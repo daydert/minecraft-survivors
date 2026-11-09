@@ -1,6 +1,6 @@
 {
   "version": "1.21.11",
-  "checks": 250,
+  "checks": 251,
   "failures": [],
   "covered_game_items": [
     "sword",

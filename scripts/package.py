@@ -3,10 +3,10 @@ from pathlib import Path
 import zipfile,hashlib,json,stat
 ROOT=Path(__file__).resolve().parent.parent
 OUT=ROOT/'builds'
-readme='''Minecraft Survivors · 0.11.0 · Главы I–III · Кооп
+readme='''Minecraft Survivors · V2 · Главы I–III + мир IV · Кооп
 
 Играть → выбор главы: Верхний мир, Незер или Край. Оружие атакует автоматически.
-Достижения: кнопка в выборе главы и в одиночной паузе. Всего 12 достижений.
+Достижения: кнопка в выборе главы и в одиночной паузе. Всего 18 достижений.
 Прогресс сохраняется на этом компьютере. В коопе достижения не выдаются.
 Забег начинается с мечом. Для «Только стрелы» его нельзя улучшать;
 найдя лук, уберите меч через I за 3 секунды. Сам лук можно развивать.
@@ -15,6 +15,8 @@ readme='''Minecraft Survivors · 0.11.0 · Главы I–III · Кооп
 Поражение в этом бою тоже ведёт в Незер. Победа открывает особую сцену.
 Глава II: 12 минут выживания, отдельная арена, победа и портал в Край.
 Глава III: остров с пропастями, кристаллы на обсидиане, дракон и последний ЭндерСтив.
+Глава IV: доступен первый этап — разрушенный мир, записка и неподвижные угрозы.
+Враги, новый арсенал и финальный бой IV ещё в разработке.
 Элитры: Пробел. Жемчуг: E. Эволюция копья с элитрами: Shift.
 Золотых ботинок и сгустка магмы в наградах Края нет.
 В Незере портал зажигается Оком Эндера при подходе. Вход — движением в портал.
@@ -71,6 +73,8 @@ for label,folder,filename in [('Windows-x64','windows','MinecraftSurvivors.exe')
   z.write(ROOT/'docs/MINECRAFT_END_MANIFEST.json','licenses/MINECRAFT_END_MANIFEST.json')
   z.write(ROOT/'docs/MUSIC_MANIFEST.json','licenses/MUSIC_MANIFEST.json')
   z.write(ROOT/'docs/MINECRAFT_ACHIEVEMENTS_MANIFEST.json','licenses/MINECRAFT_ACHIEVEMENTS_MANIFEST.json')
+  for manifest in ['V2_ASSET_MANIFEST','CHAPTER_FOUR_ASSET_MANIFEST','CHAPTER_FOUR_AUDIO_MANIFEST']:
+   z.write(ROOT/f'docs/{manifest}.json',f'licenses/{manifest}.json')
  outputs.append(archive)
 source=OUT/'MinecraftSurvivors-Source.zip'
 with zipfile.ZipFile(source,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
@@ -78,6 +82,7 @@ with zipfile.ZipFile(source,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
   if not p.is_file():continue
   rel=p.relative_to(ROOT)
   if any(part in ['.godot','.tools','builds','.git','__pycache__'] for part in rel.parts):continue
+  if p.name.startswith('.~lock.'):continue
   if p.suffix in ['.import','.avi']:continue
   if p.suffix=='.log' and not p.name.startswith(('minecraft_','presentation_','chapter_','boss_revision_','boss_polish_','ghast_update_')) and p.name not in ['verification.log','ui.log','native_release.log','build.log','performance.log','trident_run.log','animation_verification_final.log','animation_build.log','animation_performance.log','animation_full_runs.log','combat_parity.log','animation_native_release.log','animation_native_capture.log','animations_after.log','animations_before.log','animation_comparison.log']:continue
   if str(rel) in ['qa/directions.png','qa/record_frame.png']:continue

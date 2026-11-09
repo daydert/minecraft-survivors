@@ -4,6 +4,9 @@ from pathlib import Path
 from PIL import Image
 ROOT=Path(__file__).resolve().parent.parent
 m=json.loads((ROOT/'docs/MINECRAFT_ACHIEVEMENTS_MANIFEST.json').read_text());catalog=json.loads((ROOT/'data/achievements.json').read_text());checks=0
+# V2 badges have their own provenance; they were never part of the legacy bake.
+v2=json.loads((ROOT/'docs/V2_ASSET_MANIFEST.json').read_text())
+m['derived'].update({k:v for k,v in v2['derived'].items() if k.startswith('achievement_')})
 
 def check(ok,label):
  global checks

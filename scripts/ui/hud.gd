@@ -17,7 +17,9 @@ static func draw_hud(g):
 	g.centered(g.format_time(g.world.time),24,16,g.INK,true)
 	g.text_at("Убийств: %d" % g.world.kills,Vector2(12,16),8,g.INK)
 	if g.coop.active:g.text_at("Изумруды: %d" % g.world.score,Vector2(12,29),8,g.MUTED)
-	else:g.text_at("Глава III · Край" if g.is_end() else "Глава II · Незер" if g.is_nether() else "Глава I · Верхний мир",Vector2(12,29),8,g.MUTED)
+	else:g.text_at("Глава IV · «Обычный мир»" if g.is_four() else "Глава III · Край" if g.is_end() else "Глава II · Незер" if g.is_nether() else "Глава I · Верхний мир",Vector2(12,29),8,g.MUTED)
+	if g.is_four() and g.world.aura_state != "none":
+		g.text_at("Ярость" if g.world.aura_state == "rage" else "Опустошённость",Vector2(12,46),8,Color("e6a496") if g.world.note_read else g.MUTED)
 	if g.coop.active and g.coop.running:
 		var row = 0
 		for a in g.world.players.values():

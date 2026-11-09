@@ -7,6 +7,9 @@
 
 ## Этап A. Мир и вход в главу
 
+Реализован для просмотра: [отчёт и команды](CHAPTER_FOUR_A_UPDATE.md).
+Переход к B ожидает просмотра этапа A по правилу выше.
+
 - `chapter_four_world.gd` ← `arsenal_world.gd`; `chapter_number()==4`; своя ветка
   `campaign_data.configure(4)` и `data/chapter_four_balance.json` (все ключи `rules`).
 - Вход: выбор главы + переход после III (сцена руки/портала Края не меняется).

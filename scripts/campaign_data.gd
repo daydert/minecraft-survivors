@@ -14,6 +14,23 @@ func configure(chapter: int):
 	data.events = extra.events
 	data.rules = extra.rules
 	data.bastion = extra.bastion
+	if chapter==4:
+		# Chapter IV keeps the chapter I–II arsenal; its mobs, waves and rules are its own.
+		var four: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_balance.json"))
+		data.waves=four.waves
+		data.events=four.events
+		data.rules=four.rules
+		data.forms=four.forms
+		data.aura=four.aura
+		data.duration=four.duration
+		data.chapter_four=four
+		data.aura_damage=1.0
+		data.aura_interval=1.0
+		for id in four.remove_passives:data.passives.erase(id)
+		for form in four.forms:
+			var def: Dictionary=four.forms[form]
+			data.mobs[form]={"hp":def.hp,"speed":def.speed,"damage":def.damage,"xp":def.xp,"radius":def.radius}
+		return
 	if chapter==3:
 		extra=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_balance.json"))
 		for group in ["weapons","upgrades","passives","recipes","mobs"]:data[group].merge(extra[group],true)
@@ -81,4 +98,7 @@ func stats(id: String, level: int, evolution: bool = false, items: Dictionary = 
 			"dragon_breath":s.damage+=8;s.duration+=2;s.count=2
 			"shield":s.count+=3
 	if id=="spear":s.damage*=1+.08*items.get("sugar",0)
+	if data.has("chapter_four"):
+		s.damage*=float(data.aura_damage)
+		s.interval*=float(data.aura_interval)
 	return s

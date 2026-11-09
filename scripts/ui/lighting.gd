@@ -30,6 +30,7 @@ static func ensure_mesh():
 ## Ambient darkness for the current chapter and moment: {dark, color}.
 static func mood(g) -> Dictionary:
 	var w = g.world
+	if g.is_four():return {"dark": 0.40, "color": Color(0.045,0.018,0.028)}
 	if g.is_end():
 		if w.stage in ["survival", "end_arrival", "departure"]:
 			return {"dark": 0.17, "color": Color(0.06, 0.02, 0.11)}

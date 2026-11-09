@@ -7,6 +7,9 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 manifest = json.loads((ROOT / "docs/MINECRAFT_ASSET_MANIFEST.json").read_text())
+# V2 deliberately replaces the old tinted bottle with the native potion item.
+v2 = json.loads((ROOT / "docs/V2_ASSET_MANIFEST.json").read_text())
+manifest["derived"]["icon_potion"] = v2["derived"]["icon_potion"]
 spec = json.loads((ROOT / "data/minecraft_assets.json").read_text())
 balance = json.loads((ROOT / "data/balance.json").read_text())
 checks = 0

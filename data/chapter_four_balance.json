@@ -1,0 +1,226 @@
+{
+  "duration": 720,
+  "rules": {
+    "feather_knock": 0.12,
+    "fire_resist_per_level": 0.16,
+    "status_hit_invulnerability": 0.35,
+    "magma_burn": 1.2,
+    "burn_interval": 0.75,
+    "burn_damage": 1.5,
+    "wither_interval": 0.8,
+    "wither_damage": 1.5,
+    "bed_limit": 2,
+    "explosive_limit": 24,
+    "regen_interval": 5,
+    "ghast_tear_regen": 0.3,
+    "soul_sand_slow": 0.42,
+    "gold_boots_relief": 0.2
+  },
+  "forms": {
+    "flayed_zombie": {
+      "base": "zombie",
+      "hp": 12,
+      "speed": 32,
+      "damage": 2.5,
+      "xp": 1,
+      "radius": 7
+    },
+    "growth_skeleton": {
+      "base": "skeleton",
+      "hp": 12,
+      "speed": 28,
+      "damage": 3,
+      "xp": 2,
+      "radius": 7
+    },
+    "torn_spider": {
+      "base": "spider",
+      "hp": 14,
+      "speed": 58,
+      "damage": 2.5,
+      "xp": 2,
+      "radius": 9
+    },
+    "bloated_creeper": {
+      "base": "creeper",
+      "hp": 16,
+      "speed": 30,
+      "damage": 7,
+      "xp": 3,
+      "radius": 7
+    },
+    "hungry_wolf": {
+      "base": "spider",
+      "hp": 10,
+      "speed": 70,
+      "damage": 2,
+      "xp": 1,
+      "radius": 7
+    },
+    "crawler": {
+      "base": "zombie",
+      "hp": 9,
+      "speed": 20,
+      "damage": 1.5,
+      "xp": 1,
+      "radius": 7
+    },
+    "open_cow": {
+      "base": "vindicator",
+      "hp": 34,
+      "speed": 34,
+      "damage": 4,
+      "xp": 4,
+      "radius": 10
+    },
+    "matted_sheep": {
+      "base": "zombie",
+      "hp": 20,
+      "speed": 30,
+      "damage": 2,
+      "xp": 2,
+      "radius": 9
+    },
+    "infected_witch": {
+      "base": "skeleton",
+      "hp": 28,
+      "speed": 24,
+      "damage": 3,
+      "xp": 6,
+      "radius": 7
+    },
+    "gravedigger": {
+      "base": "vindicator",
+      "hp": 160,
+      "speed": 30,
+      "damage": 6,
+      "xp": 25,
+      "radius": 12
+    }
+  },
+  "waves": [
+    {
+      "at": 0,
+      "rate": 0.9,
+      "weights": {
+        "flayed_zombie": 1.0
+      }
+    },
+    {
+      "at": 45,
+      "rate": 1.4,
+      "weights": {
+        "flayed_zombie": 0.6,
+        "hungry_wolf": 0.2,
+        "growth_skeleton": 0.2
+      }
+    },
+    {
+      "at": 120,
+      "rate": 2.0,
+      "weights": {
+        "flayed_zombie": 0.45,
+        "growth_skeleton": 0.2,
+        "torn_spider": 0.2,
+        "crawler": 0.15
+      }
+    },
+    {
+      "at": 240,
+      "rate": 2.6,
+      "weights": {
+        "flayed_zombie": 0.35,
+        "torn_spider": 0.2,
+        "bloated_creeper": 0.15,
+        "open_cow": 0.1,
+        "crawler": 0.1,
+        "growth_skeleton": 0.1
+      }
+    },
+    {
+      "at": 360,
+      "rate": 3.2,
+      "weights": {
+        "flayed_zombie": 0.3,
+        "matted_sheep": 0.15,
+        "bloated_creeper": 0.15,
+        "infected_witch": 0.1,
+        "hungry_wolf": 0.15,
+        "growth_skeleton": 0.15
+      }
+    },
+    {
+      "at": 540,
+      "rate": 3.8,
+      "weights": {
+        "flayed_zombie": 0.3,
+        "open_cow": 0.15,
+        "infected_witch": 0.15,
+        "torn_spider": 0.2,
+        "bloated_creeper": 0.2
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 300,
+      "type": "gravedigger"
+    },
+    {
+      "at": 600,
+      "type": "gravedigger"
+    }
+  ],
+  "aura": {
+    "radius": 110,
+    "despair_damage": 0.85,
+    "despair_interval": 1.12,
+    "rage_damage": 1.25,
+    "rage_interval": 0.88
+  },
+  "remove_passives": [
+    "gold_boots"
+  ],
+  "content_stage": "A",
+  "exploration_only": true,
+  "arrival_duration": 4.8,
+  "growth": {
+    "hp": 38,
+    "radius": 13,
+    "range": 210,
+    "windup": 1.15,
+    "cooldown": 5.6,
+    "count": 5,
+    "spread": 0.72,
+    "speed": 78,
+    "damage": 2.5,
+    "large_hp": 110,
+    "large_radius": 28
+  },
+  "cursed_torch": {
+    "hp": 20,
+    "radius": 6,
+    "range": 220,
+    "windup": 1.05,
+    "cooldown": 6.5,
+    "damage": 3,
+    "width": 7
+  },
+  "blood_hand": {
+    "windup": 1.4,
+    "cooldown": 6.5,
+    "radius": 18,
+    "damage": 2,
+    "hold": 0.45
+  },
+  "note": {
+    "title": "Записка жителя",
+    "lines": [
+      "Если кто-нибудь вернётся —",
+      "не опускайте глаза.",
+      "Мой сын всё ещё висит у дороги.",
+      "Он боялся темноты.",
+      "Я оставил факелы зажжёнными."
+    ]
+  }
+}

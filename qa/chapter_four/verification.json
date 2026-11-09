@@ -1,0 +1,142 @@
+{
+  "stage": "A",
+  "complete_chapter": false,
+  "date": "2026-11-09",
+  "base_commit": "03ea104aad166c52b979939d46bd19e4eaa78952",
+  "verify": {
+    "command": "./scripts/verify.sh",
+    "exit_code": 0,
+    "result_lines": [
+      "UI_RESULT 15 checks; 0 failures",
+      "ROUTER_RESULT 17 checks; 0 failures",
+      "DETERMINISM_RESULT 8 scenarios; 0 failures",
+      "ANIMATION_RESULT 60 checks; 0 failures",
+      "CHAPTER_RESULT 21 checks; 0 failures",
+      "COOP_RESULT {\"500_mob_snapshot_bytes\":14202,\"checks\":74,\"failures\":[],\"largest_bucket_bytes\":459}",
+      "COOP_FOUR_RESULT {\"checks\":41,\"failures\":[]}",
+      "NETHER_RESULT 62 checks; 0 failures",
+      "MUSIC_ROTATION_RESULT 27 checks; 0 failures",
+      "MUSIC_ASSETS_RESULT 28 checks passed; 7 supplied audio files",
+      "BOSS_UPDATE_RESULT 44 checks; 0 failures",
+      "BOSS_POLISH_RESULT 50 checks; 0 failures",
+      "GHAST_UPDATE_RESULT 32 checks; 0 failures",
+      "END_RESULT 83 checks; 0 failures",
+      "END_REVISION_RESULT 26 checks; 0 failures",
+      "ACHIEVEMENTS_RESULT 51 checks; 0 failures",
+      "CHAPTER_FOUR_RESULT 38 checks; 0 failures",
+      "CHAPTER_FOUR_ASSETS_RESULT 99 checks passed",
+      "ACHIEVEMENT_ASSETS_RESULT 156 checks passed; native badges, audio and Cyrillic glyphs",
+      "END_ASSETS_RESULT 3470 checks passed; native textures, articulated dragon and frozen coop files",
+      "GHAST_ASSETS_RESULT 145 checks passed; 19 original-textured sprites and 17 parts",
+      "DUEL_ASSETS_RESULT 82 checks passed; articulated rise, command, kneeling and original sources",
+      "NETHER_ASSETS_RESULT 861 checks passed; 9 actors, original local Minecraft 1.21.11",
+      "ATLAS_RESULT 45 resource/direction checks passed",
+      "MINECRAFT_ASSETS_RESULT 251 checks passed; 18 game items, Minecraft 1.21.11",
+      "PRESENTATION_ASSETS_RESULT 447 checks passed; 31 vanilla sound events, Minecraft bitmap font",
+      "CHARACTER_ASSETS_RESULT 724 checks passed; 9 vanilla-textured actors"
+    ]
+  },
+  "chapter_four_final": {
+    "rules": 40,
+    "visual": 15,
+    "assets": 99,
+    "failures": []
+  },
+  "old_gameplay": {
+    "deterministic_scenarios": 8,
+    "fixture_rewritten": false
+  },
+  "visual_suites": [
+    "qa/test_achievements_visual.gd pass=17 errors=0 ACHIEVEMENTS_VISUAL_RESULT 17 checks; 0 failures",
+    "qa/test_boss_polish_visual.gd pass=17 errors=0 BOSS_POLISH_VISUAL_RESULT 17 checks; 0 failures",
+    "qa/test_chapter_four_visual.gd pass=15 errors=0 CHAPTER_FOUR_VISUAL_RESULT 15 checks; 0 failures",
+    "qa/test_chapter_visual.gd pass=9 errors=0 ",
+    "qa/test_character_facing.gd pass=0 errors=0 CHARACTER_FACING_RESULT 67 checks; failures=0",
+    "qa/test_coop_four_visual.gd pass=13 errors=0 ",
+    "qa/test_coop_visual.gd pass=11 errors=0 ",
+    "qa/test_end_polish_visual.gd pass=12 errors=0 END_POLISH_VISUAL_RESULT 12 checks; 0 failures",
+    "qa/test_end_revision_visual.gd pass=7 errors=0 END_REVISION_VISUAL_RESULT 7 checks; 0 failures",
+    "qa/test_end_visual.gd pass=14 errors=0 END_VISUAL_RESULT 14 checks; 0 failures",
+    "qa/test_ghast_visual.gd pass=9 errors=0 GHAST_VISUAL_RESULT 9 checks; 0 failures",
+    "qa/test_herobrine_visual.gd pass=8 errors=0 HEROBRINE_VISUAL_RESULT 8 checks; 0 failures",
+    "qa/test_minecraft_render.gd pass=7 errors=0 ",
+    "qa/test_nether_visual.gd pass=21 errors=0 NETHER_UI_RESULT 21 checks; 0 failures",
+    "qa/test_presentation.gd pass=26 errors=0 ",
+    "qa/test_visual_animation.gd pass=8 errors=0 "
+  ],
+  "pixels": {
+    "before_vs_after": {
+      "images": 58,
+      "identical": 55,
+      "ui_time_dependent": [
+        "menu",
+        "achievement_toast"
+      ],
+      "fixed_ui_time_identical": true,
+      "intentional_ui_change": "end_overworld",
+      "fixed_time_ui_difference_box": [
+        199,
+        144,
+        441,
+        331
+      ]
+    },
+    "old_golden": {
+      "images": 49,
+      "different": 30,
+      "updated": false
+    }
+  },
+  "release": {
+    "linux_native": true,
+    "windows_exported": true,
+    "windows_native_tested": false,
+    "captures": [
+      {
+        "mode": "ch4_village",
+        "exit": 0,
+        "errors": [],
+        "capture": [
+          "/tmp/ch4-release-final/ch4_village/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4_village.png"
+        ]
+      },
+      {
+        "mode": "ch4_hand",
+        "exit": 0,
+        "errors": [],
+        "capture": [
+          "/tmp/ch4-release-final/ch4_hand/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4_hand.png"
+        ]
+      },
+      {
+        "mode": "ch4_note",
+        "exit": 0,
+        "errors": [],
+        "capture": [
+          "/tmp/ch4-release-final/ch4_note/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4_note.png"
+        ]
+      },
+      {
+        "mode": "battle",
+        "exit": 0,
+        "errors": [],
+        "capture": [
+          "/tmp/ch4-release-final/battle/godot/app_userdata/Minecraft Survivors — До рассвета/capture_battle.png"
+        ]
+      }
+    ],
+    "final_build_village_smoke": {
+      "errors": [],
+      "log": "/tmp/ch4-native-delivery.log"
+    }
+  },
+  "film": {
+    "path": "qa/recordings/chapter_four_stage_a.mp4",
+    "seconds": 29,
+    "frames": 870,
+    "diagnostic_cuts": true,
+    "invulnerability": false,
+    "full_run": false,
+    "sha256": "11ac7da0e8f082d4219d44fe5f7b1cd7b8c704ff0ad077b7f6cebab735f3cd15"
+  }
+}

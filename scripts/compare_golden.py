@@ -13,9 +13,11 @@ for left in sorted(a.glob("*.png")):
     if x.size != y.size:
         print("SIZE", left.name, x.size, y.size); bad += 1; continue
     diff = ImageChops.difference(x, y)
-    box = diff.getbbox()
+    # An opaque RGBA image has an all-zero difference alpha even when RGB
+    # differs. Inspect every channel rather than silently ignoring RGB changes.
+    box = diff.getbbox(alpha_only=False)
     if box:
-        count = sum(1 for p in diff.getdata() if p != (0, 0, 0, 0))
+        count = sum(1 for p in diff.get_flattened_data() if p != (0, 0, 0, 0))
         print(f"DIFF {left.name} pixels={count} box={box}"); bad += 1
 print(f"GOLDEN_RESULT {len(list(a.glob('*.png')))} images, {bad} differ")
 sys.exit(1 if bad else 0)

@@ -150,6 +150,10 @@ func _physics_process(delta):
 		else:
 			if is_end() and world.state=="LEVEL_UP":world.tick_choices(delta)
 			world.step(delta,movement)
+			if is_four() and world.note_pending:
+				world.note_pending = false
+				router.open("ch4_note",world)
+				selected = 0;input_lock = .2
 
 func _process(delta):
 	if quitting:return
@@ -158,7 +162,7 @@ func _process(delta):
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
 	var theme="victory" if world.get("win_music")==true else "endersteve" if is_end() and world.stage in ["betrayal","last_arrival","last_duel","endsteve_death","hand","hand_pickup","return_portal","portal_ready","rekindle","exit_jump","chapter_four"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
-	audio.set_music_context(theme,world.state not in ["MENU","RESULT"])
+	audio.set_music_context("chapter_four" if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
 	update_camera_lead()
 	ui_time += delta
@@ -217,7 +221,8 @@ func _input(event):
 			action("fullscreen")
 			return
 		if event.keycode == KEY_ESCAPE:
-			if screen=="achievements":close_achievements()
+			if screen=="ch4_note":close_four_note()
+			elif screen=="achievements":close_achievements()
 			elif screen=="boss_lab":close_boss_lab()
 			elif screen=="recipes":close_recipes()
 			elif screen=="inventory":close_inventory()
@@ -286,6 +291,8 @@ func action(id: String):
 		"chapter_1":start_chapter(1)
 		"chapter_2":start_chapter(2)
 		"chapter_3":start_chapter(3)
+		"chapter_4":start_chapter(4)
+		"ch4_note_close":close_four_note()
 		"end_reroll":
 			if is_end():world.reroll_choices()
 		"skip_reward":
@@ -329,6 +336,7 @@ func action(id: String):
 			world = W.new()
 			solo_chapter=1
 			unload_end_assets()
+			unload_four_assets()
 			world.finale.reset()
 			audio.set_finale_music(false)
 			world.state = "MENU"
@@ -368,7 +376,7 @@ func secret_input(event: InputEventKey) -> bool:
 	if code in [KEY_ENTER,KEY_KP_ENTER] and secret_keys=="davis":
 		secret_keys=""
 		if screen!="boss_lab":
-			lab_chapter=solo_chapter
+			lab_chapter=mini(solo_chapter,3)
 			router.open("boss_lab",world);selected=3
 		return true
 	var letter: String={KEY_D:"d",KEY_A:"a",KEY_V:"v",KEY_I:"i",KEY_S:"s"}.get(code,"")
@@ -400,7 +408,9 @@ func start_chapter(chapter: int):
 	solo_chapter=chapter
 	if chapter==3:ensure_end_assets()
 	else:unload_end_assets()
-	world=EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
+	if chapter==4:ensure_four_assets()
+	else:unload_four_assets()
+	world=FW.new() if chapter==4 else EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
 	world.reset()
 	audio.reset_run_music()
 	cam_lead=Vector2.ZERO;lead_clock=0.0
@@ -411,6 +421,12 @@ func adjust_volume(id: String, delta: float):
 	settings[id]=float(clampi(roundi(settings[id]*10)+roundi(delta*10),0,10))/10
 	audio.update_volumes(settings.music,settings.effects)
 	save_settings()
+
+func close_four_note():
+	if not is_four() or screen != "ch4_note":return
+	world.read_note()
+	router.close(world)
+	selected = 0
 
 func toggle_inventory():
 	if coop.active:return
@@ -469,6 +485,10 @@ func _draw():
 
 func draw_scene():
 	buttons.clear()
+	if screen=="ch4_note":
+		WorldView.draw_world(self)
+		four_renderer.note(self)
+		return
 	if screen=="achievements":
 		achievements_view.screen(self);return
 	if screen=="boss_lab":
@@ -497,7 +517,7 @@ func draw_scene():
 		finale_renderer.ending(self)
 		return
 	WorldView.draw_world(self)
-	if world.state != "MENU" and (not world.finale.active or world.finale.phase in ["storm","inferno"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]):Hud.draw_hud(self)
+	if (not is_four() or world.stage != "arrival") and world.state != "MENU" and (not world.finale.active or world.finale.phase in ["storm","inferno"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]):Hud.draw_hud(self)
 	if screen=="chapters":MenuScreens.draw_chapters(self)
 	elif screen == "multiplayer": MenuScreens.draw_multiplayer(self)
 	elif not screen.is_empty(): MenuScreens.draw_settings(self)

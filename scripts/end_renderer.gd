@@ -505,5 +505,5 @@ func ending(g):
 		if shift_value:
 			g.draw_texture_rect_region(texture,Rect2(rect.position+Vector2(-2,0),rect.size),source,Color(.7,.15,.25,.55))
 		g.draw_texture_rect_region(texture,rect,source,Color(.85,.75,.85) if shift_value else Color.WHITE)
-	g.centered("Продолжение следует",151,8,Color("aaaaaa"))
+	g.button(Rect2(199,263,242,27),"Продолжить","chapter_4")
 	g.button(Rect2(199,304,242,27),"В меню","menu")

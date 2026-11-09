@@ -1,0 +1,149 @@
+{
+  "ch4_despair": {
+    "minecraft_event": "ambient.soul_sand_valley.mood",
+    "gain": 0.3,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/ambient_nether_soulsand_valley_mood1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/ambient_nether_soulsand_valley_mood2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/ambient_nether_soulsand_valley_mood3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_rage": {
+    "minecraft_event": "block.bell.resonate",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_bell_resonate.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_bell_resonate.ogg",
+        "volume": 1,
+        "pitch": 0.85
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_bell_resonate.ogg",
+        "volume": 1,
+        "pitch": 0.9
+      }
+    ]
+  },
+  "ch4_note": {
+    "minecraft_event": "item.book.page_turn",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/item_book_open_flip1.ogg",
+        "volume": 2.0,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_book_open_flip2.ogg",
+        "volume": 2.0,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_book_open_flip3.ogg",
+        "volume": 2.0,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_charge": {
+    "minecraft_event": "block.sculk_shrieker.shriek",
+    "gain": 0.18,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_sculk_shrieker_shriek1.ogg",
+        "volume": 0.85,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_sculk_shrieker_shriek2.ogg",
+        "volume": 0.85,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_sculk_shrieker_shriek3.ogg",
+        "volume": 0.85,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_pulse": {
+    "minecraft_event": "block.slime_block.hit",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_small1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_small2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_small3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_hand": {
+    "minecraft_event": "entity.warden.tendril_clicks",
+    "gain": 0.4,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_tendril_clicks_1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_tendril_clicks_2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_tendril_clicks_3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_break": {
+    "minecraft_event": "block.sculk.break",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_sculk_break1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_sculk_break2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_sculk_break3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "mode": "ch4_village",
+    "exit": 0,
+    "errors": [],
+    "capture": [
+      "/tmp/ch4-release-final/ch4_village/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4_village.png"
+    ]
+  },
+  {
+    "mode": "ch4_hand",
+    "exit": 0,
+    "errors": [],
+    "capture": [
+      "/tmp/ch4-release-final/ch4_hand/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4_hand.png"
+    ]
+  },
+  {
+    "mode": "ch4_note",
+    "exit": 0,
+    "errors": [],
+    "capture": [
+      "/tmp/ch4-release-final/ch4_note/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4_note.png"
+    ]
+  },
+  {
+    "mode": "battle",
+    "exit": 0,
+    "errors": [],
+    "capture": [
+      "/tmp/ch4-release-final/battle/godot/app_userdata/Minecraft Survivors — До рассвета/capture_battle.png"
+    ]
+  }
+]

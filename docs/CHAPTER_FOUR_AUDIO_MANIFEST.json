@@ -1,0 +1,85 @@
+{
+  "version": "1.21.11",
+  "files": {
+    "ambient_nether_soulsand_valley_mood1.ogg": {
+      "source": "minecraft/sounds/ambient/nether/soulsand_valley/mood1.ogg",
+      "sha256": "ddad26b87849c50a1a9bc1d836d0cd0edfbf18d267338a24063e849d47f90e7d"
+    },
+    "ambient_nether_soulsand_valley_mood2.ogg": {
+      "source": "minecraft/sounds/ambient/nether/soulsand_valley/mood2.ogg",
+      "sha256": "0d80a8e16664fc123483a2f21c87e117f205e2905b3daa052f6fe0226a5ded9c"
+    },
+    "ambient_nether_soulsand_valley_mood3.ogg": {
+      "source": "minecraft/sounds/ambient/nether/soulsand_valley/mood3.ogg",
+      "sha256": "2a2e13b0a3dcd5be26688ad4492b735bcc958e8cba56b7a7e5fb3ea4149f04f8"
+    },
+    "block_bell_resonate.ogg": {
+      "source": "minecraft/sounds/block/bell/resonate.ogg",
+      "sha256": "46150b989c01c9a25c7a0f64f04f60c796a3d317620edc6cd5db03714adb88c0"
+    },
+    "item_book_open_flip1.ogg": {
+      "source": "minecraft/sounds/item/book/open_flip1.ogg",
+      "sha256": "aa456d66529ecb4083b0db4f6f0f04b8500833cb0a249f16ad143e07495cfcf3"
+    },
+    "item_book_open_flip2.ogg": {
+      "source": "minecraft/sounds/item/book/open_flip2.ogg",
+      "sha256": "13c5ba53e0660f0fcf56aec6cba61c6110c7ccab47cf20b09af5cec4fe60cd5c"
+    },
+    "item_book_open_flip3.ogg": {
+      "source": "minecraft/sounds/item/book/open_flip3.ogg",
+      "sha256": "ca9319dc1cb0478dd60bd71c053c869409de2b1451598e9b783e3109a47dbc83"
+    },
+    "block_sculk_shrieker_shriek1.ogg": {
+      "source": "minecraft/sounds/block/sculk_shrieker/shriek1.ogg",
+      "sha256": "f4ab7da115bd6a391840540dbc5444bb6cbc1543fa4f37bf611c9431babcb428"
+    },
+    "block_sculk_shrieker_shriek2.ogg": {
+      "source": "minecraft/sounds/block/sculk_shrieker/shriek2.ogg",
+      "sha256": "da0ab55b7457a12ee66b99bd17104c6d559f6265491c81e60bd1bdc14e0650f7"
+    },
+    "block_sculk_shrieker_shriek3.ogg": {
+      "source": "minecraft/sounds/block/sculk_shrieker/shriek3.ogg",
+      "sha256": "3cfe579718d3e7a71405f09b76c1e97d8a920dd8c7abca26b92c170540b2eb03"
+    },
+    "mob_slime_small1.ogg": {
+      "source": "minecraft/sounds/mob/slime/small1.ogg",
+      "sha256": "569dc11e312b31206c97afe13def62f37223e63e9ec813e285abbcd5536de3bb"
+    },
+    "mob_slime_small2.ogg": {
+      "source": "minecraft/sounds/mob/slime/small2.ogg",
+      "sha256": "deebbed82402ba6806c0b77b60c98ea8e5430658976b23ce0b84b711c7c99125"
+    },
+    "mob_slime_small3.ogg": {
+      "source": "minecraft/sounds/mob/slime/small3.ogg",
+      "sha256": "d0a304e416af48ae80c6b7769b500cba47cbaadd80db27bf2242b94546452c12"
+    },
+    "mob_warden_tendril_clicks_1.ogg": {
+      "source": "minecraft/sounds/mob/warden/tendril_clicks_1.ogg",
+      "sha256": "683e44858abfa9908535b81de595d3caaffbf26e0cc9e5095274c55d211a3146"
+    },
+    "mob_warden_tendril_clicks_2.ogg": {
+      "source": "minecraft/sounds/mob/warden/tendril_clicks_2.ogg",
+      "sha256": "fd49d6da92b84b7bf6e28019b41015b304adfb131131de11f217a8bab15b752c"
+    },
+    "mob_warden_tendril_clicks_3.ogg": {
+      "source": "minecraft/sounds/mob/warden/tendril_clicks_3.ogg",
+      "sha256": "7cb1cd82b09947da148c01173c4f4f7788fd5a848d8dc2d9f6de0704b82f2fc6"
+    },
+    "block_sculk_break1.ogg": {
+      "source": "minecraft/sounds/block/sculk/break1.ogg",
+      "sha256": "f65adca7bc3c6154b24d7abb5b2f65cf8c6043cddb58b5a132b419fe2492947d"
+    },
+    "block_sculk_break2.ogg": {
+      "source": "minecraft/sounds/block/sculk/break2.ogg",
+      "sha256": "18d47b04a18b44b8efe44c2c1a51f5dff3d7f1a24af12ddf2c7bd5cabd2d5b4b"
+    },
+    "block_sculk_break3.ogg": {
+      "source": "minecraft/sounds/block/sculk/break3.ogg",
+      "sha256": "49dbce0cb89dd9779f1e463a794f7a2d95670eb58f4a5d8e0e15d9f56b1cd12d"
+    },
+    "ancestry.ogg": {
+      "source": "minecraft/sounds/music/game/ancestry.ogg",
+      "sha256": "c69011c3990c5708e5ede20b36454a467d67f457c1e02031da5d58762cdc3946"
+    }
+  }
+}

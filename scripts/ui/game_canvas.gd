@@ -13,6 +13,10 @@ const W = preload("res://scripts/campaign_world.gd")
 const OW = preload("res://scripts/overworld_world.gd")
 const NW = preload("res://scripts/nether_world.gd")
 const EW = preload("res://scripts/end_world.gd")
+const FW = preload("res://scripts/chapter_four_world.gd")
+var four_renderer = preload("res://scripts/chapter_four_renderer.gd").new()
+var four_assets: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_assets.json"))
+var four_assets_loaded := false
 var end_renderer=preload("res://scripts/end_renderer.gd").new()
 var recipe_page=0
 var achievements=preload("res://scripts/achievements.gd").new()
@@ -100,6 +104,23 @@ func ensure_end_assets(icons_only: bool=false):
 func unload_end_assets():
 	for name in end_assets.sprites:textures.erase(name)
 	end_assets_loaded=false
+
+func ensure_four_assets():
+	if four_assets_loaded:return
+	for name in four_assets.sprites:load_texture(name)
+	for name in four_assets.clips:
+		var clip: Dictionary = four_assets.clips[name].duplicate(true)
+		clip.total = 0.0;clip.uniform = true
+		for duration in clip.durations:
+			clip.total += duration
+			if not is_equal_approx(duration,clip.durations[0]):clip.uniform = false
+		minecraft_assets.clips[name] = clip
+	four_assets_loaded = true
+
+func unload_four_assets():
+	for name in four_assets.sprites:textures.erase(name)
+	for name in four_assets.clips:minecraft_assets.clips.erase(name)
+	four_assets_loaded = false
 
 func pixel_font_size(size: int) -> int:
 	return maxi(8,int(round(float(size)/8))*8)
@@ -210,6 +231,9 @@ func gear_title(id: String, evolution: bool = false, level: int = -1) -> String:
 
 func is_nether() -> bool:
 	return not coop.active and world is NW and world.chapter_number()==2
+
+func is_four() -> bool:
+	return not coop.active and world is FW
 
 func is_end() -> bool:
 	return not coop.active and world is EW

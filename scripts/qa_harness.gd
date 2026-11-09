@@ -2,6 +2,9 @@ extends RefCounted
 ## Capture, stress, autoplay and recording helpers. Never used by an ordinary run.
 
 static func prepare_capture(g):
+	if g.qa_mode.begins_with("ch4_"):
+		prepare_four_capture(g)
+		return
 	if g.qa_mode in ["achievements","achievement_toast"]:
 		if g.qa_mode=="achievements":
 			g.screen="achievements";g.achievement_tier="all";g.achievement_page=0
@@ -267,3 +270,62 @@ static func prepare_end_capture(g):
 	if g.qa_mode=="end_flight":g.world.active_item("rocket");g.world.dash_left=.8
 	else:g.world.update_attacks(.01)
 	for i in range(35):g.world.update_effects(1.0/60);g.world.update_projectiles(1.0/60)
+
+static func prepare_four_capture(g):
+	g.start_chapter(4)
+	g.world.reset(724)
+	var w = g.world
+	w.state = "RUNNING";w.stage = "survival";w.clock = 18.0;w.stage_age = 18.0
+	g.cam_lead = Vector2.ZERO
+	if g.qa_mode == "ch4_arrival":w.stage = "arrival";w.stage_age = 2.4;w.clock = 2.4
+	elif g.qa_mode in ["ch4_village","ch4_rage","ch4_note"]:
+		w.player = Vector2(625,810)
+		if g.qa_mode == "ch4_rage":w.read_note()
+		w.update_aura()
+		if g.qa_mode == "ch4_note":g.router.open("ch4_note",w)
+	elif g.qa_mode in ["ch4_pool","ch4_hand","ch4_warning"]:
+		w.player = Vector2(1322,690)
+		if g.qa_mode != "ch4_pool":
+			w.blood_hand = {"p":Vector2(1302,670),"age":1.65 if g.qa_mode == "ch4_hand" else 1.1,"caught":g.qa_mode == "ch4_hand"}
+	elif g.qa_mode in ["ch4_pyramid","ch4_chain","ch4_unlit"]:
+		w.player = Vector2(1454,1538)
+		if g.qa_mode == "ch4_unlit":g.settings.lighting = false
+		if g.qa_mode == "ch4_chain":
+			for m in w.threats:
+				if m.kind == "torch" and m.p.y>1400:
+					m.attack = "windup";m.timer = .3
+					for other in w.threats:
+						if other.kind == "torch" and other.id != m.id and other.p.distance_to(m.p)<100:m.link=other.id;break
+	w.update_flow()
+
+## Review film uses explicit camera cuts. It is never a full-run/boss proof.
+static func record_four(g, tree: SceneTree) -> Dictionary:
+	var frame := 0
+	var cues: Array = []
+	var segments: Array = []
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://qa/recordings/chapter_four_frames"))
+	for shot in [{"mode":"arrival","seconds":3.0},{"mode":"village","seconds":4.0},{"mode":"note","seconds":3.0},{"mode":"rage","seconds":4.0},{"mode":"pool","seconds":5.0},{"mode":"chain","seconds":4.0},{"mode":"growth","seconds":6.0}]:
+		g.qa_mode = "ch4_"+shot.mode
+		prepare_four_capture(g)
+		g.settings.shake = false
+		var w = g.world
+		w.build = {}
+		if shot.mode == "pool":w.hand_cooldown = .4
+		if shot.mode == "growth":
+			var growth = w.threats.filter(func(m):return m.kind == "growth")[0]
+			w.player = growth.p+Vector2(100,10);growth.timer = .4
+			w.update_flow()
+		segments.append({"mode":shot.mode,"time":frame/30.0})
+		for i in range(int(shot.seconds*30)):
+			var direction := Vector2.ZERO
+			if shot.mode == "growth" and i>90:
+				w.build = {"sword":8};direction = Vector2.LEFT if i<145 else Vector2.ZERO
+			for tick in range(2):
+				if w.state == "LEVEL_UP":w.skip_reward()
+				w.step(1.0/60,direction)
+			for id in w.sounds:cues.append({"id":id,"time":frame/30.0})
+			w.sounds.clear()
+			g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
+			tree.root.get_texture().get_image().save_png("res://qa/recordings/chapter_four_frames/%05d.png"%frame)
+			frame+=1
+	return {"fps":30,"frames":frame,"segments":segments,"sound_events":cues,"diagnostic_cuts":true,"invulnerability":false,"content_stage":"A"}

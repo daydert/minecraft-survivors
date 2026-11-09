@@ -33,7 +33,7 @@ static func draw_edges(g, color: Color):
 ## 0 at dawn, 1 in the deepest chapter I night.
 static func night(g) -> float:
 	var m: Dictionary = Lighting.mood(g)
-	return clampf((m.dark - 0.07) / 0.43, 0.0, 1.0) if not g.is_nether() and not g.is_end() else 0.0
+	return clampf((m.dark - 0.07) / 0.43, 0.0, 1.0) if not g.is_nether() and not g.is_end() and not g.is_four() else 0.0
 
 # ------------------------------------------------------------------ chapter I
 
@@ -186,6 +186,9 @@ static func nether_air(g, offset: Vector2):
 ## Collected before lighting so presentation lights reach the darkness mesh.
 static func collect(g, offset: Vector2):
 	g.ambient_lights.clear()
+	if g.is_four():
+		four_lights(g,offset)
+		return
 	if g.is_end():
 		return
 	if g.is_nether():
@@ -201,7 +204,9 @@ static func collect(g, offset: Vector2):
 
 ## Drawn after lighting: glowing points and air layers stay bright at night.
 static func after_lighting(g, offset: Vector2):
-	if g.is_nether():
+	if g.is_four():
+		four_air(g,offset)
+	elif g.is_nether():
 		nether_air(g, offset)
 	elif not g.is_end():
 		mist(g, offset)
@@ -210,6 +215,45 @@ static func after_lighting(g, offset: Vector2):
 			g.draw_rect(Rect2(s - Vector2.ONE, Vector2(3, 3)), Color(0.8, 1.0, 0.4, 0.25 * f.blink))
 			g.draw_rect(Rect2(s, Vector2.ONE), Color(1.0, 1.0, 0.7, f.blink))
 	level_burst(g, offset)
+
+## IV: sparse red light belongs to objects; the roads stay neutral and legible.
+static func four_lights(g, offset: Vector2):
+	var w = g.world
+	for mark in w.landmarks:
+		if mark.get("dead",false) or not Rect2(-140,-100,920,600).has_point(mark.p+offset):continue
+		var p: Vector2 = mark.p
+		match mark.kind:
+			"torch":
+				var charged: bool = mark.get("attack","") == "windup"
+				var flick := 1+.035*sin(w.clock*7+mark.phase)
+				g.ambient_lights.append({"p":p-Vector2(0,23 if mark.hostile else 12),"r":(76.0 if charged else 52.0)*flick,"c":Color(1,.48,.26) if charged else Color(.9,.12,.08),"power":.75,"glow":.15})
+			"growth", "growth_big":
+				g.ambient_lights.append({"p":p-Vector2(0,12),"r":70.0 if mark.kind=="growth_big" else 36.0,"c":Color(.8,.13,.16),"power":.4,"glow":.09})
+			"note":
+				if not w.note_read:g.ambient_lights.append({"p":p,"r":32.0,"c":Color(.95,.82,.6),"power":.5,"glow":.06})
+			"pyramid":
+				for x in [-90,90]:g.ambient_lights.append({"p":p+Vector2(x,-38),"r":60.0,"c":Color(.85,.08,.07),"power":.55,"glow":.14})
+	for pool in w.terrain.pools:
+		g.ambient_lights.append({"p":Vector2(pool.p[0],pool.p[1]),"r":float(pool.r)*1.5,"c":Color(.5,.06,.09),"power":.3,"glow":.04})
+
+static func four_air(g, offset: Vector2):
+	if not g.settings.get("lighting",true):return
+	var w = g.world
+	# Ground mist follows world cells; only airborne ash has a little parallax.
+	var origin := Vector2i((-offset/160).floor())
+	for y in range(origin.y-1,origin.y+4):
+		for x in range(origin.x-1,origin.x+6):
+			if hash01(x,y,91)>.42:continue
+			var p := Vector2(x*160+hash01(x,y,92)*90,y*160+hash01(x,y,93)*70)+offset
+			p += Vector2(sin(w.clock*.08+x)*18,cos(w.clock*.06+y)*6)
+			for j in range(3):g.oval(p,Vector2(72,18)*(1-j*.22),Color(.42,.33,.36,.024))
+	for j in range(26):
+		var p := Vector2(fposmod(j*87.31+offset.x*1.03+w.clock*2,660)-10,fposmod(j*43.17+offset.y*1.03+w.clock*(3+j%3),380)-10)
+		g.draw_rect(Rect2(p.floor(),Vector2.ONE),Color(.65,.48,.47,.24))
+	if w.aura_state != "none":
+		var rage: bool = w.aura_state == "rage"
+		draw_edges(g,Color(.42,.015,.02,.18) if rage else Color(.025,.015,.045,.35))
+	draw_edges(g,Color(.04,.005,.012,.32))
 
 ## Ring around the hero after a level-up, played on the world clock.
 static func level_burst(g, offset: Vector2):
