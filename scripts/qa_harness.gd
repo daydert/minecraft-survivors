@@ -185,6 +185,13 @@ static func prepare_end_capture(g):
 	if g.qa_mode=="end_inventory":g.toggle_inventory();return
 	if g.qa_mode=="end_recipes":g.screen="recipes";g.recipe_page=1;return
 	if g.qa_mode=="end_overworld":g.world.stage="chapter_four";g.world.stage_age=3;g.world.state="RESULT";return
+	if g.qa_mode=="end_shulker":
+		g.world.build={};g.world.invulnerable=60
+		for i in range(4):
+			var at=g.world.player+Vector2.from_angle(i*1.7+.4)*(150+i*20)
+			if g.world.on_land(at):g.world.spawn("shulker",at);g.world.mobs.back().timer=i*.4
+		for i in range(150):g.world.move_mobs(1.0/60);g.world.update_projectiles(1.0/60);g.world.clock+=1.0/60
+		return
 	if g.qa_mode in ["end_dragon","end_crystals","end_dragon_rage","end_betrayal","end_last_duel","end_dragon_death","end_rekindle","end_jump","end_steve_death"]:
 		g.world.prepare_arena();g.world.stage="dragon";g.world.invulnerable=60
 		g.world.build={"sword":8,"spear":8,"mace":8,"end_crystal":8,"knockback_stick":8,"shield":8}

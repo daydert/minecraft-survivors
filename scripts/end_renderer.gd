@@ -240,9 +240,19 @@ func projectile(g, b: Dictionary, offset: Vector2) -> bool:
 	var p: Vector2=b.p+offset-Vector2(0,9)
 	match b.kind:
 		"shulker_bullet":
-			for i in range(b.trail.size()):
-				g.draw_rect(Rect2((b.trail[i]+offset-Vector2(0,9)).floor(),Vector2.ONE),Color(.9,.85,1,float(i)/maxi(1,b.trail.size())*.65))
-			g.draw_set_transform(p,b.age*5);g.sprite("shulker_bullet",Vector2(-4,-4),Vector2(8,8));g.draw_set_transform(Vector2.ZERO)
+			# Pale bullets vanish on pale end stone: a ground shadow, a dark core,
+			# a pulsing violet halo and a two-tone trail keep them readable.
+			g.oval(b.p+offset+Vector2(0,2),Vector2(5,2),Color(.08,0,.12,.45))
+			var count: int=b.trail.size()
+			for i in range(count):
+				var k=float(i+1)/count
+				var q: Vector2=(b.trail[i]+offset-Vector2(0,9)).floor()
+				g.draw_rect(Rect2(q-Vector2.ONE,Vector2(3,3)),Color(.3,.06,.42,k*.5))
+				g.draw_rect(Rect2(q,Vector2.ONE),Color(1,.8,1,k*.85))
+			var pulse=.5+.5*sin(b.age*12)
+			g.draw_circle(p,9+pulse*2,Color(.62,.22,.85,.26+pulse*.16))
+			g.draw_circle(p,6.5,Color(.2,.04,.28,.85))
+			g.draw_set_transform(p,b.age*5);g.sprite("shulker_bullet",Vector2(-6,-6),Vector2(12,12));g.draw_set_transform(Vector2.ZERO)
 		"dragon_fireball":
 			end_particles(g,p,b.age,3,5,12);g.sprite("dragon_fireball",p-Vector2(8,8),Vector2(16,16))
 		"end_blade":
