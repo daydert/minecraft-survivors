@@ -1,0 +1,57 @@
+{
+  "captures": [
+    {
+      "mode": "herobrine_seated",
+      "exit_code": 0,
+      "capture": "qa/boss_native_herobrine_seated.png",
+      "log": "qa/boss_revision_native_release.log"
+    },
+    {
+      "mode": "herobrine_rise",
+      "exit_code": 0,
+      "capture": "qa/boss_native_herobrine_rise.png",
+      "log": "qa/boss_revision_native_release.log"
+    },
+    {
+      "mode": "herobrine_kneel",
+      "exit_code": 0,
+      "capture": "qa/boss_native_herobrine_kneel.png",
+      "log": "qa/boss_revision_native_release.log"
+    },
+    {
+      "mode": "herobrine_rift",
+      "exit_code": 0,
+      "capture": "qa/boss_native_herobrine_rift.png",
+      "log": "qa/boss_revision_native_release.log"
+    },
+    {
+      "mode": "herobrine_end",
+      "exit_code": 0,
+      "capture": "qa/boss_native_herobrine_end.png",
+      "log": "qa/boss_revision_native_release.log"
+    },
+    {
+      "mode": "nether_boss",
+      "exit_code": 0,
+      "capture": "qa/boss_native_nether_boss.png",
+      "log": "qa/boss_revision_native_release.log"
+    },
+    {
+      "mode": "nether_inventory",
+      "exit_code": 0,
+      "capture": "qa/boss_native_nether_inventory.png",
+      "log": "qa/boss_revision_native_release.log"
+    },
+    {
+      "mode": "nether_end",
+      "exit_code": 0,
+      "capture": "qa/boss_native_nether_end.png",
+      "log": "qa/boss_revision_native_end.log"
+    }
+  ],
+  "exit_rechecks": {
+    "successful_sequential_process_exits": 14,
+    "artificial_kills_during_successful_checks": false
+  },
+  "batch_capture_note": "Two initial automated captures exceeded 25/55-second deadlines. Individual retries and 14 subsequent sequential process exits succeeded. The cause of the intermittent timeout was not established."
+}

@@ -1,0 +1,801 @@
+{
+  "actors": {
+    "steve": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.09,
+            0.07,
+            0.09,
+            0.07,
+            0.09,
+            0.07,
+            0.09,
+            0.07
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/player/wide/steve.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "zombie": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "creeper": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.099,
+            0.077,
+            0.099,
+            0.077,
+            0.099,
+            0.077,
+            0.099,
+            0.077
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.45,
+            0.28,
+            0.17
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/creeper/creeper.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "skeleton": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.09,
+            0.07,
+            0.09,
+            0.07,
+            0.09,
+            0.07,
+            0.09,
+            0.07
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.24,
+            0.17,
+            0.09
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/skeleton/skeleton.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "spider": {
+      "frame_size": [
+        48,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        24.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.072,
+            0.056,
+            0.072,
+            0.056,
+            0.072,
+            0.056,
+            0.072,
+            0.056
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/spider/spider.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "slime": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.09,
+            0.07,
+            0.09,
+            0.07,
+            0.09,
+            0.07,
+            0.09,
+            0.07
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/slime/slime.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "translucent",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "elite": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "ravager": {
+      "frame_size": [
+        64,
+        64
+      ],
+      "columns": 22,
+      "pivot": [
+        32.0,
+        61
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.4,
+            0.26,
+            0.14
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/illager/ravager.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    },
+    "vindicator": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.15,
+            0.1
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/illager/vindicator.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      }
+    }
+  },
+  "weapons": {
+    "sword": {
+      "windup": 0.16,
+      "attack": 0.055,
+      "recover": 0.165
+    },
+    "bow": {
+      "windup": 0.24,
+      "attack": 0.07,
+      "recover": 0.16
+    },
+    "trident": {
+      "windup": 0.2,
+      "attack": 0.07,
+      "recover": 0.2
+    },
+    "fire": {
+      "windup": 0.18,
+      "attack": 0.08,
+      "recover": 0.17
+    },
+    "potion": {
+      "windup": 0.18,
+      "attack": 0.09,
+      "recover": 0.2
+    },
+    "fangs": {
+      "windup": 0.2,
+      "attack": 0.07,
+      "recover": 0.2
+    }
+  }
+}

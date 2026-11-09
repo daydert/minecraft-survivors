@@ -1,0 +1,26 @@
+{
+  "version": "1.21.11",
+  "checks": 250,
+  "failures": [],
+  "covered_game_items": [
+    "sword",
+    "bow",
+    "trident",
+    "fire",
+    "potion",
+    "fangs",
+    "blaze",
+    "redstone",
+    "amethyst",
+    "sugar",
+    "armor",
+    "hopper",
+    "apple",
+    "emerald",
+    "chest",
+    "netherite",
+    "flamebow",
+    "channeling"
+  ],
+  "original_resources": 75
+}

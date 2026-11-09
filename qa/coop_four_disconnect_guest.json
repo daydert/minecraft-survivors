@@ -1,0 +1,143 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "clean_leave": true,
+    "connected": true,
+    "diagnostics_saved": true,
+    "loading_barrier": true,
+    "own_identity": true,
+    "pause": true,
+    "pause_observed": true
+  },
+  "diagnostic_prefix": "/home/daydert/.var/app/com.visualstudio.code/data/godot/app_userdata/Minecraft Survivors — До рассвета/logs/survivors_coop_2026-10-27_18-29-42_client_p21837_345272",
+  "diagnostic_writer": {
+    "dropped": 0,
+    "error": "",
+    "queued": 0
+  },
+  "diagnostics": [
+    {
+      "ack": 20,
+      "authority": "(969.239, 1063.558)",
+      "changed": false,
+      "distance": 21.8150100708008,
+      "generation": 0,
+      "old": "(995.978, 1068.46)",
+      "pending": 4,
+      "predicted": "(974.3743, 1065.431)",
+      "seq": 24,
+      "tick": 57
+    },
+    {
+      "ack": 23,
+      "authority": "(973.1014, 1064.933)",
+      "changed": false,
+      "distance": 15.8150081634521,
+      "generation": 0,
+      "old": "(992.5951, 1070.829)",
+      "pending": 4,
+      "predicted": "(976.9332, 1068.634)",
+      "seq": 27,
+      "tick": 60
+    },
+    {
+      "ack": 24,
+      "authority": "(974.3743, 1065.431)",
+      "changed": false,
+      "distance": 13.8149824142456,
+      "generation": 0,
+      "old": "(991.4357, 1071.644)",
+      "pending": 4,
+      "predicted": "(977.7545, 1069.726)",
+      "seq": 28,
+      "tick": 63
+    },
+    {
+      "ack": 0,
+      "authority": "(994.6672, 1136.908)",
+      "changed": true,
+      "distance": 13.6536302566528,
+      "generation": 1,
+      "old": "(991.7053, 1150.237)",
+      "pending": 0,
+      "predicted": "(994.6672, 1136.908)",
+      "seq": 0,
+      "tick": 123
+    },
+    {
+      "ack": 0,
+      "authority": "(946.425, 1142.848)",
+      "changed": true,
+      "distance": 21.8141899108887,
+      "generation": 5,
+      "old": "(925.3876, 1137.078)",
+      "pending": 0,
+      "predicted": "(946.425, 1142.848)",
+      "seq": 0,
+      "tick": 234
+    },
+    {
+      "ack": 0,
+      "authority": "(946.425, 1142.848)",
+      "changed": true,
+      "distance": 19.814208984375,
+      "generation": 6,
+      "old": "(927.3164, 1137.607)",
+      "pending": 0,
+      "predicted": "(946.425, 1142.848)",
+      "seq": 0,
+      "tick": 235
+    },
+    {
+      "ack": 0,
+      "authority": "(946.425, 1142.848)",
+      "changed": false,
+      "distance": 15.8142108917236,
+      "generation": 6,
+      "old": "(928.6749, 1137.558)",
+      "pending": 2,
+      "predicted": "(943.926, 1141.74)",
+      "seq": 2,
+      "tick": 237
+    },
+    {
+      "ack": 0,
+      "authority": "(946.425, 1142.848)",
+      "changed": true,
+      "distance": 16.5856456756592,
+      "generation": 7,
+      "old": "(930.7811, 1137.339)",
+      "pending": 0,
+      "predicted": "(946.425, 1142.848)",
+      "seq": 0,
+      "tick": 240
+    },
+    {
+      "ack": 0,
+      "authority": "(946.425, 1142.848)",
+      "changed": false,
+      "distance": 12.585657119751,
+      "generation": 7,
+      "old": "(934.554, 1138.667)",
+      "pending": 0,
+      "predicted": "(946.425, 1142.848)",
+      "seq": 0,
+      "tick": 243
+    }
+  ],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 21.8150100708008,
+  "max_render_step": 2.0000262260437,
+  "p95_correction": 15.8150081634521,
+  "p95_present_ms": 2.768,
+  "p95_sim_ms": 0.147,
+  "players": 4,
+  "received_buckets": 2078,
+  "received_frames": 81,
+  "role": "guest",
+  "scenario": "disconnect",
+  "seat": 1,
+  "traveled": 218.788108472159
+}

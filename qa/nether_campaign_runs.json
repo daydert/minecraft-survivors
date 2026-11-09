@@ -1,0 +1,31 @@
+[
+  {
+    "artificial_invulnerability": false,
+    "boss_hits": 0,
+    "build": {
+      "bow": 3,
+      "crossbow": 2,
+      "fire": 1,
+      "hoe": 1,
+      "sword": 5,
+      "tnt": 1
+    },
+    "evolved": {},
+    "hp": -2.32,
+    "items": {
+      "armor": 3,
+      "blaze": 1,
+      "ghast_tear": 4,
+      "gold_leggings": 1,
+      "hopper": 1,
+      "redstone": 1,
+      "sugar": 2
+    },
+    "kills": 367,
+    "level": 25,
+    "seed": 151,
+    "stage": "survival",
+    "time": 292.983333333396,
+    "victory": false
+  }
+]

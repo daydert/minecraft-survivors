@@ -1,0 +1,285 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    },
+    "textures/entity/zombie/zombie.png": {
+      "sha256": "1b88eea9b63889c2c3399773f887af375defc3aad0e7a375adc84249da54cbbd",
+      "bytes": 700
+    },
+    "textures/entity/skeleton/skeleton.png": {
+      "sha256": "854dd39acb1d8852db3b9e5d3d2bdc032070e37f421b53661ff48d0c1ddf290a",
+      "bytes": 477
+    },
+    "textures/entity/creeper/creeper.png": {
+      "sha256": "e5f1cbe223f6838049e4632b250cad7b70c1d30e9717ad7bfe32912731887283",
+      "bytes": 2832
+    },
+    "textures/entity/spider/spider.png": {
+      "sha256": "12771d3524ad137812b2a94d52b6943401c5e0a942baa6946e783e822c46c554",
+      "bytes": 646
+    },
+    "textures/entity/slime/slime.png": {
+      "sha256": "c724fc4eb07da3e2e10cc4b269d554bfb19271a560e2dbd4b74f71fae050f955",
+      "bytes": 314
+    },
+    "textures/entity/illager/ravager.png": {
+      "sha256": "31dde5d0678b781babb511a4aae38980316935d9aa8f4073e07551a44b8638cc",
+      "bytes": 2285
+    },
+    "textures/entity/illager/vindicator.png": {
+      "sha256": "a82d0f7012c464b9421708bd9b4fc1d742c8149512c3be47a315bc67466d0618",
+      "bytes": 865
+    },
+    "textures/item/iron_axe.png": {
+      "sha256": "8dea40bac06c6f14bb0ad9e8b47de63250f6d6a46ae9439b85ddd1377f1edb49",
+      "bytes": 178
+    },
+    "textures/entity/equipment/humanoid/iron.png": {
+      "sha256": "4ab8a988d646e8a22a78fe71d0bc293579c65a663e3c1755cac698acbbdc2a66",
+      "bytes": 424
+    },
+    "textures/block/stone_bricks.png": {
+      "sha256": "24415444c9e4815aad4a3a349ecbfc0e027b96be25ac5b7c273c06f16c4fdd2f",
+      "bytes": 188
+    },
+    "textures/block/polished_blackstone_bricks.png": {
+      "sha256": "91d65c74a532535cd761b4f6760467e907450c9bfa7adc6b2e11587f00942953",
+      "bytes": 190
+    },
+    "textures/block/netherrack.png": {
+      "sha256": "3c0208b749c5393b9bad9d57ed3d830326a02b8cbd8444e96d4d0d277f85625f",
+      "bytes": 213
+    },
+    "textures/block/nether_bricks.png": {
+      "sha256": "2eba1f96e7fcaa5d9ea8ae2dd8c196494039fa41e9ed4c89909c90d942297318",
+      "bytes": 190
+    },
+    "textures/block/oak_log.png": {
+      "sha256": "61735859c9c9ea82601191a77c6f256d93619cbaf7cad998a3ed5762877a34e6",
+      "bytes": 191
+    },
+    "textures/block/oak_log_top.png": {
+      "sha256": "a520800a833ea0c6214481245ab40397aa0c08b4ffc909046dac266386f9fc01",
+      "bytes": 206
+    },
+    "textures/block/nether_portal.png": {
+      "sha256": "83f7f02814cf0dcf2b7ddd7be5c4ef03ab50e279bbca4acdcab5cd1d11a694f7",
+      "bytes": 8945
+    },
+    "textures/block/nether_portal.png.mcmeta": {
+      "sha256": "802acdb8f55f30146d5ed18414b21ba35650d4e550f81825ea104131c12dc4fc",
+      "bytes": 21
+    },
+    "textures/block/obsidian.png": {
+      "sha256": "d9c7dc812d8e8b995e22caff2b10c1fc663b5e127a94c20a7476cfd88af2cd82",
+      "bytes": 189
+    }
+  },
+  "derived": {
+    "steve_atlas": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "2320b75c6249fd0c06bc2c7830a90dc2675d51315fb0adec17a0f9f2665c967b"
+    },
+    "zombie_atlas": {
+      "sources": [
+        "entity/zombie/zombie"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "5751d59120233ce0de6fd25b89b706335a5b549a92706baa63515d69e26d9981"
+    },
+    "skeleton_atlas": {
+      "sources": [
+        "entity/skeleton/skeleton"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "790ff214902c659e916047db1ac34a0f9b388a2652bd31639381e81f4ebb09e3"
+    },
+    "creeper_atlas": {
+      "sources": [
+        "entity/creeper/creeper"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "21a99bd9105e3effd1c1fd594309817f7c9ebed77be602fb574a1ab7f33af719"
+    },
+    "spider_atlas": {
+      "sources": [
+        "entity/spider/spider"
+      ],
+      "size": [
+        1056,
+        96
+      ],
+      "sha256": "4bad2bbc64d684c439e0641153e42a72e700cd11ebddcdb6b36199a3878761ed"
+    },
+    "slime_atlas": {
+      "sources": [
+        "entity/slime/slime"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "bb697275c6e44f6b43188fda125754249658d397fa84d2eb82c0606f2bdb5626"
+    },
+    "ravager_atlas": {
+      "sources": [
+        "entity/illager/ravager"
+      ],
+      "size": [
+        1408,
+        192
+      ],
+      "sha256": "789d0f9a1afcbe7eb80aeecc9ef44318ab29a34b6a5f91754401d2a967e2d183"
+    },
+    "vindicator_atlas": {
+      "sources": [
+        "entity/illager/vindicator",
+        "item/iron_axe"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "6839503a0020a742775baed691aa2f24fdfedb2e76347ad7653349c13523eedb"
+    },
+    "elite_atlas": {
+      "sources": [
+        "entity/zombie/zombie",
+        "entity/equipment/humanoid/iron"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "69f3ddd53bee9a46c7d80184dfc6fe3df9c1cb0d812a60259ec76ed304d8d8c3"
+    },
+    "herobrine_throne": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/stone_bricks",
+        "block/polished_blackstone_bricks",
+        "block/netherrack",
+        "block/nether_bricks"
+      ],
+      "size": [
+        192,
+        176
+      ],
+      "sha256": "f39738d4c6a16cb06fcc86358e1c1cfd2db7d881172448372883509b37baad1d"
+    },
+    "tree_dead_0": {
+      "sources": [
+        "block/oak_log",
+        "block/oak_log_top"
+      ],
+      "size": [
+        64,
+        72
+      ],
+      "sha256": "cfc79262d2385e3803cae54ebaf31f5667273906a8366096cac1d2d352a5ec08"
+    },
+    "tree_dead_1": {
+      "sources": [
+        "block/oak_log",
+        "block/oak_log_top"
+      ],
+      "size": [
+        64,
+        72
+      ],
+      "sha256": "0ad3abdba6b74f12899e7e4f787e646981ae1c196a025d04619f5cfc3cdca065"
+    },
+    "tree_dead_2": {
+      "sources": [
+        "block/oak_log",
+        "block/oak_log_top"
+      ],
+      "size": [
+        64,
+        72
+      ],
+      "sha256": "e8eedefeab39395c806218c909dc6a756dd11cbaeb6739d656609a7537ddf860"
+    },
+    "ground_scorched": {
+      "sources": [
+        "ground (derived vanilla block textures)"
+      ],
+      "size": [
+        2048,
+        2048
+      ],
+      "sha256": "83ab0cd338975acf6d2905cdb5bb7d19e372d276cd44dc088c21dd56b4f5f224"
+    },
+    "nether_portal": {
+      "sources": [
+        "block/nether_portal"
+      ],
+      "size": [
+        512,
+        16
+      ],
+      "sha256": "4553f7764c814bb6be3d79460f2c41904348e6220e0989568fcf766aa13b4be7"
+    },
+    "nether_backdrop": {
+      "sources": [
+        "block/netherrack"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "c94cdcf55ee258fee44b662d9ed54ba9aed548a8dfe84c3ed00c76f74dd474e0"
+    },
+    "portal_frame": {
+      "sources": [
+        "block/obsidian"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4cd535091075c6fd4e2c49bec431ebe2cc251bc92b907ba229822d63c695f808"
+    }
+  },
+  "throne": {
+    "size": [
+      192,
+      176
+    ],
+    "pivot": [
+      96,
+      150
+    ],
+    "fire_sockets": [
+      [
+        32.449999999999996,
+        81.12432167851459
+      ],
+      [
+        159.55,
+        81.12432167851459
+      ]
+    ],
+    "reference": "User-supplied seated Herobrine reference: relaxed throne pose, crossed legs, white eyes; four Steve heads and two netherrack braziers"
+  },
+  "notes": "All character faces sample original vanilla UV textures. Herobrine's white eyes and seated pose are custom. No imagegen assets are used by these atlases."
+}

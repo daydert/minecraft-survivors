@@ -1,0 +1,17 @@
+{
+  "ender_dragon.geo.json": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/a3b394c507a6b11a3c6f61552e778ff5c4b89fd2/resource_pack/models/entity/ender_dragon.geo.json",
+    "sha256": "07c9333dc913e046ed041143624a5eb30a33cb340fa07b10d507a8c95be608c6",
+    "purpose": "Mojang reference for connected wing geometry, UV orientation and shoulder/elbow motion; local Java atlas supplies game pixels."
+  },
+  "ender_dragon.animation.json": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/a3b394c507a6b11a3c6f61552e778ff5c4b89fd2/resource_pack/animations/ender_dragon.animation.json",
+    "sha256": "43a4cf19dfdc05a35216e1ff93d5905ef6da4058cc5b2eb9ea4508358fd05307",
+    "purpose": "Mojang reference for connected wing geometry, UV orientation and shoulder/elbow motion; local Java atlas supplies game pixels."
+  },
+  "shulker_bullet.geo.json": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/a3b394c507a6b11a3c6f61552e778ff5c4b89fd2/resource_pack/models/entity/shulker_bullet.geo.json",
+    "sha256": "ecfc460d03c9df237e8dbb4b808b1b3aaa60c163aa54a01027a0d8294c291caf",
+    "purpose": "Native three-cuboid shulker bullet geometry; the game texture comes from the local Java client."
+  }
+}

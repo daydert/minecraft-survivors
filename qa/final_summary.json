@@ -1,0 +1,75 @@
+{
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "checks": 169,
+  "failures": [],
+  "checks_by_suite": {
+    "world": 47,
+    "ui": 15,
+    "animation": 59,
+    "atlas": 40,
+    "render": 8
+  },
+  "combat_parity": "qa/combat_parity.json",
+  "performance": "qa/performance.json",
+  "native_release": "qa/animation_native_release.json",
+  "video": "qa/recordings/animations_before_after.mp4",
+  "report": "docs/ANIMATION_REPORT.md",
+  "date": "2026-10-27",
+  "performance_results": {
+    "all_passives": 5,
+    "all_weapons": 8,
+    "draw_calls": 217.0,
+    "enemies": 250,
+    "evolutions": [
+      "sword",
+      "bow",
+      "trident"
+    ],
+    "executable": "/home/daydert/MinecraftSurvival/builds/linux/MinecraftSurvivors.x86_64",
+    "godot": "4.7.2-stable (official)",
+    "render_viewport": "(640.0, 360.0)",
+    "rendered_frame": {
+      "max_ms": 32.8630000000001,
+      "mean_ms": 16.9810040740744,
+      "p95_ms": 19.4444444444444
+    },
+    "renderer": "AMD Radeon 780M Graphics (radeonsi, phoenix, ACO, DRM 3.64, 6.18.53-1-lts)",
+    "resolution": "(3192, 1860)",
+    "samples": 1800,
+    "simulation": {
+      "max_ms": 13.644,
+      "mean_ms": 5.17024152770306,
+      "p95_ms": 8.368
+    },
+    "wall_seconds": 31.9906580000008
+  },
+  "average_fps": 58.889332788438665,
+  "release_sha256": {
+    "builds/linux/MinecraftSurvivors.x86_64": "b598e078abecc80760e719df7a668a83eab9d110ccf9aa675d5f05491361bfbc",
+    "builds/windows/MinecraftSurvivors.exe": "59b3a238b632226039f234b546aa175025b789677b05947bb88576517d04bcce"
+  },
+  "combat_parity_results": {
+    "failures": [],
+    "scenarios": [
+      {
+        "kills": 1,
+        "mobs": 110,
+        "scenario": "sword",
+        "time": 29.9999999999996
+      },
+      {
+        "kills": 209,
+        "mobs": 100,
+        "scenario": "all_weapons",
+        "time": 609.999999999973
+      },
+      {
+        "kills": 212,
+        "mobs": 100,
+        "scenario": "evolved",
+        "time": 609.999999999973
+      }
+    ],
+    "ticks": 5400
+  }
+}

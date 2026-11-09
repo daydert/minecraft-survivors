@@ -1,0 +1,15 @@
+{
+  "disposition": "ship",
+  "scope": "Two reported regressions: backward-facing horizontal mob movement and Steve eyes disappearing during movement/actions. Native Godot desktop Linux captures only.",
+  "evidence": [
+    ".impeccable/review/character-facing-desktop.png",
+    ".impeccable/review/steve-eyes-desktop.png",
+    "qa/minecraft_facing_battle_release.png",
+    "qa/character_facing_results.json",
+    "qa/character_asset_results.json"
+  ],
+  "capture_validity": "All three required native screenshots were opened and inspected, including nearest-neighbor enlargements. They show the expected content.",
+  "material_findings": [],
+  "assessment": "Faces and fronts point along left/right movement. Steve retains original white sclera and purple pupils in walking and other shown poses. Minecraft texture identity and sharp pixel edges are preserved.",
+  "next_actions": "No visual corrections or recaptures required. Complete source provenance, documentation and release packaging."
+}

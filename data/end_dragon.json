@@ -1,0 +1,39 @@
+{
+  "frame_size": [
+    320,
+    256
+  ],
+  "anchor": [
+    160,
+    152
+  ],
+  "directions": 16,
+  "columns": 24,
+  "states": {
+    "flight": {
+      "start": 0,
+      "count": 12,
+      "fps": 12
+    },
+    "perch": {
+      "start": 12,
+      "count": 8,
+      "fps": 8
+    },
+    "roar": {
+      "start": 20,
+      "count": 4,
+      "fps": 8
+    }
+  },
+  "joints": {
+    "neck": 5,
+    "tail": 12,
+    "wings": 4,
+    "jaw": 1,
+    "legs": 8
+  },
+  "projection_elevation": 27,
+  "source_texture": "entity/enderdragon/dragon",
+  "wing_reference": "docs/references/end/sources.json"
+}

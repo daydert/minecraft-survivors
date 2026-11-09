@@ -1,0 +1,168 @@
+{
+  "version": "0.7.1",
+  "checks": 2845,
+  "failures": [],
+  "reports": {
+    "unit": {
+      "checks": 47,
+      "failures": []
+    },
+    "ui": {
+      "checks": 15,
+      "failures": []
+    },
+    "animation": {
+      "checks": 60,
+      "failures": []
+    },
+    "chapter": {
+      "checks": 21,
+      "failures": []
+    },
+    "coop": {
+      "checks": 74,
+      "failures": []
+    },
+    "coop_four": {
+      "checks": 41,
+      "failures": []
+    },
+    "coop_logging": {
+      "checks": 11,
+      "failures": []
+    },
+    "nether": {
+      "checks": 62,
+      "failures": []
+    },
+    "nether_visual": {
+      "checks": 21,
+      "failures": []
+    },
+    "nether_asset": {
+      "checks": 853,
+      "failures": []
+    },
+    "atlas": {
+      "checks": 45,
+      "failures": []
+    },
+    "minecraft_asset": {
+      "checks": 250,
+      "failures": []
+    },
+    "presentation_asset": {
+      "checks": 447,
+      "failures": []
+    },
+    "character_asset": {
+      "checks": 724,
+      "failures": []
+    },
+    "character_facing": {
+      "checks": 67,
+      "failures": []
+    },
+    "visual_animation": {
+      "checks": 8,
+      "failures": []
+    },
+    "minecraft_render": {
+      "checks": 7,
+      "failures": []
+    },
+    "presentation": {
+      "checks": 26,
+      "failures": []
+    },
+    "chapter_visual": {
+      "checks": 9,
+      "failures": []
+    },
+    "coop_visual": {
+      "checks": 11,
+      "failures": []
+    },
+    "coop_four_visual": {
+      "checks": 13,
+      "failures": []
+    },
+    "music_rotation": {
+      "checks": 21,
+      "failures": []
+    },
+    "music_asset": {
+      "checks": 12,
+      "failures": []
+    }
+  },
+  "boss_runs": [
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 345,
+      "boss_hp": 0,
+      "hp": 20.0,
+      "seconds": 33.1666666666667,
+      "stage": "defeat",
+      "style": "hybrid",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 381,
+      "boss_hp": 0,
+      "hp": 17.7,
+      "seconds": 60.1666666666667,
+      "stage": "defeat",
+      "style": "melee",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 651,
+      "boss_hp": 0,
+      "hp": 18.0,
+      "seconds": 86.8833333333333,
+      "stage": "defeat",
+      "style": "developing",
+      "victory": true
+    }
+  ],
+  "combat_parity_ticks": 5400,
+  "native": {
+    "wither_native_battle": {
+      "runtime_errors": 0,
+      "screenshot": "qa/wither_native_battle.png"
+    },
+    "wither_native_boss": {
+      "runtime_errors": 0,
+      "screenshot": "qa/wither_native_boss.png"
+    },
+    "wither_native_end": {
+      "runtime_errors": 0,
+      "screenshot": "qa/wither_native_end.png"
+    },
+    "wither_native_inventory": {
+      "runtime_errors": 0,
+      "screenshot": "qa/wither_native_inventory.png"
+    }
+  },
+  "music_manifest": "docs/MUSIC_MANIFEST.json",
+  "exports": {
+    "builds/linux/MinecraftSurvivors.x86_64": {
+      "sha256": "b54e40512623aa94cea21b091b3a8578d0f615a9c0604f8e725198620eabb66b",
+      "bytes": 98443056
+    },
+    "builds/windows/MinecraftSurvivors.exe": {
+      "sha256": "00a55b612b1adca40d309fbed608e0589c99874d7fa7b1ed098508539aa70dca",
+      "bytes": 134052352
+    }
+  },
+  "video": "qa/recordings/wither_update.mp4",
+  "limitations": [
+    "Diagnostic video is silent and uses invulnerability for filming only.",
+    "Boss runs use predefined builds, not a whole naturally acquired campaign.",
+    "Windows is exported but not run natively.",
+    "Physical ZeroTier connections were not tested; network rules are unchanged."
+  ]
+}

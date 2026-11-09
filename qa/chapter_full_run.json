@@ -1,0 +1,75 @@
+[
+  {
+    "build": {
+      "bow": 7,
+      "sword": 2
+    },
+    "chapter_complete": false,
+    "checkpoints": [
+      {
+        "hp": 20.0,
+        "kills": 0,
+        "level": 1,
+        "mobs": 0,
+        "time": 0.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 19,
+        "level": 3,
+        "mobs": 27,
+        "time": 60.02
+      },
+      {
+        "hp": 15.84,
+        "kills": 54,
+        "level": 4,
+        "mobs": 76,
+        "time": 120.02
+      },
+      {
+        "hp": 15.84,
+        "kills": 114,
+        "level": 6,
+        "mobs": 143,
+        "time": 180.0
+      },
+      {
+        "hp": 15.84,
+        "kills": 181,
+        "level": 8,
+        "mobs": 181,
+        "time": 240.0
+      },
+      {
+        "hp": 15.84,
+        "kills": 288,
+        "level": 10,
+        "mobs": 234,
+        "time": 300.0
+      },
+      {
+        "hp": 15.84,
+        "kills": 401,
+        "level": 12,
+        "mobs": 249,
+        "time": 360.0
+      }
+    ],
+    "ending": "",
+    "evolved": {},
+    "first_level": 14.466666666667,
+    "hp": -1.0,
+    "items": {
+      "armor": 4
+    },
+    "kills": 497,
+    "level": 13,
+    "max_step_ms": 16.042,
+    "seed": 152,
+    "style": "bow",
+    "time": 375.799999999987,
+    "victory": false,
+    "wall_seconds": 76.610017
+  }
+]

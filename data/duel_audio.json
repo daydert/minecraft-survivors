@@ -1,0 +1,44 @@
+{
+  "herobrine_warp": {
+    "minecraft_event": "entity.enderman.teleport",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_endermen_portal.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_endermen_portal2.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "blood_rift": {
+    "minecraft_event": "entity.warden.sonic_boom",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_warden_sonic_boom1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_warden_sonic_boom2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_warden_sonic_boom3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_warden_sonic_boom4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  }
+}

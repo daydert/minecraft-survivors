@@ -1,0 +1,846 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "instances": [
+    "1.21.11",
+    "1.21.11(1)"
+  ],
+  "client_sha256": "1473c9489ac50fda3c435049a76a70d61a10b8610db27f5ba9d8756b686cd3bd",
+  "source": "Local Prism Launcher vanilla client; no resource-pack overrides",
+  "raw_files": {
+    "textures/item/iron_sword.png": {
+      "sha256": "455f2c306a9ddc1da19b04603ae0047211e2f4e4817b105573fcdc29b3c6945f",
+      "bytes": 194
+    },
+    "textures/item/bow.png": {
+      "sha256": "1e2cb18545e4ed9286e1120686c3f835d6619b8bd853970f1011163b68426a54",
+      "bytes": 160
+    },
+    "textures/item/trident.png": {
+      "sha256": "2bb1397727939c03c0c5c87307e91b41246e8ffd1b0ceddd73c7cc40bb9cf19d",
+      "bytes": 166
+    },
+    "textures/item/fire_charge.png": {
+      "sha256": "cf15c4301ec96a22813f17b11e43a2d047e8b65067c7513a76107fef7a485ad2",
+      "bytes": 205
+    },
+    "textures/item/blaze_powder.png": {
+      "sha256": "b2be09a066cf44cb126744fc25625fba75d3c3c33893c80cda4303ea9e432e7b",
+      "bytes": 262
+    },
+    "textures/item/redstone.png": {
+      "sha256": "6d0e6a1fd54142cd3de649e1100c428733512b322a0b0a530f62eae9f86881ec",
+      "bytes": 179
+    },
+    "textures/item/amethyst_shard.png": {
+      "sha256": "dc64feb12d553ec59b819534ae57b46e99ac95a3ab61cb71de317a5d7b857584",
+      "bytes": 183
+    },
+    "textures/item/sugar.png": {
+      "sha256": "8fd584956fcf4b3252706051f7f0c93e808cdb0e391b42dff130c6ae4e5d18ae",
+      "bytes": 167
+    },
+    "textures/item/iron_chestplate.png": {
+      "sha256": "b1b467d1c98efda1c2bd31c5a32fadc884b424b3d08f3b010d9053a1e0f0609a",
+      "bytes": 161
+    },
+    "textures/item/hopper.png": {
+      "sha256": "6a4c36e7a9e8b4f59ff3d7de17d9708045715ab85cdc4b60534d3f643a4c5791",
+      "bytes": 191
+    },
+    "textures/item/apple.png": {
+      "sha256": "e6a57182db6029fff6d02fc774780fcec9f506b74226985445c91e5e7df5d9bb",
+      "bytes": 203
+    },
+    "textures/item/emerald.png": {
+      "sha256": "7aa1f12ee48666b2c3ae56fd9884ee95bf315795bfd1fd6e4ac3d3811ae3aacb",
+      "bytes": 182
+    },
+    "textures/item/netherite_sword.png": {
+      "sha256": "8f1584739b0c4e9aa09f901bdfc9251a0a6fa1e0172b8c2a5a869e9fbaf25906",
+      "bytes": 203
+    },
+    "textures/item/bow_pulling_0.png": {
+      "sha256": "6ddd0fa3bccd38fd6d6cae5139354f2371b942a6e6d5131182a60cc07a4cc9aa",
+      "bytes": 198
+    },
+    "textures/item/bow_pulling_1.png": {
+      "sha256": "0e791b2a6dbda98be5309dd97efcef2f111b426eaf06080411f5ed18cc42f6d6",
+      "bytes": 202
+    },
+    "textures/item/bow_pulling_2.png": {
+      "sha256": "4c1c286346283a7422b9da30473da7bb71434cb190dd351daa9eb121275b3bb4",
+      "bytes": 197
+    },
+    "textures/item/arrow.png": {
+      "sha256": "fe76b2e0c79e09ddd037111cfc1d0510e1e13f2c2ff71bbf23e9c48b98d9030c",
+      "bytes": 145
+    },
+    "textures/item/potion_overlay.png": {
+      "sha256": "606f372ad8b832a8659c54adb5da0ace0bcc74b471b84211076197cb3c557043",
+      "bytes": 124
+    },
+    "textures/item/potion.png": {
+      "sha256": "6a09a39bb6c41bc92bd5eca1f51caf5b582a85f68206b164476c8e14a4669416",
+      "bytes": 165
+    },
+    "textures/item/splash_potion.png": {
+      "sha256": "5c93f8d12921efe653b0c04f693baa1a4a5fd0d02e763fca8a97ad27d74f0b81",
+      "bytes": 150
+    },
+    "textures/gui/sprites/hud/heart/full.png": {
+      "sha256": "acb11da7611dc8239d4da2fe500cca2fe88a2c4facccf42fa7207c0e9dba4a16",
+      "bytes": 107
+    },
+    "textures/gui/sprites/hud/heart/half.png": {
+      "sha256": "98d1fca665a309879c19c06b0658ba5407520f13a02d4bf7321b060534491efc",
+      "bytes": 102
+    },
+    "textures/gui/sprites/hud/heart/container.png": {
+      "sha256": "b92355b32f566dd5ec209dcf6f25ddd239fdf967a70af42308ef9607aab3b194",
+      "bytes": 98
+    },
+    "textures/misc/enchanted_glint_item.png": {
+      "sha256": "23831803126a3b75e74deeb5a5e39df9a26c94872d20533f444eb5072b417fb5",
+      "bytes": 12310
+    },
+    "textures/misc/enchanted_glint_item.png.mcmeta": {
+      "sha256": "a4f5e3c3235dd128ee6d2ce397217e8c77037dbcf641aaa5bef65824e3b4b168",
+      "bytes": 40
+    },
+    "textures/entity/projectiles/arrow.png": {
+      "sha256": "4020078eead4776e857ca87090cdfff68261fdfab3c542807685f23007e39f67",
+      "bytes": 186
+    },
+    "textures/block/fire_0.png": {
+      "sha256": "00cd7ff06026f0261b9d8dc4dc492e9e8abebc50b057738d0f3e4a39a3df7a09",
+      "bytes": 8008
+    },
+    "textures/block/fire_0.png.mcmeta": {
+      "sha256": "658d67c1b3206e23a401d04ec196512b72702b7b8c6fa0200c6c66250529bbbb",
+      "bytes": 356
+    },
+    "textures/particle/effect_0.png": {
+      "sha256": "c6d3ac6afcc08fe14c78923560170e87a2416928a067aca447173eab6127d47f",
+      "bytes": 77
+    },
+    "textures/particle/effect_1.png": {
+      "sha256": "ae5d566d495262e51e396f96d5800a174626fcc005b8c733436fda5042964d97",
+      "bytes": 83
+    },
+    "textures/particle/effect_2.png": {
+      "sha256": "ca5bebdd585b6b891582a2049be1f216b9bdbe265bb55bb7fb58d9c86626fc14",
+      "bytes": 92
+    },
+    "textures/particle/effect_3.png": {
+      "sha256": "c0212e1c94f0d553f962d699fa46f95f70580d7cbfc511c073c1ec8f8e8ba41c",
+      "bytes": 102
+    },
+    "textures/particle/effect_4.png": {
+      "sha256": "25b5f9da9e3ed3be83a76e8dca5eca06c8f3f64106cc453d460fa85a24b7b3ba",
+      "bytes": 100
+    },
+    "textures/particle/effect_5.png": {
+      "sha256": "858a3830bf53f32b9b143dbe74d3ac956a84ad92dc6d77cb400c7989da4959c1",
+      "bytes": 100
+    },
+    "textures/particle/effect_6.png": {
+      "sha256": "c4d5d8faccf27eedd60a35271368fbb99db1ca18a624eb47cefe8a94c41c0022",
+      "bytes": 103
+    },
+    "textures/particle/effect_7.png": {
+      "sha256": "ab126a1430e6c1829aca8d204e2cd49ead4409ba837b20fcce4c8b554a0f16ad",
+      "bytes": 100
+    },
+    "textures/particle/sweep_0.png": {
+      "sha256": "956cef6c5c72d5909bfc212679a6139defe9aeec4f7aa5ab1469323006564a74",
+      "bytes": 108
+    },
+    "textures/particle/sweep_1.png": {
+      "sha256": "983e908a67833142459ef3edd5f1c81245e0b11052d3c68c241a8b1704774da4",
+      "bytes": 121
+    },
+    "textures/particle/sweep_2.png": {
+      "sha256": "a424fdc2fa2670d13efb6c0b5ebe761c2c19b54b8913b0fcbca4f3e7404d507e",
+      "bytes": 125
+    },
+    "textures/particle/sweep_3.png": {
+      "sha256": "6823596672715447fc298dd612496385019352489b4bf18ed0eef8cb9867adb4",
+      "bytes": 134
+    },
+    "textures/particle/sweep_4.png": {
+      "sha256": "cdd863af03b9ecbceff9249437a07893d54fa5ec2ec83b74413224f687e5332c",
+      "bytes": 124
+    },
+    "textures/particle/sweep_5.png": {
+      "sha256": "70a36495affa84b7f84d8ea247de5d18e0c11405188708aa0fce522802cbf307",
+      "bytes": 119
+    },
+    "textures/particle/sweep_6.png": {
+      "sha256": "9ef559212f8ded56a3d86e96e9f23364755cead18227aa96b660b145bdd2f783",
+      "bytes": 112
+    },
+    "textures/particle/sweep_7.png": {
+      "sha256": "1dd3f1550c011c6cad2a8377586cbfce7af03126ce0536083abc4e44f5df46c2",
+      "bytes": 101
+    },
+    "textures/particle/explosion_0.png": {
+      "sha256": "a866f2dd2a7589a2b9b3f813735647ddf03596ebab84883a581edb6b1615adce",
+      "bytes": 92
+    },
+    "textures/particle/explosion_1.png": {
+      "sha256": "812129f9bb825fe79cc7673d10b0b7338ad2087ef638689e5836ebbe5b3cfef3",
+      "bytes": 98
+    },
+    "textures/particle/explosion_2.png": {
+      "sha256": "acb8bc2f23ba613ac921733f7f684d2aed7b3ec49b06398a1156d6097b12b29d",
+      "bytes": 98
+    },
+    "textures/particle/explosion_3.png": {
+      "sha256": "9f7c5726b0645f660e8f26bc5437c17908f8b0470cd02b401a4b152c9d80980c",
+      "bytes": 105
+    },
+    "textures/particle/explosion_4.png": {
+      "sha256": "2101114aed66f1f25812fcb419416c60f22bb249b4034b4034957769add69158",
+      "bytes": 110
+    },
+    "textures/particle/explosion_5.png": {
+      "sha256": "88f1b038924db665f411c176c6b8afe1b7e0fe897f432dcafb22f1d95fb1d6f5",
+      "bytes": 111
+    },
+    "textures/particle/explosion_6.png": {
+      "sha256": "0bd08d58f42fc1824250013294d355d6d564f64946e9111d45833a57be5510fc",
+      "bytes": 127
+    },
+    "textures/particle/explosion_7.png": {
+      "sha256": "5e0530a2676ac9e6b22b1fba636b8e2677105425e7c651ec346165732dcb7230",
+      "bytes": 132
+    },
+    "textures/particle/explosion_8.png": {
+      "sha256": "7068773dc258ae8bad83e278de1c02180f41986901a52ad722b725caf6c5eeb3",
+      "bytes": 142
+    },
+    "textures/particle/explosion_9.png": {
+      "sha256": "321e290169bfd347e73f51e0185e098e3067f75039ee2042a303f267675666f2",
+      "bytes": 145
+    },
+    "textures/particle/explosion_10.png": {
+      "sha256": "d70c078693d08db702468335f7b0b3ac6e102e052654981b16d0dc8fff7a7e59",
+      "bytes": 143
+    },
+    "textures/particle/explosion_11.png": {
+      "sha256": "63f51a1d9125323949ec86d3423fa8914ac6a0cdd37c8532a3217f8df9cab147",
+      "bytes": 146
+    },
+    "textures/particle/explosion_12.png": {
+      "sha256": "3bd75dd62da503ea3eac66bb9c23666a9bd9bdd97a299b25e4003dee47fbd9fe",
+      "bytes": 146
+    },
+    "textures/particle/explosion_13.png": {
+      "sha256": "7f58b47c1b47ab767c5ca220d8ef2ef53347789993fc1a546e16a60917608855",
+      "bytes": 137
+    },
+    "textures/particle/explosion_14.png": {
+      "sha256": "e63a58b50a0520cd066f0675de973ff484f2513d9b47c0b01d4e1499c74c7dbf",
+      "bytes": 123
+    },
+    "textures/particle/explosion_15.png": {
+      "sha256": "b69b08e62197fb8d1387439f24c5d723fc0dabe8b62e2b0502106806c47722ae",
+      "bytes": 105
+    },
+    "textures/particle/flame.png": {
+      "sha256": "beb1b1fa93b5809b906c850fcba2cdfa65e0166fe510ed592a0510a1585c4991",
+      "bytes": 107
+    },
+    "textures/entity/experience_orb.png": {
+      "sha256": "fe55d3823ae0f2c8114e051ae26a38d48808abc31a514401047ed08862ac8ec0",
+      "bytes": 415
+    },
+    "textures/entity/chest/normal.png": {
+      "sha256": "ab478534503430192b224ea4d5e1e87b6820198925bb7a7b4bd32f2a8a55c801",
+      "bytes": 811
+    },
+    "textures/entity/illager/evoker_fangs.png": {
+      "sha256": "ba286aa7aa1413368bc3ae2a9a9b2ba49c270d7c7ab6b51408a9ccfe21c7bbfc",
+      "bytes": 391
+    },
+    "textures/block/grass_block_top.png": {
+      "sha256": "52f44b64ce884a13dfe35e4b4da2e35898b790dd4d7a5ea536f1b0c0d56d29b4",
+      "bytes": 298
+    },
+    "textures/block/dirt_path_top.png": {
+      "sha256": "653ab9be45372827da221f787435e2ad5adddc6257c29d45fe56947963784ac3",
+      "bytes": 170
+    },
+    "textures/block/stone.png": {
+      "sha256": "b5e10adc72442bfb257ce7ba0b9bbe36475a0c8cdfec89b80dc9517203ff3e9f",
+      "bytes": 151
+    },
+    "textures/block/pumpkin_side.png": {
+      "sha256": "8f67ee060dd5c1ecc66913caed4294937e3cda8a11d0e0866ec8f558c157c30d",
+      "bytes": 178
+    },
+    "textures/block/pumpkin_top.png": {
+      "sha256": "d56a36f0fea290d79d9a23122255627181ca54541d0599791fdf23b617b160c6",
+      "bytes": 199
+    },
+    "textures/block/oak_log.png": {
+      "sha256": "61735859c9c9ea82601191a77c6f256d93619cbaf7cad998a3ed5762877a34e6",
+      "bytes": 191
+    },
+    "textures/block/oak_log_top.png": {
+      "sha256": "a520800a833ea0c6214481245ab40397aa0c08b4ffc909046dac266386f9fc01",
+      "bytes": 206
+    },
+    "textures/block/dandelion.png": {
+      "sha256": "eb0cdf11d96f9b0aef8201c05c51f2c6cf1fc00d8a09d26c50530aff2b05ae33",
+      "bytes": 138
+    },
+    "textures/block/dandelion.png.mcmeta": {
+      "sha256": "afca6a34e44b86e6a02b7acf062960ed0ebc3f2dab815d86b831dc9e251ad6f4",
+      "bytes": 70
+    },
+    "textures/block/oak_leaves.png": {
+      "sha256": "69c9c7048695e014aee6b8a2c4cb080607bd7a2a5291c06218b8134cbfcdc04f",
+      "bytes": 202
+    },
+    "textures/block/oak_leaves.png.mcmeta": {
+      "sha256": "dcb7170e9e198519bfd6865e85cfe17b2fb29e8a0ad2c57c69bde2f513da7c43",
+      "bytes": 62
+    }
+  },
+  "derived": {
+    "icon_sword": {
+      "sources": [
+        "item/iron_sword"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "455f2c306a9ddc1da19b04603ae0047211e2f4e4817b105573fcdc29b3c6945f",
+      "byte_identical": true
+    },
+    "icon_bow": {
+      "sources": [
+        "item/bow"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1e2cb18545e4ed9286e1120686c3f835d6619b8bd853970f1011163b68426a54",
+      "byte_identical": true
+    },
+    "icon_trident": {
+      "sources": [
+        "item/trident"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "2bb1397727939c03c0c5c87307e91b41246e8ffd1b0ceddd73c7cc40bb9cf19d",
+      "byte_identical": true
+    },
+    "icon_fire": {
+      "sources": [
+        "item/fire_charge"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "cf15c4301ec96a22813f17b11e43a2d047e8b65067c7513a76107fef7a485ad2",
+      "byte_identical": true
+    },
+    "icon_blaze": {
+      "sources": [
+        "item/blaze_powder"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b2be09a066cf44cb126744fc25625fba75d3c3c33893c80cda4303ea9e432e7b",
+      "byte_identical": true
+    },
+    "icon_redstone": {
+      "sources": [
+        "item/redstone"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "6d0e6a1fd54142cd3de649e1100c428733512b322a0b0a530f62eae9f86881ec",
+      "byte_identical": true
+    },
+    "icon_amethyst": {
+      "sources": [
+        "item/amethyst_shard"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "dc64feb12d553ec59b819534ae57b46e99ac95a3ab61cb71de317a5d7b857584",
+      "byte_identical": true
+    },
+    "icon_sugar": {
+      "sources": [
+        "item/sugar"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "8fd584956fcf4b3252706051f7f0c93e808cdb0e391b42dff130c6ae4e5d18ae",
+      "byte_identical": true
+    },
+    "icon_armor": {
+      "sources": [
+        "item/iron_chestplate"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b1b467d1c98efda1c2bd31c5a32fadc884b424b3d08f3b010d9053a1e0f0609a",
+      "byte_identical": true
+    },
+    "icon_hopper": {
+      "sources": [
+        "item/hopper"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "6a4c36e7a9e8b4f59ff3d7de17d9708045715ab85cdc4b60534d3f643a4c5791",
+      "byte_identical": true
+    },
+    "icon_apple": {
+      "sources": [
+        "item/apple"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e6a57182db6029fff6d02fc774780fcec9f506b74226985445c91e5e7df5d9bb",
+      "byte_identical": true
+    },
+    "icon_emerald": {
+      "sources": [
+        "item/emerald"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "7aa1f12ee48666b2c3ae56fd9884ee95bf315795bfd1fd6e4ac3d3811ae3aacb",
+      "byte_identical": true
+    },
+    "icon_netherite": {
+      "sources": [
+        "item/netherite_sword"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "8f1584739b0c4e9aa09f901bdfc9251a0a6fa1e0172b8c2a5a869e9fbaf25906",
+      "byte_identical": true
+    },
+    "icon_flamebow": {
+      "sources": [
+        "item/bow"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1e2cb18545e4ed9286e1120686c3f835d6619b8bd853970f1011163b68426a54",
+      "byte_identical": true
+    },
+    "icon_channeling": {
+      "sources": [
+        "item/trident"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "2bb1397727939c03c0c5c87307e91b41246e8ffd1b0ceddd73c7cc40bb9cf19d",
+      "byte_identical": true
+    },
+    "bow_draw": {
+      "sources": [
+        "item/bow",
+        "item/bow_pulling_0",
+        "item/bow_pulling_1",
+        "item/bow_pulling_2"
+      ],
+      "size": [
+        64,
+        16
+      ],
+      "sha256": "366d15625f11273fb66b7e74f2b2adbdb98b359547d20adf66fc172cf8b1e683"
+    },
+    "icon_arrow": {
+      "sources": [
+        "item/arrow"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fe76b2e0c79e09ddd037111cfc1d0510e1e13f2c2ff71bbf23e9c48b98d9030c",
+      "byte_identical": true
+    },
+    "icon_potion": {
+      "sources": [
+        "item/potion_overlay",
+        "item/potion"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "f9d60c1920ffc1041e7cf501c9dc3d6cef3c53058dbc79a2c5c3f2f9b0fa0483"
+    },
+    "icon_splash_potion": {
+      "sources": [
+        "item/potion_overlay",
+        "item/splash_potion"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "581ac8f2534721d26a17d1ded2b9168aaae5cb3f9615bfe558932e40a449fb19"
+    },
+    "netherite_enchanted": {
+      "sources": [
+        "item/netherite_sword",
+        "misc/enchanted_glint_item"
+      ],
+      "size": [
+        512,
+        16
+      ],
+      "sha256": "5143a4314e5b36790fdbbccb84be17dfd28c238dd7829734620c880b9a4bb0c0"
+    },
+    "flamebow_enchanted": {
+      "sources": [
+        "item/bow",
+        "misc/enchanted_glint_item"
+      ],
+      "size": [
+        512,
+        16
+      ],
+      "sha256": "a12dbd9a2b0f72c7c8c7c6a953887da69abcc385a908d43441633c5acb726043"
+    },
+    "channeling_enchanted": {
+      "sources": [
+        "item/trident",
+        "misc/enchanted_glint_item"
+      ],
+      "size": [
+        512,
+        16
+      ],
+      "sha256": "3e33296de359eca688e3efbf862d3d3bb7baee4c6c032a5f6412bfd43397a895"
+    },
+    "flamebow_draw": {
+      "sources": [
+        "item/bow",
+        "item/bow_pulling_0",
+        "item/bow_pulling_1",
+        "item/bow_pulling_2",
+        "misc/enchanted_glint_item"
+      ],
+      "size": [
+        512,
+        64
+      ],
+      "sha256": "8f94e6b638955bcfebe29c3eaab781aeef570d5bb3a1aecabe5046f095165b65"
+    },
+    "fire_animation": {
+      "sources": [
+        "block/fire_0"
+      ],
+      "size": [
+        512,
+        16
+      ],
+      "sha256": "b9dae6092f1dd13b964c6b60bfa62ed417119b14ad42e6c377a56ea8a786ad29"
+    },
+    "poison_animation": {
+      "sources": [
+        "particle/effect_0",
+        "particle/effect_1",
+        "particle/effect_2",
+        "particle/effect_3",
+        "particle/effect_4",
+        "particle/effect_5",
+        "particle/effect_6",
+        "particle/effect_7"
+      ],
+      "size": [
+        64,
+        8
+      ],
+      "sha256": "4c67e0da437ab6a4d5c2066e74a067439cb44b3146ba4639b89880fe532904b6"
+    },
+    "sweep_animation": {
+      "sources": [
+        "particle/sweep_0",
+        "particle/sweep_1",
+        "particle/sweep_2",
+        "particle/sweep_3",
+        "particle/sweep_4",
+        "particle/sweep_5",
+        "particle/sweep_6",
+        "particle/sweep_7"
+      ],
+      "size": [
+        256,
+        32
+      ],
+      "sha256": "d698b93a9deade42231db6ab16f342ca60ee7f42014c3810fe418bc72a4fdb9e"
+    },
+    "explosion_animation": {
+      "sources": [
+        "particle/explosion_0",
+        "particle/explosion_1",
+        "particle/explosion_2",
+        "particle/explosion_3",
+        "particle/explosion_4",
+        "particle/explosion_5",
+        "particle/explosion_6",
+        "particle/explosion_7",
+        "particle/explosion_8",
+        "particle/explosion_9",
+        "particle/explosion_10",
+        "particle/explosion_11",
+        "particle/explosion_12",
+        "particle/explosion_13",
+        "particle/explosion_14",
+        "particle/explosion_15"
+      ],
+      "size": [
+        512,
+        32
+      ],
+      "sha256": "afdfbd1db6edfd5b05b1c2388cd402c34591b46d60e84b986e55887cae8387bf"
+    },
+    "experience_orb": {
+      "sources": [
+        "entity/experience_orb"
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "151be99f04cb913871773b4520e16d99b4ecca5a8a0e0eba2ca68ee71764e437"
+    },
+    "icon_chest": {
+      "sources": [
+        "entity/chest/normal"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e1eaebb82cd8f340a2e423882a82e0f8021346b829c00f865f9df6aaae1c32e5"
+    },
+    "chest_open": {
+      "sources": [
+        "entity/chest/normal"
+      ],
+      "size": [
+        256,
+        32
+      ],
+      "sha256": "6b28fe1f1f459a65870be30c4f456a6715615363601a9e05402e29c70404c8e9"
+    },
+    "fangs_animation": {
+      "sources": [
+        "entity/illager/evoker_fangs"
+      ],
+      "size": [
+        256,
+        32
+      ],
+      "sha256": "abdb38c7185a4adf96df5f98da089e754b26a4307dbfabb440506730b81ff0e0"
+    },
+    "icon_fangs": {
+      "sources": [
+        "entity/illager/evoker_fangs"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e6cd7b9a7a2b2e6639033d46ca2476e888880259c61b1b6797ee70669837f5ff"
+    },
+    "tile_0": {
+      "sources": [
+        "block/grass_block_top"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "474247057f7b93b36c1f7d1d4b2e63f2362d2f2180d0cad4c2d30bcfe257d29b"
+    },
+    "tile_1": {
+      "sources": [
+        "block/grass_block_top"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "474247057f7b93b36c1f7d1d4b2e63f2362d2f2180d0cad4c2d30bcfe257d29b"
+    },
+    "tile_2": {
+      "sources": [
+        "block/grass_block_top"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "474247057f7b93b36c1f7d1d4b2e63f2362d2f2180d0cad4c2d30bcfe257d29b"
+    },
+    "tile_3": {
+      "sources": [
+        "block/grass_block_top"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "474247057f7b93b36c1f7d1d4b2e63f2362d2f2180d0cad4c2d30bcfe257d29b"
+    },
+    "tile_4": {
+      "sources": [
+        "block/dirt_path_top"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "0be0d864639cbf9c1a7de53db175d53175aadb2ade6d027f342e07953fee5d93"
+    },
+    "tile_5": {
+      "sources": [
+        "block/stone"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "cd123433e95d12399c4d93bb07d6ddf67e9c4d2d05e696625b477aaec3c1b2d3"
+    },
+    "ground": {
+      "sources": [
+        "block/grass_block_top",
+        "block/dirt_path_top",
+        "block/stone"
+      ],
+      "size": [
+        2048,
+        2048
+      ],
+      "sha256": "433c6a37eddd3d6d9b69919311afb042febe05808d206720aff70c45a8187a3d"
+    },
+    "rock": {
+      "sources": [
+        "block/stone"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "351a4618162f2baefbe9cc2105b19d6d6b22bc71c264c712672cd4180ecb1f83"
+    },
+    "pumpkin": {
+      "sources": [
+        "block/pumpkin_top",
+        "block/pumpkin_side"
+      ],
+      "size": [
+        24,
+        24
+      ],
+      "sha256": "fbb75bfc3293f57227aba0ad6295817bbfa78c0715b0d03964c58e15a024004a"
+    },
+    "stump": {
+      "sources": [
+        "block/oak_log_top",
+        "block/oak_log"
+      ],
+      "size": [
+        24,
+        24
+      ],
+      "sha256": "c57462a4150ea20a32da87577409ec1650a8e6232316e310183b38c7359434a2"
+    },
+    "flowers": {
+      "sources": [
+        "block/dandelion"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "45f5c4bc7a5f8bcbd303d0e60f093e275dc7b70c80eda326f922420f6cf181d2"
+    },
+    "tree_0": {
+      "sources": [
+        "block/oak_log",
+        "block/oak_log_top",
+        "block/oak_leaves"
+      ],
+      "size": [
+        64,
+        72
+      ],
+      "sha256": "7e753dc6f2ca45a61a8cf3e4a325c8e045c29c9a0fc655fb864ed0a3d5aec89e"
+    },
+    "tree_1": {
+      "sources": [
+        "block/oak_log",
+        "block/oak_log_top",
+        "block/oak_leaves"
+      ],
+      "size": [
+        64,
+        72
+      ],
+      "sha256": "ab4ecfaac1b074f657674d7666c9e0de4dbb085b561b86b3518df87ac6eb4abe"
+    },
+    "tree_2": {
+      "sources": [
+        "block/oak_log",
+        "block/oak_log_top",
+        "block/oak_leaves"
+      ],
+      "size": [
+        64,
+        72
+      ],
+      "sha256": "83e4d2e83296908345e8a52ecf497a139beaa9053a2af2f2b44b9e2eb10b3e21"
+    }
+  },
+  "notes": {
+    "potion_color": "#87a363",
+    "chest_fangs": "2D projections of vanilla entity textures; no vanilla flat item icon exists",
+    "evolutions": "Original bow/trident with moving vanilla enchantment glint"
+  }
+}

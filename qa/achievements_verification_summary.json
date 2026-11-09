@@ -1,0 +1,177 @@
+{
+  "version": "0.11.0",
+  "verified_utc": "2026-10-29T20:53:59.764957+00:00",
+  "user_clarifications": {
+    "starting_weapon": "Original sword I; no weapon selector.",
+    "bow_challenge": "Initial unupgraded sword is allowed until the first bow, then three active seconds to remove it. Other weapons cannot be upgraded or retained longer than three cumulative active seconds. Bow upgrades and evolution allowed.",
+    "no_healing": "Apples, golden carrots and consumed chorus fruit only. Passive and story healing allowed.",
+    "achievement_text": "Concise; no story-damage caveats in UI.",
+    "full_inventory_badge": "A complete native chest model with its proper UVs."
+  },
+  "regression_suite": "scripts/verify.sh passed",
+  "focused_checks": {
+    "achievements_results": {
+      "checks": 51,
+      "failures": []
+    },
+    "achievements_visual_results": {
+      "checks": 17,
+      "failures": []
+    },
+    "end_revision_visual_results": {
+      "checks": 7,
+      "failures": []
+    },
+    "presentation_results": {
+      "checks": 26,
+      "failures": []
+    },
+    "chapter_visual_results": {
+      "checks": 9,
+      "failures": []
+    }
+  },
+  "asset_checks": {
+    "achievements": 114,
+    "end": 3470
+  },
+  "native_linux": [
+    {
+      "mode": "achievements",
+      "launcher": "run.sh",
+      "exit_code": 0,
+      "success": true,
+      "errors": [],
+      "attempts": [
+        {
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "mode": "achievement_toast",
+      "launcher": "Linux binary",
+      "exit_code": 0,
+      "success": true,
+      "errors": [],
+      "attempts": [
+        {
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "mode": "end_survival",
+      "launcher": "Linux binary",
+      "exit_code": 0,
+      "success": true,
+      "errors": [],
+      "attempts": [
+        {
+          "timeout": true,
+          "seconds": 30
+        },
+        {
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "mode": "end_dragon",
+      "launcher": "Linux binary",
+      "exit_code": 0,
+      "success": true,
+      "errors": [],
+      "attempts": [
+        {
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "mode": "end_last_duel",
+      "launcher": "Linux binary",
+      "exit_code": 0,
+      "success": true,
+      "errors": [],
+      "attempts": [
+        {
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "mode": "end_victory",
+      "launcher": "Linux binary",
+      "exit_code": 0,
+      "success": true,
+      "errors": [],
+      "attempts": [
+        {
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "mode": "end_overworld",
+      "launcher": "Linux binary",
+      "exit_code": 0,
+      "success": true,
+      "errors": [],
+      "attempts": [
+        {
+          "exit_code": 0
+        }
+      ]
+    }
+  ],
+  "network": {
+    "players": 4,
+    "latency_ms": 45,
+    "jitter_ms": 20,
+    "loss": 0.05,
+    "exported": true,
+    "returncodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "runtime_errors": {},
+    "all_assertions_passed": true,
+    "physical_zerotier_test": false
+  },
+  "preserved_files": {
+    "scripts/world.gd": "9ed67cc43bb9abf6d8664acc76d04fa070fe46d8d23dcd49e475454e31bd9e02",
+    "scripts/coop_world.gd": "2fa2bd50358ef7526f0fde0cb2d70b88f10b2885bcb219d2185c600b9d0b5ead",
+    "scripts/coop_session.gd": "414ae7cafc7a66e2ea288217503f66a1bb03df58c332984d263b0f8197bc4a34",
+    "scripts/coop_codec.gd": "c298733b9fa15e38973a7c3a2f561629769c22cf9ed75ce01cbc52a4c08692df",
+    "data/balance.json": "51d1504c6ef9f9e619e0cd83a6c63f8d4d9d26fd195f1bebe85f94f58cef2455",
+    "scripts/chapter_finale.gd": "2d59232e733669aa8b6b54c285581a87ebac640e0baf914a5fdbe046d2fb7b4b"
+  },
+  "preserved_music_sha256": {
+    "boss_win": "1572e762f87c96e66af277d61788866ade70e7b70cb9c6e10db55afa7b620969",
+    "music_victory": "a9597160f12ae83f49dce57a4705f4c5eb8ddaac62a13906604a555b746215d9",
+    "music_dragon": "e48e57ac483b771d29e14aed5c0466d5eed7a7b5edfb3c91997bf45193ecff59",
+    "music_endersteve": "f91d48db4386a392bf3c7852b33cacc14960a1605faacf9db5fc95a0c9fc3350"
+  },
+  "release_sha256": {
+    "builds/linux/MinecraftSurvivors.x86_64": "45e24831f5c52bde0943ee121ff062b7af592891ded5dd14f0bdbbfdc05d18a7",
+    "builds/windows/MinecraftSurvivors.exe": "7a5f7ffb14850b54fb05944c2fc1091ca35f7987b66e91eed0081cd425bfca87"
+  },
+  "screenshots": [
+    "qa/achievement_easy.png",
+    "qa/achievement_hard.png",
+    "qa/achievement_secret_locked.png",
+    "qa/achievement_secret_unlocked.png",
+    "qa/achievement_toast.png",
+    "qa/achievement_overworld.png",
+    "qa/achievement_end_edge.png",
+    "qa/achievement_end_edge_shake.png"
+  ],
+  "limitations": [
+    "Windows export built but not executed natively on Windows.",
+    "Native Wayland diagnostic capture had an intermittent timeout; the successful repeat and every attempt are preserved in the release results. All seven capture modes and run.sh completed without script errors.",
+    "Conditions are tested through real simulation events and controlled completion states; this is not a claim of natural full-run completion of every challenge."
+  ]
+}

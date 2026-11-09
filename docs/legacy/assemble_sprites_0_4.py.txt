@@ -1,0 +1,250 @@
+"""Bake articulated pixel poses from accepted individual direction anchors.
+
+Heads and torso preserve generated identity; rigid rectangular limbs have
+integer joints. Every frame shares a fixed ground pivot. No runtime resampling.
+"""
+from PIL import Image, ImageDraw
+from pathlib import Path
+import argparse, json, math
+
+ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT / 'assets/art_source'
+OUT = ROOT / 'assets/sprites'
+DIRECTIONS = ['down', 'up', 'side']
+STATES = {
+    'idle': [0.45, 0.3, 0.45, 0.6],
+    'walk': [0.09, 0.07, 0.09, 0.07, 0.09, 0.07, 0.09, 0.07],
+    'windup': [0.08, 0.05, 0.03], 'attack': [0.045, 0.045],
+    'recover': [0.06, 0.08, 0.1], 'hurt': [0.045, 0.075],
+}
+OUTLINE = '#23302d'
+
+def normalized(name, direction):
+    path = SOURCE / (f'{name}_anchor.png' if direction == 'down' else f'{name}_{direction}.png')
+    im = Image.open(path).convert('RGBA')
+    alpha = im.getchannel('A').point(lambda a: 255 if a >= 128 else 0)
+    im.putalpha(alpha)
+    im = im.crop(alpha.getbbox())
+    size = (64, 64) if name == 'ravager' else (48, 32) if name == 'spider' else (32, 32)
+    target = (54, 57) if name == 'ravager' else (42, 23) if name == 'spider' else (24, 24) if name == 'slime' else (22, 29)
+    factor = min(target[0] / im.width, target[1] / im.height)
+    im = im.resize((round(im.width * factor), round(im.height * factor)), Image.Resampling.NEAREST)
+    alpha = im.getchannel('A')
+    im = im.convert('RGB').quantize(colors=20, method=Image.Quantize.MEDIANCUT).convert('RGBA')
+    im.putalpha(alpha)
+    tile = Image.new('RGBA', size)
+    tile.alpha_composite(im, ((size[0] - im.width) // 2, size[1] - im.height - 1))
+    return tile
+
+def paste(out, part, x, y):
+    out.alpha_composite(part, (round(x), round(y)))
+
+def limb(d, start, end, width, color, light, shoe=None):
+    a, b = tuple(map(round, start)), tuple(map(round, end))
+    d.line([a, b], fill=OUTLINE, width=width + 2)
+    d.line([a, b], fill=color, width=width)
+    d.line([(a[0] - 1, a[1]), (b[0] - 1, b[1])], fill=light, width=1)
+    if shoe:
+        x, y = b
+        d.rectangle((x - width // 2, y - 1, x + width // 2, y), fill=shoe)
+
+def humanoid(base, name, direction, state, f):
+    out = Image.new('RGBA', (32, 32)); d = ImageDraw.Draw(out)
+    zombie = name in ['zombie', 'elite']; skeleton = name == 'skeleton'; side = direction == 'side'
+    walk = math.sin(f * math.tau / 8) if state == 'walk' else 0
+    bob = (1 if f in [1, 2, 5, 6] else 0) if state == 'walk' else (1 if state == 'idle' and f == 2 else 0)
+    sway = round(walk * (1 if zombie else 0.7))
+    if state == 'windup': bob = -1
+    if state == 'recover': bob = -1 if f == 0 else 0
+    if state == 'hurt': sway, bob = (-2 if f == 0 else -1), -1
+    cx, hip = 16 + sway, 23 - bob
+    skin, skinlight = ('#638c4d', '#8daa63') if zombie else ('#d0ccaf', '#eee4cb') if skeleton else ('#ab7958', '#c9946a')
+    pants, pl = ('#b2af9d', '#e4ddc2') if skeleton else ('#454165', '#5a5388') if zombie else ('#414470', '#565b91')
+    width = 2 if skeleton else 3
+    # The supporting foot stays at y=30; the other lifts in the passing pose.
+    for leg in [-1, 1]:
+        phase = walk * leg
+        x = cx + (2 if not side else 1) * leg
+        footx = x + round(phase * (4 if side else 1))
+        footy = 30 - round(max(0, phase) * 3)
+        if state == 'walk' and ((f == 0 and leg == -1) or (f == 4 and leg == 1)): footy -= 1
+        limb(d, (x, hip), (footx, footy), width, pants, pl, '#454c48')
+    if side:
+        torso = base.crop((13, 14, 19, 24)); torso_x = cx - 3
+    else:
+        torso = base.crop((11, 14, 21, 24)); torso_x = cx - 5
+    head = base.crop((10, 2, 22, 15)); head_x = cx - 6
+    if name == 'elite':
+        td = ImageDraw.Draw(torso)
+        td.rectangle((0, 1, torso.width - 1, 7), fill='#889b95')
+        td.line((1, 2, 1, 6), fill='#d1d9c4', width=2)
+        td.line((torso.width - 2, 2, torso.width - 2, 7), fill='#536f6b')
+        hd = ImageDraw.Draw(head)
+        hd.rectangle((0, 0, 11, 3), fill='#9baea6')
+        hd.line((1, 1, 10, 1), fill='#d0d7c4')
+        hd.rectangle((0, 3, 1, 8), fill='#7e9690')
+        hd.rectangle((10, 3, 11, 8), fill='#5d7672')
+    arms = []
+    for arm in [-1, 1]:
+        sx, sy = cx + arm * (2 if side else 6), 16 - bob
+        ex, ey = sx + round(-walk * arm * (3 if side else 1)), 23 - bob + round(walk * arm * 2)
+        if zombie:
+            ex, ey = (sx + 5, 18 - bob + round(walk * arm)) if side else (sx + arm, 19 - bob + round(walk * arm * 2))
+        if state == 'windup': ex, ey = (cx + 6 - f, 14 - f) if arm == 1 else (cx - 3, 19)
+        elif state == 'attack': ex, ey = (cx + 8, 18 + f * 2) if arm == 1 else (cx - 5, 19)
+        elif state == 'recover': ex, ey = (cx + 7 - f, 22 - f) if arm == 1 else (sx, 22)
+        elif state == 'hurt': ex, ey = sx + arm * 2, 21 - f
+        if skeleton and state == 'windup':
+            ex, ey = (cx+7,17) if side and arm==-1 else (cx+3-f*2,16) if side else (cx-2,19) if arm==-1 else (cx+3-f*2,17)
+        arms.append(((sx, sy), (ex, ey)))
+    if side: limb(d, *arms[0], width, skin, skinlight)
+    paste(out, torso, torso_x, 14 - bob)
+    for i, pair in enumerate(arms):
+        if not side or i == 1:
+            limb(d, *pair, width, skin, skinlight)
+            if not skeleton:
+                sx, sy = pair[0]
+                d.rectangle((sx - 1, sy - 1, sx + 1, sy + 1), fill='#488f8a' if zombie else '#43a6a0')
+    paste(out, head, head_x, 2 - bob)
+    ImageDraw.Draw(out).rectangle((0,31,31,31),fill=(0,0,0,0))
+    return out
+
+def creeper(base, direction, state, f):
+    out = Image.new('RGBA', (32, 32)); d = ImageDraw.Draw(out)
+    gait = math.sin(f * math.tau / 8) if state == 'walk' else 0
+    crouch = f if state == 'windup' else 0
+    bob = (1 if f in [1, 2, 5, 6] else 0) if state == 'walk' else -crouch
+    for rear in [True, False]:
+        for sign in [-1, 1]:
+            step = gait * sign * (-1 if rear else 1)
+            x = 16 + sign * (3 if rear else 4)
+            y = (27 if rear else 30) - round(max(0, step) * 2)
+            fx = x + round(step)
+            limb(d, (16 + sign * 3, 25), (fx, y), 4, '#457c38', '#7db758')
+            d.rectangle((fx-2,y-2,fx+2,y),fill='#426f37')
+            d.line((fx-2,y-2,fx+1,y-2),fill='#79a94d')
+    body = base.crop((12, 15, 20, 26)); head = base.crop((10, 2, 22, 16))
+    if state == 'windup':
+        body = body.resize((8 + f, 11 - f), Image.Resampling.NEAREST)
+        head = head.resize((12 + f, 14 + f), Image.Resampling.NEAREST)
+    elif state == 'attack':
+        body = body.resize((11,10),Image.Resampling.NEAREST)
+        head = head.resize((16,16),Image.Resampling.NEAREST)
+        bob = -1
+    if state == 'hurt': bob = -1
+    paste(out, body, 16 - body.width // 2, 15 - bob)
+    paste(out, head, 16 - head.width // 2, 2 - bob)
+    ImageDraw.Draw(out).rectangle((0,31,31,31),fill=(0,0,0,0))
+    return out
+
+def spider(base, direction, state, f):
+    out = Image.new('RGBA', (48, 32)); d = ImageDraw.Draw(out)
+    t = f * math.tau / 8 if state == 'walk' else 0
+    bob = -1 if state == 'hurt' else 0
+    for sign in [-1, 1]:
+        for j in range(4):
+            s = math.sin(t + j * math.pi / 2 + (0 if sign == 1 else math.pi)) if state == 'walk' else 0
+            root = (24 + sign * 5, 17 + j * 2 + bob)
+            knee = (24 + sign * (12 + j % 2), 10 + j * 4 + round(s * 2) + bob)
+            foot = (24 + sign * (19 - j % 2), 13 + j * 5 - round(max(0, s) * 3))
+            limb(d, root, knee, 2, '#373732', '#4b4940')
+            limb(d, knee, foot, 2, '#292d2a', '#46453c')
+    if direction == 'side': part = base.crop((10, 10, 36, 25)); x, y = 11, 12
+    else: part = base.crop((18, 8, 31, 29)); x, y = 18, 8
+    paste(out, part, x, y + bob)
+    return out
+
+def slime(base, direction, state, f):
+    part = base.crop(base.getbbox())
+    if state == 'windup': w, h, lift = 24 + f * 2, 22 - f * 3, 0
+    elif state == 'attack': w, h, lift = 20 + f, 27 - f, 4 - f
+    elif state == 'recover': w, h, lift = [29, 26, 24][f], [17, 21, 23][f], 0
+    elif state == 'hurt': w, h, lift = 26, 21, 0
+    else: w, h, lift = 24, 23 - (1 if f == 2 else 0), 0
+    out = Image.new('RGBA', (32, 32))
+    paste(out, part.resize((w, h), Image.Resampling.NEAREST), (32-w)//2, 31-h-lift)
+    return out
+
+def ravager(base, direction, state, f):
+    out = Image.new('RGBA', (64, 64)); d = ImageDraw.Draw(out)
+    t = math.sin(f * math.tau / 8) if state in ['walk', 'attack'] else 0
+    dip = (f + 1) if state == 'windup' else 2 if state == 'attack' else (2-f if state == 'recover' else 0)
+    bob = round(abs(t)) if state == 'walk' else 0
+    if direction == 'side':
+        for x, sign in [(16, 1), (24, -1), (43, -1), (49, 1)]:
+            limb(d, (x, 48), (x + round(t * sign * 4), 61 - round(max(0,t*sign)*3)), 5, '#73796f', '#9ca294', '#424c46')
+        paste(out, base.crop((5, 26, 46, 52)), 5, 26 - bob)
+        paste(out, base.crop((43, 29, 60, 49)), 43 + min(2, dip), 29 + dip)
+    else:
+        for rear in [True, False]:
+            for sign in [-1, 1]:
+                x = 32 + sign * (13 if rear else 11); st = t * sign * (-1 if rear else 1)
+                y = (42 if rear else 61) - round(max(0,st)*3)
+                limb(d, (x, y-10), (x + round(st*2), y), 6, '#747b72', '#a0a699', '#414e48')
+        if direction == 'up': paste(out, base.crop((18, 6, 46, 54)), 18, 6 - bob + dip)
+        else:
+            paste(out, base.crop((16, 6, 49, 33)), 16, 6 - bob)
+            paste(out, base.crop((17, 29, 48, 55)), 17, 29 + dip - bob)
+    ImageDraw.Draw(out).rectangle((0,63,63,63),fill=(0,0,0,0))
+    return out
+
+def generate(names):
+    manifest = {}; path = ROOT / 'data/animations.json'
+    if path.exists(): manifest = json.loads(path.read_text())['actors']
+    for name in names:
+        source_name = 'zombie' if name == 'elite' else name
+        fw, fh = (64,64) if name == 'ravager' else (48,32) if name == 'spider' else (32,32)
+        states = {}; offset = 0
+        for state, durations in STATES.items():
+            times = list(durations)
+            if state == 'walk':
+                multiplier = 1.6 if name in ['zombie','elite','ravager'] else 0.8 if name == 'spider' else 1.1 if name == 'creeper' else 1
+                times = [round(t * multiplier, 4) for t in times]
+            if state == 'windup' and name == 'creeper': times = [0.45,0.28,0.17]
+            if state == 'windup' and name == 'skeleton': times = [0.24,0.17,0.09]
+            if state == 'windup' and name == 'ravager': times = [0.4,0.26,0.14]
+            states[state] = {'start':offset, 'durations':times, 'loop':state in ['idle','walk']}
+            offset += len(times)
+        atlas = Image.new('RGBA', (fw*offset, fh*3))
+        for row, direction in enumerate(DIRECTIONS):
+            base = normalized(source_name, direction)
+            for state, clip in states.items():
+                for f in range(len(clip['durations'])):
+                    if name in ['steve','zombie','elite','skeleton']: tile = humanoid(base,name,direction,state,f)
+                    elif name == 'creeper': tile = creeper(base,direction,state,f)
+                    elif name == 'spider': tile = spider(base,direction,state,f)
+                    elif name == 'slime': tile = slime(base,direction,state,f)
+                    else: tile = ravager(base,direction,state,f)
+                    atlas.alpha_composite(tile, ((clip['start']+f)*fw, row*fh))
+        atlas.save(OUT / f'{name}_atlas.png')
+        manifest[name] = {'frame_size':[fw,fh], 'columns':offset, 'pivot':[fw/2,fh-3], 'directions':DIRECTIONS, 'states':states, 'generated_anchor':str((SOURCE/f'{source_name}_anchor.png').relative_to(ROOT))}
+    weapons = {
+        'sword': {'windup':0.16,'attack':0.055,'recover':0.165},
+        'bow': {'windup':0.24,'attack':0.07,'recover':0.16},
+        'trident': {'windup':0.2,'attack':0.07,'recover':0.2},
+        'fire': {'windup':0.18,'attack':0.08,'recover':0.17},
+        'potion': {'windup':0.18,'attack':0.09,'recover':0.2},
+        'fangs': {'windup':0.2,'attack':0.07,'recover':0.2},
+    }
+    path.write_text(json.dumps({'actors':manifest,'weapons':weapons},indent=2)+'\n')
+    (ROOT/'docs/ASSET_MANIFEST.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    for n in names:
+        for direction in DIRECTIONS:
+            for state in ['idle','walk','prepare','charge']:
+                for p in OUT.glob(f'{n}_{state}_{direction}_*.png'):
+                    p.unlink(); p.with_suffix('.png.import').unlink(missing_ok=True)
+    proof = Image.new('RGBA',(8*64, len(manifest)*100),'#40563a'); draw = ImageDraw.Draw(proof)
+    for row,n in enumerate(manifest):
+        spec = manifest[n]; w,h = spec['frame_size']; a = Image.open(OUT/f'{n}_atlas.png')
+        draw.text((2,row*100+2),n,fill='#eee4cb')
+        for f in range(8):
+            x = (spec['states']['walk']['start']+f)*w
+            proof.alpha_composite(a.crop((x,0,x+w,h)),(f*64+(64-w)//2,row*100+20))
+    proof.save(ROOT/'qa/animation_native.png')
+    proof.resize((proof.width*4,proof.height*4),Image.Resampling.NEAREST).save(ROOT/'qa/animation_4x.png')
+    print('Articulated atlases:', ', '.join(names))
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(); parser.add_argument('--only', nargs='+')
+    args = parser.parse_args()
+    generate(args.only or ['steve','zombie','creeper','skeleton','spider','slime','elite','ravager'])

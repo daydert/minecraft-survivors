@@ -1,0 +1,99 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "canonical_end": true,
+    "connected": true,
+    "finale": true,
+    "no_movement_teleports": true,
+    "pause": true,
+    "receives_authority": true,
+    "spectator": true
+  },
+  "diagnostics": [
+    {
+      "ack": 18,
+      "authority": "(1044.651, 1024.664)",
+      "changed": false,
+      "distance": 21.8148517608643,
+      "generation": 0,
+      "old": "(1074.148, 1029.563)",
+      "pending": 6,
+      "predicted": "(1052.47, 1027.129)",
+      "seq": 24,
+      "tick": 63
+    },
+    {
+      "ack": 21,
+      "authority": "(1048.587, 1025.812)",
+      "changed": false,
+      "distance": 17.8148880004883,
+      "generation": 0,
+      "old": "(1072.076, 1031.079)",
+      "pending": 5,
+      "predicted": "(1054.372, 1029.091)",
+      "seq": 26,
+      "tick": 66
+    },
+    {
+      "ack": 53,
+      "authority": "(1060.322, 1038.175)",
+      "changed": false,
+      "distance": 21.814489364624,
+      "generation": 0,
+      "old": "(1073.27, 1065.124)",
+      "pending": 6,
+      "predicted": "(1062.791, 1045.991)",
+      "seq": 59,
+      "tick": 129
+    },
+    {
+      "ack": 56,
+      "authority": "(1061.646, 1042.055)",
+      "changed": false,
+      "distance": 13.8145036697388,
+      "generation": 0,
+      "old": "(1068.238, 1063.443)",
+      "pending": 7,
+      "predicted": "(1061.602, 1051.326)",
+      "seq": 63,
+      "tick": 132
+    },
+    {
+      "ack": 0,
+      "authority": "(1062.234, 1048.667)",
+      "changed": true,
+      "distance": 13.3846731185913,
+      "generation": 1,
+      "old": "(1060.757, 1061.97)",
+      "pending": 0,
+      "predicted": "(1062.234, 1048.667)",
+      "seq": 0,
+      "tick": 138
+    },
+    {
+      "ack": 72,
+      "authority": "(980.3941, 1003.071)",
+      "changed": false,
+      "distance": 15.0162878036499,
+      "generation": 2,
+      "old": "(973.9991, 989.4843)",
+      "pending": 0,
+      "predicted": "(980.3941, 1003.071)",
+      "seq": 83,
+      "tick": 301
+    }
+  ],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 21.8148517608643,
+  "max_render_step": 2.00000762939453,
+  "p95_correction": 5.81488704681396,
+  "p95_present_ms": 2.433,
+  "p95_sim_ms": 0.146,
+  "received_buckets": 3120,
+  "received_frames": 202,
+  "role": "guest",
+  "scenario": "story",
+  "traveled": 169.886227540381
+}

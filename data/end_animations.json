@@ -1,0 +1,835 @@
+{
+  "actors": {
+    "endermite": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "entity/endermite",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "shadow_size": [
+        4,
+        2
+      ]
+    },
+    "endermite_brood": {
+      "frame_size": [
+        96,
+        96
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "entity/endermite",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "shadow_size": [
+        9,
+        3
+      ]
+    },
+    "enderman": {
+      "frame_size": [
+        48,
+        64
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "entity/enderman/enderman",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "dispenser_enderman": {
+      "frame_size": [
+        48,
+        64
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "entity/enderman/enderman",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "shadow_size": [
+        9,
+        3
+      ]
+    },
+    "shulker": {
+      "frame_size": [
+        32,
+        32
+      ],
+      "columns": 22,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "entity/shulker/shulker",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "shadow_size": [
+        8,
+        3
+      ]
+    },
+    "endersteve": {
+      "frame_size": [
+        96,
+        96
+      ],
+      "columns": 70,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "cast": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "teleport": {
+          "start": 30,
+          "durations": [
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075
+          ],
+          "loop": false
+        },
+        "slash": {
+          "start": 38,
+          "durations": [
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065
+          ],
+          "loop": false
+        },
+        "stagger": {
+          "start": 46,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 52,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": false
+        },
+        "roar": {
+          "start": 64,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        }
+      },
+      "source_texture": "entity/player/wide/steve",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        48.0,
+        72
+      ],
+      "shadow_size": [
+        8,
+        3
+      ]
+    },
+    "endersteve_final": {
+      "frame_size": [
+        96,
+        96
+      ],
+      "columns": 70,
+      "pivot": [
+        16.0,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "cast": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "teleport": {
+          "start": 30,
+          "durations": [
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075,
+            0.075
+          ],
+          "loop": false
+        },
+        "slash": {
+          "start": 38,
+          "durations": [
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065,
+            0.065
+          ],
+          "loop": false
+        },
+        "stagger": {
+          "start": 46,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 52,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": false
+        },
+        "roar": {
+          "start": 64,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        }
+      },
+      "source_texture": "entity/player/wide/steve",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        48.0,
+        72
+      ],
+      "shadow_size": [
+        8,
+        3
+      ]
+    }
+  },
+  "weapons": {
+    "spear": {
+      "windup": 0.3,
+      "attack": 0.2,
+      "recover": 0.3
+    },
+    "mace": {
+      "windup": 0.3,
+      "attack": 0.2,
+      "recover": 0.3
+    },
+    "end_crystal": {
+      "windup": 0.3,
+      "attack": 0.2,
+      "recover": 0.3
+    },
+    "knockback_stick": {
+      "windup": 0.3,
+      "attack": 0.2,
+      "recover": 0.3
+    },
+    "dragon_breath": {
+      "windup": 0.3,
+      "attack": 0.2,
+      "recover": 0.3
+    },
+    "shield": {
+      "windup": 0.3,
+      "attack": 0.2,
+      "recover": 0.3
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "achievement": {
+    "minecraft_event": "ui.toast.in",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/achievement_ui_toast_in.ogg",
+        "volume": 0.4,
+        "pitch": 1
+      }
+    ]
+  }
+}

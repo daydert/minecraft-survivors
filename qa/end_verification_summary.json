@@ -1,0 +1,418 @@
+{
+  "version": "0.10.0",
+  "chapter": 3,
+  "chapter_checks": {
+    "end_results": 77,
+    "end_visual_results": 14,
+    "end_polish_visual_results": 12,
+    "end_asset_results": 3437
+  },
+  "frozen_files": {
+    "scripts/world.gd": "9ed67cc43bb9abf6d8664acc76d04fa070fe46d8d23dcd49e475454e31bd9e02",
+    "scripts/coop_world.gd": "2fa2bd50358ef7526f0fde0cb2d70b88f10b2885bcb219d2185c600b9d0b5ead",
+    "scripts/coop_session.gd": "414ae7cafc7a66e2ea288217503f66a1bb03df58c332984d263b0f8197bc4a34",
+    "scripts/coop_codec.gd": "c298733b9fa15e38973a7c3a2f561629769c22cf9ed75ce01cbc52a4c08692df",
+    "data/balance.json": "51d1504c6ef9f9e619e0cd83a6c63f8d4d9d26fd195f1bebe85f94f58cef2455",
+    "scripts/chapter_finale.gd": "2d59232e733669aa8b6b54c285581a87ebac640e0baf914a5fdbe046d2fb7b4b"
+  },
+  "legacy_verification_log": "qa/end_verification.log",
+  "legacy_visual_completion": {
+    "results": [
+      {
+        "test": "test_chapter_visual",
+        "returncode": 0,
+        "errors": [],
+        "success": true
+      },
+      {
+        "test": "test_coop_visual",
+        "returncode": 0,
+        "errors": [],
+        "success": true
+      },
+      {
+        "test": "test_coop_four_visual",
+        "returncode": 0,
+        "errors": [],
+        "success": true
+      }
+    ],
+    "earlier_batch_timeout": {
+      "test": "test_chapter_visual",
+      "phase": "shutdown after all assertions passed"
+    }
+  },
+  "combat_parity_ticks": 5400,
+  "full_natural_run_proven": false,
+  "chapter_check_total": 3540,
+  "boss_runs": [
+    {
+      "build": "Рывок",
+      "complete": true,
+      "corpse": [
+        782.440979003906,
+        905.811096191406
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 19.0,
+      "phase_two": true,
+      "player": [
+        1024.0,
+        1091.0
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 456.87,
+      "seed": 724,
+      "stage": "chapter_four"
+    },
+    {
+      "build": "Дыхание",
+      "complete": true,
+      "corpse": [
+        1080.6416015625,
+        1048.12231445312
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 19.0,
+      "phase_two": true,
+      "player": [
+        1024.0,
+        1091.0
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 103.95,
+      "seed": 724,
+      "stage": "chapter_four"
+    },
+    {
+      "build": "Край",
+      "complete": true,
+      "corpse": [
+        1163.93310546875,
+        1201.185546875
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 18.0,
+      "phase_two": true,
+      "player": [
+        1024.0,
+        1091.0
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 343.67,
+      "seed": 724,
+      "stage": "chapter_four"
+    },
+    {
+      "build": "Смешанная",
+      "complete": true,
+      "corpse": [
+        1160.380859375,
+        1063.62951660156
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 19.0,
+      "phase_two": true,
+      "player": [
+        1024.0,
+        1091.0
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 126.1,
+      "seed": 724,
+      "stage": "chapter_four"
+    }
+  ],
+  "survival_probe": {
+    "build": {
+      "dragon_breath": 4,
+      "mace": 6,
+      "sword": 8
+    },
+    "complete": false,
+    "evolved": {},
+    "god_mode": false,
+    "health_events": [
+      {
+        "damage": 2.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          927.146118164062,
+          931.415954589844
+        ],
+        "time": 13.0666666666669
+      },
+      {
+        "damage": 4.16,
+        "falling": false,
+        "land": true,
+        "position": [
+          1371.81713867188,
+          908.941162109375
+        ],
+        "time": 69.9999999999973
+      },
+      {
+        "damage": 4.16,
+        "falling": false,
+        "land": true,
+        "position": [
+          1370.48693847656,
+          908.62744140625
+        ],
+        "time": 70.6499999999973
+      },
+      {
+        "damage": 4.16,
+        "falling": false,
+        "land": true,
+        "position": [
+          1330.93798828125,
+          909.038391113281
+        ],
+        "time": 81.13333333333
+      },
+      {
+        "damage": 3.24,
+        "falling": false,
+        "land": true,
+        "position": [
+          1450.79309082031,
+          975.30322265625
+        ],
+        "time": 170.766666666695
+      },
+      {
+        "damage": 1.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          1436.10437011719,
+          980.423522949219
+        ],
+        "time": 171.483333333362
+      },
+      {
+        "damage": 1.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          1420.93884277344,
+          1020.90264892578
+        ],
+        "time": 172.483333333363
+      },
+      {
+        "damage": 1.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          1398.47473144531,
+          1035.37731933594
+        ],
+        "time": 173.483333333364
+      },
+      {
+        "damage": 1.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          1353.24035644531,
+          1022.30334472656
+        ],
+        "time": 174.483333333364
+      },
+      {
+        "damage": 2.16,
+        "falling": false,
+        "land": true,
+        "position": [
+          1285.83410644531,
+          817.34423828125
+        ],
+        "time": 180.033333333369
+      },
+      {
+        "damage": 3.24,
+        "falling": false,
+        "land": true,
+        "position": [
+          1331.556640625,
+          723.801147460938
+        ],
+        "time": 182.850000000038
+      },
+      {
+        "damage": 3.24,
+        "falling": false,
+        "land": true,
+        "position": [
+          1403.48706054688,
+          483.386352539062
+        ],
+        "time": 187.766666666708
+      },
+      {
+        "damage": 1.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          1450.22912597656,
+          452.485290527344
+        ],
+        "time": 188.483333333375
+      },
+      {
+        "damage": 5.4,
+        "falling": false,
+        "land": true,
+        "position": [
+          1462.2236328125,
+          471.876220703125
+        ],
+        "time": 189.133333333376
+      },
+      {
+        "damage": 1.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          1518.77392578125,
+          464.942443847656
+        ],
+        "time": 190.483333333377
+      },
+      {
+        "damage": 1.0,
+        "falling": false,
+        "land": true,
+        "position": [
+          1552.22216796875,
+          393.757232666016
+        ],
+        "time": 191.483333333378
+      },
+      {
+        "damage": 5.4,
+        "falling": false,
+        "land": true,
+        "position": [
+          1643.93994140625,
+          470.064666748047
+        ],
+        "time": 193.73333333338
+      },
+      {
+        "damage": 3.36,
+        "falling": false,
+        "land": true,
+        "position": [
+          1362.48999023438,
+          315.010955810547
+        ],
+        "time": 201.816666666719
+      }
+    ],
+    "hp": -1.52,
+    "items": {},
+    "kills": 232,
+    "level": 18,
+    "peak_mobs": 54,
+    "reached_arena": false,
+    "seed": 151,
+    "stage": "survival",
+    "time": 201.816666666719
+  },
+  "video": {
+    "path": "qa/recordings/chapter_three.mp4",
+    "seconds": 47.7,
+    "diagnostic_immunity": true,
+    "scripted_scene_placement": true,
+    "soundtrack": "composed from original tracks and timed vanilla events"
+  },
+  "native_release": [
+    {
+      "mode": "end_survival",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_dragon",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_last_duel",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_flight",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_rekindle",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_overworld",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_scale",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    }
+  ],
+  "native_network": {
+    "players": 4,
+    "latency": 45.0,
+    "jitter": 20.0,
+    "loss": 0.05,
+    "returncodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "runtime_errors": {},
+    "exported": true
+  },
+  "builds": {
+    "builds/linux/MinecraftSurvivors.x86_64": {
+      "bytes": 101910776,
+      "sha256": "a1fe387a42e4d2281ec3e085b094f37f86dd617f2f8c2a997e1821d37c8ba439"
+    },
+    "builds/windows/MinecraftSurvivors.exe": {
+      "bytes": 137520072,
+      "sha256": "9dbbadbc481f32b779dc7a8ac276c98befa7b40b77926a5699fb2b525adc71e7"
+    }
+  }
+}

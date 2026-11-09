@@ -1,0 +1,130 @@
+{
+  "latency": 45.0,
+  "jitter": 20.0,
+  "loss": 0.05,
+  "scenario": "restart",
+  "label": "final",
+  "engine": "/home/daydert/MinecraftSurvival/.tools/Godot_v4.7.2-stable_linux.x86_64",
+  "visual": false,
+  "exported": false,
+  "blackout": 0,
+  "packets": 4887,
+  "dropped": 251,
+  "max_udp_datagram": 1392,
+  "returncodes": [
+    0,
+    0
+  ],
+  "runtime_errors": {},
+  "host": {
+    "bytes_sent": 1611002,
+    "checks": {
+      "clean_restart": true,
+      "connected": true,
+      "first_ending": true,
+      "remote_moved": true
+    },
+    "diagnostics": [],
+    "input_packets": 347,
+    "max_bucket_bytes": 681,
+    "max_correction": 0,
+    "max_render_step": 0.0,
+    "p95_correction": 0,
+    "p95_present_ms": 0.003,
+    "p95_sim_ms": 5.012,
+    "p95_snapshot_ms": 2.195,
+    "p95_world_ms": 3.413,
+    "received_buckets": 0,
+    "received_frames": 0,
+    "role": "host",
+    "scenario": "restart",
+    "traveled": 0.0
+  },
+  "guest": {
+    "bytes_sent": 0,
+    "checks": {
+      "clean_restart": true,
+      "connected": true,
+      "finale": true,
+      "no_movement_teleports": true,
+      "pause": true,
+      "receives_authority": true,
+      "spectator": true
+    },
+    "diagnostics": [
+      {
+        "ack": 18,
+        "authority": "(1044.649, 1024.672)",
+        "changed": false,
+        "distance": 21.8144435882568,
+        "generation": 0,
+        "old": "(1074.142, 1029.587)",
+        "pending": 6,
+        "predicted": "(1052.465, 1027.145)",
+        "seq": 24,
+        "tick": 63
+      },
+      {
+        "ack": 21,
+        "authority": "(1048.585, 1025.82)",
+        "changed": false,
+        "distance": 15.8144683837891,
+        "generation": 0,
+        "old": "(1071.008, 1031.883)",
+        "pending": 6,
+        "predicted": "(1055.293, 1030.113)",
+        "seq": 27,
+        "tick": 66
+      },
+      {
+        "ack": 24,
+        "authority": "(1052.465, 1027.145)",
+        "changed": false,
+        "distance": 13.814471244812,
+        "generation": 0,
+        "old": "(1069.935, 1032.675)",
+        "pending": 4,
+        "predicted": "(1056.208, 1031.128)",
+        "seq": 28,
+        "tick": 69
+      },
+      {
+        "ack": 0,
+        "authority": "(1071.812, 1094.641)",
+        "changed": true,
+        "distance": 15.016863822937,
+        "generation": 1,
+        "old": "(1068.627, 1109.316)",
+        "pending": 0,
+        "predicted": "(1071.812, 1094.641)",
+        "seq": 0,
+        "tick": 137
+      },
+      {
+        "ack": 98,
+        "authority": "(955.0864, 1058.482)",
+        "changed": false,
+        "distance": 16.3784961700439,
+        "generation": 2,
+        "old": "(948.0334, 1043.7)",
+        "pending": 0,
+        "predicted": "(955.0864, 1058.482)",
+        "seq": 110,
+        "tick": 301
+      }
+    ],
+    "enet_throttle": 32.0,
+    "input_packets": 0,
+    "max_bucket_bytes": 0,
+    "max_correction": 0.0,
+    "max_render_step": 2.00006461143494,
+    "p95_correction": 0.0,
+    "p95_present_ms": 2.296,
+    "p95_sim_ms": 0.184,
+    "received_buckets": 108,
+    "received_frames": 37,
+    "role": "guest",
+    "scenario": "restart",
+    "traveled": 238.539560350386
+  }
+}

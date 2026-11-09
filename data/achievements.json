@@ -1,0 +1,87 @@
+[
+  {
+    "id": "chapter_one",
+    "name": "Из огня да в полымя",
+    "description": "Пройти главу I.",
+    "tier": "easy",
+    "icon": "chapter_one"
+  },
+  {
+    "id": "first_evolution",
+    "name": "Зачаровано",
+    "description": "Получить первую эволюцию.",
+    "tier": "easy",
+    "icon": "first_evolution"
+  },
+  {
+    "id": "full_inventory",
+    "name": "Места нет",
+    "description": "Занять все слоты оружия и усилений.",
+    "tier": "easy",
+    "icon": "full_inventory"
+  },
+  {
+    "id": "sword_only",
+    "name": "Верный клинок",
+    "description": "Пройти главу I только с мечом.",
+    "tier": "medium",
+    "icon": "sword_only"
+  },
+  {
+    "id": "two_weapons",
+    "name": "Двух хватит",
+    "description": "Пройти главу II, занимая не больше двух слотов оружия за весь забег.",
+    "tier": "medium",
+    "icon": "two_weapons"
+  },
+  {
+    "id": "no_evolutions",
+    "name": "Без чар",
+    "description": "Пройти главу II или III без эволюций.",
+    "tier": "medium",
+    "icon": "no_evolutions"
+  },
+  {
+    "id": "chapter_two",
+    "name": "Выход из Незера",
+    "description": "Пройти главу II.",
+    "tier": "medium",
+    "icon": "chapter_two"
+  },
+  {
+    "id": "chapter_three",
+    "name": "Край позади",
+    "description": "Пройти главу III.",
+    "tier": "medium",
+    "icon": "chapter_three"
+  },
+  {
+    "id": "bow_only",
+    "name": "Только стрелы",
+    "description": "Пройти главу I с луком. Меч не улучшать; получив лук, убрать за 3 с. Другое оружие — не дольше 3 с.",
+    "tier": "hard",
+    "icon": "bow_only"
+  },
+  {
+    "id": "untouched",
+    "name": "Ни царапины",
+    "description": "Пройти главу I без урона.",
+    "tier": "hard",
+    "icon": "untouched"
+  },
+  {
+    "id": "no_healing",
+    "name": "Без перекуса",
+    "description": "Пройти главу II или III без хилок.",
+    "tier": "hard",
+    "icon": "no_healing"
+  },
+  {
+    "id": "herobrine",
+    "name": "Победа?",
+    "description": "Победить первую стадию Херобрина.",
+    "tier": "secret",
+    "icon": "herobrine",
+    "secret": true
+  }
+]

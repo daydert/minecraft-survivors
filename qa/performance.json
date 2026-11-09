@@ -1,0 +1,28 @@
+{
+  "all_passives": 5,
+  "all_weapons": 8,
+  "draw_calls": 253.0,
+  "enemies": 250,
+  "evolutions": [
+    "sword",
+    "bow",
+    "trident"
+  ],
+  "executable": "/home/daydert/MinecraftSurvival/.tools/Godot_v4.7.2-stable_linux.x86_64",
+  "godot": "4.7.2-stable (official)",
+  "render_viewport": "(640.0, 360.0)",
+  "rendered_frame": {
+    "max_ms": 67.2593333333333,
+    "mean_ms": 8.99638841750855,
+    "p95_ms": 12.5
+  },
+  "renderer": "AMD Radeon 780M Graphics (radeonsi, phoenix, ACO, DRM 3.64, 6.18.53-1-lts)",
+  "resolution": "(3192, 1860)",
+  "samples": 1800,
+  "simulation": {
+    "max_ms": 18.467,
+    "mean_ms": 4.42210147601476,
+    "p95_ms": 8.863
+  },
+  "wall_seconds": 19.0781588181819
+}

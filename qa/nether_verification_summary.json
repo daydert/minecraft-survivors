@@ -1,0 +1,188 @@
+{
+  "version": "0.7.0",
+  "checks": 2718,
+  "failures": [],
+  "reports": {
+    "unit": {
+      "checks": 47,
+      "failures": []
+    },
+    "ui": {
+      "checks": 15,
+      "failures": []
+    },
+    "animation": {
+      "checks": 60,
+      "failures": []
+    },
+    "chapter": {
+      "checks": 21,
+      "failures": []
+    },
+    "coop": {
+      "checks": 74,
+      "failures": []
+    },
+    "coop_four": {
+      "checks": 41,
+      "failures": []
+    },
+    "coop_logging": {
+      "checks": 11,
+      "failures": []
+    },
+    "nether": {
+      "checks": 55,
+      "failures": []
+    },
+    "nether_visual": {
+      "checks": 21,
+      "failures": []
+    },
+    "nether_asset": {
+      "checks": 766,
+      "failures": []
+    },
+    "atlas": {
+      "checks": 45,
+      "failures": []
+    },
+    "minecraft_asset": {
+      "checks": 250,
+      "failures": []
+    },
+    "presentation_asset": {
+      "checks": 447,
+      "failures": []
+    },
+    "character_asset": {
+      "checks": 724,
+      "failures": []
+    },
+    "character_facing": {
+      "checks": 67,
+      "failures": []
+    },
+    "visual_animation": {
+      "checks": 8,
+      "failures": []
+    },
+    "minecraft_render": {
+      "checks": 7,
+      "failures": []
+    },
+    "presentation": {
+      "checks": 26,
+      "failures": []
+    },
+    "chapter_visual": {
+      "checks": 9,
+      "failures": []
+    },
+    "coop_visual": {
+      "checks": 11,
+      "failures": []
+    },
+    "coop_four_visual": {
+      "checks": 13,
+      "failures": []
+    }
+  },
+  "combat_parity_ticks": 5400,
+  "boss_runs": [
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 343,
+      "boss_hp": 0,
+      "hp": 20.0,
+      "seconds": 31.5666666666667,
+      "stage": "portal",
+      "style": "hybrid",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 426,
+      "boss_hp": 0,
+      "hp": 17.7,
+      "seconds": 60.15,
+      "stage": "portal",
+      "style": "melee",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 661,
+      "boss_hp": 0,
+      "hp": 20.0,
+      "seconds": 82.5666666666667,
+      "stage": "portal",
+      "style": "developing",
+      "victory": true
+    }
+  ],
+  "ordinary_autoplay": [
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 0,
+      "build": {
+        "bow": 3,
+        "crossbow": 2,
+        "fire": 1,
+        "hoe": 1,
+        "sword": 5,
+        "tnt": 1
+      },
+      "evolved": {},
+      "hp": -2.32,
+      "items": {
+        "armor": 3,
+        "blaze": 1,
+        "ghast_tear": 4,
+        "gold_leggings": 1,
+        "hopper": 1,
+        "redstone": 1,
+        "sugar": 2
+      },
+      "kills": 367,
+      "level": 25,
+      "seed": 151,
+      "stage": "survival",
+      "time": 292.983333333396,
+      "victory": false
+    }
+  ],
+  "native": {
+    "native_nether_battle": {
+      "screenshot": "qa/native_nether_battle.png",
+      "runtime_errors": 0
+    },
+    "native_nether_boss": {
+      "screenshot": "qa/native_nether_boss.png",
+      "runtime_errors": 0
+    },
+    "native_nether_end": {
+      "screenshot": "qa/native_nether_end.png",
+      "runtime_errors": 0
+    },
+    "native_nether_inventory": {
+      "screenshot": "qa/native_nether_inventory.png",
+      "runtime_errors": 0
+    }
+  },
+  "exports": {
+    "builds/linux/MinecraftSurvivors.x86_64": {
+      "sha256": "546456e5ce950264618f194b78748df76b6c917a43702caa526cb1d040eea028",
+      "bytes": 84247728
+    },
+    "builds/windows/MinecraftSurvivors.exe": {
+      "sha256": "7c43b5c048bfaeebd1024ea1aa851e2eb8d3c082a484a59b617be8c8e1a6f756",
+      "bytes": 119857024
+    }
+  },
+  "limits": [
+    "Boss runs use predefined builds; the ordinary seed151 autoplay died before 12 minutes.",
+    "Windows was exported but not run natively.",
+    "Physical ZeroTier network was not tested; network simulation and balance were not changed."
+  ]
+}

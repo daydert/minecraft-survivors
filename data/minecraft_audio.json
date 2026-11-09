@@ -1,0 +1,578 @@
+{
+  "swing": {
+    "minecraft_event": "entity.player.attack.sweep",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep1.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep2.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep3.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep4.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep5.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep6.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep7.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "arrow": {
+    "minecraft_event": "entity.arrow.shoot",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_bow.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "trident": {
+    "minecraft_event": "item.trident.throw",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/item_trident_throw1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/item_trident_throw2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "fire": {
+    "minecraft_event": "entity.blaze.shoot",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_fireball4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "potion_throw": {
+    "minecraft_event": "entity.splash_potion.throw",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_bow.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hit": {
+    "minecraft_event": "entity.player.attack.strong",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_strong1.ogg",
+        "volume": 0.6,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_strong2.ogg",
+        "volume": 0.6,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_strong3.ogg",
+        "volume": 0.6,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_strong4.ogg",
+        "volume": 0.6,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_strong5.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_strong6.ogg",
+        "volume": 0.7,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt": {
+    "minecraft_event": "entity.player.hurt",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/damage_hit1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/damage_hit2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/damage_hit3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "explosion": {
+    "minecraft_event": "entity.generic.explode",
+    "gain": 0.4,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_explode1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_explode2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_explode3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_explode4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hiss": {
+    "minecraft_event": "entity.creeper.primed",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_fuse.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "xp": {
+    "minecraft_event": "entity.experience_orb.pickup",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_orb.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "pickup": {
+    "minecraft_event": "entity.item.pickup",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_pop.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "level": {
+    "minecraft_event": "entity.player.levelup",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_levelup.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "chest": {
+    "minecraft_event": "block.chest.open",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/block_chest_open.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "potion": {
+    "minecraft_event": "entity.splash_potion.break",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_glass1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_glass2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_glass3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "fangs": {
+    "minecraft_event": "entity.evoker_fangs.attack",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_evocation_illager_fangs.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "lightning": {
+    "minecraft_event": "entity.lightning_bolt.thunder",
+    "gain": 0.28,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/ambient_weather_thunder1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_weather_thunder2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_weather_thunder3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "warning": {
+    "minecraft_event": "entity.ravager.roar",
+    "gain": 0.4,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_roar1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_roar2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_roar3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_roar4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "death": {
+    "minecraft_event": "entity.player.death",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/damage_hit1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/damage_hit2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/damage_hit3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "select": {
+    "minecraft_event": "ui.button.click",
+    "gain": 0.75,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_click_stereo.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "break": {
+    "minecraft_event": "block.wood.break",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/dig_wood1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/dig_wood2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/dig_wood3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/dig_wood4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "herobrine": {
+    "minecraft_event": "entity.wither.spawn",
+    "gain": 0.35,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_spawn.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "fire_wave": {
+    "minecraft_event": "entity.blaze.shoot",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_fireball4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "portal_open": {
+    "minecraft_event": "block.portal.trigger",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/portal_trigger.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "portal_travel": {
+    "minecraft_event": "block.portal.travel",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/portal_travel.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt_zombie": {
+    "minecraft_event": "entity.zombie.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_zombie_hurt1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_zombie_hurt2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt_skeleton": {
+    "minecraft_event": "entity.skeleton.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_skeleton_hurt1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_skeleton_hurt2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_skeleton_hurt3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_skeleton_hurt4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt_spider": {
+    "minecraft_event": "entity.spider.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_spider_say1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_spider_say2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_spider_say3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_spider_say4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt_creeper": {
+    "minecraft_event": "entity.creeper.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_creeper_say1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_creeper_say2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_creeper_say3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_creeper_say4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt_slime": {
+    "minecraft_event": "entity.slime.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_slime_big1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_slime_big2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_slime_big3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_slime_big4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt_ravager": {
+    "minecraft_event": "entity.ravager.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_hurt1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_hurt2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_hurt3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ravager_hurt4.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "hurt_vindicator": {
+    "minecraft_event": "entity.vindicator.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_vindication_illager_hurt1.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_vindication_illager_hurt2.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_vindication_illager_hurt3.ogg",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  }
+}

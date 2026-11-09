@@ -1,0 +1,252 @@
+{
+  "sessions": {
+    "survivors_coop_2026-10-27_18-19-16_client_p19466_347125": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_guest2_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "sample": 15,
+        "run_start": 1,
+        "position_correction": 3,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 143.202666666667,
+        "presentation_ms": 3.089,
+        "snapshot_gap_ms": 165.000000000001,
+        "visual_error_px": 177.653900146484
+      },
+      "peer_rtt_max_ms": {
+        "1": 103.0
+      },
+      "markers": [
+        {
+          "t_ms": 4573,
+          "wall_ms": 1793125161038,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": 11.9999999999996,
+          "pending": 0,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1595373536": "Друг",
+            "1598879684": "Друг_2",
+            "1767648766": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "transport_disconnected"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-19-16_client_p19467_343849": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_guest3_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "sample": 15,
+        "run_start": 1,
+        "position_correction": 3,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.134,
+        "snapshot_gap_ms": 167.0,
+        "visual_error_px": 137.882446289062
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4615,
+          "wall_ms": 1793125161075,
+          "epoch": 1,
+          "tick": 189,
+          "state": "RUNNING",
+          "snapshot_age_ms": 17.9999999999998,
+          "pending": 2,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1595373536": "Друг",
+            "1598879684": "Друг_2",
+            "1767648766": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "transport_disconnected"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-19-16_client_p19465_345758": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_guest_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "sample": 15,
+        "lobby": 1,
+        "run_start": 1,
+        "position_correction": 6,
+        "user_marker": 1,
+        "network_waiting": 2,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.316,
+        "snapshot_gap_ms": 1073.0,
+        "visual_error_px": 24.0472259521484
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4580,
+          "wall_ms": 1793125161043,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": 6.00000000000023,
+          "pending": 0,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1595373536": "Друг",
+            "1598879684": "Друг_2",
+            "1767648766": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "transport_disconnected"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-19-16_host_p19442_386510": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 15,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "slow_simulation": 1,
+        "state_changed": 5,
+        "input_reset": 4,
+        "command": 4,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "simulation_ms": 12.063,
+        "snapshot_encode_ms": 2.911
+      },
+      "peer_rtt_max_ms": {
+        "1598879684": 104.0,
+        "1767648766": 109.0,
+        "1595373536": 106.0
+      },
+      "markers": [
+        {
+          "t_ms": 4962,
+          "wall_ms": 1793125160966,
+          "epoch": 1,
+          "tick": 186,
+          "state": "WAITING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1595373536": "Друг",
+            "1598879684": "Друг_2",
+            "1767648766": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    }
+  },
+  "damaged_lines": []
+}

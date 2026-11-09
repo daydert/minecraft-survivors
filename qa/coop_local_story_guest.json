@@ -1,0 +1,26 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "canonical_end": true,
+    "connected": true,
+    "finale": true,
+    "no_movement_teleports": true,
+    "pause": true,
+    "receives_authority": true,
+    "spectator": true
+  },
+  "diagnostics": [],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 4.09973573684692,
+  "max_render_step": 1.36673152446747,
+  "p95_correction": 0.371935158967972,
+  "p95_present_ms": 2.2,
+  "p95_sim_ms": 0.188,
+  "received_buckets": 3468,
+  "received_frames": 252,
+  "role": "guest",
+  "scenario": "story",
+  "traveled": 223.812445686621
+}

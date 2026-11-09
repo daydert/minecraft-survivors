@@ -1,0 +1,25 @@
+{
+  "frame_size": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    57
+  ],
+  "columns": 24,
+  "walking_offset": 12,
+  "gear": [
+    "idle",
+    "spear_iron",
+    "spear_diamond",
+    "spear_netherite",
+    "mace",
+    "knockback_stick",
+    "end_crystal",
+    "dragon_breath",
+    "elytra",
+    "rocket",
+    "hand"
+  ]
+}

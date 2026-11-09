@@ -1,0 +1,13 @@
+.godot/
+.tools/
+builds/
+__pycache__/
+*.tmp
+qa/*.log
+qa/**/*.log
+qa/recordings/
+qa/network_logs/
+qa/*.png
+qa/*.png.import
+qa/*_before/
+qa/before/

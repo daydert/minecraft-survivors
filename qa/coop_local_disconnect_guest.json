@@ -1,0 +1,22 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "clean_leave": true,
+    "connected": true,
+    "pause": true
+  },
+  "diagnostics": [],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 4.09973096847534,
+  "max_render_step": 1.36673152446747,
+  "p95_correction": 2.25004363059998,
+  "p95_present_ms": 2.887,
+  "p95_sim_ms": 0.215,
+  "received_buckets": 2398,
+  "received_frames": 98,
+  "role": "guest",
+  "scenario": "disconnect",
+  "traveled": 209.609249154062
+}

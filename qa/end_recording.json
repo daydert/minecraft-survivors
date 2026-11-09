@@ -1,0 +1,646 @@
+{
+  "diagnostic_immunity": true,
+  "fps": 30,
+  "frames": 2685,
+  "manual_finale_input": true,
+  "scripted_placement": true,
+  "shots": [
+    {
+      "at": 0.0,
+      "mode": "end_survival",
+      "seconds": 3.0
+    },
+    {
+      "at": 3.0,
+      "mode": "end_flight",
+      "seconds": 2.0
+    },
+    {
+      "at": 5.0,
+      "mode": "end_choices",
+      "seconds": 3.0
+    },
+    {
+      "at": 8.0,
+      "mode": "end_crystals",
+      "seconds": 2.0
+    },
+    {
+      "at": 10.0,
+      "mode": "end_dragon",
+      "seconds": 6.0
+    },
+    {
+      "at": 16.0,
+      "mode": "end_dragon_rage",
+      "seconds": 6.0
+    },
+    {
+      "at": 22.0,
+      "mode": "end_dragon_death",
+      "seconds": 4.8
+    },
+    {
+      "at": 26.8,
+      "mode": "end_betrayal",
+      "seconds": 8.7
+    },
+    {
+      "at": 35.5,
+      "mode": "end_last_duel",
+      "seconds": 34.0
+    },
+    {
+      "at": 69.5,
+      "mode": "end_steve_death",
+      "seconds": 17.0
+    },
+    {
+      "at": 86.5,
+      "mode": "end_overworld",
+      "seconds": 3.0
+    }
+  ],
+  "sound_events": [
+    {
+      "id": "hurt_shulker",
+      "time": 0.0333333333333333
+    },
+    {
+      "id": "hurt_dispenser_enderman",
+      "time": 0.0333333333333333
+    },
+    {
+      "id": "hurt_enderman",
+      "time": 0.0333333333333333
+    },
+    {
+      "id": "hurt_endersteve",
+      "time": 0.0333333333333333
+    },
+    {
+      "id": "hurt_endermite",
+      "time": 0.0333333333333333
+    },
+    {
+      "id": "explosion",
+      "time": 0.0333333333333333
+    },
+    {
+      "id": "xp",
+      "time": 0.1
+    },
+    {
+      "id": "hurt_shulker",
+      "time": 0.333333333333333
+    },
+    {
+      "id": "break",
+      "time": 0.333333333333333
+    },
+    {
+      "id": "swing",
+      "time": 0.333333333333333
+    },
+    {
+      "id": "swing",
+      "time": 0.5
+    },
+    {
+      "id": "hurt_enderman",
+      "time": 0.933333333333333
+    },
+    {
+      "id": "hurt_shulker",
+      "time": 0.933333333333333
+    },
+    {
+      "id": "break",
+      "time": 0.933333333333333
+    },
+    {
+      "id": "explosion",
+      "time": 0.933333333333333
+    },
+    {
+      "id": "mace_smash",
+      "time": 0.933333333333333
+    },
+    {
+      "id": "swing",
+      "time": 1.2
+    },
+    {
+      "id": "swing",
+      "time": 1.36666666666667
+    },
+    {
+      "id": "arrow",
+      "time": 1.56666666666667
+    },
+    {
+      "id": "explosion",
+      "time": 1.56666666666667
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 1.73333333333333
+    },
+    {
+      "id": "swing",
+      "time": 1.76666666666667
+    },
+    {
+      "id": "end_teleport",
+      "time": 1.96666666666667
+    },
+    {
+      "id": "swing",
+      "time": 2.06666666666667
+    },
+    {
+      "id": "swing",
+      "time": 2.23333333333333
+    },
+    {
+      "id": "arrow",
+      "time": 2.9
+    },
+    {
+      "id": "break",
+      "time": 2.93333333333333
+    },
+    {
+      "id": "swing",
+      "time": 2.93333333333333
+    },
+    {
+      "id": "hurt_endermite_brood",
+      "time": 3.0
+    },
+    {
+      "id": "hurt_endersteve",
+      "time": 3.0
+    },
+    {
+      "id": "hurt_endermite",
+      "time": 3.0
+    },
+    {
+      "id": "xp",
+      "time": 3.06666666666667
+    },
+    {
+      "id": "hurt_dispenser_enderman",
+      "time": 3.1
+    },
+    {
+      "id": "hurt_shulker",
+      "time": 3.1
+    },
+    {
+      "id": "hurt_endermite",
+      "time": 3.16666666666667
+    },
+    {
+      "id": "hurt_enderman",
+      "time": 3.23333333333333
+    },
+    {
+      "id": "break",
+      "time": 3.26666666666667
+    },
+    {
+      "id": "warning",
+      "time": 3.26666666666667
+    },
+    {
+      "id": "swing",
+      "time": 3.33333333333333
+    },
+    {
+      "id": "swing",
+      "time": 3.5
+    },
+    {
+      "id": "explosion",
+      "time": 3.63333333333333
+    },
+    {
+      "id": "swing",
+      "time": 4.2
+    },
+    {
+      "id": "swing",
+      "time": 4.36666666666667
+    },
+    {
+      "id": "swing",
+      "time": 4.8
+    },
+    {
+      "id": "select",
+      "time": 6.73333333333333
+    },
+    {
+      "id": "pickup",
+      "time": 7.26666666666667
+    },
+    {
+      "id": "swing",
+      "time": 10.0
+    },
+    {
+      "id": "wind_burst",
+      "time": 10.0
+    },
+    {
+      "id": "hurt_end_dragon",
+      "time": 10.2666666666667
+    },
+    {
+      "id": "swing",
+      "time": 10.3333333333333
+    },
+    {
+      "id": "swing",
+      "time": 10.5
+    },
+    {
+      "id": "hurt_end_dragon",
+      "time": 10.6333333333333
+    },
+    {
+      "id": "explosion",
+      "time": 10.6333333333333
+    },
+    {
+      "id": "explosion",
+      "time": 10.9666666666667
+    },
+    {
+      "id": "mace_smash",
+      "time": 10.9666666666667
+    },
+    {
+      "id": "swing",
+      "time": 11.2
+    },
+    {
+      "id": "swing",
+      "time": 11.3666666666667
+    },
+    {
+      "id": "explosion",
+      "time": 11.6
+    },
+    {
+      "id": "swing",
+      "time": 11.8
+    },
+    {
+      "id": "swing",
+      "time": 12.0666666666667
+    },
+    {
+      "id": "swing",
+      "time": 12.2333333333333
+    },
+    {
+      "id": "swing",
+      "time": 12.9333333333333
+    },
+    {
+      "id": "swing",
+      "time": 13.1
+    },
+    {
+      "id": "swing",
+      "time": 13.4333333333333
+    },
+    {
+      "id": "swing",
+      "time": 13.6
+    },
+    {
+      "id": "swing",
+      "time": 13.8
+    },
+    {
+      "id": "swing",
+      "time": 13.9666666666667
+    },
+    {
+      "id": "wind_burst",
+      "time": 14.5333333333333
+    },
+    {
+      "id": "swing",
+      "time": 14.6666666666667
+    },
+    {
+      "id": "swing",
+      "time": 14.8333333333333
+    },
+    {
+      "id": "swing",
+      "time": 15.4
+    },
+    {
+      "id": "explosion",
+      "time": 15.5
+    },
+    {
+      "id": "mace_smash",
+      "time": 15.5
+    },
+    {
+      "id": "swing",
+      "time": 15.7
+    },
+    {
+      "id": "swing",
+      "time": 16.0
+    },
+    {
+      "id": "wind_burst",
+      "time": 16.0
+    },
+    {
+      "id": "hurt_arena_crystal",
+      "time": 16.3333333333333
+    },
+    {
+      "id": "swing",
+      "time": 16.3333333333333
+    },
+    {
+      "id": "swing",
+      "time": 16.5
+    },
+    {
+      "id": "explosion",
+      "time": 16.6333333333333
+    },
+    {
+      "id": "hurt_arena_crystal",
+      "time": 16.9666666666667
+    },
+    {
+      "id": "explosion",
+      "time": 16.9666666666667
+    },
+    {
+      "id": "mace_smash",
+      "time": 16.9666666666667
+    },
+    {
+      "id": "swing",
+      "time": 17.2
+    },
+    {
+      "id": "swing",
+      "time": 17.3666666666667
+    },
+    {
+      "id": "explosion",
+      "time": 17.6
+    },
+    {
+      "id": "swing",
+      "time": 17.8
+    },
+    {
+      "id": "swing",
+      "time": 18.0666666666667
+    },
+    {
+      "id": "swing",
+      "time": 18.2333333333333
+    },
+    {
+      "id": "swing",
+      "time": 18.9333333333333
+    },
+    {
+      "id": "swing",
+      "time": 19.1
+    },
+    {
+      "id": "dragon_flap",
+      "time": 19.3333333333333
+    },
+    {
+      "id": "swing",
+      "time": 19.4333333333333
+    },
+    {
+      "id": "swing",
+      "time": 19.6
+    },
+    {
+      "id": "swing",
+      "time": 19.8
+    },
+    {
+      "id": "swing",
+      "time": 19.9666666666667
+    },
+    {
+      "id": "wind_burst",
+      "time": 20.5333333333333
+    },
+    {
+      "id": "swing",
+      "time": 20.6666666666667
+    },
+    {
+      "id": "swing",
+      "time": 20.8333333333333
+    },
+    {
+      "id": "swing",
+      "time": 21.4
+    },
+    {
+      "id": "explosion",
+      "time": 21.5
+    },
+    {
+      "id": "mace_smash",
+      "time": 21.5
+    },
+    {
+      "id": "swing",
+      "time": 21.7
+    },
+    {
+      "id": "portal_open",
+      "time": 26.5
+    },
+    {
+      "id": "explosion",
+      "time": 29.9333333333333
+    },
+    {
+      "id": "blood_rift",
+      "time": 29.9333333333333
+    },
+    {
+      "id": "warning",
+      "time": 35.4
+    },
+    {
+      "id": "swing",
+      "time": 35.4333333333333
+    },
+    {
+      "id": "wind_burst",
+      "time": 35.4333333333333
+    },
+    {
+      "id": "end_teleport",
+      "time": 35.7
+    },
+    {
+      "id": "end_teleport",
+      "time": 38.3333333333333
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 39.2333333333333
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 40.0666666666667
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 40.9
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 41.7333333333333
+    },
+    {
+      "id": "end_teleport",
+      "time": 43.6
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 44.5
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 45.3333333333333
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 46.1666666666667
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 47.0
+    },
+    {
+      "id": "end_teleport",
+      "time": 48.8666666666667
+    },
+    {
+      "id": "end_teleport",
+      "time": 50.3666666666667
+    },
+    {
+      "id": "dragon_growl",
+      "time": 52.5
+    },
+    {
+      "id": "end_teleport",
+      "time": 54.6333333333333
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 55.4
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 56.0333333333333
+    },
+    {
+      "id": "swing",
+      "time": 56.3333333333333
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 56.6666666666667
+    },
+    {
+      "id": "swing",
+      "time": 56.9666666666667
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 57.3
+    },
+    {
+      "id": "swing",
+      "time": 57.6
+    },
+    {
+      "id": "shulker_shoot",
+      "time": 57.9333333333333
+    },
+    {
+      "id": "swing",
+      "time": 58.2333333333333
+    },
+    {
+      "id": "swing",
+      "time": 58.8666666666667
+    },
+    {
+      "id": "end_teleport",
+      "time": 59.7666666666667
+    },
+    {
+      "id": "mace_smash",
+      "time": 61.5333333333333
+    },
+    {
+      "id": "end_teleport",
+      "time": 62.8
+    },
+    {
+      "id": "end_teleport",
+      "time": 67.3333333333333
+    },
+    {
+      "id": "end_teleport",
+      "time": 72.0666666666667
+    },
+    {
+      "id": "end_teleport",
+      "time": 74.0
+    },
+    {
+      "id": "blood_rift",
+      "time": 75.6
+    },
+    {
+      "id": "pickup",
+      "time": 78.5
+    },
+    {
+      "id": "portal_ignite",
+      "time": 79.1333333333333
+    },
+    {
+      "id": "portal_open",
+      "time": 80.9333333333333
+    },
+    {
+      "id": "portal_travel",
+      "time": 82.1666666666667
+    }
+  ]
+}

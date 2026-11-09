@@ -1,0 +1,98 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "connected": true,
+    "entities": true,
+    "no_movement_teleports": true,
+    "pause": true,
+    "receives_authority": true
+  },
+  "diagnostics": [
+    {
+      "ack": 27,
+      "authority": "(1056.83, 1025.911)",
+      "changed": false,
+      "distance": 21.8130683898926,
+      "generation": 0,
+      "old": "(1086.102, 1036.869)",
+      "pending": 7,
+      "predicted": "(1065.267, 1030.412)",
+      "seq": 34,
+      "tick": 54
+    },
+    {
+      "ack": 60,
+      "authority": "(1072.382, 1040.366)",
+      "changed": false,
+      "distance": 21.8098659515381,
+      "generation": 0,
+      "old": "(1085.048, 1068.941)",
+      "pending": 7,
+      "predicted": "(1075.094, 1049.535)",
+      "seq": 67,
+      "tick": 117
+    },
+    {
+      "ack": 63,
+      "authority": "(1073.663, 1044.26)",
+      "changed": false,
+      "distance": 15.8098316192627,
+      "generation": 0,
+      "old": "(1081.379, 1067.595)",
+      "pending": 7,
+      "predicted": "(1074.163, 1053.528)",
+      "seq": 70,
+      "tick": 120
+    },
+    {
+      "ack": 0,
+      "authority": "(1075.094, 1049.535)",
+      "changed": true,
+      "distance": 16.2197265625,
+      "generation": 1,
+      "old": "(1076.18, 1065.719)",
+      "pending": 0,
+      "predicted": "(1075.094, 1049.535)",
+      "seq": 0,
+      "tick": 126
+    },
+    {
+      "ack": 0,
+      "authority": "(943.6695, 940.2094)",
+      "changed": true,
+      "distance": 17.739013671875,
+      "generation": 3,
+      "old": "(951.0823, 924.0935)",
+      "pending": 0,
+      "predicted": "(943.6695, 940.2094)",
+      "seq": 0,
+      "tick": 347
+    },
+    {
+      "ack": 0,
+      "authority": "(954.3826, 931.7443)",
+      "changed": true,
+      "distance": 12.2907552719116,
+      "generation": 5,
+      "old": "(965.0144, 925.5776)",
+      "pending": 0,
+      "predicted": "(954.3826, 931.7443)",
+      "seq": 0,
+      "tick": 387
+    }
+  ],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 21.8130683898926,
+  "max_render_step": 2.00008511543274,
+  "p95_correction": 11.8131151199341,
+  "p95_frame_ms": 16.6666666666667,
+  "p95_present_ms": 6.196,
+  "p95_sim_ms": 0.233,
+  "received_buckets": 3795,
+  "received_frames": 137,
+  "role": "guest",
+  "scenario": "stress",
+  "traveled": 214.891031215506
+}

@@ -1,0 +1,119 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/block/stone_bricks.png": {
+      "sha256": "24415444c9e4815aad4a3a349ecbfc0e027b96be25ac5b7c273c06f16c4fdd2f",
+      "bytes": 188
+    },
+    "textures/block/polished_blackstone_bricks.png": {
+      "sha256": "91d65c74a532535cd761b4f6760467e907450c9bfa7adc6b2e11587f00942953",
+      "bytes": 190
+    },
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    },
+    "textures/block/netherrack.png": {
+      "sha256": "3c0208b749c5393b9bad9d57ed3d830326a02b8cbd8444e96d4d0d277f85625f",
+      "bytes": 213
+    },
+    "textures/block/nether_bricks.png": {
+      "sha256": "2eba1f96e7fcaa5d9ea8ae2dd8c196494039fa41e9ed4c89909c90d942297318",
+      "bytes": 190
+    }
+  },
+  "derived": {
+    "duel_throne": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/stone_bricks",
+        "block/polished_blackstone_bricks",
+        "block/netherrack",
+        "block/nether_bricks"
+      ],
+      "size": [
+        192,
+        176
+      ],
+      "sha256": "7bc7d6d64afd721e4088639c5bd203274e570a940deddeefb4bc8f95ef61d53d"
+    },
+    "duel_seated": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        480,
+        112
+      ],
+      "sha256": "9cf6d83e30279d3e156d62f76a015b4b33987a08b6fb01ac023b7cc878b6fd65"
+    },
+    "duel_rise": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        1600,
+        112
+      ],
+      "sha256": "ab04c12f8acfea1b8091ae1d04611b0461ab67ef82b9bbbd99ebf5c32f7dcb3c"
+    },
+    "duel_stand": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        480,
+        112
+      ],
+      "sha256": "32f57c3cc3dcf14ace29592d671c9ab82475e914b60bf5546f1972777ce76e99"
+    },
+    "duel_command": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        960,
+        112
+      ],
+      "sha256": "f1dd3d1b40b5553b5c2fd4ac861cf2fb18a2e138277699a7672c1a2815205f5b"
+    },
+    "duel_kneel": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        720,
+        48
+      ],
+      "sha256": "31ce38a7270327e31a2815796379865f104502afcbf5a128eff864669686790a"
+    }
+  },
+  "sound_files": {
+    "mob_endermen_portal.ogg": {
+      "source": "minecraft/sounds/mob/endermen/portal.ogg",
+      "sha256": "1c49b72d40de158d74c4c0250dc4b2882f6a2ef56ac2248ebec8e5a068fa601e"
+    },
+    "mob_endermen_portal2.ogg": {
+      "source": "minecraft/sounds/mob/endermen/portal2.ogg",
+      "sha256": "e9e763114c674e500c37880fbdf5fa5bdca524f1a79f60ed90755de48bf4faf5"
+    },
+    "mob_warden_sonic_boom1.ogg": {
+      "source": "minecraft/sounds/mob/warden/sonic_boom1.ogg",
+      "sha256": "9edc2796b7e9ef97d61bd814a8a6b3e78e25cd8f410a733a2010416a95acceb6"
+    },
+    "mob_warden_sonic_boom2.ogg": {
+      "source": "minecraft/sounds/mob/warden/sonic_boom2.ogg",
+      "sha256": "e7cacd5568320b66b277a77b5ee0cf5014e4e1ee70d341a535af90b3b5541a8a"
+    },
+    "mob_warden_sonic_boom3.ogg": {
+      "source": "minecraft/sounds/mob/warden/sonic_boom3.ogg",
+      "sha256": "d3a7953a576e138f94f5706495dd84d63d0ece226d5d24ca688d8c1760ec442a"
+    },
+    "mob_warden_sonic_boom4.ogg": {
+      "source": "minecraft/sounds/mob/warden/sonic_boom4.ogg",
+      "sha256": "93a8d7b75b8dcdaa44782f9fc107cc059cecacabca378973e9e0860219133c45"
+    }
+  },
+  "notes": "Original Minecraft resources with custom articulated poses; legacy co-op throne is unchanged."
+}

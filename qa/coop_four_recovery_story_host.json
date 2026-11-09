@@ -1,0 +1,36 @@
+{
+  "bytes_sent": 5110296,
+  "checks": {
+    "canonical_end": true,
+    "connected": true,
+    "diagnostics_saved": true,
+    "independent_inputs": true,
+    "loaded_all": true,
+    "loading_barrier": true,
+    "own_identity": true,
+    "remote_moved": true
+  },
+  "diagnostic_prefix": "/home/daydert/.var/app/com.visualstudio.code/data/godot/app_userdata/Minecraft Survivors — До рассвета/logs/survivors_coop_2026-10-27_18-30-44_host_p22192_387595",
+  "diagnostic_writer": {
+    "dropped": 0,
+    "error": "",
+    "queued": 0
+  },
+  "diagnostics": [],
+  "input_packets": 879,
+  "max_bucket_bytes": 751,
+  "max_correction": 0,
+  "max_render_step": 0.0,
+  "p95_correction": 0,
+  "p95_present_ms": 0.004,
+  "p95_sim_ms": 5.073,
+  "p95_snapshot_ms": 1.32,
+  "p95_world_ms": 3.893,
+  "players": 4,
+  "received_buckets": 0,
+  "received_frames": 0,
+  "role": "host",
+  "scenario": "story",
+  "seat": 0,
+  "traveled": 0.0
+}

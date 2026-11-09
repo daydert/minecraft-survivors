@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://b8el34t8gt85n"
+path="res://.godot/imported/minecraft_bold.fnt-c8b53cb264ad37c66cfb4c6ad143f969.fontdata"
+
+[deps]
+
+source_file="res://assets/fonts/minecraft/minecraft_bold.fnt"
+dest_files=["res://.godot/imported/minecraft_bold.fnt-c8b53cb264ad37c66cfb4c6ad143f969.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

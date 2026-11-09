@@ -1,0 +1,295 @@
+{
+  "version": "0.6",
+  "engine": "Godot 4.7.2 stable",
+  "simulation_checks": 74,
+  "visual_checks": 11,
+  "solo_combat_parity_ticks": 5400,
+  "network_scenarios": {
+    "local_story": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "canonical_end": true,
+          "connected": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "canonical_end": true,
+          "connected": true,
+          "finale": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true,
+          "spectator": true
+        }
+      },
+      "latency_one_way_ms": 0,
+      "jitter_ms": 0,
+      "loss": 0,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "final_story": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "canonical_end": true,
+          "connected": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "canonical_end": true,
+          "connected": true,
+          "finale": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true,
+          "spectator": true
+        }
+      },
+      "latency_one_way_ms": 45.0,
+      "jitter_ms": 20.0,
+      "loss": 0.05,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "final_stress": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "connected": true,
+          "remote_moved": true,
+          "stress_cap": true
+        },
+        "guest": {
+          "connected": true,
+          "entities": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true
+        }
+      },
+      "latency_one_way_ms": 45.0,
+      "jitter_ms": 20.0,
+      "loss": 0.05,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "final_host_dead": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "canonical_end": true,
+          "connected": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "canonical_end": true,
+          "connected": true,
+          "finale": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true,
+          "surviving_guest": true
+        }
+      },
+      "latency_one_way_ms": 45.0,
+      "jitter_ms": 20.0,
+      "loss": 0.05,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "final_restart": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "clean_restart": true,
+          "connected": true,
+          "first_ending": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "clean_restart": true,
+          "connected": true,
+          "finale": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true,
+          "spectator": true
+        }
+      },
+      "latency_one_way_ms": 45.0,
+      "jitter_ms": 20.0,
+      "loss": 0.05,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "recovery_story": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "canonical_end": true,
+          "connected": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "canonical_end": true,
+          "connected": true,
+          "finale": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true,
+          "spectator": true
+        }
+      },
+      "latency_one_way_ms": 45.0,
+      "jitter_ms": 20.0,
+      "loss": 0.05,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "local_disconnect": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "connected": true,
+          "disconnect_life": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "clean_leave": true,
+          "connected": true,
+          "pause": true
+        }
+      },
+      "latency_one_way_ms": 0,
+      "jitter_ms": 0,
+      "loss": 0,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "local_host_leave": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "clean_leave": true,
+          "connected": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "connected": true,
+          "pause": true,
+          "server_lost": true
+        }
+      },
+      "latency_one_way_ms": 0,
+      "jitter_ms": 0,
+      "loss": 0,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "native_story": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "canonical_end": true,
+          "connected": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "canonical_end": true,
+          "connected": true,
+          "finale": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true,
+          "spectator": true
+        }
+      },
+      "latency_one_way_ms": 45.0,
+      "jitter_ms": 20.0,
+      "loss": 0.05,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "native_stress": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "connected": true,
+          "remote_moved": true,
+          "stress_cap": true
+        },
+        "guest": {
+          "connected": true,
+          "entities": true,
+          "no_movement_teleports": true,
+          "pause": true,
+          "receives_authority": true
+        }
+      },
+      "latency_one_way_ms": 45.0,
+      "jitter_ms": 20.0,
+      "loss": 0.05,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    },
+    "native_host_leave": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "checks": {
+        "host": {
+          "clean_leave": true,
+          "connected": true,
+          "remote_moved": true
+        },
+        "guest": {
+          "connected": true,
+          "pause": true,
+          "server_lost": true
+        }
+      },
+      "latency_one_way_ms": 0,
+      "jitter_ms": 0,
+      "loss": 0,
+      "max_udp_datagram": 1392,
+      "runtime_errors": {}
+    }
+  },
+  "limitations": [
+    "Physical ZeroTier network between friends not available",
+    "Native Windows execution not available"
+  ]
+}

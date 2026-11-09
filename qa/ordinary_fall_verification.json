@@ -1,0 +1,16 @@
+{
+  "checks": 26,
+  "failures": [],
+  "ordinary_visibility_reproduced_before_fix": 3,
+  "changed_runtime_files": [
+    "scripts/herobrine_renderer.gd"
+  ],
+  "native_linux_capture": "qa/ordinary_fall_native.png",
+  "linux_started_outside_project": true,
+  "windows_native_run": false,
+  "standard_packages_verified": [
+    "MinecraftSurvivors-Windows-x64.zip",
+    "MinecraftSurvivors-Linux-x64.zip",
+    "MinecraftSurvivors-Source.zip"
+  ]
+}

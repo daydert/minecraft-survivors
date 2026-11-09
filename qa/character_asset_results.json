@@ -1,0 +1,16 @@
+{
+  "checks": 724,
+  "failures": [],
+  "actors": [
+    "steve",
+    "zombie",
+    "creeper",
+    "skeleton",
+    "spider",
+    "slime",
+    "elite",
+    "ravager",
+    "vindicator"
+  ],
+  "minecraft_version": "1.21.11"
+}

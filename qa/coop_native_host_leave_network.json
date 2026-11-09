@@ -1,0 +1,62 @@
+{
+  "latency": 0,
+  "jitter": 0,
+  "loss": 0,
+  "scenario": "host_leave",
+  "label": "native",
+  "engine": "/home/daydert/MinecraftSurvival/builds/linux/MinecraftSurvivors.x86_64",
+  "visual": false,
+  "exported": true,
+  "blackout": 0,
+  "packets": 2816,
+  "dropped": 0,
+  "max_udp_datagram": 1392,
+  "returncodes": [
+    0,
+    0
+  ],
+  "host": {
+    "bytes_sent": 958564,
+    "checks": {
+      "clean_leave": true,
+      "connected": true,
+      "remote_moved": true
+    },
+    "diagnostics": [],
+    "input_packets": 135,
+    "max_bucket_bytes": 702,
+    "max_correction": 0,
+    "max_render_step": 0.0,
+    "p95_correction": 0,
+    "p95_present_ms": 0.003,
+    "p95_sim_ms": 6.306,
+    "p95_snapshot_ms": 2.172,
+    "p95_world_ms": 5.953,
+    "received_buckets": 0,
+    "received_frames": 0,
+    "role": "host",
+    "scenario": "host_leave",
+    "traveled": 0.0
+  },
+  "guest": {
+    "bytes_sent": 0,
+    "checks": {
+      "connected": true,
+      "pause": true,
+      "server_lost": true
+    },
+    "diagnostics": [],
+    "input_packets": 0,
+    "max_bucket_bytes": 0,
+    "max_correction": 4.09952878952026,
+    "max_render_step": 1.36673152446747,
+    "p95_correction": 2.24983382225037,
+    "p95_present_ms": 2.728,
+    "p95_sim_ms": 0.184,
+    "received_buckets": 2398,
+    "received_frames": 98,
+    "role": "guest",
+    "scenario": "host_leave",
+    "traveled": 210.975986236197
+  }
+}

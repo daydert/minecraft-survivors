@@ -1,0 +1,141 @@
+{
+  "latency": 45.0,
+  "jitter": 20.0,
+  "loss": 0.05,
+  "scenario": "story",
+  "label": "native",
+  "engine": "/home/daydert/MinecraftSurvival/builds/linux/MinecraftSurvivors.x86_64",
+  "visual": false,
+  "exported": true,
+  "blackout": 0,
+  "packets": 4686,
+  "dropped": 236,
+  "max_udp_datagram": 1392,
+  "returncodes": [
+    0,
+    0
+  ],
+  "runtime_errors": {},
+  "host": {
+    "bytes_sent": 1578518,
+    "checks": {
+      "canonical_end": true,
+      "connected": true,
+      "remote_moved": true
+    },
+    "diagnostics": [],
+    "input_packets": 301,
+    "max_bucket_bytes": 887,
+    "max_correction": 0,
+    "max_render_step": 0.0,
+    "p95_correction": 0,
+    "p95_present_ms": 0.003,
+    "p95_sim_ms": 3.847,
+    "p95_snapshot_ms": 1.646,
+    "p95_world_ms": 2.611,
+    "received_buckets": 0,
+    "received_frames": 0,
+    "role": "host",
+    "scenario": "story",
+    "traveled": 0.0
+  },
+  "guest": {
+    "bytes_sent": 0,
+    "checks": {
+      "canonical_end": true,
+      "connected": true,
+      "finale": true,
+      "no_movement_teleports": true,
+      "pause": true,
+      "receives_authority": true,
+      "spectator": true
+    },
+    "diagnostics": [
+      {
+        "ack": 18,
+        "authority": "(1044.618, 1024.786)",
+        "changed": false,
+        "distance": 21.8141841888428,
+        "generation": 0,
+        "old": "(1073.848, 1031.07)",
+        "pending": 6,
+        "predicted": "(1052.308, 1027.625)",
+        "seq": 24,
+        "tick": 57
+      },
+      {
+        "ack": 21,
+        "authority": "(1048.495, 1026.118)",
+        "changed": false,
+        "distance": 15.8142328262329,
+        "generation": 0,
+        "old": "(1070.562, 1033.26)",
+        "pending": 6,
+        "predicted": "(1054.947, 1030.763)",
+        "seq": 27,
+        "tick": 60
+      },
+      {
+        "ack": 47,
+        "authority": "(1059.272, 1037.711)",
+        "changed": false,
+        "distance": 16.3902111053467,
+        "generation": 0,
+        "old": "(1071.245, 1066.597)",
+        "pending": 11,
+        "predicted": "(1063.642, 1052.077)",
+        "seq": 58,
+        "tick": 93
+      },
+      {
+        "ack": 0,
+        "authority": "(1063.951, 1083.353)",
+        "changed": true,
+        "distance": 15.0168695449829,
+        "generation": 1,
+        "old": "(1060.307, 1097.921)",
+        "pending": 0,
+        "predicted": "(1063.951, 1083.353)",
+        "seq": 0,
+        "tick": 127
+      },
+      {
+        "ack": 123,
+        "authority": "(931.329, 1035.411)",
+        "changed": false,
+        "distance": 20.4570560455322,
+        "generation": 2,
+        "old": "(926.7269, 1015.479)",
+        "pending": 0,
+        "predicted": "(931.329, 1035.411)",
+        "seq": 133,
+        "tick": 306
+      },
+      {
+        "ack": 126,
+        "authority": "(931.329, 1035.411)",
+        "changed": false,
+        "distance": 14.4570636749268,
+        "generation": 2,
+        "old": "(928.0767, 1021.325)",
+        "pending": 0,
+        "predicted": "(931.329, 1035.411)",
+        "seq": 133,
+        "tick": 309
+      }
+    ],
+    "enet_throttle": 32.0,
+    "input_packets": 0,
+    "max_bucket_bytes": 0,
+    "max_correction": 21.8141841888428,
+    "max_render_step": 2.00008988380432,
+    "p95_correction": 3.54371023178101,
+    "p95_present_ms": 1.95,
+    "p95_sim_ms": 0.129,
+    "received_buckets": 3455,
+    "received_frames": 222,
+    "role": "guest",
+    "scenario": "story",
+    "traveled": 246.727191154103
+  }
+}

@@ -1,0 +1,126 @@
+[
+  {
+    "build": {
+      "bow": 3,
+      "fire": 2,
+      "potion": 3,
+      "sword": 8,
+      "trident": 8
+    },
+    "checkpoints": [
+      {
+        "hp": 20.0,
+        "kills": 0,
+        "level": 1,
+        "mobs": 0,
+        "time": 0.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 37,
+        "level": 4,
+        "mobs": 9,
+        "time": 60.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 109,
+        "level": 7,
+        "mobs": 21,
+        "time": 120.02
+      },
+      {
+        "hp": 17.84,
+        "kills": 234,
+        "level": 10,
+        "mobs": 29,
+        "time": 180.0
+      },
+      {
+        "hp": 17.84,
+        "kills": 363,
+        "level": 12,
+        "mobs": 27,
+        "time": 240.0
+      },
+      {
+        "hp": 17.68,
+        "kills": 524,
+        "level": 14,
+        "mobs": 42,
+        "time": 300.0
+      },
+      {
+        "hp": 17.68,
+        "kills": 656,
+        "level": 17,
+        "mobs": 74,
+        "time": 360.0
+      },
+      {
+        "hp": 17.68,
+        "kills": 881,
+        "level": 18,
+        "mobs": 109,
+        "time": 420.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 1198,
+        "level": 22,
+        "mobs": 100,
+        "time": 480.02
+      },
+      {
+        "hp": 16.72,
+        "kills": 1621,
+        "level": 24,
+        "mobs": 97,
+        "time": 540.02
+      },
+      {
+        "hp": 15.0,
+        "kills": 2118,
+        "level": 29,
+        "mobs": 65,
+        "time": 600.02
+      },
+      {
+        "hp": 13.2,
+        "kills": 2489,
+        "level": 33,
+        "mobs": 60,
+        "time": 660.02
+      },
+      {
+        "hp": 13.2,
+        "kills": 2761,
+        "level": 38,
+        "mobs": 52,
+        "time": 720.0
+      }
+    ],
+    "evolved": {
+      "sword": true,
+      "trident": true
+    },
+    "first_level": 19.4500000000002,
+    "hp": 13.2,
+    "items": {
+      "amethyst": 2,
+      "armor": 5,
+      "blaze": 5,
+      "hopper": 1,
+      "redstone": 2,
+      "sugar": 2
+    },
+    "kills": 2761,
+    "level": 38,
+    "max_step_ms": 10.931,
+    "seed": 151,
+    "style": "trident",
+    "time": 720.0,
+    "victory": true,
+    "wall_seconds": 64.659695
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "mode": "herobrine_wipe",
+    "exit_code": 0,
+    "capture": "qa/remains_native_herobrine_wipe.png",
+    "log": "qa/herobrine_remains_native_herobrine_wipe.log"
+  },
+  {
+    "mode": "portal",
+    "exit_code": 0,
+    "capture": "qa/remains_native_portal.png",
+    "log": "qa/herobrine_remains_native_portal.log"
+  },
+  {
+    "mode": "fall",
+    "exit_code": 0,
+    "capture": "qa/remains_native_fall.png",
+    "log": "qa/herobrine_remains_native_fall.log"
+  }
+]

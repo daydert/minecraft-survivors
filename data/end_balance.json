@@ -1,0 +1,408 @@
+{
+  "weapons": {
+    "spear": {
+      "name": "Железное копьё",
+      "damage": 19,
+      "interval": 3.8,
+      "radius": 13,
+      "speed": 3.2,
+      "range": 95,
+      "count": 1
+    },
+    "mace": {
+      "name": "Булава",
+      "damage": 26,
+      "interval": 5.2,
+      "radius": 34,
+      "speed": 0,
+      "range": 62,
+      "count": 1,
+      "height": 24
+    },
+    "end_crystal": {
+      "name": "Кристалл Края",
+      "damage": 85,
+      "interval": 10.0,
+      "radius": 65,
+      "speed": 0,
+      "range": 54,
+      "count": 1
+    },
+    "knockback_stick": {
+      "name": "Палка отдачи",
+      "damage": 10,
+      "interval": 2.1,
+      "radius": 44,
+      "speed": 0,
+      "range": 44,
+      "count": 1,
+      "force": 210
+    },
+    "dragon_breath": {
+      "name": "Дыхание дракона",
+      "damage": 7,
+      "interval": 5.8,
+      "radius": 31,
+      "speed": 0,
+      "range": 150,
+      "count": 1,
+      "duration": 3.2
+    },
+    "shield": {
+      "name": "Щит",
+      "damage": 8,
+      "interval": 7.0,
+      "radius": 20,
+      "speed": 0,
+      "range": 20,
+      "count": 2
+    }
+  },
+  "upgrades": {
+    "spear": [
+      {
+        "damage": 7
+      },
+      {
+        "range": 14
+      },
+      {
+        "interval": -0.4
+      },
+      {
+        "damage": 10
+      },
+      {
+        "speed": 0.3
+      },
+      {
+        "radius": 4
+      },
+      {
+        "damage": 16
+      }
+    ],
+    "mace": [
+      {
+        "height": 8
+      },
+      {
+        "damage": 10
+      },
+      {
+        "height": 12
+      },
+      {
+        "radius": 9
+      },
+      {
+        "height": 14
+      },
+      {
+        "interval": -0.7
+      },
+      {
+        "height": 18
+      }
+    ],
+    "end_crystal": [
+      {
+        "damage": 25
+      },
+      {
+        "radius": 8
+      },
+      {
+        "damage": 30
+      },
+      {
+        "radius": 8
+      },
+      {
+        "damage": 35
+      },
+      {
+        "radius": 10
+      },
+      {
+        "damage": 50
+      }
+    ],
+    "knockback_stick": [
+      {
+        "force": 40
+      },
+      {
+        "damage": 7
+      },
+      {
+        "radius": 7
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "force": 80
+      },
+      {
+        "damage": 12
+      },
+      {
+        "force": 100
+      }
+    ],
+    "dragon_breath": [
+      {
+        "damage": 3
+      },
+      {
+        "duration": 0.8
+      },
+      {
+        "radius": 7
+      },
+      {
+        "interval": -0.6
+      },
+      {
+        "damage": 5
+      },
+      {
+        "duration": 1
+      },
+      {
+        "damage": 7
+      }
+    ],
+    "shield": [
+      {
+        "count": 1
+      },
+      {
+        "damage": 6
+      },
+      {
+        "count": 1
+      },
+      {
+        "interval": -1
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 12
+      },
+      {
+        "count": 2
+      }
+    ]
+  },
+  "passives": {
+    "elytra": {
+      "name": "Элитры",
+      "effect": "Пробел: ненадолго позволяет лететь над пропастями."
+    },
+    "ender_pearl": {
+      "name": "Жемчуг Края",
+      "effect": "E: бросает жемчуг вперёд и переносит к месту падения."
+    },
+    "rabbit_foot": {
+      "name": "Кроличья лапка",
+      "effect": "Враги чаще оставляют лечение."
+    },
+    "end_eye": {
+      "name": "Око Края",
+      "effect": "Добавляет ещё один предмет на выбор."
+    },
+    "shulker_shell": {
+      "name": "Панцирь шалкера",
+      "effect": "Спасает от падения в пропасть."
+    }
+  },
+  "recipes": {
+    "spear": {
+      "passive": "elytra",
+      "name": "Ракетное копьё",
+      "icon": "spear_netherite",
+      "effect": "Shift: полёт с фейерверком, неуязвимость и тройной урон"
+    },
+    "mace": {
+      "passive": "feather",
+      "name": "Булава с порывом ветра",
+      "icon": "mace",
+      "effect": "Двойная ударная волна · высота +24"
+    },
+    "end_crystal": {
+      "passive": "amethyst",
+      "name": "Резонанс Края",
+      "icon": "end_crystal",
+      "effect": "После взрыва ещё четыре осколочных удара"
+    },
+    "knockback_stick": {
+      "passive": "sugar",
+      "name": "Палка отдачи X",
+      "icon": "knockback_stick",
+      "effect": "Рикошеты врагов и ударная цепь · отдача +50%"
+    },
+    "dragon_breath": {
+      "passive": "fire_resist",
+      "name": "Пурпурное пламя",
+      "icon": "dragon_breath",
+      "effect": "Два облака · урон +8 · длительность +2 с"
+    },
+    "shield": {
+      "passive": "shulker_shell",
+      "name": "Зачарованный щит",
+      "icon": "shield",
+      "effect": "Отражает снаряды · шипы · ещё 3 удара"
+    }
+  },
+  "mobs": {
+    "endermite": {
+      "hp": 10,
+      "speed": 36,
+      "damage": 2,
+      "xp": 2,
+      "radius": 6
+    },
+    "enderman": {
+      "hp": 40,
+      "speed": 40,
+      "damage": 4,
+      "xp": 5,
+      "radius": 9
+    },
+    "shulker": {
+      "hp": 44,
+      "speed": 0,
+      "damage": 3,
+      "xp": 6,
+      "radius": 10
+    },
+    "dispenser_enderman": {
+      "hp": 55,
+      "speed": 26,
+      "damage": 3,
+      "xp": 7,
+      "radius": 10
+    },
+    "endermite_brood": {
+      "hp": 180,
+      "speed": 20,
+      "damage": 4,
+      "xp": 15,
+      "radius": 15
+    },
+    "endersteve": {
+      "hp": 950,
+      "speed": 43,
+      "damage": 5,
+      "xp": 85,
+      "radius": 6
+    },
+    "end_dragon": {
+      "hp": 8200,
+      "speed": 68,
+      "damage": 5,
+      "xp": 0,
+      "radius": 28
+    },
+    "endersteve_final": {
+      "hp": 10500,
+      "speed": 56,
+      "damage": 5,
+      "xp": 0,
+      "radius": 6
+    },
+    "arena_crystal": {
+      "hp": 180,
+      "speed": 0,
+      "damage": 0,
+      "xp": 0,
+      "radius": 12
+    }
+  },
+  "waves": [
+    {
+      "at": 0,
+      "rate": 0.9,
+      "weights": {
+        "endermite": 1
+      }
+    },
+    {
+      "at": 60,
+      "rate": 1.4,
+      "weights": {
+        "endermite": 0.7,
+        "enderman": 0.3
+      }
+    },
+    {
+      "at": 150,
+      "rate": 2.1,
+      "weights": {
+        "endermite": 0.45,
+        "enderman": 0.3,
+        "shulker": 0.15,
+        "dispenser_enderman": 0.1
+      }
+    },
+    {
+      "at": 270,
+      "rate": 2.9,
+      "weights": {
+        "endermite": 0.3,
+        "enderman": 0.25,
+        "shulker": 0.15,
+        "dispenser_enderman": 0.2,
+        "endermite_brood": 0.1
+      }
+    },
+    {
+      "at": 420,
+      "rate": 3.8,
+      "weights": {
+        "endermite": 0.25,
+        "enderman": 0.25,
+        "shulker": 0.15,
+        "dispenser_enderman": 0.2,
+        "endermite_brood": 0.15
+      }
+    },
+    {
+      "at": 570,
+      "rate": 4.6,
+      "weights": {
+        "endermite": 0.2,
+        "enderman": 0.25,
+        "shulker": 0.15,
+        "dispenser_enderman": 0.25,
+        "endermite_brood": 0.15
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 150,
+      "type": "endersteve"
+    },
+    {
+      "at": 300,
+      "type": "endersteve"
+    },
+    {
+      "at": 450,
+      "type": "endersteve"
+    },
+    {
+      "at": 600,
+      "type": "endersteve"
+    },
+    {
+      "at": 690,
+      "type": "endersteve"
+    }
+  ]
+}

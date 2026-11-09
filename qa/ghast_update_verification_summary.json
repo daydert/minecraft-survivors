@@ -1,0 +1,322 @@
+{
+  "version": "0.9.0",
+  "total_checks": 3254,
+  "checks": {
+    "unit": {
+      "checks": 47,
+      "failures": [],
+      "report": "qa/unit_results.json"
+    },
+    "ui": {
+      "checks": 15,
+      "failures": [],
+      "report": "qa/ui_results.json"
+    },
+    "animation": {
+      "checks": 60,
+      "failures": [],
+      "report": "qa/animation_results.json"
+    },
+    "chapter": {
+      "checks": 21,
+      "failures": [],
+      "report": "qa/chapter_results.json"
+    },
+    "coop": {
+      "checks": 74,
+      "failures": [],
+      "report": "qa/coop_results.json"
+    },
+    "coop_four": {
+      "checks": 41,
+      "failures": [],
+      "report": "qa/coop_four_results.json"
+    },
+    "coop_logging": {
+      "checks": 11,
+      "failures": [],
+      "report": "qa/coop_logging_results.json"
+    },
+    "nether": {
+      "checks": 62,
+      "failures": [],
+      "report": "qa/nether_results.json"
+    },
+    "music_rotation": {
+      "checks": 27,
+      "failures": [],
+      "report": "qa/music_rotation_results.json"
+    },
+    "music_asset": {
+      "checks": 20,
+      "failures": [],
+      "report": "qa/music_asset_results.json"
+    },
+    "boss_update": {
+      "checks": 44,
+      "failures": [],
+      "report": "qa/boss_update_results.json"
+    },
+    "boss_polish": {
+      "checks": 50,
+      "failures": [],
+      "report": "qa/boss_polish_results.json"
+    },
+    "ghast_update": {
+      "checks": 32,
+      "failures": [],
+      "report": "qa/ghast_update_results.json"
+    },
+    "ghast_asset": {
+      "checks": 145,
+      "failures": [],
+      "report": "qa/ghast_asset_results.json"
+    },
+    "ghast_visual": {
+      "checks": 9,
+      "failures": [],
+      "report": "qa/ghast_visual_results.json"
+    },
+    "duel_asset": {
+      "checks": 82,
+      "failures": [],
+      "report": "qa/duel_asset_results.json"
+    },
+    "nether_asset": {
+      "checks": 861,
+      "failures": [],
+      "report": "qa/nether_asset_results.json"
+    },
+    "atlas": {
+      "checks": 45,
+      "failures": [],
+      "report": "qa/atlas_results.json"
+    },
+    "minecraft_asset": {
+      "checks": 250,
+      "failures": [],
+      "report": "qa/minecraft_asset_results.json"
+    },
+    "presentation_asset": {
+      "checks": 447,
+      "failures": [],
+      "report": "qa/presentation_asset_results.json"
+    },
+    "character_asset": {
+      "checks": 724,
+      "failures": [],
+      "report": "qa/character_asset_results.json"
+    },
+    "herobrine_visual": {
+      "checks": 8,
+      "failures": [],
+      "report": "qa/herobrine_visual_results.json"
+    },
+    "boss_polish_visual": {
+      "checks": 17,
+      "failures": [],
+      "report": "qa/boss_polish_visual_results.json"
+    },
+    "nether_visual": {
+      "checks": 21,
+      "failures": [],
+      "report": "qa/nether_visual_results.json"
+    },
+    "character_facing": {
+      "checks": 67,
+      "failures": [],
+      "report": "qa/character_facing_results.json"
+    },
+    "visual_animation": {
+      "checks": 8,
+      "failures": [],
+      "report": "qa/visual_animation_results.json"
+    },
+    "minecraft_render": {
+      "checks": 7,
+      "failures": [],
+      "report": "qa/minecraft_render_results.json"
+    },
+    "presentation": {
+      "checks": 26,
+      "failures": [],
+      "report": "qa/presentation_results.json"
+    },
+    "chapter_visual": {
+      "checks": 9,
+      "failures": [],
+      "report": "qa/chapter_visual_results.json"
+    },
+    "coop_visual": {
+      "checks": 11,
+      "failures": [],
+      "report": "qa/coop_visual_results.json"
+    },
+    "coop_four_visual": {
+      "checks": 13,
+      "failures": [],
+      "report": "qa/coop_four_visual_results.json"
+    }
+  },
+  "full_verification_log": "qa/ghast_update_verification.log",
+  "followup_rules_log": "qa/ghast_update_rules.log",
+  "followup_asset_log": "qa/ghast_update_asset_checks.log",
+  "followup_visual_log": "qa/ghast_update_visual.log",
+  "combat_parity": {
+    "ticks": 5400,
+    "differences": 0,
+    "log": "qa/ghast_update_combat_parity.log"
+  },
+  "boss_lab_runs": [
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 0,
+      "preset": "Клинки",
+      "seconds": 101.966666666667,
+      "won": false
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 20,
+      "preset": "Стрелы",
+      "seconds": 21.7833333333333,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 20,
+      "preset": "Смешанная",
+      "seconds": 19.1833333333333,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 18.5,
+      "preset": "Пламя",
+      "seconds": 27.6833333333333,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 10.0,
+      "preset": "Клинки",
+      "seconds": 24.6166666666667,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 13.5,
+      "preset": "Стрелы",
+      "seconds": 31.2666666666667,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 5.29999999999999,
+      "preset": "Ловушки",
+      "seconds": 34.2166666666667,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 14.8,
+      "preset": "Пламя",
+      "seconds": 31.35,
+      "won": true
+    }
+  ],
+  "boss_lab_wins": 7,
+  "boss_lab_attempts": 8,
+  "corrected_prior_claim": "Chapter I melee bot loses the optional Herobrine first stage. Seven of eight win, not eight. All four Nether presets win.",
+  "native_linux": [
+    {
+      "mode": "nether_ghast",
+      "exit_code": 0,
+      "seconds": 1.566854467993835,
+      "capture": "qa/ghast_native_nether_ghast.png",
+      "log": "qa/ghast_update_native_nether_ghast.log"
+    },
+    {
+      "mode": "nether_ghast_charge",
+      "exit_code": 0,
+      "seconds": 1.6666629969986388,
+      "capture": "qa/ghast_native_nether_ghast_charge.png",
+      "log": "qa/ghast_update_native_nether_ghast_charge.log"
+    },
+    {
+      "mode": "nether_ghast_burst",
+      "exit_code": 0,
+      "seconds": 1.6672946370090358,
+      "capture": "qa/ghast_native_nether_ghast_burst.png",
+      "log": "qa/ghast_update_native_nether_ghast_burst.log"
+    },
+    {
+      "mode": "nether_ghast_reveal",
+      "exit_code": 0,
+      "seconds": 1.6672168179939035,
+      "capture": "qa/ghast_native_nether_ghast_reveal.png",
+      "log": "qa/ghast_update_native_nether_ghast_reveal.log"
+    },
+    {
+      "mode": "nether_portal_camera",
+      "exit_code": 0,
+      "seconds": 1.666704186995048,
+      "capture": "qa/ghast_native_nether_portal_camera.png",
+      "log": "qa/ghast_update_native_nether_portal_camera.log"
+    },
+    {
+      "mode": "nether_boss",
+      "exit_code": 0,
+      "seconds": 1.6673711909970734,
+      "capture": "qa/ghast_native_nether_boss.png",
+      "log": "qa/ghast_update_native_nether_boss.log"
+    },
+    {
+      "mode": "nether_inventory",
+      "exit_code": 0,
+      "seconds": 1.6168789040093543,
+      "capture": "qa/ghast_native_nether_inventory.png",
+      "log": "qa/ghast_update_native_nether_inventory.log"
+    },
+    {
+      "mode": "nether_end",
+      "exit_code": 0,
+      "seconds": 1.6670169130084105,
+      "capture": "qa/ghast_native_nether_end.png",
+      "log": "qa/ghast_update_native_nether_end.log"
+    }
+  ],
+  "native_linux_capture_timeouts": 0,
+  "native_windows_tested": false,
+  "physical_zerotier_tested": false,
+  "coop_rules_changed": false,
+  "executables": {
+    "linux": {
+      "path": "builds/linux/MinecraftSurvivors.x86_64",
+      "bytes": 99525224,
+      "sha256": "a0a8489e93f5102f96f6d8821101e00738b81355b5f3ffc56595edc99764dd41"
+    },
+    "windows": {
+      "path": "builds/windows/MinecraftSurvivors.exe",
+      "bytes": 135134520,
+      "sha256": "cfbc28798b07f7dd2faaec1bce3739282121ffd34816e2c110cd5232a1074b58"
+    }
+  },
+  "films": {
+    "paths": [
+      "qa/recordings/wither_ghast.mp4",
+      "qa/recordings/tnt_cluster.mp4"
+    ],
+    "diagnostic_wither_phase_selection_and_invulnerability": true,
+    "scripted_tnt_facing": true,
+    "audio": "Original supplied music and Minecraft cue files aligned to recorded simulation timestamps; not a recording of the complete live mixer."
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "checks": 1726,
+  "failures": {},
+  "evidence": [
+    "qa/unit_results.json",
+    "qa/ui_results.json",
+    "qa/animation_results.json",
+    "qa/chapter_results.json",
+    "qa/atlas_results.json",
+    "qa/minecraft_asset_results.json",
+    "qa/presentation_asset_results.json",
+    "qa/character_asset_results.json",
+    "qa/character_facing_results.json",
+    "qa/visual_animation_results.json",
+    "qa/minecraft_render_results.json",
+    "qa/presentation_results.json",
+    "qa/chapter_visual_results.json"
+  ],
+  "source_sha256": {
+    "scripts/bake_minecraft_characters.py": "64fe2abda23a3ff9a4da1fa910e6851365076d44f445b175a6821fdabe5efa27",
+    "scripts/import_minecraft_assets.py": "48527fafa6c76b1e551c3301777af7e2cb4983dc61fa491b20cce29cc50bfb42",
+    "scripts/check_minecraft_characters.py": "a25e13d12f5e6c4f6ebdc536f9a834183749ea42fc12f9112bf66fbfe714e3b4",
+    "qa/test_character_facing.gd": "ae298962e0c1a84137daf205c6e7b17aabd55ef234f27046d0fee3f7d13e111b"
+  }
+}

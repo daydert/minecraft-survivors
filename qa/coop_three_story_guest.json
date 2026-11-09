@@ -1,0 +1,75 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "canonical_end": true,
+    "connected": true,
+    "diagnostics_saved": true,
+    "finale": true,
+    "loading_barrier": true,
+    "no_movement_teleports": true,
+    "own_identity": true,
+    "pause": true,
+    "pause_observed": true,
+    "receives_authority": true,
+    "spectator": true
+  },
+  "diagnostic_prefix": "/home/daydert/.var/app/com.visualstudio.code/data/godot/app_userdata/Minecraft Survivors — До рассвета/logs/survivors_coop_2026-10-27_18-29-11_client_p21672_360846",
+  "diagnostic_writer": {
+    "dropped": 0,
+    "error": "",
+    "queued": 0
+  },
+  "diagnostics": [
+    {
+      "ack": 0,
+      "authority": "(1172.242, 1124.654)",
+      "changed": true,
+      "distance": 17.7381000518799,
+      "generation": 1,
+      "old": "(1165.316, 1140.984)",
+      "pending": 0,
+      "predicted": "(1172.242, 1124.654)",
+      "seq": 0,
+      "tick": 138
+    },
+    {
+      "ack": 0,
+      "authority": "(1158.72, 1131.184)",
+      "changed": true,
+      "distance": 17.7382030487061,
+      "generation": 3,
+      "old": "(1141.622, 1135.909)",
+      "pending": 0,
+      "predicted": "(1158.72, 1131.184)",
+      "seq": 0,
+      "tick": 198
+    },
+    {
+      "ack": 85,
+      "authority": "(1068.321, 1071.255)",
+      "changed": false,
+      "distance": 15.0163249969482,
+      "generation": 4,
+      "old": "(1064.381, 1056.764)",
+      "pending": 0,
+      "predicted": "(1068.321, 1071.255)",
+      "seq": 96,
+      "tick": 302
+    }
+  ],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 17.7382030487061,
+  "max_render_step": 2.00004911422729,
+  "p95_correction": 2.33295345306396,
+  "p95_present_ms": 2.47,
+  "p95_sim_ms": 0.14,
+  "players": 3,
+  "received_buckets": 3476,
+  "received_frames": 209,
+  "role": "guest",
+  "scenario": "story",
+  "seat": 1,
+  "traveled": 280.81763315064
+}

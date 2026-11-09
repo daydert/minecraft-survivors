@@ -1,0 +1,107 @@
+{
+  "music_2": {
+    "source": "/home/daydert/Downloads/Telegram Desktop/Music2.mp3",
+    "source_sha256": "4dc2f163d39a3d742a3bdae8c684a98fefab26b9a263ea2cd2b895b085eca69d",
+    "path": "assets/audio/music_2.ogg",
+    "sha256": "f256ac28825e072d5a09a282e6f9d9c57ff816a79595a07ec6bf5d46bd63b11a",
+    "byte_identical": false,
+    "duration": 314.541474,
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ]
+  },
+  "music_3": {
+    "source": "/home/daydert/Downloads/Telegram Desktop/Music3.mp3",
+    "source_sha256": "2632c05745ed281cce0da50434607c3ec934edde540b2559638b1b42999dfead",
+    "path": "assets/audio/music_3.ogg",
+    "sha256": "08bbda33c3361f5356365c71fb7bf94daf1b7c0695aa1610998065c376a26007",
+    "byte_identical": false,
+    "duration": 270.024853,
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ]
+  },
+  "music_wither": {
+    "source": "/home/daydert/MinecraftSurvival/builds/audio_2026-10-28_18-28-58.ogg",
+    "source_sha256": "a2ffc3313fa87be56632a1ff4f80174a3cab70aefd53636d780fff1a65cd9ced",
+    "path": "assets/audio/music_wither.ogg",
+    "sha256": "a2ffc3313fa87be56632a1ff4f80174a3cab70aefd53636d780fff1a65cd9ced",
+    "byte_identical": true,
+    "duration": 67.783651,
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ]
+  },
+  "boss_win": {
+    "source": "/home/daydert/Downloads/Telegram Desktop/wineffect.ogg",
+    "source_sha256": "1572e762f87c96e66af277d61788866ade70e7b70cb9c6e10db55afa7b620969",
+    "path": "assets/audio/boss_win.ogg",
+    "sha256": "1572e762f87c96e66af277d61788866ade70e7b70cb9c6e10db55afa7b620969",
+    "byte_identical": true,
+    "duration": 6.115374,
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ]
+  },
+  "music_victory": {
+    "source": "/home/daydert/Downloads/Telegram Desktop/audio_2026-10-29_00-31-58.ogg",
+    "source_sha256": "a9597160f12ae83f49dce57a4705f4c5eb8ddaac62a13906604a555b746215d9",
+    "path": "assets/audio/music_victory.ogg",
+    "sha256": "a9597160f12ae83f49dce57a4705f4c5eb8ddaac62a13906604a555b746215d9",
+    "byte_identical": true,
+    "duration": 34.331723,
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ]
+  },
+  "music_dragon": {
+    "source": "/home/daydert/Downloads/DrAgOn.ogg",
+    "source_sha256": "e48e57ac483b771d29e14aed5c0466d5eed7a7b5edfb3c91997bf45193ecff59",
+    "path": "assets/audio/music_dragon.ogg",
+    "sha256": "e48e57ac483b771d29e14aed5c0466d5eed7a7b5edfb3c91997bf45193ecff59",
+    "byte_identical": true,
+    "duration": 69.817302,
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ]
+  },
+  "music_endersteve": {
+    "source": "/home/daydert/Downloads/GlitchFight.ogg",
+    "source_sha256": "f91d48db4386a392bf3c7852b33cacc14960a1605faacf9db5fc95a0c9fc3350",
+    "path": "assets/audio/music_endersteve.ogg",
+    "sha256": "f91d48db4386a392bf3c7852b33cacc14960a1605faacf9db5fc95a0c9fc3350",
+    "byte_identical": true,
+    "duration": 69.818186,
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ]
+  }
+}

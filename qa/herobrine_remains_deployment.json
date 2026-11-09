@@ -1,0 +1,5 @@
+{
+  "default_binaries_replaced": false,
+  "shared_files_unchanged": false,
+  "reason": "Separate tested builds preserve the parallel chapter-III integration."
+}

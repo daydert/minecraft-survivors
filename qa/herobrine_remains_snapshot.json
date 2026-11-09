@@ -1,0 +1,14 @@
+{
+  "path": "/tmp/mc_herobrine_remains_r2avfnvl",
+  "patch_files": [
+    "scripts/herobrine_renderer.gd",
+    "scripts/herobrine_remains_view.gd",
+    "scripts/bake_herobrine_remains.py",
+    "scripts/bake_herobrine_duel.py",
+    "assets/sprites/herobrine_remains.png",
+    "docs/MINECRAFT_REMAINS_MANIFEST.json",
+    "docs/HEROBRINE_REMAINS_FIX.md",
+    "qa/test_herobrine_remains.gd",
+    "qa/record_herobrine_remains.gd"
+  ]
+}

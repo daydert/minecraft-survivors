@@ -1,0 +1,82 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "common_pause": true,
+    "connected": true,
+    "diagnostics_saved": true,
+    "loading_barrier": true,
+    "own_identity": true,
+    "sibling_disconnect": true
+  },
+  "diagnostic_prefix": "/home/daydert/.var/app/com.visualstudio.code/data/godot/app_userdata/Minecraft Survivors — До рассвета/logs/survivors_coop_2026-10-27_18-29-42_client_p21838_345272",
+  "diagnostic_writer": {
+    "dropped": 0,
+    "error": "",
+    "queued": 0
+  },
+  "diagnostics": [
+    {
+      "ack": 0,
+      "authority": "(953.7375, 1092.796)",
+      "changed": true,
+      "distance": 15.0163440704346,
+      "generation": 1,
+      "old": "(942.0186, 1083.407)",
+      "pending": 0,
+      "predicted": "(953.7375, 1092.796)",
+      "seq": 0,
+      "tick": 123
+    },
+    {
+      "ack": 0,
+      "authority": "(970.0844, 1052.683)",
+      "changed": true,
+      "distance": 17.7388591766357,
+      "generation": 5,
+      "old": "(981.8442, 1039.402)",
+      "pending": 0,
+      "predicted": "(970.0844, 1052.683)",
+      "seq": 0,
+      "tick": 231
+    },
+    {
+      "ack": 0,
+      "authority": "(994.2491, 1043.42)",
+      "changed": true,
+      "distance": 13.654149055481,
+      "generation": 9,
+      "old": "(1007.752, 1041.393)",
+      "pending": 0,
+      "predicted": "(994.2491, 1043.42)",
+      "seq": 0,
+      "tick": 276
+    },
+    {
+      "ack": 0,
+      "authority": "(1082.432, 1165.773)",
+      "changed": true,
+      "distance": 12.2909679412842,
+      "generation": 11,
+      "old": "(1077.44, 1177.004)",
+      "pending": 0,
+      "predicted": "(1082.432, 1165.773)",
+      "seq": 0,
+      "tick": 419
+    }
+  ],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 17.7388591766357,
+  "max_render_step": 2.00007128715515,
+  "p95_correction": 7.65416479110718,
+  "p95_present_ms": 2.751,
+  "p95_sim_ms": 0.151,
+  "players": 4,
+  "received_buckets": 3765,
+  "received_frames": 134,
+  "role": "guest2",
+  "scenario": "disconnect",
+  "seat": 2,
+  "traveled": 231.049719570088
+}

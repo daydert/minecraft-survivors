@@ -1,0 +1,2570 @@
+{
+  "sessions": {
+    "survivors_coop_2026-10-27_18-28-55_client_p21625_334228": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_compat_story_guest_000.jsonl"
+      ],
+      "samples": 12,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 1,
+        "run_start": 1,
+        "sample": 12,
+        "position_correction": 8,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 2.887,
+        "snapshot_gap_ms": 171.0,
+        "visual_error_px": 21.8149147033691
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4033,
+          "wall_ms": 1793125740037,
+          "epoch": 1,
+          "tick": 189,
+          "state": "RUNNING",
+          "snapshot_age_ms": 25.9999999999998,
+          "pending": 11,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1517251676": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-28-55_host_p21602_348392": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_compat_story_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "sample": 15,
+        "transport_connected": 1,
+        "lobby_join": 1,
+        "run_start": 1,
+        "peer_loaded": 1,
+        "run_go": 1,
+        "state_changed": 118,
+        "command": 3,
+        "input_reset": 5,
+        "user_marker": 1,
+        "peer_disconnected": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 142.102666666667,
+        "simulation_ms": 6.126,
+        "snapshot_encode_ms": 2.15
+      },
+      "peer_rtt_max_ms": {
+        "1517251676": 103.0
+      },
+      "markers": [
+        {
+          "t_ms": 4414,
+          "wall_ms": 1793125739932,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1517251676": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-42_client_p21838_345272": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_disconnect_guest2_000.jsonl"
+      ],
+      "samples": 9,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 1,
+        "run_start": 1,
+        "sample": 9,
+        "position_correction": 5,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.385,
+        "snapshot_gap_ms": 208.0,
+        "visual_error_px": 17.7388591766357
+      },
+      "peer_rtt_max_ms": {
+        "1": 109.0
+      },
+      "markers": [
+        {
+          "t_ms": 4177,
+          "wall_ms": 1793125786976,
+          "epoch": 1,
+          "tick": 189,
+          "state": "RUNNING",
+          "snapshot_age_ms": 12.0000000000005,
+          "pending": 2,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "310142479": "Друг_2",
+            "555108169": "Друг",
+            "1634365295": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-42_client_p21839_345196": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_disconnect_guest3_000.jsonl"
+      ],
+      "samples": 9,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "run_start": 1,
+        "sample": 9,
+        "position_correction": 5,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.776,
+        "snapshot_gap_ms": 134.0,
+        "visual_error_px": 13.654372215271
+      },
+      "peer_rtt_max_ms": {
+        "1": 98.0
+      },
+      "markers": [
+        {
+          "t_ms": 4177,
+          "wall_ms": 1793125786976,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 46.0000000000003,
+          "pending": 2,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "310142479": "Друг_2",
+            "555108169": "Друг",
+            "1634365295": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-42_client_p21837_345272": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_disconnect_guest_000.jsonl"
+      ],
+      "samples": 6,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "run_start": 1,
+        "sample": 6,
+        "position_correction": 5,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.292,
+        "snapshot_gap_ms": 178.999999999999,
+        "visual_error_px": 21.8150100708008
+      },
+      "peer_rtt_max_ms": {
+        "1": 106.0
+      },
+      "markers": [
+        {
+          "t_ms": 4128,
+          "wall_ms": 1793125786928,
+          "epoch": 1,
+          "tick": 183,
+          "state": "RUNNING",
+          "snapshot_age_ms": 62.0000000000003,
+          "pending": 3,
+          "correction_px": 0.0680327862501144
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "310142479": "Друг_2",
+            "555108169": "Друг",
+            "1634365295": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-42_host_p21814_404415": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_disconnect_host_000.jsonl"
+      ],
+      "samples": 10,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 10,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "slow_simulation": 1,
+        "state_changed": 59,
+        "input_reset": 12,
+        "command": 7,
+        "user_marker": 1,
+        "peer_disconnected": 3,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 147.791,
+        "simulation_ms": 12.415,
+        "snapshot_encode_ms": 3.107
+      },
+      "peer_rtt_max_ms": {
+        "1634365295": 102.0,
+        "555108169": 102.0,
+        "310142479": 105.0
+      },
+      "markers": [
+        {
+          "t_ms": 4525,
+          "wall_ms": 1793125786886,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "310142479": "Друг_2",
+            "555108169": "Друг",
+            "1634365295": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-54_client_p21933_340673": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_dead_guest2_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "sample": 13,
+        "run_start": 1,
+        "position_correction": 8,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.368,
+        "snapshot_gap_ms": 145.0,
+        "visual_error_px": 60.7625923156738
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4484,
+          "wall_ms": 1793125798494,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 14.0000000000002,
+          "pending": 1,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "689901319": "Друг_2",
+            "834806673": "Друг_3",
+            "1968962205": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-54_client_p21934_340673": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_dead_guest3_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "sample": 13,
+        "run_start": 1,
+        "position_correction": 7,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.268,
+        "snapshot_gap_ms": 157.0,
+        "visual_error_px": 190.81982421875
+      },
+      "peer_rtt_max_ms": {
+        "1": 103.0
+      },
+      "markers": [
+        {
+          "t_ms": 4482,
+          "wall_ms": 1793125798492,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 12.0000000000005,
+          "pending": 1,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "689901319": "Друг_2",
+            "834806673": "Друг_3",
+            "1968962205": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-54_client_p21932_340673": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_dead_guest_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "sample": 13,
+        "lobby": 1,
+        "run_start": 1,
+        "position_correction": 12,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 4.023,
+        "snapshot_gap_ms": 152.0,
+        "visual_error_px": 153.053833007812
+      },
+      "peer_rtt_max_ms": {
+        "1": 103.0
+      },
+      "markers": [
+        {
+          "t_ms": 4482,
+          "wall_ms": 1793125798493,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 20.0000000000005,
+          "pending": 2,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "689901319": "Друг_2",
+            "834806673": "Друг_3",
+            "1968962205": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-53_host_p21909_390562": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_dead_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 15,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "slow_simulation": 1,
+        "state_changed": 122,
+        "input_reset": 7,
+        "command": 6,
+        "user_marker": 1,
+        "peer_disconnected": 3,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 149.412,
+        "simulation_ms": 15.352,
+        "snapshot_encode_ms": 2.252
+      },
+      "peer_rtt_max_ms": {
+        "834806673": 105.0,
+        "689901319": 104.0,
+        "1968962205": 101.0
+      },
+      "markers": [
+        {
+          "t_ms": 4867,
+          "wall_ms": 1793125798429,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "689901319": "Друг_2",
+            "834806673": "Друг_3",
+            "1968962205": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-31-01_client_p22309_348951": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_leave_guest2_000.jsonl"
+      ],
+      "samples": 5,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "run_start": 1,
+        "sample": 5,
+        "position_correction": 2,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 144.944666666667,
+        "presentation_ms": 3.533,
+        "snapshot_gap_ms": 61.0000000000002,
+        "visual_error_px": 4.099684715271
+      },
+      "peer_rtt_max_ms": {
+        "1": 17.0
+      },
+      "markers": [
+        {
+          "t_ms": 3228,
+          "wall_ms": 1793125864626,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 32.0,
+          "pending": 4,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "147531618": "Друг_3",
+            "1018625562": "Друг",
+            "1229653009": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "transport_disconnected"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-31-01_client_p22310_349065": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_leave_guest3_000.jsonl"
+      ],
+      "samples": 5,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "run_start": 1,
+        "sample": 5,
+        "position_correction": 3,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 144.291666666667,
+        "presentation_ms": 3.06,
+        "snapshot_gap_ms": 59.9999999999998,
+        "visual_error_px": 4.09974575042725
+      },
+      "peer_rtt_max_ms": {
+        "1": 12.0
+      },
+      "markers": [
+        {
+          "t_ms": 3227,
+          "wall_ms": 1793125864625,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 32.0,
+          "pending": 4,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "147531618": "Друг_3",
+            "1018625562": "Друг",
+            "1229653009": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "transport_disconnected"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-31-01_client_p22308_350492": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_leave_guest_000.jsonl"
+      ],
+      "samples": 5,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 1,
+        "run_start": 1,
+        "sample": 5,
+        "position_correction": 2,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 145.695666666667,
+        "presentation_ms": 3.194,
+        "snapshot_gap_ms": 60.9999999999999,
+        "visual_error_px": 4.09975814819336
+      },
+      "peer_rtt_max_ms": {
+        "1": 18.0
+      },
+      "markers": [
+        {
+          "t_ms": 3227,
+          "wall_ms": 1793125864627,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 32.0,
+          "pending": 4,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "147531618": "Друг_3",
+            "1018625562": "Друг",
+            "1229653009": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "transport_disconnected"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-31-00_host_p22285_363898": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_host_leave_host_000.jsonl"
+      ],
+      "samples": 6,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "state_changed": 3,
+        "sample": 6,
+        "input_reset": 6,
+        "command": 4,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 148.777666666667,
+        "simulation_ms": 10.763,
+        "snapshot_encode_ms": 2.212
+      },
+      "peer_rtt_max_ms": {
+        "147531618": 12.0,
+        "1229653009": 11.0,
+        "1018625562": 11.0
+      },
+      "markers": [
+        {
+          "t_ms": 3706,
+          "wall_ms": 1793125864621,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "147531618": "Друг_3",
+            "1018625562": "Друг",
+            "1229653009": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-28-48_client_p21339_255198": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_native_story_guest2_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "sample": 13,
+        "run_start": 1,
+        "position_correction": 7,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 149.539,
+        "presentation_ms": 10.092,
+        "snapshot_gap_ms": 220.000000000001,
+        "visual_error_px": 126.2763671875
+      },
+      "peer_rtt_max_ms": {
+        "1": 110.0
+      },
+      "markers": [
+        {
+          "t_ms": 4500,
+          "wall_ms": 1793125733328,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 46.0000000000003,
+          "pending": 11,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1407123572": "Друг_2",
+            "1508141817": "Друг",
+            "2002534110": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-28-48_client_p21340_254367": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_native_story_guest3_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "sample": 13,
+        "lobby": 1,
+        "run_start": 1,
+        "position_correction": 9,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 148.71,
+        "presentation_ms": 14.432,
+        "snapshot_gap_ms": 130.0,
+        "visual_error_px": 81.4451599121094
+      },
+      "peer_rtt_max_ms": {
+        "1": 97.0
+      },
+      "markers": [
+        {
+          "t_ms": 4507,
+          "wall_ms": 1793125733334,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 52.9999999999999,
+          "pending": 10,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1407123572": "Друг_2",
+            "1508141817": "Друг",
+            "2002534110": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-28-48_client_p21338_253983": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_native_story_guest_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "sample": 13,
+        "run_start": 1,
+        "position_correction": 5,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 148.203,
+        "presentation_ms": 16.307,
+        "snapshot_gap_ms": 174.0,
+        "visual_error_px": 15.0160350799561
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4508,
+          "wall_ms": 1793125733334,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 41.0000000000004,
+          "pending": 11,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1407123572": "Друг_2",
+            "1508141817": "Друг",
+            "2002534110": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-28-48_host_p21315_256182": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_native_story_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 15,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "state_changed": 123,
+        "input_reset": 9,
+        "command": 5,
+        "user_marker": 1,
+        "slow_simulation": 1,
+        "peer_disconnected": 3,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "simulation_ms": 15.373,
+        "snapshot_encode_ms": 6.038
+      },
+      "peer_rtt_max_ms": {
+        "1407123572": 101.0,
+        "1508141817": 103.0,
+        "2002534110": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4921,
+          "wall_ms": 1793125733249,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1407123572": "Друг_2",
+            "1508141817": "Друг",
+            "2002534110": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-26-10_client_p20960_614102": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "AMD Radeon 780M Graphics (radeonsi, phoenix, ACO, DRM 3.64, 6.18.53-1-lts)",
+      "files": [
+        "qa/network_logs/four_native_stress_guest2_000.jsonl"
+      ],
+      "samples": 8,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 1,
+        "run_start": 1,
+        "sample": 8,
+        "position_correction": 1,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "draw_cpu_ms": 8.766,
+        "frame_ms": 149.033333333333,
+        "presentation_ms": 6.021,
+        "snapshot_gap_ms": 135.0,
+        "visual_error_px": 16.3780212402344
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 3988,
+          "wall_ms": 1793125574946,
+          "epoch": 1,
+          "tick": 183,
+          "state": "RUNNING",
+          "snapshot_age_ms": 11.0000000000001,
+          "pending": 8,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "864832047": "Друг_2",
+            "969750930": "Друг_3",
+            "1578684177": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-26-10_client_p20961_643043": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "AMD Radeon 780M Graphics (radeonsi, phoenix, ACO, DRM 3.64, 6.18.53-1-lts)",
+      "files": [
+        "qa/network_logs/four_native_stress_guest3_000.jsonl"
+      ],
+      "samples": 8,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "run_start": 1,
+        "sample": 8,
+        "position_correction": 5,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "draw_cpu_ms": 8.532,
+        "frame_ms": 150.0,
+        "presentation_ms": 6.135,
+        "snapshot_gap_ms": 150.0,
+        "visual_error_px": 21.8146305084229
+      },
+      "peer_rtt_max_ms": {
+        "1": 118.0
+      },
+      "markers": [
+        {
+          "t_ms": 3968,
+          "wall_ms": 1793125574954,
+          "epoch": 1,
+          "tick": 183,
+          "state": "RUNNING",
+          "snapshot_age_ms": 27.0000000000001,
+          "pending": 9,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "864832047": "Друг_2",
+            "969750930": "Друг_3",
+            "1578684177": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-26-10_client_p20959_594334": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "AMD Radeon 780M Graphics (radeonsi, phoenix, ACO, DRM 3.64, 6.18.53-1-lts)",
+      "files": [
+        "qa/network_logs/four_native_stress_guest_000.jsonl"
+      ],
+      "samples": 8,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "run_start": 1,
+        "sample": 8,
+        "position_correction": 6,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "draw_cpu_ms": 8.516,
+        "frame_ms": 143.289333333333,
+        "presentation_ms": 6.025,
+        "snapshot_gap_ms": 131.0,
+        "visual_error_px": 21.8144760131836
+      },
+      "peer_rtt_max_ms": {
+        "1": 110.0
+      },
+      "markers": [
+        {
+          "t_ms": 4051,
+          "wall_ms": 1793125574989,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 11.9999999999996,
+          "pending": 9,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "864832047": "Друг_2",
+            "969750930": "Друг_3",
+            "1578684177": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-26-10_host_p20855_586465": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "AMD Radeon 780M Graphics (radeonsi, phoenix, ACO, DRM 3.64, 6.18.53-1-lts)",
+      "files": [
+        "qa/network_logs/four_native_stress_host_000.jsonl"
+      ],
+      "samples": 10,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 10,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "slow_simulation": 1,
+        "state_changed": 82,
+        "command": 2,
+        "input_reset": 2,
+        "user_marker": 1,
+        "peer_disconnected": 3,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "draw_cpu_ms": 9.274,
+        "simulation_ms": 14.122,
+        "snapshot_encode_ms": 3.66
+      },
+      "peer_rtt_max_ms": {
+        "1578684177": 116.0,
+        "969750930": 110.0,
+        "864832047": 112.0
+      },
+      "markers": [
+        {
+          "t_ms": 4497,
+          "wall_ms": 1793125574928,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "864832047": "Друг_2",
+            "969750930": "Друг_3",
+            "1578684177": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-45_client_p22216_348938": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_guest2_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "sample": 13,
+        "run_start": 1,
+        "position_correction": 7,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 2.936,
+        "snapshot_gap_ms": 165.0,
+        "visual_error_px": 77.2774505615234
+      },
+      "peer_rtt_max_ms": {
+        "1": 103.0
+      },
+      "markers": [
+        {
+          "t_ms": 4559,
+          "wall_ms": 1793125849801,
+          "epoch": 1,
+          "tick": 186,
+          "state": "LEVEL_UP",
+          "snapshot_age_ms": 46.9999999999997,
+          "pending": 0,
+          "correction_px": 1.52432119846344
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1525288709": "Друг_3",
+            "1557057574": "Друг",
+            "1927558067": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-45_client_p22217_350882": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_guest3_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "sample": 13,
+        "lobby": 1,
+        "run_start": 1,
+        "position_correction": 8,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 143.719666666667,
+        "presentation_ms": 3.947,
+        "snapshot_gap_ms": 166.0,
+        "visual_error_px": 74.1364440917969
+      },
+      "peer_rtt_max_ms": {
+        "1": 109.0
+      },
+      "markers": [
+        {
+          "t_ms": 4608,
+          "wall_ms": 1793125849852,
+          "epoch": 1,
+          "tick": 189,
+          "state": "WAITING",
+          "snapshot_age_ms": 19.9999999999996,
+          "pending": 0,
+          "correction_px": 1.02435708045959
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1525288709": "Друг_3",
+            "1557057574": "Друг",
+            "1927558067": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-45_client_p22215_353680": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_guest_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "sample": 13,
+        "run_start": 1,
+        "position_correction": 4,
+        "user_marker": 1,
+        "network_waiting": 2,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 144.305666666667,
+        "presentation_ms": 3.317,
+        "snapshot_gap_ms": 1056.0,
+        "visual_error_px": 25.8794231414795
+      },
+      "peer_rtt_max_ms": {
+        "1": 104.0
+      },
+      "markers": [
+        {
+          "t_ms": 4539,
+          "wall_ms": 1793125849786,
+          "epoch": 1,
+          "tick": 186,
+          "state": "WAITING",
+          "snapshot_age_ms": 20.9999999999999,
+          "pending": 0,
+          "correction_px": 0.823224544525146
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1525288709": "Друг_3",
+            "1557057574": "Друг",
+            "1927558067": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-44_host_p22192_387595": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_recovery_story_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 15,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "slow_simulation": 1,
+        "state_changed": 123,
+        "input_reset": 9,
+        "command": 7,
+        "user_marker": 1,
+        "peer_disconnected": 3,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 142.398,
+        "simulation_ms": 12.068,
+        "snapshot_encode_ms": 2.053
+      },
+      "peer_rtt_max_ms": {
+        "1557057574": 108.0,
+        "1927558067": 108.0,
+        "1525288709": 106.0
+      },
+      "markers": [
+        {
+          "t_ms": 4963,
+          "wall_ms": 1793125849747,
+          "epoch": 1,
+          "tick": 187,
+          "state": "WAITING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "1525288709": "Друг_3",
+            "1557057574": "Друг",
+            "1927558067": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-10_client_p22026_357117": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_restart_guest2_000.jsonl"
+      ],
+      "samples": 16,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "sample": 16,
+        "run_start": 2,
+        "position_correction": 7,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.549,
+        "snapshot_gap_ms": 123.999999999999,
+        "visual_error_px": 153.490615844727
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4585,
+          "wall_ms": 1793125814677,
+          "epoch": 1,
+          "tick": 189,
+          "state": "RUNNING",
+          "snapshot_age_ms": 55.0000000000006,
+          "pending": 5,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        },
+        {
+          "seed": 725,
+          "epoch": 2,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-10_client_p22027_355677": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_restart_guest3_000.jsonl"
+      ],
+      "samples": 16,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "sample": 16,
+        "run_start": 2,
+        "position_correction": 7,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 149.801666666667,
+        "presentation_ms": 3.836,
+        "snapshot_gap_ms": 126.0,
+        "visual_error_px": 180.638885498047
+      },
+      "peer_rtt_max_ms": {
+        "1": 112.0
+      },
+      "markers": [
+        {
+          "t_ms": 4503,
+          "wall_ms": 1793125814593,
+          "epoch": 1,
+          "tick": 186,
+          "state": "WAITING",
+          "snapshot_age_ms": 32.0,
+          "pending": 0,
+          "correction_px": 0.247928947210312
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        },
+        {
+          "seed": 725,
+          "epoch": 2,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-10_client_p22025_356262": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_restart_guest_000.jsonl"
+      ],
+      "samples": 16,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "sample": 16,
+        "lobby": 1,
+        "run_start": 2,
+        "position_correction": 8,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.829,
+        "snapshot_gap_ms": 125.0,
+        "visual_error_px": 21.8152332305908
+      },
+      "peer_rtt_max_ms": {
+        "1": 105.0
+      },
+      "markers": [
+        {
+          "t_ms": 4538,
+          "wall_ms": 1793125814629,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": 32.0,
+          "pending": 1,
+          "correction_px": 0.275490492582321
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        },
+        {
+          "seed": 725,
+          "epoch": 2,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-09_host_p22002_392712": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_restart_host_000.jsonl"
+      ],
+      "samples": 18,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 18,
+        "run_start": 2,
+        "peer_loaded": 6,
+        "run_go": 2,
+        "state_changed": 123,
+        "command": 5,
+        "input_reset": 9,
+        "user_marker": 1,
+        "peer_disconnected": 3,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 144.183,
+        "simulation_ms": 11.065,
+        "snapshot_encode_ms": 3.368
+      },
+      "peer_rtt_max_ms": {
+        "329476833": 106.0,
+        "1439218977": 108.0,
+        "1988809606": 108.0
+      },
+      "markers": [
+        {
+          "t_ms": 4925,
+          "wall_ms": 1793125814555,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        },
+        {
+          "seed": 725,
+          "epoch": 2,
+          "roster": {
+            "1": "Ведущий",
+            "329476833": "Друг_2",
+            "1439218977": "Друг_3",
+            "1988809606": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-29_client_p22120_340392": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_slow_story_guest2_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "run_start": 1,
+        "sample": 13,
+        "position_correction": 9,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.524,
+        "snapshot_gap_ms": 206.000000000001,
+        "visual_error_px": 80.3977355957031
+      },
+      "peer_rtt_max_ms": {
+        "1": 113.0
+      },
+      "markers": [
+        {
+          "t_ms": 4495,
+          "wall_ms": 1793125833645,
+          "epoch": 1,
+          "tick": 183,
+          "state": "RUNNING",
+          "snapshot_age_ms": 88.9999999999995,
+          "pending": 5,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "872702654": "Друг",
+            "1440131081": "Друг_3",
+            "1540386803": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-29_client_p22121_340393": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_slow_story_guest3_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "sample": 13,
+        "lobby": 1,
+        "run_start": 1,
+        "position_correction": 14,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.475,
+        "snapshot_gap_ms": 157.999999999999,
+        "visual_error_px": 98.0885314941406
+      },
+      "peer_rtt_max_ms": {
+        "1": 500.0
+      },
+      "markers": [
+        {
+          "t_ms": 4682,
+          "wall_ms": 1793125833832,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 7.00000000000056,
+          "pending": 13,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "872702654": "Друг",
+            "1440131081": "Друг_3",
+            "1540386803": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-29_client_p22119_342369": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_slow_story_guest_000.jsonl"
+      ],
+      "samples": 13,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "run_start": 1,
+        "sample": 13,
+        "position_correction": 4,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 4.643,
+        "snapshot_gap_ms": 165.000000000001,
+        "visual_error_px": 15.0167474746704
+      },
+      "peer_rtt_max_ms": {
+        "1": 99.0
+      },
+      "markers": [
+        {
+          "t_ms": 4498,
+          "wall_ms": 1793125833650,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 32.0,
+          "pending": 7,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "872702654": "Друг",
+            "1440131081": "Друг_3",
+            "1540386803": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-30-28_host_p22096_398264": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_slow_story_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 15,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "state_changed": 12,
+        "input_reset": 7,
+        "command": 7,
+        "user_marker": 1,
+        "peer_disconnected": 2,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "simulation_ms": 9.914,
+        "snapshot_encode_ms": 2.132
+      },
+      "peer_rtt_max_ms": {
+        "872702654": 107.0,
+        "1540386803": 103.0,
+        "1440131081": 508.0
+      },
+      "markers": [
+        {
+          "t_ms": 4883,
+          "wall_ms": 1793125833593,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "872702654": "Друг",
+            "1440131081": "Друг_3",
+            "1540386803": "Друг_2"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-27_client_p21744_360304": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_story_guest2_000.jsonl"
+      ],
+      "samples": 12,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 3,
+        "run_start": 1,
+        "sample": 12,
+        "position_correction": 6,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.435,
+        "snapshot_gap_ms": 159.0,
+        "visual_error_px": 161.816635131836
+      },
+      "peer_rtt_max_ms": {
+        "1": 103.0
+      },
+      "markers": [
+        {
+          "t_ms": 3991,
+          "wall_ms": 1793125771203,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 25.0000000000004,
+          "pending": 10,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "800964237": "Друг_2",
+            "1299259319": "Друг",
+            "1862843520": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-27_client_p21745_356294": {
+      "role": "client",
+      "nick": "Друг_3",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_story_guest3_000.jsonl"
+      ],
+      "samples": 12,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "run_start": 1,
+        "sample": 12,
+        "position_correction": 9,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.739,
+        "snapshot_gap_ms": 145.0,
+        "visual_error_px": 169.938339233398
+      },
+      "peer_rtt_max_ms": {
+        "1": 101.0
+      },
+      "markers": [
+        {
+          "t_ms": 3980,
+          "wall_ms": 1793125771187,
+          "epoch": 1,
+          "tick": 183,
+          "state": "RUNNING",
+          "snapshot_age_ms": 46.0000000000003,
+          "pending": 10,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "800964237": "Друг_2",
+            "1299259319": "Друг",
+            "1862843520": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-27_client_p21743_358788": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_story_guest_000.jsonl"
+      ],
+      "samples": 12,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 1,
+        "run_start": 1,
+        "sample": 12,
+        "position_correction": 6,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.392,
+        "snapshot_gap_ms": 194.000000000001,
+        "visual_error_px": 22.1829414367676
+      },
+      "peer_rtt_max_ms": {
+        "1": 101.0
+      },
+      "markers": [
+        {
+          "t_ms": 3979,
+          "wall_ms": 1793125771188,
+          "epoch": 1,
+          "tick": 183,
+          "state": "RUNNING",
+          "snapshot_age_ms": 45.9999999999994,
+          "pending": 11,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "800964237": "Друг_2",
+            "1299259319": "Друг",
+            "1862843520": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-26_host_p21720_394242": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/four_story_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 3,
+        "lobby_join": 3,
+        "sample": 15,
+        "run_start": 1,
+        "peer_loaded": 3,
+        "run_go": 1,
+        "state_changed": 122,
+        "input_reset": 5,
+        "command": 4,
+        "user_marker": 1,
+        "peer_disconnected": 3,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 148.755666666667,
+        "simulation_ms": 11.679,
+        "snapshot_encode_ms": 2.309
+      },
+      "peer_rtt_max_ms": {
+        "800964237": 100.0,
+        "1862843520": 105.0,
+        "1299259319": 99.0
+      },
+      "markers": [
+        {
+          "t_ms": 4406,
+          "wall_ms": 1793125771154,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "800964237": "Друг_2",
+            "1299259319": "Друг",
+            "1862843520": "Друг_3"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-11_client_p21673_362954": {
+      "role": "client",
+      "nick": "Друг_2",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/three_story_guest2_000.jsonl"
+      ],
+      "samples": 12,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 1,
+        "run_start": 1,
+        "sample": 12,
+        "position_correction": 8,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 141.941,
+        "presentation_ms": 3.178,
+        "snapshot_gap_ms": 165.000000000001,
+        "visual_error_px": 30.7657432556152
+      },
+      "peer_rtt_max_ms": {
+        "1": 107.0
+      },
+      "markers": [
+        {
+          "t_ms": 4008,
+          "wall_ms": 1793125755623,
+          "epoch": 1,
+          "tick": 186,
+          "state": "RUNNING",
+          "snapshot_age_ms": 25.9999999999998,
+          "pending": 10,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "770277813": "Друг_2",
+            "837514329": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-11_client_p21672_360846": {
+      "role": "client",
+      "nick": "Друг",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/three_story_guest_000.jsonl"
+      ],
+      "samples": 12,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 1,
+        "lobby": 2,
+        "run_start": 1,
+        "sample": 12,
+        "position_correction": 4,
+        "user_marker": 1,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "presentation_ms": 3.467,
+        "snapshot_gap_ms": 165.0,
+        "visual_error_px": 17.7382030487061
+      },
+      "peer_rtt_max_ms": {
+        "1": 102.0
+      },
+      "markers": [
+        {
+          "t_ms": 3993,
+          "wall_ms": 1793125755606,
+          "epoch": 1,
+          "tick": 183,
+          "state": "RUNNING",
+          "snapshot_age_ms": 59.9999999999996,
+          "pending": 12,
+          "correction_px": 0.0
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "770277813": "Друг_2",
+            "837514329": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    },
+    "survivors_coop_2026-10-27_18-29-11_host_p21649_413920": {
+      "role": "host",
+      "nick": "Ведущий",
+      "version": "0.6.1",
+      "os": "Linux",
+      "gpu": "headless",
+      "files": [
+        "qa/network_logs/three_story_host_000.jsonl"
+      ],
+      "samples": 15,
+      "events": {
+        "log_part": 1,
+        "session_open": 1,
+        "long_frame": 1,
+        "transport_connected": 2,
+        "lobby_join": 2,
+        "sample": 15,
+        "run_start": 1,
+        "peer_loaded": 2,
+        "run_go": 1,
+        "state_changed": 121,
+        "command": 3,
+        "input_reset": 5,
+        "user_marker": 1,
+        "peer_disconnected": 2,
+        "session_end": 1
+      },
+      "metric_max": {
+        "frame_ms": 150.0,
+        "simulation_ms": 8.579,
+        "snapshot_encode_ms": 1.937
+      },
+      "peer_rtt_max_ms": {
+        "837514329": 109.0,
+        "770277813": 103.0
+      },
+      "markers": [
+        {
+          "t_ms": 4401,
+          "wall_ms": 1793125755571,
+          "epoch": 1,
+          "tick": 187,
+          "state": "RUNNING",
+          "snapshot_age_ms": null,
+          "pending": null,
+          "correction_px": null
+        }
+      ],
+      "runs": [
+        {
+          "seed": 724,
+          "epoch": 1,
+          "roster": {
+            "1": "Ведущий",
+            "770277813": "Друг_2",
+            "837514329": "Друг"
+          }
+        }
+      ],
+      "end_reasons": [
+        "local_leave"
+      ],
+      "writer_drops": 0
+    }
+  },
+  "damaged_lines": []
+}

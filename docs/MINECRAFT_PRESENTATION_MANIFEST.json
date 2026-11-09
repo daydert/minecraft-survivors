@@ -1,0 +1,438 @@
+{
+  "version": "1.21.11",
+  "asset_index": "29",
+  "sound_files": {
+    "entity_player_attack_sweep1.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep1.ogg",
+      "sha1": "89741b2005ca27c98454e0cc000afe33b5af86fb",
+      "sha256": "37cfe39d4d85697e1431af93f045e94ccb78578bacb6e9ce52f6fbc91d7a417f"
+    },
+    "entity_player_attack_sweep2.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep2.ogg",
+      "sha1": "5350ba0ce6e2d5deeb53849704ce4702c0ee4a85",
+      "sha256": "fa6ef1546275d20167e2e11591e93df5b8bfe8b87fe92b41609ce689350c4650"
+    },
+    "entity_player_attack_sweep3.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep3.ogg",
+      "sha1": "8740a15ba2100a68975842c571d40edf970f5bef",
+      "sha256": "270a0f370684ed5435bc8984cf50985a8c10acd32c5a6d244ab6ed9161300485"
+    },
+    "entity_player_attack_sweep4.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep4.ogg",
+      "sha1": "98dfc1ea33b18d387dfbed5cbdc919250538c42e",
+      "sha256": "246db3ef55af0bf7f570a085c668008382fa323fcd1187e9fba4c8f34c0c9bbc"
+    },
+    "entity_player_attack_sweep5.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep5.ogg",
+      "sha1": "bf3558e6fb0cacdf87d0d35f1a470acbe5842af4",
+      "sha256": "379fb59765ff3325b30c74ca51261bb52308a416440d5ccec9502b264b73f18f"
+    },
+    "entity_player_attack_sweep6.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep6.ogg",
+      "sha1": "2b9277d2e4542d106bca65e63092c6fcaadf40ea",
+      "sha256": "afee5cd1f4ea7c7bc40aa1ad081c83945eda95f7626d21f4499c5d07d7f8974e"
+    },
+    "entity_player_attack_sweep7.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep7.ogg",
+      "sha1": "dcbf16528e0835b5638c782cede362aa8743fccd",
+      "sha256": "7b732b48bb4080f7fc1b3305102786dc7b679d4510066f177d87b9d02c3d95f6"
+    },
+    "random_bow.ogg": {
+      "source": "minecraft/sounds/random/bow.ogg",
+      "sha1": "4a6c47aa4f8c2cfe3237b250ed19b8714d611fd2",
+      "sha256": "3d983f24930734d6d32428b3b722d688b99475d488ab963f0d61107381d04c4a"
+    },
+    "item_trident_throw1.ogg": {
+      "source": "minecraft/sounds/item/trident/throw1.ogg",
+      "sha1": "57bc0d3c05470580efb254ec51262eae17ff0c4c",
+      "sha256": "22e05d937ae3d9dbb0946f53d9887feb017fc539239f67a4a8c769a9519c1255"
+    },
+    "item_trident_throw2.ogg": {
+      "source": "minecraft/sounds/item/trident/throw2.ogg",
+      "sha1": "c8e64c102f026145de1da692d73ba8bb400ef025",
+      "sha256": "0e94ad80f156d341c0688f6b918b78515c645b6cab074197e112c672f57a50a2"
+    },
+    "mob_ghast_fireball4.ogg": {
+      "source": "minecraft/sounds/mob/ghast/fireball4.ogg",
+      "sha1": "e2aae5ec9916c6c4ae328520f4d72a50afff5aed",
+      "sha256": "135cbb0831e14ce6b0e136e35abc3439e4445b5a51c401781aecf7e2abed9ea6"
+    },
+    "entity_player_attack_strong1.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/strong1.ogg",
+      "sha1": "999bdf382687457820f934783e6ef38dc01c508b",
+      "sha256": "ea49515b4f731c4864412a2b37a9951cb9f20d06432e4ef212bb93af5cc5398d"
+    },
+    "entity_player_attack_strong2.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/strong2.ogg",
+      "sha1": "f71fa38e886f8a6c60803422c286e347efb65676",
+      "sha256": "8fe731a71349e0bb2604460f245f274cfad7468579a151b6e1f3ea1569ee6f34"
+    },
+    "entity_player_attack_strong3.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/strong3.ogg",
+      "sha1": "cc9728d993ea4ea9e87b86cb7c36459ecd48207d",
+      "sha256": "fc969a3284ee1084ae62113f1594a1d0f0a56fd78fc4a9e8062070263c13b573"
+    },
+    "entity_player_attack_strong4.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/strong4.ogg",
+      "sha1": "521749fe4b753428e2ddf3273a7639f95da8524f",
+      "sha256": "20a917efb1e4d7b9bc337ed58fbdff866db7e4e8265f001d224533e8a97e5ffe"
+    },
+    "entity_player_attack_strong5.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/strong5.ogg",
+      "sha1": "bf544e65cfdec0512f9e89320d0453f94a5883e7",
+      "sha256": "f5e5629614c2e311b5baafb952b26dccdc95a0265b0b1cdc63bbd35502ea081c"
+    },
+    "entity_player_attack_strong6.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/strong6.ogg",
+      "sha1": "46baa8602f9e40edf48f5c0ac7a280474140033b",
+      "sha256": "6470a6364e3526415f7231de2682f574775bff06ec7455dac7ae7902318827cf"
+    },
+    "damage_hit1.ogg": {
+      "source": "minecraft/sounds/damage/hit1.ogg",
+      "sha1": "c43077ac1f9ceda7e9e1c152f839baf207833aa8",
+      "sha256": "d3c5958cbbe957e4c2b33304458663e254e7da8124bce61066c6b4fcd8b4d03c"
+    },
+    "damage_hit2.ogg": {
+      "source": "minecraft/sounds/damage/hit2.ogg",
+      "sha1": "65bf3f80ca720c55b99925ba3a515d2f932b15b1",
+      "sha256": "4962653496440cc27ebac4d0e08d2eca78580671a184041736fe8ee5a22b88d0"
+    },
+    "damage_hit3.ogg": {
+      "source": "minecraft/sounds/damage/hit3.ogg",
+      "sha1": "b334c8ab1abc3ffa233bd612074bc8032c9b160f",
+      "sha256": "cfba56fe35f7a444211209c389062298193c579a7414e7b87120cb00917fdc43"
+    },
+    "random_explode1.ogg": {
+      "source": "minecraft/sounds/random/explode1.ogg",
+      "sha1": "fa85b9e7e54c36c9f9d0249ca739444b5e3bb66c",
+      "sha256": "f5951a4f5ece95d595398c3519ab26044c359bc088a0f0684ee6f1b14c02ebc0"
+    },
+    "random_explode2.ogg": {
+      "source": "minecraft/sounds/random/explode2.ogg",
+      "sha1": "e55daa373e577f611565d57ec53cd28dcf472f99",
+      "sha256": "cb262b2af5fdfaac7b83cc64790c83cc852506444f382f06ded37e83f105b5a8"
+    },
+    "random_explode3.ogg": {
+      "source": "minecraft/sounds/random/explode3.ogg",
+      "sha1": "3a92d0fd263265719532041f6f2ea44c7ba2f2e2",
+      "sha256": "c2a8b6821fe8a50d72605bff3410bd8c4c82bff47cbce37d99e225dbaf55f6a4"
+    },
+    "random_explode4.ogg": {
+      "source": "minecraft/sounds/random/explode4.ogg",
+      "sha1": "09835e0c3138faf6047506a2b6f1da087c082d2e",
+      "sha256": "f676d7fb3ddd9623ca931004ad380c5027846394b51b96b0ac2518159ff915c2"
+    },
+    "random_fuse.ogg": {
+      "source": "minecraft/sounds/random/fuse.ogg",
+      "sha1": "b9a550ba1e028c027557572aeb928b760864efe4",
+      "sha256": "3ce4f8c898d0b388c42e435eb6f71e23bab23dfb51c066ff255b0695b2ebf0f5"
+    },
+    "random_orb.ogg": {
+      "source": "minecraft/sounds/random/orb.ogg",
+      "sha1": "8a04a60d5c28fc60df472a877ca57f37eabc78d7",
+      "sha256": "706f615c548ca86b780611526ec9d785bba62e2c10580cf7ef738a0757f4c093"
+    },
+    "random_pop.ogg": {
+      "source": "minecraft/sounds/random/pop.ogg",
+      "sha1": "d6ae1c04d0a7376a33d1df12e1b8057cfbab6bc2",
+      "sha256": "4ddf491e1b736a9711cd76590ba70b203136d7ea1d5134a42088e58daccf3951"
+    },
+    "random_levelup.ogg": {
+      "source": "minecraft/sounds/random/levelup.ogg",
+      "sha1": "19034765ba8ba5389b35804ab213537ab5cf706f",
+      "sha256": "6668fd66a20eacb458565f3e0944aca66613750ac28ef94fb028bc258476b251"
+    },
+    "block_chest_open.ogg": {
+      "source": "minecraft/sounds/block/chest/open.ogg",
+      "sha1": "cad8f949f15cc3d22a01b016c22050cf847ca9fc",
+      "sha256": "76546dea0576f1b89217d0bf7bcb0e2e46e7629e57f04ded7cb157e7dd6d06d2"
+    },
+    "random_glass1.ogg": {
+      "source": "minecraft/sounds/random/glass1.ogg",
+      "sha1": "fa35a51bb74a4a6cf0c48161342db5a8577f13e5",
+      "sha256": "0409013e382d13e121fe464fc99fae4262629e7f6a1f52cff3f5b3475a888c91"
+    },
+    "random_glass2.ogg": {
+      "source": "minecraft/sounds/random/glass2.ogg",
+      "sha1": "f1b8e424aa0559952b08651d792f96381d2fb132",
+      "sha256": "c226b5cbd76dcfae6d5f3252b8ccf996cec4e99b43ef0ca3ae6659c35cbf9867"
+    },
+    "random_glass3.ogg": {
+      "source": "minecraft/sounds/random/glass3.ogg",
+      "sha1": "3be3cf9a5c8534bf6548ba89c699a3b2abf9e074",
+      "sha256": "1dd567dda2acb11b303d2592d6bf497ec92dd2818f2469addcb88f44ef052495"
+    },
+    "mob_evocation_illager_fangs.ogg": {
+      "source": "minecraft/sounds/mob/evocation_illager/fangs.ogg",
+      "sha1": "3be8d0b483bcd9d7234a55fa8b0ab81f0713438e",
+      "sha256": "30447a8d0338323c62506b129712823eaf1b02f5a25363359918e1d9b74686e6"
+    },
+    "ambient_weather_thunder1.ogg": {
+      "source": "minecraft/sounds/ambient/weather/thunder1.ogg",
+      "sha1": "a20f0a846d7becf5d08756207f86acf24fac1a8d",
+      "sha256": "d407a7b11be826d5c3b08199861cf6a85a93707690f7878c84ec0bebe4db93ed"
+    },
+    "ambient_weather_thunder2.ogg": {
+      "source": "minecraft/sounds/ambient/weather/thunder2.ogg",
+      "sha1": "9c94cf13276d60a7ce67eacdc3885f25fa0aadf5",
+      "sha256": "ecfb20e38b2e682464020309c38c65c102b91cb0342b139a35c3e21d6e5fff0d"
+    },
+    "ambient_weather_thunder3.ogg": {
+      "source": "minecraft/sounds/ambient/weather/thunder3.ogg",
+      "sha1": "7b96a88619a2228cf4c7d3a2b81ecfd1b3b56673",
+      "sha256": "65acefae26577d5aad581bc6659021c0b5f7228fd897d4f996bb47bb9fad6253"
+    },
+    "mob_ravager_roar1.ogg": {
+      "source": "minecraft/sounds/mob/ravager/roar1.ogg",
+      "sha1": "8855447a5c5fe347907ae574495fec645a11a9d1",
+      "sha256": "8de6cd2abc28bc9d489f5dc57a09b4ff1174afbd1cb63f90fa5ee343d665c936"
+    },
+    "mob_ravager_roar2.ogg": {
+      "source": "minecraft/sounds/mob/ravager/roar2.ogg",
+      "sha1": "070b4565691243aa4255810ac4d29c1238d03536",
+      "sha256": "7300450d2dd265710ca178ae4248783a07aa3b17071bc437a98fd9cd1b55a321"
+    },
+    "mob_ravager_roar3.ogg": {
+      "source": "minecraft/sounds/mob/ravager/roar3.ogg",
+      "sha1": "c638b991376f596903f7a6f58adf02240e3ef3fe",
+      "sha256": "fcc36df2b23500fa1fb60a7bbe4a9e1f69f8dcc493101c690a5454b488c78fe8"
+    },
+    "mob_ravager_roar4.ogg": {
+      "source": "minecraft/sounds/mob/ravager/roar4.ogg",
+      "sha1": "b8990fb5454091c22e0cb44377a3d113781b316a",
+      "sha256": "4cf540cc729b66719e29f771adfe07dae2e3efd9ccb17dbf2afbccaff10affcb"
+    },
+    "random_click_stereo.ogg": {
+      "source": "minecraft/sounds/random/click_stereo.ogg",
+      "sha1": "f0ca66561f832bf2f60b393837297c2692367cd5",
+      "sha256": "91bc25153ad4a697335477f5ebeb9515e83fdbcafd16b1e45fb63de514391d9f"
+    },
+    "dig_wood1.ogg": {
+      "source": "minecraft/sounds/dig/wood1.ogg",
+      "sha1": "ef59a7ee4163d8b06fcda67e356ffe717756adda",
+      "sha256": "313dbced391ecb42a63c85bc874b7fa226215acabadf5069e223dff6c5ebad99"
+    },
+    "dig_wood2.ogg": {
+      "source": "minecraft/sounds/dig/wood2.ogg",
+      "sha1": "e6c0a8a18eb9c866042b44595ba9f40e3a691153",
+      "sha256": "76685444e4e4bb0f62cc8347866ed3eab5e1fe6a55fbd217edc2e7a66b50a6e7"
+    },
+    "dig_wood3.ogg": {
+      "source": "minecraft/sounds/dig/wood3.ogg",
+      "sha1": "8e7b1f82f4d68c04e8fdd43fb631079e4e36badc",
+      "sha256": "6b439a67286d392e3a7bc96f67ea51ed17aa8d22610f243249df88d4ba5aa9e7"
+    },
+    "dig_wood4.ogg": {
+      "source": "minecraft/sounds/dig/wood4.ogg",
+      "sha1": "be74b375d7adfe9470afec83707cda6f35275fa1",
+      "sha256": "b8a75c1b0658d0bc4e0e8e2d44585182feda102551e266fd42490034cc08c4f5"
+    },
+    "mob_wither_spawn.ogg": {
+      "source": "minecraft/sounds/mob/wither/spawn.ogg",
+      "sha1": "52049ed59e074474287b5dfee00477ce571b3385",
+      "sha256": "6295353ea7dbe9a6b029b180f0308fad5ed88b33546814a92d523f798866eb9d"
+    },
+    "portal_trigger.ogg": {
+      "source": "minecraft/sounds/portal/trigger.ogg",
+      "sha1": "86ee4459e92beea5a4287881d26f7eaee0411c92",
+      "sha256": "07e0d99b8770799c42e6d2564139125b91a06c24e815cfb42021485d3b2ff72b"
+    },
+    "portal_travel.ogg": {
+      "source": "minecraft/sounds/portal/travel.ogg",
+      "sha1": "9022fcfb001438a87c65b268202a6abf5957b64a",
+      "sha256": "0099a1c5ba6849ba6bcd97e1b0e95d5dd85595d1f87439fdcb355106982e39de"
+    },
+    "mob_zombie_hurt1.ogg": {
+      "source": "minecraft/sounds/mob/zombie/hurt1.ogg",
+      "sha1": "e46ef10953dadb96e7faab3dddcfecc5551b652b",
+      "sha256": "19e5fc39e4d5a95b1de7f0bcc41fb9b2760186a099dad34fa66230b740d71f2d"
+    },
+    "mob_zombie_hurt2.ogg": {
+      "source": "minecraft/sounds/mob/zombie/hurt2.ogg",
+      "sha1": "0fe7a2c57b0b284ec0e7b52b0e0e38d4a9139e53",
+      "sha256": "2d90b404ebbcbf3856434a993127ba50f06414ea727f0a6f9c590477728973dc"
+    },
+    "mob_skeleton_hurt1.ogg": {
+      "source": "minecraft/sounds/mob/skeleton/hurt1.ogg",
+      "sha1": "6df446a07ce7f7aa292e8eeeab9f96543acd805b",
+      "sha256": "92ffbac6d6ec3cf66e35a874761956bdde0cd9a5b7957c2759b9077471b44161"
+    },
+    "mob_skeleton_hurt2.ogg": {
+      "source": "minecraft/sounds/mob/skeleton/hurt2.ogg",
+      "sha1": "f3d328aec8103dc8d9686f2d1251a052fbd8a469",
+      "sha256": "64a38a1b4ce6cfe761676127668063bd9c74d6a494ed3a1d182ce85cae4fd432"
+    },
+    "mob_skeleton_hurt3.ogg": {
+      "source": "minecraft/sounds/mob/skeleton/hurt3.ogg",
+      "sha1": "816e6dd7c8e080ab8b6197aa46ea9dbb73bf0540",
+      "sha256": "f2e8bd7896d4eecddf09841fea0061223a9a828dcf6068c7a8885ae11f4cc406"
+    },
+    "mob_skeleton_hurt4.ogg": {
+      "source": "minecraft/sounds/mob/skeleton/hurt4.ogg",
+      "sha1": "c7dfb6697b44e539ee6228e1de125e306f41f339",
+      "sha256": "2d43affde904f7e36fea2c7c64eaf74a91926e6b1e247eec6c949790c77f904a"
+    },
+    "mob_spider_say1.ogg": {
+      "source": "minecraft/sounds/mob/spider/say1.ogg",
+      "sha1": "8a687fb7ea955d58a8e758a7e6ca8147c48dd477",
+      "sha256": "d83db29c099244b8dbd0caa698307ab86b340136cc345bb82179370eee8aa1f2"
+    },
+    "mob_spider_say2.ogg": {
+      "source": "minecraft/sounds/mob/spider/say2.ogg",
+      "sha1": "0d61e1a8550820d63881a1cfb333c4dda042e86a",
+      "sha256": "0ccfbdb83122cb2400573aa11a08a4a7b65053c6c82e77dd115927e15e3cbf48"
+    },
+    "mob_spider_say3.ogg": {
+      "source": "minecraft/sounds/mob/spider/say3.ogg",
+      "sha1": "8cb03a82e064925b02b9f89b9b2a492feaeaa117",
+      "sha256": "d45f065039e8e4e99b3c1298571949ef93d94d43e0e4012aaaf81b0e98fb73f2"
+    },
+    "mob_spider_say4.ogg": {
+      "source": "minecraft/sounds/mob/spider/say4.ogg",
+      "sha1": "ceede14b6b28de916432ab1aa7b1de6b50c374fb",
+      "sha256": "c69e373d9c6e062176c318474e87dfc5cf865e7dbed483e385e120567e82b6eb"
+    },
+    "mob_creeper_say1.ogg": {
+      "source": "minecraft/sounds/mob/creeper/say1.ogg",
+      "sha1": "6fc976d65fc742451db2049a2a38a1007b976bc1",
+      "sha256": "c1f55a99094a2cb9a342b4f5477b9bc37316c0d36a948d5294a6c5ea253e5e05"
+    },
+    "mob_creeper_say2.ogg": {
+      "source": "minecraft/sounds/mob/creeper/say2.ogg",
+      "sha1": "79fdb366ce047a20297c73f85858ea7e29ec0898",
+      "sha256": "28752147b5f9ade04a33ab64197c335af33d20a1bf6eb5421fe1a0313e124306"
+    },
+    "mob_creeper_say3.ogg": {
+      "source": "minecraft/sounds/mob/creeper/say3.ogg",
+      "sha1": "8eaa122d6c96f2d5fef601926aa930cef0c5f81c",
+      "sha256": "fda20a00a0ae469a589874fb71faea63d24b80e82bee2c70c096d30926f8cf85"
+    },
+    "mob_creeper_say4.ogg": {
+      "source": "minecraft/sounds/mob/creeper/say4.ogg",
+      "sha1": "ecbf5ce78cc21479c4b91273fd030ed68639d3f8",
+      "sha256": "b183f069923aa74b41030866d33598068f82309b06bf3f2c317f58ed2a58e8f5"
+    },
+    "mob_slime_big1.ogg": {
+      "source": "minecraft/sounds/mob/slime/big1.ogg",
+      "sha1": "eff4b27c4de6d4e6c8fd88adfaf2a7d486ce7886",
+      "sha256": "65298cd3708aaf88bd2e5296b5923d70539e54b0bd2bb76e749150c03a63c29d"
+    },
+    "mob_slime_big2.ogg": {
+      "source": "minecraft/sounds/mob/slime/big2.ogg",
+      "sha1": "791edfe35bc72bb3d836ae1ecd5270d441777844",
+      "sha256": "ad06d48fb0ee32e5aab77c17dcb36db3a289770ee3ca066b6d91ae62700007cc"
+    },
+    "mob_slime_big3.ogg": {
+      "source": "minecraft/sounds/mob/slime/big3.ogg",
+      "sha1": "5cde6592ea7457b2bc11169b996cc491790608fd",
+      "sha256": "aa238c35a35023c2f89d375d97a8eb0d73fa202e30152be82ebadaeb5a2d02f5"
+    },
+    "mob_slime_big4.ogg": {
+      "source": "minecraft/sounds/mob/slime/big4.ogg",
+      "sha1": "96fd44f6a57b46075ad2553d2b68263aa5800f31",
+      "sha256": "f72d855a819ddd194bc5fc09213d458de6c4737c5e3d13e8dba47d8612f2537c"
+    },
+    "mob_ravager_hurt1.ogg": {
+      "source": "minecraft/sounds/mob/ravager/hurt1.ogg",
+      "sha1": "e231367664680ecd993348375b089fb9b3a33547",
+      "sha256": "1fb2550a506ac83a812cda40cddce77a190bbb8505e8d36dc2f25000e96c2641"
+    },
+    "mob_ravager_hurt2.ogg": {
+      "source": "minecraft/sounds/mob/ravager/hurt2.ogg",
+      "sha1": "c4095e981c62291381eadb5e361865e90630c8a9",
+      "sha256": "4bdb5c257ab2e21520c3470b3a968047297f5b9722c514fe22b52d4c64371a28"
+    },
+    "mob_ravager_hurt3.ogg": {
+      "source": "minecraft/sounds/mob/ravager/hurt3.ogg",
+      "sha1": "6ed05589cf5885b3ce969ed649b7f9da465e3417",
+      "sha256": "22500e5ce78d1af821eae91f7414337c3e4f0686c660809de17a13c74a14fa1f"
+    },
+    "mob_ravager_hurt4.ogg": {
+      "source": "minecraft/sounds/mob/ravager/hurt4.ogg",
+      "sha1": "7d3bd8655eb785e3dc00367643bf99b3077e04aa",
+      "sha256": "959857d69e12ee7ab29d0ca111c37b8b1989375e2795f763f7cffd02e1433391"
+    },
+    "mob_vindication_illager_hurt1.ogg": {
+      "source": "minecraft/sounds/mob/vindication_illager/hurt1.ogg",
+      "sha1": "8d22f72686dcf0e857e35620b7a2a44624471f3a",
+      "sha256": "27fac6fe1a870c657dbe101bfb57df0c60fe9525a37e4ad935e26b943dd2e19f"
+    },
+    "mob_vindication_illager_hurt2.ogg": {
+      "source": "minecraft/sounds/mob/vindication_illager/hurt2.ogg",
+      "sha1": "b9361288a03fad98053bf519ea7eced31e072099",
+      "sha256": "56dc21192ff517581c67409b0773406f5daecebed626c12770f18080d73c6d21"
+    },
+    "mob_vindication_illager_hurt3.ogg": {
+      "source": "minecraft/sounds/mob/vindication_illager/hurt3.ogg",
+      "sha1": "2e8e4851fce57c409245a321827275f390158f89",
+      "sha256": "ace3a6f460cf06bbc3099dad5acde3df89111233ee2e8e1ba1bb71cab5bd51d7"
+    }
+  },
+  "font_sources": {
+    "assets/minecraft/textures/font/nonlatin_european.png": "21e91bd394e0790da5db58c99d6f89712977930d6f746fb298824f73c47e7027",
+    "assets/minecraft/textures/font/accented.png": "b9088c6e0496eba5df8733848a9d034381e5a656da08a6f70b9a77d178a0d0ba",
+    "assets/minecraft/textures/font/ascii.png": "e8646f1ed1f4bfd597d262cca3d8fac88ceaaa62807bbd5e607b2e3fe41c928a"
+  },
+  "gui_sources": {
+    "hud_hotbar": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/hotbar.png",
+      "sha256": "57aad603aafc75cea079d8db04b3029c1b1b5501eb0799971ccaf858876f52a7"
+    },
+    "hud_selection": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/hotbar_selection.png",
+      "sha256": "8c1e1cd977cce0c3a2aaf04036af4904426dafd1a6f4db9665b0d8be1468e80a"
+    },
+    "hud_xp_empty": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/experience_bar_background.png",
+      "sha256": "0ea991d9e971547d901f7adcfd6af8f6692c39e4e4ed620b2844c2ebeccb9d71"
+    },
+    "hud_xp_full": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/experience_bar_progress.png",
+      "sha256": "a94235503f186fd84ac66ce4b09a4ba9796bc4b8efb9ad43dcc3486698fc26dd"
+    },
+    "gui_button": {
+      "source": "assets/minecraft/textures/gui/sprites/widget/button.png",
+      "sha256": "0a2e159360200a39e0c7e9c0db0e6aa034ba4e1f8d99698c004084b5ba6e94cb"
+    },
+    "gui_button_active": {
+      "source": "assets/minecraft/textures/gui/sprites/widget/button_highlighted.png",
+      "sha256": "1fcd15ad8971b1e846f848b2211d631f51b9b6533d99ca392a5799af7e9854f9"
+    },
+    "heart": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/heart/full.png",
+      "sha256": "acb11da7611dc8239d4da2fe500cca2fe88a2c4facccf42fa7207c0e9dba4a16"
+    },
+    "heart_half": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/heart/half.png",
+      "sha256": "98d1fca665a309879c19c06b0658ba5407520f13a02d4bf7321b060534491efc"
+    },
+    "heart_empty": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/heart/container.png",
+      "sha256": "b92355b32f566dd5ec209dcf6f25ddd239fdf967a70af42308ef9607aab3b194"
+    },
+    "heart_blink": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/heart/full_blinking.png",
+      "sha256": "d43889d4c676a6e2498b0510bf4f77c0050b792884952c67475f4bff097a498b"
+    },
+    "heart_half_blink": {
+      "source": "assets/minecraft/textures/gui/sprites/hud/heart/half_blinking.png",
+      "sha256": "f63cf9331c3087e5e403b96e2456721cbbbc4be05b86c3443b863efda40b6c88"
+    }
+  },
+  "glyphs": 2414,
+  "music": {
+    "source": "/home/daydert/Downloads/Telegram Desktop/MusicForGame.mp3",
+    "source_sha256": "c9af4d15fca78da80b9c74ab40bcef52e828c37bb25b452dee46a4486644b3be",
+    "output": "assets/audio/music.ogg",
+    "sha256": "bde8705349fcd4a2fb9ae5a11ca3a3ac06e5bba101469a087e08b2ecd1bc9287",
+    "conversion": "Original source contains AAC despite .mp3 extension; decoded to Ogg Vorbis q6 for Godot"
+  },
+  "boss_music": {
+    "source": "/home/daydert/Downloads/audio_2026-10-27_17-30-49.ogg",
+    "source_sha256": "5b7459ec34a0ae4420daca6a4f561187809bf9388c92e9c00c559f003984619c",
+    "output": "assets/audio/music_herobrine.ogg",
+    "sha256": "5b7459ec34a0ae4420daca6a4f561187809bf9388c92e9c00c559f003984619c",
+    "duration_seconds": 79.961542,
+    "conversion": "Original Vorbis bytes copied unchanged; corrected track supplied by user"
+  }
+}

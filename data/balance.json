@@ -1,0 +1,413 @@
+{
+  "duration": 720.0,
+  "arena": 2048,
+  "player_speed": 82.0,
+  "player_hp": 20.0,
+  "mob_cap": 250,
+  "projectile_cap": 200,
+  "orb_cap": 300,
+  "particle_cap": 400,
+  "mobs": {
+    "zombie": {
+      "hp": 8,
+      "speed": 30,
+      "damage": 2,
+      "xp": 1,
+      "radius": 7
+    },
+    "spider": {
+      "hp": 6,
+      "speed": 55,
+      "damage": 2,
+      "xp": 1,
+      "radius": 10
+    },
+    "skeleton": {
+      "hp": 12,
+      "speed": 25,
+      "damage": 2,
+      "xp": 2,
+      "radius": 7
+    },
+    "creeper": {
+      "hp": 14,
+      "speed": 35,
+      "damage": 2,
+      "xp": 2,
+      "radius": 7
+    },
+    "slime": {
+      "hp": 18,
+      "speed": 22,
+      "damage": 3,
+      "xp": 2,
+      "radius": 11
+    },
+    "small_slime": {
+      "hp": 4,
+      "speed": 40,
+      "damage": 1,
+      "xp": 0,
+      "radius": 5
+    },
+    "elite": {
+      "hp": 180,
+      "speed": 28,
+      "damage": 3,
+      "xp": 30,
+      "radius": 10
+    },
+    "ravager": {
+      "hp": 1000,
+      "speed": 24,
+      "damage": 4,
+      "xp": 100,
+      "radius": 21
+    },
+    "vindicator": {
+      "hp": 32,
+      "speed": 38,
+      "damage": 4,
+      "xp": 4,
+      "radius": 8
+    }
+  },
+  "waves": [
+    {
+      "at": 0,
+      "rate": 0.8,
+      "weights": {
+        "zombie": 1.0
+      }
+    },
+    {
+      "at": 60,
+      "rate": 1.4,
+      "weights": {
+        "zombie": 0.75,
+        "spider": 0.25
+      }
+    },
+    {
+      "at": 120,
+      "rate": 2.2,
+      "weights": {
+        "zombie": 0.6,
+        "spider": 0.25,
+        "skeleton": 0.15
+      }
+    },
+    {
+      "at": 240,
+      "rate": 3.2,
+      "weights": {
+        "zombie": 0.40178571428571425,
+        "spider": 0.17857142857142858,
+        "skeleton": 0.13392857142857142,
+        "creeper": 0.17857142857142858,
+        "vindicator": 0.10714285714285712
+      }
+    },
+    {
+      "at": 360,
+      "rate": 4.5,
+      "weights": {
+        "zombie": 0.3125,
+        "spider": 0.1785714285714286,
+        "skeleton": 0.13392857142857142,
+        "creeper": 0.13392857142857142,
+        "slime": 0.13392857142857142,
+        "vindicator": 0.10714285714285715
+      }
+    },
+    {
+      "at": 480,
+      "rate": 6.0,
+      "weights": {
+        "zombie": 0.29914529914529914,
+        "spider": 0.17094017094017097,
+        "skeleton": 0.12820512820512822,
+        "creeper": 0.12820512820512822,
+        "slime": 0.12820512820512822,
+        "vindicator": 0.1452991452991453
+      }
+    },
+    {
+      "at": 630,
+      "rate": 4.0,
+      "weights": {
+        "zombie": 0.34188034188034183,
+        "spider": 0.17094017094017092,
+        "skeleton": 0.08547008547008546,
+        "creeper": 0.17094017094017092,
+        "slime": 0.08547008547008546,
+        "vindicator": 0.14529914529914528
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 180,
+      "type": "elite"
+    },
+    {
+      "at": 360,
+      "type": "elite"
+    },
+    {
+      "at": 510,
+      "type": "elite"
+    },
+    {
+      "at": 600,
+      "type": "elite"
+    },
+    {
+      "at": 630,
+      "type": "ravager"
+    }
+  ],
+  "weapons": {
+    "sword": {
+      "name": "Железный меч",
+      "damage": 8,
+      "interval": 1.0,
+      "radius": 42,
+      "speed": 0,
+      "range": 42,
+      "count": 1
+    },
+    "bow": {
+      "name": "Лук",
+      "damage": 6,
+      "interval": 1.1,
+      "radius": 3,
+      "speed": 220,
+      "range": 280,
+      "count": 1
+    },
+    "trident": {
+      "name": "Трезубец",
+      "damage": 10,
+      "interval": 2.4,
+      "radius": 6,
+      "speed": 170,
+      "range": 170,
+      "count": 1
+    },
+    "fire": {
+      "name": "Огненный заряд",
+      "damage": 10,
+      "interval": 2.6,
+      "radius": 28,
+      "speed": 135,
+      "range": 240,
+      "count": 1
+    },
+    "potion": {
+      "name": "Зелье отравления",
+      "damage": 2,
+      "interval": 3.4,
+      "radius": 30,
+      "speed": 135,
+      "range": 240,
+      "count": 1,
+      "duration": 3
+    },
+    "fangs": {
+      "name": "Клыки заклинателя",
+      "damage": 9,
+      "interval": 2.8,
+      "radius": 9,
+      "speed": 0,
+      "range": 80,
+      "count": 4
+    }
+  },
+  "upgrades": {
+    "sword": [
+      {
+        "damage": 4
+      },
+      {
+        "radius": 8
+      },
+      {
+        "damage": 4
+      },
+      {
+        "back": 1
+      },
+      {
+        "interval": -0.15
+      },
+      {
+        "damage": 4
+      },
+      {
+        "radius": 8
+      }
+    ],
+    "bow": [
+      {
+        "damage": 3
+      },
+      {
+        "count": 1
+      },
+      {
+        "interval": -0.15
+      },
+      {
+        "damage": 3
+      },
+      {
+        "pierce": 1
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 4
+      }
+    ],
+    "trident": [
+      {
+        "damage": 4
+      },
+      {
+        "range": 30
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 4
+      },
+      {
+        "speed": 40
+      },
+      {
+        "damage": 6
+      }
+    ],
+    "fire": [
+      {
+        "damage": 5
+      },
+      {
+        "radius": 8
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 5
+      },
+      {
+        "radius": 8
+      },
+      {
+        "damage": 8
+      }
+    ],
+    "potion": [
+      {
+        "damage": 1
+      },
+      {
+        "radius": 8
+      },
+      {
+        "duration": 1
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 1
+      },
+      {
+        "interval": -0.4
+      },
+      {
+        "radius": 10
+      }
+    ],
+    "fangs": [
+      {
+        "damage": 4
+      },
+      {
+        "count": 2
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "rows": 1
+      },
+      {
+        "damage": 4
+      },
+      {
+        "count": 2
+      },
+      {
+        "damage": 6
+      }
+    ]
+  },
+  "passives": {
+    "blaze": {
+      "name": "Огненный порошок",
+      "effect": "+10% ко всему урону"
+    },
+    "redstone": {
+      "name": "Редстоун",
+      "effect": "−6% к интервалу атак"
+    },
+    "amethyst": {
+      "name": "Аметистовый осколок",
+      "effect": "+10% к размеру атак"
+    },
+    "sugar": {
+      "name": "Сахар",
+      "effect": "+8% к скорости движения"
+    },
+    "armor": {
+      "name": "Железный нагрудник",
+      "effect": "−0,2 HP входящего урона"
+    },
+    "hopper": {
+      "name": "Воронка",
+      "effect": "+30% к притяжению опыта"
+    }
+  },
+  "recipes": {
+    "sword": {
+      "passive": "blaze",
+      "name": "Незеритовый меч",
+      "icon": "netherite",
+      "effect": "Урон +12 · радиус +12 · два взмаха"
+    },
+    "bow": {
+      "passive": "redstone",
+      "name": "Лук с горящей стрелой",
+      "icon": "flamebow",
+      "effect": "Поджигает на 3 с · 4 урона в секунду"
+    },
+    "trident": {
+      "passive": "amethyst",
+      "name": "Трезубец с громовержцем",
+      "icon": "channeling",
+      "effect": "Молния · 30 урона · радиус 36"
+    }
+  }
+}

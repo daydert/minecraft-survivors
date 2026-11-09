@@ -1,0 +1,491 @@
+{
+  "clips": {
+    "ghast_hover": {
+      "frame_size": [
+        192,
+        216
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14
+      ]
+    },
+    "ghast_charge": {
+      "frame_size": [
+        192,
+        216
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14,
+        0.14
+      ]
+    },
+    "ghast_piece_0": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    },
+    "ghast_piece_1": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    },
+    "ghast_piece_2": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    },
+    "ghast_piece_3": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    },
+    "ghast_piece_4": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    },
+    "ghast_piece_5": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    },
+    "ghast_piece_6": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    },
+    "ghast_piece_7": {
+      "frame_size": [
+        80,
+        80
+      ],
+      "frames": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "durations": [
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09,
+        0.09
+      ]
+    }
+  },
+  "sprites": [
+    "ghast_hover",
+    "ghast_charge",
+    "ghast_piece_0",
+    "ghast_piece_1",
+    "ghast_piece_2",
+    "ghast_piece_3",
+    "ghast_piece_4",
+    "ghast_piece_5",
+    "ghast_piece_6",
+    "ghast_piece_7",
+    "ghast_leg_0",
+    "ghast_leg_1",
+    "ghast_leg_2",
+    "ghast_leg_3",
+    "ghast_leg_4",
+    "ghast_leg_5",
+    "ghast_leg_6",
+    "ghast_leg_7",
+    "ghast_leg_8"
+  ],
+  "pieces": [
+    {
+      "sprite": "ghast_piece_0",
+      "center": [
+        -4,
+        18,
+        -4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_piece_1",
+      "center": [
+        4,
+        18,
+        -4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_piece_2",
+      "center": [
+        -4,
+        26,
+        -4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_piece_3",
+      "center": [
+        4,
+        26,
+        -4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_piece_4",
+      "center": [
+        -4,
+        18,
+        4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_piece_5",
+      "center": [
+        4,
+        18,
+        4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_piece_6",
+      "center": [
+        -4,
+        26,
+        4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_piece_7",
+      "center": [
+        4,
+        26,
+        4
+      ],
+      "size": [
+        80,
+        80
+      ]
+    },
+    {
+      "sprite": "ghast_leg_0",
+      "center": [
+        -5,
+        8.5,
+        -5
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_1",
+      "center": [
+        0,
+        10.0,
+        -5
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_2",
+      "center": [
+        5,
+        7.5,
+        -5
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_3",
+      "center": [
+        -5,
+        9.5,
+        0
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_4",
+      "center": [
+        0,
+        7.0,
+        0
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_5",
+      "center": [
+        5,
+        9.0,
+        0
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_6",
+      "center": [
+        -5,
+        8.0,
+        5
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_7",
+      "center": [
+        0,
+        10.5,
+        5
+      ],
+      "size": [
+        32,
+        104
+      ]
+    },
+    {
+      "sprite": "ghast_leg_8",
+      "center": [
+        5,
+        8.5,
+        5
+      ],
+      "size": [
+        32,
+        104
+      ]
+    }
+  ]
+}

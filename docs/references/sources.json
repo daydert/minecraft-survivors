@@ -1,0 +1,112 @@
+{
+  "steve": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/entity/steve.png",
+    "status": 200,
+    "file": "steve.png"
+  },
+  "zombie": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/entity/zombie/zombie.png",
+    "status": 200,
+    "file": "zombie.png"
+  },
+  "creeper": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/entity/creeper/creeper.png",
+    "status": 200,
+    "file": "creeper.png"
+  },
+  "skeleton": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/entity/skeleton/skeleton.png",
+    "status": 200,
+    "file": "skeleton.png"
+  },
+  "spider": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/ui/promo_spider.png",
+    "status": 200,
+    "file": "spider.png"
+  },
+  "slime": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/entity/slime/slime.png",
+    "status": 200,
+    "file": "slime.png"
+  },
+  "ravager": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/entity/illager/ravager.png",
+    "status": 200,
+    "file": "ravager.png"
+  },
+  "iron_sword": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/iron_sword.png",
+    "status": 200,
+    "file": "iron_sword.png"
+  },
+  "bow": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/bow_standby.png",
+    "status": 200,
+    "file": "bow.png"
+  },
+  "trident": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/trident.png",
+    "status": 200,
+    "file": "trident.png"
+  },
+  "fire_charge": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/fireball.png",
+    "status": 200,
+    "file": "fire_charge.png"
+  },
+  "grass": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/blocks/grass_top.png",
+    "status": 200,
+    "file": "grass.png"
+  },
+  "chestplate": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/iron_chestplate.png",
+    "status": 200,
+    "file": "chestplate.png"
+  },
+  "amethyst": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/amethyst_shard.png",
+    "status": 200,
+    "file": "amethyst.png"
+  },
+  "redstone": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/redstone_dust.png",
+    "status": 200,
+    "file": "redstone.png"
+  },
+  "blaze": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/blaze_powder.png",
+    "status": 200,
+    "file": "blaze.png"
+  },
+  "sugar": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/sugar.png",
+    "status": 200,
+    "file": "sugar.png"
+  },
+  "hopper": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/hopper.png",
+    "status": 200,
+    "file": "hopper.png"
+  },
+  "apple": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/apple.png",
+    "status": 200,
+    "file": "apple.png"
+  },
+  "emerald": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/emerald.png",
+    "status": 200,
+    "file": "emerald.png"
+  },
+  "fangs": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/entity/illager/fangs.png",
+    "status": 200,
+    "file": "fangs.png"
+  },
+  "potion": {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/textures/items/potion_bottle_lingering_poison.png",
+    "status": 200,
+    "file": "potion.png"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "failures": [],
+  "scenarios": [
+    {
+      "kills": 1,
+      "mobs": 88,
+      "scenario": "sword",
+      "time": 29.9999999999996
+    },
+    {
+      "kills": 106,
+      "mobs": 13,
+      "scenario": "all_weapons",
+      "time": 609.999999999973
+    },
+    {
+      "kills": 107,
+      "mobs": 12,
+      "scenario": "evolved",
+      "time": 609.999999999973
+    }
+  ],
+  "ticks": 5400
+}

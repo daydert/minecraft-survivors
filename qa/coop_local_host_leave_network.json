@@ -1,0 +1,63 @@
+{
+  "latency": 0,
+  "jitter": 0,
+  "loss": 0,
+  "scenario": "host_leave",
+  "label": "local",
+  "engine": "/home/daydert/MinecraftSurvival/.tools/Godot_v4.7.2-stable_linux.x86_64",
+  "visual": false,
+  "exported": false,
+  "blackout": 0,
+  "packets": 2720,
+  "dropped": 0,
+  "max_udp_datagram": 1392,
+  "returncodes": [
+    0,
+    0
+  ],
+  "runtime_errors": {},
+  "host": {
+    "bytes_sent": 914132,
+    "checks": {
+      "clean_leave": true,
+      "connected": true,
+      "remote_moved": true
+    },
+    "diagnostics": [],
+    "input_packets": 135,
+    "max_bucket_bytes": 676,
+    "max_correction": 0,
+    "max_render_step": 0.0,
+    "p95_correction": 0,
+    "p95_present_ms": 0.003,
+    "p95_sim_ms": 6.408,
+    "p95_snapshot_ms": 2.25,
+    "p95_world_ms": 6.345,
+    "received_buckets": 0,
+    "received_frames": 0,
+    "role": "host",
+    "scenario": "host_leave",
+    "traveled": 0.0
+  },
+  "guest": {
+    "bytes_sent": 0,
+    "checks": {
+      "connected": true,
+      "pause": true,
+      "server_lost": true
+    },
+    "diagnostics": [],
+    "input_packets": 0,
+    "max_bucket_bytes": 0,
+    "max_correction": 4.09964323043823,
+    "max_render_step": 1.36673152446747,
+    "p95_correction": 2.02480149269104,
+    "p95_present_ms": 2.872,
+    "p95_sim_ms": 0.215,
+    "received_buckets": 2302,
+    "received_frames": 98,
+    "role": "guest",
+    "scenario": "host_leave",
+    "traveled": 201.850319741367
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "bytes_sent": 10371189,
+  "checks": {
+    "connected": true,
+    "independent_inputs": true,
+    "loaded_all": true,
+    "loading_barrier": true,
+    "own_identity": true,
+    "remote_moved": true,
+    "stress_cap": true
+  },
+  "diagnostics": [],
+  "input_packets": 498,
+  "max_bucket_bytes": 1334,
+  "max_correction": 0,
+  "max_render_step": 0.0,
+  "p95_correction": 0,
+  "p95_frame_ms": 36.6666666666667,
+  "p95_present_ms": 0.003,
+  "p95_sim_ms": 14.635,
+  "p95_snapshot_ms": 2.798,
+  "p95_world_ms": 12.299,
+  "players": 4,
+  "received_buckets": 0,
+  "received_frames": 0,
+  "role": "host",
+  "scenario": "stress",
+  "seat": 0,
+  "traveled": 0.0
+}

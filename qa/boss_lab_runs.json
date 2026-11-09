@@ -1,0 +1,66 @@
+[
+  {
+    "artificial_invulnerability": false,
+    "chapter": 1,
+    "hp": 0,
+    "preset": "Клинки",
+    "seconds": 101.966666666667,
+    "won": false
+  },
+  {
+    "artificial_invulnerability": false,
+    "chapter": 1,
+    "hp": 20,
+    "preset": "Стрелы",
+    "seconds": 21.7833333333333,
+    "won": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "chapter": 1,
+    "hp": 20,
+    "preset": "Смешанная",
+    "seconds": 19.1833333333333,
+    "won": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "chapter": 1,
+    "hp": 18.5,
+    "preset": "Пламя",
+    "seconds": 27.6833333333333,
+    "won": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "chapter": 2,
+    "hp": 10.0,
+    "preset": "Клинки",
+    "seconds": 24.6166666666667,
+    "won": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "chapter": 2,
+    "hp": 13.5,
+    "preset": "Стрелы",
+    "seconds": 31.2666666666667,
+    "won": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "chapter": 2,
+    "hp": 5.29999999999999,
+    "preset": "Ловушки",
+    "seconds": 34.2166666666667,
+    "won": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "chapter": 2,
+    "hp": 14.8,
+    "preset": "Пламя",
+    "seconds": 31.35,
+    "won": true
+  }
+]

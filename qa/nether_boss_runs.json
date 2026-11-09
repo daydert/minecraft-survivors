@@ -1,0 +1,32 @@
+[
+  {
+    "artificial_invulnerability": false,
+    "boss_hits": 339,
+    "boss_hp": 0,
+    "hp": 1.24,
+    "seconds": 35.4666666666667,
+    "stage": "defeat",
+    "style": "hybrid",
+    "victory": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "boss_hits": 366,
+    "boss_hp": 0,
+    "hp": 4.94,
+    "seconds": 57.7333333333333,
+    "stage": "defeat",
+    "style": "melee",
+    "victory": true
+  },
+  {
+    "artificial_invulnerability": false,
+    "boss_hits": 416,
+    "boss_hp": 3875.99999999997,
+    "hp": -2.52,
+    "seconds": 58.55,
+    "stage": "wither",
+    "style": "developing",
+    "victory": false
+  }
+]

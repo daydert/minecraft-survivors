@@ -1,0 +1,216 @@
+{
+  "version": "0.10.1",
+  "verified_utc": "2026-10-29T19:35:54.413090+00:00",
+  "regression_suite": "scripts/verify.sh passed, including unchanged coop and chapters I/II checks",
+  "focused_checks": {
+    "end_rules": {
+      "checks": 83,
+      "failures": []
+    },
+    "revision_rules": {
+      "checks": 26,
+      "failures": []
+    },
+    "end_visual": {
+      "checks": 14,
+      "failures": []
+    },
+    "previous_polish_visual": {
+      "checks": 12,
+      "failures": []
+    },
+    "revision_visual": {
+      "checks": 7,
+      "failures": []
+    }
+  },
+  "end_asset_checks": 3488,
+  "boss_runs": [
+    {
+      "build": "Рывок",
+      "complete": true,
+      "corpse": [
+        1386.0,
+        776.743774414062
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 16.0,
+      "phase_two": true,
+      "player": [
+        1039.00866699219,
+        1046.41625976562
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 311.63,
+      "seed": 724,
+      "stage": "chapter_four"
+    },
+    {
+      "build": "Дыхание",
+      "complete": true,
+      "corpse": [
+        790.362243652344,
+        1032.32165527344
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 20.0,
+      "phase_two": true,
+      "player": [
+        1007.24737548828,
+        1052.7158203125
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 101.48,
+      "seed": 724,
+      "stage": "chapter_four"
+    },
+    {
+      "build": "Край",
+      "complete": true,
+      "corpse": [
+        1209.03918457031,
+        846.521118164062
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 18.0,
+      "phase_two": true,
+      "player": [
+        1033.11743164062,
+        1042.18566894531
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 271.3,
+      "seed": 724,
+      "stage": "chapter_four"
+    },
+    {
+      "build": "Смешанная",
+      "complete": true,
+      "corpse": [
+        1073.22204589844,
+        880.386047363281
+      ],
+      "crystals_destroyed": 6,
+      "dragon_win": true,
+      "final_win": true,
+      "god_mode": false,
+      "hp": 20.0,
+      "minimum_hp": 17.0,
+      "phase_two": true,
+      "player": [
+        1027.11083984375,
+        1039.57946777344
+      ],
+      "remaining_boss_hp": 0,
+      "seconds": 128.42,
+      "seed": 724,
+      "stage": "chapter_four"
+    }
+  ],
+  "native_linux_captures": [
+    {
+      "mode": "end_survival",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_dragon",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_last_duel",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_flight",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_rekindle",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_overworld",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    },
+    {
+      "mode": "end_scale",
+      "exit_code": 0,
+      "success": true,
+      "errors": []
+    }
+  ],
+  "native_linux_run_sh": {
+    "command": "./run.sh --quit-after 90",
+    "exit_code": 0,
+    "startup_script_errors": [],
+    "shutdown_diagnostics": [
+      "4 ObjectDB instances and 2 resources still in use on the frame-limit exit."
+    ],
+    "initial_probe": "Supplying --display-driver wayland explicitly duplicated the flag already inserted by run.sh and stalled display initialization; stopped that probe and reran the documented command successfully."
+  },
+  "four_player_exported_loopback": {
+    "returncodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "runtime_errors": {},
+    "players": 4,
+    "latency_ms": 45,
+    "jitter_ms": 20,
+    "packet_loss": 0.05,
+    "actual_zerotier_test": false
+  },
+  "preserved_sha256": {
+    "scripts/world.gd": "9ed67cc43bb9abf6d8664acc76d04fa070fe46d8d23dcd49e475454e31bd9e02",
+    "scripts/coop_world.gd": "2fa2bd50358ef7526f0fde0cb2d70b88f10b2885bcb219d2185c600b9d0b5ead",
+    "scripts/coop_session.gd": "414ae7cafc7a66e2ea288217503f66a1bb03df58c332984d263b0f8197bc4a34",
+    "scripts/coop_codec.gd": "c298733b9fa15e38973a7c3a2f561629769c22cf9ed75ce01cbc52a4c08692df",
+    "data/balance.json": "51d1504c6ef9f9e619e0cd83a6c63f8d4d9d26fd195f1bebe85f94f58cef2455",
+    "scripts/chapter_finale.gd": "2d59232e733669aa8b6b54c285581a87ebac640e0baf914a5fdbe046d2fb7b4b",
+    "assets/audio/music_dragon.ogg": "e48e57ac483b771d29e14aed5c0466d5eed7a7b5edfb3c91997bf45193ecff59",
+    "assets/audio/music_endersteve.ogg": "f91d48db4386a392bf3c7852b33cacc14960a1605faacf9db5fc95a0c9fc3350"
+  },
+  "builds": {
+    "builds/linux/MinecraftSurvivors.x86_64": "fc7bf1b51e87914783e40dcddc79e5a2745fca7b1496184de3aec51b7069523b",
+    "builds/windows/MinecraftSurvivors.exe": "42f0ebfd048f5cf1bbed52e36a5b8e38972b517190fa27830ca92c4b8ab249eb"
+  },
+  "video": {
+    "path": "qa/recordings/chapter_three_polish.mp4",
+    "seconds": 89.5,
+    "diagnostic_immunity": true,
+    "scripted_placement": true,
+    "manual_finale_input": true,
+    "audio": "Original DrAgOn / GlitchFight and vanilla cues, composed from recorded event times."
+  },
+  "limits": [
+    "Boss tests use four maximum laboratory builds, not a full natural 12-minute run.",
+    "Windows export built; native Windows runtime not available in Linux.",
+    "Some visual SceneTree QA scripts and the --quit-after smoke exit report ObjectDB/resource cleanup diagnostics after passing. All seven standalone capture modes call quit_game and exit without errors."
+  ]
+}

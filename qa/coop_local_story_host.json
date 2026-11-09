@@ -1,0 +1,23 @@
+{
+  "bytes_sent": 1511903,
+  "checks": {
+    "canonical_end": true,
+    "connected": true,
+    "remote_moved": true
+  },
+  "diagnostics": [],
+  "input_packets": 360,
+  "max_bucket_bytes": 683,
+  "max_correction": 0,
+  "max_render_step": 0.0,
+  "p95_correction": 0,
+  "p95_present_ms": 0.003,
+  "p95_sim_ms": 4.164,
+  "p95_snapshot_ms": 1.85,
+  "p95_world_ms": 2.906,
+  "received_buckets": 0,
+  "received_frames": 0,
+  "role": "host",
+  "scenario": "story",
+  "traveled": 0.0
+}

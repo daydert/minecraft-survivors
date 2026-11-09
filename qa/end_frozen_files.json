@@ -1,0 +1,8 @@
+{
+  "scripts/world.gd": "9ed67cc43bb9abf6d8664acc76d04fa070fe46d8d23dcd49e475454e31bd9e02",
+  "scripts/coop_world.gd": "2fa2bd50358ef7526f0fde0cb2d70b88f10b2885bcb219d2185c600b9d0b5ead",
+  "scripts/coop_session.gd": "414ae7cafc7a66e2ea288217503f66a1bb03df58c332984d263b0f8197bc4a34",
+  "scripts/coop_codec.gd": "c298733b9fa15e38973a7c3a2f561629769c22cf9ed75ce01cbc52a4c08692df",
+  "data/balance.json": "51d1504c6ef9f9e619e0cd83a6c63f8d4d9d26fd195f1bebe85f94f58cef2455",
+  "scripts/chapter_finale.gd": "2d59232e733669aa8b6b54c285581a87ebac640e0baf914a5fdbe046d2fb7b4b"
+}

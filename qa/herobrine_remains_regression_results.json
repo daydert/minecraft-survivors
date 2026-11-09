@@ -1,0 +1,22 @@
+[
+  {
+    "test": "qa/test_boss_polish.gd",
+    "exit_code": 0,
+    "log": "qa/herobrine_remains_regression_test_boss_polish.log"
+  },
+  {
+    "test": "qa/test_herobrine_visual.gd",
+    "exit_code": 0,
+    "log": "qa/herobrine_remains_regression_test_herobrine_visual.log"
+  },
+  {
+    "test": "qa/test_boss_polish_visual.gd",
+    "exit_code": 0,
+    "log": "qa/herobrine_remains_regression_test_boss_polish_visual.log"
+  },
+  {
+    "test": "qa/test_chapter_visual.gd",
+    "exit_code": 0,
+    "log": "qa/herobrine_remains_regression_test_chapter_visual.log"
+  }
+]

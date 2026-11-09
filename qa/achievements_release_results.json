@@ -1,0 +1,90 @@
+[
+  {
+    "mode": "achievements",
+    "launcher": "run.sh",
+    "exit_code": 0,
+    "success": true,
+    "errors": [],
+    "attempts": [
+      {
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "mode": "achievement_toast",
+    "launcher": "Linux binary",
+    "exit_code": 0,
+    "success": true,
+    "errors": [],
+    "attempts": [
+      {
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "mode": "end_survival",
+    "launcher": "Linux binary",
+    "exit_code": 0,
+    "success": true,
+    "errors": [],
+    "attempts": [
+      {
+        "timeout": true,
+        "seconds": 30
+      },
+      {
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "mode": "end_dragon",
+    "launcher": "Linux binary",
+    "exit_code": 0,
+    "success": true,
+    "errors": [],
+    "attempts": [
+      {
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "mode": "end_last_duel",
+    "launcher": "Linux binary",
+    "exit_code": 0,
+    "success": true,
+    "errors": [],
+    "attempts": [
+      {
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "mode": "end_victory",
+    "launcher": "Linux binary",
+    "exit_code": 0,
+    "success": true,
+    "errors": [],
+    "attempts": [
+      {
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "mode": "end_overworld",
+    "launcher": "Linux binary",
+    "exit_code": 0,
+    "success": true,
+    "errors": [],
+    "attempts": [
+      {
+        "exit_code": 0
+      }
+    ]
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "common_pause": true,
+    "connected": true,
+    "entities": true,
+    "loading_barrier": true,
+    "no_movement_teleports": true,
+    "own_identity": true,
+    "receives_authority": true
+  },
+  "diagnostics": [
+    {
+      "ack": 0,
+      "authority": "(1127.996, 931.6976)",
+      "changed": true,
+      "distance": 19.0988483428955,
+      "generation": 1,
+      "old": "(1146.271, 926.1487)",
+      "pending": 0,
+      "predicted": "(1127.996, 931.6976)",
+      "seq": 0,
+      "tick": 125
+    },
+    {
+      "ack": 0,
+      "authority": "(1127.996, 931.6976)",
+      "changed": false,
+      "distance": 19.0988483428955,
+      "generation": 1,
+      "old": "(1146.271, 926.1487)",
+      "pending": 0,
+      "predicted": "(1127.996, 931.6976)",
+      "seq": 0,
+      "tick": 126
+    },
+    {
+      "ack": 0,
+      "authority": "(1127.996, 931.6976)",
+      "changed": false,
+      "distance": 15.0988025665283,
+      "generation": 1,
+      "old": "(1142.443, 927.3109)",
+      "pending": 0,
+      "predicted": "(1127.996, 931.6976)",
+      "seq": 0,
+      "tick": 129
+    }
+  ],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 19.0988483428955,
+  "max_render_step": 2.00008130073547,
+  "p95_correction": 0.643981456756592,
+  "p95_frame_ms": 20.8333333333333,
+  "p95_present_ms": 5.16,
+  "p95_sim_ms": 0.125,
+  "players": 4,
+  "received_buckets": 3327,
+  "received_frames": 122,
+  "role": "guest3",
+  "scenario": "stress",
+  "seat": 3,
+  "traveled": 267.831704938639
+}

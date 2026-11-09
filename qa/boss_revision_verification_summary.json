@@ -1,0 +1,278 @@
+{
+  "version": "0.8.0",
+  "verification_command": "./scripts/verify.sh --visual",
+  "total_checks": 2993,
+  "checks": {
+    "unit": {
+      "checks": 47,
+      "failures": [],
+      "report": "qa/unit_results.json"
+    },
+    "ui": {
+      "checks": 15,
+      "failures": [],
+      "report": "qa/ui_results.json"
+    },
+    "animation": {
+      "checks": 60,
+      "failures": [],
+      "report": "qa/animation_results.json"
+    },
+    "chapter": {
+      "checks": 21,
+      "failures": [],
+      "report": "qa/chapter_results.json"
+    },
+    "coop": {
+      "checks": 74,
+      "failures": [],
+      "report": "qa/coop_results.json"
+    },
+    "coop_four": {
+      "checks": 41,
+      "failures": [],
+      "report": "qa/coop_four_results.json"
+    },
+    "coop_logging": {
+      "checks": 11,
+      "failures": [],
+      "report": "qa/coop_logging_results.json"
+    },
+    "nether": {
+      "checks": 62,
+      "failures": [],
+      "report": "qa/nether_results.json"
+    },
+    "music_rotation": {
+      "checks": 27,
+      "failures": [],
+      "report": "qa/music_rotation_results.json"
+    },
+    "music_asset": {
+      "checks": 20,
+      "failures": [],
+      "report": "qa/music_asset_results.json"
+    },
+    "boss_update": {
+      "checks": 44,
+      "failures": [],
+      "report": "qa/boss_update_results.json"
+    },
+    "duel_asset": {
+      "checks": 82,
+      "failures": [],
+      "report": "qa/duel_asset_results.json"
+    },
+    "nether_asset": {
+      "checks": 853,
+      "failures": [],
+      "report": "qa/nether_asset_results.json"
+    },
+    "atlas": {
+      "checks": 45,
+      "failures": [],
+      "report": "qa/atlas_results.json"
+    },
+    "minecraft_asset": {
+      "checks": 250,
+      "failures": [],
+      "report": "qa/minecraft_asset_results.json"
+    },
+    "presentation_asset": {
+      "checks": 447,
+      "failures": [],
+      "report": "qa/presentation_asset_results.json"
+    },
+    "character_asset": {
+      "checks": 724,
+      "failures": [],
+      "report": "qa/character_asset_results.json"
+    },
+    "herobrine_visual": {
+      "checks": 8,
+      "failures": [],
+      "report": "qa/herobrine_visual_results.json"
+    },
+    "nether_visual": {
+      "checks": 21,
+      "failures": [],
+      "report": "qa/nether_visual_results.json"
+    },
+    "character_facing": {
+      "checks": 67,
+      "failures": [],
+      "report": "qa/character_facing_results.json"
+    },
+    "visual_animation": {
+      "checks": 8,
+      "failures": [],
+      "report": "qa/visual_animation_results.json"
+    },
+    "minecraft_render": {
+      "checks": 7,
+      "failures": [],
+      "report": "qa/minecraft_render_results.json"
+    },
+    "presentation": {
+      "checks": 26,
+      "failures": [],
+      "report": "qa/presentation_results.json"
+    },
+    "chapter_visual": {
+      "checks": 9,
+      "failures": [],
+      "report": "qa/chapter_visual_results.json"
+    },
+    "coop_visual": {
+      "checks": 11,
+      "failures": [],
+      "report": "qa/coop_visual_results.json"
+    },
+    "coop_four_visual": {
+      "checks": 13,
+      "failures": [],
+      "report": "qa/coop_four_visual_results.json"
+    }
+  },
+  "post_visual_camera_rule_checks": "qa/boss_revision_camera_rules.log",
+  "combat_parity": {
+    "ticks": 5400,
+    "differences": 0,
+    "log": "qa/boss_revision_combat_parity.log"
+  },
+  "herobrine_runs": [
+    {
+      "artificial_invulnerability": false,
+      "boss_hp": -3.8000000000009,
+      "chapter_complete": true,
+      "final_hp": 0,
+      "first_stage_defeated": true,
+      "hp_after_duel": 16.6,
+      "seconds": 28.7,
+      "style": "hybrid",
+      "victory": false
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hp": -15.0000000000007,
+      "chapter_complete": true,
+      "final_hp": 0,
+      "first_stage_defeated": true,
+      "hp_after_duel": 14.9,
+      "seconds": 53.8333333333333,
+      "style": "melee",
+      "victory": false
+    }
+  ],
+  "wither_runs": [
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 340,
+      "boss_hp": 0,
+      "hp": 11.62,
+      "seconds": 29.35,
+      "stage": "defeat",
+      "style": "hybrid",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 411,
+      "boss_hp": 0,
+      "hp": 0.0800000000000007,
+      "seconds": 67.4166666666667,
+      "stage": "defeat",
+      "style": "melee",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 401,
+      "boss_hp": 4254.29999999996,
+      "hp": -0.779999999999995,
+      "seconds": 52.7333333333333,
+      "stage": "wither",
+      "style": "developing",
+      "victory": false
+    }
+  ],
+  "executables": {
+    "Linux": {
+      "path": "builds/linux/MinecraftSurvivors.x86_64",
+      "bytes": 99292472,
+      "sha256": "f7e5c6513c2884c17eb7e6fc9acd11ee8af7b63a37cb0cc7c25ec7cdfd092e33"
+    },
+    "Windows": {
+      "path": "builds/windows/MinecraftSurvivors.exe",
+      "bytes": 134901768,
+      "sha256": "6e518db06cfc677e5c6d90d42a3678db88788a25a9fb8fe90cc9b24e4abca35d"
+    }
+  },
+  "native_linux": {
+    "captures": [
+      {
+        "mode": "herobrine_seated",
+        "exit_code": 0,
+        "capture": "qa/boss_native_herobrine_seated.png",
+        "log": "qa/boss_revision_native_release.log"
+      },
+      {
+        "mode": "herobrine_rise",
+        "exit_code": 0,
+        "capture": "qa/boss_native_herobrine_rise.png",
+        "log": "qa/boss_revision_native_release.log"
+      },
+      {
+        "mode": "herobrine_kneel",
+        "exit_code": 0,
+        "capture": "qa/boss_native_herobrine_kneel.png",
+        "log": "qa/boss_revision_native_release.log"
+      },
+      {
+        "mode": "herobrine_rift",
+        "exit_code": 0,
+        "capture": "qa/boss_native_herobrine_rift.png",
+        "log": "qa/boss_revision_native_release.log"
+      },
+      {
+        "mode": "herobrine_end",
+        "exit_code": 0,
+        "capture": "qa/boss_native_herobrine_end.png",
+        "log": "qa/boss_revision_native_release.log"
+      },
+      {
+        "mode": "nether_boss",
+        "exit_code": 0,
+        "capture": "qa/boss_native_nether_boss.png",
+        "log": "qa/boss_revision_native_release.log"
+      },
+      {
+        "mode": "nether_inventory",
+        "exit_code": 0,
+        "capture": "qa/boss_native_nether_inventory.png",
+        "log": "qa/boss_revision_native_release.log"
+      },
+      {
+        "mode": "nether_end",
+        "exit_code": 0,
+        "capture": "qa/boss_native_nether_end.png",
+        "log": "qa/boss_revision_native_end.log"
+      }
+    ],
+    "exit_rechecks": {
+      "successful_sequential_process_exits": 14,
+      "artificial_kills_during_successful_checks": false
+    },
+    "batch_capture_note": "Two initial automated captures exceeded 25/55-second deadlines. Individual retries and 14 subsequent sequential process exits succeeded. The cause of the intermittent timeout was not established."
+  },
+  "native_windows_tested": false,
+  "physical_zerotier_tested": false,
+  "coop_rules_changed": false,
+  "films": {
+    "herobrine": "qa/recordings/herobrine_duel.mp4",
+    "wither": "qa/recordings/wither_duel.mp4",
+    "diagnostic_phase_selection": true,
+    "wither_recording_invulnerability": true,
+    "audio": "Supplied music and victory audio muxed by event timestamps; gameplay sound mixer is tested separately."
+  }
+}

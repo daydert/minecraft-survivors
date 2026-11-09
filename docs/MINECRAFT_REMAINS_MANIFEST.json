@@ -1,0 +1,28 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    }
+  },
+  "derived": {
+    "herobrine_remains": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        576,
+        48
+      ],
+      "sha256": "3998d3f3d3de71848ec9e5159b85cc47fa39b80eaeb8476ef1a048fd3d77d89d"
+    }
+  },
+  "frames": 12,
+  "frame_size": [
+    48,
+    48
+  ],
+  "notes": "Secret chapter-I ending only. No gameplay, legacy finale or other chapters changed."
+}

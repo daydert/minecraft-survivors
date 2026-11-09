@@ -1,0 +1,24 @@
+[
+  {
+    "artificial_invulnerability": false,
+    "boss_hp": -3.8000000000009,
+    "chapter_complete": true,
+    "final_hp": 0,
+    "first_stage_defeated": true,
+    "hp_after_duel": 16.6,
+    "seconds": 28.7,
+    "style": "hybrid",
+    "victory": false
+  },
+  {
+    "artificial_invulnerability": false,
+    "boss_hp": -15.0000000000007,
+    "chapter_complete": true,
+    "final_hp": 0,
+    "first_stage_defeated": true,
+    "hp_after_duel": 14.9,
+    "seconds": 53.8333333333333,
+    "style": "melee",
+    "victory": false
+  }
+]

@@ -1,0 +1,419 @@
+{
+  "weapons": {
+    "axe": {
+      "name": "Железный топор",
+      "damage": 22,
+      "interval": 1.45,
+      "radius": 34,
+      "speed": 0,
+      "range": 29,
+      "count": 1
+    },
+    "hoe": {
+      "name": "Железная мотыга",
+      "damage": 5,
+      "interval": 3.6,
+      "radius": 25,
+      "speed": 145,
+      "range": 210,
+      "count": 1,
+      "duration": 2.5
+    },
+    "bed": {
+      "name": "Кровать",
+      "damage": 48,
+      "interval": 8.0,
+      "radius": 65,
+      "speed": 0,
+      "range": 80,
+      "count": 1
+    },
+    "tnt": {
+      "name": "ТНТ",
+      "damage": 32,
+      "interval": 5.8,
+      "radius": 49,
+      "speed": 0,
+      "range": 80,
+      "count": 1
+    },
+    "crossbow": {
+      "name": "Арбалет",
+      "damage": 16,
+      "interval": 2.2,
+      "radius": 3,
+      "speed": 260,
+      "range": 310,
+      "count": 1
+    },
+    "fishing": {
+      "name": "Удочка",
+      "damage": 3,
+      "interval": 2.6,
+      "radius": 5,
+      "speed": 210,
+      "range": 160,
+      "count": 1
+    }
+  },
+  "upgrades": {
+    "axe": [
+      {
+        "damage": 7
+      },
+      {
+        "radius": 3
+      },
+      {
+        "damage": 8
+      },
+      {
+        "interval": -0.2
+      },
+      {
+        "damage": 10
+      },
+      {
+        "radius": 3
+      },
+      {
+        "damage": 14
+      }
+    ],
+    "hoe": [
+      {
+        "damage": 2
+      },
+      {
+        "duration": 0.6
+      },
+      {
+        "damage": 2
+      },
+      {
+        "radius": 5
+      },
+      {
+        "interval": -0.4
+      },
+      {
+        "duration": 0.8
+      },
+      {
+        "damage": 4
+      }
+    ],
+    "bed": [
+      {
+        "damage": 12
+      },
+      {
+        "radius": 7
+      },
+      {
+        "interval": -1
+      },
+      {
+        "damage": 16
+      },
+      {
+        "radius": 8
+      },
+      {
+        "interval": -1
+      },
+      {
+        "damage": 24
+      }
+    ],
+    "tnt": [
+      {
+        "damage": 8
+      },
+      {
+        "count": 1
+      },
+      {
+        "radius": 6
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 12
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 16
+      }
+    ],
+    "crossbow": [
+      {
+        "damage": 5
+      },
+      {
+        "pierce": 1
+      },
+      {
+        "interval": -0.25
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 7
+      },
+      {
+        "pierce": 1
+      },
+      {
+        "damage": 10
+      }
+    ],
+    "fishing": [
+      {
+        "damage": 2
+      },
+      {
+        "count": 1
+      },
+      {
+        "range": 25
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "count": 1
+      },
+      {
+        "damage": 3
+      },
+      {
+        "count": 1
+      }
+    ]
+  },
+  "passives": {
+    "fire_resist": {
+      "name": "Сгусток магмы",
+      "effect": "Урон огня и иссушения −16%."
+    },
+    "feather": {
+      "name": "Лёгкое перо",
+      "effect": "Отбрасывание ударами и сила удочки +12%."
+    },
+    "ghast_tear": {
+      "name": "Слеза гаста",
+      "effect": "Восстановление 0,3 HP каждые 5 с."
+    },
+    "gold_boots": {
+      "name": "Золотые ботинки",
+      "effect": "Пиглины нейтральны. Агрессия −2 с. Замедление песка душ −20%."
+    }
+  },
+  "recipes": {
+    "axe": {
+      "passive": "armor",
+      "name": "Зачарованный незеритовый топор",
+      "icon": "axe_netherite",
+      "effect": "Урон +34 · радиус +12 · повторный удар"
+    },
+    "hoe": {
+      "passive": "hopper",
+      "name": "Зачарованная незеритовая мотыга",
+      "icon": "hoe_netherite",
+      "effect": "Две мотыги · урон +5 · дольше на 1,2 с"
+    },
+    "bed": {
+      "passive": "fire_resist",
+      "name": "Взрывной сон",
+      "icon": "bed",
+      "effect": "Урон +45 · радиус +24"
+    },
+    "tnt": {
+      "passive": "feather",
+      "name": "Цепная реакция",
+      "icon": "tnt",
+      "effect": "Летящие заряды делятся на 3 малых ТНТ"
+    },
+    "crossbow": {
+      "passive": "redstone",
+      "name": "Арбалет с фейерверками",
+      "icon": "firework",
+      "effect": "Взрывные ракеты · урон +18"
+    },
+    "fishing": {
+      "passive": "gold_boots",
+      "name": "Ловец душ",
+      "icon": "fishing",
+      "effect": "6 крючков · притяжение и оглушение"
+    }
+  },
+  "mobs": {
+    "zombified_piglin": {
+      "hp": 8,
+      "speed": 30,
+      "damage": 2,
+      "xp": 2,
+      "radius": 8
+    },
+    "piglin_sword": {
+      "hp": 18,
+      "speed": 37,
+      "damage": 3,
+      "xp": 3,
+      "radius": 8
+    },
+    "piglin_crossbow": {
+      "hp": 18,
+      "speed": 29,
+      "damage": 3,
+      "xp": 3,
+      "radius": 8
+    },
+    "wither_skeleton": {
+      "hp": 34,
+      "speed": 40,
+      "damage": 4,
+      "xp": 4,
+      "radius": 9
+    },
+    "blaze_nether": {
+      "hp": 24,
+      "speed": 24,
+      "damage": 2,
+      "xp": 4,
+      "radius": 8
+    },
+    "hoglin": {
+      "hp": 60,
+      "speed": 42,
+      "damage": 4,
+      "xp": 6,
+      "radius": 13
+    },
+    "zoglin": {
+      "hp": 74,
+      "speed": 48,
+      "damage": 5,
+      "xp": 7,
+      "radius": 13
+    },
+    "brute": {
+      "hp": 650,
+      "speed": 36,
+      "damage": 6,
+      "xp": 65,
+      "radius": 11
+    },
+    "wither": {
+      "hp": 11000,
+      "speed": 30,
+      "damage": 5,
+      "xp": 0,
+      "radius": 26
+    }
+  },
+  "waves": [
+    {
+      "at": 0,
+      "rate": 0.8,
+      "weights": {
+        "zombified_piglin": 1.0
+      }
+    },
+    {
+      "at": 60,
+      "rate": 1.25,
+      "weights": {
+        "zombified_piglin": 0.6,
+        "piglin_sword": 0.3,
+        "piglin_crossbow": 0.1
+      }
+    },
+    {
+      "at": 150,
+      "rate": 2.3,
+      "weights": {
+        "zombified_piglin": 0.25,
+        "piglin_sword": 0.3,
+        "piglin_crossbow": 0.15,
+        "wither_skeleton": 0.2,
+        "hoglin": 0.1
+      }
+    },
+    {
+      "at": 270,
+      "rate": 3.1,
+      "weights": {
+        "zombified_piglin": 0.15,
+        "piglin_sword": 0.25,
+        "piglin_crossbow": 0.15,
+        "wither_skeleton": 0.2,
+        "blaze_nether": 0.15,
+        "hoglin": 0.1
+      }
+    },
+    {
+      "at": 420,
+      "rate": 4.2,
+      "weights": {
+        "zombified_piglin": 0.15,
+        "piglin_sword": 0.2,
+        "piglin_crossbow": 0.1,
+        "wither_skeleton": 0.2,
+        "blaze_nether": 0.15,
+        "zoglin": 0.2
+      }
+    },
+    {
+      "at": 570,
+      "rate": 5.4,
+      "weights": {
+        "zombified_piglin": 0.1,
+        "piglin_sword": 0.15,
+        "piglin_crossbow": 0.1,
+        "wither_skeleton": 0.25,
+        "blaze_nether": 0.15,
+        "hoglin": 0.1,
+        "zoglin": 0.15
+      }
+    },
+    {
+      "at": 660,
+      "rate": 4.5,
+      "weights": {
+        "piglin_sword": 0.15,
+        "piglin_crossbow": 0.15,
+        "wither_skeleton": 0.25,
+        "blaze_nether": 0.2,
+        "zoglin": 0.25
+      }
+    }
+  ],
+  "events": [
+    {
+      "at": 150,
+      "type": "brute"
+    },
+    {
+      "at": 300,
+      "type": "brute"
+    },
+    {
+      "at": 450,
+      "type": "brute"
+    },
+    {
+      "at": 600,
+      "type": "brute"
+    },
+    {
+      "at": 690,
+      "type": "brute"
+    }
+  ]
+}

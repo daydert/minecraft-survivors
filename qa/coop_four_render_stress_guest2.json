@@ -1,0 +1,90 @@
+{
+  "bytes_sent": 0,
+  "checks": {
+    "common_pause": true,
+    "connected": true,
+    "entities": true,
+    "loading_barrier": true,
+    "no_movement_teleports": true,
+    "own_identity": true,
+    "receives_authority": true
+  },
+  "diagnostics": [
+    {
+      "ack": 19,
+      "authority": "(1081.121, 1008.919)",
+      "changed": false,
+      "distance": 21.8144874572754,
+      "generation": 0,
+      "old": "(1063.081, 1031.034)",
+      "pending": 5,
+      "predicted": "(1076.04, 1013.486)",
+      "seq": 24,
+      "tick": 42
+    },
+    {
+      "ack": 22,
+      "authority": "(1078.113, 1011.705)",
+      "changed": false,
+      "distance": 15.8144702911377,
+      "generation": 0,
+      "old": "(1062.849, 1027.755)",
+      "pending": 5,
+      "predicted": "(1072.244, 1015.034)",
+      "seq": 27,
+      "tick": 45
+    },
+    {
+      "ack": 0,
+      "authority": "(985.3642, 1002.847)",
+      "changed": true,
+      "distance": 17.7370090484619,
+      "generation": 1,
+      "old": "(972.3365, 990.8104)",
+      "pending": 0,
+      "predicted": "(985.3642, 1002.847)",
+      "seq": 0,
+      "tick": 125
+    },
+    {
+      "ack": 0,
+      "authority": "(985.3642, 1002.847)",
+      "changed": false,
+      "distance": 17.7370090484619,
+      "generation": 1,
+      "old": "(972.3365, 990.8104)",
+      "pending": 0,
+      "predicted": "(985.3642, 1002.847)",
+      "seq": 0,
+      "tick": 126
+    },
+    {
+      "ack": 0,
+      "authority": "(985.3642, 1002.847)",
+      "changed": false,
+      "distance": 15.7369985580444,
+      "generation": 1,
+      "old": "(973.8055, 992.1677)",
+      "pending": 0,
+      "predicted": "(985.3642, 1002.847)",
+      "seq": 0,
+      "tick": 129
+    }
+  ],
+  "enet_throttle": 32.0,
+  "input_packets": 0,
+  "max_bucket_bytes": 0,
+  "max_correction": 21.8144874572754,
+  "max_render_step": 2.0000102519989,
+  "p95_correction": 9.73696804046631,
+  "p95_frame_ms": 18.75,
+  "p95_present_ms": 5.116,
+  "p95_sim_ms": 0.116,
+  "players": 4,
+  "received_buckets": 3344,
+  "received_frames": 117,
+  "role": "guest2",
+  "scenario": "stress",
+  "seat": 2,
+  "traveled": 263.547991319472
+}

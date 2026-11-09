@@ -1,0 +1,51 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/humanoid.animation.json",
+    "file": "docs/references/animation/humanoid.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/zombie.animation.json",
+    "file": "docs/references/animation/zombie.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/skeleton.animation.json",
+    "file": "docs/references/animation/skeleton.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/creeper.animation.json",
+    "file": "docs/references/animation/creeper.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/spider.animation.json",
+    "file": "docs/references/animation/spider.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/slime.animation.json",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/ravager.animation.json",
+    "file": "docs/references/animation/ravager.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/quadruped.animation.json",
+    "file": "docs/references/animation/quadruped.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/player.animation.json",
+    "file": "docs/references/animation/player.animation.json",
+    "status": 200
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/entity/slime.entity.json",
+    "file": "docs/references/animation/slime.entity.json",
+    "status": 200
+  }
+]

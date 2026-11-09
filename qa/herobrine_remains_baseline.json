@@ -1,0 +1,38 @@
+{
+  "scripts/herobrine_renderer.gd": {
+    "sha256": "a9468defb37e152e64332676593ac5a0bb0026d2fb4955eb9d11dd2671c8ab52",
+    "mtime_ns": 1793225027990416876
+  },
+  "scripts/main.gd": {
+    "sha256": "28f6e23c8f3b08cd2c52814009f24ba54449258fcfe7efac1efa80f6a51620ba",
+    "mtime_ns": 1793284379722381787
+  },
+  "project.godot": {
+    "sha256": "15b060549704e2dd056271592efae87f81cd1e18260d92b10787df2adce7f041",
+    "mtime_ns": 1793284672693767718
+  },
+  "export_presets.cfg": {
+    "sha256": "a52baf340460baa6112983fc2f290a77fa8902bf94b7c2442fde05fc0f396cda",
+    "mtime_ns": 1793284672693921335
+  },
+  "AGENTS.md": {
+    "sha256": "a9828cbf7f47c2381faefb975581ffb66ee1296ab29c736f9bfdae8cb31b3898",
+    "mtime_ns": 1793284932554069479
+  },
+  "docs/AGENT_HANDOFF.md": {
+    "sha256": "a0730e1fc1f17cdd7ac31ccebbb1fcf16f1b90bfeea02a6937f04128151522f6",
+    "mtime_ns": 1793284932554069479
+  },
+  "builds/linux/MinecraftSurvivors.x86_64": {
+    "sha256": "a0a8489e93f5102f96f6d8821101e00738b81355b5f3ffc56595edc99764dd41",
+    "mtime_ns": 1793285094878857075
+  },
+  "builds/windows/MinecraftSurvivors.exe": {
+    "sha256": "cfbc28798b07f7dd2faaec1bce3739282121ffd34816e2c110cd5232a1074b58",
+    "mtime_ns": 1793285098062033539
+  },
+  "builds/MinecraftSurvivors-Source.zip": {
+    "sha256": "4d0cce6e9d28b4b8edac7a5b1bfef1552d9c93f3af0b957897271bc6010e301e",
+    "mtime_ns": 1793285615851787441
+  }
+}

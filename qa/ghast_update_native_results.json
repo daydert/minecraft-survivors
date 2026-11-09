@@ -1,0 +1,58 @@
+[
+  {
+    "mode": "nether_ghast",
+    "exit_code": 0,
+    "seconds": 1.566854467993835,
+    "capture": "qa/ghast_native_nether_ghast.png",
+    "log": "qa/ghast_update_native_nether_ghast.log"
+  },
+  {
+    "mode": "nether_ghast_charge",
+    "exit_code": 0,
+    "seconds": 1.6666629969986388,
+    "capture": "qa/ghast_native_nether_ghast_charge.png",
+    "log": "qa/ghast_update_native_nether_ghast_charge.log"
+  },
+  {
+    "mode": "nether_ghast_burst",
+    "exit_code": 0,
+    "seconds": 1.6672946370090358,
+    "capture": "qa/ghast_native_nether_ghast_burst.png",
+    "log": "qa/ghast_update_native_nether_ghast_burst.log"
+  },
+  {
+    "mode": "nether_ghast_reveal",
+    "exit_code": 0,
+    "seconds": 1.6672168179939035,
+    "capture": "qa/ghast_native_nether_ghast_reveal.png",
+    "log": "qa/ghast_update_native_nether_ghast_reveal.log"
+  },
+  {
+    "mode": "nether_portal_camera",
+    "exit_code": 0,
+    "seconds": 1.666704186995048,
+    "capture": "qa/ghast_native_nether_portal_camera.png",
+    "log": "qa/ghast_update_native_nether_portal_camera.log"
+  },
+  {
+    "mode": "nether_boss",
+    "exit_code": 0,
+    "seconds": 1.6673711909970734,
+    "capture": "qa/ghast_native_nether_boss.png",
+    "log": "qa/ghast_update_native_nether_boss.log"
+  },
+  {
+    "mode": "nether_inventory",
+    "exit_code": 0,
+    "seconds": 1.6168789040093543,
+    "capture": "qa/ghast_native_nether_inventory.png",
+    "log": "qa/ghast_update_native_nether_inventory.log"
+  },
+  {
+    "mode": "nether_end",
+    "exit_code": 0,
+    "seconds": 1.6670169130084105,
+    "capture": "qa/ghast_native_nether_end.png",
+    "log": "qa/ghast_update_native_nether_end.log"
+  }
+]

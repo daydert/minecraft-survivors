@@ -1,0 +1,15 @@
+{
+  "scripts/herobrine_renderer.gd": "bee55527cd81c458223454665d882d1e577b00e5ff38f0f180b796e9f5fe1ef7",
+  "scripts/herobrine_encounter.gd": "126d6a7add5d9d74338a4e19748a09d9d227146eda7e206fe5bbb697a75698b0",
+  "scripts/herobrine_remains_view.gd": "8fddc2421b2d2c2f282f6be55686fe19c2eebd7ce9c648e1f9719fd6a37a55de",
+  "scripts/main.gd": "f9028c1377a287fdbfb0b2112532421696f513cb762c929e6fdd7894f8c00efc",
+  "scripts/world.gd": "9ed67cc43bb9abf6d8664acc76d04fa070fe46d8d23dcd49e475454e31bd9e02",
+  "scripts/chapter_finale.gd": "2d59232e733669aa8b6b54c285581a87ebac640e0baf914a5fdbe046d2fb7b4b",
+  "scripts/legacy_finale_renderer.gd": "3e06ade10d4648780bca53a5131070a7dabaf3df947bfb42b31d7472becd85a6",
+  "scripts/coop_world.gd": "2fa2bd50358ef7526f0fde0cb2d70b88f10b2885bcb219d2185c600b9d0b5ead",
+  "scripts/coop_session.gd": "414ae7cafc7a66e2ea288217503f66a1bb03df58c332984d263b0f8197bc4a34",
+  "data/balance.json": "51d1504c6ef9f9e619e0cd83a6c63f8d4d9d26fd195f1bebe85f94f58cef2455",
+  "scripts/end_world.gd": "db5d81ad752aef3962d141109e04254064ada7d10663e6417946102ae7e8c012",
+  "scripts/end_encounter.gd": "1e842c2688033b56b28bb2923e06a5d69d92cc0c539255d8daf016fbeacab71f",
+  "scripts/end_renderer.gd": "e517ef58147cc4100272315df571408340b331649edb87f98ed61bd5a19680ca"
+}

@@ -1,0 +1,358 @@
+{
+  "version": "0.8.1",
+  "total_checks": 3068,
+  "checks": {
+    "unit": {
+      "checks": 47,
+      "failures": [],
+      "report": "qa/unit_results.json"
+    },
+    "ui": {
+      "checks": 15,
+      "failures": [],
+      "report": "qa/ui_results.json"
+    },
+    "animation": {
+      "checks": 60,
+      "failures": [],
+      "report": "qa/animation_results.json"
+    },
+    "chapter": {
+      "checks": 21,
+      "failures": [],
+      "report": "qa/chapter_results.json"
+    },
+    "coop": {
+      "checks": 74,
+      "failures": [],
+      "report": "qa/coop_results.json"
+    },
+    "coop_four": {
+      "checks": 41,
+      "failures": [],
+      "report": "qa/coop_four_results.json"
+    },
+    "coop_logging": {
+      "checks": 11,
+      "failures": [],
+      "report": "qa/coop_logging_results.json"
+    },
+    "nether": {
+      "checks": 62,
+      "failures": [],
+      "report": "qa/nether_results.json"
+    },
+    "music_rotation": {
+      "checks": 27,
+      "failures": [],
+      "report": "qa/music_rotation_results.json"
+    },
+    "music_asset": {
+      "checks": 20,
+      "failures": [],
+      "report": "qa/music_asset_results.json"
+    },
+    "boss_update": {
+      "checks": 44,
+      "failures": [],
+      "report": "qa/boss_update_results.json"
+    },
+    "boss_polish": {
+      "checks": 50,
+      "failures": [],
+      "report": "qa/boss_polish_results.json"
+    },
+    "duel_asset": {
+      "checks": 82,
+      "failures": [],
+      "report": "qa/duel_asset_results.json"
+    },
+    "nether_asset": {
+      "checks": 861,
+      "failures": [],
+      "report": "qa/nether_asset_results.json"
+    },
+    "atlas": {
+      "checks": 45,
+      "failures": [],
+      "report": "qa/atlas_results.json"
+    },
+    "minecraft_asset": {
+      "checks": 250,
+      "failures": [],
+      "report": "qa/minecraft_asset_results.json"
+    },
+    "presentation_asset": {
+      "checks": 447,
+      "failures": [],
+      "report": "qa/presentation_asset_results.json"
+    },
+    "character_asset": {
+      "checks": 724,
+      "failures": [],
+      "report": "qa/character_asset_results.json"
+    },
+    "herobrine_visual": {
+      "checks": 8,
+      "failures": [],
+      "report": "qa/herobrine_visual_results.json"
+    },
+    "boss_polish_visual": {
+      "checks": 17,
+      "failures": [],
+      "report": "qa/boss_polish_visual_results.json"
+    },
+    "nether_visual": {
+      "checks": 21,
+      "failures": [],
+      "report": "qa/nether_visual_results.json"
+    },
+    "character_facing": {
+      "checks": 67,
+      "failures": [],
+      "report": "qa/character_facing_results.json"
+    },
+    "visual_animation": {
+      "checks": 8,
+      "failures": [],
+      "report": "qa/visual_animation_results.json"
+    },
+    "minecraft_render": {
+      "checks": 7,
+      "failures": [],
+      "report": "qa/minecraft_render_results.json"
+    },
+    "presentation": {
+      "checks": 26,
+      "failures": [],
+      "report": "qa/presentation_results.json"
+    },
+    "chapter_visual": {
+      "checks": 9,
+      "failures": [],
+      "report": "qa/chapter_visual_results.json"
+    },
+    "coop_visual": {
+      "checks": 11,
+      "failures": [],
+      "report": "qa/coop_visual_results.json"
+    },
+    "coop_four_visual": {
+      "checks": 13,
+      "failures": [],
+      "report": "qa/coop_four_visual_results.json"
+    }
+  },
+  "full_verification_log": "qa/boss_polish_verification.log",
+  "last_far_death_camera_check": "qa/boss_polish_rules.log",
+  "combat_parity": {
+    "ticks": 5400,
+    "differences": 0,
+    "log": "qa/boss_polish_combat_parity.log"
+  },
+  "boss_lab_runs": [
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 0,
+      "preset": "Клинки",
+      "seconds": 101.966666666667,
+      "won": false
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 20,
+      "preset": "Стрелы",
+      "seconds": 21.7833333333333,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 20,
+      "preset": "Смешанная",
+      "seconds": 19.1833333333333,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 1,
+      "hp": 18.5,
+      "preset": "Пламя",
+      "seconds": 27.6833333333333,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 8.99999999999999,
+      "preset": "Клинки",
+      "seconds": 22.7166666666667,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 8.4,
+      "preset": "Стрелы",
+      "seconds": 33.4666666666667,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 11.2,
+      "preset": "Ловушки",
+      "seconds": 31.7666666666667,
+      "won": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "chapter": 2,
+      "hp": 12.8,
+      "preset": "Пламя",
+      "seconds": 33.2666666666667,
+      "won": true
+    }
+  ],
+  "wither_runs": [
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 339,
+      "boss_hp": 0,
+      "hp": 1.24,
+      "seconds": 35.4666666666667,
+      "stage": "defeat",
+      "style": "hybrid",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 366,
+      "boss_hp": 0,
+      "hp": 4.94,
+      "seconds": 57.7333333333333,
+      "stage": "defeat",
+      "style": "melee",
+      "victory": true
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hits": 416,
+      "boss_hp": 3875.99999999997,
+      "hp": -2.52,
+      "seconds": 58.55,
+      "stage": "wither",
+      "style": "developing",
+      "victory": false
+    }
+  ],
+  "herobrine_runs": [
+    {
+      "artificial_invulnerability": false,
+      "boss_hp": -3.8000000000009,
+      "chapter_complete": true,
+      "final_hp": 0,
+      "first_stage_defeated": true,
+      "hp_after_duel": 16.6,
+      "seconds": 28.7,
+      "style": "hybrid",
+      "victory": false
+    },
+    {
+      "artificial_invulnerability": false,
+      "boss_hp": -15.0000000000007,
+      "chapter_complete": true,
+      "final_hp": 0,
+      "first_stage_defeated": true,
+      "hp_after_duel": 14.9,
+      "seconds": 53.8333333333333,
+      "style": "melee",
+      "victory": false
+    }
+  ],
+  "native_linux": [
+    {
+      "mode": "boss_lab",
+      "exit_code": 0,
+      "seconds": 1.6674895139985892,
+      "capture": "qa/polish_native_boss_lab.png",
+      "log": "qa/boss_polish_native_boss_lab.log"
+    },
+    {
+      "mode": "herobrine_rift",
+      "exit_code": 0,
+      "seconds": 1.5668261559985694,
+      "capture": "qa/polish_native_herobrine_rift.png",
+      "log": "qa/boss_polish_native_herobrine_rift.log"
+    },
+    {
+      "mode": "herobrine_wipe",
+      "exit_code": 0,
+      "seconds": 1.516715973000828,
+      "capture": "qa/polish_native_herobrine_wipe.png",
+      "log": "qa/boss_polish_native_herobrine_wipe.log"
+    },
+    {
+      "mode": "herobrine_loss",
+      "exit_code": 0,
+      "seconds": 1.5165107290013111,
+      "capture": "qa/polish_native_herobrine_loss.png",
+      "log": "qa/boss_polish_native_herobrine_loss.log"
+    },
+    {
+      "mode": "herobrine_end",
+      "exit_code": 0,
+      "seconds": 1.567138825001166,
+      "capture": "qa/polish_native_herobrine_end.png",
+      "log": "qa/boss_polish_native_herobrine_end.log"
+    },
+    {
+      "mode": "nether_boss",
+      "exit_code": 0,
+      "seconds": 1.5663998569980322,
+      "capture": "qa/polish_native_nether_boss.png",
+      "log": "qa/boss_polish_native_nether_boss.log"
+    },
+    {
+      "mode": "nether_inventory",
+      "exit_code": 0,
+      "seconds": 1.5664099300011003,
+      "capture": "qa/polish_native_nether_inventory.png",
+      "log": "qa/boss_polish_native_nether_inventory.log"
+    },
+    {
+      "mode": "nether_end",
+      "exit_code": 0,
+      "seconds": 1.5665793670013954,
+      "capture": "qa/polish_native_nether_end.png",
+      "log": "qa/boss_polish_native_nether_end.log"
+    }
+  ],
+  "native_linux_capture_timeouts_this_revision": 0,
+  "native_windows_tested": false,
+  "physical_zerotier_tested": false,
+  "coop_rules_changed": false,
+  "executables": {
+    "linux": {
+      "path": "builds/linux/MinecraftSurvivors.x86_64",
+      "bytes": 99302960,
+      "sha256": "c1bc1aab8a18ec07a732113fabd99ae131f4d0797660dcf3077b856aefc1f0a1"
+    },
+    "windows": {
+      "path": "builds/windows/MinecraftSurvivors.exe",
+      "bytes": 134912256,
+      "sha256": "84b9043094c221553114eb92d6b156e5c8dcfdbab62ff49ccfbf790cceb79bcf"
+    }
+  },
+  "films": {
+    "paths": [
+      "qa/recordings/herobrine_polish.mp4",
+      "qa/recordings/wither_polish.mp4"
+    ],
+    "diagnostic_phase_selection": true,
+    "wither_recording_invulnerability": true,
+    "audio": "Music aligned to event timestamps from provided files; not a capture of every live sound effect."
+  }
+}

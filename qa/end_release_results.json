@@ -1,0 +1,44 @@
+[
+  {
+    "mode": "end_survival",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  },
+  {
+    "mode": "end_dragon",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  },
+  {
+    "mode": "end_last_duel",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  },
+  {
+    "mode": "end_flight",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  },
+  {
+    "mode": "end_rekindle",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  },
+  {
+    "mode": "end_overworld",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  },
+  {
+    "mode": "end_scale",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  }
+]

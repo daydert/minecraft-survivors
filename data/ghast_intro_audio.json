@@ -1,0 +1,91 @@
+{
+  "ghast_intro_cry": {
+    "minecraft_event": "entity.ghast.ambient",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_moan1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_moan2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_moan3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_moan4.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_moan5.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_moan6.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_moan7.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ghast_intro_charge": {
+    "minecraft_event": "entity.ghast.warn",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_charge.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ghast_intro_death": {
+    "minecraft_event": "entity.ghast.death",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_ghast_death.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ghast_intro_burst": {
+    "minecraft_event": "entity.generic.explode",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_explode1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_explode2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_explode3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_explode4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  }
+}

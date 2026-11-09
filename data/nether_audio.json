@@ -1,0 +1,285 @@
+{
+  "hurt_piglin": {
+    "minecraft_event": "entity.piglin.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_piglin_hurt1.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_piglin_hurt2.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_piglin_hurt3.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_piglin_brute": {
+    "minecraft_event": "entity.piglin_brute.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_piglin_brute_hurt1.ogg",
+        "volume": 0.64,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_piglin_brute_hurt2.ogg",
+        "volume": 0.64,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_piglin_brute_hurt3.ogg",
+        "volume": 0.64,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_piglin_brute_hurt4.ogg",
+        "volume": 0.65,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_zombified_piglin": {
+    "minecraft_event": "entity.zombified_piglin.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_zombified_piglin_zpighurt1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_zombified_piglin_zpighurt2.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_hoglin": {
+    "minecraft_event": "entity.hoglin.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_hoglin_hurt1.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_hoglin_hurt2.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_hoglin_hurt3.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_hoglin_hurt4.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_zoglin": {
+    "minecraft_event": "entity.zoglin.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_zoglin_hurt1.ogg",
+        "volume": 0.83,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_zoglin_hurt2.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_zoglin_hurt3.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_wither": {
+    "minecraft_event": "entity.wither.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_hurt1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_hurt2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_hurt3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_hurt4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_wither_skeleton": {
+    "minecraft_event": "entity.wither_skeleton.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_skeleton_hurt1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_skeleton_hurt2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_skeleton_hurt3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_skeleton_hurt4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_blaze": {
+    "minecraft_event": "entity.blaze.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_blaze_hit1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_blaze_hit2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_blaze_hit3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_blaze_hit4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "pot_break": {
+    "minecraft_event": "block.decorated_pot.break",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/block_decorated_pot_break1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/block_decorated_pot_break2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/block_decorated_pot_break3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/block_decorated_pot_break4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "wither_shoot": {
+    "minecraft_event": "entity.wither.shoot",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_shoot.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "wither_charge": {
+    "minecraft_event": "entity.wither.ambient",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_idle1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_idle2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_idle3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_idle4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "wither_death": {
+    "minecraft_event": "entity.wither.death",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_wither_death.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "portal_ignite": {
+    "minecraft_event": "block.end_portal_frame.fill",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/block_end_portal_eyeplace1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/block_end_portal_eyeplace2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/block_end_portal_eyeplace3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  }
+}

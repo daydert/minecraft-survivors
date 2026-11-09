@@ -1,0 +1,277 @@
+[
+  {
+    "build": {
+      "sword": 4
+    },
+    "checkpoints": [
+      {
+        "hp": 20.0,
+        "kills": 0,
+        "level": 1,
+        "mobs": 0,
+        "time": 0.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 39,
+        "level": 4,
+        "mobs": 7,
+        "time": 60.02
+      }
+    ],
+    "evolved": {},
+    "first_level": 19.4500000000002,
+    "hp": -0.680000000000001,
+    "items": {
+      "armor": 1
+    },
+    "kills": 45,
+    "level": 5,
+    "max_step_ms": 7.668,
+    "seed": 151,
+    "style": "sword",
+    "time": 78.4333333333302,
+    "victory": false,
+    "wall_seconds": 3.067616
+  },
+  {
+    "build": {
+      "bow": 8,
+      "sword": 7,
+      "trident": 3
+    },
+    "checkpoints": [
+      {
+        "hp": 20.0,
+        "kills": 0,
+        "level": 1,
+        "mobs": 0,
+        "time": 0.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 19,
+        "level": 3,
+        "mobs": 27,
+        "time": 60.02
+      },
+      {
+        "hp": 15.84,
+        "kills": 54,
+        "level": 4,
+        "mobs": 76,
+        "time": 120.02
+      },
+      {
+        "hp": 15.84,
+        "kills": 114,
+        "level": 6,
+        "mobs": 143,
+        "time": 180.0
+      },
+      {
+        "hp": 15.84,
+        "kills": 181,
+        "level": 8,
+        "mobs": 181,
+        "time": 240.0
+      },
+      {
+        "hp": 15.84,
+        "kills": 281,
+        "level": 10,
+        "mobs": 247,
+        "time": 300.0
+      },
+      {
+        "hp": 14.04,
+        "kills": 456,
+        "level": 12,
+        "mobs": 230,
+        "time": 360.0
+      },
+      {
+        "hp": 14.04,
+        "kills": 681,
+        "level": 13,
+        "mobs": 252,
+        "time": 420.02
+      },
+      {
+        "hp": 14.04,
+        "kills": 805,
+        "level": 16,
+        "mobs": 249,
+        "time": 480.02
+      },
+      {
+        "hp": 9.12,
+        "kills": 1098,
+        "level": 18,
+        "mobs": 180,
+        "time": 540.02
+      },
+      {
+        "hp": 4.32,
+        "kills": 1592,
+        "level": 20,
+        "mobs": 115,
+        "time": 600.02
+      },
+      {
+        "hp": 1.92,
+        "kills": 1906,
+        "level": 24,
+        "mobs": 119,
+        "time": 660.02
+      },
+      {
+        "hp": 0.120000000000002,
+        "kills": 2168,
+        "level": 25,
+        "mobs": 118,
+        "time": 720.0
+      }
+    ],
+    "evolved": {
+      "bow": true
+    },
+    "first_level": 14.466666666667,
+    "hp": 0.120000000000002,
+    "items": {
+      "armor": 5,
+      "blaze": 1,
+      "redstone": 1,
+      "sugar": 2
+    },
+    "kills": 2168,
+    "level": 25,
+    "max_step_ms": 93.565,
+    "seed": 152,
+    "style": "bow",
+    "time": 720.0,
+    "victory": true,
+    "wall_seconds": 209.084015
+  },
+  {
+    "build": {
+      "bow": 1,
+      "fangs": 1,
+      "fire": 3,
+      "potion": 2,
+      "sword": 7
+    },
+    "checkpoints": [
+      {
+        "hp": 20.0,
+        "kills": 0,
+        "level": 1,
+        "mobs": 0,
+        "time": 0.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 34,
+        "level": 4,
+        "mobs": 12,
+        "time": 60.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 113,
+        "level": 7,
+        "mobs": 17,
+        "time": 120.02
+      },
+      {
+        "hp": 17.84,
+        "kills": 219,
+        "level": 10,
+        "mobs": 37,
+        "time": 180.0
+      },
+      {
+        "hp": 15.6,
+        "kills": 310,
+        "level": 11,
+        "mobs": 56,
+        "time": 240.0
+      },
+      {
+        "hp": 10.96,
+        "kills": 382,
+        "level": 14,
+        "mobs": 152,
+        "time": 300.0
+      },
+      {
+        "hp": 14.96,
+        "kills": 562,
+        "level": 14,
+        "mobs": 137,
+        "time": 360.0
+      },
+      {
+        "hp": 18.96,
+        "kills": 683,
+        "level": 15,
+        "mobs": 246,
+        "time": 420.02
+      },
+      {
+        "hp": 20.0,
+        "kills": 853,
+        "level": 16,
+        "mobs": 252,
+        "time": 480.02
+      },
+      {
+        "hp": 12.08,
+        "kills": 1213,
+        "level": 19,
+        "mobs": 182,
+        "time": 540.02
+      },
+      {
+        "hp": 12.08,
+        "kills": 1440,
+        "level": 22,
+        "mobs": 251,
+        "time": 600.02
+      },
+      {
+        "hp": 12.08,
+        "kills": 1772,
+        "level": 24,
+        "mobs": 178,
+        "time": 660.02
+      },
+      {
+        "hp": 12.08,
+        "kills": 2363,
+        "level": 32,
+        "mobs": 66,
+        "time": 720.0
+      }
+    ],
+    "evolved": {},
+    "first_level": 15.4000000000003,
+    "hp": 12.08,
+    "items": {
+      "amethyst": 4,
+      "armor": 3,
+      "blaze": 5,
+      "hopper": 1,
+      "redstone": 4,
+      "sugar": 4
+    },
+    "kills": 2363,
+    "level": 32,
+    "max_step_ms": 26.815,
+    "seed": 153,
+    "style": "random",
+    "time": 720.0,
+    "victory": true,
+    "wall_seconds": 162.143856
+  }
+]

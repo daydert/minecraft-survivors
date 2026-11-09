@@ -1,0 +1,273 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/ghast/ghast.png": {
+      "sha256": "50bb277c7bd76b95501845b30d4245bd51c8169e86b819edf47627efe104bd4a",
+      "bytes": 1045
+    },
+    "textures/entity/ghast/ghast_shooting.png": {
+      "sha256": "dc8e796a7df956f6cd559ec739c01c4c550776a297b18ba5162614ba7046ac56",
+      "bytes": 1188
+    },
+    "textures/block/bone_block_side.png": {
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "bytes": 139
+    }
+  },
+  "derived": {
+    "ghast_hover": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        1536,
+        216
+      ],
+      "sha256": "e4ee85d4d4b89266edd95d0862f6ea26af1c795b07d4ffd2375c85bb9da12fea"
+    },
+    "ghast_charge": {
+      "sources": [
+        "entity/ghast/ghast_shooting"
+      ],
+      "size": [
+        1536,
+        216
+      ],
+      "sha256": "85a069c7763e3fbc9960f10ea55e95008f8fc6ae06a93c958d24454ef9f47f2a"
+    },
+    "ghast_piece_0": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "7be339ff9e41ea87896ea778946b6f46447d35326f34060c8be58b54af1fc38b"
+    },
+    "ghast_piece_1": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "b35eb6c87be35c1fd980acb22914b810cf0cb2eadb002278a03e357270a78548"
+    },
+    "ghast_piece_2": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "f860cb17b7f71cdfc056c8880e09cd125b811a96e892e401ce5a49306cf5b596"
+    },
+    "ghast_piece_3": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "d5d7a1322b4bbb5544a7bdb6ca994170207d5e2dc8ab43d7a8e499d1348b2c62"
+    },
+    "ghast_piece_4": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "d749dce6a02c1318fbbb3fc6b0cbb6b7a8dafb9a0c8fbd4d4968b085b4ee95ba"
+    },
+    "ghast_piece_5": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "6bf575b3db012fd7a82f52058ff5c475283fe46591096943b72a0945406bf76f"
+    },
+    "ghast_piece_6": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "d8d04e462a3e509582862df89ae62bbe1f7bd4f9d2f721c0ab9c70e0fb8157ba"
+    },
+    "ghast_piece_7": {
+      "sources": [
+        "entity/ghast/ghast_shooting",
+        "block/bone_block_side"
+      ],
+      "size": [
+        640,
+        80
+      ],
+      "sha256": "2312b036714c90f3385978fd818ebaa5af1479df6ca3f9da44b316f4829a5d4d"
+    },
+    "ghast_leg_0": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "8d173702c2ceaf65a2a45749702a087a89c6f913369adcf52d7ecb970c00276f"
+    },
+    "ghast_leg_1": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "dd11f978129e64cf651f4e87801ee6fccfe06e5db4b34b4b7e9f4394d722b005"
+    },
+    "ghast_leg_2": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "4a1ee61c01a6885385d6cbba4f15b1dbf601d810cbf9a341c22d73b8f9b84163"
+    },
+    "ghast_leg_3": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "01c6f721802c9c44fa54ce976966449c8da7995fd2968a6a35165e982cb0c3b4"
+    },
+    "ghast_leg_4": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "63cce4fb8854e68f18e850009db4a6bac8a5cacea3334e852f94c350e91e5362"
+    },
+    "ghast_leg_5": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "f9df648ee9bcb561d560d1b0f9cec68d83420c2db8d8f331c06ba7e1d2f4a1f9"
+    },
+    "ghast_leg_6": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "9adfd2ce60306ba6fe8d17b5a74f9f7bb34941fe4af04b49c0e979b3380ebe22"
+    },
+    "ghast_leg_7": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "6f525cfc3055de100267c5e8360ba483b3a54e9e55994e6ea80dd32525c2442d"
+    },
+    "ghast_leg_8": {
+      "sources": [
+        "entity/ghast/ghast"
+      ],
+      "size": [
+        32,
+        104
+      ],
+      "sha256": "8d173702c2ceaf65a2a45749702a087a89c6f913369adcf52d7ecb970c00276f"
+    }
+  },
+  "sound_files": {
+    "mob_ghast_moan1.ogg": {
+      "source": "minecraft/sounds/mob/ghast/moan1.ogg",
+      "sha256": "63da067c0480b67299bac0caeb6062bf0d22da67f0b6188ebc848564686848d3"
+    },
+    "mob_ghast_moan2.ogg": {
+      "source": "minecraft/sounds/mob/ghast/moan2.ogg",
+      "sha256": "2a58dff8439f7d39e02c4e6676ce12a16da368908f4ca24f6b990bfb073cd9ec"
+    },
+    "mob_ghast_moan3.ogg": {
+      "source": "minecraft/sounds/mob/ghast/moan3.ogg",
+      "sha256": "78ffdf8e7f15a498d2757d665bcf860a8847ebd827fd6909fade84c4e02bba56"
+    },
+    "mob_ghast_moan4.ogg": {
+      "source": "minecraft/sounds/mob/ghast/moan4.ogg",
+      "sha256": "a31201f2045c172a78aab8d28325d2fb964a8482d17dacf3e31acc725b7d6434"
+    },
+    "mob_ghast_moan5.ogg": {
+      "source": "minecraft/sounds/mob/ghast/moan5.ogg",
+      "sha256": "b482b4a8c72a3ba1b9379fbe5a9b179052f0ddb47d71b41f18a3c79e8e2d64ca"
+    },
+    "mob_ghast_moan6.ogg": {
+      "source": "minecraft/sounds/mob/ghast/moan6.ogg",
+      "sha256": "98a28ea433952a8be4f28db0cb96eb5c9af56182da7b30e7eb7a54ead25f0099"
+    },
+    "mob_ghast_moan7.ogg": {
+      "source": "minecraft/sounds/mob/ghast/moan7.ogg",
+      "sha256": "a54d78dd6de18493fc431b29eb44b140a15832baf4fddb4576fab780acbf6e9e"
+    },
+    "mob_ghast_charge.ogg": {
+      "source": "minecraft/sounds/mob/ghast/charge.ogg",
+      "sha256": "dc88c7b29ee0de91831662301546e3bcee55760f308344ef390b853460d93833"
+    },
+    "mob_ghast_death.ogg": {
+      "source": "minecraft/sounds/mob/ghast/death.ogg",
+      "sha256": "f8464eed7620996f7d9627d04ba92fc648ac28db5c5c0b83689e577b7b746d24"
+    },
+    "random_explode1.ogg": {
+      "source": "minecraft/sounds/random/explode1.ogg",
+      "sha256": "f5951a4f5ece95d595398c3519ab26044c359bc088a0f0684ee6f1b14c02ebc0"
+    },
+    "random_explode2.ogg": {
+      "source": "minecraft/sounds/random/explode2.ogg",
+      "sha256": "cb262b2af5fdfaac7b83cc64790c83cc852506444f382f06ded37e83f105b5a8"
+    },
+    "random_explode3.ogg": {
+      "source": "minecraft/sounds/random/explode3.ogg",
+      "sha256": "c2a8b6821fe8a50d72605bff3410bd8c4c82bff47cbce37d99e225dbaf55f6a4"
+    },
+    "random_explode4.ogg": {
+      "source": "minecraft/sounds/random/explode4.ogg",
+      "sha256": "f676d7fb3ddd9623ca931004ad380c5027846394b51b96b0ac2518159ff915c2"
+    }
+  },
+  "notes": "Original Ghast textures and cuboid UVs; large animated projection and matching physical fragments. Existing Minecraft importer/rasterizer. No imagegen."
+}

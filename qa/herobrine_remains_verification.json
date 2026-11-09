@@ -1,0 +1,69 @@
+{
+  "checks": 95,
+  "failures": [],
+  "new_visual_checks": 11,
+  "regressions": [
+    {
+      "name": "boss_polish",
+      "checks": 50,
+      "failures": []
+    },
+    {
+      "name": "herobrine_visual",
+      "checks": 8,
+      "failures": []
+    },
+    {
+      "name": "boss_polish_visual",
+      "checks": 17,
+      "failures": []
+    },
+    {
+      "name": "chapter_visual",
+      "checks": 9,
+      "failures": []
+    }
+  ],
+  "native_linux": [
+    {
+      "mode": "herobrine_wipe",
+      "exit_code": 0,
+      "capture": "qa/remains_native_herobrine_wipe.png",
+      "log": "qa/herobrine_remains_native_herobrine_wipe.log"
+    },
+    {
+      "mode": "portal",
+      "exit_code": 0,
+      "capture": "qa/remains_native_portal.png",
+      "log": "qa/herobrine_remains_native_portal.log"
+    },
+    {
+      "mode": "fall",
+      "exit_code": 0,
+      "capture": "qa/remains_native_fall.png",
+      "log": "qa/herobrine_remains_native_fall.log"
+    }
+  ],
+  "native_windows_tested": false,
+  "original_texture_provenance_verified": true,
+  "packages": [
+    "MinecraftSurvivors-Herobrine-Remains-Linux.zip",
+    "MinecraftSurvivors-Herobrine-Remains-Windows.zip",
+    "Herobrine-Remains-Source-Patch.zip"
+  ],
+  "parallel_work_files": {
+    "scripts/main.gd": false,
+    "project.godot": true,
+    "export_presets.cfg": true,
+    "AGENTS.md": true,
+    "docs/AGENT_HANDOFF.md": true
+  },
+  "note": "main.gd changed in parallel chapter-III work; it was not edited by this fix. Shared binaries and release archives are preserved. Tested builds are under builds/herobrine-remains-fix/.",
+  "deployment": {
+    "default_binaries_replaced": false,
+    "shared_files_unchanged": false,
+    "reason": "Separate tested builds preserve the parallel chapter-III integration."
+  },
+  "video": "qa/recordings/herobrine_remains.mp4",
+  "timers_damage_rng_changed": false
+}

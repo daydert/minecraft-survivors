@@ -1,0 +1,222 @@
+{
+  "version": "0.6.1",
+  "project_date": "2026-10-28",
+  "checks": {
+    "coop_results": 74,
+    "coop_four_results": 41,
+    "coop_logging_results": 11,
+    "coop_visual_results": 11,
+    "coop_four_visual_results": 13
+  },
+  "network_scenarios": 11,
+  "network_process_runs": 41,
+  "network_reports": [
+    {
+      "report": "qa/coop_four_compat_story_network.json",
+      "players": 2,
+      "scenario": "story",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0
+      ],
+      "logs": 2
+    },
+    {
+      "report": "qa/coop_three_story_network.json",
+      "players": 3,
+      "scenario": "story",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0
+      ],
+      "logs": 3
+    },
+    {
+      "report": "qa/coop_four_story_network.json",
+      "players": 4,
+      "scenario": "story",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_disconnect_network.json",
+      "players": 4,
+      "scenario": "disconnect",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_host_dead_network.json",
+      "players": 4,
+      "scenario": "host_dead",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_restart_network.json",
+      "players": 4,
+      "scenario": "restart",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_slow_story_network.json",
+      "players": 4,
+      "scenario": "story",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_recovery_story_network.json",
+      "players": 4,
+      "scenario": "story",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_host_leave_network.json",
+      "players": 4,
+      "scenario": "host_leave",
+      "exported": false,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_native_story_network.json",
+      "players": 4,
+      "scenario": "story",
+      "exported": true,
+      "visual": false,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    },
+    {
+      "report": "qa/coop_four_native_stress_network.json",
+      "players": 4,
+      "scenario": "stress",
+      "exported": true,
+      "visual": true,
+      "all_checks_passed": true,
+      "runtime_errors": {},
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "logs": 4
+    }
+  ],
+  "diagnostics": {
+    "sessions": 41,
+    "files": 41,
+    "damaged_lines": 0,
+    "writer_drops": 0,
+    "zip_input_verified": true,
+    "incomplete_final_line_verified": true,
+    "analysis": "qa/coop_four_diagnostics_analysis.json"
+  },
+  "solo_combat_parity": {
+    "ticks": 5400,
+    "report": "qa/coop_four_parity.log",
+    "result": "exact_match"
+  },
+  "native_four_window_stress": {
+    "mobs": 500,
+    "latency_each_way_ms": 45,
+    "jitter_ms": 20,
+    "loss_fraction": 0.05,
+    "host_p95_frame_ms": 25.9259259259259,
+    "host_p95_sim_ms": 11.045,
+    "host_p95_snapshot_ms": 2.47,
+    "guests_p95_frame_ms": [
+      16.6666666666667,
+      16.6666666666667,
+      16.6666666666667
+    ],
+    "report": "qa/coop_four_native_stress_network.json"
+  },
+  "limitations": [
+    "Loopback UDP proxies; actual friends ZeroTier network not available.",
+    "Linux native tested; Windows export built but not executed natively.",
+    "All four rendered windows shared one machine; measured frame times are scenario-specific."
+  ]
+}

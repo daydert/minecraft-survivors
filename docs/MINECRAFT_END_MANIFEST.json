@@ -1,0 +1,1349 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    },
+    "textures/block/obsidian.png": {
+      "sha256": "d9c7dc812d8e8b995e22caff2b10c1fc663b5e127a94c20a7476cfd88af2cd82",
+      "bytes": 189
+    },
+    "textures/entity/endermite.png": {
+      "sha256": "6e9d9fcd55bac4656af16733405b8c6c11ad65426331a52de27c483adb2e1b16",
+      "bytes": 505
+    },
+    "textures/entity/enderman/enderman.png": {
+      "sha256": "ac2a712566f11083a7e7f44ca904088662157144d35e764002be04fc9c34d50c",
+      "bytes": 334
+    },
+    "textures/entity/enderman/enderman_eyes.png": {
+      "sha256": "f6fc9f458102d8cbe33e2895a725e4348026b02dde9deff460fe657ef79f9674",
+      "bytes": 106
+    },
+    "textures/block/furnace_side.png": {
+      "sha256": "cada9065da8d26b3a7324a203edb42f2564975519e8504d520e10d530822bb5b",
+      "bytes": 228
+    },
+    "textures/block/dispenser_front.png": {
+      "sha256": "b537b00654b8b6f7101d95a0a87a95fcad7f6d375236b437ab3b20e651c3d4a3",
+      "bytes": 252
+    },
+    "textures/block/furnace_top.png": {
+      "sha256": "59e26149cde8b86ea1d165c1a4ba5c44531a4b7be134b30c93120bba1cefb162",
+      "bytes": 208
+    },
+    "textures/entity/shulker/shulker.png": {
+      "sha256": "0d89ea9689d831b3af581da2994de5fcd95b377413d7f1f0ca01a8be60c9c4f0",
+      "bytes": 1414
+    },
+    "textures/item/netherite_sword.png": {
+      "sha256": "8f1584739b0c4e9aa09f901bdfc9251a0a6fa1e0172b8c2a5a869e9fbaf25906",
+      "bytes": 203
+    },
+    "textures/item/iron_spear.png": {
+      "sha256": "dd147a088c206bac507bdeabd48abd5d00f78497d33e539e015f7c1c528b079a",
+      "bytes": 204
+    },
+    "textures/item/diamond_spear.png": {
+      "sha256": "fa6c967027edcae3bc31a6d81c6d4e846833f21f641a34aef6f9f68895ea5cfb",
+      "bytes": 201
+    },
+    "textures/item/netherite_spear.png": {
+      "sha256": "9cf98d37a835fd007f8cd220b02e1d6cb431428d833f7ffc5ca72eab92d97e0a",
+      "bytes": 190
+    },
+    "textures/item/mace.png": {
+      "sha256": "389119cde42a517b1bb217a9baa216285babfa9f3d8718e05b8b98a5349a45b1",
+      "bytes": 200
+    },
+    "textures/item/stick.png": {
+      "sha256": "da5ede0e54715247de78567df5212a114d0b8a1af183e286fa69cc6af5993711",
+      "bytes": 105
+    },
+    "textures/item/dragon_breath.png": {
+      "sha256": "001fae774fa420a56040d16b7df09ff8e875c129250e422b4caee3d64584af61",
+      "bytes": 198
+    },
+    "textures/item/elytra.png": {
+      "sha256": "7a83137eea9fd1e1eb75906cb573a277a90cc0796e2aa2a04d0605abc5b21717",
+      "bytes": 199
+    },
+    "textures/item/ender_pearl.png": {
+      "sha256": "ff40529856c82317ce24cec4ba384971f56aec0f8ce3756e059d2eb17f3b310a",
+      "bytes": 206
+    },
+    "textures/item/rabbit_foot.png": {
+      "sha256": "61e6b1dfeeb0e86627bc61c7773a2dadd9f93677bebc2e5d2d4fe2467adafa8a",
+      "bytes": 168
+    },
+    "textures/item/ender_eye.png": {
+      "sha256": "95843c3a2fc9bf92359f304617cc9a3905d955796c53dd3c8f6958a04dff3c82",
+      "bytes": 213
+    },
+    "textures/item/shulker_shell.png": {
+      "sha256": "b39fa843deb1dbd9774e2d39c80f6ae602f2945e2129e2c0c86741b8d4e1be63",
+      "bytes": 188
+    },
+    "textures/item/chorus_fruit.png": {
+      "sha256": "ad7d167b3b689d3a2f977ede752c807d9aeec6cf4656d8dd609266f6fb6cae2e",
+      "bytes": 202
+    },
+    "textures/item/wind_charge.png": {
+      "sha256": "accd53e9b2f7903ce24a4e6d778fbf4bc4dc321983871c614af915baa55f97f3",
+      "bytes": 191
+    },
+    "textures/entity/shield_base_nopattern.png": {
+      "sha256": "08aa1d4f2eebb31f657f34dfa969c801990500800eb4956ee3eb6dce73e54787",
+      "bytes": 411
+    },
+    "textures/entity/end_crystal/end_crystal.png": {
+      "sha256": "753671b80bd3a88f301b7ec44e26a48003afc176f32d0a3338b37df284edc103",
+      "bytes": 1199
+    },
+    "textures/block/end_stone.png": {
+      "sha256": "1fd05dbb86e8f49c518cabb82f706b71db6e94f03d9fd2b18f053f8e7a01e498",
+      "bytes": 202
+    },
+    "textures/block/end_stone_bricks.png": {
+      "sha256": "901e935159b9be141d5c3dc8c4f8db26f45db2efd784b9aa3414e5b356f14eb8",
+      "bytes": 199
+    },
+    "textures/block/purpur_block.png": {
+      "sha256": "3e6a2fe3f74a47f110e7870ad2a55814129bd0c1908391c4e5465345a8402dbd",
+      "bytes": 168
+    },
+    "textures/block/bedrock.png": {
+      "sha256": "a71e7dce773df8c797506296f58eca840e53ceb3319bc405af7e15e5c25551da",
+      "bytes": 166
+    },
+    "textures/block/dragon_egg.png": {
+      "sha256": "5ec895a4fd60650f1d08c2f66888e809f539832565c12cfc4b7d3df16d519b12",
+      "bytes": 153
+    },
+    "textures/block/end_rod.png": {
+      "sha256": "b07e8ff07283460ee6c99cab96a542083dcaa25c82ff960ea994d46bcaa1f8d3",
+      "bytes": 158
+    },
+    "textures/entity/shulker/spark.png": {
+      "sha256": "90d6ab4ad046acf4a2d541760543ab033f38b3f239a2495999390e6899c2aa22",
+      "bytes": 517
+    },
+    "textures/entity/enderdragon/dragon_fireball.png": {
+      "sha256": "537e30e45accf1e9a7f0c50830a9e3b2086cbe718fb52676845461bae3d5700f",
+      "bytes": 202
+    },
+    "textures/block/chorus_plant.png": {
+      "sha256": "a0af7aa83ac49c99d0adc1626ccff7532e4a0bf25a20eead0e7b02f6db86fd3f",
+      "bytes": 222
+    },
+    "textures/block/chorus_flower.png": {
+      "sha256": "1513916d623ea4d40b351da2524b247b84f3da6ab62d9feb80c93edef3cca7dd",
+      "bytes": 243
+    },
+    "textures/block/purpur_pillar.png": {
+      "sha256": "c611215e993eabfb3f5ed82e7f789b5ed98ba04be2ba8eaa64d21f1f64abc05b",
+      "bytes": 182
+    },
+    "textures/block/purpur_pillar_top.png": {
+      "sha256": "e39723b0da84397ecff57b77480f75fdd7c2465cc55f6ae3e1732ede250f26dc",
+      "bytes": 198
+    },
+    "textures/entity/enderdragon/dragon.png": {
+      "sha256": "6133c12916bb6e4bfdc35389d52e79763d934bae827de90d66fdce2199f9d2f9",
+      "bytes": 4534
+    },
+    "textures/entity/enderdragon/dragon_eyes.png": {
+      "sha256": "0176003b84bd87daca9f39390ff33d7d4b3ccf8d391018c3aeb90e33671a6f4a",
+      "bytes": 180
+    },
+    "textures/item/iron_spear_in_hand.png": {
+      "sha256": "2d9d274689c59dd241c5768587439714ca59af80793a74c408c618748004d365",
+      "bytes": 230
+    },
+    "textures/item/diamond_spear_in_hand.png": {
+      "sha256": "b39edc6f9101da3a5a146d3827d50194cff0c41fb9723072f03274ce5aab3f7d",
+      "bytes": 227
+    },
+    "textures/item/netherite_spear_in_hand.png": {
+      "sha256": "a1c9442d7b9b93f6c88ac19540d457dd15753e547e9c0dbce335258c50daf0ed",
+      "bytes": 215
+    },
+    "textures/entity/equipment/wings/elytra.png": {
+      "sha256": "6adbbc0f7d39cd233083f672a6624141d3de47885efdd1f387d50e92c75eeb2d",
+      "bytes": 269
+    },
+    "textures/block/grass_block_top.png": {
+      "sha256": "52f44b64ce884a13dfe35e4b4da2e35898b790dd4d7a5ea536f1b0c0d56d29b4",
+      "bytes": 298
+    },
+    "textures/block/nether_wart_block.png": {
+      "sha256": "11c7567e6945e4425cb5eb22bf4b973600fc0ace33f9e556759eb949564e34b1",
+      "bytes": 178
+    },
+    "textures/block/netherrack.png": {
+      "sha256": "3c0208b749c5393b9bad9d57ed3d830326a02b8cbd8444e96d4d0d277f85625f",
+      "bytes": 213
+    },
+    "textures/block/crimson_nylium.png": {
+      "sha256": "3c09e4a15255d9d9e67adc946da2ad02a4b3ee983557ff4238e8ca9451d7963d",
+      "bytes": 212
+    },
+    "textures/block/bone_block_side.png": {
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "bytes": 139
+    },
+    "textures/block/cracked_stone_bricks.png": {
+      "sha256": "eb8ba94381d27de90102e3effd16fede4a78106120563b02caff4c2ee597f3a2",
+      "bytes": 204
+    }
+  },
+  "derived": {
+    "endersteve_skin": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/obsidian"
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "92da0d8acc3b900b42241c78f7720112297d60c58c5d4b1dcb72d4616e90d7b2"
+    },
+    "endersteve_final_skin": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/obsidian"
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "1385e1b11eaf756a672b70b94e85eefe74de362286f49dd27304ba25d2ad6dfb"
+    },
+    "endermite_atlas": {
+      "sources": [
+        "entity/endermite"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "427edf61ab17908e9c037245d3b14f2ce6ac48b63048a16b489ba56696ab0b38"
+    },
+    "endermite_brood_atlas": {
+      "sources": [
+        "entity/endermite"
+      ],
+      "size": [
+        2112,
+        288
+      ],
+      "sha256": "d6f6dee853bab166129d11104aca41694bcd64da753db1bfd99ea80ca8fb5655"
+    },
+    "enderman_atlas": {
+      "sources": [
+        "entity/enderman/enderman"
+      ],
+      "size": [
+        1056,
+        192
+      ],
+      "sha256": "3e85de4c437764ecb9981f0ced9129b4a4414786d4fc2616c3ae95fe648aa39c"
+    },
+    "dispenser_enderman_atlas": {
+      "sources": [
+        "entity/enderman/enderman"
+      ],
+      "size": [
+        1056,
+        192
+      ],
+      "sha256": "7ecd750bab7a5177b515ac9b9626e5f40b7fab2e6e175a8791877103f8bf2003"
+    },
+    "shulker_atlas": {
+      "sources": [
+        "entity/shulker/shulker"
+      ],
+      "size": [
+        704,
+        96
+      ],
+      "sha256": "a4552e94b27f6095ee30a8832d9ea1088249912c1046af4910890ddbfb6ee867"
+    },
+    "endersteve_atlas": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        6720,
+        288
+      ],
+      "sha256": "f073b7ea698962b422c86cb80072bbe01636dd3c1b923cf98022108fe64c7362"
+    },
+    "endersteve_final_atlas": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        6720,
+        288
+      ],
+      "sha256": "b4fefe600c9c796d9ee40c699ca63466e7e24e8ba310c7b8ada41eebaf5df16b"
+    },
+    "icon_spear": {
+      "sources": [
+        "item/iron_spear"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "dd147a088c206bac507bdeabd48abd5d00f78497d33e539e015f7c1c528b079a",
+      "byte_identical": true
+    },
+    "icon_spear_iron": {
+      "sources": [
+        "item/iron_spear"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "dd147a088c206bac507bdeabd48abd5d00f78497d33e539e015f7c1c528b079a",
+      "byte_identical": true
+    },
+    "icon_spear_diamond": {
+      "sources": [
+        "item/diamond_spear"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fa6c967027edcae3bc31a6d81c6d4e846833f21f641a34aef6f9f68895ea5cfb",
+      "byte_identical": true
+    },
+    "icon_spear_netherite": {
+      "sources": [
+        "item/netherite_spear"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "9cf98d37a835fd007f8cd220b02e1d6cb431428d833f7ffc5ca72eab92d97e0a",
+      "byte_identical": true
+    },
+    "icon_mace": {
+      "sources": [
+        "item/mace"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "389119cde42a517b1bb217a9baa216285babfa9f3d8718e05b8b98a5349a45b1",
+      "byte_identical": true
+    },
+    "icon_knockback_stick": {
+      "sources": [
+        "item/stick"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "da5ede0e54715247de78567df5212a114d0b8a1af183e286fa69cc6af5993711",
+      "byte_identical": true
+    },
+    "icon_dragon_breath": {
+      "sources": [
+        "item/dragon_breath"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "001fae774fa420a56040d16b7df09ff8e875c129250e422b4caee3d64584af61",
+      "byte_identical": true
+    },
+    "icon_elytra": {
+      "sources": [
+        "item/elytra"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "7a83137eea9fd1e1eb75906cb573a277a90cc0796e2aa2a04d0605abc5b21717",
+      "byte_identical": true
+    },
+    "icon_ender_pearl": {
+      "sources": [
+        "item/ender_pearl"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ff40529856c82317ce24cec4ba384971f56aec0f8ce3756e059d2eb17f3b310a",
+      "byte_identical": true
+    },
+    "icon_rabbit_foot": {
+      "sources": [
+        "item/rabbit_foot"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "61e6b1dfeeb0e86627bc61c7773a2dadd9f93677bebc2e5d2d4fe2467adafa8a",
+      "byte_identical": true
+    },
+    "icon_end_eye": {
+      "sources": [
+        "item/ender_eye"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "95843c3a2fc9bf92359f304617cc9a3905d955796c53dd3c8f6958a04dff3c82",
+      "byte_identical": true
+    },
+    "icon_shulker_shell": {
+      "sources": [
+        "item/shulker_shell"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b39fa843deb1dbd9774e2d39c80f6ae602f2945e2129e2c0c86741b8d4e1be63",
+      "byte_identical": true
+    },
+    "icon_chorus_fruit": {
+      "sources": [
+        "item/chorus_fruit"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ad7d167b3b689d3a2f977ede752c807d9aeec6cf4656d8dd609266f6fb6cae2e",
+      "byte_identical": true
+    },
+    "icon_wind_charge": {
+      "sources": [
+        "item/wind_charge"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "accd53e9b2f7903ce24a4e6d778fbf4bc4dc321983871c614af915baa55f97f3",
+      "byte_identical": true
+    },
+    "icon_end_hand": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "2f5631e3f282f235d413c5f476fbf6f22d793fd17dd20e48206a44c9c68842f6"
+    },
+    "icon_shield": {
+      "sources": [
+        "entity/shield_base_nopattern"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ebaa8f6fde90a35ff1ba77ece34b7ca6a36a4d37f4cd81b37fbcca83cf4210a7"
+    },
+    "end_crystal_ground": {
+      "sources": [
+        "entity/end_crystal/end_crystal"
+      ],
+      "size": [
+        40,
+        48
+      ],
+      "sha256": "b730c91a175f1b40f592017f44ad6abf2f66231d66271bef673e5030173754cc"
+    },
+    "icon_end_crystal": {
+      "sources": [
+        "entity/end_crystal/end_crystal"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "339e53f5b389fb8da2d56329e32c23355298e8d53d2963aed70743e5bb1c4e1f"
+    },
+    "end_stone_tile": {
+      "sources": [
+        "block/end_stone"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "5d8ef1b46a10fa50d35037e65cddb72163d94d20940f8ad85d470f067bc67eb3"
+    },
+    "end_bricks": {
+      "sources": [
+        "block/end_stone_bricks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e46ab73b13f96d53fffc4d62a560b88776b52cae56898b60c3e45a926ea68340"
+    },
+    "end_purpur": {
+      "sources": [
+        "block/purpur_block"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "2af03178ec44eea0b7a2a05f81cb0771dc0fc39a109db0dcb15bb4feab180472"
+    },
+    "end_obsidian": {
+      "sources": [
+        "block/obsidian"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4cd535091075c6fd4e2c49bec431ebe2cc251bc92b907ba229822d63c695f808"
+    },
+    "end_bedrock": {
+      "sources": [
+        "block/bedrock"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "0d07af5a7df4b6af64fe439d3f533d9a9583d07526e7af3a3cd9ec647ccd34e9"
+    },
+    "end_egg": {
+      "sources": [
+        "block/dragon_egg"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "0764dbfc5df6b605bcf1b5296af4dad0268f1f6f9fb9d269a7c1af28682f114d"
+    },
+    "end_rod": {
+      "sources": [
+        "block/end_rod"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4a8e7432d5ee36cd83784be953e328dff85b701797e12086fa7f548e4d0aefa7"
+    },
+    "shulker_bullet": {
+      "sources": [
+        "entity/shulker/spark"
+      ],
+      "size": [
+        12,
+        12
+      ],
+      "sha256": "17070685e774656ae2ad8aee674c7391de42fc02a1064be86e7abc5a52f6b3fc"
+    },
+    "dragon_fireball": {
+      "sources": [
+        "entity/enderdragon/dragon_fireball"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "7caa069cab5621d8a53d957f53fc051abcc414b224c9f7a833853a4feeaa1268"
+    },
+    "chorus_0": {
+      "sources": [
+        "block/chorus_plant",
+        "block/chorus_flower"
+      ],
+      "size": [
+        56,
+        64
+      ],
+      "sha256": "fcb644dfb9ca934adb7a5f73df2092e33f3f7716cd6dc32a26c0b8226c2be1d5"
+    },
+    "chorus_1": {
+      "sources": [
+        "block/chorus_plant",
+        "block/chorus_flower"
+      ],
+      "size": [
+        56,
+        64
+      ],
+      "sha256": "9a592fa7d327470ee1b2bc43f3a50c5aae322cac17695e7916ddd10b433b3c4b"
+    },
+    "chorus_2": {
+      "sources": [
+        "block/chorus_plant",
+        "block/chorus_flower"
+      ],
+      "size": [
+        56,
+        64
+      ],
+      "sha256": "6a761f9ef1e3b8602e0d38d5d3415fb912061d0346f7361b447477e046567eca"
+    },
+    "end_ruin_0": {
+      "sources": [
+        "block/purpur_pillar",
+        "block/purpur_pillar_top"
+      ],
+      "size": [
+        56,
+        88
+      ],
+      "sha256": "7f367739f5044368665a9362fcd5e5a77437060d5791ad792223aff1ebcb79ae"
+    },
+    "end_ruin_1": {
+      "sources": [
+        "block/purpur_pillar",
+        "block/purpur_pillar_top"
+      ],
+      "size": [
+        56,
+        88
+      ],
+      "sha256": "4526c0ec6369a0836b239881d5e6f0f7c4ddcff18636a61b2c1b3dccd6a72237"
+    },
+    "end_ruin_2": {
+      "sources": [
+        "block/purpur_pillar",
+        "block/purpur_pillar_top"
+      ],
+      "size": [
+        56,
+        88
+      ],
+      "sha256": "5bc7c978615b673580e4b878c101906387b2f4592df41b6d30068c4474b8f3fb"
+    },
+    "end_island": {
+      "sources": [
+        "block/end_stone"
+      ],
+      "size": [
+        2048,
+        2048
+      ],
+      "sha256": "2baa6da8dfb540c2d625d12c4bab8115ce3d5f12a35135d8f6c9a0b025e7d234"
+    },
+    "end_dragon_atlas": {
+      "sources": [
+        "entity/enderdragon/dragon",
+        "entity/enderdragon/dragon_eyes"
+      ],
+      "size": [
+        7680,
+        4096
+      ],
+      "sha256": "99f1ed0ddea744989135270251a836af48663f57ecb0272feb8f1ca3e3fb0596"
+    },
+    "end_held_idle": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "0d147fdf416c20f90e7234a39db688c3bc86ba38bd3cc2d7a718c6298c4222e0"
+    },
+    "end_held_idle_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "edfd7b83a251f4e64fe2ce47e26420a66e31f2253e808e64be80971945d62202"
+    },
+    "end_held_spear_iron": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "c213f343aae1f5b6ee2c50f372497a5a884f54f53d459ec00bccf46b82a96e04"
+    },
+    "end_held_spear_iron_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "67a7ee4f02461e5262720fd234c108aabb04185002a97937e5fb3b06ff245d3e"
+    },
+    "end_held_spear_diamond": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "b606a5f56a263caf2c20775a52a90c24346f16a8a8d2eef1ebf67d8530ffa575"
+    },
+    "end_held_spear_diamond_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "e86c81da49a4bf6cc975fa1a4290c82e216bb68b46f4ec4547ab882b7c071b11"
+    },
+    "end_held_spear_netherite": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "12d0e7d035a3fb1ca979af7867c585d9bfbb05c9ae97d3bdf8fa90cfe70c7eea"
+    },
+    "end_held_spear_netherite_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "bb4e4d66160bec6880d4d080320804e044e54b749d3c0c680561448773c1b7d6"
+    },
+    "end_held_mace": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "ba9894aca964de5a2662b275d1c143f01df4dacc0c4e2f50b1b7efe7dffd7565"
+    },
+    "end_held_mace_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "b7f2b80bda78816bafc1a53e37f0aad23b43830b3a63b2d7b6a0b561a221c348"
+    },
+    "end_held_knockback_stick": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "457dae4ccc8356bf69c40361be6c961625a87d93d0263b180a7ca304613d484b"
+    },
+    "end_held_knockback_stick_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "b3b2198581acaa0bda28616f51507f7d6725df5c9ee332691fb675f33c1661af"
+    },
+    "end_held_end_crystal": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "7c2d4edb20cb5c075cdac05d6746cab95761a71c7418674eaeb53a9f142a187b"
+    },
+    "end_held_end_crystal_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "1a57c8f4edf24dbd1b9b48b5466b02debeb03020c47cf902d053120f4ee1d475"
+    },
+    "end_held_dragon_breath": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "c4928e9bf97fb249b3007a7cb6b3d79e052923fbbfca894b8fb741385fc29652"
+    },
+    "end_held_dragon_breath_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "7c6e3b22a5e7551cbfe7ae2e7bc48a585c4a19b742a75be6e33453804a1699dc"
+    },
+    "end_held_elytra": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath",
+        "entity/equipment/wings/elytra"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "93084ba5b21ec1196ceb78a9948bf182f6009c8ed4d25b5a4621ba6c0d199e8a"
+    },
+    "end_held_elytra_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath",
+        "entity/equipment/wings/elytra"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "d709d94a8a5c902d7f3662cd45b5224ac0d1a4f05ab90eb08b0426f4065515a8"
+    },
+    "end_held_rocket": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath",
+        "entity/equipment/wings/elytra"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "38bce9e7631ec613dbab2f61c6cd18b8df3c43622eaf0e94d9a7576b943785e4"
+    },
+    "end_held_rocket_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath",
+        "entity/equipment/wings/elytra"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "4c17eab78601f820a93e64c087fe904216a2cb850a478afca90295850b3328bf"
+    },
+    "end_held_hand": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath",
+        "entity/equipment/wings/elytra",
+        "block/obsidian"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "30023a53ba4c3c52ace226769233f2b9029229163c7000d8c04b1475b11029f8"
+    },
+    "end_held_hand_guard": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/shield_base_nopattern",
+        "item/iron_spear_in_hand",
+        "item/diamond_spear_in_hand",
+        "item/netherite_spear_in_hand",
+        "item/mace",
+        "item/stick",
+        "entity/end_crystal/end_crystal",
+        "item/dragon_breath",
+        "entity/equipment/wings/elytra",
+        "block/obsidian"
+      ],
+      "size": [
+        1536,
+        192
+      ],
+      "sha256": "bd846431267d2972f419edce0e2ea77921101c524b81e8c20d9876300d128a8b"
+    },
+    "end_egg_model": {
+      "sources": [
+        "block/dragon_egg"
+      ],
+      "size": [
+        28,
+        32
+      ],
+      "sha256": "5a4160ced5f52751ef388344e72976b49562a08a2c42c903b238a64b638dc1a9"
+    },
+    "end_player_pickup": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/obsidian"
+      ],
+      "size": [
+        1024,
+        192
+      ],
+      "sha256": "47db9290a19d28ab2890205522b428f87e1984b998d2d6d7c392bed4c7b70ef8"
+    },
+    "end_player_jump": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/obsidian"
+      ],
+      "size": [
+        1024,
+        192
+      ],
+      "sha256": "f398726a9a6c0539ce1f019175442540920be2150db014fd433205188a21dc64"
+    },
+    "end_duel_leap": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/obsidian"
+      ],
+      "size": [
+        1024,
+        192
+      ],
+      "sha256": "e70a951e09c56bb7e4cf509eee797b26c48123279793f52d3fb495791f0f8047"
+    },
+    "end_finale_death": {
+      "sources": [
+        "entity/player/wide/steve",
+        "block/obsidian"
+      ],
+      "size": [
+        6144,
+        384
+      ],
+      "sha256": "a58d0791e631048785619b9b5fb7d930a9c7baa28fe9427053b8b5c07a953d88"
+    },
+    "end_teaser_ground": {
+      "sources": [
+        "block/nether_wart_block",
+        "block/netherrack",
+        "block/crimson_nylium"
+      ],
+      "size": [
+        640,
+        360
+      ],
+      "sha256": "dce01ba434736bd987af7eabd0e64dd75640449667ee85d30ea2ca86bbbb46f0"
+    },
+    "end_chapter_title": {
+      "sources": [
+        "Minecraft bitmap font, Cyrillic and accented glyphs"
+      ],
+      "size": [
+        276,
+        30
+      ],
+      "sha256": "dc3e8737a05bd0643ed62878da62e9e351dc64eb3b9cee83389b96c362f78440"
+    }
+  },
+  "sound_files": {
+    "mob_endermen_hit1.ogg": {
+      "source": "minecraft/sounds/mob/endermen/hit1.ogg",
+      "sha256": "b3ca4a437103fec9b50bf3152ba27819498b0af576af4c767f717cb0aab2e3bc"
+    },
+    "mob_endermen_hit2.ogg": {
+      "source": "minecraft/sounds/mob/endermen/hit2.ogg",
+      "sha256": "73f9be15103ee0507deeddbb12eb2c5ee0d42d75492fe1ada1761112a4c33172"
+    },
+    "mob_endermen_hit3.ogg": {
+      "source": "minecraft/sounds/mob/endermen/hit3.ogg",
+      "sha256": "69eea5da8af93dec7a80f0501f4fb9d84fc21a24d885ccc5bd2a7f8661a6280d"
+    },
+    "mob_endermen_hit4.ogg": {
+      "source": "minecraft/sounds/mob/endermen/hit4.ogg",
+      "sha256": "a5c2a1e10a060919fbd37c2e62eecef68b8adc6f583a47f2d1c1aac84434d8fa"
+    },
+    "mob_silverfish_hit1.ogg": {
+      "source": "minecraft/sounds/mob/silverfish/hit1.ogg",
+      "sha256": "1104f81e164e9417831447d14911e606df67dd6e992d309b459a0a398a3b6a39"
+    },
+    "mob_silverfish_hit2.ogg": {
+      "source": "minecraft/sounds/mob/silverfish/hit2.ogg",
+      "sha256": "bccdc9f0e3f49684407c76b1b3a41bb97c7dd5ad9315e9315f260a4eed4ef5e4"
+    },
+    "mob_silverfish_hit3.ogg": {
+      "source": "minecraft/sounds/mob/silverfish/hit3.ogg",
+      "sha256": "b1dcfb87d670a9e81468ed3f344637e5930f662ac38007a7dd5d398e42558c1d"
+    },
+    "entity_shulker_hurt1.ogg": {
+      "source": "minecraft/sounds/entity/shulker/hurt1.ogg",
+      "sha256": "84e1ca8eb5b9c664dd168335c6d4a53d6741389fe38976525a0c14bf31f5aac2"
+    },
+    "entity_shulker_hurt2.ogg": {
+      "source": "minecraft/sounds/entity/shulker/hurt2.ogg",
+      "sha256": "0476c647a679ca227f4d307fb97843b603abb2547356108d48f843fa4b0d05ed"
+    },
+    "entity_shulker_hurt3.ogg": {
+      "source": "minecraft/sounds/entity/shulker/hurt3.ogg",
+      "sha256": "71d2f75af09c362004a305982a991a58c6320ed0ada6208e72022364af81082f"
+    },
+    "entity_shulker_hurt4.ogg": {
+      "source": "minecraft/sounds/entity/shulker/hurt4.ogg",
+      "sha256": "cd917760452c2f09df775dfa46e75c9505e4ad97808afb8a3a2f00fb337cca60"
+    },
+    "damage_hit1.ogg": {
+      "source": "minecraft/sounds/damage/hit1.ogg",
+      "sha256": "d3c5958cbbe957e4c2b33304458663e254e7da8124bce61066c6b4fcd8b4d03c"
+    },
+    "damage_hit2.ogg": {
+      "source": "minecraft/sounds/damage/hit2.ogg",
+      "sha256": "4962653496440cc27ebac4d0e08d2eca78580671a184041736fe8ee5a22b88d0"
+    },
+    "damage_hit3.ogg": {
+      "source": "minecraft/sounds/damage/hit3.ogg",
+      "sha256": "cfba56fe35f7a444211209c389062298193c579a7414e7b87120cb00917fdc43"
+    },
+    "mob_enderdragon_hit1.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/hit1.ogg",
+      "sha256": "961171c796e82ad9dad3b3c2676bb1eae6cdbe4d257fceb63ec0d2510edf8ae9"
+    },
+    "mob_enderdragon_hit2.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/hit2.ogg",
+      "sha256": "95521478d46d8ca5c4c5452fcb97e7127c4fa08df0054617a67b3f2fcdf1471b"
+    },
+    "mob_enderdragon_hit3.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/hit3.ogg",
+      "sha256": "62592713d25197361baae208079e54b08790ae232317ea51918b9f833c98207c"
+    },
+    "mob_enderdragon_hit4.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/hit4.ogg",
+      "sha256": "4849d3a856828bff6c69e93418e84deaf73d870e4e349d9a105ae467f9b9fc5b"
+    },
+    "mob_endermen_portal.ogg": {
+      "source": "minecraft/sounds/mob/endermen/portal.ogg",
+      "sha256": "1c49b72d40de158d74c4c0250dc4b2882f6a2ef56ac2248ebec8e5a068fa601e"
+    },
+    "mob_endermen_portal2.ogg": {
+      "source": "minecraft/sounds/mob/endermen/portal2.ogg",
+      "sha256": "e9e763114c674e500c37880fbdf5fa5bdca524f1a79f60ed90755de48bf4faf5"
+    },
+    "entity_shulker_shoot1.ogg": {
+      "source": "minecraft/sounds/entity/shulker/shoot1.ogg",
+      "sha256": "6b3d5135d59543be5287ec9757e80b24fca5a9df6759bf86475e5795884291cb"
+    },
+    "entity_shulker_shoot2.ogg": {
+      "source": "minecraft/sounds/entity/shulker/shoot2.ogg",
+      "sha256": "1741fb841aa854f75b66596acc25a2915cd43d34ed4c7e250b371c1e7f4c1caf"
+    },
+    "entity_shulker_shoot3.ogg": {
+      "source": "minecraft/sounds/entity/shulker/shoot3.ogg",
+      "sha256": "47944eee2e475079ac50e9c150ef2083c828a6ef96ed9c0fbf5734dd7f639a62"
+    },
+    "entity_shulker_shoot4.ogg": {
+      "source": "minecraft/sounds/entity/shulker/shoot4.ogg",
+      "sha256": "b70d2f877587748aa2659a06d6d145f226ac00519624e653cdd3a0a7ff3c0d08"
+    },
+    "mob_enderdragon_growl1.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/growl1.ogg",
+      "sha256": "7835c8f07ef4b65a917af913ec716d7bb8a21a29294e8079bba56b4afd5f83e5"
+    },
+    "mob_enderdragon_growl2.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/growl2.ogg",
+      "sha256": "60afd46305fe40185cffb17c0cc9126cc022cc7f22d85f46e7cd2b277322354f"
+    },
+    "mob_enderdragon_growl3.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/growl3.ogg",
+      "sha256": "924c18fd92c5eb58dfd12b694810f06e54fd8f8797a40b961c8a739bb00d066f"
+    },
+    "mob_enderdragon_growl4.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/growl4.ogg",
+      "sha256": "43c45697c5fc0d4cfbef225125726a5e401591d94c2eb0b916b059763eca537e"
+    },
+    "mob_enderdragon_wings1.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/wings1.ogg",
+      "sha256": "a8602095019fa845622961078710daa31fca3b816dd0a76c38d32b4a9c8c9e19"
+    },
+    "mob_enderdragon_wings2.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/wings2.ogg",
+      "sha256": "fd583264f74a645940973fcd52976caafc5ab1301aeb590e71fed7dc28b67199"
+    },
+    "mob_enderdragon_wings3.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/wings3.ogg",
+      "sha256": "fb1c2e1405814b41aea1a7e7c42daba9c792b1543b45de7207b9708cc5577fb1"
+    },
+    "mob_enderdragon_wings4.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/wings4.ogg",
+      "sha256": "0f49156ab33b7f127769e7715538e6d966c035b0c46df67c54f70f462bfc0ced"
+    },
+    "mob_enderdragon_wings5.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/wings5.ogg",
+      "sha256": "ba0388e8e0fe8f6c5e7f43fd65f46f50b6289fd41586065e2d669573842d6dd1"
+    },
+    "mob_enderdragon_wings6.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/wings6.ogg",
+      "sha256": "1d361273c9e061c7c78e4019a6c8498a5baf89a3c198988dae31404295be748f"
+    },
+    "mob_enderdragon_end.ogg": {
+      "source": "minecraft/sounds/mob/enderdragon/end.ogg",
+      "sha256": "0b97ac5e8f760b27190fc6d21186847a69344df7edd2f14cb58ef4e110cae48b"
+    },
+    "item_shield_block1.ogg": {
+      "source": "minecraft/sounds/item/shield/block1.ogg",
+      "sha256": "e3365acaf40951f9e04334ea5122de786adaf24d357d095757096d75a70dc842"
+    },
+    "item_shield_block2.ogg": {
+      "source": "minecraft/sounds/item/shield/block2.ogg",
+      "sha256": "c8dbf8adac1111d46ff6fd99ef5c7b23cff84e06da1a7a9d6aacfc01cf3f0765"
+    },
+    "item_shield_block3.ogg": {
+      "source": "minecraft/sounds/item/shield/block3.ogg",
+      "sha256": "075d0c5e518e95c8d4d335e1f8ae2792f12413e9fdc95ec023024e88cd63a6df"
+    },
+    "item_shield_block4.ogg": {
+      "source": "minecraft/sounds/item/shield/block4.ogg",
+      "sha256": "e509b3ba0bcb2b4326f51c9689313142c5a6198743da2127a3548442b557539c"
+    },
+    "item_shield_block5.ogg": {
+      "source": "minecraft/sounds/item/shield/block5.ogg",
+      "sha256": "5368f2ac419ca62a3936d2a8150f15aaf399f2dfe050ab51d26f3ee8ad8e308a"
+    },
+    "random_break.ogg": {
+      "source": "minecraft/sounds/random/break.ogg",
+      "sha256": "232f9beec1cb73323d61ab365770e5bb68384b2ed31cd589f85dbf4c3aac5775"
+    },
+    "item_mace_smash_ground1.ogg": {
+      "source": "minecraft/sounds/item/mace/smash_ground1.ogg",
+      "sha256": "55094af6fd56ed57bf7e95881c826cce8075991481a574577b5a76f5be1adbba"
+    },
+    "item_mace_smash_ground2.ogg": {
+      "source": "minecraft/sounds/item/mace/smash_ground2.ogg",
+      "sha256": "077283b1ba9970f0e01bb1fa442702c4bd32e9cd33d107d6acb662f1da8818c5"
+    },
+    "item_mace_smash_ground3.ogg": {
+      "source": "minecraft/sounds/item/mace/smash_ground3.ogg",
+      "sha256": "060ea9a9aa79b3cca933c47c47088fb41d704a53f2b88041fc70f9a401904f2c"
+    },
+    "item_mace_smash_ground4.ogg": {
+      "source": "minecraft/sounds/item/mace/smash_ground4.ogg",
+      "sha256": "29ea796bccf8ccc5c15bd49b2f63df138519da258c47a3885b59c3cd14e975bd"
+    },
+    "entity_wind_charge_wind_burst1.ogg": {
+      "source": "minecraft/sounds/entity/wind_charge/wind_burst1.ogg",
+      "sha256": "66255713c7390009b28d07006ad06c29bf29b0f1e1a18d02a36cba55ea3039c9"
+    },
+    "entity_wind_charge_wind_burst2.ogg": {
+      "source": "minecraft/sounds/entity/wind_charge/wind_burst2.ogg",
+      "sha256": "76d96737110ae4baf5434d9b0343a6c11b9ac7afa209e4a9d9ae93c5cb3064f0"
+    },
+    "entity_wind_charge_wind_burst3.ogg": {
+      "source": "minecraft/sounds/entity/wind_charge/wind_burst3.ogg",
+      "sha256": "80e2a830cc67577d03160f142d5c13ff93d474c0728e0a72ba147f29569bb929"
+    },
+    "random_bow.ogg": {
+      "source": "minecraft/sounds/random/bow.ogg",
+      "sha256": "3d983f24930734d6d32428b3b722d688b99475d488ab963f0d61107381d04c4a"
+    },
+    "fireworks_launch1.ogg": {
+      "source": "minecraft/sounds/fireworks/launch1.ogg",
+      "sha256": "25dc188ddaeab5589f532e53e47d5882681a47a8c7a76078765cf670aacbda8e"
+    }
+  },
+  "notes": "Local vanilla textures. Original EnderSteve corruption, 2D poses, island layout and articulated dragon adaptation. No downloaded mod or imagegen resources.",
+  "dragon": {
+    "frame_size": [
+      320,
+      256
+    ],
+    "anchor": [
+      160,
+      152
+    ],
+    "directions": 16,
+    "columns": 24,
+    "states": {
+      "flight": {
+        "start": 0,
+        "count": 12,
+        "fps": 12
+      },
+      "perch": {
+        "start": 12,
+        "count": 8,
+        "fps": 8
+      },
+      "roar": {
+        "start": 20,
+        "count": 4,
+        "fps": 8
+      }
+    },
+    "joints": {
+      "neck": 5,
+      "tail": 12,
+      "wings": 4,
+      "jaw": 1,
+      "legs": 8
+    },
+    "projection_elevation": 27,
+    "source_texture": "entity/enderdragon/dragon",
+    "wing_reference": "docs/references/end/sources.json"
+  },
+  "model_references": {
+    "ender_dragon.geo.json": {
+      "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/a3b394c507a6b11a3c6f61552e778ff5c4b89fd2/resource_pack/models/entity/ender_dragon.geo.json",
+      "sha256": "07c9333dc913e046ed041143624a5eb30a33cb340fa07b10d507a8c95be608c6",
+      "purpose": "Mojang reference for connected wing geometry, UV orientation and shoulder/elbow motion; local Java atlas supplies game pixels."
+    },
+    "ender_dragon.animation.json": {
+      "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/a3b394c507a6b11a3c6f61552e778ff5c4b89fd2/resource_pack/animations/ender_dragon.animation.json",
+      "sha256": "43a4cf19dfdc05a35216e1ff93d5905ef6da4058cc5b2eb9ea4508358fd05307",
+      "purpose": "Mojang reference for connected wing geometry, UV orientation and shoulder/elbow motion; local Java atlas supplies game pixels."
+    },
+    "shulker_bullet.geo.json": {
+      "url": "https://raw.githubusercontent.com/Mojang/bedrock-samples/a3b394c507a6b11a3c6f61552e778ff5c4b89fd2/resource_pack/models/entity/shulker_bullet.geo.json",
+      "sha256": "ecfc460d03c9df237e8dbb4b808b1b3aaa60c163aa54a01027a0d8294c291caf",
+      "purpose": "Native three-cuboid shulker bullet geometry; the game texture comes from the local Java client."
+    }
+  }
+}

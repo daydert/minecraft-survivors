@@ -1,0 +1,28 @@
+{
+  "build": {
+    "bow": 8,
+    "sword": 7,
+    "trident": 3
+  },
+  "evolved": {
+    "bow": true
+  },
+  "executable": "/home/daydert/MinecraftSurvival/builds/linux/MinecraftSurvivors.x86_64",
+  "hp": 0.120000000000002,
+  "items": {
+    "armor": 5,
+    "blaze": 1,
+    "redstone": 1,
+    "sugar": 2
+  },
+  "kills": 2168,
+  "level": 25,
+  "simulation": {
+    "max_ms": 38.859,
+    "mean_ms": 4.41418279669453,
+    "p95_ms": 9.496
+  },
+  "style": "bow",
+  "time": 720.0,
+  "victory": true
+}
