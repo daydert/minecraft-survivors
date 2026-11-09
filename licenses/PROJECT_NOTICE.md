@@ -109,3 +109,14 @@ Minecraft Java 1.21.11. Компоновка мира, модели, позы и
 арбалета, булавы, цепи, летучей мыши и тотема сохранены без перекодирования.
 Источники и SHA: `docs/CHAPTER_FOUR_EQUIPMENT_MANIFEST.json`,
 `docs/CHAPTER_FOUR_AUDIO_MANIFEST.json`.
+
+
+## Глава IV: сторонняя музыка и звуки (OpenGameArt)
+
+Скачаны по разрешению пользователя, конвертированы в Ogg Vorbis с выравниванием громкости.
+Источники и контрольные суммы: docs/CHAPTER_FOUR_EXTERNAL_AUDIO.json.
+
+- Херобрин, стадия I — «Dark souls type boss theme», Philémon Weber (Helmet), CC-BY 4.0.
+- Херобрин, стадия II — «Colossal Boss Battle Theme» (Blackmoor Colossus Loop), Matthew Pablo, www.matthewpablo.com, CC-BY 3.0.
+- Выстрел дробовика — «Gunshot Sounds» (shotty.wav), Vincent Sevedge, CC-BY 3.0.
+- Перезарядка дробовика — «Gun reload sounds» (shotguncock.wav), SpringySpringo, CC0.

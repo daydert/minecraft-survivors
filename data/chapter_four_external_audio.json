@@ -1,0 +1,22 @@
+{
+  "ch4_shotgun": {
+    "gain": 0.75,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/ext_shotgun_blast.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_reload": {
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/ext_shotgun_cock.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  }
+}

@@ -59,7 +59,7 @@ func launch_mass(w,at=null):
 		for i in range(20):
 			var candidate: Vector2=w.player+Vector2.from_angle(-PI/2+i*2.39996)*(142+i%3*15)
 			if w.free_at(candidate,54) and candidate.x>100 and candidate.y>100 and candidate.x<1948 and candidate.y<1948:p=candidate;break
-	mass=actor(w,"mass",p,data.mass.hp,data.mass.radius);mass.mask=15;mass.small=false;mass.skin="ch4d_mass_15";mass.damage=data.mass.damage;mass.pattern=0;mass.burst=0;mass.burst_timer=0.0
+	mass=actor(w,"mass",p,data.mass.hp,float(data.mass.radius)*1.3);mass.scale=1.3;mass.mask=15;mass.small=false;mass.skin="ch4d_mass_15";mass.damage=data.mass.damage;mass.pattern=0;mass.burst=0;mass.burst_timer=0.0
 	mass.aim=w.player;mass.sweep_a=Vector2.ZERO;mass.sweep_b=Vector2.ZERO;mass.attack_hits={}
 	for j in range(4):
 		var part=actor(w,"mass_part",p,data.mass.part_hp,9);part.boss=true;part.attack="attached";part.component=j+1;part.owner=mass.id;part.offset=[Vector2(-18,-15),Vector2(18,-15),Vector2(0,8),Vector2(0,24)][j];parts.append(part)
@@ -139,7 +139,7 @@ func update_mass(w,dt: float):
 		return
 	if mass.hp<=0:die_mass(w);return
 	if mass.hp<mass.max_hp*.33 and not mass.small:
-		mass.small=true;mass.scale=.74;mass.radius=16
+		mass.small=true;mass.scale=.96;mass.radius=21
 		for part in parts:
 			if part.hp>0:detach(w,part)
 		enter(mass,"recover",1.2);w.sound("ch4_mass_shed")

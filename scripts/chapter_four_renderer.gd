@@ -103,6 +103,8 @@ func world(g):
 	EncounterView.lights(g)
 	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","one","two","kneel"]:
 		var e = w.ending
+		for ef in w.effects:
+			if ef.kind=="ch4_hb_ignite":g.ambient_lights.append({"p":ef.p,"r":90.0,"c":Color(1,.25,.12),"power":.9,"glow":.25})
 		g.ambient_lights.append({"p":e.hb.p-Vector2(0,26),"r":56.0,"c":Color(.9,.92,1.0),"power":.55,"glow":.05})
 		g.ambient_lights.append({"p":e.center,"r":230.0,"c":Color(.72,.74,.86),"power":.42,"glow":.0})
 		var r: Rect2 = e.arena

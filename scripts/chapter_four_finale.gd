@@ -50,6 +50,7 @@ var road_index := 0
 var door_state := ""
 var spoken: Dictionary = {}
 var head_at := -1.0
+var punch_at := -10.0
 
 func reset(w):
 	rng.seed = int(w.rng.seed) ^ 0x4e7b19
@@ -209,6 +210,10 @@ func step_intro(w):
 	var turn: Array = data.intro.turn
 	if age < turn[0]:
 		set_pose("cast"); hb.visual_dir = Vector2.UP
+		if age >= 1.9 and not spoken.has("ignite"):
+			spoken["ignite"] = true
+			w.add_effect("ch4_hb_ignite", hb.p + Vector2(0, -36), 2.2)
+			w.sound("ch4_rage", .1); flash = .06
 	elif age < turn[1]:
 		set_pose("idle")
 		var k: float = (age - float(turn[0])) / (float(turn[1]) - float(turn[0]))
@@ -664,7 +669,7 @@ func step_death(w, dt: float):
 			say(line.text, line.style, float(line.cut) - float(line.at) + 0.5, float(line.cut) - float(line.at))
 	for t in d.punches:
 		if age >= float(t) and age - dt < float(t):
-			set_steve("mount"); steve_pose_age = 0.0; set_pose("lying_hit"); w.sound("ch4_punch_heavy", .02)
+			set_steve("mount"); steve_pose_age = 0.0; set_pose("lying_hit"); w.sound("ch4_punch_heavy", .02); punch_at = age
 			w.shake = .12; w.emit_pixels("impact", hb.p - Vector2(0, 6), 6, Vector2.UP)
 	var final_t: float = float(d.final)
 	if age >= mount_at and age < final_t - 0.7 and steve_pose != "mount":set_steve("mount")

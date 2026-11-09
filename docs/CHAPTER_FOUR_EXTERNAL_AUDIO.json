@@ -1,0 +1,34 @@
+{
+  "boss_one.ogg": {
+    "source_url": "https://opengameart.org/content/dark-souls-type-boss-theme",
+    "title": "«Dark souls type boss theme» — Philémon Weber (Helmet)",
+    "license": "CC-BY 4.0",
+    "download_sha256": "9850019376d71f4e0088850476d5552b22333ee5649de95531601856caed1e81",
+    "converted_sha256": "ad70bca7de8a562b313ab21b56193a0de274456d527ba5815a40b7cdd62b2927",
+    "converted": "ffmpeg loudnorm, Ogg Vorbis"
+  },
+  "boss_two.ogg": {
+    "source_url": "https://opengameart.org/content/colossal-boss-battle-theme",
+    "title": "«Colossal Boss Battle Theme» (Blackmoor Colossus Loop) — Matthew Pablo, www.matthewpablo.com",
+    "license": "CC-BY 3.0",
+    "download_sha256": "d4be654272c60c47d4821a6a3ddca9022ab37d9d350a9755b7e658cb6be315bb",
+    "converted_sha256": "b7caa99d2ff420172c1040cb59eac452f382eb796bbc5fe53d2b80fa3ad83dd8",
+    "converted": "ffmpeg loudnorm, Ogg Vorbis"
+  },
+  "ext_shotgun_blast.ogg": {
+    "source_url": "https://opengameart.org/content/gunshot-sounds",
+    "title": "«Gunshot Sounds» (shotty.wav) — Vincent Sevedge / Tabasco",
+    "license": "CC-BY 3.0 (файл в архиве); на OGA указано CC0",
+    "download_sha256": "5b3960083a94e18ee47bc84376615a476debc884b18f25b93ea4b6ab3f278e4f",
+    "converted_sha256": "a5d162b8bedffc69d05b472b6147b138f936f3626e9f47a54ba3869d5215501a",
+    "converted": "ffmpeg loudnorm, Ogg Vorbis"
+  },
+  "ext_shotgun_cock.ogg": {
+    "source_url": "https://opengameart.org/content/gun-reload-sounds",
+    "title": "«Gun reload sounds» (shotguncock.wav) — SpringySpringo",
+    "license": "CC0",
+    "download_sha256": "33e007321ba83301c861aef573f2c40b70bc62f8f24c0164877e6dd123e24371",
+    "converted_sha256": "de9fb57fc15f1230b7685b05b8fbf62a0368318f36deafb5827c4f2f9e735e8e",
+    "converted": "ffmpeg loudnorm, Ogg Vorbis"
+  }
+}

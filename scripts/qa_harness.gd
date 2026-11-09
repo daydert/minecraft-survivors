@@ -446,6 +446,68 @@ static func prepare_four_finale_capture(g):
 	var door_at: Dictionary={"door":2.0,"door_open":5.4,"door_enter":8.4}
 	finale_run(w,door_at.get(mode,2.0))
 
+## Film pilot for the finale: reads the same hazards the player sees and moves
+## out of them. Diagnostic only (the recording also keeps the hero invulnerable).
+static func finale_pilot(w, e) -> Vector2:
+	if not e.fighting() or e.hb.is_empty():return Vector2.ZERO
+	var p: Vector2=w.player
+	var to_hb: Vector2=p.direction_to(e.hb.p)
+	var d: float=p.distance_to(e.hb.p)
+	var wish: Vector2=to_hb.orthogonal()*0.8+to_hb*clampf((d-70.0)/40.0,-1,1)
+	for m in e.marks:
+		if not m.hit and p.distance_to(m.p)<34:wish+=m.p.direction_to(p)*3
+	for ring in e.rings:
+		if ring.has("r"):wish=(ring.p+Vector2.from_angle(ring.gap)*(ring.r+30))-p;wish=wish.normalized()*2
+	for lane in e.lanes:
+		var q: Vector2=Geometry2D.get_closest_point_to_segment(p,lane.a,lane.b)
+		if q.distance_to(p)<26:wish+=q.direction_to(p)*3
+	if not e.hole.is_empty():wish+=e.hole.p.direction_to(p)*(3 if p.distance_to(e.hole.p)<90 else 1)
+	if e.move=="rain":
+		var lanes: int=int(e.data.two.rain.lanes)
+		var safe_x: float=e.arena.position.x+(e.hb.get("rain_safe",lanes/2)+0.5)*e.arena.size.x/lanes
+		wish=Vector2(signf(safe_x-p.x)*minf(1,absf(safe_x-p.x)/12),0.3)
+	if not e.seam.is_empty() and absf(p.x-e.seam.x)<40:wish.x+=signf(p.x-e.seam.x)*2
+	for leg in e.path:
+		if leg.get("marked",false):
+			var q: Vector2=Geometry2D.get_closest_point_to_segment(p,leg.a,leg.b)
+			if q.distance_to(p)<24:wish+=q.direction_to(p)*3
+	for b in e.shots:
+		if b.p.distance_to(p)<30:wish+=b.v.normalized().orthogonal()*signf(b.v.normalized().orthogonal().dot(p-b.p))*2
+	return wish.limit_length()
+
+static func record_four_finale(g, tree: SceneTree) -> Dictionary:
+	g.start_chapter(4);g.world.reset(724)
+	var w=g.world;var e=w.ending
+	w.state="RUNNING";w.stage="survival";w.stage_age=30;w.note_presented=true;w.note_read=true
+	w.db.data.chapter_four.exploration_only=true
+	w.build={"sword":8,"bow":7,"shotgun":4,"bell":4};w.items={"armor":4,"bedrock":2,"redstone":3}
+	g.settings.shake=true;w.time=719.0;w.player=e.center+Vector2(0,330)
+	var frame:=0;var cues:Array=[];var music:Array=[];var phases:Array=[]
+	var last_music:="?";var last_phase:="?"
+	var folder:="res://qa/recordings/chapter_four_finale_frames"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(folder))
+	var limit:=30*330
+	while frame<limit and w.state!="RESULT":
+		for tick in range(2):
+			if w.state=="LEVEL_UP":w.skip_reward()
+			if w.state=="CHEST":w.chest_delay=0;w.close_chest()
+			var move:=Vector2.ZERO
+			if e.phase in ["","summit"]:move=w.player.direction_to(e.center)
+			else:move=finale_pilot(w,e)
+			if e.fighting():w.invulnerable=maxf(w.invulnerable,.2);w.hp=maxf(w.hp,14)
+			finale_qte(w,e)
+			w.step(1.0/60,move)
+		var t: float=frame/30.0
+		for id in w.sounds:cues.append({"id":id,"time":t})
+		w.sounds.clear()
+		if e.music!=last_music:last_music=e.music;music.append({"track":e.music,"time":t})
+		if e.phase!=last_phase:last_phase=e.phase;phases.append({"phase":e.phase,"time":t})
+		g.ui_time+=1.0/30;g.update_camera_lead()
+		g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
+		tree.root.get_texture().get_image().save_png(folder+"/%05d.png"%frame)
+		frame+=1
+	return {"fps":30,"frames":frame,"music":music,"phases":phases,"sound_events":cues,"diagnostic":"invulnerable hero, scripted dodging and QTE answers","state":w.state}
+
 static func prepare_four_encounter_capture(g):
 	g.start_chapter(4);g.world.reset(724)
 	var w=g.world;var e=w.encounters;var mode: String=g.qa_mode.trim_prefix("ch4d_")

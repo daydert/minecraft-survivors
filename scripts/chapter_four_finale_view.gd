@@ -248,6 +248,12 @@ static func effect(g, ef: Dictionary, offset: Vector2) -> bool:
 			g.draw_line(p, end, Color(1, 1, 1, 1 - k), 3)
 			g.draw_line(p, end, Color(0.2, 0.0, 0.03, (1 - k) * 0.8), 7)
 		"ch4_hb_head":head_burst(g, p, ef.age)
+		"ch4_hb_ignite":
+			var fire_k = 1.0 - k
+			g.draw_clip("fire_animation", (p - Vector2(6, 14)).floor(), Vector2(12, 14), ef.age)
+			for j in range(8):
+				var q = p + Vector2(sin(j * 2.4) * 6, -k * 24 - j * 2)
+				g.draw_rect(Rect2(q.floor(), Vector2.ONE), Color(1, 0.4, 0.2, fire_k))
 		_:return false
 	return true
 
@@ -358,6 +364,13 @@ static func duel(g, e, offset: Vector2):
 			e.hb.p = hp - offset
 			herobrine(g, offset, scale)
 			e.hb.p = saved
+			var since = e.age - e.punch_at
+			if e.phase == "death" and since >= 0.0 and since < 0.3 and e.head_at < 0.0:
+				var head0 = hp + Vector2(-17, -8)
+				for j in range(9):
+					var d = Vector2.from_angle(-PI * 0.5 + (Atmosphere.hash01(j, int(e.punch_at * 10), 31) - 0.5) * 2.4)
+					g.draw_rect(Rect2((head0 + d * since * 160.0 + Vector2(0, since * since * 300)).floor(), Vector2(2, 2)), Color(0.6, 0.02, 0.05, 1.0 - since / 0.3))
+				Atmosphere.draw_edges(g, Color(0.5, 0.0, 0.03, 0.35 * (1.0 - since / 0.3)))
 			if e.head_at >= 0.0:
 				var head: Vector2 = hp + Vector2(-17, -8)
 				g.draw_set_transform(head, 0, Vector2(scale, scale))
@@ -419,12 +432,15 @@ static func words(g, e, offset: Vector2):
 			"plead":plead(g, t, age)
 
 static func calm_line(g, e, t: Dictionary, age: float, offset: Vector2):
-	var shown = mini(t.text.length(), int(age * 18.0))
+	var shown = mini(t.text.length(), int(age * 11.0))
 	var text: String = t.text.substr(0, shown)
 	var fade: float = 1.0 - smoothstep(t.life - 0.6, t.life, age)
 	var p: Vector2 = (e.hb.p + offset - Vector2(0, 50)) if not e.hb.is_empty() else Vector2(320, 120)
-	var width: float = g.font.get_string_size(t.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
-	g.text_at(text, Vector2(p.x - width / 2, p.y).floor(), 8, Color(0.92, 0.92, 0.92, fade))
+	# Cold and still: large letters, slow reveal, no tremble at all.
+	var width: float = g.font.get_string_size(t.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+	var at = Vector2(clampf(p.x - width / 2, 8, 632 - width), maxf(60, p.y)).floor()
+	g.text_at(text, at + Vector2(1, 1), 16, Color(0, 0, 0, fade))
+	g.text_at(text, at, 16, Color(0.92, 0.92, 0.95, fade))
 
 ## "АХАХАХАХАХХАХА": every letter lives on its own — jitter, swelling, ghosts.
 static func laugh(g, t: Dictionary, age: float):
