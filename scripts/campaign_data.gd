@@ -23,6 +23,7 @@ func configure(chapter: int):
 		data.forms=four.forms
 		data.aura=four.aura
 		data.duration=four.duration
+		data.mob_cap=four.mob_cap
 		data.chapter_four=four
 		data.aura_damage=1.0
 		data.aura_interval=1.0

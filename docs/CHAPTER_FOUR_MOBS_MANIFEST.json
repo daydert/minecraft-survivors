@@ -1,0 +1,292 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/zombie/zombie.png": {
+      "sha256": "1b88eea9b63889c2c3399773f887af375defc3aad0e7a375adc84249da54cbbd",
+      "bytes": 700
+    },
+    "textures/block/mushroom_stem.png": {
+      "sha256": "9633dd875492cf5240be3e2442e4729c2350912f4b0b565c9f01640195466401",
+      "bytes": 170
+    },
+    "textures/block/red_concrete_powder.png": {
+      "sha256": "39f9bb7a9f0e11986b65cec8bb58252405f26f048ee3c62397038e3a0eff9e1d",
+      "bytes": 564
+    },
+    "textures/block/bone_block_side.png": {
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "bytes": 139
+    },
+    "textures/block/coal_block.png": {
+      "sha256": "4987dbd954475908df08f13e8114510285825fb8c189263317d4a0c1bf78b030",
+      "bytes": 177
+    },
+    "textures/entity/skeleton/skeleton.png": {
+      "sha256": "854dd39acb1d8852db3b9e5d3d2bdc032070e37f421b53661ff48d0c1ddf290a",
+      "bytes": 477
+    },
+    "textures/item/bow.png": {
+      "sha256": "1e2cb18545e4ed9286e1120686c3f835d6619b8bd853970f1011163b68426a54",
+      "bytes": 160
+    },
+    "textures/entity/spider/spider.png": {
+      "sha256": "12771d3524ad137812b2a94d52b6943401c5e0a942baa6946e783e822c46c554",
+      "bytes": 646
+    },
+    "textures/entity/creeper/creeper.png": {
+      "sha256": "e5f1cbe223f6838049e4632b250cad7b70c1d30e9717ad7bfe32912731887283",
+      "bytes": 2832
+    },
+    "textures/entity/wolf/wolf.png": {
+      "sha256": "8ec1bfe40fa361284c109bc79d1e4fa0e69d1095289ebd911999e03e3b7164ff",
+      "bytes": 650
+    },
+    "textures/entity/villager/villager.png": {
+      "sha256": "ac6a775858c742fecd5dd18e8f99f308701650e770d30da97773daab92b6f5bd",
+      "bytes": 700
+    },
+    "textures/entity/cow/temperate_cow.png": {
+      "sha256": "5106c2676c70d64b2af4bc0792cb4adfa75cf587d05cc370ee7c6ca01465efdc",
+      "bytes": 793
+    },
+    "textures/entity/sheep/sheep.png": {
+      "sha256": "5356607cc2b8979f00d2aafd31bdfcbbff792a6eebd6206d44733ad63ad303f9",
+      "bytes": 603
+    },
+    "textures/entity/sheep/sheep_wool.png": {
+      "sha256": "4f76a7d14c8248288e7ad1bc73ea76bd509c19c828dd02268453406fd59d961c",
+      "bytes": 414
+    },
+    "textures/entity/witch.png": {
+      "sha256": "c22f075ec24a49d3b2f108432c098d7d4b52e266b1b6da6aa5de6cda5cf01af4",
+      "bytes": 994
+    },
+    "textures/block/iron_block.png": {
+      "sha256": "dafa9944ba49fe71958553eded50e87d7bea9c7410cfe568745989bede101c49",
+      "bytes": 169
+    },
+    "textures/block/slime_block.png": {
+      "sha256": "9175dd2ac2a6e93c0e5c3b46e5006fd9f230ee005b7da3ea109f6d872e30209d",
+      "bytes": 195
+    },
+    "textures/block/glass.png": {
+      "sha256": "cb89c706dce86eac3123cef087d359b5f23098b658a468fb91662b4a9922bcd0",
+      "bytes": 147
+    },
+    "textures/block/glass.png.mcmeta": {
+      "sha256": "03ef274873ccbeae639bd58df2bf22261195588cc63f15a43c5107807cf6bcde",
+      "bytes": 61
+    },
+    "textures/item/potion.png": {
+      "sha256": "6a09a39bb6c41bc92bd5eca1f51caf5b582a85f68206b164476c8e14a4669416",
+      "bytes": 165
+    },
+    "textures/item/iron_shovel.png": {
+      "sha256": "432a399180f3af76ab368f5399950caae1a879fdc6a03c01cd9f765d249a8900",
+      "bytes": 153
+    },
+    "textures/block/gold_block.png": {
+      "sha256": "75d99ac8de448cfbf35a5688b773dac2c517ca696fe87459b63115af3794937b",
+      "bytes": 199
+    },
+    "textures/entity/horse/horse_skeleton.png": {
+      "sha256": "355545a452030177be6e4b3799f7e19402405460b29c08121351049793ad9ae5",
+      "bytes": 759
+    },
+    "textures/entity/silverfish.png": {
+      "sha256": "be4837e2c8bd3b0bf1d9631c15fdfd8dee85882b84772bf7649438ea90c6ff83",
+      "bytes": 730
+    },
+    "textures/entity/chicken/temperate_chicken.png": {
+      "sha256": "80340dc8559bbeaa994728c23ea7df655d8f8e6b462257c7570dd5a8cf57b36b",
+      "bytes": 366
+    },
+    "textures/block/coarse_dirt.png": {
+      "sha256": "6889a193decb2c38cd8559456693c15192917c7b917d6ef9c3c2e142f7819ad4",
+      "bytes": 495
+    }
+  },
+  "derived": {
+    "ch4_flayed_zombie_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        936,
+        126
+      ],
+      "sha256": "d7fa25d7c334d158b3e20c970421a00dd857986719355749e499286c28400b7e"
+    },
+    "ch4_growth_skeleton_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1040,
+        129
+      ],
+      "sha256": "f043e887982cd098240b434424fa31556ae28f9cc59f4b81ab8decdcf2aec445"
+    },
+    "ch4_torn_spider_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1118,
+        111
+      ],
+      "sha256": "c088485713fca3d2213600f67e51e76c650f23c4e0f894f1fc938e14eb4be73c"
+    },
+    "ch4_bloated_creeper_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        962,
+        117
+      ],
+      "sha256": "5d8c0165f1e896ec823717bc99dbeecb1b0e8fd245fe1115fd089b58a6a7e46b"
+    },
+    "ch4_hungry_wolf_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        962,
+        138
+      ],
+      "sha256": "032984de643e0bb783c8be6a61081645e60e6fb928dbc8d2d2879485b049963b"
+    },
+    "ch4_crawler_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        910,
+        114
+      ],
+      "sha256": "e94abae32a3513504040da19593712281e41a02784c17fb20920c631722f85e5"
+    },
+    "ch4_open_cow_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1144,
+        153
+      ],
+      "sha256": "e5b5fe44467175a6f3b520430523086882597d921ac3d62bdf2dcd9d7d361ad5"
+    },
+    "ch4_matted_sheep_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1040,
+        132
+      ],
+      "sha256": "70bc91fb293aaead6b32e4ecf209325ab19295de7b20e567bd2fda7519edc61b"
+    },
+    "ch4_sheared_sheep_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1014,
+        132
+      ],
+      "sha256": "a41c6c573cdddd0434aeff03e09120576306043c7296d743602587e2d0e2dafc"
+    },
+    "ch4_infected_witch_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1144,
+        150
+      ],
+      "sha256": "c20fcd4311d1e1a33836dc6731765266f9f1686f1001f76084b9cab5082dc60c"
+    },
+    "ch4_fused_villagers_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1352,
+        165
+      ],
+      "sha256": "d561244d3e871bc05632afc437879a339537131adf1b36301378f62d1152d214"
+    },
+    "ch4_fused_lower_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        962,
+        126
+      ],
+      "sha256": "b92620ff0c0ca3c91623d919a4f28a44710b786ba22bdc4e52ec2d19f9d6b20b"
+    },
+    "ch4_gravedigger_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1716,
+        207
+      ],
+      "sha256": "b6c847ed36c9de0c75fb497dbda1a7c8cc60ead17735d874e697cb9d8740b706"
+    },
+    "ch4_bellringer_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1092,
+        144
+      ],
+      "sha256": "197c15ba12674174fe028a46a24e31bf44bf1f948b6e2a1b8582e6a20d98a507"
+    },
+    "ch4_bone_rider_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1560,
+        219
+      ],
+      "sha256": "ee1c86f6416f7e3a2ae9b5ceb5202dbd938d990c2b5ca58c13d5f841d5502b1a"
+    },
+    "ch4_parasite_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        442,
+        51
+      ],
+      "sha256": "1a939187f98beab188da834c2a9ac385700dc7d1863a9d5432815ef2bf3e425a"
+    },
+    "ch4_chicken_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        598,
+        78
+      ],
+      "sha256": "9a7bd9d46a3b5731402a376a3a95c962030260938a1ff367ee6b93319e7cc983"
+    },
+    "ch4_earth_wall": {
+      "sources": [
+        "block/coarse_dirt"
+      ],
+      "size": [
+        24,
+        28
+      ],
+      "sha256": "577a396a5fc5bd4b9f36757bdf8b24d8be775ea366a9c2ff7c1fe0b06e6ee54c"
+    }
+  }
+}

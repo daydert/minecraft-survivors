@@ -1,0 +1,26 @@
+[
+  {
+    "mode": "ch4b_gallery",
+    "exit": 0,
+    "errors": [],
+    "capture": [
+      "/tmp/ch4-b-native/ch4b_gallery/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4b_gallery.png"
+    ]
+  },
+  {
+    "mode": "ch4b_grave",
+    "exit": 0,
+    "errors": [],
+    "capture": [
+      "/tmp/ch4-b-native/ch4b_grave/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4b_grave.png"
+    ]
+  },
+  {
+    "mode": "ch4b_cow",
+    "exit": 0,
+    "errors": [],
+    "capture": [
+      "/tmp/ch4-b-native/ch4b_cow/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4b_cow.png"
+    ]
+  }
+]

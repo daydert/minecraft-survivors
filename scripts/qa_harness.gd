@@ -2,6 +2,9 @@ extends RefCounted
 ## Capture, stress, autoplay and recording helpers. Never used by an ordinary run.
 
 static func prepare_capture(g):
+	if g.qa_mode.begins_with("ch4b_"):
+		prepare_four_enemies_capture(g)
+		return
 	if g.qa_mode.begins_with("ch4_"):
 		prepare_four_capture(g)
 		return
@@ -329,3 +332,56 @@ static func record_four(g, tree: SceneTree) -> Dictionary:
 			tree.root.get_texture().get_image().save_png("res://qa/recordings/chapter_four_frames/%05d.png"%frame)
 			frame+=1
 	return {"fps":30,"frames":frame,"segments":segments,"sound_events":cues,"diagnostic_cuts":true,"invulnerability":false,"content_stage":"A"}
+
+static func prepare_four_enemies_capture(g):
+	g.start_chapter(4);g.world.reset(724)
+	var w=g.world
+	w.state="RUNNING";w.stage="survival";w.clock=20;w.time=0
+	w.db.data.chapter_four.exploration_only=true;w.build={};w.note_presented=true
+	g.cam_lead=Vector2.ZERO;g.settings.lighting=true;g.settings.shake=false
+	var mode: String=g.qa_mode.trim_prefix("ch4b_")
+	if mode in ["gallery","unlit"]:
+		var i:=0
+		for kind in w.db.data.forms:
+			w.spawn(kind,w.player+Vector2(-205+(i%5)*103,-90+(i/5)*78));i+=1
+		for m in w.mobs:m.timer=10;m.dir=Vector2.DOWN
+		if mode=="unlit":g.settings.lighting=false
+	elif mode=="crowd":
+		var kinds=["flayed_zombie","growth_skeleton","torn_spider","hungry_wolf","matted_sheep","fused_villagers"]
+		for i in range(48):w.spawn(kinds[i%kinds.size()],w.player+Vector2.from_angle(i*2.39996)*(75+i%5*22))
+		w.build={"sword":8,"bow":6,"axe":5};w.items={"armor":3,"redstone":2};w.facing=Vector2.UP
+	elif mode=="flock":w.player=Vector2(845,940)
+	else:
+		var kinds={"skeleton":"growth_skeleton","cow":"open_cow","spider":"torn_spider","rider":"bone_rider","grave":"gravedigger","bell":"bellringer","witch":"infected_witch","cyst":"bloated_creeper","mutations":"matted_sheep"}
+		var kind: String=kinds[mode]
+		w.spawn(kind,w.player+Vector2(-95,-20) if mode!="cyst" else w.player+Vector2(20,0))
+		var m=w.mobs.back();m.timer=0;m.dir=m.p.direction_to(w.player)
+		if mode=="witch":w.spawn("flayed_zombie",m.p+Vector2(35,5));w.mobs.back().hp=2
+		if mode=="bell":
+			for j in range(3):w.spawn("flayed_zombie",m.p+Vector2(35+j*24,40))
+		if mode=="mutations":
+			w.hurt(m,m.max_hp*.6);w.spawn("fused_villagers",w.player+Vector2(75,-20));w.hurt(w.mobs.back(),w.mobs.back().max_hp*.6)
+	w.rebuild_hit_grid();w.update_flow()
+	var preview: float={"skeleton":.56,"cow":.65,"spider":.85,"rider":.7,"grave":1.35,"bell":.8,"witch":.55,"cyst":1.3,"mutations":.1,"crowd":.4}.get(mode,0.0)
+	for i in range(ceili(preview*60)):w.step(1.0/60)
+	w.Enemies.poses(w)
+
+static func record_four_enemies(g,tree: SceneTree) -> Dictionary:
+	var frame:=0;var cues: Array=[];var segments: Array=[]
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://qa/recordings/chapter_four_b_frames"))
+	for mode in ["gallery","skeleton","spider","cow","grave","bell","rider","witch","cyst","mutations","crowd"]:
+		g.qa_mode="ch4b_"+mode;prepare_four_enemies_capture(g)
+		var w=g.world
+		segments.append({"mode":mode,"time":frame/30.0})
+		for i in range(90):
+			var dir:=Vector2.ZERO
+			if mode in ["skeleton","spider","cow","rider"] and i>10:dir=Vector2.DOWN if i<40 else Vector2.RIGHT if i<75 else Vector2.ZERO
+			if mode!="gallery":
+				for tick in range(2):
+					if w.state=="LEVEL_UP":w.skip_reward()
+					w.step(1.0/60,dir)
+			for id in w.sounds:cues.append({"id":id,"time":frame/30.0})
+			w.sounds.clear()
+			g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
+			tree.root.get_texture().get_image().save_png("res://qa/recordings/chapter_four_b_frames/%05d.png"%frame);frame+=1
+	return {"fps":30,"frames":frame,"segments":segments,"sound_events":cues,"diagnostic_cuts":true,"invulnerability":false,"max_gear_only_in_crowd":true,"content_stage":"B"}

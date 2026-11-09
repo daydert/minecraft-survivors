@@ -2,6 +2,13 @@ extends "res://scripts/arsenal_world.gd"
 ## IV owns its terrain and scenario. Stage A is exploration and environmental
 ## combat; the wave/actor drafts remain data for the subsequent content stage.
 const TERRAIN := "res://data/chapter_four_terrain.json"
+const Enemies = preload("res://scripts/chapter_four_enemies.gd")
+var enemy_shots: Array = []
+var enemy_fields: Array = []
+var enemy_bottles: Array = []
+var mob_walls: Array = []
+var chickens: Array = []
+var mob_slow := 1.0
 var terrain: Dictionary = {}
 var pools: Dictionary = {}
 var landmarks: Array = []
@@ -24,9 +31,12 @@ func reset(seed_value: int = 0):
 	terrain = JSON.parse_string(FileAccess.get_file_as_string(TERRAIN))
 	pools.clear();landmarks.clear();threats.clear();blood_shots.clear()
 	blood_hand.clear();hand_cooldown = 2.0;held = 0.0
+	enemy_shots.clear();enemy_fields.clear();enemy_bottles.clear();mob_walls.clear();chickens.clear();mob_slow=1.0
 	note_read = false;note_pending = false;note_presented = false
 	aura_state = "none";aura_changed_at = -10.0;victory_stage = ""
 	super.reset(seed_value)
+	var actors: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_mobs.json"))
+	animation.data.actors.merge(actors.actors,true)
 	stage = "arrival"
 	facing = Vector2.UP
 
@@ -74,9 +84,63 @@ func make_map():
 		if free_at(p, 10) and not in_blood(p):
 			props.append({"type": "pumpkin", "p": p, "hp": 12.0, "id": next_id(), "radius": 7.0})
 	assign_healing()
+	for i in range(5):
+		var p=Vector2(820,840)+Vector2((i%3)*17,(i/3)*16)
+		chickens.append({"p":p,"dir":Vector2.DOWN,"state":"watch","age":0.0})
+
+func remove_mob_solid(p: Vector2):
+	var cell:=Vector2i(p/64.0)
+	if solid_grid.has(cell):solid_grid[cell]=solid_grid[cell].filter(func(s):return s.p!=p)
+	var nav_cell:=Vector2i(p/CELL)
+	if not nearby_solids(p).any(func(s):return Vector2i(s.p/CELL)==nav_cell):blocked.erase(nav_cell)
+	update_flow()
+
+func spawn(kind: String, at = null) -> bool:
+	if not db.data.forms.has(kind):return super.spawn(kind,at)
+	var def: Dictionary=db.data.forms[kind]
+	var limits: Dictionary=db.data.chapter_four.enemy_limits
+	if kind=="parasite" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.parasites):return false
+	if kind=="infected_witch" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.witches):return false
+	if kind=="growth_skeleton" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.skeletons):return false
+	if def.elite and mobs.filter(func(m):return m.get("boss",false) and m.hp>0).size()>=int(limits.elites):return false
+	if not super.spawn(kind,at):return false
+	var m: Dictionary=mobs.back()
+	m.merge({"form":kind,"skin":"ch4_"+kind,"undead":true,"ai":def.ai,"boss":def.elite,"haste":0.0,"haste_scale":1.0,"changed":false,"cast":"","phase_duration":1.0,"phase_age":0.0,"lift":0.0,"passes":0,"pass_origin":m.p,"wall_points":[],"exploded":false,"expired":false,"expires":clock+float(def.ai.get("lifetime",99999))},true)
+	m.timer=1.2+float(m.id%7)*.27
+	m.phase="walk"
+	return true
+
+func move_mobs(dt: float):
+	# Legacy actors may appear in a QA fixture; their old update remains intact.
+	var all: Array=mobs
+	mobs=all.filter(func(m):return not m.has("form"))
+	super.move_mobs(dt)
+	mobs=all
+	Enemies.update(self,dt)
+
+func heal_undead(at: Vector2, radius: float, damage: float):
+	# Shared hook for the Chapter IV healing potion (arsenal stage C).
+	for m in in_radius(at,radius):
+		if m.get("undead",false) and not m.get("allied",false):hurt(m,damage)
+
+func resolve_deaths():
+	for i in range(mobs.size()-1,-1,-1):
+		var m: Dictionary=mobs[i]
+		if m.hp>0 or not m.has("form"):continue
+		if not m.expired and not m.exploded:
+			kills+=1;drop_xp(m.p,m.xp)
+			if m.boss:loot.append({"kind":"chest","p":m.p,"born":time})
+			add_effect("ch4_remains",m.p,.6,{"skin":m.skin,"dir":m.visual_dir})
+		if m.exploded and threats.filter(func(t):return t.hp>0 and t.has("parasite_at")).size()<int(db.data.chapter_four.enemy_limits.cysts):
+			var cyst={"kind":"growth","p":m.p,"variant":1,"id":next_id(),"phase":float(m.id)}
+			make_threat(cyst,db.data.chapter_four.growth);cyst.hp=18.0;cyst.max_hp=18.0;cyst.radius=9.0;cyst.timer=999.0
+			cyst.parasite_at=clock+float(m.ai.cyst_delay);cyst.parasites_left=3;cyst.expires_at=clock+float(m.ai.cyst_life)
+			landmarks.append(cyst);add_solid(cyst.p,cyst.radius)
+		mobs.remove_at(i)
+	super.resolve_deaths()
 
 func make_threat(mark: Dictionary, rules: Dictionary):
-	mark.merge({"hp": float(rules.hp), "max_hp": float(rules.hp), "radius": float(rules.radius), "timer": 2.0 + fposmod(mark.phase, 3), "attack": "idle", "flash": 0.0, "burn": 0.0, "burn_tick": .5, "visual": animation.actor(), "knock": Vector2.ZERO, "boss": false, "control_resist": 0.0, "aim": Vector2.DOWN, "link": -1, "dead": false})
+	mark.merge({"hp": float(rules.hp), "max_hp": float(rules.hp), "radius": float(rules.radius), "timer": 2.0 + fposmod(mark.phase, 3), "attack": "idle", "flash": 0.0, "burn": 0.0, "burn_tick": .5, "visual": animation.actor(), "knock": Vector2.ZERO, "boss": false, "control_resist": 0.0, "undead": true, "aim": Vector2.DOWN, "link": -1, "dead": false})
 	threats.append(mark)
 
 func in_blood(p: Vector2) -> bool:
@@ -103,10 +167,23 @@ func rebuild_hit_grid():
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if not m.has("attack"):
+		if m.has("form"):
+			var kind: String=m.kind
+			m.kind=db.data.forms[kind].base
+			super.hurt(m,amount,push)
+			m.kind=kind
+			if m.hp>0:
+				if kind=="bellringer" and m.phase=="windup":Enemies.cancel(m,1.6)
+				if kind=="infected_witch" and m.phase=="windup" and m.cast=="heal":Enemies.cancel(m,1.3)
+				if kind in ["matted_sheep","fused_villagers"] and not m.changed and m.hp<m.max_hp*m.ai.shed_hp:
+					m.changed=true;m.speed*=m.ai.shed_speed;m.skin="ch4_sheared_sheep" if kind=="matted_sheep" else "ch4_fused_lower"
+					if kind=="matted_sheep":m.hp=minf(m.hp,9)
+					add_effect("ch4_shed",m.p,.6);Enemies.cancel(m,.3)
+			return
 		super.hurt(m, amount, push)
 		return
 	if m.hp <= 0:return
-	damage_by[damage_owner] = damage_by.get(damage_owner, 0.0) + minf(m.hp, amount)
+	if not m.get("expiring",false):damage_by[damage_owner] = damage_by.get(damage_owner, 0.0) + minf(m.hp, amount)
 	m.hp -= amount;m.flash = .1
 	emit_pixels("impact", m.p - Vector2(0, 10), 3, push)
 	if m.hp <= 0:
@@ -117,11 +194,14 @@ func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 			var nav_cell := Vector2i(m.p / CELL)
 			if not nearby_solids(m.p).any(func(s):return Vector2i(s.p/CELL) == nav_cell):blocked.erase(nav_cell)
 			update_flow()
-		drop_xp(m.p, 3 if m.kind == "torch" else 6)
+		if not m.get("expiring",false):drop_xp(m.p, 3 if m.kind == "torch" else 6)
 		sound("ch4_break")
 
 func hook_target(m: Dictionary, evolved_hook: bool):
-	if not m.has("attack"):super.hook_target(m, evolved_hook)
+	if not m.has("attack"):
+		if m.get("control_resist",0.0)>0:return
+		super.hook_target(m, evolved_hook)
+		if m.has("form") and m.phase in ["windup","smash_wait"]:Enemies.cancel(m)
 
 func aura_near() -> bool:
 	for mark in landmarks:
@@ -232,13 +312,15 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	flow_timer -= dt
 	if flow_timer <= 0 and flow_cell != Vector2i(player / CELL):update_flow();flow_timer = .25
 	update_aura()
-	if not db.data.chapter_four.exploration_only:spawn_wave(dt)
+	if not db.data.chapter_four.exploration_only and time<float(db.data.duration):spawn_wave(dt)
 	move_mobs(dt)
 	rebuild_hit_grid()
 	update_attacks(dt);update_projectiles(dt);update_explosives(dt)
 	update_hazards(dt);update_fire(dt);update_threats(dt);resolve_deaths()
+	Enemies.environment(self,dt)
 	update_effects(dt);pickup(dt);update_particles(dt)
 	animation.advance(self, dt);update_regeneration(dt)
+	Enemies.poses(self)
 	if hp <= 0:
 		state = "RESULT";victory = false;sound("death");return
 	if xp >= db.required_xp(level):next_level()
@@ -248,4 +330,4 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		if player.distance_to(note) < 18:note_presented = true;note_pending = true
 
 func movement_speed() -> float:
-	return float(db.data.player_speed) * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else 1.0)
+	return float(db.data.player_speed) * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow)

@@ -1,0 +1,68 @@
+{
+  "stage": "B",
+  "full_chapter_complete": false,
+  "user_corrections": [
+    "Heavier I-III/coop regressions deferred until complete IV",
+    "Grotesque exposed anatomy amplified after user rejected ordinary mob appearance"
+  ],
+  "checks": {
+    "environment": 40,
+    "enemies": 69,
+    "visual": 19,
+    "environment_assets": 114,
+    "mob_assets": 2713
+  },
+  "failures": [],
+  "old_regressions_run_this_stage": false,
+  "pressure": {
+    "clock_seconds": 3.99999999999999,
+    "draw_and_frame_wait_p50_ms": 5.854,
+    "draw_and_frame_wait_p95_ms": 10.548,
+    "frames": 240,
+    "invulnerability_for_measurement": true,
+    "last_mobs": 133,
+    "natural_run": false,
+    "peak_mobs": 134,
+    "sim_p50_ms": 2.33,
+    "sim_p95_ms": 6.586
+  },
+  "film": {
+    "path": "qa/recordings/chapter_four_stage_b.mp4",
+    "seconds": 33,
+    "frames": 990,
+    "invulnerability": false,
+    "diagnostic_cuts": true,
+    "natural_run": false,
+    "sha256": "5d50a317084f92f6c541cd8fdff5728e505bcfcbb1b3b899d6487cbba3852aee"
+  },
+  "release": {
+    "linux_native": [
+      {
+        "mode": "ch4b_gallery",
+        "exit": 0,
+        "errors": [],
+        "capture": [
+          "/tmp/ch4-b-native/ch4b_gallery/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4b_gallery.png"
+        ]
+      },
+      {
+        "mode": "ch4b_grave",
+        "exit": 0,
+        "errors": [],
+        "capture": [
+          "/tmp/ch4-b-native/ch4b_grave/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4b_grave.png"
+        ]
+      },
+      {
+        "mode": "ch4b_cow",
+        "exit": 0,
+        "errors": [],
+        "capture": [
+          "/tmp/ch4-b-native/ch4b_cow/godot/app_userdata/Minecraft Survivors — До рассвета/capture_ch4b_cow.png"
+        ]
+      }
+    ],
+    "windows_exported": true,
+    "windows_native_tested": false
+  }
+}

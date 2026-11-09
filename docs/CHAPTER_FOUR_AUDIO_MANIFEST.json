@@ -77,6 +77,66 @@
       "source": "minecraft/sounds/block/sculk/break3.ogg",
       "sha256": "49dbce0cb89dd9779f1e463a794f7a2d95670eb58f4a5d8e0e15d9f56b1cd12d"
     },
+    "mob_zombie_wood1.ogg": {
+      "source": "minecraft/sounds/mob/zombie/wood1.ogg",
+      "sha256": "58cdd007aca5a21faf5892de5c404f447132b4eaff4f2e34e729de1818b654d5"
+    },
+    "mob_zombie_wood2.ogg": {
+      "source": "minecraft/sounds/mob/zombie/wood2.ogg",
+      "sha256": "2dfc11b50ed4e8749571f5bf29e16c51fd858753e34a143065ab495362731b4d"
+    },
+    "mob_zombie_wood3.ogg": {
+      "source": "minecraft/sounds/mob/zombie/wood3.ogg",
+      "sha256": "4915dfc17ef2008027065409259a32b5c7488e60a16af53672d5987b06a4b7d7"
+    },
+    "random_bow.ogg": {
+      "source": "minecraft/sounds/random/bow.ogg",
+      "sha256": "3d983f24930734d6d32428b3b722d688b99475d488ab963f0d61107381d04c4a"
+    },
+    "random_explode1.ogg": {
+      "source": "minecraft/sounds/random/explode1.ogg",
+      "sha256": "f5951a4f5ece95d595398c3519ab26044c359bc088a0f0684ee6f1b14c02ebc0"
+    },
+    "random_explode2.ogg": {
+      "source": "minecraft/sounds/random/explode2.ogg",
+      "sha256": "cb262b2af5fdfaac7b83cc64790c83cc852506444f382f06ded37e83f105b5a8"
+    },
+    "random_explode3.ogg": {
+      "source": "minecraft/sounds/random/explode3.ogg",
+      "sha256": "c2a8b6821fe8a50d72605bff3410bd8c4c82bff47cbce37d99e225dbaf55f6a4"
+    },
+    "entity_witch_drink1.ogg": {
+      "source": "minecraft/sounds/entity/witch/drink1.ogg",
+      "sha256": "5fb16bd2e15918e255de2992fcae6789b0356cfea9a99ed035f240e1889094ac"
+    },
+    "entity_witch_drink2.ogg": {
+      "source": "minecraft/sounds/entity/witch/drink2.ogg",
+      "sha256": "67146c925751a29fb31451d8ab7e43b984c876743ace653d9866af4c098dc4bd"
+    },
+    "entity_witch_drink3.ogg": {
+      "source": "minecraft/sounds/entity/witch/drink3.ogg",
+      "sha256": "dd72e5150cd8a925f16dd53937b9b8a70af97f7870e9a6abd55d20d18716a763"
+    },
+    "random_glass1.ogg": {
+      "source": "minecraft/sounds/random/glass1.ogg",
+      "sha256": "0409013e382d13e121fe464fc99fae4262629e7f6a1f52cff3f5b3475a888c91"
+    },
+    "random_glass2.ogg": {
+      "source": "minecraft/sounds/random/glass2.ogg",
+      "sha256": "c226b5cbd76dcfae6d5f3252b8ccf996cec4e99b43ef0ca3ae6659c35cbf9867"
+    },
+    "random_glass3.ogg": {
+      "source": "minecraft/sounds/random/glass3.ogg",
+      "sha256": "1dd567dda2acb11b303d2592d6bf497ec92dd2818f2469addcb88f44ef052495"
+    },
+    "block_bell_bell_use01.ogg": {
+      "source": "minecraft/sounds/block/bell/bell_use01.ogg",
+      "sha256": "20418557fb3b447d76d9a465c1ca665058f572a1f6c1fff6dbe18a714eda1af8"
+    },
+    "mob_irongolem_throw.ogg": {
+      "source": "minecraft/sounds/mob/irongolem/throw.ogg",
+      "sha256": "1e215ddaf816a248ce745b8afbe10ff305d1f8178dd02ab0e1632137fcdedccf"
+    },
     "ancestry.ogg": {
       "source": "minecraft/sounds/music/game/ancestry.ogg",
       "sha256": "c69011c3990c5708e5ede20b36454a467d67f457c1e02031da5d58762cdc3946"

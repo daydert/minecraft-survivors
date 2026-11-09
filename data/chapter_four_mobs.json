@@ -1,0 +1,1775 @@
+{
+  "sprites": [
+    "ch4_flayed_zombie_atlas",
+    "ch4_growth_skeleton_atlas",
+    "ch4_torn_spider_atlas",
+    "ch4_bloated_creeper_atlas",
+    "ch4_hungry_wolf_atlas",
+    "ch4_crawler_atlas",
+    "ch4_open_cow_atlas",
+    "ch4_matted_sheep_atlas",
+    "ch4_sheared_sheep_atlas",
+    "ch4_infected_witch_atlas",
+    "ch4_fused_villagers_atlas",
+    "ch4_fused_lower_atlas",
+    "ch4_gravedigger_atlas",
+    "ch4_bellringer_atlas",
+    "ch4_bone_rider_atlas",
+    "ch4_parasite_atlas",
+    "ch4_chicken_atlas",
+    "ch4_earth_wall"
+  ],
+  "actors": {
+    "ch4_flayed_zombie": {
+      "frame_size": [
+        36,
+        42
+      ],
+      "columns": 26,
+      "pivot": [
+        9,
+        31
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        9,
+        31
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_growth_skeleton": {
+      "frame_size": [
+        40,
+        43
+      ],
+      "columns": 26,
+      "pivot": [
+        12,
+        32
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        12,
+        32
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_torn_spider": {
+      "frame_size": [
+        43,
+        37
+      ],
+      "columns": 26,
+      "pivot": [
+        21,
+        25
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        21,
+        25
+      ],
+      "shadow_size": [
+        12,
+        3
+      ]
+    },
+    "ch4_bloated_creeper": {
+      "frame_size": [
+        37,
+        39
+      ],
+      "columns": 26,
+      "pivot": [
+        12,
+        29
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        12,
+        29
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_hungry_wolf": {
+      "frame_size": [
+        37,
+        46
+      ],
+      "columns": 26,
+      "pivot": [
+        15,
+        27
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        15,
+        27
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_crawler": {
+      "frame_size": [
+        35,
+        38
+      ],
+      "columns": 26,
+      "pivot": [
+        20,
+        27
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        20,
+        27
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_open_cow": {
+      "frame_size": [
+        44,
+        51
+      ],
+      "columns": 26,
+      "pivot": [
+        17,
+        31
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        17,
+        31
+      ],
+      "shadow_size": [
+        12,
+        3
+      ]
+    },
+    "ch4_matted_sheep": {
+      "frame_size": [
+        40,
+        44
+      ],
+      "columns": 26,
+      "pivot": [
+        17,
+        27
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        17,
+        27
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_sheared_sheep": {
+      "frame_size": [
+        39,
+        44
+      ],
+      "columns": 26,
+      "pivot": [
+        17,
+        27
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        17,
+        27
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_infected_witch": {
+      "frame_size": [
+        44,
+        50
+      ],
+      "columns": 26,
+      "pivot": [
+        13,
+        38
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        13,
+        38
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_fused_villagers": {
+      "frame_size": [
+        52,
+        55
+      ],
+      "columns": 26,
+      "pivot": [
+        13,
+        44
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        13,
+        44
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_fused_lower": {
+      "frame_size": [
+        37,
+        42
+      ],
+      "columns": 26,
+      "pivot": [
+        10,
+        31
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        10,
+        31
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_gravedigger": {
+      "frame_size": [
+        66,
+        69
+      ],
+      "columns": 26,
+      "pivot": [
+        22,
+        51
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        22,
+        51
+      ],
+      "shadow_size": [
+        15,
+        4
+      ]
+    },
+    "ch4_bellringer": {
+      "frame_size": [
+        42,
+        48
+      ],
+      "columns": 26,
+      "pivot": [
+        11,
+        36
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        11,
+        36
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_bone_rider": {
+      "frame_size": [
+        60,
+        73
+      ],
+      "columns": 26,
+      "pivot": [
+        21,
+        47
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        21,
+        47
+      ],
+      "shadow_size": [
+        15,
+        4
+      ]
+    },
+    "ch4_parasite": {
+      "frame_size": [
+        17,
+        17
+      ],
+      "columns": 26,
+      "pivot": [
+        8,
+        13
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        8,
+        13
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    },
+    "ch4_chicken": {
+      "frame_size": [
+        23,
+        26
+      ],
+      "columns": 26,
+      "pivot": [
+        8,
+        17
+      ],
+      "directions": [
+        "down",
+        "up",
+        "side"
+      ],
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.45,
+            0.3,
+            0.45,
+            0.6
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 4,
+          "durations": [
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112,
+            0.144,
+            0.112
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.08,
+            0.05,
+            0.03
+          ],
+          "loop": false
+        },
+        "attack": {
+          "start": 15,
+          "durations": [
+            0.045,
+            0.045
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 17,
+          "durations": [
+            0.06,
+            0.08,
+            0.1
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 20,
+          "durations": [
+            0.045,
+            0.075
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 22,
+          "durations": [
+            0.1,
+            0.12,
+            0.14,
+            0.2
+          ],
+          "loop": false
+        }
+      },
+      "source_texture": "assets/minecraft/textures/entity/zombie/zombie.png",
+      "source_model": "Minecraft textured cuboids; animated orthographic projection",
+      "alpha_mode": "binary",
+      "side_facing": "right",
+      "projection_yaw": {
+        "down": 0,
+        "up": 180,
+        "side": -55
+      },
+      "anchor": [
+        8,
+        17
+      ],
+      "shadow_size": [
+        7,
+        2
+      ]
+    }
+  }
+}

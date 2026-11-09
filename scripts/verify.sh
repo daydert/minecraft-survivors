@@ -23,6 +23,8 @@ python scripts/check_game_music.py
 "$engine" --headless --path . -s qa/test_achievements.gd
 "$engine" --headless --path . -s qa/test_v2_content.gd
 "$engine" --headless --path . -s qa/test_chapter_four.gd
+"$engine" --headless --path . -s qa/test_chapter_four_enemies.gd
+python scripts/check_chapter_four_mobs.py
 python scripts/check_chapter_four_assets.py
 python scripts/check_achievement_assets.py
 python scripts/check_end_assets.py
@@ -49,6 +51,7 @@ if [ "${1:-}" = "--network-four" ]; then
     python qa/test_network.py --players 4 --scenario host_leave --label four
 fi
 if [ "${1:-}" = "--visual" ]; then
+    "$engine" --path . --display-driver wayland -s qa/test_chapter_four_enemies_visual.gd
     "$engine" --path . --display-driver wayland -s qa/test_chapter_four_visual.gd
     "$engine" --path . --display-driver wayland -s qa/test_end_visual.gd
     "$engine" --path . --display-driver wayland -s qa/test_end_polish_visual.gd

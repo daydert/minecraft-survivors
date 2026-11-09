@@ -37,6 +37,14 @@ def generate():
         'ch4_pulse': ('block.slime_block.hit', .5),
         'ch4_hand': ('entity.warden.tendril_clicks', .4),
         'ch4_break': ('block.sculk.break', .6),
+        'ch4_mob_warn': ('entity.zombie.attack_wooden_door', .24),
+        'ch4_bone_shoot': ('entity.skeleton.shoot', .45),
+        'ch4_creeper_burst': ('entity.generic.explode', .55),
+        'ch4_mob_heal': ('entity.witch.drink', .35),
+        'ch4_poison': ('entity.splash_potion.break', .4),
+        'ch4_bell_warn': ('block.bell.resonate', .27),
+        'ch4_bell': ('block.bell.use', .45),
+        'ch4_ground_slam': ('entity.iron_golem.attack', .55),
     }
     output = ROOT / 'assets/audio/chapter_four'
     output.mkdir(exist_ok=True)

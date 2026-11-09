@@ -1,6 +1,7 @@
 extends RefCounted
 ## A single world offset for ground, blood, silhouettes and actors. Visual
 ## hashes and the simulation clock keep pause/camera movement deterministic.
+const EnemyView=preload("res://scripts/chapter_four_enemy_view.gd")
 const Lighting = preload("res://scripts/ui/lighting.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const ANCHORS = {"house": Vector2(56,66), "crucifix": Vector2(32,88), "growth": Vector2(24,40), "growth_big": Vector2(64,96), "torch": Vector2(8,21), "pyramid": Vector2(144,150)}
@@ -12,6 +13,7 @@ func world(g):
 	if w.shake > 0 and g.settings.shake and w.state == "RUNNING":offset += Vector2(sin(w.clock*75), cos(w.clock*87)).round()
 	g.draw_texture_rect_region(g.textures.ch4_ground, Rect2(0,0,640,360), Rect2(-offset,Vector2(640,360)))
 	blood(g, offset)
+	EnemyView.floor_layer(g,offset)
 	for mark in w.landmarks:
 		if mark.kind == "crucifix":pillar_floor(g, mark, offset)
 		if mark.get("attack", "") == "windup" and mark.kind == "torch":
@@ -48,7 +50,8 @@ func world(g):
 				if w.stage != "arrival":g.draw_held_weapons(w.player+offset)
 			"mob":
 				var m = actor.obj
-				g.draw_actor(m.kind,m.p+offset,m.visual_dir,m.animation,m.moving,Color.WHITE,m.phase,1,m.visual)
+				if m.has("form"):EnemyView.actor(g,m,offset)
+				else:g.draw_actor(m.kind,m.p+offset,m.visual_dir,m.animation,m.moving,Color.WHITE,m.phase,1,m.visual)
 			"loot":
 				var o = actor.obj
 				g.item_icon(o.kind, o.p+offset-Vector2(8,16+sin(w.clock*3)*2))
@@ -57,8 +60,10 @@ func world(g):
 		var p: Vector2 = (o.p+offset).floor()
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2(p-Vector2(4,5),Vector2(8,8)),Rect2(0,0,16,16),Color(.6,1,.4))
 	for b in w.projectiles:g.draw_projectile(b,offset)
+	EnemyView.projectiles(g,offset)
 	for e in w.effects:
-		if e.kind == "ch4_arc":arc(g,e,offset)
+		if EnemyView.effect(g,e,offset):pass
+		elif e.kind == "ch4_arc":arc(g,e,offset)
 		else:g.draw_effect(e,offset)
 	for b in w.blood_shots:
 		var p: Vector2 = (b.p+offset).floor()
