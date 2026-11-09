@@ -1,0 +1,533 @@
+{
+  "campaign_ch1": [
+    {
+      "core": "f27f78aea2c2e99d516577d49c678f46",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "1d02bf9d890d35a5d2f8a2d12c733111",
+      "pickups": "a096a859d85c39e3f792526911a5e4dd",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=2 kills=8 mobs=14 state=RUNNING stage=-",
+      "t": 30.017
+    },
+    {
+      "core": "49ff9b9813fcf860e76a104dd31b668b",
+      "effects": "d35850c28b3abb3913546da5e076a61b",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "6b47ac6e7bc493348609ef962f912f26",
+      "pickups": "412f994f8f91a6862debd1a567b48605",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=3 kills=19 mobs=27 state=RUNNING stage=-",
+      "t": 60.017
+    },
+    {
+      "core": "5215fe453857c6a1fa0bbb430289fc21",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "522fcf6902c0487d5f52721351ccaf2c",
+      "pickups": "28e727932a22a946fab68099ce05dda3",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=3 kills=29 mobs=59 state=RUNNING stage=-",
+      "t": 90.017
+    },
+    {
+      "core": "1dc230093734d5874c73032e1c562cd7",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "f38e21760773be93a7d96188cf4d5c56",
+      "pickups": "f92d476e4621b39ffdf2477b86093939",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=4 kills=54 mobs=76 state=RUNNING stage=-",
+      "t": 120.017
+    },
+    {
+      "core": "0ac0806ae4f785f5da41041715cc4ec5",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "302da18216a5c003d192ad20e3b1fd78",
+      "pickups": "871771fc50dd6deda998cac5f0e97a5e",
+      "projectiles": "1e901f148540eaf3287d58ce0928f6b6",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=4 kills=83 mobs=112 state=RUNNING stage=-",
+      "t": 150.0
+    },
+    {
+      "core": "75c628fb2676ca178eb189181b7c6b12",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "aee4a13d2c95a351df4a550481f42113",
+      "pickups": "21a12dd71b4953e9d2d8e34315680669",
+      "projectiles": "4f1dd1ad18e6504f8c734f5615c432ea",
+      "sounds": "7c7b58655a537895619d51b4ca105c65",
+      "summary": "hp=15.84 lvl=6 kills=114 mobs=143 state=RUNNING stage=-",
+      "t": 180.0
+    },
+    {
+      "core": "5516a2116d60830641dc71732b5e16fc",
+      "effects": "91b352be790fe198a140908c2c7c0c98",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "85500d391e2657de90c49dfbad1533e7",
+      "pickups": "091b335a6bdfeb7a41ab726f0a40c9bb",
+      "projectiles": "d477adb73199553ff6e7bdcf497034e3",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=7 kills=152 mobs=156 state=RUNNING stage=-",
+      "t": 210.0
+    },
+    {
+      "core": "3fac938b9ea9b08fbac10321286e90c0",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "bc22047daa96615f6510457c5b6c3874",
+      "pickups": "d922162ff588d224dbdbbcbf1375008f",
+      "projectiles": "3c42702e2239bdfd210983d5668932c1",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=8 kills=181 mobs=181 state=RUNNING stage=-",
+      "t": 240.0
+    },
+    {
+      "core": "0c9d7205dbb159c9577e5c1c24636150",
+      "effects": "18d2d048471b11044917912f3a129fb8",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "b58e6fffeeb757b5c31365b32026f075",
+      "pickups": "7c9719c11f9b4de04d5892ffc56ea4ef",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=9 kills=230 mobs=219 state=RUNNING stage=-",
+      "t": 270.0
+    },
+    {
+      "core": "34061d908904420fc74d6082f1adfe36",
+      "effects": "da5d6206b8b4068aebb68b3ee87c2023",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "be57eabe2ff615917a397b45810763b5",
+      "pickups": "4f75d1920dcbf2de334808f42bc751c1",
+      "projectiles": "f45df01cc11b2577e9576db1d551c94b",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=10 kills=288 mobs=234 state=RUNNING stage=-",
+      "t": 300.0
+    },
+    {
+      "core": "34061d908904420fc74d6082f1adfe36",
+      "effects": "da5d6206b8b4068aebb68b3ee87c2023",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "be57eabe2ff615917a397b45810763b5",
+      "pickups": "4f75d1920dcbf2de334808f42bc751c1",
+      "projectiles": "f45df01cc11b2577e9576db1d551c94b",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.84 lvl=10 kills=288 mobs=234 state=RUNNING stage=-",
+      "t": 300.0
+    }
+  ],
+  "campaign_ch1_boss": [
+    {
+      "core": "04a0909a13413b3b955d8ed27dbcc18f",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "d751713988987e9331980363e24189ce",
+      "pickups": "2bb27d0f8b8b3c1f6ea00de18b32d37c",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=0 lvl=31 kills=29 mobs=0 state=RESULT stage=-",
+      "t": 720.0
+    }
+  ],
+  "coop_base_ch1": [
+    {
+      "core": "573409229a12499865f1028d8e028239",
+      "effects": "abab1e15abbda00dab884cc5a60412e8",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "44f276de3d8805e61b77cd47b6b049b5",
+      "pickups": "6bee79e191137f595d4bfa08e3733bce",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=3 kills=13 mobs=9 state=RUNNING stage=-",
+      "t": 30.017
+    },
+    {
+      "core": "c4a72e4ff36aed8739b2654a1bb41901",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "44acd9e846bf1ffc6950eb34187517f6",
+      "pickups": "32597cd3fd6b8e27f2d36d07d5fdbc2a",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=4 kills=39 mobs=7 state=RUNNING stage=-",
+      "t": 60.017
+    },
+    {
+      "core": "b9d3b540e943782d1d29a10b647e0a02",
+      "effects": "6db7140f2c57283bebbf012687067e87",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "0223850e8dff09ecaa88ca1b26f8b0f8",
+      "pickups": "cf8c40d872a075d4e1fbf78fb5892da9",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=18.12 lvl=5 kills=48 mobs=40 state=RUNNING stage=-",
+      "t": 90.017
+    },
+    {
+      "core": "db51c5afd2733721427ffd9c4e50ea38",
+      "effects": "d909e48d505d6928811471fca37644a2",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "850c5cd1e6d1633f749df05c23c9d231",
+      "pickups": "fea9a22a7e22754e36489dc42547eb4a",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=10.6 lvl=8 kills=118 mobs=12 state=RUNNING stage=-",
+      "t": 120.017
+    },
+    {
+      "core": "1d24939d683b0de9b9dedaca815a2931",
+      "effects": "4edef910f30986c9034efdb98157d217",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "551d57904100f17d0ec03ae7b0163572",
+      "pickups": "99a3e76f21c96ae0717dd1b9737e2636",
+      "projectiles": "0c313bcf47e3ad4afe58e1ce6cc84057",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=12.2 lvl=10 kills=168 mobs=28 state=RUNNING stage=-",
+      "t": 150.0
+    },
+    {
+      "core": "2921c8016e493e8b9de6d3bc46ec462a",
+      "effects": "aadd93279f90104b23809707bf1bc443",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "e4ce296dec6eabf5c097cb0b5f829595",
+      "pickups": "e5f31c65d73c0834213c858223a2a0c8",
+      "projectiles": "f779071a578213ac876cc136d34b9480",
+      "sounds": "7c7b58655a537895619d51b4ca105c65",
+      "summary": "hp=16.88 lvl=11 kills=227 mobs=30 state=RUNNING stage=-",
+      "t": 180.0
+    },
+    {
+      "core": "84a5831b98e3033c98a1de8c902b66b2",
+      "effects": "140aaf51f758ce0d3be65c03b5dcbf5b",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "591d7c2799453eabc3890af656c1cd31",
+      "pickups": "52b40a8c314c5d7387fcdcaca1b2e435",
+      "projectiles": "e7cd9771c520a1cc805549132057da5f",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.28 lvl=14 kills=285 mobs=30 state=RUNNING stage=-",
+      "t": 210.0
+    },
+    {
+      "core": "299d6d44f13b6f40aad84900be49b917",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "a361080d9d738a8107c925f29d8cd6ac",
+      "pickups": "add3fcf0ebf2d8892fa9b3662c130bb9",
+      "projectiles": "67eeeb47930a7aa73d673153417d0bac",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=14.12 lvl=14 kills=336 mobs=40 state=RUNNING stage=-",
+      "t": 240.0
+    },
+    {
+      "core": "6b4e1fe0dccda507f28e644ee60f0638",
+      "effects": "46df731822d1756a63777228242e3a92",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "100094b66806241f415ca3bc2cec592c",
+      "pickups": "1d18b9ef0c93f4770ec31cf0e37b3bce",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=12.8 lvl=15 kills=411 mobs=61 state=RUNNING stage=-",
+      "t": 270.0
+    },
+    {
+      "core": "10e9f74196cd683aa4a55cfb7fcf6194",
+      "effects": "017e540c3d1b4ae90c63b4c925fd54db",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "0fbfc3902367e809772d0576f6c19335",
+      "pickups": "4e584b99c76b3b3c30a9b9950b6e1a9f",
+      "projectiles": "11e431e456af9d8b1bb1505be3e207c7",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=11.48 lvl=15 kills=467 mobs=93 state=RUNNING stage=-",
+      "t": 300.0
+    },
+    {
+      "core": "10e9f74196cd683aa4a55cfb7fcf6194",
+      "effects": "017e540c3d1b4ae90c63b4c925fd54db",
+      "extra": "d751713988987e9331980363e24189ce",
+      "mobs": "0fbfc3902367e809772d0576f6c19335",
+      "pickups": "4e584b99c76b3b3c30a9b9950b6e1a9f",
+      "projectiles": "11e431e456af9d8b1bb1505be3e207c7",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=11.48 lvl=15 kills=467 mobs=93 state=RUNNING stage=-",
+      "t": 300.0
+    }
+  ],
+  "end": [
+    {
+      "core": "cec6212a7ae0b514a325f138773b0bdb",
+      "effects": "1444abfb8e811424e066b3b6e62ef4c3",
+      "extra": "acd746a5b1c6731d6fcd7ce62af60c02",
+      "mobs": "71ea01c09fe2a944d35c8269c073c6f6",
+      "pickups": "b7d70484dce510b6bde0a76db0b31b19",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=1 kills=0 mobs=8 state=RUNNING stage=survival",
+      "t": 30.017
+    },
+    {
+      "core": "836c79b679bf8894ef202639dbbe4928",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "86a3d0d9621018f0942cef5ec49d935d",
+      "mobs": "c23e210a694780a5c7729ad9e35296cb",
+      "pickups": "8158a98463f92a9471d8438ef58afcd7",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=6.0 lvl=1 kills=5 mobs=20 state=RUNNING stage=survival",
+      "t": 60.017
+    },
+    {
+      "core": "7607e2f92714f8fdec4aafce55d978df",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "687f2b161230619dc8eab21aedac23af",
+      "mobs": "b12aa1ee6b9e1a5ee77a0ab5fbd7b93b",
+      "pickups": "1d0fa25e6fc11f3b7fd1c81b5fd5ef11",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=4 kills=27 mobs=39 state=RUNNING stage=survival",
+      "t": 90.017
+    },
+    {
+      "core": "faeb03961dccf06c0b009399b3f4fb10",
+      "effects": "50983d70b830314fb5f9f5c655cf2837",
+      "extra": "baf018501dea9e8e689682eea5cbd40d",
+      "mobs": "4e7695f7c59851c070865bd539ff9add",
+      "pickups": "7785f7eb343c25686ffadf06af7455bf",
+      "projectiles": "add3861c4bdab310d2af48910c1b6b78",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=19.84 lvl=11 kills=89 mobs=19 state=RUNNING stage=survival",
+      "t": 120.017
+    },
+    {
+      "core": "63a82edd5e22c2293b8db45b66fd43f4",
+      "effects": "8834546680508db1662bc336454f916a",
+      "extra": "0952ef765b2ebc6239ff10ce00d86bf7",
+      "mobs": "0e751cf5fd7b243eed57f4759b2447af",
+      "pickups": "0b3830851e71be41eccefd9bb0384f2c",
+      "projectiles": "dfe574fe8ec555c942f08de4a75e224b",
+      "sounds": "39329609a38a9cd4ad8d7561c6a365d7",
+      "summary": "hp=15.68 lvl=14 kills=130 mobs=21 state=RUNNING stage=survival",
+      "t": 150.0
+    },
+    {
+      "core": "a56a3597dbab15c04373ef4a0c04e2d2",
+      "effects": "904cd2ec53b6018830ee46a437298311",
+      "extra": "a2f6e398cc50dd10252b178851954994",
+      "mobs": "8b8218a9fb0ab578dbc31544d4bf42c7",
+      "pickups": "f596e546324b00fcb985226533db2c21",
+      "projectiles": "a293cc12cd8f9362e2227d054c2d94ba",
+      "sounds": "6a9906bd92ccf2072caa4ec3a41ad3b6",
+      "summary": "hp=7.64 lvl=16 kills=173 mobs=39 state=RUNNING stage=survival",
+      "t": 180.0
+    },
+    {
+      "core": "c31fa7f06981063f53b443cea35cb563",
+      "effects": "ae8c5c739f505ee365bbd465ed3a7f95",
+      "extra": "e5c89290a8a0f98f68bb61c693cea686",
+      "mobs": "ea9704a3f0cbc89dddfa8af223f8f266",
+      "pickups": "dea5bd3b88fbc8acba6279aa41ce6efb",
+      "projectiles": "a139ec4a79f068bd1a6b1b4eadf071bc",
+      "sounds": "719ba9141c1860f3bf409f7278b99999",
+      "summary": "hp=7.04 lvl=20 kills=219 mobs=45 state=RUNNING stage=survival",
+      "t": 210.0
+    },
+    {
+      "core": "c35679bd537acd7b62f15ea0b3972dff",
+      "effects": "7127878d49e9deb7503dcb164eea2179",
+      "extra": "2e3f21e5e53b4fba093059787df00fde",
+      "mobs": "e6ee7a0da5406af59afff1f201818c6e",
+      "pickups": "566b4678124f1f45d10c75727ad2c300",
+      "projectiles": "c5cebc7af9ac26323d1a4e25c8e25aae",
+      "sounds": "6d50bf02e94ef23f4e983830da53c7c4",
+      "summary": "hp=10.64 lvl=22 kills=263 mobs=46 state=RUNNING stage=survival",
+      "t": 240.0
+    },
+    {
+      "core": "de1c46cf02b14a6ba23528dd95b6cd86",
+      "effects": "12478c869183644f819f8a8fc347e15a",
+      "extra": "2657fde3452fef8605edafea6b339cd5",
+      "mobs": "cce7fdeedf5704512a881da59bf56e11",
+      "pickups": "2a15fa109eb531788cc5b8c2d38d102b",
+      "projectiles": "2180c22bd937698e4064778b106fd4af",
+      "sounds": "b10a22f16728541ac81f32fea0f176ce",
+      "summary": "hp=20.0 lvl=23 kills=300 mobs=59 state=RUNNING stage=survival",
+      "t": 270.0
+    },
+    {
+      "core": "883184683db3700c5ef4c994ff5ee6db",
+      "effects": "4e04e5e4abb18c0c723d506d08924454",
+      "extra": "7d6bf066a34f4cf091210a425d724692",
+      "mobs": "f3c1676d381409df4c9c6375ec0680d3",
+      "pickups": "98d86cdaf730ce2d3e3e3f2b561df600",
+      "projectiles": "32619561e82294676045e451b6ecc97d",
+      "sounds": "6e918c0106c80f26627c566fcdaa62e9",
+      "summary": "hp=20.0 lvl=25 kills=413 mobs=56 state=RUNNING stage=survival",
+      "t": 300.0
+    },
+    {
+      "core": "883184683db3700c5ef4c994ff5ee6db",
+      "effects": "4e04e5e4abb18c0c723d506d08924454",
+      "extra": "7d6bf066a34f4cf091210a425d724692",
+      "mobs": "f3c1676d381409df4c9c6375ec0680d3",
+      "pickups": "98d86cdaf730ce2d3e3e3f2b561df600",
+      "projectiles": "32619561e82294676045e451b6ecc97d",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=25 kills=413 mobs=56 state=RUNNING stage=survival",
+      "t": 300.0
+    }
+  ],
+  "end_boss": [
+    {
+      "core": "9542252dc60995428baeeb5c340d1412",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "ac16ae78b089f7473e89b435e12fde6e",
+      "mobs": "d751713988987e9331980363e24189ce",
+      "pickups": "12c938e66de7972718bad1927d597103",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=7.0 lvl=30 kills=38 mobs=0 state=RUNNING stage=portal_ready",
+      "t": 720.0
+    }
+  ],
+  "nether": [
+    {
+      "core": "87fe4a578d22851aef23e04f0d55a859",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "61b1eb4fdcaf005fae5a5c52a6c3dfe2",
+      "mobs": "00e529db4c40e3540afcb04e03c95d1e",
+      "pickups": "a39b3afd8c4276b485bcda42124d3b81",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=3 kills=9 mobs=13 state=RUNNING stage=survival",
+      "t": 30.017
+    },
+    {
+      "core": "31cc22017091f940f4d7d6eda4b8147a",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "eddff66a83373e550bb1c02cec1c02d9",
+      "mobs": "67b2fd93b01df5a883f8b1697386be4e",
+      "pickups": "8eea33e8b19a26397fcae4eb7e009578",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.5 lvl=6 kills=38 mobs=8 state=RUNNING stage=survival",
+      "t": 60.017
+    },
+    {
+      "core": "9fb540b1d319dce5028d1d57b9a8dabd",
+      "effects": "29e126792dd30e1724a1e96d36ac2960",
+      "extra": "bc66a6918fabc38ccbfe4fdaa137db3e",
+      "mobs": "d28795fab62737c619f7d1b1b7ae1d86",
+      "pickups": "65aa918c08952884bdae549c474a49e5",
+      "projectiles": "a5adf3026f9306b3f359e1a21115bc0d",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=15.5 lvl=9 kills=69 mobs=14 state=RUNNING stage=survival",
+      "t": 90.017
+    },
+    {
+      "core": "277c92b7c5a60aa512697e13cf0a8aae",
+      "effects": "a946bcd5a416a6be73a86fb53ffdf433",
+      "extra": "3fb6159ae0dad08d883275c512938e0b",
+      "mobs": "fe732a215406c7070794e4cdbac51f7f",
+      "pickups": "1e5ebc17f89308ecded6f847710e4873",
+      "projectiles": "0a8d623a18e01d70af492579b791ff14",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=11 kills=110 mobs=11 state=RUNNING stage=survival",
+      "t": 120.017
+    },
+    {
+      "core": "a0525b246d6d056d122be3f1e9e1560f",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "0ebe3952125fc4747b39114f99641159",
+      "mobs": "53c88b18fedec513d5a57682d809d5cc",
+      "pickups": "fa26dfbf969c494f1532accd5df4030e",
+      "projectiles": "65af33fe05ecae2be3b8910af365f6e9",
+      "sounds": "7c7b58655a537895619d51b4ca105c65",
+      "summary": "hp=10.94 lvl=14 kills=142 mobs=17 state=RUNNING stage=survival",
+      "t": 150.0
+    },
+    {
+      "core": "1aa008710331dd44acafa9694668f5c3",
+      "effects": "84f23f4792aae54ee76a44ff3088715c",
+      "extra": "23146a667196444d8da9cf5b0476372f",
+      "mobs": "519cd1ab7648d2b1bc9fdf9f4826be23",
+      "pickups": "898cee789283d631efda544ce8c270e0",
+      "projectiles": "49ab6e2dcba399f60aae8e1f5ec263ba",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=7.8 lvl=16 kills=195 mobs=30 state=RUNNING stage=survival",
+      "t": 180.0
+    },
+    {
+      "core": "e041914b558226051d949a0e00f2ffd8",
+      "effects": "37b09554383399f2dafb061220313d39",
+      "extra": "ba79633dfd101a72e2f9d0a8a34eb1f5",
+      "mobs": "142043ce700c731ffc27fadbc661784c",
+      "pickups": "8816f03d52af02adfa5d4628a2811e5a",
+      "projectiles": "654529a886bad7b99e1c9c722c8f1261",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=9.68 lvl=19 kills=250 mobs=35 state=RUNNING stage=survival",
+      "t": 210.0
+    },
+    {
+      "core": "a8d363169cb9ae9fe53b95f669ba4917",
+      "effects": "2fc129c0bff2c2e86c41f141590efc3a",
+      "extra": "9f6be3d01d47399f8d5da0b5f8ba5965",
+      "mobs": "eeb1d916a1de7fb6fe732b8cd9710ad5",
+      "pickups": "b5f873d13398de83e4f0f84da7cd8522",
+      "projectiles": "213696000e75d906f37a4a5bacf7f85f",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=13.32 lvl=20 kills=303 mobs=38 state=RUNNING stage=survival",
+      "t": 240.0
+    },
+    {
+      "core": "9414e9dfcf328be0fef43b5854c10939",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "80ecf52c6a95c4fbc71cea2e7b4f5171",
+      "mobs": "1cb15c73b64b5247e490ef8ef154e648",
+      "pickups": "cc315bb99a17756b4f72d4e43ca4a07e",
+      "projectiles": "3ac2532080492587043d0be5329c2232",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=20.0 lvl=21 kills=362 mobs=29 state=RUNNING stage=survival",
+      "t": 270.0
+    },
+    {
+      "core": "dd660d6d0a09446c07707c9a82acf338",
+      "effects": "c048badafa6f5515c9ad82b6dd18b68a",
+      "extra": "621beea69e03a09d90938259bb76657a",
+      "mobs": "3cd97ab07f83464b9950d4ec80bf8f1c",
+      "pickups": "13e213ae65526573b7be868a20e77e52",
+      "projectiles": "dde1c20e423281ae7c327e89310e075d",
+      "sounds": "7c7b58655a537895619d51b4ca105c65",
+      "summary": "hp=17.0 lvl=26 kills=398 mobs=66 state=RUNNING stage=survival",
+      "t": 300.0
+    },
+    {
+      "core": "dd660d6d0a09446c07707c9a82acf338",
+      "effects": "c048badafa6f5515c9ad82b6dd18b68a",
+      "extra": "621beea69e03a09d90938259bb76657a",
+      "mobs": "3cd97ab07f83464b9950d4ec80bf8f1c",
+      "pickups": "13e213ae65526573b7be868a20e77e52",
+      "projectiles": "dde1c20e423281ae7c327e89310e075d",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=17.0 lvl=26 kills=398 mobs=66 state=RUNNING stage=survival",
+      "t": 300.0
+    }
+  ],
+  "nether_boss": [
+    {
+      "core": "80ed663ea2142b8cd1b19f9856eee01b",
+      "effects": "d751713988987e9331980363e24189ce",
+      "extra": "0cbbd49250242956a646acdf30f214a9",
+      "mobs": "d751713988987e9331980363e24189ce",
+      "pickups": "12c938e66de7972718bad1927d597103",
+      "projectiles": "d751713988987e9331980363e24189ce",
+      "sounds": "d751713988987e9331980363e24189ce",
+      "summary": "hp=14.0 lvl=30 kills=13 mobs=0 state=RESULT stage=end",
+      "t": 720.0
+    }
+  ]
+}
