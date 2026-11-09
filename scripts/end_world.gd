@@ -1,5 +1,6 @@
-extends "res://scripts/nether_world.gd"
-## Chapter III inherits solo equipment only. No network classes or data are used.
+extends "res://scripts/arsenal_world.gd"
+## Chapter III shares solo equipment with chapter II through arsenal_world.gd,
+## not chapter II itself. No network classes or data are used.
 const END_WEAPONS=["spear","mace","end_crystal","knockback_stick","dragon_breath","shield"]
 const END_ARENA=Rect2(656,704,736,640)
 var land=PackedByteArray()
