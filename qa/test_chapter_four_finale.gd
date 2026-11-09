@@ -79,7 +79,9 @@ func run():
 	check(e.phase=="retry" and w.state=="RUNNING","Dying in stage II retries the stage instead of ending the run")
 	advance(w,2.4)
 	check(e.phase=="two" and w.hp>=12,"The retry restores the stage II checkpoint")
-	w.hurt(e.hb,e.hb.hp+10)
+	e.day_done=[];e.hb.hp=e.hb.max_hp;w.hurt(e.hb,e.hb.max_hp*2)
+	check(e.phase=="two" and e.hb.hp>e.hb.max_hp*.55,"Stage II cannot be burst past its day acceleration")
+	e.day_done=[0,1];w.hurt(e.hb,e.hb.hp+10)
 	check(e.phase=="erase","Defeat in stage II starts the erasure")
 	var build_before=e.checkpoint.build
 	advance(w,float(e.data.erase.duration)+.1)
@@ -114,7 +116,7 @@ func run():
 	check(w.state=="RESULT" and w.victory and w.build==e.stored.build,"Stepping through the door ends chapter IV with the build restored")
 	# Retry inside the fistfight
 	w=fresh();e=w.ending;advance(w,.1);w.player=e.center+Vector2(0,150);advance(w,8)
-	w.hurt(e.hb,e.hb.hp+10);advance(w,7);w.hurt(e.hb,e.hb.hp+10);advance(w,float(e.data.erase.duration)+.2)
+	w.hurt(e.hb,e.hb.hp+10);advance(w,7);e.day_done=[0,1];w.hurt(e.hb,e.hb.hp+10);advance(w,float(e.data.erase.duration)+.2)
 	w.hp=1;w.invulnerable=0
 	until(w,func():return e.phase=="retry",30.0)
 	check(e.phase=="retry","Losing the fistfight retries it")

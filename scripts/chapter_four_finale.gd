@@ -48,6 +48,8 @@ var flash := 0.0
 var glitch := 0.0
 var road_index := 0
 var door_state := ""
+var spoken: Dictionary = {}
+var head_at := -1.0
 
 func reset(w):
 	rng.seed = int(w.rng.seed) ^ 0x4e7b19
@@ -55,7 +57,7 @@ func reset(w):
 	lanes.clear(); hole = {}; path.clear(); strips.clear(); seam = {}; sky = 0.0; split = 0.0; looked = false; face = "calm"
 	pose = "idle"; pose_age = 0.0; day_done.clear(); stored = {}; checkpoint = {}; qte_index = 0; qte = {}; presses.clear()
 	hold = false; steve_pose = "idle"; text_events.clear(); silence = false; music = ""; retry_from = ""; flash = 0.0; glitch = 0.0
-	road_index = 0; door_state = ""
+	road_index = 0; door_state = ""; spoken.clear(); head_at = -1.0
 	var pyramid := Vector2(w.terrain.pyramid[0], w.terrain.pyramid[1])
 	center = pyramid + Vector2(data.arena.offset[0], data.arena.offset[1])
 	var size := Vector2(data.arena.size[0], data.arena.size[1])
@@ -128,7 +130,14 @@ func hurt(w, m: Dictionary, amount: float, push: Vector2):
 	if move == "day" and move_age < move_time - float(data.two.day.stun):scale = float(data.two.day.float_guard)
 	if move in ["stunned", "landed"]:scale = float(data.two.day.stun_bonus) if move == "stunned" else 1.5
 	if move == "look":scale = 1.25
-	var dealt := minf(m.hp, amount * scale)
+	# Stage II cannot be burst past its day acceleration: each one is a floor
+	# until it has been played. A strong build shortens the fight, not the show.
+	var floor_hp := 0.0
+	if phase == "two":
+		for i in range(data.two.day.at.size()):
+			if not day_done.has(i):
+				floor_hp = m.max_hp * (float(data.two.day.at[i]) - 0.06); break
+	var dealt := minf(maxf(0.0, m.hp - floor_hp), amount * scale)
 	m.hp -= dealt; m.flash = .1; m.visual.hurt = .12
 	w.damage_by[w.damage_owner] = w.damage_by.get(w.damage_owner, 0.0) + dealt
 	w.add_effect("damage", m.p - Vector2(0, 26), .5, {"amount": ceili(dealt)})
@@ -155,7 +164,9 @@ func camera(w) -> Vector2:
 			mid.x = clampf(mid.x, w.player.x - 230, w.player.x + 230); mid.y = clampf(mid.y, w.player.y - 110, w.player.y + 100)
 			camera_at = camera_at.lerp(mid, .08)
 			return camera_at
-		"kneel", "erase":
+		"kneel":
+			return hb.p.lerp(w.player, 0.25) + Vector2(0, -10)
+		"erase":
 			return (w.player + hb.p) / 2 + Vector2(0, -16)
 		"three", "death", "retry":
 			return center + Vector2(0, -6)
@@ -205,8 +216,8 @@ func step_intro(w):
 		if pose_age < .02 or abs(k - 0.35) < .01 or abs(k - 0.7) < .01:w.sound("ch4_hb_twitch", .3)
 	else:
 		hb.visual_dir = Vector2.DOWN
-	if age >= float(data.intro.line_at) and text_events.is_empty() and age < float(data.intro.line_at) + .1:
-		say("Ты опять здесь.", "calm", 2.6)
+	if age >= float(data.intro.line_at) and not spoken.has("intro"):
+		spoken["intro"] = true; say("Ты опять здесь.", "calm", 2.6)
 	if age >= 6.2:set_pose("invite"); face = "smile"
 	if age >= float(data.intro.duration):
 		phase = "one"; age = 0.0; face = "calm"; set_pose("idle"); music = "boss_one"
@@ -217,8 +228,8 @@ func step_kneel(w):
 	if age < float(k.rise_at):set_pose("kneel"); silence = true
 	elif age < float(k.rise_at) + 1.3:set_pose("rise"); face = "smile"
 	else:set_pose("idle")
-	if age >= float(k.line_at) and not text_events.any(func(t): return t.phase == "kneel"):
-		say("Хорошо. Давай всерьёз.", "calm", 2.4)
+	if age >= float(k.line_at) and not spoken.has("kneel"):
+		spoken["kneel"] = true; say("Хорошо. Давай всерьёз.", "calm", 2.4)
 	if age >= float(k.duration):
 		phase = "two"; age = 0.0; silence = false; music = "boss_two"
 		hb.hp = float(data.two.hp); hb.max_hp = hb.hp; face = "smile"
@@ -648,7 +659,8 @@ func step_death(w, dt: float):
 	if age < mount_at:set_steve("walk"); w.player = w.player.lerp(steve_at, minf(1, dt * 4))
 	else:w.player = steve_at
 	for line in d.lines:
-		if age >= float(line.at) and not text_events.any(func(t): return t.text == line.text):
+		if age >= float(line.at) and not spoken.has(line.text) and age < float(d.final):
+			spoken[line.text] = true
 			say(line.text, line.style, float(line.cut) - float(line.at) + 0.5, float(line.cut) - float(line.at))
 	for t in d.punches:
 		if age >= float(t) and age - dt < float(t):
@@ -659,7 +671,7 @@ func step_death(w, dt: float):
 	if age >= final_t - 0.7 and age < final_t:set_steve("mount"); steve_pose_age = 0.0
 	if age >= final_t and age - dt < final_t:
 		set_pose("headless"); flash = .5; w.shake = .4; w.sound("ch4_head_break", .02); w.sound("ch4_bone_crack", .02)
-		w.add_effect("ch4_hb_head", hb.p + Vector2(-8, -4), 1.6)
+		head_at = age
 		text_events.clear()
 	if age >= final_t and age < float(d.stand):set_steve("mount"); steve_pose_age = 0.0
 	if age >= float(d.stand):set_steve("lower_arm")

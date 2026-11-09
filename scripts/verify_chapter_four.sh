@@ -7,6 +7,8 @@ engine=${SURVIVORS_GODOT_BIN:-./.tools/Godot_v4.7.2-stable_linux.x86_64}
 "$engine" --headless --path . -s qa/test_chapter_four.gd
 "$engine" --headless --path . -s qa/test_chapter_four_enemies.gd
 "$engine" --headless --path . -s qa/test_chapter_four_arsenal.gd
+"$engine" --headless --path . -s qa/test_chapter_four_encounters.gd
+"$engine" --headless --path . -s qa/test_chapter_four_finale.gd
 python scripts/check_chapter_four_assets.py
 python scripts/check_chapter_four_mobs.py
 python scripts/check_chapter_four_equipment.py

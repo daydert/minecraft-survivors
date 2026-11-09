@@ -20,7 +20,8 @@ func world(g):
 	blood(g, offset)
 	Horror.veins(g, offset)
 	EnemyView.floor_layer(g,offset)
-	ArsenalView.floor_layer(g,offset)
+	var gearless: bool = w.ending.phase in ["erase","three","death","retry","coords","road","door"]
+	if not gearless:ArsenalView.floor_layer(g,offset)
 	EncounterView.floor_layer(g,offset)
 	FinaleView.floor_layer(g,offset)
 	for mark in w.landmarks:
@@ -79,12 +80,13 @@ func world(g):
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2(p-Vector2(4,5),Vector2(8,8)),Rect2(0,0,16,16),Color(.6,1,.4))
 	for b in w.projectiles:g.draw_projectile(b,offset)
 	EnemyView.projectiles(g,offset)
-	ArsenalView.air_layer(g,offset)
+	if not gearless:ArsenalView.air_layer(g,offset)
 	EncounterView.air_layer(g,offset)
 	FinaleView.air_layer(g,offset)
 	for e in w.effects:
 		if FinaleView.effect(g,e,offset):pass
 		elif EncounterView.effect(g,e,offset):pass
+		elif gearless and e.kind.begins_with("ch4c"):pass
 		elif ArsenalView.effect(g,e,offset):pass
 		elif EnemyView.effect(g,e,offset):pass
 		elif e.kind == "ch4_arc":arc(g,e,offset)
@@ -100,7 +102,16 @@ func world(g):
 	Atmosphere.collect(g,offset)
 	EncounterView.lights(g)
 	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","one","two","kneel"]:
-		g.ambient_lights.append({"p":w.ending.hb.p-Vector2(0,26),"r":46.0,"c":Color(.9,.92,1.0),"power":.45,"glow":.04})
+		var e = w.ending
+		g.ambient_lights.append({"p":e.hb.p-Vector2(0,26),"r":56.0,"c":Color(.9,.92,1.0),"power":.55,"glow":.05})
+		g.ambient_lights.append({"p":e.center,"r":230.0,"c":Color(.72,.74,.86),"power":.42,"glow":.0})
+		var r: Rect2 = e.arena
+		for i in range(10):
+			var t := float(i)/9.0
+			for q in [Vector2(r.position.x+r.size.x*t,r.position.y),Vector2(r.position.x+r.size.x*t,r.end.y)]:
+				g.ambient_lights.append({"p":q-Vector2(0,12),"r":58.0,"c":Color(1,.22,.12),"power":.6,"glow":.12})
+		for ring in e.rings:
+			if ring.has("r"):g.ambient_lights.append({"p":ring.p,"r":ring.r+40.0,"c":Color(1,.5,.2),"power":.7,"glow":.18})
 	Lighting.draw(g,offset)
 	Horror.fog(g,offset)
 	Atmosphere.after_lighting(g,offset)
@@ -126,6 +137,11 @@ func blood(g, offset: Vector2):
 			var cell := Vector2i(x,y)
 			if not w.pools.has(cell):continue
 			var p := Vector2(cell*16)+offset
+			if w.ending.phase in ["road","door"]:
+				# After his death the pools stand empty: dark, dried and cracked.
+				g.draw_rect(Rect2(p,Vector2(16,16)),Color(.13,.05,.05))
+				if Atmosphere.hash01(x,y,83)<.5:g.draw_line(p+Vector2(2,4+x%5),p+Vector2(12,9+y%4),Color(.05,.02,.02),1)
+				continue
 			g.draw_clip("ch4_blood_animation",p,Vector2(16,16),w.clock)
 			if not w.pools.has(cell+Vector2i.UP):g.draw_line(p,p+Vector2(16,0),Color(.43,.11,.1),1)
 			if not w.pools.has(cell+Vector2i.DOWN):g.draw_line(p+Vector2(0,15),p+Vector2(16,15),Color(.18,.015,.025),1)

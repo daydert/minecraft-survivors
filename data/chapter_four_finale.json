@@ -3,7 +3,7 @@
   "summit_trigger": 210,
   "intro": {"duration": 7.4, "turn": [2.6, 4.2], "line_at": 4.6},
   "one": {
-    "hp": 6400,
+    "hp": 3400,
     "radius": 8,
     "rest": [1.1, 1.9],
     "blink_range": 44, "blink_distance": 96, "blink_cooldown": 2.4,
@@ -14,7 +14,7 @@
   },
   "kneel": {"duration": 6.6, "rise_at": 3.0, "line_at": 4.4},
   "two": {
-    "hp": 9600,
+    "hp": 5600,
     "rest": 1.5,
     "angry_below": 0.34, "angry_speed": 1.18,
     "hole": {"grow": 2.6, "pull": 78, "radius": 18, "damage": 5, "debris": 26, "gaps": 4, "speed": 120},

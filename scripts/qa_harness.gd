@@ -5,6 +5,9 @@ static func prepare_capture(g):
 	if g.qa_mode.begins_with("ch4c_"):
 		prepare_four_arsenal_capture(g)
 		return
+	if g.qa_mode.begins_with("ch4e_"):
+		prepare_four_finale_capture(g)
+		return
 	if g.qa_mode.begins_with("ch4d_"):
 		prepare_four_encounter_capture(g)
 		return
@@ -391,6 +394,57 @@ static func record_four_enemies(g,tree: SceneTree) -> Dictionary:
 			g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
 			tree.root.get_texture().get_image().save_png("res://qa/recordings/chapter_four_b_frames/%05d.png"%frame);frame+=1
 	return {"fps":30,"frames":frame,"segments":segments,"sound_events":cues,"diagnostic_cuts":true,"invulnerability":false,"max_gear_only_in_crowd":true,"content_stage":"B"}
+
+static func finale_run(w, seconds: float):
+	for i in range(ceili(seconds*60)):w.step(1.0/60)
+
+static func finale_qte(w, e):
+	var q: Dictionary=e.qte
+	if q.is_empty() or q.result!="" or q.age<q.windup+.05:return
+	match q.kind:
+		"dodge":e.press(q.dir)
+		"attack":e.press("attack")
+		"seq":e.press(q.dirs[q.progress])
+	e.hold=q.kind=="hold"
+
+static func prepare_four_finale_capture(g):
+	g.start_chapter(4);g.world.reset(724)
+	var w=g.world;var e=w.ending;var mode: String=g.qa_mode.trim_prefix("ch4e_")
+	w.state="RUNNING";w.stage="survival";w.stage_age=30;w.note_presented=true;w.note_read=true
+	w.db.data.chapter_four.exploration_only=true;w.build={"sword":8,"bow":6,"shotgun":6,"bell":5};w.items={"armor":4,"bedrock":3}
+	g.settings.shake=false;w.time=719.95
+	finale_run(w,.1);w.player=e.center+Vector2(0,150);finale_run(w,.05)
+	if mode=="intro":finale_run(w,4.0);return
+	w.invulnerable=999;finale_run(w,7.5)
+	if mode.begins_with("one_"):
+		e.start(w,mode.trim_prefix("one_"))
+		finale_run(w,{"lightning":.6,"ring":1.2,"strike":.45}[mode.trim_prefix("one_")]);return
+	w.hurt(e.hb,e.hb.hp+1)
+	if mode=="kneel":finale_run(w,4.6);return
+	finale_run(w,6.8)
+	if mode.begins_with("two_"):
+		var name: String=mode.trim_prefix("two_")
+		e.hb.hp=e.hb.max_hp*.8;e.day_done=[0,1]
+		var at: float={"hole":2.0,"blitz":1.75,"rain":1.6,"rift":2.2,"tear":2.0,"rift_warn":.8}.get(name,1.0)
+		e.start(w,"rift" if name=="rift_warn" else name);finale_run(w,at);return
+	if mode in ["day","day_split"]:
+		e.start(w,"day");finale_run(w,3.2 if mode=="day" else 8.6);return
+	e.day_done=[0,1];w.hurt(e.hb,e.hb.hp+1)
+	if mode=="erase":finale_run(w,1.8);return
+	finale_run(w,float(e.data.erase.duration)+.1)
+	if mode=="three":
+		for i in range(ceili(1.0*60)):finale_qte(w,e);w.step(1.0/60)
+		e.qte.age=e.qte.windup+.3;return
+	while e.phase=="three":finale_qte(w,e);w.step(1.0/60)
+	var death_at: Dictionary={"death_laugh":2.6,"death_crawl":6.2,"death_plead":11.8,"death_final":12.75,"death_hold":15.0}
+	if death_at.has(mode):finale_run(w,death_at[mode]);return
+	finale_run(w,21.1)
+	if mode=="coords":finale_run(w,3.5);return
+	finale_run(w,9.0)
+	if mode=="road":finale_run(w,4.8);return
+	finale_run(w,10.9)
+	var door_at: Dictionary={"door":2.0,"door_open":5.4,"door_enter":8.4}
+	finale_run(w,door_at.get(mode,2.0))
 
 static func prepare_four_encounter_capture(g):
 	g.start_chapter(4);g.world.reset(724)

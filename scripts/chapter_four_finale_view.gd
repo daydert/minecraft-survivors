@@ -78,7 +78,15 @@ static func floor_layer(g, offset: Vector2):
 	if e.phase in ["one", "two", "kneel"]:arena_edge(g, e, offset)
 	for m in e.marks:
 		var k: float = clampf(m.age / float(e.data.one.lightning.windup), 0, 1)
-		if not m.hit:Tells.ring(g, m.p + offset, float(e.data.one.lightning.radius), k, clock, Color(0.7, 0.85, 1.0))
+		if not m.hit:
+			var q: Vector2 = (m.p + offset).floor()
+			Tells.ring(g, q, float(e.data.one.lightning.radius), k, clock, Color(0.75, 0.88, 1.0))
+			# A thin column of light gathers from the sky onto the mark.
+			var a: float = 0.15 + 0.6 * k
+			if k > 0.85:a = 0.75 + 0.25 * sin(clock * 40.0)
+			g.draw_rect(Rect2(q.x - 1, q.y - 150, 3, 150), Color(0.7, 0.85, 1.0, a * 0.35))
+			g.draw_rect(Rect2(q.x, q.y - 150, 1, 150), Color(1, 1, 1, a))
+			g.oval(q, Vector2(float(e.data.one.lightning.radius), float(e.data.one.lightning.radius) * 0.5) * (0.4 + 0.6 * k), Color(0.6, 0.8, 1.0, 0.12 + 0.18 * k))
 	for ring in e.rings:fire_ring(g, e, ring, offset)
 	for lane in e.lanes:
 		if not lane.hit:Tells.lane(g, lane.a + offset, lane.b + offset, float(e.data.one.strike.width), clampf(lane.age / float(e.data.one.strike.windup), 0, 1), int(lane.a.x), clock)
@@ -245,20 +253,24 @@ static func effect(g, ef: Dictionary, offset: Vector2) -> bool:
 
 ## The final blow: cubes of the head scatter with the two white eye pixels.
 static func head_burst(g, p: Vector2, age: float):
+	# Local space: the caller scales it to the close-up. No helpers that reset the transform.
 	var colors = [Color("2e1f10"), Color("b4846d"), Color("aa7d66"), Color("6b2a1c"), Color("7a0c10"), Color("4a0508")]
+	var fly: float = minf(age, 0.42)
+	var pool: float = minf(1.0, age * 0.8)
+	for j in range(5):
+		var w: float = (10.0 + j * 4.0) * pool
+		g.draw_rect(Rect2((p + Vector2(-w / 2, 9 - j * 0.6)).floor(), Vector2(w, 2 + j % 2)), Color(0.32, 0.0, 0.02, 0.9))
 	for j in range(26):
 		var a: float = -PI * 0.5 + (Atmosphere.hash01(j, 1, 7) - 0.5) * 2.6
-		var speed: float = 40.0 + Atmosphere.hash01(j, 2, 7) * 90.0
-		var v = Vector2(cos(a), sin(a)) * speed
-		var q = p + v * age + Vector2(0, 160 * age * age)
-		if q.y > p.y + 10:q.y = p.y + 10 + Atmosphere.hash01(j, 3, 7) * 6
-		var size = 1.0 + float(j % 3)
+		var speed: float = 30.0 + Atmosphere.hash01(j, 2, 7) * 55.0
+		var q: Vector2 = p + Vector2(cos(a), sin(a)) * speed * fly + Vector2(0, 150 * fly * fly)
+		if age > 0.42:q.y = maxf(q.y, p.y + 6 + Atmosphere.hash01(j, 3, 7) * 5)
+		var size: float = 1.0 + float(j % 2)
 		g.draw_rect(Rect2(q.floor(), Vector2(size, size)), colors[j % colors.size()])
 	for j in range(2):
-		var q = p + Vector2(-6 + j * 12, -20) * minf(1.0, age * 3.0) + Vector2(0, 120 * age * age)
-		if q.y > p.y + 8:q.y = p.y + 8
+		var q: Vector2 = p + Vector2(-5 + j * 10, -14) * minf(1.0, age * 3.0) + Vector2(0, 90 * fly * fly)
+		if age > 0.42:q.y = maxf(q.y, p.y + 6)
 		g.draw_rect(Rect2(q.floor(), Vector2.ONE), Color.WHITE)
-	g.oval(p + Vector2(0, 8), Vector2(6 + minf(26.0, age * 30.0), 3 + minf(9.0, age * 10.0)), Color(0.35, 0.0, 0.02, 0.85))
 
 # ------------------------------------------------------------------ overlays (after lighting)
 
@@ -346,6 +358,11 @@ static func duel(g, e, offset: Vector2):
 			e.hb.p = hp - offset
 			herobrine(g, offset, scale)
 			e.hb.p = saved
+			if e.head_at >= 0.0:
+				var head: Vector2 = hp + Vector2(-17, -8)
+				g.draw_set_transform(head, 0, Vector2(scale, scale))
+				head_burst(g, Vector2.ZERO, e.age - e.head_at)
+				g.draw_set_transform(Vector2.ZERO)
 		else:
 			var saved: Vector2 = g.world.player
 			g.world.player = sp - offset + Vector2(0, dodge)
@@ -463,7 +480,7 @@ static func plead(g, t: Dictionary, age: float):
 			if index >= typed:break
 			var shake: float = 1.5 + age * 0.6
 			var jitter = Vector2(Atmosphere.hash01(frame, index, 16) - 0.5, Atmosphere.hash01(frame, index, 17) - 0.5) * shake
-			var p = Vector2(320 + (i - line.length() / 2.0) * 9, 128 + li * 18) + jitter
+			var p = Vector2(320 + (i - line.length() / 2.0) * 13, 118 + li * 24) + jitter
 			var a = 1.0
 			if cut:
 				var since: float = age - t.cut
@@ -473,7 +490,8 @@ static func plead(g, t: Dictionary, age: float):
 					a = maxf(0.0, 1.0 - since * 2.0)
 				else:
 					a = maxf(0.0, 1.0 - since * 1.2)
-			g.text_at(line[i], p.floor(), 8, Color(1, 1, 1, a))
+			g.text_at(line[i], p.floor() + Vector2(1, 1), 16, Color(0.5, 0.0, 0.04, a))
+			g.text_at(line[i], p.floor(), 16, Color(1, 1, 1, a))
 			index += 1
 
 # ------------------------------------------------------------------ erase, note, road, door
