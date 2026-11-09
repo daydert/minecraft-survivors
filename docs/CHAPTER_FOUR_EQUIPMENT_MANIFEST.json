@@ -1,0 +1,2380 @@
+{
+  "raw_files": {
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    },
+    "textures/block/bedrock.png": {
+      "sha256": "a71e7dce773df8c797506296f58eca840e53ceb3319bc405af7e15e5c25551da",
+      "bytes": 166
+    },
+    "textures/block/polished_blackstone.png": {
+      "sha256": "4a36ac06b65d5330bc83e4711b4f62c3afe788b95526f2983730461a35b401ff",
+      "bytes": 189
+    },
+    "textures/block/oak_planks.png": {
+      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+      "bytes": 195
+    },
+    "textures/block/iron_block.png": {
+      "sha256": "dafa9944ba49fe71958553eded50e87d7bea9c7410cfe568745989bede101c49",
+      "bytes": 169
+    },
+    "textures/block/brown_terracotta.png": {
+      "sha256": "e162788c4a41a06711dcef4572ca4f4dfee090463fdd0d523ff98d00458b1daf",
+      "bytes": 353
+    },
+    "textures/block/bone_block_side.png": {
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "bytes": 139
+    },
+    "textures/block/blackstone.png": {
+      "sha256": "8104d381f680eeb7d71a023aa056b593ef0855821538e435949c94b58033e7cb",
+      "bytes": 202
+    },
+    "textures/block/coal_block.png": {
+      "sha256": "4987dbd954475908df08f13e8114510285825fb8c189263317d4a0c1bf78b030",
+      "bytes": 177
+    },
+    "textures/entity/bell/bell_body.png": {
+      "sha256": "5e9f858c01847a8153602dc226699b26b5f06d21f925c38d06585916c76aef87",
+      "bytes": 261
+    },
+    "textures/item/fishing_rod.png": {
+      "sha256": "eaf66dce8f2dfccdc95c8b2c8df7d715bb4a337dfa250a227a9eb58b73b0602c",
+      "bytes": 184
+    },
+    "textures/item/iron_sword.png": {
+      "sha256": "455f2c306a9ddc1da19b04603ae0047211e2f4e4817b105573fcdc29b3c6945f",
+      "bytes": 194
+    },
+    "textures/item/diamond_sword.png": {
+      "sha256": "5634a8cb79a70beb306210de9ec492fc2d4dc8f739372683e9882ef06bf63008",
+      "bytes": 194
+    },
+    "textures/item/netherite_sword.png": {
+      "sha256": "8f1584739b0c4e9aa09f901bdfc9251a0a6fa1e0172b8c2a5a869e9fbaf25906",
+      "bytes": 203
+    },
+    "textures/item/iron_axe.png": {
+      "sha256": "8dea40bac06c6f14bb0ad9e8b47de63250f6d6a46ae9439b85ddd1377f1edb49",
+      "bytes": 178
+    },
+    "textures/item/diamond_axe.png": {
+      "sha256": "c40234807156fa36f370037f93939c397be76672c2d55b20fb3026d04df97155",
+      "bytes": 178
+    },
+    "textures/item/netherite_axe.png": {
+      "sha256": "aa1c6ff73e24c7a6fd06bc3ae59b4961ffd08d22fb51b7e2b93678ce82d5a1aa",
+      "bytes": 184
+    },
+    "textures/item/iron_hoe.png": {
+      "sha256": "4ed88a87c141168b4552041174e83105e5d5825ea9b96836dd4869c674848d69",
+      "bytes": 150
+    },
+    "textures/item/diamond_hoe.png": {
+      "sha256": "5cb26dd2b299d0cd99bda9e70e222618750233f0a10ecca0896234ce4998bc75",
+      "bytes": 161
+    },
+    "textures/item/netherite_hoe.png": {
+      "sha256": "7a9f6a8951c784c0b62c30f6c5551f569d3e990eb7fe07b49ebceb645a1ad70e",
+      "bytes": 165
+    },
+    "textures/item/bow.png": {
+      "sha256": "1e2cb18545e4ed9286e1120686c3f835d6619b8bd853970f1011163b68426a54",
+      "bytes": 160
+    },
+    "textures/item/trident.png": {
+      "sha256": "2bb1397727939c03c0c5c87307e91b41246e8ffd1b0ceddd73c7cc40bb9cf19d",
+      "bytes": 166
+    },
+    "textures/block/red_wool.png": {
+      "sha256": "07b48cec9b4610e908025807fb85fa686dd50f17918fa677ce655d28b3ba3464",
+      "bytes": 372
+    },
+    "textures/block/tnt_side.png": {
+      "sha256": "e895862292492528e8e55d675acb886245485639fd16a4c075f6e64c06404541",
+      "bytes": 175
+    },
+    "textures/block/red_concrete_powder.png": {
+      "sha256": "39f9bb7a9f0e11986b65cec8bb58252405f26f048ee3c62397038e3a0eff9e1d",
+      "bytes": 564
+    },
+    "textures/block/mushroom_stem.png": {
+      "sha256": "9633dd875492cf5240be3e2442e4729c2350912f4b0b565c9f01640195466401",
+      "bytes": 170
+    },
+    "textures/block/red_concrete.png": {
+      "sha256": "4069c61ef07e5c113c2e0850b009d8c814c21881525535a01dffea7d52fd1896",
+      "bytes": 195
+    },
+    "textures/item/potion.png": {
+      "sha256": "6a09a39bb6c41bc92bd5eca1f51caf5b582a85f68206b164476c8e14a4669416",
+      "bytes": 165
+    },
+    "textures/item/gunpowder.png": {
+      "sha256": "9551e2f663c9d7291991f9c922daf68ed26adb99de9c8ef5173f24f0c8693585",
+      "bytes": 151
+    },
+    "textures/block/redstone_block.png": {
+      "sha256": "104718f1f17c7016eeff145ca59d16a9ab026cad26de9dfba8a7815ccd8f18ed",
+      "bytes": 171
+    },
+    "textures/block/glass.png": {
+      "sha256": "cb89c706dce86eac3123cef087d359b5f23098b658a468fb91662b4a9922bcd0",
+      "bytes": 147
+    },
+    "textures/block/glass.png.mcmeta": {
+      "sha256": "03ef274873ccbeae639bd58df2bf22261195588cc63f15a43c5107807cf6bcde",
+      "bytes": 61
+    },
+    "textures/block/black_candle.png": {
+      "sha256": "12e76d52487e6119aefc6a7c921d2ebcab7bbfc655b84a71bdf678225117aacb",
+      "bytes": 117
+    }
+  },
+  "derived": {
+    "ch4_held_bedrock_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        108
+      ],
+      "sha256": "b872eaaee768e84b4da856c0af5d3daeedf2b51bd48dd26ffe1f172b6139f848"
+    },
+    "ch4_held_bedrock_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        108
+      ],
+      "sha256": "547ca520a702d577c45628481121072604f5166f5489dad520f63e3e625926e5"
+    },
+    "ch4_held_bedrock_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        480,
+        108
+      ],
+      "sha256": "c41bd469bc7c9e57059d22e5dd1ece8aa3ed0d384fba684bdf8f5737be0033ee"
+    },
+    "ch4_held_bedrock_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        480,
+        108
+      ],
+      "sha256": "0ca269f105d6635141d838bc6e0f104cfb6ca63aa7dd355740fdc94bb51009d4"
+    },
+    "ch4_held_bedrock_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        108
+      ],
+      "sha256": "44f76cf37241b1bb34babbb1c3d4ff819f793e85428307745c6d6f412adce1de"
+    },
+    "ch4_held_bedrock_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        108
+      ],
+      "sha256": "445679e5a15f38a11156757b2b9b98db9af1fc3bc5adbe33aa2dff3faf9f2227"
+    },
+    "ch4_held_bedrock_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        108
+      ],
+      "sha256": "b10f30c3d55e24fc5cdabd7720f4235244a82c9cf0d2a323707284bff0b7148d"
+    },
+    "ch4_held_bedrock_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        108
+      ],
+      "sha256": "e652ad6bffb142838bb88c757563fd4b01067052ef4723c135a278111459b2b9"
+    },
+    "ch4_held_shotgun_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        624,
+        114
+      ],
+      "sha256": "ee8222ddc4d2e7130e05d8ba9c766bc8cd0d208385b8c31436d06ea4ce997157"
+    },
+    "ch4_held_shotgun_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        624,
+        114
+      ],
+      "sha256": "40d65187fceccaae3104091dffe0b55f240ae75f4e7093e75745bd4b6e568a77"
+    },
+    "ch4_held_shotgun_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        624,
+        114
+      ],
+      "sha256": "de0cb6d9850cfb65b0432052e423c523f584d223592f5d0db9b5387b53aa24a8"
+    },
+    "ch4_held_shotgun_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        624,
+        114
+      ],
+      "sha256": "d260161fa4197ab2855f91e9d7e26203ccab63cd9259d50e9787a785148fdecd"
+    },
+    "ch4_held_shotgun_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        624,
+        114
+      ],
+      "sha256": "f3328c3459e5e49139d32c28d1a31603ffdc5b1118d65cd1f4f6eccfa80a59d2"
+    },
+    "ch4_held_shotgun_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        624,
+        114
+      ],
+      "sha256": "32e555500c6b6b2c7787314bfc3f0a2fc35e4dcd8e75f8198fd012a9c8a2c34d"
+    },
+    "ch4_held_shotgun_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        114
+      ],
+      "sha256": "286e9fd961448d6688aaba5274b95728272fad69bfd036d6e3831e969b97807e"
+    },
+    "ch4_held_shotgun_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        114
+      ],
+      "sha256": "7646ce7139d798dac84e7ca39af3a1f51f91c28db040755f6cd62fe9dddfe039"
+    },
+    "ch4_held_bone_saw_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        768,
+        123
+      ],
+      "sha256": "8d05c4d994b8c8ea0abd81b25eea5d7180a5bec09382bd46f78be5492039bf04"
+    },
+    "ch4_held_bone_saw_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        768,
+        123
+      ],
+      "sha256": "66fca813ab19812094c6bd092dad24721da85965e30bf4c69866ab441981e78a"
+    },
+    "ch4_held_bone_saw_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        768,
+        123
+      ],
+      "sha256": "454aa35fbdd8eae627ddfda5b09a9633a7ef9e48759afd518b39787cd4ba66ba"
+    },
+    "ch4_held_bone_saw_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        768,
+        123
+      ],
+      "sha256": "216bf53f5dd5826c4821ea97797f3154eb4e1db6023da28185bf30855e76224f"
+    },
+    "ch4_held_bone_saw_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        768,
+        123
+      ],
+      "sha256": "c6918470898fbd4e470cd10e0aa936740e420c4b6b7bdb6f0d4aab71845c3dad"
+    },
+    "ch4_held_bone_saw_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        768,
+        123
+      ],
+      "sha256": "381bb25e4db711d4fc66aef50b467c17b5fe9f9b7647629f8b82e64ab802b532"
+    },
+    "ch4_held_bone_saw_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        832,
+        123
+      ],
+      "sha256": "dc9a4dc2319219324bc0843c6a5fad7c96955b3f8a47454d5b132de8f6d20675"
+    },
+    "ch4_held_bone_saw_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        832,
+        123
+      ],
+      "sha256": "430d969bfebe90f395ba8ed6e3c97adda2274ac6f95d893c6107a62213e78ade"
+    },
+    "ch4_held_bell_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        432,
+        120
+      ],
+      "sha256": "1175484b4f04e5db133790670e348d23b94a93750f0a7dd93d50e7a53acb568e"
+    },
+    "ch4_held_bell_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        432,
+        120
+      ],
+      "sha256": "fe95bd5116b0a3f58d74650cb239803ff6b0d1c86637128c00a2821ceb4931c7"
+    },
+    "ch4_held_bell_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        464,
+        120
+      ],
+      "sha256": "d92c0b587127ea725e4376097cca3cb9602dab98421ff24b80e2e25dfba08d3e"
+    },
+    "ch4_held_bell_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        464,
+        120
+      ],
+      "sha256": "78a25cabff8c725b54cacc4ff3cc282bc279f7ef78e268099948eeeee7fb111d"
+    },
+    "ch4_held_bell_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        120
+      ],
+      "sha256": "be9f05077beb7670e3ccd2d99c23f97a035217cb32975e1e897373f258182d24"
+    },
+    "ch4_held_bell_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        120
+      ],
+      "sha256": "9a4c8b3529908e75dfdbb837050be66f0bdf388742e8f47d691223554fc84134"
+    },
+    "ch4_held_bell_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        120
+      ],
+      "sha256": "e6df346094df14a9f8a55816c57f49b3b24329d1a914215c028f36e0985445ca"
+    },
+    "ch4_held_bell_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        120
+      ],
+      "sha256": "90d02054249086ae64492733a5b3bb3dc6d3314f57de3af328203d9f0864515d"
+    },
+    "ch4_held_sky_tnt_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "e72be7581b51bf4e8ac0cec26ef957de2eeb43a243c28aff14655f59803048fc"
+    },
+    "ch4_held_sky_tnt_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "7d918b5ad26d277af4283fdec608fe9273eda133dd5011d431fb2cc3ccdc205e"
+    },
+    "ch4_held_sky_tnt_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "01fa478b010bc158dcb0cd41e6591d97c11cd96459ce2efb0d7b76529504dba4"
+    },
+    "ch4_held_sky_tnt_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "4f8f743b2d0c7332fb56bdd5d594115e80fb0380483f3bc423967a36063e0775"
+    },
+    "ch4_held_sky_tnt_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "e8604a4260a5371660aff37cf14c555e5a5ccb652265a08a7636d0fd5d49179b"
+    },
+    "ch4_held_sky_tnt_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "5f576c9b7b4a99b6b9180cd8cab24c2be06c3f1b1a3f17cc48828c43817115ad"
+    },
+    "ch4_held_sky_tnt_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "45357a7e4f7dd71dbd37e1cda57e0a9569bb9c18f929ac4f5e036c2125ccd063"
+    },
+    "ch4_held_sky_tnt_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "970ba19ccffa2598483825571e00efcec473b3b1b14f12c24649f84e2911d78f"
+    },
+    "ch4_held_idle_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "f9dbbfeba485c9bc47d75d89ff0d36fe7bbfae76937350ef7daec9d9c2766f76"
+    },
+    "ch4_held_idle_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "f909f6725ddb7b66d99b73b8b4f8a7a9441e7eb9487db504db998faf748d2f9f"
+    },
+    "ch4_held_idle_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "6572bac5c2d05d0df686274c64958d7a4f626fafc8d46f71ea116fe60fc888ef"
+    },
+    "ch4_held_idle_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "c320d869d87709c584e6fc8d1c27eba8987c9f1b3a9823866d51fe4ffcada97b"
+    },
+    "ch4_held_idle_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "84b00a58045263dfd9017a32e495e7b297feaaf7be86f138d38309854030606f"
+    },
+    "ch4_held_idle_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "62fc90ddaf19f2eef5ca983ea5ddf5205dfae68e8cc221eb84b77133c796e440"
+    },
+    "ch4_held_idle_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "334380943bbacbd0ed8c24b51b92fdb7412e411476596228bb085e4f5e760dd9"
+    },
+    "ch4_held_idle_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "e681f290683c01256140b51f94b6ce092bc02912c6ac1d4ec9b8eba20e37e6da"
+    },
+    "ch4_held_sword_iron_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        102
+      ],
+      "sha256": "2fcae96ecc80bf82d2b7a90f328d74cf50bf7c0d4650b5eff24a155bc0ecb2d9"
+    },
+    "ch4_held_sword_iron_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        102
+      ],
+      "sha256": "bdb64de9e2a141014f2b96b52ef4c5c1d62808a14e79d54c52f29e14deebf16e"
+    },
+    "ch4_held_sword_iron_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        102
+      ],
+      "sha256": "ea6f1788342d5fd79e6709028fa5d81b00e140e4add98a959d3936a89701fd97"
+    },
+    "ch4_held_sword_iron_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        102
+      ],
+      "sha256": "f3abc9cf8ac1cdb1cf3a45b531c27cd904c0dc9e7219bc954f4ed2f1998295e5"
+    },
+    "ch4_held_sword_iron_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        102
+      ],
+      "sha256": "9de7045c081d4eaf51e44155774b227eeff9bd6b546870e117c7589b002a13e4"
+    },
+    "ch4_held_sword_iron_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        102
+      ],
+      "sha256": "bebd14989d57a2eb5a6f4d4d6c4a504cf6cf06735693766dec1f9536d864847f"
+    },
+    "ch4_held_sword_iron_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        102
+      ],
+      "sha256": "7abb2e46481dd5744314b4f4de3570c6e9be166c4602e30115c4ec26c1f304ef"
+    },
+    "ch4_held_sword_iron_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        102
+      ],
+      "sha256": "de3e5510d869f00ab4532fa724f4dfa7444e1b2437902626d4dfc783a6733afc"
+    },
+    "ch4_held_sword_diamond_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        102
+      ],
+      "sha256": "3f4900ea2f157d7b475b8d6fe6ca7ada373663779b6c1b638a25707fbc8f65ca"
+    },
+    "ch4_held_sword_diamond_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        102
+      ],
+      "sha256": "0c56fa3c4399b731ff998aba72007f7d188d41f4c5e72f5c613c5d309dd5b172"
+    },
+    "ch4_held_sword_diamond_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        102
+      ],
+      "sha256": "ed78fb9247fcc226020a6f180b19edb83d844329707d6c93566e84267bec8eb3"
+    },
+    "ch4_held_sword_diamond_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        102
+      ],
+      "sha256": "9991c64ce6c5680debaa45afa481bf80731a5812050a97ce2ffdb90d93fe7ea9"
+    },
+    "ch4_held_sword_diamond_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        102
+      ],
+      "sha256": "5726ba0adfe4946e9ef5ab4d73ddd60bd11b59b256f1950f6a3308bd68d4b86e"
+    },
+    "ch4_held_sword_diamond_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        102
+      ],
+      "sha256": "61b4e1ebd67d41a19ffe6f199186c40d3d0dcfd6286f863a9ff82e450699187d"
+    },
+    "ch4_held_sword_diamond_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        102
+      ],
+      "sha256": "b2b23e861adc3f7cffa3208dce83103c07b2b72712d5ed85e5c1cbfd0230ef4e"
+    },
+    "ch4_held_sword_diamond_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        102
+      ],
+      "sha256": "7c3c6e6370e21da2229b72d37e08afc52b4f636ef2a4c2937e422d4e8dd991b5"
+    },
+    "ch4_held_sword_netherite_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        102
+      ],
+      "sha256": "09c18ac9631b5a944c76cb77f1fd311630d45aff2ff5474a98725af855a82e77"
+    },
+    "ch4_held_sword_netherite_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        102
+      ],
+      "sha256": "8b9e3cfad76e9177a10c05f23b7707a3619665637e9a4deeeac3c9c0ae0c6ed5"
+    },
+    "ch4_held_sword_netherite_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        102
+      ],
+      "sha256": "bf6b5e198f3a24b51182446bebddf20faab5a77cb5e8880681c1f10d758846e3"
+    },
+    "ch4_held_sword_netherite_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        102
+      ],
+      "sha256": "5aaedebdf826bb6e0ea94f48f0f36252f8c7ff9711defcb4159f98b5b1d63d47"
+    },
+    "ch4_held_sword_netherite_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        102
+      ],
+      "sha256": "99e9523412d792db29123afa84466df48f60b70f6908cb0e48f262a726b5483f"
+    },
+    "ch4_held_sword_netherite_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        102
+      ],
+      "sha256": "5bc1d1ade14a49843e3ff64387a0e2d9a76701b5d2a7c0034c85579950706d0e"
+    },
+    "ch4_held_sword_netherite_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        102
+      ],
+      "sha256": "7d6af419bd4b07709414d6d17c02b6f421523ca135ce2aafa4e52049f711a19e"
+    },
+    "ch4_held_sword_netherite_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        102
+      ],
+      "sha256": "5fecf9b221a5caf52f5e39613834a30999b9cf4457136a41cdf2f42eb2b0ec81"
+    },
+    "ch4_held_axe_iron_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "161f47905dc728c5634a414943abc3e0398b4cfc5c9b5cfbe068281b5e4749c1"
+    },
+    "ch4_held_axe_iron_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "47012c42c4220ac349fb34c7288fae8f24c5cad3662477b1fc794a446db7efdd"
+    },
+    "ch4_held_axe_iron_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "76279033ce0708208739ab8f4f8c39518ac689e816730c0e588e76ff93000955"
+    },
+    "ch4_held_axe_iron_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "8fa9b1745638ed92b96e40153f18af721dd8a73faec941e4c039999b6a394b3b"
+    },
+    "ch4_held_axe_iron_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "485c6dee8c80301884567ed077eb00e33f84227f153ef3d6965f989448b98fcd"
+    },
+    "ch4_held_axe_iron_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "30a55d12460f03e72d4a668fe188ecf6ec587bc728ea7242b4e5959af657fe5e"
+    },
+    "ch4_held_axe_iron_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "1af96891de93a88f757db976739b7c94907f506512093bd4db99e38a46d1a577"
+    },
+    "ch4_held_axe_iron_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "63e1204fc68f436dcb0fdcb3c0aec01d8c7f5f7d49a81aef0c17944a763b69bd"
+    },
+    "ch4_held_axe_diamond_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "b8c6385dcfcdec7771418674ac8678514d6a736c88efd7f83adc0a1d48efacdb"
+    },
+    "ch4_held_axe_diamond_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "cb6a7e86cd64e45cf9a2fcc7369e6688f233510edba774c7c23219f5e32b3813"
+    },
+    "ch4_held_axe_diamond_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "115557bfe772ad0fc3d28e906d94d4a016c41d79ef32e0930b19a12327520ba7"
+    },
+    "ch4_held_axe_diamond_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "b4b02cf5ab4fca7b5377ab7b9ebf20ca158f990e2dc5f292533ad17c479de041"
+    },
+    "ch4_held_axe_diamond_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "13a5011908a140b4f3e05e7290614fe0d41635fba2c502ce2c4b0e61985d1daf"
+    },
+    "ch4_held_axe_diamond_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "d01749aa00b84e7fad74dfa47b638e0515bfb24794a4b61e55ad9127c57d8983"
+    },
+    "ch4_held_axe_diamond_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "42d83477c8a2a344e252f1f0c06e54f5d92fea0bc98f2b68cc153beb5f164466"
+    },
+    "ch4_held_axe_diamond_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "ff77b074d394d86258a27637f927d20d2fe0984f4c22df20262e89d24c684d3b"
+    },
+    "ch4_held_axe_netherite_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "ced80541af9c2c8581d673819913b1a849f48fa74572a1e29c6f3eb40b538c96"
+    },
+    "ch4_held_axe_netherite_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "21d763450c3cd2318c071bb057bcaea86524c134cb16588b297ce768af337b6b"
+    },
+    "ch4_held_axe_netherite_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "1014dddb94bf3db1ffb6c604201df1c4f5a2c836677132b7b0ea733755b1cad5"
+    },
+    "ch4_held_axe_netherite_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "70c4057c3f0282aba24165beac811e69d390c1617d42002a7acc95c14ec62bd1"
+    },
+    "ch4_held_axe_netherite_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "04909229c6412d963373523e3e3f7bd7c1263bbdf8c850f46708746532f69e49"
+    },
+    "ch4_held_axe_netherite_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "653b96b2cc71f5a492589535afed803510067e648f9000cec835154d7e9588d8"
+    },
+    "ch4_held_axe_netherite_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "3ca4ef4aa056760aef4a35ef7f79f1c0759ee559c6e9bf2c89703ec2c4bc2c94"
+    },
+    "ch4_held_axe_netherite_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "34757a1b3222cf25e3ed2dbe7b005e8624ebc49a62b3f6bb504eebee27c4f834"
+    },
+    "ch4_held_hoe_iron_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        99
+      ],
+      "sha256": "3de018a9470da3c4f3294210f73e8012ec59c43b5697440d120e8b55a6ba74ff"
+    },
+    "ch4_held_hoe_iron_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        99
+      ],
+      "sha256": "2d7aea016a12953751dbca7ae8faa588b99dec7e12c24a52a6a9e60b94c129ea"
+    },
+    "ch4_held_hoe_iron_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "7b7118698008b15ba95032683efe9e8e0d8e61d86aa598fbe6ad8d712200898f"
+    },
+    "ch4_held_hoe_iron_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "358d3e6d24d910a757af87079ecbdb2d6dd64e4ff4282968014f5319f6c1ab22"
+    },
+    "ch4_held_hoe_iron_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "8734f9c1fc82dec0b2c3bba1568e229accad8b832e1abb15debd23b70cda2823"
+    },
+    "ch4_held_hoe_iron_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "e8318262d9a0b992d1758d5362c7209840dea2a3a9bf5eb4f3444a1f1c738b9e"
+    },
+    "ch4_held_hoe_iron_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "c39ef5bc4088f113a7df0164e505bacc4d02f646ecd117f83630de01e7ef4ae4"
+    },
+    "ch4_held_hoe_iron_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "3709a25d9180828be65680ad826177e31453e87738bbbcfd6cc40a099fe9d2f7"
+    },
+    "ch4_held_hoe_diamond_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        99
+      ],
+      "sha256": "73d529603fe2aa489b5ffe13e9a7dd0d79abda918e6fb9ce2b405c78698c14a7"
+    },
+    "ch4_held_hoe_diamond_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        99
+      ],
+      "sha256": "e1f38aca470d22c1e3debb4d4142899b994a90a0b15b8297e6f3936f317978f4"
+    },
+    "ch4_held_hoe_diamond_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "fc0abcdfe3bc4ac09de7528a2e03dd7d4ddda397e752b1bf1601913a2db1f9c9"
+    },
+    "ch4_held_hoe_diamond_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "baf8156fbea241b7a1b718182574c2b3e719bc32689074520eb6542d3c102848"
+    },
+    "ch4_held_hoe_diamond_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "74d322a6df4c05daa7178f25e0a93b4f1bae8ac47f8c964d2ea1532a01deec6a"
+    },
+    "ch4_held_hoe_diamond_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "e3461e14b4e7b5d0f40e8cfef993d14d383afc01aa845e3d130e263319466e36"
+    },
+    "ch4_held_hoe_diamond_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "2fa0666a45cb1e6492d948fce2cab7375c65bb48842ccc4a4a499ca35f396275"
+    },
+    "ch4_held_hoe_diamond_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "dc3a5928bbaa2ba6e030002eb1998e3b1a3968a6530e69bbb7edaa3fc4be15d4"
+    },
+    "ch4_held_hoe_netherite_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        99
+      ],
+      "sha256": "77d3b2f7a522cc28084dcafc1da54e09a58a2405cfc1dd7d42dab2711b0d65e3"
+    },
+    "ch4_held_hoe_netherite_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        384,
+        99
+      ],
+      "sha256": "159ff8c9047416cf4de4bd21a8ae1d4f15ca443a3361e2d3cf55800def8422f3"
+    },
+    "ch4_held_hoe_netherite_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "7f85212ff7deb9652edf08ac38668dd18dd8c0a53ab275e9cf3f1e8221d7a552"
+    },
+    "ch4_held_hoe_netherite_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "e85648a84851bd2fd73ebc345e4959d34448edf1ed1c97e6bda9524e57a5f09e"
+    },
+    "ch4_held_hoe_netherite_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "53e409d2ccdf65ba255ea864d160d0d9e3e6d8fd4cc27d7ae5448b7767672dde"
+    },
+    "ch4_held_hoe_netherite_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "78f629bc04fd545efc6b63daeafa3ec510edd2ebf6857555d59dca0525f2891b"
+    },
+    "ch4_held_hoe_netherite_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "423c074c1b49cb035b9e73da8bd274ae47c7e1b2c1d324fb6e832b9055147750"
+    },
+    "ch4_held_hoe_netherite_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "708d3abc2c18dc0c4e0cb6cf0e661c5dade8b4595c5fa1a4c20b4a11f11e8bf5"
+    },
+    "ch4_held_bow_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        368,
+        99
+      ],
+      "sha256": "9f2a4a663d6924a354dae699861a6ddf474047547fe3578564f665a39d01d5df"
+    },
+    "ch4_held_bow_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        368,
+        99
+      ],
+      "sha256": "6c1d50842097f63c79271121546cd0e29d2e8ece176ca63ec73ebb129e70fb6c"
+    },
+    "ch4_held_bow_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "9c81acb3e43b8553a5666ffcff3270305927ed938f451d28ab9fdc91bf781cc2"
+    },
+    "ch4_held_bow_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "23e277041c4d6cf1b3e77535c88db12e5389b49f9758e918d45815e82791b868"
+    },
+    "ch4_held_bow_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "067802bedfb6b3ad3636f5ec3c783c773d045f97bf3a21ca1bec42ed69411fcf"
+    },
+    "ch4_held_bow_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "65a929330fe16c2b475a2e8e67a0de63629087e9665a5a63e12622d4a08b7520"
+    },
+    "ch4_held_bow_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "8d0c883f832b5d7deff60db82312ed18ef5fa19e54f0f129628d2a79285f3fe4"
+    },
+    "ch4_held_bow_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "c7932707a387aa63cb371da5877cdcd983585963c76874b400cabe956244d30f"
+    },
+    "ch4_held_trident_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "070b41eed3f26062ca607ec9bd0b544fb7caedb23e73e47990384d9bea7ba2dd"
+    },
+    "ch4_held_trident_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "5e82899d7e7257241d6d3f0def3105f002440ed38170dec2e7de686b5dbd4079"
+    },
+    "ch4_held_trident_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "5f9d61c296d0fbb587a1ebfbcbd5ff045f5decb997d788be39edc60ca5fb7f49"
+    },
+    "ch4_held_trident_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "48f46f2b57d5fd2650cf322270d386e4d706cfb871bd7083e2301ab482a9aa06"
+    },
+    "ch4_held_trident_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "31871adb3fd4512536ef66036561e0b26ab349f9e58ff8e26265e2e60f82f393"
+    },
+    "ch4_held_trident_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "2fe7cc5c3c192e27d798394039226e446c20431067bf8f35246ddad73ba69329"
+    },
+    "ch4_held_trident_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "a6192b11f2bb82dc4aa9b85ee658d9832ac6def83181e386dfe7d756eef6f617"
+    },
+    "ch4_held_trident_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "77f951ee1c3ab795216c57547c743b1d65e119a39b4d47f733ea1f353b4fa0c1"
+    },
+    "ch4_held_bed_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        368,
+        99
+      ],
+      "sha256": "f9f8d84323d54e5fe59e5419bb01fe989655b7aa25e71ddf6171536b9c00c677"
+    },
+    "ch4_held_bed_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        368,
+        99
+      ],
+      "sha256": "355c3543e05346fda39c90af4a4e3ce8b48af5f617a8e5444bf8a80a4329183d"
+    },
+    "ch4_held_bed_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "fb03f0cbe13f9ca36b11b904f61af755a57613d8e515dafe4cd5519e94a9110c"
+    },
+    "ch4_held_bed_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "3c23a12aa51fc41d9e630adb93cf4ec4d8d9a56c4a62e0bbf3b184b059da0472"
+    },
+    "ch4_held_bed_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "cc06847c781bbc229e7e42026287f5e6d58757b443f39e2745397728fa021c11"
+    },
+    "ch4_held_bed_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "015d68ef49435ffee96885a5748c30afb2b10666b9cdd337fc2c2c96f330b90d"
+    },
+    "ch4_held_bed_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "fba67d6ed0aa49bcde65eed2a506415147d6cf0b0f3c65b3656c9893f82cd6d7"
+    },
+    "ch4_held_bed_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "6d0c5033eb40b5ad334c5f28f806581e4b2df8bbdae953f9f730b0321e459949"
+    },
+    "ch4_held_tnt_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        368,
+        99
+      ],
+      "sha256": "bc9929703ffff070e2c0af2c7cda3454f709d8029ab6b46ecc2cbc97398d6431"
+    },
+    "ch4_held_tnt_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        368,
+        99
+      ],
+      "sha256": "4d4babf8f416e79d7706aa4ecb05efb906407ac4a493a7a269fe6badb7b8d258"
+    },
+    "ch4_held_tnt_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "e6458e2b00161514a283db332a17f5f52a3d86b7207c6ffff61ae9b3b388c7cd"
+    },
+    "ch4_held_tnt_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "fdb911418723b1a894e45828b19d6b899f3378b7e7c9a21bfcbe5428e0e4610c"
+    },
+    "ch4_held_tnt_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "078c5cfbec557c8a1683a416c4bd9cde84fa5ea0445fe7ca86995f1546eea92a"
+    },
+    "ch4_held_tnt_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "4138db95553606cb6ff3b214965eff6c0fa78ebcf439a01ae51f888d9b104048"
+    },
+    "ch4_held_tnt_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "45a74885732ffbe45aeed032ffb94149135b609360ca414950f936d8b140bbdf"
+    },
+    "ch4_held_tnt_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "8654d63a9adbd573824bde922658835878fabe6cfbffc6d139acc1cf2d45094c"
+    },
+    "ch4_held_fishing_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "f451e2bcca2ddb4dacbb77f7d8f9d0568cb597c5f21a82a26fe11cfdcd05ada4"
+    },
+    "ch4_held_fishing_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "c34154ddf0fe9237cefa4b48f3c0532660e98431b0ee08b2ff723d3f776f80ae"
+    },
+    "ch4_held_fishing_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "34d612ffba8992443d60e4a267e5d2271d3bac1e267b33ce81a4a8fde5876aee"
+    },
+    "ch4_held_fishing_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "62e7b6723dc8e173bbcb1c570a6e09c6b4a4f46b5a2567decc0485f8eba5be25"
+    },
+    "ch4_held_fishing_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "ab08693e18f0fcedb1729f4ef9be22daec5bf9d3e4d5de75710c51796eddd4f1"
+    },
+    "ch4_held_fishing_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "01992d5c329dbe15f4476e996c524ff1bb55a32aac81906fdf1ac9499830cbb4"
+    },
+    "ch4_held_fishing_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "231deeb666d593272f071800e1d6fc9b48a93d9a9fc3f14524c180f3b8c8ed4c"
+    },
+    "ch4_held_fishing_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "004a50e32915d3a65c2eeb03865762667c1533d606c8d406df91e3b713d75635"
+    },
+    "ch4_held_blood_pool_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "1d57f0bdc7e5bea393f7dbabb1be82b704b31826017f9372b1166a5ed7004939"
+    },
+    "ch4_held_blood_pool_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "c2ffe6cc004084bab4e097e1fcda859e35065a6244eb473f0dec24fb17ce080c"
+    },
+    "ch4_held_blood_pool_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "e75599728c2aa84267a4da4c70c5b9b423285a01616952481d7a7d35925f0480"
+    },
+    "ch4_held_blood_pool_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "21023264b9a9244fa7adf6bb21923bf12df69da70699c316be72c7a7c408da22"
+    },
+    "ch4_held_blood_pool_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "32e5b5f599b9bffb0566ffed7b45b93d7f458db5a067e3553d02556fe0847a4e"
+    },
+    "ch4_held_blood_pool_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "e9efbd1381ba2bfab3c5da356966a533183fb3bada0de3792711206672ca83e1"
+    },
+    "ch4_held_blood_pool_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "382008f366e6ca5a803de1fdb0344c6ad90d7e2bdd0346a7e72e5258f8cd201a"
+    },
+    "ch4_held_blood_pool_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "b1b43981b4030715fb38c3362f9f3cf96f5156541b1f7f4ccf17988bdca2e7fc"
+    },
+    "ch4_held_embryo_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "1d57f0bdc7e5bea393f7dbabb1be82b704b31826017f9372b1166a5ed7004939"
+    },
+    "ch4_held_embryo_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        352,
+        99
+      ],
+      "sha256": "c2ffe6cc004084bab4e097e1fcda859e35065a6244eb473f0dec24fb17ce080c"
+    },
+    "ch4_held_embryo_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "e75599728c2aa84267a4da4c70c5b9b423285a01616952481d7a7d35925f0480"
+    },
+    "ch4_held_embryo_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "21023264b9a9244fa7adf6bb21923bf12df69da70699c316be72c7a7c408da22"
+    },
+    "ch4_held_embryo_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "32e5b5f599b9bffb0566ffed7b45b93d7f458db5a067e3553d02556fe0847a4e"
+    },
+    "ch4_held_embryo_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "e9efbd1381ba2bfab3c5da356966a533183fb3bada0de3792711206672ca83e1"
+    },
+    "ch4_held_embryo_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "382008f366e6ca5a803de1fdb0344c6ad90d7e2bdd0346a7e72e5258f8cd201a"
+    },
+    "ch4_held_embryo_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "b1b43981b4030715fb38c3362f9f3cf96f5156541b1f7f4ccf17988bdca2e7fc"
+    },
+    "ch4_held_red_torch_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "377d1ee9b611b356565492b833d279e4fb958e66795ba26ec0fc9f535be5bee6"
+    },
+    "ch4_held_red_torch_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        320,
+        99
+      ],
+      "sha256": "e39a1b93c9ae84c7d362dec3897ba35a1507b81f7126968a0ae60745a89c2384"
+    },
+    "ch4_held_red_torch_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "57c3ebd1a23c04b8ddd3cba09e344aa3ee9dd12a17761a2e559d553c324955e9"
+    },
+    "ch4_held_red_torch_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "2c1851c2f250935c3da668ce499fac767ca2b783e72f5cb559fd757a82a7b725"
+    },
+    "ch4_held_red_torch_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "ed60c25f9f069286add157a4ef7c42326a61c59bd5677aa19210be792a71d2ef"
+    },
+    "ch4_held_red_torch_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "038b827c765b9aa4181059ba3578afb99b150addfafc0b7ec7ad0c63ba254e6f"
+    },
+    "ch4_held_red_torch_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "a79928cc59d7adf21e997b1ed4cd6107e866edf2204093c7c4df135bdf4f8577"
+    },
+    "ch4_held_red_torch_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "43a0ef6c88be56700c60664cd3b22564d71610baf43c21fce78ceef9d1bec844"
+    },
+    "ch4_held_potion_w0_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        336,
+        99
+      ],
+      "sha256": "b01941eb38756ffe79c5e5e76f2a2c9a560c5efeb8daa22c43c256adbe2ce3f6"
+    },
+    "ch4_held_potion_w0_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        336,
+        99
+      ],
+      "sha256": "3d45cdc7d3c6c1dd6a48a9d7355860a9f9f4fa53e8cbf42424f745ac5e54fb78"
+    },
+    "ch4_held_potion_w1_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "1028c6b660bc0add9a5e822d58541fae53f6e016587cf40111a2f782de615af1"
+    },
+    "ch4_held_potion_w1_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        448,
+        99
+      ],
+      "sha256": "28ba04644c917c5246970af1cf84201d0cad64fc1d3764d2488cbca032ff4bb2"
+    },
+    "ch4_held_potion_w2_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "ca26bee365a9451706bd844c68fa67a6d5472d82da990bc0a8d7ed4f85b3ee24"
+    },
+    "ch4_held_potion_w2_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        576,
+        99
+      ],
+      "sha256": "0edb064cf5df44af1e2c0aac80fe61e3d721d6994f0ffaa926d5d6ac28d4a717"
+    },
+    "ch4_held_potion_w3_a0": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "7916755361ec6fc4c461fdec56f2db968096a8833b49ed3a9543d8a39ed6eebc"
+    },
+    "ch4_held_potion_w3_a1": {
+      "sources": [
+        "original Steve skin; native item/block textures; full shoulder/elbow/wrist hierarchy"
+      ],
+      "size": [
+        704,
+        99
+      ],
+      "sha256": "c4727d3df171af6d5b76388b85ac08e752e9a08854b0f0f1bc2163047642637d"
+    },
+    "icon_ch4_bedrock_sword": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3f57f67cae2c17aeb9fd2dea7ac2f8c1695dd21ae13d9c14d55b38eeeb871c25"
+    },
+    "icon_ch4_shotgun": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "17651f51a7ca2e28ad525d00d7086d4cc28173ddf333dcf1f279f63fb86b590d"
+    },
+    "icon_ch4_shotgun_evo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "17651f51a7ca2e28ad525d00d7086d4cc28173ddf333dcf1f279f63fb86b590d"
+    },
+    "icon_ch4_blood_pool": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+    },
+    "icon_ch4_blood_pool_evo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+    },
+    "icon_ch4_embryo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+    },
+    "icon_ch4_embryo_evo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+    },
+    "icon_ch4_bell": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b2880f100badb7c66d52391b68061ed63e64535743c94c369933c8808f4b47f2"
+    },
+    "icon_ch4_bell_evo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b2880f100badb7c66d52391b68061ed63e64535743c94c369933c8808f4b47f2"
+    },
+    "icon_ch4_bone_saw": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ec800a86a2c205bddadfa2a64d605315a96f418312cc7e2a127347147dc6b066"
+    },
+    "icon_ch4_bone_saw_evo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ec800a86a2c205bddadfa2a64d605315a96f418312cc7e2a127347147dc6b066"
+    },
+    "icon_ch4_red_torch": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "bca25c0460024f5c6e1e6c96f706b216f56b2971ea53f6e16e5a2307e287581d"
+    },
+    "icon_ch4_red_torch_evo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "bca25c0460024f5c6e1e6c96f706b216f56b2971ea53f6e16e5a2307e287581d"
+    },
+    "icon_ch4_sky_tnt": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1ee7f0ff5ef8df03cb4be3fa8fb6890532f16037b2cc996f170307c0399bb6f1"
+    },
+    "icon_ch4_potion": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fe111f8d79fdbc4763aff574ffd1a43eeba02a9c6bd1807df0faa378d6535169"
+    },
+    "icon_ch4_potion_evo": {
+      "sources": [
+        "native textured held tool"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fe111f8d79fdbc4763aff574ffd1a43eeba02a9c6bd1807df0faa378d6535169"
+    },
+    "icon_ch4_bedrock": {
+      "sources": [
+        "native block/item bedrock"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "0d07af5a7df4b6af64fe439d3f533d9a9583d07526e7af3a3cd9ec647ccd34e9"
+    },
+    "icon_ch4_gunpowder": {
+      "sources": [
+        "native block/item gunpowder"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3edb05ddb717ab9db70b9894de788b0e6c070dae5f4bb41070bb4fec354d85f0"
+    },
+    "icon_ch4_heart_booster": {
+      "sources": [
+        "native textured equipment geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ed5c45dcd2ecd78ac7a760846fdd7322a8cedccc866fc91685be7f559262eade"
+    },
+    "icon_ch4_mirror_shard": {
+      "sources": [
+        "native textured equipment geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "49e2097a6d528d6be209d912b557023cbbbcaccc5c51105544d976a0a7fd36ea"
+    },
+    "icon_ch4_black_candle": {
+      "sources": [
+        "native textured equipment geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "7062eae91d172d2485de34e452852520b22fa3bdf3b07e990bfd048385fe4e5c"
+    },
+    "icon_ch4_empty_totem": {
+      "sources": [
+        "native textured equipment geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "c5fb14c520bcfe018287c0636674e8ea857336ffc912824429429b6c5cf57896"
+    },
+    "icon_ch4_iron_maiden": {
+      "sources": [
+        "native textured equipment geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "23bf0defe399d1ab45619b700a12aff068219b84833c7f33d8ca687f9050cab7"
+    },
+    "icon_ch4_thorns": {
+      "sources": [
+        "native textured equipment geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4971110731cf1f2843e2050b76f64860159e3d6c313906bdf170709e924c2289"
+    },
+    "icon_ch4_bat_wings": {
+      "sources": [
+        "native wing geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "f3bbf5a5ddc05517a2e83015863755e5aedcbbacad611c85f795902c7c44c9e0"
+    },
+    "icon_ch4_bat_swarm": {
+      "sources": [
+        "native wing geometry"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "f3bbf5a5ddc05517a2e83015863755e5aedcbbacad611c85f795902c7c44c9e0"
+    },
+    "ch4_pet_1": {
+      "sources": [
+        "mushroom stem; red concrete powder; coal"
+      ],
+      "size": [
+        512,
+        192
+      ],
+      "sha256": "25f546c46bb59ba22a05ed8e9144c6f43d0d32682de709e5ef7b80d75267b009"
+    },
+    "ch4_pet_2": {
+      "sources": [
+        "mushroom stem; red concrete powder; coal"
+      ],
+      "size": [
+        512,
+        192
+      ],
+      "sha256": "8fef0b23b50a8b0c5ac8d89c020c7745690acf1251d4b3cb1aad3d95b524fe92"
+    },
+    "ch4_pet_3": {
+      "sources": [
+        "mushroom stem; red concrete powder; coal"
+      ],
+      "size": [
+        512,
+        192
+      ],
+      "sha256": "a698475ae6186c1c442d2891d4428448509bd39a9a46cd982cbe599c88953496"
+    },
+    "ch4_pet_4": {
+      "sources": [
+        "mushroom stem; red concrete powder; coal"
+      ],
+      "size": [
+        512,
+        192
+      ],
+      "sha256": "c55bcf38fb503d2b6d0e07a37b14f851e082562c5d9046a42632ba6e50c95c6b"
+    },
+    "ch4_ghost_bell": {
+      "sources": [
+        "entity/bell/bell_body"
+      ],
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "7ff81f7e4fd5f1bd04d516a5e9297525536a82c774fc3f5b0179ec68cafb81e9"
+    },
+    "ch4_sky_charge": {
+      "sources": [
+        "block/tnt_side"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "0fed195a4f6546a4a5bbfe50a8ec36b068bcdc15106be83ea754281b25cabe0f"
+    }
+  },
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar"
+}

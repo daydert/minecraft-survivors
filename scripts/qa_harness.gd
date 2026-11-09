@@ -2,6 +2,9 @@ extends RefCounted
 ## Capture, stress, autoplay and recording helpers. Never used by an ordinary run.
 
 static func prepare_capture(g):
+	if g.qa_mode.begins_with("ch4c_"):
+		prepare_four_arsenal_capture(g)
+		return
 	if g.qa_mode.begins_with("ch4b_"):
 		prepare_four_enemies_capture(g)
 		return
@@ -385,3 +388,52 @@ static func record_four_enemies(g,tree: SceneTree) -> Dictionary:
 			g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
 			tree.root.get_texture().get_image().save_png("res://qa/recordings/chapter_four_b_frames/%05d.png"%frame);frame+=1
 	return {"fps":30,"frames":frame,"segments":segments,"sound_events":cues,"diagnostic_cuts":true,"invulnerability":false,"max_gear_only_in_crowd":true,"content_stage":"B"}
+
+static func prepare_four_arsenal_capture(g):
+	g.start_chapter(4);g.world.reset(874)
+	var w=g.world;var mode: String=g.qa_mode.trim_prefix("ch4c_")
+	w.stage="survival";w.state="RUNNING";w.clock=184;w.time=420;w.stage_age=184;w.note_read=true;w.db.data.chapter_four.exploration_only=true
+	w.player=Vector2(1050,1100);w.facing=Vector2.RIGHT;w.threats=[];w.chickens=[];w.build={};w.items={};w.evolved={};g.cam_lead=Vector2.ZERO
+	var id: String={"bedrock":"sword","pool":"blood_pool","pet":"embryo","saw":"bone_saw","torch":"red_torch","sky":"sky_tnt","heart":"shotgun","bat":"sword"}.get(mode,mode)
+	if id in w.db.weapons:w.build[id]=8
+	if mode in ["bedrock","shotgun","pool","pet","bell","saw","torch","sky","potion"]:w.evolved[id]=true
+	if mode in ["bedrock","saw","bat"]:w.items={"bat_wings":5,"armor":5,"thorns":3,"mirror_shard":3};w.evolved.armor=true
+	if mode=="heart":w.items={"heart_booster":5,"black_candle":4,"empty_totem":1};w.hp=15
+	if mode=="bat":w.evolved.bat_wings=true
+	w.arsenal.reset(w);w.arsenal.tick(w,.01,Vector2.ZERO)
+	for i in range(14):
+		var p: Vector2=w.player+Vector2.from_angle(i*2.39996)*float(50+i%4*28)
+		w.spawn(["flayed_zombie","growth_skeleton","matted_sheep","open_cow","hungry_wolf","fused_villagers"][i%6],p)
+		w.mobs.back().hp*=5;w.mobs.back().max_hp=w.mobs.back().hp;w.mobs.back().timer=4
+	w.rebuild_hit_grid();w.arsenal.kills=48
+	if mode=="heart":w.active_item("heart")
+	if mode=="bat":w.active_item("bat")
+	if mode=="torch":
+		for i in range(6):w.arsenal.torches.append({"p":w.player+Vector2.from_angle(i*TAU/6)*68,"life":13.0,"id":w.next_id()})
+	if mode=="pool":
+		w.arsenal.pools.append({"p":w.player,"base":42.0,"radius":62.0,"power":10,"life":15.0,"tick":.05,"damage":14.0})
+	if mode.begins_with("recipes"):
+		w.build={"sword":8,"fishing":8,"tnt":8,"shotgun":8,"bell":8,"bone_saw":8};w.items={"bedrock":1,"gunpowder":5,"mirror_shard":3,"armor":5,"thorns":3,"bat_wings":5,"empty_totem":1,"black_candle":3};w.evolved={"fishing":true,"tnt":true}
+		g.router.open("recipes",w);g.recipe_page=1 if mode=="recipes2" else 0
+	elif mode=="inventory":
+		w.build={"sword":8,"shotgun":8,"sky_tnt":8,"bell":8,"bone_saw":8,"embryo":8};w.items={"heart_booster":5,"mirror_shard":3,"armor":5,"thorns":3,"bat_wings":5,"empty_totem":1,"black_candle":3,"bedrock":2};w.evolved={"sword":true,"armor":true,"bat_wings":true,"sky_tnt":true}
+		g.router.open("inventory",w)
+	else:
+		var preview: float={"bedrock":.23,"shotgun":.34,"sky":1.5,"pool":.5,"pet":.2,"bell":.65,"saw":.28,"torch":.1,"potion":2.0,"heart":.32,"bat":.12}.get(mode,.2)
+		for i in range(ceili(preview*60)):w.step(1.0/60)
+	w.update_flow()
+
+static func record_four_arsenal(g,tree: SceneTree) -> Dictionary:
+	var frame:=0;var cues: Array=[];var segments: Array=[]
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://qa/recordings/chapter_four_c_frames"))
+	for mode in ["bedrock","shotgun","pool","pet","bell","saw","torch","sky","heart","bat","potion"]:
+		g.qa_mode="ch4c_"+mode;prepare_four_arsenal_capture(g);var w=g.world
+		segments.append({"mode":mode,"time":frame/30.0})
+		for i in range(90):
+			for tick in range(2):
+				if w.state=="LEVEL_UP":w.skip_reward()
+				w.step(1.0/60,Vector2.RIGHT if mode in ["torch","bat"] and i<50 else Vector2.ZERO)
+			for id in w.sounds:cues.append({"id":id,"time":frame/30.0})
+			w.sounds.clear();g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
+			tree.root.get_texture().get_image().save_png("res://qa/recordings/chapter_four_c_frames/%05d.png"%frame);frame+=1
+	return {"fps":30,"frames":frame,"segments":segments,"sound_events":cues,"diagnostic_cuts":true,"invulnerability":false,"max_gear":true,"content_stage":"C"}

@@ -15,8 +15,9 @@ readme='''Minecraft Survivors · V2 · Главы I–III + мир IV · Коо�
 Поражение в этом бою тоже ведёт в Незер. Победа открывает особую сцену.
 Глава II: 12 минут выживания, отдельная арена, победа и портал в Край.
 Глава III: остров с пропастями, кристаллы на обсидиане, дракон и последний ЭндерСтив.
-Глава IV: мир, записка, 14 типов врагов с паразитами и три вида неподвижных угроз.
-Новый арсенал, особые встречи и финальный бой IV ещё в разработке.
+Глава IV: мир, 14 типов врагов, новый арсенал, спутник и составные эволюции.
+В IV: E — ускоритель сердца за HP; Пробел — эволюция крыльев в рой.
+Особые встречи и финальный бой IV ещё в разработке.
 Элитры: Пробел. Жемчуг: E. Эволюция копья с элитрами: Shift.
 Золотых ботинок и сгустка магмы в наградах Края нет.
 В Незере портал зажигается Оком Эндера при подходе. Вход — движением в портал.
@@ -73,7 +74,7 @@ for label,folder,filename in [('Windows-x64','windows','MinecraftSurvivors.exe')
   z.write(ROOT/'docs/MINECRAFT_END_MANIFEST.json','licenses/MINECRAFT_END_MANIFEST.json')
   z.write(ROOT/'docs/MUSIC_MANIFEST.json','licenses/MUSIC_MANIFEST.json')
   z.write(ROOT/'docs/MINECRAFT_ACHIEVEMENTS_MANIFEST.json','licenses/MINECRAFT_ACHIEVEMENTS_MANIFEST.json')
-  for manifest in ['V2_ASSET_MANIFEST','CHAPTER_FOUR_ASSET_MANIFEST','CHAPTER_FOUR_AUDIO_MANIFEST','CHAPTER_FOUR_MOBS_MANIFEST']:
+  for manifest in ['V2_ASSET_MANIFEST','CHAPTER_FOUR_ASSET_MANIFEST','CHAPTER_FOUR_AUDIO_MANIFEST','CHAPTER_FOUR_MOBS_MANIFEST','CHAPTER_FOUR_EQUIPMENT_MANIFEST']:
    z.write(ROOT/f'docs/{manifest}.json',f'licenses/{manifest}.json')
  outputs.append(archive)
 source=OUT/'MinecraftSurvivors-Source.zip'

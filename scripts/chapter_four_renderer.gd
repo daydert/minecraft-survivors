@@ -2,6 +2,7 @@ extends RefCounted
 ## A single world offset for ground, blood, silhouettes and actors. Visual
 ## hashes and the simulation clock keep pause/camera movement deterministic.
 const EnemyView=preload("res://scripts/chapter_four_enemy_view.gd")
+const ArsenalView=preload("res://scripts/chapter_four_arsenal_view.gd")
 const Lighting = preload("res://scripts/ui/lighting.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const ANCHORS = {"house": Vector2(56,66), "crucifix": Vector2(32,88), "growth": Vector2(24,40), "growth_big": Vector2(64,96), "torch": Vector2(8,21), "pyramid": Vector2(144,150)}
@@ -14,6 +15,7 @@ func world(g):
 	g.draw_texture_rect_region(g.textures.ch4_ground, Rect2(0,0,640,360), Rect2(-offset,Vector2(640,360)))
 	blood(g, offset)
 	EnemyView.floor_layer(g,offset)
+	ArsenalView.floor_layer(g,offset)
 	for mark in w.landmarks:
 		if mark.kind == "crucifix":pillar_floor(g, mark, offset)
 		if mark.get("attack", "") == "windup" and mark.kind == "torch":
@@ -32,6 +34,7 @@ func world(g):
 	for o in w.loot:
 		if Rect2(-24,-24,688,408).has_point(o.p+offset):actors.append({"sort":o.p.y,"kind":"loot","obj":o})
 	actors.append({"sort":w.player.y,"kind":"player"})
+	if w.build.has("embryo"):actors.append({"sort":w.arsenal.pet.p.y,"kind":"pet"})
 	if not w.blood_hand.is_empty():actors.append({"sort":w.blood_hand.p.y+2,"kind":"hand"})
 	actors.sort_custom(func(a,b):return a.sort < b.sort)
 	for actor in actors:
@@ -46,8 +49,8 @@ func world(g):
 					g.sprite("tree_dead_"+str(o.variant),p-Vector2(32,67),Vector2.ZERO,Color(.68,.58,.58,alpha))
 				else:g.sprite("pumpkin",p-Vector2(12,19),Vector2.ZERO,Color(.8,.68,.65))
 			"player":
-				g.draw_actor("steve",w.player+offset,w.facing,w.clock,w.player_moving,g.invulnerable_tint(),"walk",1,w.player_visual)
-				if w.stage != "arrival":g.draw_held_weapons(w.player+offset)
+				ArsenalView.player(g,offset)
+			"pet":ArsenalView.pet(g,offset)
 			"mob":
 				var m = actor.obj
 				if m.has("form"):EnemyView.actor(g,m,offset)
@@ -61,8 +64,10 @@ func world(g):
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2(p-Vector2(4,5),Vector2(8,8)),Rect2(0,0,16,16),Color(.6,1,.4))
 	for b in w.projectiles:g.draw_projectile(b,offset)
 	EnemyView.projectiles(g,offset)
+	ArsenalView.air_layer(g,offset)
 	for e in w.effects:
-		if EnemyView.effect(g,e,offset):pass
+		if ArsenalView.effect(g,e,offset):pass
+		elif EnemyView.effect(g,e,offset):pass
 		elif e.kind == "ch4_arc":arc(g,e,offset)
 		else:g.draw_effect(e,offset)
 	for b in w.blood_shots:

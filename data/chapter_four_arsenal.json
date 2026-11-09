@@ -1,0 +1,580 @@
+{
+  "weapons": {
+    "shotgun": {
+      "name": "Дробовик из арбалетов",
+      "damage": 6,
+      "interval": 2,
+      "radius": 3,
+      "speed": 0,
+      "range": 180,
+      "count": 1,
+      "pellets": 6,
+      "reach": 230
+    },
+    "blood_pool": {
+      "name": "Лужа крови",
+      "damage": 4,
+      "interval": 8,
+      "radius": 28,
+      "speed": 0,
+      "range": 180,
+      "count": 1
+    },
+    "embryo": {
+      "name": "Эмбрион",
+      "damage": 5,
+      "interval": 1.8,
+      "radius": 42,
+      "speed": 0,
+      "range": 180,
+      "count": 1
+    },
+    "bell": {
+      "name": "Колокол",
+      "damage": 10,
+      "interval": 3.4,
+      "radius": 72,
+      "speed": 0,
+      "range": 180,
+      "count": 1
+    },
+    "bone_saw": {
+      "name": "Костяная пила",
+      "damage": 4,
+      "interval": 2.8,
+      "radius": 35,
+      "speed": 0,
+      "range": 180,
+      "count": 1,
+      "duration": 0.85
+    },
+    "red_torch": {
+      "name": "Красный факел",
+      "damage": 5,
+      "interval": 3.8,
+      "radius": 4,
+      "speed": 0,
+      "range": 180,
+      "count": 1
+    },
+    "sky_tnt": {
+      "name": "Небесный подрыв",
+      "damage": 36,
+      "interval": 11,
+      "radius": 24,
+      "speed": 0,
+      "range": 180,
+      "count": 1,
+      "lootable": false
+    }
+  },
+  "upgrades": {
+    "shotgun": [
+      {
+        "damage": 2
+      },
+      {
+        "pellets": 1
+      },
+      {
+        "interval": -0.2
+      },
+      {
+        "damage": 2
+      },
+      {
+        "pellets": 2
+      },
+      {
+        "interval": -0.25
+      },
+      {
+        "damage": 3
+      }
+    ],
+    "blood_pool": [
+      {
+        "damage": 1
+      },
+      {
+        "radius": 3
+      },
+      {
+        "damage": 1
+      },
+      {
+        "radius": 3
+      },
+      {
+        "damage": 2
+      },
+      {
+        "interval": -1
+      },
+      {
+        "damage": 2
+      }
+    ],
+    "embryo": [
+      {
+        "damage": 2
+      },
+      {
+        "interval": -0.15
+      },
+      {
+        "damage": 3
+      },
+      {
+        "radius": 10
+      },
+      {
+        "damage": 3
+      },
+      {
+        "interval": -0.2
+      },
+      {
+        "damage": 4
+      }
+    ],
+    "bell": [
+      {
+        "damage": 3
+      },
+      {
+        "radius": 7
+      },
+      {
+        "interval": -0.25
+      },
+      {
+        "damage": 4
+      },
+      {
+        "radius": 8
+      },
+      {
+        "damage": 5
+      },
+      {
+        "interval": -0.3
+      }
+    ],
+    "bone_saw": [
+      {
+        "damage": 1
+      },
+      {
+        "radius": 4
+      },
+      {
+        "damage": 1
+      },
+      {
+        "duration": 0.1
+      },
+      {
+        "damage": 2
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "damage": 2
+      }
+    ],
+    "red_torch": [
+      {
+        "damage": 2
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "damage": 2
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "damage": 2
+      },
+      {
+        "interval": -0.3
+      },
+      {
+        "damage": 3
+      }
+    ],
+    "sky_tnt": [
+      {
+        "damage": 3
+      },
+      {
+        "damage": 3
+      },
+      {
+        "damage": 3
+      },
+      {
+        "damage": 3
+      },
+      {
+        "damage": 3
+      },
+      {
+        "damage": 3
+      },
+      {
+        "damage": 3
+      }
+    ]
+  },
+  "passives": {
+    "bedrock": {
+      "name": "Бедрок",
+      "effect": "Меньше отбрасывания. Защита при неподвижности."
+    },
+    "thorns": {
+      "name": "Шипы",
+      "effect": "Ответный урон при попадании вблизи."
+    },
+    "bat_wings": {
+      "name": "Крылья летучей мыши",
+      "effect": "Ограниченный вампиризм ближнего боя."
+    },
+    "heart_booster": {
+      "name": "Ускоритель сердца",
+      "effect": "E: ускорение атак за растущую цену HP."
+    },
+    "mirror_shard": {
+      "name": "Осколок зеркала",
+      "effect": "Ближние попадания заряжают повтор следующего удара."
+    },
+    "black_candle": {
+      "name": "Чёрная свеча",
+      "effect": "Неподвижность постепенно усиливает урон."
+    },
+    "empty_totem": {
+      "name": "Пустой тотем",
+      "effect": "Одно возрождение за забег. Здоровье после него: 6–18 HP."
+    },
+    "gunpowder": {
+      "name": "Порох",
+      "effect": "Взрывной урон +6% за уровень."
+    }
+  },
+  "recipes": {
+    "sword": {
+      "name": "Бедроковый меч",
+      "icon": "ch4_bedrock_sword",
+      "effect": "Тяжёлый удар · пробивает защиту · прерывает подготовку",
+      "requires": [
+        {
+          "id": "sword",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "bedrock",
+          "level": 1,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "shotgun": {
+      "name": "Двуствольный дробовик",
+      "icon": "ch4_shotgun_evo",
+      "effect": "Два залпа · больше дроби · сильная отдача",
+      "requires": [
+        {
+          "id": "shotgun",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "gunpowder",
+          "level": 5,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "blood_pool": {
+      "name": "Кровавый источник",
+      "icon": "ch4_blood_pool_evo",
+      "effect": "Две растущие лужи · усиленные шипы",
+      "requires": [
+        {
+          "id": "blood_pool",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "black_candle",
+          "level": 3,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "embryo": {
+      "name": "Порождение",
+      "icon": "ch4_embryo_evo",
+      "effect": "Быстрый рост · повторный удар · защита героя",
+      "requires": [
+        {
+          "id": "embryo",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "empty_totem",
+          "level": 1,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "bell": {
+      "name": "Призрачный колокол",
+      "icon": "ch4_bell_evo",
+      "effect": "Раскачивание · удар по отмеченным целям",
+      "requires": [
+        {
+          "id": "bell",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "mirror_shard",
+          "level": 3,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "bone_saw": {
+      "name": "Кровопийца",
+      "icon": "ch4_bone_saw_evo",
+      "effect": "Усиленный контакт · лечение на возврате",
+      "requires": [
+        {
+          "id": "bone_saw",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "bat_wings",
+          "level": 3,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "red_torch": {
+      "name": "Замкнутая цепь",
+      "icon": "ch4_red_torch_evo",
+      "effect": "Замыкает контур · последовательные разряды",
+      "requires": [
+        {
+          "id": "red_torch",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "black_candle",
+          "level": 3,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "potion": {
+      "name": "Стойкие туманные зелья",
+      "icon": "ch4_potion_evo",
+      "effect": "Лечебный и ядовитый туман · дольше на 1,5 с",
+      "requires": [
+        {
+          "id": "potion",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": false
+        },
+        {
+          "id": "ghast_tear",
+          "level": 1,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "armor": {
+      "name": "Железная дева",
+      "icon": "ch4_iron_maiden",
+      "effect": "Сильный ответ · лечение · дольше защита после удара",
+      "requires": [
+        {
+          "id": "armor",
+          "level": 5,
+          "kind": "passive",
+          "evolved": false
+        },
+        {
+          "id": "thorns",
+          "level": 3,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "bat_wings": {
+      "name": "Кровавая стая",
+      "icon": "ch4_bat_swarm",
+      "effect": "Пробел: пролёт сквозь врагов · метки для ближнего боя",
+      "requires": [
+        {
+          "id": "bat_wings",
+          "level": 5,
+          "kind": "passive",
+          "evolved": false
+        },
+        {
+          "id": "empty_totem",
+          "level": 1,
+          "kind": "passive",
+          "evolved": false
+        }
+      ],
+      "result": null,
+      "consume": []
+    },
+    "sky_tnt": {
+      "name": "Небесный подрыв",
+      "icon": "ch4_sky_tnt",
+      "effect": "Пять колец ТНТ с неба · расходует оба оружия",
+      "requires": [
+        {
+          "id": "fishing",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": true
+        },
+        {
+          "id": "tnt",
+          "level": 8,
+          "kind": "weapon",
+          "evolved": true
+        }
+      ],
+      "result": "sky_tnt",
+      "consume": [
+        "fishing",
+        "tnt"
+      ]
+    }
+  },
+  "rules": {
+    "heart_recharge": [
+      46,
+      42,
+      38,
+      34,
+      30
+    ],
+    "heart_speed": [
+      2,
+      3,
+      4,
+      6,
+      10
+    ],
+    "heart_duration": 2.4,
+    "heart_price_step": 2,
+    "heart_price_max": 10,
+    "heart_decay_after": 50,
+    "heart_decay_every": 30,
+    "heart_heal_lock": 4,
+    "bat_cooldown": 9,
+    "bat_duration": 0.65,
+    "bat_speed": 255,
+    "vamp_per_level": 0.12,
+    "vamp_window": 1,
+    "maiden_interval": 1.2,
+    "thorns_damage": 2.5,
+    "candle_build": 4,
+    "candle_decay": 1.1,
+    "candle_per_level": 0.1,
+    "bedrock_defense": 0.04,
+    "mirror_hits": [
+      6,
+      5,
+      5,
+      4,
+      3
+    ],
+    "mirror_scale": 0.38,
+    "pool_kill_cap": 10,
+    "pool_leave_life": 15,
+    "pet_growth": [
+      0,
+      8,
+      24,
+      48
+    ],
+    "pet_guard_interval": 4,
+    "torch_life": 13,
+    "torch_distance": 112,
+    "torch_tick": 0.35,
+    "shot_limit": 96,
+    "cloud_limit": 4,
+    "sky_limit": 56,
+    "sky_rings": 5,
+    "sky_step": 0.22
+  },
+  "exclude_weapons": [
+    "fire",
+    "fangs",
+    "crossbow"
+  ],
+  "exclude_passives": [
+    "gold_boots"
+  ],
+  "descriptions": {
+    "shotgun": "Широкий залп. Самый сильный урон в упор.",
+    "blood_pool": "Убийства рядом питают лужу и её шипы.",
+    "embryo": "Растёт от убийств, не отбирая опыт.",
+    "bell": "Отталкивает, задерживает и раскалывает врагов.",
+    "bone_saw": "Режет сильнее при длительном контакте.",
+    "red_torch": "Ставит факелы. Разряды соединяют соседние.",
+    "sky_tnt": "Рывок удочки вызывает пять колец ТНТ.",
+    "potion": "Лечение и урон нежити. Выше уровни добавляют яд и туман."
+  }
+}

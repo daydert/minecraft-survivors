@@ -1,4 +1,5 @@
 extends "res://scripts/game_data.gd"
+const FourEquipment=preload("res://scripts/chapter_four_equipment.gd")
 ## Solo equipment presentation. Network data and balance remain untouched.
 
 func configure(chapter: int):
@@ -15,7 +16,7 @@ func configure(chapter: int):
 	data.rules = extra.rules
 	data.bastion = extra.bastion
 	if chapter==4:
-		# Chapter IV keeps the chapter I–II arsenal; its mobs, waves and rules are its own.
+		# IV extends the solo arsenal with its own equipment, recipes and rules.
 		var four: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_balance.json"))
 		data.waves=four.waves
 		data.events=four.events
@@ -31,6 +32,7 @@ func configure(chapter: int):
 		for form in four.forms:
 			var def: Dictionary=four.forms[form]
 			data.mobs[form]={"hp":def.hp,"speed":def.speed,"damage":def.damage,"xp":def.xp,"radius":def.radius}
+		FourEquipment.configure(self)
 		return
 	if chapter==3:
 		extra=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_balance.json"))
@@ -46,6 +48,7 @@ func configure(chapter: int):
 		data.recipes.dragon_breath.passive="ghast_tear"
 
 func equipment_title(id: String, level: int, evolution: bool = false) -> String:
+	if data.has("four_arsenal") and evolution and recipes.has(id):return recipes[id].name
 	if id in ["sword","axe","hoe","armor","spear"]:
 		var material = "Незеритовый" if level >= (5 if id=="armor" else 8) else "Алмазный" if level>= (3 if id=="armor" else 4) else "Железный"
 		if id=="hoe": material = material.trim_suffix("ый")+"ая"
@@ -54,6 +57,9 @@ func equipment_title(id: String, level: int, evolution: bool = false) -> String:
 	return title(id,evolution)
 
 func equipment_icon(id: String, level: int, evolution: bool = false) -> String:
+	if data.has("four_arsenal"):
+		var four_icon: String=FourEquipment.icon(self,id,evolution)
+		if not four_icon.is_empty():return four_icon
 	if id in ["sword","axe","hoe","armor","spear"]:
 		var tier = "netherite" if (evolution and id!="armor") or level >= (5 if id=="armor" else 8) else "diamond" if level >= (3 if id=="armor" else 4) else "iron"
 		return id+"_"+tier
@@ -63,6 +69,12 @@ func title(id: String, evolution: bool = false) -> String:
 	return {"golden_carrot":"Золотая морковь","experience":"Опыт","ender_eye":"Око Эндера"}.get(id,super.title(id,evolution))
 
 func description(id: String, level: int) -> String:
+	if data.has("four_arsenal") and data.four_arsenal.descriptions.has(id):
+		if level==0:return data.four_arsenal.descriptions[id]
+		var a: Dictionary=stats(id,level);var b: Dictionary=stats(id,mini(8,level+1))
+		for key in ["damage","interval","radius","pellets","reach","duration"]:
+			if a.get(key,0)!=b.get(key,0):return "%s %s → %s"%[{"damage":"Урон","interval":"Интервал","radius":"Область","pellets":"Дробь","reach":"Дальность","duration":"Длительность"}[key],number(a.get(key,0)),number(b.get(key,0))]
+		return data.four_arsenal.descriptions[id]
 	var descriptions={"axe":"Бьёт вокруг героя.","hoe":"Вращается на месте первого попадания.","bed":"Взрывается при приближении. Блок защищает от взрыва.","tnt":"Заряды появляются по очереди. Движение задаёт сторону разлёта.","crossbow":"Стреляет пробивающими болтами.","fishing":"Притягивает врагов и ненадолго оглушает.","golden_carrot":"Восстанавливает 6 HP","experience":"Даёт 8 опыта"}
 	if descriptions.has(id) and (level==0 or not weapons.has(id)):return descriptions[id]
 	if id in ["spear","mace","end_crystal","knockback_stick","dragon_breath","shield"]:
@@ -82,6 +94,10 @@ func description(id: String, level: int) -> String:
 	return text
 
 func stats(id: String, level: int, evolution: bool = false, items: Dictionary = {}) -> Dictionary:
+	if data.has("four_arsenal"):return FourEquipment.stats(self,id,level,evolution,items)
+	return stats_standard(id,level,evolution,items)
+
+func stats_standard(id: String, level: int, evolution: bool = false, items: Dictionary = {}) -> Dictionary:
 	var s=super.stats(id,level,evolution,items)
 	if evolution:
 		match id:

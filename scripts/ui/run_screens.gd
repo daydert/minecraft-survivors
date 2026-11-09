@@ -99,7 +99,7 @@ static func draw_result(g):
 		g.text_at(values[i],Vector2(x,143),19,g.INK,true)
 		g.text_at(labels[i],Vector2(x,161),8,g.MUTED)
 	var dealt: Dictionary=g.world.get("damage_by") if "damage_by" in g.world else {}
-	var ranked: Array=dealt.keys().filter(func(id):return g.world.db.weapons.has(id) and dealt[id]>=1)
+	var ranked: Array=dealt.keys().filter(func(id):return (g.world.db.weapons.has(id) or (g.is_four() and g.world.db.passives.has(id))) and dealt[id]>=1)
 	ranked.sort_custom(func(a,b):return dealt[a]>dealt[b])
 	if ranked.is_empty():
 		var ids=g.world.build.keys()+g.world.items.keys()

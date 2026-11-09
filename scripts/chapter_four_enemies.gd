@@ -40,9 +40,9 @@ static func update(w, dt: float):
 		m.p=w.move_actor(m.p,m.knock*dt,m.radius);m.knock=m.knock.move_toward(Vector2.ZERO,dt*400)
 		m.moving=m.p.distance_squared_to(before)>.0001;m.visual.travel=m.p.distance_to(before)
 		if (m.phase=="attack" or was_attacking) and m.kind in ["open_cow","bone_rider","torn_spider","hungry_wolf"]:
-			if Geometry2D.get_closest_point_to_segment(w.player,before,m.p).distance_to(w.player)<m.radius+6:w.damage_player(m.damage)
+			if Geometry2D.get_closest_point_to_segment(w.player,before,m.p).distance_to(w.player)<m.radius+6:w.receive_hit(m.damage,m)
 		elif m.kind not in ["bloated_creeper","growth_skeleton","bellringer","infected_witch","gravedigger"] and m.phase=="walk":
-			w.damage_area(m.p,m.radius+5,m.damage)
+			contact(w,m,m.radius+5)
 
 static func travel(w, m: Dictionary, direction: Vector2, speed: float, dt: float):
 	m.dir=direction
@@ -133,10 +133,10 @@ static func strike(w, m: Dictionary):
 		"flayed_zombie":
 			var end: Vector2=m.p+m.charge*ai.reach
 			w.add_effect("ch4_slam",m.p,.18,{"end":end,"width":9.0})
-			if Geometry2D.get_closest_point_to_segment(w.player,m.p,end).distance_to(w.player)<11:w.damage_player(m.damage)
+			if Geometry2D.get_closest_point_to_segment(w.player,m.p,end).distance_to(w.player)<11:w.receive_hit(m.damage,m)
 		"growth_skeleton":shoot(w,m.p,m.charge,"bone",ai.speed,m.damage)
 		"bloated_creeper":
-			w.damage_area(m.p,ai.radius,m.damage)
+			contact(w,m,ai.radius)
 			w.add_effect("ch4_burst",m.p,.4,{"radius":float(ai.radius)})
 			m.exploded=true;m.hp=0;w.sound("ch4_creeper_burst");return
 		"infected_witch":
@@ -164,7 +164,7 @@ static func strike(w, m: Dictionary):
 static func smash(w,m: Dictionary):
 	var end: Vector2=m.p+m.charge*m.ai.slam_length
 	w.add_effect("ch4_slam",m.p,.3,{"end":end,"width":float(m.ai.slam_width)})
-	if Geometry2D.get_closest_point_to_segment(w.player,m.p,end).distance_to(w.player)<float(m.ai.slam_width):w.damage_player(m.damage)
+	if Geometry2D.get_closest_point_to_segment(w.player,m.p,end).distance_to(w.player)<float(m.ai.slam_width):w.receive_hit(m.damage,m)
 	for wall in w.mob_walls:
 		if wall.owner==m.id:wall.life=0
 	w.sound("ch4_ground_slam");enter(m,"attack",m.ai.attack)
@@ -226,3 +226,6 @@ static func poses(w):
 		elif m.phase=="attack":w.animation.set_pose(m.visual,"attack",fposmod(m.phase_age,.09))
 		elif m.phase in ["recover","turn"]:w.animation.set_pose(m.visual,"recover",clampf(m.phase_age/maxf(.01,m.phase_duration),0,.999)*.24)
 		if m.stun>0:w.animation.set_pose(m.visual,"hurt",.06)
+
+static func contact(w,m: Dictionary,radius: float):
+	if w.player.distance_to(m.p)<radius:w.receive_hit(m.damage,m)

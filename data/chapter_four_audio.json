@@ -283,6 +283,156 @@
       }
     ]
   },
+  "ch4_heartbeat": {
+    "minecraft_event": "entity.warden.heartbeat",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_heartbeat_1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_heartbeat_2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_heartbeat_3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_heavy": {
+    "minecraft_event": "item.mace.smash_ground_heavy",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/item_mace_smash_ground_heavy.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_shotgun": {
+    "minecraft_event": "item.crossbow.shoot",
+    "gain": 0.8,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_shoot1.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_shoot1.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_shoot1.ogg",
+        "volume": 0.9,
+        "pitch": 0.9
+      }
+    ]
+  },
+  "ch4_reload": {
+    "minecraft_event": "item.crossbow.loading_end",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_loading_end.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_sky_hook": {
+    "minecraft_event": "entity.fishing_bobber.throw",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/entity_bobber_castfast.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_drink": {
+    "minecraft_event": "entity.generic.drink",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/random_drink.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_bat": {
+    "minecraft_event": "entity.bat.takeoff",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_bat_takeoff.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_chain": {
+    "minecraft_event": "block.chain.hit",
+    "gain": 0.35,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_chain_step1.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_chain_step2.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_chain_step3.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_totem": {
+    "minecraft_event": "item.totem.use",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/item_totem_use_totem.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_mirror": {
+    "minecraft_event": "block.glass.break",
+    "gain": 0.25,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/random_glass1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/random_glass2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/random_glass3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
   "ch4_ground_slam": {
     "minecraft_event": "entity.iron_golem.attack",
     "gain": 0.55,

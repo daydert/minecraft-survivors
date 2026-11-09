@@ -44,6 +44,16 @@ def generate():
         'ch4_poison': ('entity.splash_potion.break', .4),
         'ch4_bell_warn': ('block.bell.resonate', .27),
         'ch4_bell': ('block.bell.use', .45),
+        'ch4_heartbeat': ('entity.warden.heartbeat', .6),
+        'ch4_heavy': ('item.mace.smash_ground_heavy', .6),
+        'ch4_shotgun': ('item.crossbow.shoot', .8),
+        'ch4_reload': ('item.crossbow.loading_end', .6),
+        'ch4_sky_hook': ('entity.fishing_bobber.throw', .65),
+        'ch4_drink': ('entity.generic.drink', .5),
+        'ch4_bat': ('entity.bat.takeoff', .5),
+        'ch4_chain': ('block.chain.hit', .35),
+        'ch4_totem': ('item.totem.use', .6),
+        'ch4_mirror': ('block.glass.break', .25),
         'ch4_ground_slam': ('entity.iron_golem.attack', .55),
     }
     output = ROOT / 'assets/audio/chapter_four'

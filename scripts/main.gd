@@ -202,6 +202,9 @@ func _input(event):
 		for i in range(buttons.size()):
 			if buttons[i].rect.has_point(mouse): selected = i
 	if event is InputEventKey and event.pressed and not event.echo:
+		if is_four() and world.state=="RUNNING" and screen.is_empty():
+			if event.physical_keycode==KEY_E:world.active_item("heart");return
+			if event.physical_keycode==KEY_SPACE:world.active_item("bat");return
 		if is_end() and screen.is_empty() and world.state=="RUNNING":
 			if event.physical_keycode==KEY_E or event.keycode==KEY_E:world.active_item("ender_pearl");return
 			if event.physical_keycode==KEY_SPACE or event.keycode==KEY_SPACE:world.active_item("elytra");return

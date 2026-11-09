@@ -1,0 +1,12 @@
+{
+  "clock_seconds": 3.99999999999999,
+  "draw_and_frame_wait_p50_ms": 30.828,
+  "draw_and_frame_wait_p95_ms": 47.399,
+  "frames": 240,
+  "invulnerability_for_measurement": true,
+  "last_mobs": 0,
+  "natural_run": false,
+  "peak_mobs": 134,
+  "sim_p50_ms": 3.232,
+  "sim_p95_ms": 15.642
+}

@@ -368,7 +368,7 @@
   "remove_passives": [
     "gold_boots"
   ],
-  "content_stage": "B",
+  "content_stage": "C",
   "exploration_only": false,
   "arrival_duration": 4.8,
   "growth": {

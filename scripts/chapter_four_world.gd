@@ -1,8 +1,10 @@
 extends "res://scripts/arsenal_world.gd"
-## IV owns its terrain and scenario. Stage A is exploration and environmental
-## combat; the wave/actor drafts remain data for the subsequent content stage.
+## IV owns its terrain, waves and arsenal. Special encounters and the final
+## boss are the following stages of the chapter plan.
 const TERRAIN := "res://data/chapter_four_terrain.json"
 const Enemies = preload("res://scripts/chapter_four_enemies.gd")
+const Equipment = preload("res://scripts/chapter_four_equipment.gd")
+var arsenal = preload("res://scripts/chapter_four_arsenal.gd").new()
 var enemy_shots: Array = []
 var enemy_fields: Array = []
 var enemy_bottles: Array = []
@@ -23,6 +25,7 @@ var note_presented := false
 var aura_state := "none"
 var aura_changed_at := -10.0
 var victory_stage := ""
+var damage_popups: Dictionary={}
 
 func chapter_number() -> int:
 	return 4
@@ -34,9 +37,13 @@ func reset(seed_value: int = 0):
 	enemy_shots.clear();enemy_fields.clear();enemy_bottles.clear();mob_walls.clear();chickens.clear();mob_slow=1.0
 	note_read = false;note_pending = false;note_presented = false
 	aura_state = "none";aura_changed_at = -10.0;victory_stage = ""
+	damage_popups.clear()
 	super.reset(seed_value)
 	var actors: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_mobs.json"))
 	animation.data.actors.merge(actors.actors,true)
+	var equipment: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_arsenal.json"))
+	for id in equipment.weapons:animation.data.weapons[id]={"windup":.2,"attack":.12,"recover":.36}
+	arsenal.reset(self)
 	stage = "arrival"
 	facing = Vector2.UP
 
@@ -123,11 +130,31 @@ func heal_undead(at: Vector2, radius: float, damage: float):
 	for m in in_radius(at,radius):
 		if m.get("undead",false) and not m.get("allied",false):hurt(m,damage)
 
+func add_effect(kind: String,p: Vector2,life: float,extra: Dictionary={}):
+	# Fast pellets/saw ticks share one nearby number for 120 ms. Damage and hit
+	# reactions still run per hit; only redundant text draw calls are combined.
+	if kind=="damage":
+		var cell:=Vector2i((p/8).floor())
+		var previous: Dictionary=damage_popups.get(cell,{})
+		if previous.get("life",0)>0 and previous.get("age",1)<.12:
+			previous.amount+=extra.get("amount",0);return
+		var count: int=effects.size()
+		super.add_effect(kind,p,life,extra)
+		if effects.size()>count:damage_popups[cell]=effects.back()
+		return
+	super.add_effect(kind,p,life,extra)
+
+func update_effects(dt: float):
+	super.update_effects(dt)
+	for cell in damage_popups.keys():
+		if damage_popups[cell].life<=0:damage_popups.erase(cell)
+
 func resolve_deaths():
 	for i in range(mobs.size()-1,-1,-1):
 		var m: Dictionary=mobs[i]
 		if m.hp>0 or not m.has("form"):continue
 		if not m.expired and not m.exploded:
+			arsenal.after_kill(self,m)
 			kills+=1;drop_xp(m.p,m.xp)
 			if m.boss:loot.append({"kind":"chest","p":m.p,"born":time})
 			add_effect("ch4_remains",m.p,.6,{"skin":m.skin,"dir":m.visual_dir})
@@ -166,12 +193,17 @@ func rebuild_hit_grid():
 		hit_grid[cell].append(m)
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
+	if m.get("allied",false) or m.hp<=0:return
+	if not arsenal.piercing:amount*=1-clampf(float(m.get("guard",0)),0,.8)
+	amount*=1+minf(4,m.get("ch4_cracks",0))*.025
+	var before: float=m.hp
 	if not m.has("attack"):
 		if m.has("form"):
 			var kind: String=m.kind
 			m.kind=db.data.forms[kind].base
 			super.hurt(m,amount,push)
 			m.kind=kind
+			arsenal.melee_hit(self,m,minf(before,amount))
 			if m.hp>0:
 				if kind=="bellringer" and m.phase=="windup":Enemies.cancel(m,1.6)
 				if kind=="infected_witch" and m.phase=="windup" and m.cast=="heal":Enemies.cancel(m,1.3)
@@ -181,6 +213,7 @@ func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 					add_effect("ch4_shed",m.p,.6);Enemies.cancel(m,.3)
 			return
 		super.hurt(m, amount, push)
+		arsenal.melee_hit(self,m,minf(before,amount))
 		return
 	if m.hp <= 0:return
 	if not m.get("expiring",false):damage_by[damage_owner] = damage_by.get(damage_owner, 0.0) + minf(m.hp, amount)
@@ -302,7 +335,11 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		if stage_age >= float(db.data.chapter_four.arrival_duration):stage = "survival";stage_age = 0
 		return
 	time = minf(db.data.duration, time + dt)
+	arsenal.tick(self,dt,movement)
 	var before: Vector2 = player
+	if arsenal.bat_left>0:
+		movement=arsenal.bat_direction
+		invulnerable=maxf(invulnerable,.08)
 	if movement.length_squared() > 0:
 		facing = movement.normalized()
 		player = move_actor(player, movement.limit_length() * movement_speed() * dt, 6)
@@ -316,11 +353,13 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	move_mobs(dt)
 	rebuild_hit_grid()
 	update_attacks(dt);update_projectiles(dt);update_explosives(dt)
+	arsenal.step(self,dt)
 	update_hazards(dt);update_fire(dt);update_threats(dt);resolve_deaths()
 	Enemies.environment(self,dt)
 	update_effects(dt);pickup(dt);update_particles(dt)
 	animation.advance(self, dt);update_regeneration(dt)
 	Enemies.poses(self)
+	if hp<=0:try_totem()
 	if hp <= 0:
 		state = "RESULT";victory = false;sound("death");return
 	if xp >= db.required_xp(level):next_level()
@@ -330,4 +369,79 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		if player.distance_to(note) < 18:note_presented = true;note_pending = true
 
 func movement_speed() -> float:
+	if arsenal.bat_left>0:return float(arsenal.rules(self).bat_speed)
 	return float(db.data.player_speed) * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow)
+
+func active_item(id: String) -> bool:
+	if stage=="arrival":return false
+	return arsenal.activate(self,id)
+
+func eligible() -> Array:
+	return super.eligible().filter(func(id):return not evolved.has(id) and (not db.weapons.has(id) or db.weapons[id].get("lootable",true)) and not (build.has("sky_tnt") and id in ["fishing","tnt"]) and not (id=="empty_totem" and arsenal.totem_spent and items.has(id)))
+
+func evolution_candidates(born: float) -> Array:
+	if born<360:return []
+	return db.recipes.keys().filter(func(id):return Equipment.ready(self,id))
+
+func open_chest(chest: Dictionary):
+	var candidates: Array=evolution_candidates(chest.born)
+	if candidates.is_empty():super.open_chest(chest);return
+	var id: String=candidates[rng.randi_range(0,candidates.size()-1)]
+	run_progress.observe(self)
+	var recipe: Dictionary=db.recipes[id]
+	for ingredient in recipe.get("consume",[]):
+		var prior: String=state;state="PAUSED";discard(ingredient);state=prior
+	if not recipe.get("consume",[]).is_empty():build[id]=8;cooldowns[id]=.3
+	evolved[id]=true
+	arsenal.clear(id)
+	run_progress.evolution(id);run_progress.observe(self)
+	chest_reward={"id":id,"evolution":true,"text":recipe.effect}
+	pending_chest={};chest_delay=.65;state="CHEST";sound("chest")
+
+func discard(id: String) -> bool:
+	if not super.discard(id):return false
+	evolved.erase(id);arsenal.clear(id)
+	# Consumed rods cannot leave hooks pulling enemies after the fusion.
+	if id=="fishing":projectiles=projectiles.filter(func(b):return b.kind!="hook")
+	return true
+
+func update_attacks(dt: float):
+	var all: Dictionary=build
+	build={}
+	for id in all:
+		if not arsenal.own(self,id):build[id]=all[id]
+	super.update_attacks(dt)
+	build=all
+	arsenal.update_attacks(self,dt)
+
+func receive_hit(amount: float,attacker: Dictionary):
+	arsenal.incoming=attacker;damage_player(amount);arsenal.incoming={}
+
+func damage_player(amount: float):
+	if invulnerable>0 or hp<=0:return
+	var armor: float=.2*items.get("armor",0)
+	var protection: float=float(arsenal.rules(self).bedrock_defense)*items.get("bedrock",0) if arsenal.still>=.7 else 0.0
+	var taken: float=maxf(1,amount-armor)*(1-protection)
+	hp-=taken;run_progress.damage(taken)
+	invulnerable=.95 if evolved.has("armor") and items.has("armor") else .65
+	player_visual.hurt=.12;shake=.12;sound("hurt",.15);add_effect("player_hit",player,.22)
+	var attacker: Dictionary=arsenal.incoming
+	if not attacker.is_empty():player=move_actor(player,resist_displacement(attacker.p.direction_to(player)*9),6)
+	if not attacker.is_empty() and attacker.hp>0 and items.has("thorns") and arsenal.retaliation<=0:
+		arsenal.retaliation=float(arsenal.rules(self).maiden_interval)
+		arsenal.hit(self,attacker,float(arsenal.rules(self).thorns_damage)*items.thorns*(1.5 if evolved.has("armor") else 1),"thorns",Vector2.ZERO,true)
+		if evolved.has("armor") and arsenal.heal_lock<=0 and hp>0:hp=minf(20,hp+.35)
+		add_effect("ch4_thorns",player,.25,{"end":attacker.p})
+	if hp<=0:try_totem()
+
+func try_totem() -> bool:
+	if hp>0 or not items.has("empty_totem") or arsenal.totem_spent:return false
+	arsenal.totem_spent=true;hp=3+3*items.empty_totem;invulnerable=2.2+.2*items.empty_totem;sound("ch4_totem");add_effect("ch4_revive",player,1.2)
+	return true
+
+func resist_displacement(velocity: Vector2) -> Vector2:
+	return velocity*(1-.12*items.get("bedrock",0))
+
+func update_regeneration(dt: float):
+	if arsenal.heal_lock>0:return
+	super.update_regeneration(dt)

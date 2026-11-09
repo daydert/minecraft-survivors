@@ -1,0 +1,103 @@
+[
+  {
+    "damage_by": {
+      "bell": 2111.48666666667,
+      "bone_saw": 1074.365,
+      "mirror_shard": 36.255,
+      "sword": 4160.87333333333,
+      "thorns": 22.5
+    },
+    "diagnostic_max_gear": true,
+    "hp": 12.3485000000001,
+    "kills": 261,
+    "ordinary_damage": true,
+    "p95_ms": 2.073,
+    "peak": {
+      "clouds": 0,
+      "effects": 21,
+      "mobs": 34,
+      "pellets": 0,
+      "tnt": 0,
+      "torches": 0
+    },
+    "simulated": 180.000000000035,
+    "state": "RUNNING",
+    "style": "melee",
+    "totem_used": false
+  },
+  {
+    "damage_by": {
+      "bow": 3177.581625,
+      "potion": 316.457375000001,
+      "shotgun": 3463.4405,
+      "sky_tnt": 675.443875
+    },
+    "diagnostic_max_gear": true,
+    "hp": 20.0,
+    "kills": 279,
+    "ordinary_damage": true,
+    "p95_ms": 2.222,
+    "peak": {
+      "clouds": 4,
+      "effects": 41,
+      "mobs": 27,
+      "pellets": 24,
+      "tnt": 50,
+      "torches": 0
+    },
+    "simulated": 180.000000000035,
+    "state": "RUNNING",
+    "style": "ranged",
+    "totem_used": false
+  },
+  {
+    "damage_by": {
+      "bell": 2987.06591666667,
+      "blood_pool": 1110.67875,
+      "embryo": 2542.06108333333,
+      "potion": 547.64175,
+      "red_torch": 207.5525
+    },
+    "diagnostic_max_gear": true,
+    "hp": 4.68800000000006,
+    "kills": 269,
+    "ordinary_damage": true,
+    "p95_ms": 2.147,
+    "peak": {
+      "clouds": 4,
+      "effects": 26,
+      "mobs": 28,
+      "pellets": 0,
+      "tnt": 0,
+      "torches": 5
+    },
+    "simulated": 180.000000000035,
+    "state": "RUNNING",
+    "style": "ritual",
+    "totem_used": false
+  },
+  {
+    "damage_by": {
+      "bone_saw": 22.4,
+      "shotgun": 7272.811125,
+      "sword": 307.702
+    },
+    "diagnostic_max_gear": true,
+    "hp": 3.96,
+    "kills": 271,
+    "ordinary_damage": true,
+    "p95_ms": 2.296,
+    "peak": {
+      "clouds": 0,
+      "effects": 35,
+      "mobs": 31,
+      "pellets": 96,
+      "tnt": 0,
+      "torches": 0
+    },
+    "simulated": 180.000000000035,
+    "state": "RUNNING",
+    "style": "heart",
+    "totem_used": true
+  }
+]

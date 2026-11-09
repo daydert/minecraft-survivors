@@ -18,7 +18,7 @@ func fresh():
 func run():
 	var w = FW.new();w.reset(724)
 	check(w.chapter_number()==4 and w.stage=="arrival" and not w.finale.active,"IV has its own arrival and never starts the old finale")
-	check(w.db.data.duration==720 and w.db.data.chapter_four.content_stage=="B","Chapter B owns its stage metadata and duration")
+	check(w.db.data.duration==720 and w.db.data.chapter_four.content_stage=="C","Chapter C owns its stage metadata and duration")
 	var kinds: Array = w.landmarks.map(func(m):return m.kind)
 	check(["house","crucifix","growth","growth_big","torch","pyramid","note"].all(func(k):return kinds.has(k)),"All seven environment landmarks exist")
 	check(w.threats.size()>8 and not w.pools.is_empty(),"Destructible hazards and blood pools exist")

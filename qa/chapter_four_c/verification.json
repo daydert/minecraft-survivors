@@ -1,0 +1,36 @@
+{
+  "stage": "C",
+  "checks": {
+    "environment_and_flow": 40,
+    "enemies": 69,
+    "arsenal": 97,
+    "visual": 35,
+    "environment_audio_assets": 127,
+    "enemy_assets": 2713,
+    "equipment_assets": 18883
+  },
+  "failures": [],
+  "old_chapters_deferred_by_user": true,
+  "full_chapter_run": false,
+  "partial_runs": "partial_runs.json",
+  "video_seconds": 33,
+  "video_artificial_invulnerability": false,
+  "equipment_atlases": 192,
+  "equipment_cache_limit": 8,
+  "pressure": "pressure.json",
+  "native_linux": {
+    "bedrock": {
+      "rendered": true,
+      "matches_source_pixels": true
+    },
+    "sky": {
+      "rendered": true,
+      "matches_source_pixels": true,
+      "matched_visual_preferences": true
+    },
+    "recipes2": {
+      "rendered": true,
+      "matches_source_pixels": true
+    }
+  }
+}

@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parent.parent
 OUT=ROOT/'qa/recordings'
 
 def encode(clean=False,stage="a"):
-    stem="chapter_four" if stage=="a" else "chapter_four_b"
+    stem="chapter_four" if stage=="a" else "chapter_four_"+stage
     data=json.loads((OUT/(stem+'_timeline.json')).read_text())
     seconds=data['frames']/data['fps']
     frames=OUT/(stem+'_frames')
@@ -33,5 +33,5 @@ def encode(clean=False,stage="a"):
     if clean:shutil.rmtree(frames)
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--clean',action='store_true');parser.add_argument('--stage',choices=['a','b'],default='a')
+    parser=argparse.ArgumentParser();parser.add_argument('--clean',action='store_true');parser.add_argument('--stage',choices=['a','b','c'],default='a')
     opt=parser.parse_args();encode(opt.clean,opt.stage)

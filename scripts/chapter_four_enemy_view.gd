@@ -57,6 +57,14 @@ static func floor_layer(g,offset: Vector2):
 static func actor(g,m: Dictionary,offset: Vector2):
 	var tint=Color(1.5,1.3,1.3) if m.flash>0 and g.settings.flashes else Color.WHITE
 	g.draw_actor(m.skin,m.p+offset-Vector2(0,m.lift),m.visual_dir,m.animation,m.moving,tint,m.phase,1,m.visual)
+	if m.get("ch4_cracks",0)>0:
+		var chest: Vector2=m.p+offset-Vector2(0,15+m.lift)
+		for j in range(int(m.ch4_cracks)):
+			var q: Vector2=chest+Vector2((j%2)*5-2,(j/2)*4-3)
+			g.draw_polyline(PackedVector2Array([q+Vector2(-2,-3),q,q+Vector2(-1,3),q+Vector2(2,5)]),Color(.08,.015,.02,.8),1)
+	if m.get("bat_mark",0.0)>g.world.clock:
+		g.draw_line(m.p+offset-Vector2(3,31),m.p+offset-Vector2(0,28),Color(.8,.1,.12,.8),1)
+		g.draw_line(m.p+offset-Vector2(0,28),m.p+offset-Vector2(-3,31),Color(.8,.1,.12,.8),1)
 	if m.stun>0:
 		for j in range(3):
 			var a=g.world.clock*5+j*TAU/3

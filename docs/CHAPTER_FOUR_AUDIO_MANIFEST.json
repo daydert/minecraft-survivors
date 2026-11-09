@@ -133,6 +133,58 @@
       "source": "minecraft/sounds/block/bell/bell_use01.ogg",
       "sha256": "20418557fb3b447d76d9a465c1ca665058f572a1f6c1fff6dbe18a714eda1af8"
     },
+    "mob_warden_heartbeat_1.ogg": {
+      "source": "minecraft/sounds/mob/warden/heartbeat_1.ogg",
+      "sha256": "a2983f14696a31c0adfe516bd3a0e07983cc3557b85dcb399707fe255681c7c3"
+    },
+    "mob_warden_heartbeat_2.ogg": {
+      "source": "minecraft/sounds/mob/warden/heartbeat_2.ogg",
+      "sha256": "486e450774179de70f8a6dd213c53c5709ee226775b163bfa5e416f523e5ecf4"
+    },
+    "mob_warden_heartbeat_3.ogg": {
+      "source": "minecraft/sounds/mob/warden/heartbeat_3.ogg",
+      "sha256": "200e401f406daec2e9a952571751c01535bc563831d42afe76f99accdc93a88a"
+    },
+    "item_mace_smash_ground_heavy.ogg": {
+      "source": "minecraft/sounds/item/mace/smash_ground_heavy.ogg",
+      "sha256": "5c767de537374768afa4b72890f9ea561d64ddf39418da1b45f97af02b62a1bc"
+    },
+    "item_crossbow_shoot1.ogg": {
+      "source": "minecraft/sounds/item/crossbow/shoot1.ogg",
+      "sha256": "2f658e68fb8e28cf966131942964007c3ded963317d7344fd91fc64cd93eb900"
+    },
+    "item_crossbow_loading_end.ogg": {
+      "source": "minecraft/sounds/item/crossbow/loading_end.ogg",
+      "sha256": "8a06ae12c8d5d10da69d23cc8ccc99aca3df3fc71cd64f883a54b437ce7a7a84"
+    },
+    "entity_bobber_castfast.ogg": {
+      "source": "minecraft/sounds/entity/bobber/castfast.ogg",
+      "sha256": "cf79fc36f804c6128572202e40ab24501dea4a087b38f2d5fae9efd0993d3a94"
+    },
+    "random_drink.ogg": {
+      "source": "minecraft/sounds/random/drink.ogg",
+      "sha256": "1c8e2a196c8b8dfe6c13740e3c32d27876efb14d8474d90750bd3b409e907461"
+    },
+    "mob_bat_takeoff.ogg": {
+      "source": "minecraft/sounds/mob/bat/takeoff.ogg",
+      "sha256": "b2287953dd90e2585ac2a3241b4c206a124441ccc1f013a2077d488b637f9a02"
+    },
+    "block_chain_step1.ogg": {
+      "source": "minecraft/sounds/block/chain/step1.ogg",
+      "sha256": "ce0dbf9c7ca4d62608f0446dc24fe22d80a1924170896da1cb1b02ee0bad5b65"
+    },
+    "block_chain_step2.ogg": {
+      "source": "minecraft/sounds/block/chain/step2.ogg",
+      "sha256": "570fb7e2b102c813fcfb24b9f726117ccb8d1add2d7d736bcf3ebc6395617f61"
+    },
+    "block_chain_step3.ogg": {
+      "source": "minecraft/sounds/block/chain/step3.ogg",
+      "sha256": "0ce5f4d23964920947f9566feec08771d2adabb943eebe400d0672ba6b3b6ba5"
+    },
+    "item_totem_use_totem.ogg": {
+      "source": "minecraft/sounds/item/totem/use_totem.ogg",
+      "sha256": "da971fbaf8ab46983cbf90f8682f3cd91c9eb36b0aa9b80171b87eb723143633"
+    },
     "mob_irongolem_throw.ogg": {
       "source": "minecraft/sounds/mob/irongolem/throw.ogg",
       "sha256": "1e215ddaf816a248ce745b8afbe10ff305d1f8178dd02ab0e1632137fcdedccf"
