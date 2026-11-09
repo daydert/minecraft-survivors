@@ -185,13 +185,145 @@
       "source": "minecraft/sounds/item/totem/use_totem.ogg",
       "sha256": "da971fbaf8ab46983cbf90f8682f3cd91c9eb36b0aa9b80171b87eb723143633"
     },
+    "mob_warden_emerge.ogg": {
+      "source": "minecraft/sounds/mob/warden/emerge.ogg",
+      "sha256": "166d968221e73699fcbf238874c24e8e2351279aab54096696c98f7e87f7ee21"
+    },
+    "mob_hoglin_angry1.ogg": {
+      "source": "minecraft/sounds/mob/hoglin/angry1.ogg",
+      "sha256": "bf2966756872e015f1f1c7095dcce931cc3245db62966e2f053a9eeeb4a46cd9"
+    },
+    "mob_hoglin_angry2.ogg": {
+      "source": "minecraft/sounds/mob/hoglin/angry2.ogg",
+      "sha256": "2ae52dd457bc06a17f92b12ca6ac7f771ad500a46153fb9e1eb0bef2258a70ba"
+    },
+    "mob_hoglin_angry3.ogg": {
+      "source": "minecraft/sounds/mob/hoglin/angry3.ogg",
+      "sha256": "089c458c6b79aebc02788dc5a1605f3ffefcad5b942cae65d65b680510f90501"
+    },
+    "mob_slime_big1.ogg": {
+      "source": "minecraft/sounds/mob/slime/big1.ogg",
+      "sha256": "65298cd3708aaf88bd2e5296b5923d70539e54b0bd2bb76e749150c03a63c29d"
+    },
+    "mob_slime_big2.ogg": {
+      "source": "minecraft/sounds/mob/slime/big2.ogg",
+      "sha256": "ad06d48fb0ee32e5aab77c17dcb36db3a289770ee3ca066b6d91ae62700007cc"
+    },
+    "mob_slime_big3.ogg": {
+      "source": "minecraft/sounds/mob/slime/big3.ogg",
+      "sha256": "aa238c35a35023c2f89d375d97a8eb0d73fa202e30152be82ebadaeb5a2d02f5"
+    },
+    "mob_ravager_death1.ogg": {
+      "source": "minecraft/sounds/mob/ravager/death1.ogg",
+      "sha256": "60951cfaacb17e7fb66c412f92f7d59e6e92203c24dfe5c04c225725be72f4f3"
+    },
+    "mob_ravager_death2.ogg": {
+      "source": "minecraft/sounds/mob/ravager/death2.ogg",
+      "sha256": "39eea36ce71d8e717ca00bb6c0fd25f465d4f4ce2d508fb8336b651085eacbf5"
+    },
+    "mob_ravager_death3.ogg": {
+      "source": "minecraft/sounds/mob/ravager/death3.ogg",
+      "sha256": "9b201218ef1be33c8a52fc06503ce8e7e9673c0699a6bcf1e6b6244d90268a10"
+    },
+    "mob_llama_spit1.ogg": {
+      "source": "minecraft/sounds/mob/llama/spit1.ogg",
+      "sha256": "f436ea39cbc91f47c729bef14f27b3e190413fadee15010ffd635e379d8b9ebe"
+    },
+    "mob_llama_spit2.ogg": {
+      "source": "minecraft/sounds/mob/llama/spit2.ogg",
+      "sha256": "55c428e871d29b236c9d98b1759867bb56ab3f10339f5e4e3082105dda8f9a7e"
+    },
+    "block_honeyblock_break1.ogg": {
+      "source": "minecraft/sounds/block/honeyblock/break1.ogg",
+      "sha256": "b3167dbfec931815c74c367d24201b53af39e77278e3e1b92471cb81e9c23e77"
+    },
+    "block_honeyblock_break2.ogg": {
+      "source": "minecraft/sounds/block/honeyblock/break2.ogg",
+      "sha256": "704cca7d098977ca76599849e7510b964d25dc60b4b013007778d7220552cb58"
+    },
+    "block_honeyblock_break3.ogg": {
+      "source": "minecraft/sounds/block/honeyblock/break3.ogg",
+      "sha256": "8cd497c6afea25a097ef9eebbd1090a32ddf6645bd919c934260932bf54c5000"
+    },
+    "mob_irongolem_hit1.ogg": {
+      "source": "minecraft/sounds/mob/irongolem/hit1.ogg",
+      "sha256": "d448b3138761d304586e4dd14d0db91709189aafde7143a4cf69ef435d5b4874"
+    },
+    "mob_irongolem_hit2.ogg": {
+      "source": "minecraft/sounds/mob/irongolem/hit2.ogg",
+      "sha256": "663bdf44099731591b58b2394e2baf8b68b481029fa298e57900efa6bb8e586c"
+    },
+    "mob_irongolem_hit3.ogg": {
+      "source": "minecraft/sounds/mob/irongolem/hit3.ogg",
+      "sha256": "39c46e4d92856fff8b679ca53a04dd7fcae864e227687b859eb4a8f522ce12a5"
+    },
+    "mob_irongolem_damage1.ogg": {
+      "source": "minecraft/sounds/mob/irongolem/damage1.ogg",
+      "sha256": "dd84ab9bcc644a5ffee446a8bbd43995a45b82b6d05951bf8f68a5d0d0112997"
+    },
+    "mob_irongolem_damage2.ogg": {
+      "source": "minecraft/sounds/mob/irongolem/damage2.ogg",
+      "sha256": "0180d467e6c99eee72920b7404f951ed62865a237084bc7cef3e559b73db9e1a"
+    },
     "mob_irongolem_throw.ogg": {
       "source": "minecraft/sounds/mob/irongolem/throw.ogg",
       "sha256": "1e215ddaf816a248ce745b8afbe10ff305d1f8178dd02ab0e1632137fcdedccf"
     },
+    "mob_irongolem_repair.ogg": {
+      "source": "minecraft/sounds/mob/irongolem/repair.ogg",
+      "sha256": "98b211198ed77ac8866ee00c1c408f74377366dd7e110c9823bbb8541ede5e5a"
+    },
+    "block_beacon_activate.ogg": {
+      "source": "minecraft/sounds/block/beacon/activate.ogg",
+      "sha256": "7b51564218d6db8cff8e65ca1a46c8bb003880c77d33a4881659d3942753cd4a"
+    },
+    "block_beacon_power1.ogg": {
+      "source": "minecraft/sounds/block/beacon/power1.ogg",
+      "sha256": "4ffb2a8a104081cd0b25ed2fec73ede9870342e8fd81a98f4188cb1571df9a18"
+    },
+    "block_beacon_power2.ogg": {
+      "source": "minecraft/sounds/block/beacon/power2.ogg",
+      "sha256": "1dfcfca78b8a8a9efa54354fb3d31480c60c731801d029de12b1fb098646c391"
+    },
+    "block_beacon_power3.ogg": {
+      "source": "minecraft/sounds/block/beacon/power3.ogg",
+      "sha256": "fd75d1e1bd6b3e8aac41b28e1e91c371a8766eb5e315f3c1753415cde143bd32"
+    },
+    "block_beacon_deactivate.ogg": {
+      "source": "minecraft/sounds/block/beacon/deactivate.ogg",
+      "sha256": "de3f958bc746cd66fd2d8948ca777095adb155a99b29d9c4716bbe92540deca5"
+    },
+    "block_respawn_anchor_deplete1.ogg": {
+      "source": "minecraft/sounds/block/respawn_anchor/deplete1.ogg",
+      "sha256": "bb71f1f9ed88e2c1a65d0f79e6a8712f537a4ee4c86f724d67cc577d104f48b6"
+    },
+    "block_respawn_anchor_deplete2.ogg": {
+      "source": "minecraft/sounds/block/respawn_anchor/deplete2.ogg",
+      "sha256": "fe72b74205d9102091bb556499a012d003b4f538f851bd21189818b975fa7a38"
+    },
+    "tile_piston_out.ogg": {
+      "source": "minecraft/sounds/tile/piston/out.ogg",
+      "sha256": "a6ccad684b4226447997bb4598676bc8a4aee30b8cc39c47243a6c87de1ebb20"
+    },
+    "block_deepslate_step1.ogg": {
+      "source": "minecraft/sounds/block/deepslate/step1.ogg",
+      "sha256": "c0e176482b556d6dd75e15afc01f3642981cfc0313796e164f05f2a120ee91d1"
+    },
+    "block_deepslate_step2.ogg": {
+      "source": "minecraft/sounds/block/deepslate/step2.ogg",
+      "sha256": "cbbba0516d2ed14ca4a1c7077f4f245699450531a6ce82e2530d9deddaf754d7"
+    },
+    "block_deepslate_step3.ogg": {
+      "source": "minecraft/sounds/block/deepslate/step3.ogg",
+      "sha256": "b662ef288c40c8b711036d2b21167b1bc293c0854fdfebfe2e1e6e37dea7200e"
+    },
     "ancestry.ogg": {
       "source": "minecraft/sounds/music/game/ancestry.ogg",
       "sha256": "c69011c3990c5708e5ede20b36454a467d67f457c1e02031da5d58762cdc3946"
+    },
+    "pyramid_5.ogg": {
+      "source": "minecraft/sounds/records/5.ogg",
+      "sha256": "4e27f8ee8ee24d2236ce5ae089ac35e18482522f083ae2a0365be4a09af86f2e"
     }
   }
 }

@@ -5,6 +5,7 @@ const TERRAIN := "res://data/chapter_four_terrain.json"
 const Enemies = preload("res://scripts/chapter_four_enemies.gd")
 const Equipment = preload("res://scripts/chapter_four_equipment.gd")
 var arsenal = preload("res://scripts/chapter_four_arsenal.gd").new()
+var encounters = preload("res://scripts/chapter_four_encounters.gd").new()
 var enemy_shots: Array = []
 var enemy_fields: Array = []
 var enemy_bottles: Array = []
@@ -44,6 +45,10 @@ func reset(seed_value: int = 0):
 	var equipment: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_arsenal.json"))
 	for id in equipment.weapons:animation.data.weapons[id]={"windup":.2,"attack":.12,"recover":.36}
 	arsenal.reset(self)
+	if FileAccess.file_exists("res://data/chapter_four_encounter_assets.json"):
+		var special: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_encounter_assets.json"))
+		animation.data.actors.merge(special.actors,true)
+	encounters.reset(self)
 	stage = "arrival"
 	facing = Vector2.UP
 
@@ -59,10 +64,12 @@ func make_map():
 	for item in terrain.props:
 		var p := Vector2(item.p[0], item.p[1])
 		if item.type == "trunk":
+			if encounters.reserve(p):continue
 			add_prop("tree", p)
 			props.back().variant = int(item.variant)
 			continue
 		var mark := {"kind": item.type, "p": p, "variant": int(item.get("variant", 0)), "id": next_id(), "phase": fposmod(p.x * .137 + p.y * .071, TAU)}
+		if item.type in ["growth","growth_big"] and encounters.reserve(p):continue
 		landmarks.append(mark)
 		match item.type:
 			"house":
@@ -89,6 +96,7 @@ func make_map():
 	for i in range(18):
 		var p: Vector2 = player + Vector2.from_angle(i * 2.39996) * (150 + i % 5 * 130)
 		if free_at(p, 10) and not in_blood(p):
+			if encounters.reserve(p):continue
 			props.append({"type": "pumpkin", "p": p, "hp": 12.0, "id": next_id(), "radius": 7.0})
 	assign_healing()
 	for i in range(5):
@@ -105,6 +113,7 @@ func remove_mob_solid(p: Vector2):
 func spawn(kind: String, at = null) -> bool:
 	if not db.data.forms.has(kind):return super.spawn(kind,at)
 	var def: Dictionary=db.data.forms[kind]
+	if encounters.busy() and def.elite:return false
 	var limits: Dictionary=db.data.chapter_four.enemy_limits
 	if kind=="parasite" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.parasites):return false
 	if kind=="infected_witch" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.witches):return false
@@ -191,11 +200,16 @@ func rebuild_hit_grid():
 		var cell := Vector2i(m.p / CELL)
 		if not hit_grid.has(cell):hit_grid[cell] = []
 		hit_grid[cell].append(m)
+	for m in encounters.candidates():
+		var cell:=Vector2i(m.p/CELL)
+		if not hit_grid.has(cell):hit_grid[cell]=[]
+		hit_grid[cell].append(m)
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if m.get("allied",false) or m.hp<=0:return
 	if not arsenal.piercing:amount*=1-clampf(float(m.get("guard",0)),0,.8)
 	amount*=1+minf(4,m.get("ch4_cracks",0))*.025
+	if m.has("encounter_actor"):encounters.hurt(self,m,amount,push);return
 	var before: float=m.hp
 	if not m.has("attack"):
 		if m.has("form"):
@@ -231,10 +245,13 @@ func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 		sound("ch4_break")
 
 func hook_target(m: Dictionary, evolved_hook: bool):
+	if m.get("encounter_actor","") in ["golem","golem_node","guardian_torch"]:return
+	if m.get("encounter_actor","")=="mass_part":m=encounters.mass
 	if not m.has("attack"):
 		if m.get("control_resist",0.0)>0:return
 		super.hook_target(m, evolved_hook)
 		if m.has("form") and m.phase in ["windup","smash_wait"]:Enemies.cancel(m)
+		if m.has("encounter_actor") and m.phase=="windup":encounters.enter(m,"recover",.65)
 
 func aura_near() -> bool:
 	for mark in landmarks:
@@ -259,6 +276,7 @@ func read_note():
 func update_threats(dt: float):
 	for m in threats:
 		if m.hp <= 0:continue
+		if encounters.current=="guardian" and encounters.arena().grow(40).has_point(m.p):m.attack="idle";m.timer=maxf(m.timer,.5);continue
 		m.flash = maxf(0, m.flash - dt)
 		if m.burn > 0:
 			m.burn -= dt;m.burn_tick -= dt
@@ -351,6 +369,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	update_aura()
 	if not db.data.chapter_four.exploration_only and time<float(db.data.duration):spawn_wave(dt)
 	move_mobs(dt)
+	encounters.tick(self,dt)
 	rebuild_hit_grid()
 	update_attacks(dt);update_projectiles(dt);update_explosives(dt)
 	arsenal.step(self,dt)
@@ -359,6 +378,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	update_effects(dt);pickup(dt);update_particles(dt)
 	animation.advance(self, dt);update_regeneration(dt)
 	Enemies.poses(self)
+	encounters.poses(self)
 	if hp<=0:try_totem()
 	if hp <= 0:
 		state = "RESULT";victory = false;sound("death");return
@@ -445,3 +465,25 @@ func resist_displacement(velocity: Vector2) -> Vector2:
 func update_regeneration(dt: float):
 	if arsenal.heal_lock>0:return
 	super.update_regeneration(dt)
+
+func neutral(m: Dictionary) -> bool:
+	return m.get("allied",false)
+
+func spawn_wave(dt: float):
+	super.spawn_wave(dt*float(encounters.data.rules.wave_scale) if encounters.busy() else dt)
+
+func replace_special_solids(owner: String,positions: Array,radius: float):
+	# Batch replacement updates navigation once, rather than once per stone.
+	var changed: Dictionary={}
+	for cell in solid_grid.keys():
+		var previous: Array=solid_grid[cell]
+		for solid in previous:
+			if solid.get("encounter","")==owner:changed[Vector2i(solid.p/CELL)]=true
+		solid_grid[cell]=previous.filter(func(s):return s.get("encounter","")!=owner)
+	for cell in changed:
+		if not nearby_solids(Vector2(cell*CELL)+Vector2.ONE*CELL/2).any(func(s):return Vector2i(s.p/CELL)==cell):blocked.erase(cell)
+	for p in positions:
+		var cell:=Vector2i(p/64)
+		if not solid_grid.has(cell):solid_grid[cell]=[]
+		solid_grid[cell].append({"p":p,"r":radius,"encounter":owner});blocked[Vector2i(p/CELL)]=true
+	if not changed.is_empty() or not positions.is_empty():update_flow()

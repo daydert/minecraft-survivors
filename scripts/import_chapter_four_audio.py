@@ -54,6 +54,23 @@ def generate():
         'ch4_chain': ('block.chain.hit', .35),
         'ch4_totem': ('item.totem.use', .6),
         'ch4_mirror': ('block.glass.break', .25),
+        'ch4_mass_birth': ('entity.warden.emerge', .5),
+        'ch4_mass_warn': ('entity.hoglin.angry', .5),
+        'ch4_mass_shed': ('block.slime_block.break', .65),
+        'ch4_mass_death': ('entity.ravager.death', .65),
+        'ch4_flesh_hit': ('entity.slime.hurt', .3),
+        'ch4_flesh_shot': ('entity.llama.spit', .4),
+        'ch4_growth_rip': ('block.honey_block.break', .6),
+        'ch4_golem_strain': ('entity.iron_golem.hurt', .6),
+        'ch4_golem_warn': ('entity.iron_golem.damage', .55),
+        'ch4_golem_slam': ('entity.iron_golem.attack', .65),
+        'ch4_golem_free': ('entity.iron_golem.repair', .8),
+        'ch4_guardian_awake': ('block.beacon.activate', .6),
+        'ch4_guardian_warn': ('block.beacon.power_select', .55),
+        'ch4_guardian_open': ('block.beacon.deactivate', .45),
+        'ch4_guardian_death': ('block.respawn_anchor.deplete', .7),
+        'ch4_stone_rise': ('block.piston.extend', .6),
+        'ch4_stone_hit': ('block.deepslate.hit', .45),
         'ch4_ground_slam': ('entity.iron_golem.attack', .55),
     }
     output = ROOT / 'assets/audio/chapter_four'
@@ -73,6 +90,10 @@ def generate():
     content = raw('sounds/' + track['name'] + '.ogg')
     (output / 'ancestry.ogg').write_bytes(content)
     manifest['ancestry.ogg'] = dict(source='minecraft/sounds/' + track['name'] + '.ogg', sha256=hashlib.sha256(content).hexdigest())
+    track = next(variants('music_disc.5'))
+    content = raw('sounds/' + track['name'] + '.ogg')
+    (output / 'pyramid_5.ogg').write_bytes(content)
+    manifest['pyramid_5.ogg'] = dict(source='minecraft/sounds/' + track['name'] + '.ogg', sha256=hashlib.sha256(content).hexdigest())
     (ROOT / 'data/chapter_four_audio.json').write_text(json.dumps(mapping, indent=2) + '\n')
     (ROOT / 'docs/CHAPTER_FOUR_AUDIO_MANIFEST.json').write_text(json.dumps(dict(version=version, files=manifest), indent=2) + '\n')
     print('Chapter IV audio:', len(manifest), 'original OGG files')

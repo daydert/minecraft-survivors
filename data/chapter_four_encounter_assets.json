@@ -1,0 +1,2903 @@
+{
+  "actors": {
+    "ch4d_mass_0": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_1": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_2": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_3": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_4": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_5": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_6": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_7": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_8": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_9": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_10": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_11": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_12": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_13": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_14": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_mass_15": {
+      "frame_size": [
+        103,
+        70
+      ],
+      "anchor": [
+        50,
+        38
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        29,
+        7
+      ]
+    },
+    "ch4d_loose_1": {
+      "frame_size": [
+        26,
+        25
+      ],
+      "anchor": [
+        13,
+        16
+      ],
+      "columns": 6,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "attack": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "recover": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "hurt": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "death": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        }
+      },
+      "shadow_size": [
+        8,
+        3
+      ]
+    },
+    "ch4d_loose_2": {
+      "frame_size": [
+        22,
+        25
+      ],
+      "anchor": [
+        11,
+        16
+      ],
+      "columns": 6,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "attack": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "recover": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "hurt": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "death": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        }
+      },
+      "shadow_size": [
+        8,
+        3
+      ]
+    },
+    "ch4d_loose_3": {
+      "frame_size": [
+        76,
+        41
+      ],
+      "anchor": [
+        38,
+        23
+      ],
+      "columns": 6,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "attack": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "recover": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "hurt": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "death": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        }
+      },
+      "shadow_size": [
+        8,
+        3
+      ]
+    },
+    "ch4d_loose_4": {
+      "frame_size": [
+        48,
+        25
+      ],
+      "anchor": [
+        24,
+        15
+      ],
+      "columns": 6,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "windup": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "attack": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "recover": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "hurt": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        },
+        "death": {
+          "start": 0,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": true
+        }
+      },
+      "shadow_size": [
+        8,
+        3
+      ]
+    },
+    "ch4d_golem": {
+      "frame_size": [
+        52,
+        69
+      ],
+      "anchor": [
+        19,
+        60
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        13,
+        4
+      ]
+    },
+    "ch4d_golem_saved": {
+      "frame_size": [
+        52,
+        69
+      ],
+      "anchor": [
+        19,
+        60
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        13,
+        4
+      ]
+    },
+    "ch4d_guardian": {
+      "frame_size": [
+        52,
+        84
+      ],
+      "anchor": [
+        26,
+        46
+      ],
+      "columns": 48,
+      "states": {
+        "idle": {
+          "start": 0,
+          "durations": [
+            0.4,
+            0.4
+          ],
+          "loop": true
+        },
+        "walk": {
+          "start": 2,
+          "durations": [
+            0.15,
+            0.15,
+            0.15,
+            0.15
+          ],
+          "loop": true
+        },
+        "intro": {
+          "start": 6,
+          "durations": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ],
+          "loop": false
+        },
+        "windup": {
+          "start": 12,
+          "durations": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "loop": false
+        },
+        "haul": {
+          "start": 16,
+          "durations": [
+            0.12,
+            0.12,
+            0.12,
+            0.12
+          ],
+          "loop": false
+        },
+        "fan": {
+          "start": 20,
+          "durations": [
+            0.18,
+            0.18,
+            0.18,
+            0.18
+          ],
+          "loop": true
+        },
+        "sweep": {
+          "start": 24,
+          "durations": [
+            0.1,
+            0.1,
+            0.1,
+            0.1,
+            0.1
+          ],
+          "loop": false
+        },
+        "recover": {
+          "start": 29,
+          "durations": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "loop": false
+        },
+        "hurt": {
+          "start": 32,
+          "durations": [
+            0.07,
+            0.07
+          ],
+          "loop": false
+        },
+        "release": {
+          "start": 34,
+          "durations": [
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45,
+            0.45
+          ],
+          "loop": false
+        },
+        "death": {
+          "start": 41,
+          "durations": [
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6,
+            0.6
+          ],
+          "loop": false
+        }
+      },
+      "shadow_size": [
+        13,
+        4
+      ]
+    }
+  },
+  "sprites": [
+    "ch4d_block",
+    "ch4d_shard",
+    "ch4d_iron_piece",
+    "ch4d_node"
+  ]
+}

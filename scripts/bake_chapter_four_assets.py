@@ -58,12 +58,23 @@ def shade(image, rgb):
     return ImageChops.multiply(image.convert("RGBA"), Image.new("RGBA", image.size, (*rgb, 255)))
 
 
+def cold(image, black, white):
+    """Burnt ground: the vanilla texture's own value pattern, recoloured cold."""
+    from PIL import ImageOps
+    grey = ImageOps.autocontrast(image.convert("L"), cutoff=2)
+    return ImageOps.colorize(grey, black=black, white=white).convert("RGBA")
+
+
 def ground(imp):
-    base_names = ["coarse_dirt", "dirt", "rooted_dirt", "coarse_dirt"]
-    base = [shade(imp.tex("block/" + n), (140, 124, 118)) for n in base_names]
-    ash = shade(imp.tex("block/gravel"), (82, 78, 76))
-    road = shade(imp.tex("block/dirt_path_top"), (150, 128, 110))
-    blood = [shade(imp.tex("block/crimson_nylium"), (150, 70, 70)), shade(imp.tex("block/red_concrete_powder"), (120, 40, 40))]
+    # Cold charcoal and ash make every red accent (blood, flesh, torches) read
+    # at a glance; the warm brown of the first pass blended everything together.
+    base_names = ["coarse_dirt", "tuff", "rooted_dirt", "coarse_dirt"]
+    base = [cold(imp.tex("block/" + n), (11, 9, 11), (70, 62, 64)) for n in base_names]
+    ash = cold(imp.tex("block/gravel"), (30, 28, 30), (96, 92, 94))
+    road = cold(imp.tex("block/dirt_path_top"), (40, 36, 36), (128, 118, 112))
+    # Dried blood is dark and rusty; only small wet patches carry the bright crimson.
+    blood = [cold(imp.tex("block/crimson_nylium"), (20, 3, 5), (96, 16, 20)), cold(imp.tex("block/red_concrete_powder"), (24, 3, 6), (88, 14, 18))]
+    wet = cold(imp.tex("block/red_concrete_powder"), (60, 4, 10), (190, 26, 34))
     flesh = [shade(imp.tex("block/nether_wart_block"), (235, 150, 150)), shade(imp.tex("block/nether_wart_block"), (200, 110, 112))]
     vein = imp.tex("block/sculk_vein")
     tone = field(4, TILES, 9)
@@ -76,8 +87,8 @@ def ground(imp):
             p = (tx * 16 + 8, ty * 16 + 8)
             kind = 0
             infection = max(0.0, max(1 - math.dist(p, c) / r for c, r in FLESH))
-            if infection > 0.35 + 0.25 * blood_noise[ty, tx]:
-                kind = 3 if infection > 0.62 + 0.2 * blood_noise[ty, tx] else 2
+            if infection > 0.5 + 0.28 * blood_noise[ty, tx]:
+                kind = 3 if infection > 0.74 + 0.18 * blood_noise[ty, tx] else 2
             elif blood_noise[ty, tx] > 0.93:
                 kind = 2
             if any(segment_distance(p, a, b) < 22 for a, b in ROADS):
@@ -86,12 +97,12 @@ def ground(imp):
             if kind == 1:
                 tile = road
             elif kind == 2:
-                tile = blood[(tx * 7 + ty * 3) % 2]
+                tile = wet if blood_noise[ty, tx] > 0.72 else blood[(tx * 7 + ty * 3) % 2]
             elif kind == 3:
                 tile = flesh[(tx + ty) % 2]
             else:
                 pick = min(len(base) - 1, int(tone[ty, tx] * 1.6 * len(base)) % len(base))
-                tile = ash if rot_rng.random() < 0.03 else base[pick]
+                tile = ash if rot_rng.random() < 0.05 else base[pick]
             tile = tile.rotate(90 * int(rot_rng.integers(4)))
             out.paste(tile, (tx * 16, ty * 16))
             if kind == 3 and rot_rng.random() < 0.35:

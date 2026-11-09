@@ -433,6 +433,293 @@
       }
     ]
   },
+  "ch4_mass_birth": {
+    "minecraft_event": "entity.warden.emerge",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_emerge.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_mass_warn": {
+    "minecraft_event": "entity.hoglin.angry",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_hoglin_angry1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_hoglin_angry2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_hoglin_angry3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_mass_shed": {
+    "minecraft_event": "block.slime_block.break",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_big1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_big2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_big3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_mass_death": {
+    "minecraft_event": "entity.ravager.death",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_death1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_death2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_death3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_flesh_hit": {
+    "minecraft_event": "entity.slime.hurt",
+    "gain": 0.3,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_big1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_big2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_slime_big3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_flesh_shot": {
+    "minecraft_event": "entity.llama.spit",
+    "gain": 0.4,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_llama_spit1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_llama_spit2.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_growth_rip": {
+    "minecraft_event": "block.honey_block.break",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_honeyblock_break1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_honeyblock_break2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_honeyblock_break3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_golem_strain": {
+    "minecraft_event": "entity.iron_golem.hurt",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_hit1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_hit2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_hit3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_golem_warn": {
+    "minecraft_event": "entity.iron_golem.damage",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_damage1.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_damage1.ogg",
+        "volume": 0.8,
+        "pitch": 0.8
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_damage2.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_golem_slam": {
+    "minecraft_event": "entity.iron_golem.attack",
+    "gain": 0.65,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_throw.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_golem_free": {
+    "minecraft_event": "entity.iron_golem.repair",
+    "gain": 0.8,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_irongolem_repair.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_guardian_awake": {
+    "minecraft_event": "block.beacon.activate",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_activate.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_guardian_warn": {
+    "minecraft_event": "block.beacon.power_select",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_power1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_power2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_power3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_guardian_open": {
+    "minecraft_event": "block.beacon.deactivate",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_deactivate.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_guardian_death": {
+    "minecraft_event": "block.respawn_anchor.deplete",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_respawn_anchor_deplete1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_respawn_anchor_deplete2.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_stone_rise": {
+    "minecraft_event": "block.piston.extend",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/tile_piston_out.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_stone_hit": {
+    "minecraft_event": "block.deepslate.hit",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_deepslate_step1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_deepslate_step2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_deepslate_step3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
   "ch4_ground_slam": {
     "minecraft_event": "entity.iron_golem.attack",
     "gain": 0.55,

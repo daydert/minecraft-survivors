@@ -1,0 +1,342 @@
+{
+  "raw_files": {
+    "textures/entity/villager/villager.png": {
+      "sha256": "ac6a775858c742fecd5dd18e8f99f308701650e770d30da97773daab92b6f5bd",
+      "bytes": 700
+    },
+    "textures/entity/zombie/zombie.png": {
+      "sha256": "1b88eea9b63889c2c3399773f887af375defc3aad0e7a375adc84249da54cbbd",
+      "bytes": 700
+    },
+    "textures/block/mushroom_stem.png": {
+      "sha256": "9633dd875492cf5240be3e2442e4729c2350912f4b0b565c9f01640195466401",
+      "bytes": 170
+    },
+    "textures/block/red_concrete_powder.png": {
+      "sha256": "39f9bb7a9f0e11986b65cec8bb58252405f26f048ee3c62397038e3a0eff9e1d",
+      "bytes": 564
+    },
+    "textures/block/coal_block.png": {
+      "sha256": "4987dbd954475908df08f13e8114510285825fb8c189263317d4a0c1bf78b030",
+      "bytes": 177
+    },
+    "textures/block/bone_block_side.png": {
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "bytes": 139
+    },
+    "textures/entity/iron_golem/iron_golem.png": {
+      "sha256": "37b8337e08ce66f82218b332fc6059795389f3d59836cfb3108d458190e20416",
+      "bytes": 1923
+    },
+    "textures/block/poppy.png": {
+      "sha256": "9678d89814d640f88305add21ee6d157f52007aac60bbc363b30054bb3388561",
+      "bytes": 143
+    },
+    "textures/block/poppy.png.mcmeta": {
+      "sha256": "afca6a34e44b86e6a02b7acf062960ed0ebc3f2dab815d86b831dc9e251ad6f4",
+      "bytes": 70
+    },
+    "textures/block/polished_blackstone.png": {
+      "sha256": "4a36ac06b65d5330bc83e4711b4f62c3afe788b95526f2983730461a35b401ff",
+      "bytes": 189
+    },
+    "textures/block/chiseled_polished_blackstone.png": {
+      "sha256": "fa713a4d1d0269482764471949cc9feee2c35fc13c0309a9826b3602940ce82c",
+      "bytes": 179
+    },
+    "textures/block/polished_basalt_side.png": {
+      "sha256": "69a4a98f9ddd56b58fa37cf1e0fb2fa04ce4e34768dc44cc270e9b033f1b8a1f",
+      "bytes": 170
+    },
+    "textures/block/calcite.png": {
+      "sha256": "bf4d6a2d7e044fb5e17ba86b86e24df4f031e75df600bc0fa6aabb5377644cb9",
+      "bytes": 197
+    },
+    "textures/block/quartz_block_side.png": {
+      "sha256": "63d3d5c7184b3f83b269933b306ea587bc28792c9c5118227b218cd4e3a6bd8c",
+      "bytes": 165
+    },
+    "textures/block/chiseled_stone_bricks.png": {
+      "sha256": "fbd59c309a861f63cfbb1f0f2348316d16bafa3bdd1ef81550357e1b5778df8f",
+      "bytes": 198
+    },
+    "textures/block/iron_block.png": {
+      "sha256": "dafa9944ba49fe71958553eded50e87d7bea9c7410cfe568745989bede101c49",
+      "bytes": 169
+    }
+  },
+  "derived": {
+    "ch4d_mass_0_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "1a9dbc2c4e81088d53766a881c3009e6880c273d1bc98fd06e3c57070fe59be0"
+    },
+    "ch4d_mass_1_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "c13e4472b389e82731c88be37433a95772cec2badc23aea538b77bc04fba2759"
+    },
+    "ch4d_mass_2_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "a0287fc77eaa7b19e71421d54800ff30c20aa6876cf7bd6b1f4914ce8d8b51a4"
+    },
+    "ch4d_mass_3_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "1d133b5955c929743d9e6df4468eafc7e19a675f1cb73945dc35d76a14e3a8fa"
+    },
+    "ch4d_mass_4_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "d605e9730db1e29de73dea26778dd23a5b392496bc7a74c56cfb2e50cc684942"
+    },
+    "ch4d_mass_5_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "0392b77e3020b148d8ca80de4060be11c99f26c54722d99961598bad66b68ddb"
+    },
+    "ch4d_mass_6_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "6e4669e80181f45c5128f6dbc22a73c5f282c72b021a90e77411fa5b1a621e2e"
+    },
+    "ch4d_mass_7_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "884749ce942177fa6d91c35ba6c349a6d9520c440031b4f3be2d45b3d6a351ea"
+    },
+    "ch4d_mass_8_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "d2495f471f6b32c40e4bebeef090d85e0d2a558637f61d720f0ce21327b49ea4"
+    },
+    "ch4d_mass_9_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "cdf95bbe504031a22d53f2cfef0fef58285615ad81ab84068b66eb7370898bf0"
+    },
+    "ch4d_mass_10_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "ebf10c649b437088b55948270ea462f5614a63e318a93096a905c615b135b5fe"
+    },
+    "ch4d_mass_11_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "aa49be5fcfb7c0aa38016640f5fde8890b03320410eab638c931b5742260576a"
+    },
+    "ch4d_mass_12_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "c715056092efed7b2ceb9d40130158b55e9f0e6866cb8fefeab91a2a0706362b"
+    },
+    "ch4d_mass_13_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "c971e5516b270c709474adefe73abbd528dcb02ec6de3c8690bf899b3166786b"
+    },
+    "ch4d_mass_14_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "94e4cd2f322239f2becaeaa8ca372388ebca3121aad967fb9fa738608ca1aa37"
+    },
+    "ch4d_mass_15_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        4944,
+        210
+      ],
+      "sha256": "80ecb76191cc531f4e161e46c0b98a8a505935fbaa31e3c7a372f88f625129d1"
+    },
+    "ch4d_loose_1_atlas": {
+      "sources": [
+        "detached native textured anatomy"
+      ],
+      "size": [
+        156,
+        75
+      ],
+      "sha256": "8bbf464af11adb9e63cb065bd9a074a5e536beb3c34f28b7c1aee59bae0435b4"
+    },
+    "ch4d_loose_2_atlas": {
+      "sources": [
+        "detached native textured anatomy"
+      ],
+      "size": [
+        132,
+        75
+      ],
+      "sha256": "c08195efa1fd343c9d8cb8667f46abdf7064a4b14d2118108d7377951888eb30"
+    },
+    "ch4d_loose_3_atlas": {
+      "sources": [
+        "detached native textured anatomy"
+      ],
+      "size": [
+        456,
+        123
+      ],
+      "sha256": "f564faa7e89636ada010e6024c39b86b4158cc8d19bb8ecb51b9bd16a8cfe672"
+    },
+    "ch4d_loose_4_atlas": {
+      "sources": [
+        "detached native textured anatomy"
+      ],
+      "size": [
+        288,
+        75
+      ],
+      "sha256": "d6195508ba817046534137c426d360da84b6a3acc773a54f78984fb2693bc3af"
+    },
+    "ch4d_golem_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        2496,
+        207
+      ],
+      "sha256": "31e0e5d37d0ce5a39164228e1b1c355166e028a785d39bc92da339f12ff32e35"
+    },
+    "ch4d_golem_saved_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        2496,
+        207
+      ],
+      "sha256": "cf27402975ea637bfb203e56e5bdbf2dfbd16c2ba9fa20ed48b6a6cc72f2c673"
+    },
+    "ch4d_guardian_atlas": {
+      "sources": [
+        "native textures; connected action hierarchy; component depth composition"
+      ],
+      "size": [
+        2496,
+        252
+      ],
+      "sha256": "39446db50ed24228f4ebccb6408586f863dce1c57dce2cd904b22d86f0eb074a"
+    },
+    "ch4d_block": {
+      "sources": [
+        "native block geometry"
+      ],
+      "size": [
+        48,
+        48
+      ],
+      "sha256": "23395992f017ca0ae97b06e773ccd943496c54d8b59409711e7941b1f4b1e1f6"
+    },
+    "ch4d_shard": {
+      "sources": [
+        "native block geometry"
+      ],
+      "size": [
+        48,
+        48
+      ],
+      "sha256": "57d5b974f634532c212e700b19686ec9bcf21682e8854e84e63b9c89e72ece44"
+    },
+    "ch4d_iron_piece": {
+      "sources": [
+        "native block geometry"
+      ],
+      "size": [
+        48,
+        48
+      ],
+      "sha256": "8181b78e187a6ae50b13d911ba9adef4a43935a5c0b73bcc3f1b1f10a3054e80"
+    },
+    "ch4d_node": {
+      "sources": [
+        "native flesh, exposed bone"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "7c9e5431f01016daa40ef00e59d180b47e4f46c6efb4ac2712b204af647ecbbd"
+    }
+  },
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar"
+}

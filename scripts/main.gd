@@ -162,7 +162,7 @@ func _process(delta):
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
 	var theme="victory" if world.get("win_music")==true else "endersteve" if is_end() and world.stage in ["betrayal","last_arrival","last_duel","endsteve_death","hand","hand_pickup","return_portal","portal_ready","rekindle","exit_jump","chapter_four"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
-	audio.set_music_context("chapter_four" if is_four() else theme,world.state not in ["MENU","RESULT"])
+	audio.set_music_context(("chapter_four_pyramid" if world.encounters.current=="guardian" else "chapter_four") if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
 	update_camera_lead()
 	ui_time += delta

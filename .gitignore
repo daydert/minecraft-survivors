@@ -12,3 +12,4 @@ qa/*.png.import
 qa/*_before/
 qa/before/
 qa/chapter_four/regression/
+.~lock.*#

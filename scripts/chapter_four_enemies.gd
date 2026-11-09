@@ -89,6 +89,10 @@ static func act(w, m: Dictionary, dt: float):
 	# Walking/idle: simple mobs form the crowd; stronger ones reserve clear tells.
 	var direction: Vector2=w.navigation(m.p)
 	var speed: float=m.speed
+	if m.boss and w.encounters.busy() and distance<float(w.encounters.data.rules.elite_radius):
+		m.timer=maxf(m.timer,.8+float(m.id%3)*.4)
+		travel(w,m,direction,speed*.55,dt)
+		return
 	match m.kind:
 		"flayed_zombie":
 			if m.timer<=0 and distance<ai.reach:windup(w,m,toward);return

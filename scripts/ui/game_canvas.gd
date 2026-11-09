@@ -20,6 +20,8 @@ var four_assets_loaded := false
 var four_mobs: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_mobs.json"))
 var four_equipment: Dictionary={}
 var four_held_cache: Array=[]
+var four_encounter_assets: Dictionary={}
+var four_actor_cache: Array=[]
 var end_renderer=preload("res://scripts/end_renderer.gd").new()
 var recipe_page=0
 var achievements=preload("res://scripts/achievements.gd").new()
@@ -111,7 +113,8 @@ func unload_end_assets():
 func ensure_four_assets():
 	if four_assets_loaded:return
 	four_equipment=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_equipment.json"))
-	for name in four_assets.sprites+four_mobs.sprites+four_equipment.sprites:load_texture(name)
+	four_encounter_assets=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_encounter_assets.json"))
+	for name in four_assets.sprites+four_mobs.sprites+four_equipment.sprites+four_encounter_assets.sprites:load_texture(name)
 	for name in four_assets.clips:
 		var clip: Dictionary = four_assets.clips[name].duplicate(true)
 		clip.total = 0.0;clip.uniform = true
@@ -122,8 +125,9 @@ func ensure_four_assets():
 	four_assets_loaded = true
 
 func unload_four_assets():
-	for name in four_assets.sprites+four_mobs.sprites+four_equipment.get("sprites",[])+four_held_cache:textures.erase(name)
+	for name in four_assets.sprites+four_mobs.sprites+four_equipment.get("sprites",[])+four_held_cache+four_encounter_assets.get("sprites",[])+four_actor_cache:textures.erase(name)
 	four_held_cache.clear();four_equipment={}
+	four_actor_cache.clear();four_encounter_assets={}
 	for name in four_assets.clips:minecraft_assets.clips.erase(name)
 	four_assets_loaded = false
 
@@ -132,6 +136,14 @@ func four_held_texture(name: String):
 	if not textures.has(name):load_texture(name)
 	four_held_cache.erase(name);four_held_cache.append(name)
 	while four_held_cache.size()>8:textures.erase(four_held_cache.pop_front())
+	return textures.get(name)
+
+func four_actor_texture(actor: String):
+	if not four_encounter_assets.get("actors",{}).has(actor):return null
+	var name:=actor+"_atlas"
+	if not textures.has(name):load_texture(name)
+	four_actor_cache.erase(name);four_actor_cache.append(name)
+	while four_actor_cache.size()>8:textures.erase(four_actor_cache.pop_front())
 	return textures.get(name)
 
 func pixel_font_size(size: int) -> int:

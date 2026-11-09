@@ -1,6 +1,7 @@
 extends RefCounted
 ## IV-specific enemy tells and residues; all marks use the actual hit geometry.
 const Atmosphere=preload("res://scripts/ui/atmosphere.gd")
+const Tells=preload("res://scripts/chapter_four_tells.gd")
 
 static func floor_layer(g,offset: Vector2):
 	var w=g.world
@@ -23,26 +24,28 @@ static func floor_layer(g,offset: Vector2):
 	for m in w.mobs:
 		if not m.has("form") or m.hp<=0:continue
 		var p: Vector2=m.p+offset
+		var k: float=clampf(m.get("phase_age",0.0)/maxf(.01,m.get("phase_duration",1.0)),0,1)
+		var seed: int=int(m.id)*7
 		if m.phase=="windup":
+			var ai: Dictionary=m.get("ai",{})
 			match m.kind:
-				"bone_rider":
-					var end: Vector2=p+m.charge*m.ai.dash_speed*m.ai.attack
-					g.draw_dashed_line(p,end,Color(.85,.8,.65,.55),1,7)
-					for side in [-1,1]:g.draw_line(p+m.charge.orthogonal()*side*12,end+m.charge.orthogonal()*side*12,Color(.6,.5,.4,.24),1)
-				"open_cow","torn_spider","hungry_wolf":
-					var q: Vector2=p+m.charge*(28 if m.kind=="open_cow" else 18)
-					g.draw_line(q-m.charge.orthogonal()*8,q+m.charge.orthogonal()*8,Color(.85,.35,.22,.55),2)
+				"flayed_zombie":Tells.claws(g,p,m.charge,float(ai.get("reach",24)),k,seed,w.clock)
+				"growth_skeleton":Tells.aim(g,p-Vector2(0,8),m.charge,120,k,w.clock)
+				"open_cow","bone_rider","torn_spider","hungry_wolf":
+					var end: Vector2=p+m.charge*float(ai.get("dash_speed",120))*float(ai.get("attack",.3))
+					Tells.lane(g,p,end,float(m.radius)+6,k,seed,w.clock)
+				"bloated_creeper":Tells.ring(g,p,float(ai.get("radius",36)),k,w.clock)
 				"infected_witch":
-					var q: Vector2=m.mark+offset
-					var c=Color(.4,.8,.4,.5) if m.cast=="heal" else Color(.6,.3,.8,.5)
-					for j in range(5):
-						var a=j*2.4;g.draw_line(q+Vector2.from_angle(a)*10,q+Vector2.from_angle(a)*16,c,1)
+					var heal: bool=m.get("cast","")=="heal"
+					Tells.ring(g,m.mark+offset,float(ai.get("heal_radius",60))*.65 if heal else float(ai.get("cloud_radius",30)),k,w.clock,Color(.45,.95,.4) if heal else Tells.HOT)
+				"fused_villagers":
+					for angle in [-.2,0.0,.2]:Tells.aim(g,p-Vector2(0,14),m.charge.rotated(angle),90,k,w.clock)
 				"gravedigger":
-					for point in m.wall_points:g.draw_rect(Rect2(point+offset-Vector2(8,4),Vector2(16,8)),Color(.7,.45,.25,.4),false,1)
+					for i in range(m.wall_points.size()):Tells.bulge(g,m.wall_points[i]+offset,k,seed+i*5,w.clock)
+				"bellringer":Tells.ring(g,p,float(ai.get("buff_radius",90)),k,w.clock,Color(1,.8,.35))
 		if m.phase=="smash_wait":
 			var end: Vector2=p+m.charge*m.ai.slam_length
-			var edge: Vector2=m.charge.orthogonal()*m.ai.slam_width
-			g.draw_colored_polygon(PackedVector2Array([p-edge,p+edge,end+edge,end-edge]),Color(.6,.3,.12,.17))
+			Tells.lane(g,p,end,float(m.ai.slam_width),k,seed+90,w.clock)
 		if m.lift>0:g.oval(p,Vector2(12,3),Color(0,0,0,.4))
 	for wall in w.mob_walls:
 		var p: Vector2=wall.p+offset

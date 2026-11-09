@@ -2,27 +2,33 @@ extends RefCounted
 ## A single world offset for ground, blood, silhouettes and actors. Visual
 ## hashes and the simulation clock keep pause/camera movement deterministic.
 const EnemyView=preload("res://scripts/chapter_four_enemy_view.gd")
+const Tells=preload("res://scripts/chapter_four_tells.gd")
+const Horror=preload("res://scripts/chapter_four_horror.gd")
 const ArsenalView=preload("res://scripts/chapter_four_arsenal_view.gd")
+const EncounterView=preload("res://scripts/chapter_four_encounter_view.gd")
 const Lighting = preload("res://scripts/ui/lighting.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const ANCHORS = {"house": Vector2(56,66), "crucifix": Vector2(32,88), "growth": Vector2(24,40), "growth_big": Vector2(64,96), "torch": Vector2(8,21), "pyramid": Vector2(144,150)}
 
 func world(g):
 	var w = g.world
-	var offset: Vector2 = Vector2(320,180) - w.camera().floor()
-	if w.stage == "survival":offset -= g.cam_lead.round()
+	var offset: Vector2 = Vector2(320,180) - w.encounters.visual_camera(w,w.camera()).floor()
+	if w.stage == "survival" and w.encounters.current!="guardian":offset -= g.cam_lead.round()
 	if w.shake > 0 and g.settings.shake and w.state == "RUNNING":offset += Vector2(sin(w.clock*75), cos(w.clock*87)).round()
 	g.draw_texture_rect_region(g.textures.ch4_ground, Rect2(0,0,640,360), Rect2(-offset,Vector2(640,360)))
 	blood(g, offset)
+	Horror.veins(g, offset)
 	EnemyView.floor_layer(g,offset)
 	ArsenalView.floor_layer(g,offset)
+	EncounterView.floor_layer(g,offset)
 	for mark in w.landmarks:
 		if mark.kind == "crucifix":pillar_floor(g, mark, offset)
 		if mark.get("attack", "") == "windup" and mark.kind == "torch":
 			var other = w.linked_torch(mark)
 			if other != null:
-				g.draw_line((mark.p+offset).floor(), (other.p+offset).floor(), Color(.8,.24,.18,.24), float(w.db.data.chapter_four.cursed_torch.width)*2)
-				g.draw_dashed_line((mark.p+offset).floor(), (other.p+offset).floor(), Color(1,.65,.46,.8), 1, 5)
+				var total: float=float(w.db.data.chapter_four.cursed_torch.get("windup",1.0))
+				var k: float=clampf(1.0-float(mark.get("timer",0.0))/maxf(.01,total),0,1)
+				Tells.thread(g,mark.p+offset-Vector2(0,20),other.p+offset-Vector2(0,20),k,int(mark.id),w.clock)
 	var actors: Array = []
 	for obj in w.props:
 		if obj.type == "pumpkin" and obj.hp <= 0:continue
@@ -34,11 +40,15 @@ func world(g):
 	for o in w.loot:
 		if Rect2(-24,-24,688,408).has_point(o.p+offset):actors.append({"sort":o.p.y,"kind":"loot","obj":o})
 	actors.append({"sort":w.player.y,"kind":"player"})
+	EncounterView.append_actors(g,actors)
 	if w.build.has("embryo"):actors.append({"sort":w.arsenal.pet.p.y,"kind":"pet"})
 	if not w.blood_hand.is_empty():actors.append({"sort":w.blood_hand.p.y+2,"kind":"hand"})
 	actors.sort_custom(func(a,b):return a.sort < b.sort)
 	for actor in actors:
 		match actor.kind:
+			"encounter":EncounterView.actor(g,actor.obj,offset)
+			"enc_node":EncounterView.node(g,actor.obj,offset)
+			"enc_block":EncounterView.block_actor(g,actor.obj,offset)
 			"landmark":landmark(g, actor.obj, offset)
 			"prop":
 				var o = actor.obj
@@ -65,8 +75,10 @@ func world(g):
 	for b in w.projectiles:g.draw_projectile(b,offset)
 	EnemyView.projectiles(g,offset)
 	ArsenalView.air_layer(g,offset)
+	EncounterView.air_layer(g,offset)
 	for e in w.effects:
-		if ArsenalView.effect(g,e,offset):pass
+		if EncounterView.effect(g,e,offset):pass
+		elif ArsenalView.effect(g,e,offset):pass
 		elif EnemyView.effect(g,e,offset):pass
 		elif e.kind == "ch4_arc":arc(g,e,offset)
 		else:g.draw_effect(e,offset)
@@ -79,9 +91,15 @@ func world(g):
 		for particle in pool:
 			g.draw_rect(Rect2((particle.p+offset).floor(),Vector2.ONE*ceilf(particle.get("size",2))),Color(particle.color,clampf(particle.life/.1,0,1)))
 	Atmosphere.collect(g,offset)
+	EncounterView.lights(g)
 	Lighting.draw(g,offset)
+	Horror.fog(g,offset)
 	Atmosphere.after_lighting(g,offset)
+	Horror.watcher(g,offset)
+	Horror.eyes(g,offset)
+	Horror.grade(g)
 	if w.stage == "arrival":arrival(g)
+	EncounterView.cinematic(g)
 
 func blood(g, offset: Vector2):
 	var w = g.world
@@ -145,10 +163,10 @@ func landmark(g, mark: Dictionary, offset: Vector2):
 		var charged: bool = mark.get("attack","") == "windup"
 		g.draw_rect(Rect2(p-Vector2(1,25 if mark.hostile else 13),Vector2(2,2)),Color(1,.8,.55) if charged else Color(.9,.18,.09,.8))
 	if mark.get("attack","") == "windup" and mark.kind != "torch":
-		var d: Vector2 = mark.aim
-		for j in range(3):
-			var q := p+d.rotated((j-1)*.36)*(20+5*sin(w.clock*5))
-			g.draw_line(q-d*5,q,Color(1,.4,.28,.8),2)
+		var k: float = clampf(1.0-float(mark.timer)/float(w.db.data.chapter_four.growth.windup),0,1)
+		var growth_rules: Dictionary = w.db.data.chapter_four.growth
+		var count: int = int(growth_rules.count)
+		for j in range(count):Tells.aim(g,p-Vector2(0,10),mark.aim.rotated((float(j)/maxf(1,count-1)-.5)*float(growth_rules.spread)),70,k,w.clock)
 
 func hand(g, offset: Vector2):
 	var h: Dictionary = g.world.blood_hand

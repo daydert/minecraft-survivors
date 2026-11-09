@@ -69,6 +69,7 @@ static func draw_hud(g):
 				g.text_at(level_text,p+Vector2(17-g.font.get_string_size(level_text,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x,17),8,number_color)
 	if g.is_end():g.end_renderer.hud(g)
 	if g.is_four():g.four_renderer.ArsenalView.hud(g)
+	if g.is_four():g.four_renderer.EncounterView.hud(g)
 	if g.is_nether():g.nether_renderer.hud(g)
 	if g.world.message_timer>0 and g.world.state=="RUNNING" and (not g.is_nether() or g.world.stage!="wither"):
 		g.centered(g.world.message,68,12,g.GOLD,true)

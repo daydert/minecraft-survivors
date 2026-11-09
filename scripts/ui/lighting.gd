@@ -30,7 +30,7 @@ static func ensure_mesh():
 ## Ambient darkness for the current chapter and moment: {dark, color}.
 static func mood(g) -> Dictionary:
 	var w = g.world
-	if g.is_four():return {"dark": 0.40, "color": Color(0.045,0.018,0.028)}
+	if g.is_four():return {"dark": 0.5, "color": Color(0.018,0.02,0.04)}
 	if g.is_end():
 		if w.stage in ["survival", "end_arrival", "departure"]:
 			return {"dark": 0.17, "color": Color(0.06, 0.02, 0.11)}
@@ -70,7 +70,7 @@ static func sources(g, offset: Vector2) -> Array:
 				light(list, a.player + offset - Vector2(0, 10), 135, WARM, 1.0, 0.03)
 	elif w.state != "MENU":
 		var lift: float = w.elevation() if w.has_method("elevation") else 0.0
-		light(list, w.player + offset - Vector2(0, 10 + lift), 135, WARM, 1.0, 0.03)
+		light(list, w.player + offset - Vector2(0, 10 + lift), 125 if g.is_four() else 135, Color(0.92, 0.88, 0.86) if g.is_four() else WARM, 1.0, 0.02 if g.is_four() else 0.03)
 	var orbs := 0
 	for o in w.orbs:
 		orbs += 1

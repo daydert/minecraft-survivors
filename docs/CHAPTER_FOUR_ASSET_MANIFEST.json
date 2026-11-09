@@ -6,9 +6,9 @@
       "sha256": "6889a193decb2c38cd8559456693c15192917c7b917d6ef9c3c2e142f7819ad4",
       "bytes": 495
     },
-    "textures/block/dirt.png": {
-      "sha256": "67197d5371efc3ca1638217c38349665dbd5a977b47bfb20075c858dff87d510",
-      "bytes": 197
+    "textures/block/tuff.png": {
+      "sha256": "a9e5466e34449fb0c73de64341e38a6bef1bcb16efba2a387a5ad6700af2cd90",
+      "bytes": 185
     },
     "textures/block/rooted_dirt.png": {
       "sha256": "3c59420f80c58794b49f822fb9b251779250b759f5c12111fa29f772a635f42b",
@@ -115,7 +115,7 @@
     "ch4_ground": {
       "sources": [
         "block/coarse_dirt",
-        "block/dirt",
+        "block/tuff",
         "block/rooted_dirt",
         "block/coarse_dirt",
         "block/gravel",
@@ -129,7 +129,7 @@
         2048,
         2048
       ],
-      "sha256": "f56e9614f9fce8bc40ef50d3c7441d324dd07310209e8d4f39f0c087e97390ed"
+      "sha256": "2fb319364d42f282c693f0037b91bb53d28964583ed3a38131aa565982f6871d"
     },
     "ch4_house_0": {
       "sources": [
