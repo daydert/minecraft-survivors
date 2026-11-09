@@ -2,19 +2,26 @@ extends "res://scripts/game_data.gd"
 ## Solo equipment presentation. Network data and balance remain untouched.
 
 func configure(chapter: int):
-	if chapter < 2: return
+	if chapter < 2:
+		var overworld: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/overworld_balance.json"))
+		data.mobs.merge(overworld.mobs,true)
+		data.night = overworld.night
+		return
 	var extra: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/nether_balance.json"))
 	for group in ["weapons","upgrades","passives","recipes","mobs"]:
 		data[group].merge(extra[group],true)
 	data.waves = extra.waves
 	data.events = extra.events
 	data.rules = extra.rules
+	data.bastion = extra.bastion
 	if chapter==3:
 		extra=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_balance.json"))
 		for group in ["weapons","upgrades","passives","recipes","mobs"]:data[group].merge(extra[group],true)
 		data.waves=extra.waves
 		data.events=extra.events
 		data.rules=extra.rules
+		data.end_city=extra.end_city
+		data.void_gust=extra.void_gust
 		for id in ["gold_boots","fire_resist"]:data.passives.erase(id)
 		data.recipes.bed.passive="shulker_shell"
 		data.recipes.fishing.passive="ender_pearl"

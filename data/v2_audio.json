@@ -1,0 +1,322 @@
+{
+  "hurt_witch": {
+    "minecraft_event": "entity.witch.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_hurt1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_hurt2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_hurt3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "witch_throw": {
+    "minecraft_event": "entity.witch.throw",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_throw1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_throw2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_throw3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "witch_laugh": {
+    "minecraft_event": "entity.witch.celebrate",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_ambient1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_ambient4.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_witch_celebrate.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_phantom": {
+    "minecraft_event": "entity.phantom.hurt",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_hurt1.ogg",
+        "volume": 0.75,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_hurt2.ogg",
+        "volume": 0.75,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_hurt3.ogg",
+        "volume": 0.75,
+        "pitch": 1
+      }
+    ]
+  },
+  "phantom_swoop": {
+    "minecraft_event": "entity.phantom.swoop",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_swoop1.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_swoop2.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_swoop3.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_swoop4.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      }
+    ]
+  },
+  "phantom_flap": {
+    "minecraft_event": "entity.phantom.flap",
+    "gain": 0.35,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_flap1.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_flap2.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_flap3.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_flap4.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_flap5.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_phantom_flap6.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      }
+    ]
+  },
+  "potion_splash": {
+    "minecraft_event": "entity.splash_potion.break",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/random_glass1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_glass2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/random_glass3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "cave": {
+    "minecraft_event": "ambient.cave",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave4.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave5.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave6.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave7.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave8.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave9.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave10.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave11.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave12.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave13.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave14.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave15.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave16.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave17.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave18.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave19.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave20.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave21.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave22.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/ambient_cave_cave23.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "chest_open": {
+    "minecraft_event": "block.chest.open",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/block_chest_open.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "gust": {
+    "minecraft_event": "entity.breeze.wind_burst",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_breeze_wind_burst1.ogg",
+        "volume": 1,
+        "pitch": 1.2
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_breeze_wind_burst2.ogg",
+        "volume": 1,
+        "pitch": 1.2
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_breeze_wind_burst3.ogg",
+        "volume": 1,
+        "pitch": 1.2
+      }
+    ]
+  }
+}

@@ -423,5 +423,34 @@
     "fall_shell_cooldown": 50,
     "fall_shell_cooldown_per_level": 6,
     "slow_arrow_factor": 0.58
+  },
+  "end_city": {
+    "min_distance": 420,
+    "max_distance": 760,
+    "wake": 260,
+    "shulkers": [
+      [
+        -52,
+        14
+      ],
+      [
+        52,
+        14
+      ],
+      [
+        0,
+        -30
+      ]
+    ]
+  },
+  "void_gust": {
+    "from": 240,
+    "first": 20,
+    "every": 34,
+    "jitter": 6,
+    "warn": 1.4,
+    "blow": 1.1,
+    "push": 150,
+    "mob_push": 170
   }
 }

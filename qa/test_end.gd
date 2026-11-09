@@ -127,7 +127,7 @@ func run():
 	w.mobs.clear();w.spawn("endersteve_final",w.player+Vector2(80,0));boss=w.mobs[0];boss.phase="cast";before=boss.p;w.hook_target(boss,true);w.move_mobs(.1)
 	check(boss.p!=before and boss.phase=="recover","Fishing pulls EnderSteve and interrupts a prepared attack")
 	w=fresh();w.build={};w.hp=8;w.last_safe=Vector2(1600,1600);w.spawn("endermite_brood",w.player);w.mobs[0].radius=300;w.loot.append({"kind":"chorus_fruit","p":w.player,"source":w.player})
-	w.pickup(.01);check(w.hp==8 and w.loot.size()==1,"Chorus waits rather than teleporting into an enemy or outside ten blocks when no landing is safe")
+	w.pickup(.01);check(w.hp==8 and w.loot.filter(func(o):return o.kind=="chorus_fruit").size()==1,"Chorus waits rather than teleporting into an enemy or outside ten blocks when no landing is safe")
 	w=fresh();w.build={};var inner=w.last_safe;var edge=Vector2.ZERO
 	for i in range(w.land.size()):
 		var point=Vector2(i%128*16+8,i/128*16+8)

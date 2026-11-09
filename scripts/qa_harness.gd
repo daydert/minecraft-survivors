@@ -24,6 +24,7 @@ static func prepare_capture(g):
 		prepare_herobrine_capture(g)
 		return
 	if g.qa_mode=="menu":return
+	g.world=g.OW.new()
 	g.world.reset(724)
 	g.world.time=378
 	g.world.level=17
@@ -43,11 +44,31 @@ static func prepare_capture(g):
 	if g.qa_mode=="dawn":g.world.time=700
 	if g.qa_mode=="dusk":g.world.time=20
 	if g.qa_mode=="low_hp":g.world.hp=3
+	if g.qa_mode.begins_with("landmark_"):
+		var kind: String=g.qa_mode.trim_prefix("landmark_")
+		for mark in g.world.landmarks:
+			if mark.kind==kind:g.world.player=mark.p+Vector2(30,70);g.world.time=40
+		g.world.mobs.clear()
+		return
+	if g.qa_mode in ["blood_moon","witches","phantoms","fog"]:
+		g.world.mobs.clear()
+		g.world.time={"blood_moon":372.0,"witches":300.0,"phantoms":560.0,"fog":190.0}[g.qa_mode]
+		for i in range(10):g.world.spawn(["zombie","skeleton","spider"][i%3],g.world.player+Vector2.from_angle(i*0.9)*(90+i*12))
+		if g.qa_mode=="witches":
+			for i in range(3):g.world.spawn("witch",g.world.player+Vector2.from_angle(i*2.1+.3)*150)
+		if g.qa_mode=="phantoms":
+			for i in range(3):g.world.spawn("phantom",g.world.player+Vector2.from_angle(i*2.1)*130)
+		g.world.state="RUNNING";g.world.invulnerable=999
+		for i in range(150):g.world.step(1.0/60)
+		g.world.invulnerable=0
+		return
 	if g.qa_mode=="level":
 		g.world.choices=["bow","potion","amethyst"]
 		g.world.state="LEVEL_UP"
 	elif g.qa_mode=="pause":g.world.state="PAUSED"
 	elif g.qa_mode=="result":
+		g.world.state="RUNNING";g.world.invulnerable=999
+		for i in range(900):g.world.step(1.0/60)
 		g.world.state="RESULT"
 		g.world.victory=true
 		g.world.time=720
@@ -171,6 +192,12 @@ static func prepare_nether_capture(g):
 		g.world.rebuild_hit_grid()
 		g.world.update_attacks(.01)
 		if g.qa_mode=="nether_inventory":g.toggle_inventory()
+		if g.qa_mode=="nether_bastion":
+			g.world.mobs.clear();g.world.time=365;g.world.state="RUNNING";g.world.invulnerable=999
+			g.world.player=g.world.bastion.p+Vector2(0,150)
+			for i in range(60):g.world.step(1.0/60,Vector2.UP)
+			for i in range(420):g.world.step(1.0/60)
+			g.world.invulnerable=0
 
 static func prepare_end_capture(g):
 	if g.qa_mode=="end_victory":
@@ -188,6 +215,16 @@ static func prepare_end_capture(g):
 	if g.qa_mode=="end_inventory":g.toggle_inventory();return
 	if g.qa_mode=="end_recipes":g.screen="recipes";g.recipe_page=1;return
 	if g.qa_mode=="end_overworld":g.world.stage="chapter_four";g.world.stage_age=3;g.world.state="RESULT";return
+	if g.qa_mode in ["end_city","end_gust"]:
+		g.world.mobs.clear();g.world.invulnerable=999
+		if g.qa_mode=="end_city":g.world.player=g.world.city.p+Vector2(0,30);g.world.last_safe=g.world.player
+		else:
+			g.world.time=260;g.world.gust.timer=0.01
+			for i in range(14):
+				var at=g.world.player+Vector2.from_angle(i*.45)*(60+i*9)
+				if g.world.on_land(at):g.world.spawn("endermite",at)
+		for i in range(100 if g.qa_mode=="end_city" else 95):g.world.step(1.0/60)
+		return
 	if g.qa_mode=="end_shulker":
 		g.world.build={};g.world.invulnerable=60
 		for i in range(4):

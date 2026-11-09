@@ -16,6 +16,9 @@ func _ready():
 	var duel_assets: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/duel_assets.json"))
 	for name in duel_assets.clips:minecraft_assets.clips[name]=duel_assets.clips[name]
 	for name in duel_assets.sprites:load_texture(name)
+	var v2_assets: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/v2_assets.json"))
+	for name in v2_assets.clips:minecraft_assets.clips[name]=v2_assets.clips[name]
+	for name in v2_assets.sprites:load_texture(name)
 	for name in ["ground","heart","heart_half","heart_empty","rock","pumpkin","stump","flowers","tree_0","tree_1","tree_2","experience_orb","icon_arrow","icon_splash_potion","flamebow_draw"]:
 		load_texture(name)
 	for name in minecraft_assets.clips:
@@ -157,6 +160,7 @@ func _process(delta):
 	var theme="victory" if world.get("win_music")==true else "endersteve" if is_end() and world.stage in ["betrayal","last_arrival","last_duel","endsteve_death","hand","hand_pickup","return_portal","portal_ready","rekindle","exit_jump","chapter_four"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
 	audio.set_music_context(theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
+	update_camera_lead()
 	ui_time += delta
 	if stress_mode:
 		frame_samples.append(delta*1000)
@@ -378,6 +382,15 @@ func secret_input(event: InputEventKey) -> bool:
 func close_boss_lab():
 	router.close(world);selected=0;input_lock=.12
 
+func update_camera_lead():
+	if coop.active or world.state!="RUNNING":
+		lead_clock=world.clock
+		return
+	var dt: float=clampf(world.clock-lead_clock,0,.1)
+	lead_clock=world.clock
+	var target: Vector2=world.facing*20.0 if world.player_moving else Vector2.ZERO
+	cam_lead=cam_lead.lerp(target,1-exp(-dt*3.0))
+
 func close_recipes():
 	router.close(world,"inventory")
 
@@ -387,9 +400,10 @@ func start_chapter(chapter: int):
 	solo_chapter=chapter
 	if chapter==3:ensure_end_assets()
 	else:unload_end_assets()
-	world=EW.new() if chapter==3 else NW.new() if chapter==2 else W.new()
+	world=EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
 	world.reset()
 	audio.reset_run_music()
+	cam_lead=Vector2.ZERO;lead_clock=0.0
 	screen=""
 	selected=0
 

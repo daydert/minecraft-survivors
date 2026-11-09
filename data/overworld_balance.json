@@ -1,0 +1,41 @@
+{
+  "mobs": {
+    "witch": {"hp": 26, "speed": 24, "damage": 3, "xp": 6, "radius": 7},
+    "phantom": {"hp": 16, "speed": 70, "damage": 3, "xp": 4, "radius": 8}
+  },
+  "night": {
+    "fog_at": 180,
+    "fog_duration": 32,
+    "ring_bursts": [0, 6, 12],
+    "ring_size": 5,
+    "ring_radius": 215,
+    "blood_moon_at": 360,
+    "blood_moon_duration": 60,
+    "blood_moon_rate": 0.9,
+    "blood_moon_xp": 1.5,
+    "blood_moon_speed": 1.1,
+    "witch_from": 240,
+    "witch_every": 18,
+    "witch_cap": 3,
+    "witch_cap_late": 5,
+    "witch_late_at": 480,
+    "witch_keep": [130, 185],
+    "witch_throw_every": 3.6,
+    "witch_throw_flight": 0.9,
+    "witch_splash_radius": 30,
+    "witch_heal_every": 6,
+    "witch_heal_radius": 90,
+    "witch_heal_share": 0.25,
+    "phantom_from": 540,
+    "phantom_every": 22,
+    "phantom_count": 2,
+    "phantom_cap": 6,
+    "phantom_orbit": 135,
+    "phantom_altitude": 46,
+    "phantom_circle": [3.2, 5.0],
+    "phantom_windup": 0.75,
+    "phantom_dive_speed": 215,
+    "phantom_dive_time": 1.1,
+    "phantom_climb": 1.0
+  }
+}

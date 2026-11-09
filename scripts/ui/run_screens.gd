@@ -98,11 +98,27 @@ static func draw_result(g):
 		var x=128+i*102
 		g.text_at(values[i],Vector2(x,143),19,g.INK,true)
 		g.text_at(labels[i],Vector2(x,161),8,g.MUTED)
-	var ids=g.world.build.keys()+g.world.items.keys()
-	var x0=320-ids.size()*13
-	for i in range(ids.size()):
-		var id=ids[i]
-		g.item_icon(id,Vector2(x0+i*26,190),1.3,g.world.evolved.has(id))
+	var dealt: Dictionary=g.world.get("damage_by") if "damage_by" in g.world else {}
+	var ranked: Array=dealt.keys().filter(func(id):return g.world.db.weapons.has(id) and dealt[id]>=1)
+	ranked.sort_custom(func(a,b):return dealt[a]>dealt[b])
+	if ranked.is_empty():
+		var ids=g.world.build.keys()+g.world.items.keys()
+		var x0=320-ids.size()*13
+		for i in range(ids.size()):
+			var id=ids[i]
+			g.item_icon(id,Vector2(x0+i*26,190),1.3,g.world.evolved.has(id))
+	else:
+		# Damage per weapon: the run's story in six bars.
+		var top: float=dealt[ranked[0]]
+		for i in range(mini(6,ranked.size())):
+			var id=ranked[i]
+			var p=Vector2(116+(i%2)*218,172+(i/2)*20)
+			g.item_icon(id,p,1,g.world.evolved.has(id))
+			var share: float=dealt[id]/top
+			g.draw_rect(Rect2(p+Vector2(21,7),Vector2(120,4)),Color("333333"))
+			g.draw_rect(Rect2(p+Vector2(21,7),Vector2(roundf(120*share),4)),g.LIME if i==0 else Color("9a9a9a"))
+			var label=g.world.db.number(roundf(dealt[id])) if dealt[id]<10000 else "%dk" % int(dealt[id]/1000)
+			g.text_at(label,p+Vector2(147,13),8,g.INK)
 	if not g.coop.active or g.coop.hosting: g.button(Rect2(131,239,178,33),"Ещё раз","retry")
 	g.button(Rect2(330,239,178,33),"В меню","menu")
 

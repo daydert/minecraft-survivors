@@ -145,6 +145,7 @@ func update_attacks(dt: float):
 		if id not in NEW_WEAPONS:continue
 		cooldowns[id]=cooldowns.get(id,0.0)-dt
 		if cooldowns[id]>0:continue
+		damage_owner=id
 		var target=nearest(player,320)
 		if target==null and id not in ["axe","bed","tnt"]:continue
 		var s=db.stats(id,build[id],evolved.has(id),items)
@@ -224,7 +225,7 @@ func update_explosives(dt: float):
 		if b.kind=="bed":
 			if b.age>.65 and player.distance_to(b.p)<19:
 				add_effect("foot_block",player,.85,{"direction":player.direction_to(b.p)})
-				explode(b.p,b.stats.radius,b.stats.damage)
+				damage_owner=b.kind;explode(b.p,b.stats.radius,b.stats.damage)
 				explosives.remove_at(i)
 			elif b.age>25:explosives.remove_at(i)
 			continue
@@ -243,7 +244,7 @@ func update_explosives(dt: float):
 					other.fuse=maxf(other.fuse,.72)
 					other.launched=true
 			if not b.first and not b.child and b.stats.get("cluster",false):split_tnt(b)
-			explode(b.p,b.stats.radius,b.stats.damage)
+			damage_owner=b.kind;explode(b.p,b.stats.radius,b.stats.damage)
 			explosives.remove_at(i)
 
 func fire_projectile(kind: String, p: Vector2, direction: Vector2, s: Dictionary, evolution: bool):
@@ -264,6 +265,7 @@ func update_projectiles(dt: float):
 	projectiles=ordinary
 	super.update_projectiles(dt)
 	for b in custom:
+		select_attack_owner(b)
 		var old: Vector2=b.p
 		b.age+=dt;b.life-=dt
 		b.dir=b.dir.rotated(b.get("turn",0.0)*dt)
@@ -312,7 +314,7 @@ func update_projectiles(dt: float):
 func update_effects(dt: float):
 	for e in effects:
 		if e.kind=="axe_spin" and e.get("return_damage",0)>0 and not e.returned and e.age+dt>=.3:
-			e.returned=true
+			e.returned=true;damage_owner="axe"
 			for m in in_radius(player,e.radius):hurt(m,e.return_damage,player.direction_to(m.p))
 			break_props(player,e.radius,e.return_damage);sound("swing")
 	super.update_effects(dt)
@@ -320,7 +322,7 @@ func update_effects(dt: float):
 		if e.kind!="hoe_spin":continue
 		e.tick-=dt
 		if e.tick<=0:
-			e.tick+=.3
+			e.tick+=.3;damage_owner="hoe"
 			for m in in_radius(e.p,e.radius):hurt(m,e.damage)
 			break_props(e.p,e.radius,e.damage)
 

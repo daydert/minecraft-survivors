@@ -48,7 +48,9 @@ static func mood(g) -> Dictionary:
 	var t: float = w.time
 	var dark := lerpf(0.30, 0.50, smoothstep(0.0, 360.0, t))
 	var dawn := smoothstep(540.0, 718.0, t)
-	return {"dark": lerpf(dark, 0.07, dawn), "color": NIGHT.lerp(DAWN, dawn)}
+	var color := NIGHT.lerp(DAWN, dawn)
+	var moon: float = w.blood_moon() if w.has_method("blood_moon") else 0.0
+	return {"dark": lerpf(dark, 0.07, dawn) + 0.05 * moon, "color": color.lerp(Color(0.3, 0.0, 0.04), moon * 0.6)}
 
 static func light(list: Array, p: Vector2, radius: float, color: Color, power: float = 1.0, glow: float = 0.0):
 	if p.x < -radius or p.y < -radius or p.x > 640 + radius or p.y > 360 + radius:

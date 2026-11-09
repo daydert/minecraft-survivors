@@ -10,6 +10,7 @@ func world(g):
 	if g.qa_mode=="end_scale":scale_review(g);return
 	var w=g.world
 	var offset=Vector2(320,180)-w.camera().floor()
+	if w.stage=="survival":offset-=g.cam_lead.round()
 	if w.shake>0 and g.settings.shake and w.state=="RUNNING":offset+=Vector2(sin(w.clock*75),cos(w.clock*87)).round()*2
 	ground(g,offset)
 	for h in w.hazards:
@@ -45,6 +46,8 @@ func world(g):
 		if w.visible(m.p,90):actors.append({"y":m.p.y,"type":"mob","obj":m})
 	actors.append({"y":w.player.y,"type":"player"})
 	for o in w.loot:actors.append({"y":o.p.y,"type":"loot","obj":o})
+	for mark in w.landmarks:
+		if w.visible(mark.p,140):actors.append({"y":mark.p.y,"type":"landmark","obj":mark})
 	actors.sort_custom(func(a,b):return a.y<b.y)
 	for a in actors:
 		match a.type:
@@ -73,6 +76,10 @@ func world(g):
 				if m.phase=="cleave_windup":
 					g.draw_arc(p,75,m.charge.angle()-1.45,m.charge.angle()+1.45,24,Color(.8,.6,.9,.6),1)
 			"player":player(g,offset)
+			"landmark":
+				var q: Vector2=a.obj.p+offset
+				g.oval(q+Vector2(0,4),Vector2(60,12),Color(0,0,0,.3))
+				g.sprite("end_city",(q-Vector2(64,94)).floor())
 			"loot":
 				var o=a.obj;var p: Vector2=o.p+offset
 				g.oval(p,Vector2(6,2),Color(0,0,0,.35));g.item_icon(o.kind,p-Vector2(8,16+sin(w.clock*3)*2))
@@ -91,6 +98,7 @@ func world(g):
 	Atmosphere.collect(g,offset)
 	Lighting.draw(g,offset)
 	Atmosphere.after_lighting(g,offset)
+	gust_streaks(g)
 	cinematic(g,offset)
 
 func scale_review(g):
@@ -132,6 +140,24 @@ func ground(g, offset: Vector2):
 			g.draw_texture_rect(g.textures.end_obsidian,Rect2(r.position.x,y,r.size.x,4),true)
 
 ## The abyss: deep violet sky, drifting nebulae and two parallax star layers.
+## Void gust: faint streaks warn of the direction, then a dense rush of wind.
+func gust_streaks(g):
+	var w=g.world
+	if w.gust.is_empty() or w.gust.phase=="idle" or w.stage!="survival":return
+	var dir: Vector2=w.gust.dir
+	var warn: bool=w.gust.phase=="warn"
+	var strength: float=clampf(w.gust.age/1.4,0,1) if warn else 1.0-clampf(w.gust.age/1.1,0,1)*.6
+	var count=18 if warn else 44
+	for j in range(count):
+		var lane=fposmod(j*97.3,700.0)-30.0
+		var travel=fposmod(w.clock*(260.0 if warn else 620.0)+j*131.7,900.0)-130.0
+		var base=Vector2(320,180)+dir*(travel-450.0)+dir.orthogonal()*(lane-350.0)
+		var length=10.0 if warn else 26.0+j%3*6
+		g.draw_line(base,base+dir*length,Color(.9,.82,1,(.25 if warn else .5)*strength),1)
+	if warn:
+		var tip=Vector2(320,180)+dir*120
+		g.draw_colored_polygon(PackedVector2Array([tip+dir*10,tip-dir*6+dir.orthogonal()*7,tip-dir*6-dir.orthogonal()*7]),Color(.85,.6,1,.55*strength))
+
 func abyss(g, offset: Vector2):
 	var clock: float=g.world.clock
 	g.draw_rect(Rect2(0,0,640,360),Color("0d0a16"))

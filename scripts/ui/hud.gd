@@ -65,6 +65,11 @@ static func draw_hud(g):
 	if g.is_nether():g.nether_renderer.hud(g)
 	if g.world.message_timer>0 and g.world.state=="RUNNING" and (not g.is_nether() or g.world.stage!="wither"):
 		g.centered(g.world.message,68,12,g.GOLD,true)
+	if g.is_nether() and g.world.bastion.get("state","")=="assault" and g.world.stage=="survival":
+		var left: float=g.world.bastion.timer/float(g.world.db.data.bastion.duration)
+		g.draw_rect(Rect2(229,46,182,5),Color("333333"))
+		g.draw_rect(Rect2(229,46,182*clampf(left,0,1),5),Color("d9a334"))
+		g.centered("Штурм бастиона",41,8,g.INK)
 	for m in g.world.mobs:
 		if m.kind!="ravager" or m.hp<=0:continue
 		g.draw_rect(Rect2(229,46,182,5),Color("333333"))

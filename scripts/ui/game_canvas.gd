@@ -10,6 +10,7 @@ const QAHarness = preload("res://scripts/qa_harness.gd")
 
 
 const W = preload("res://scripts/campaign_world.gd")
+const OW = preload("res://scripts/overworld_world.gd")
 const NW = preload("res://scripts/nether_world.gd")
 const EW = preload("res://scripts/end_world.gd")
 var end_renderer=preload("res://scripts/end_renderer.gd").new()
@@ -45,6 +46,9 @@ var ui_time = 0.0
 ## Presentation-only lights (fireflies, embers): {p, r, c, power, glow} in world space.
 var ambient_lights: Array = []
 var burst_level := 0
+## Presentation-only camera lead in the direction of travel (solo survival).
+var cam_lead := Vector2.ZERO
+var lead_clock := 0.0
 var burst_clock := -10.0
 var router = preload("res://scripts/ui/screen_router.gd").new()
 ## Current full-screen view; "" means the world with its state overlay.

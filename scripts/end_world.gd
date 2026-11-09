@@ -46,6 +46,12 @@ var heal_rng=RandomNumberGenerator.new()
 var reward_rng=RandomNumberGenerator.new()
 var end_complete=false
 var damage_source="melee"
+## Version 2: an End city guarded by shulkers and periodic void gusts.
+var landmarks: Array=[]
+var city: Dictionary={}
+var gust: Dictionary={}
+var gust_rng=RandomNumberGenerator.new()
+var falls=0
 
 func chapter_number() -> int:return 3
 
@@ -60,10 +66,14 @@ func reset(seed_value: int=0):
 	choice_age=0;choice_tick=0;rerolls=0;last_choices.clear();crystals.clear();dragon_history.clear()
 	chosen_item="";chosen_index=-1;choice_hold=0
 	endsteve_corpse={};hand_taken=false;end_complete=false;damage_source="melee"
+	landmarks.clear();city={};gust={};falls=0
 	super.reset(seed_value)
 	var extra: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_animations.json"))
 	animation.data.actors.merge(extra.actors,true);animation.data.weapons.merge(extra.weapons,true)
 	heal_rng.seed=int(rng.seed)^0x64fc92;reward_rng.seed=int(rng.seed)^0x7b128
+	gust_rng.seed=int(rng.seed)^0x3c96e1
+	var rules: Dictionary=db.data.void_gust
+	gust={"phase":"idle","timer":float(rules.first),"age":0.0,"dir":Vector2.RIGHT,"count":0}
 	last_safe=player;scene_camera=player
 	stage="end_arrival";stage_age=0
 
@@ -90,7 +100,60 @@ func make_map():
 			if not solid_grid.has(cell):solid_grid[cell]=[]
 			solid_grid[cell].append({"p":p,"r":9.0})
 			blocked[Vector2i(p/CELL)]=true
+	place_city(decor)
 	assign_healing()
+
+func place_city(decor: RandomNumberGenerator):
+	var rules: Dictionary=db.data.end_city
+	var best=Vector2.ZERO
+	for attempt in range(200):
+		var p=player+Vector2.from_angle(decor.randf()*TAU)*decor.randf_range(float(rules.min_distance),float(rules.max_distance))
+		if supported_at(p,58) and supported_at(p+Vector2(0,30),40):best=p;break
+	if best==Vector2.ZERO:return
+	for i in range(props.size()-1,-1,-1):
+		if props[i].type=="end_ruin" and props[i].p.distance_to(best)<90:
+			var c=Vector2i(props[i].p/64)
+			if solid_grid.has(c):solid_grid[c]=solid_grid[c].filter(func(s):return s.p!=props[i].p)
+			if props[i].type=="end_ruin":blocked.erase(Vector2i(props[i].p/CELL))
+			props.remove_at(i)
+	for x in [-44,-30,30,44]:
+		var q=best+Vector2(x,-10)
+		var c=Vector2i(q/64)
+		if not solid_grid.has(c):solid_grid[c]=[]
+		solid_grid[c].append({"p":q,"r":9.0});blocked[Vector2i(q/CELL)]=true
+	city={"p":best,"guarded":false}
+	landmarks=[{"kind":"end_city","p":best,"id":next_id()}]
+	loot.append({"kind":"chest","p":best+Vector2(0,12),"born":0.0})
+
+func update_city():
+	if city.is_empty() or city.guarded or player.distance_to(city.p)>float(db.data.end_city.wake):return
+	city.guarded=true;message="Город Края";message_timer=2.5;sound("warning")
+	for offset in db.data.end_city.shulkers:
+		var q=city.p+Vector2(offset[0],offset[1])
+		if on_land(q) and spawn("shulker",q):mobs.back().timer=1.0+mobs.size()%3*.4
+
+func update_gust(dt: float):
+	var rules: Dictionary=db.data.void_gust
+	if gust.is_empty() or time<float(rules.from):return
+	gust.timer-=dt;gust.age+=dt
+	match gust.phase:
+		"idle":
+			if gust.timer<=0:
+				gust.phase="warn";gust.timer=float(rules.warn);gust.age=0.0
+				gust.dir=Vector2.from_angle(gust_rng.randf()*TAU)
+				sound("gust",.3)
+		"warn":
+			if gust.timer<=0:
+				gust.phase="blow";gust.timer=float(rules.blow);gust.age=0.0;gust.count+=1
+				for m in mobs:
+					if m.hp<=0 or m.get("boss",false) or m.kind in ["shulker","arena_crystal"]:continue
+					m.knock=gust.dir*float(rules.mob_push);m.launch=.45;m.collision_hits={}
+		"blow":
+			if not flying() and dash_left<=0:player_push=player_push.lerp(gust.dir*float(rules.push),minf(1,dt*8))
+			if gust.timer<=0:
+				if gust.count>=5 and falls==0:run_progress.award("windswept")
+				gust.phase="idle";gust.age=0.0
+				gust.timer=float(rules.every)+gust_rng.randf_range(-float(rules.jitter),float(rules.jitter))
 
 func on_land(p: Vector2) -> bool:
 	if stage not in ["survival","end_arrival","departure"]:return END_ARENA.has_point(p)
@@ -187,7 +250,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 			player=move_actor(player,dash_direction*movement_speed()*(5.8 if rocket else db.stats("spear",build.get("spear",1),false,items).speed)*dt,6)
 			for m in in_radius((before+player)/2,before.distance_to(player)/2+15):
 				if dash_hits.has(m.id):continue
-				dash_hits[m.id]=true;var s=db.stats("spear",build.get("spear",1),evolved.has("spear"),items)
+				dash_hits[m.id]=true;damage_owner="spear";var s=db.stats("spear",build.get("spear",1),evolved.has("spear"),items)
 				hurt(m,s.damage*(3 if rocket else 1)*(rule("slow_arrow_factor") if slow_time>0 else 1.0),dash_direction*2)
 			break_props(player,16,25)
 			if dash_left<=0:rocket=false
@@ -199,13 +262,13 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 		update_elevation(dt)
 		if on_land(player):
 			if not flying() and supported_at(player):last_safe=player
-		elif not flying():fall_age=0;sound("hurt");add_effect("end_fall",player,.85)
+		elif not flying():fall_age=0;falls+=1;sound("hurt");add_effect("end_fall",player,.85)
 	player_visual.travel=before.distance_to(player);player_moving=player_visual.travel>.0001
 	tracked_velocity=tracked_velocity.lerp((player-before)/maxf(dt,.0001),minf(1,dt*8))
 	if combat and fall_age<0:
 		flow_timer-=dt
 		if flow_timer<=0 and flow_cell!=Vector2i(player/CELL):update_flow();flow_timer=.3
-		if stage=="survival":spawn_wave(dt)
+		if stage=="survival":spawn_wave(dt);update_city();update_gust(dt)
 		move_mobs(dt);rebuild_hit_grid();update_attacks(dt);update_projectiles(dt);update_explosives(dt);update_hazards(dt);resolve_deaths()
 	update_effects(dt)
 	if fall_age<0:pickup(dt)
@@ -249,7 +312,7 @@ func update_elevation(dt: float):
 		if jump_age>=.95:
 			jump_age=-1;jump_height=0
 			var damage=jump_stats.damage*(1+jump_stats.height/24)
-			end_blast(player,jump_stats.radius,damage,"mace_impact")
+			damage_owner="mace";end_blast(player,jump_stats.radius,damage,"mace_impact")
 			if evolved.has("mace"):add_effect("end_aftershock",player,.8,{"radius":jump_stats.radius*1.4,"damage":damage*.5,"triggered":false})
 			sound("mace_smash");shake=.2
 
@@ -313,6 +376,7 @@ func hurt(m: Dictionary, amount: float, push: Vector2=Vector2.ZERO):
 	super.hurt(m,amount,push)
 
 func move_mobs(dt: float):
+	damage_owner="knockback_stick"
 	var spawnlings=[]
 	for m in mobs:
 		if m.hp<=0:continue
@@ -433,6 +497,7 @@ func update_attacks(dt: float):
 		if id not in END_WEAPONS or id=="shield":continue
 		cooldowns[id]=cooldowns.get(id,0.0)-dt
 		if cooldowns[id]>0:continue
+		damage_owner=id
 		var target=nearest(player,240)
 		if target==null:continue
 		var s=db.stats(id,build[id],evolved.has(id),items)
@@ -560,14 +625,14 @@ func update_effects(dt: float):
 			var destination=safe_destination(e.end,56)
 			if destination!=null:teleport_to(destination)
 		elif e.kind=="placed_end_crystal" and e.age+dt>.65 and not e.triggered:
-			e.triggered=true;end_blast(e.p,e.stats.radius,e.stats.damage,"crystal_blast")
+			e.triggered=true;damage_owner="end_crystal";end_blast(e.p,e.stats.radius,e.stats.damage,"crystal_blast")
 			if evolved.has("end_crystal"):
 				for j in range(4):add_effect("end_aftershock",e.p+Vector2.from_angle(j*PI/2)*e.stats.radius*.7,.85+j*.1,{"radius":e.stats.radius*.6,"damage":e.stats.damage*.4,"triggered":false})
-		elif e.kind=="end_aftershock" and not e.triggered and e.age+dt>=e.total-.15:e.triggered=true;end_blast(e.p,e.radius,e.damage,"crystal_blast")
+		elif e.kind=="end_aftershock" and not e.triggered and e.age+dt>=e.total-.15:e.triggered=true;damage_owner="end_crystal";end_blast(e.p,e.radius,e.damage,"crystal_blast")
 		elif e.kind=="friendly_breath":
 			e.tick-=dt
 			if e.tick<=0:
-				e.tick+=.4
+				e.tick+=.4;damage_owner="dragon_breath"
 				for m in in_radius(e.p,e.radius):hurt(m,e.damage)
 	super.update_effects(dt)
 
@@ -593,6 +658,7 @@ func pickup(dt: float):
 		if o.kind=="end_hand":
 			hand_taken=true;stage="hand_pickup";stage_age=0;facing=player.direction_to(o.p);sound("pickup");loot.remove_at(i);continue
 		if o.kind=="chest":
+			if not city.is_empty() and o.p.distance_to(city.p)<40:run_progress.award("end_city")
 			if not pending_chest.is_empty():continue
 			pending_chest=o.duplicate()
 		else:apply_upgrade(o.kind)
@@ -630,7 +696,8 @@ func begin_arena():
 func prepare_arena():
 	time=db.data.duration;slow_time=0;poison_time=0;levitation=0;levitation_height=0;levitation_velocity=0;player_burn=0;player_wither=0
 	stage="dragon_arrival";stage_age=0;player=Vector2(1024,1175);last_safe=player;scene_camera=Vector2(1024,1080);facing=Vector2.UP;hp=minf(20,hp+8)
-	for pool in [mobs,projectiles,effects,particles,pixels,loot,orbs,tasks,props,explosives,tnt_groups,hazards,magma,pending_events,crystals,dragon_history]:pool.clear()
+	for pool in [mobs,projectiles,effects,particles,pixels,loot,orbs,tasks,props,explosives,tnt_groups,hazards,magma,pending_events,crystals,dragon_history,landmarks]:pool.clear()
+	city={};gust={}
 	blocked.clear();solid_grid.clear();pending_chest={};invulnerable=4;flight=0;dash_left=0;rocket=false;jump_age=-1;fall_age=-1;player_push=Vector2.ZERO
 	portal_position=Vector2(1024,1056);portal_lit=false
 	for i in range(6):

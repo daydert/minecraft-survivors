@@ -10,6 +10,9 @@ var transition_camera=Vector2.ZERO
 var arena_camera=Vector2(1024,1040)
 var soul_sand=PackedByteArray()
 var encounter=preload("res://scripts/wither_encounter.gd").new()
+## Version 2: the bastion opens at 6:00; holding it during the assault earns a chest.
+var landmarks: Array=[]
+var bastion: Dictionary={}
 
 func chapter_number() -> int:return 2
 
@@ -29,7 +32,59 @@ func make_map():
 		var p=Vector2(rng.randf_range(120,1928),rng.randf_range(120,1928))
 		if p.distance_to(player)>145:magma.append({"p":p,"radius":22.0+float(i%3)*5})
 
+	place_bastion()
 	assign_healing()
+
+func place_bastion():
+	var rules: Dictionary=db.data.bastion
+	var place=RandomNumberGenerator.new();place.seed=int(rng.seed)^0x6a51c3
+	var angle=place.randf()*TAU
+	var p=(player+Vector2.from_angle(angle)*float(rules.distance)).clamp(Vector2(260,260),Vector2(1788,1788))
+	for i in range(props.size()-1,-1,-1):
+		if props[i].type in ["rock","tree"] and props[i].p.distance_to(p)<130:
+			var c=Vector2i(props[i].p/64.0)
+			if solid_grid.has(c):solid_grid[c]=solid_grid[c].filter(func(s):return s.p!=props[i].p)
+			blocked.erase(Vector2i(props[i].p/CELL))
+			props.remove_at(i)
+	magma=magma.filter(func(m):return m.p.distance_to(p)>150)
+	for x in range(-66,67,12):
+		var q=p+Vector2(x,-14)
+		var c=Vector2i(q/64.0)
+		if not solid_grid.has(c):solid_grid[c]=[]
+		solid_grid[c].append({"p":q,"r":8.0});blocked[Vector2i(q/CELL)]=true
+	bastion={"p":p,"state":"closed","timer":0.0,"wave":0.0,"brute":false}
+	landmarks=[{"kind":"bastion","p":p,"id":next_id()}]
+	update_flow()
+
+func update_bastion(dt: float):
+	if bastion.is_empty():return
+	var rules: Dictionary=db.data.bastion
+	match bastion.state:
+		"closed":
+			if time>=float(rules.open_at):
+				bastion.state="open";message="Бастион открыт";message_timer=3;sound("warning")
+		"open":
+			if player.distance_to(bastion.p)<float(rules.trigger):
+				bastion.state="assault";bastion.timer=float(rules.duration);bastion.wave=0.0
+				message="Штурм бастиона";message_timer=3;sound("warning")
+				for offset in rules.turrets:
+					if spawn("blaze_nether",bastion.p+Vector2(offset[0],offset[1])):
+						mobs.back().turret=true;mobs.back().aggro=999.0
+		"assault":
+			bastion.timer-=dt;bastion.wave-=dt
+			if bastion.wave<=0:
+				bastion.wave=float(rules.wave_every)
+				for j in range(int(rules.wave_size)):
+					var gate=bastion.p+Vector2(-80 if j%2==0 else 80,30+j*6)
+					if spawn(PIGLINS[j%2],gate):mobs.back().aggro=999.0
+			if not bastion.brute and bastion.timer<=float(rules.duration)*.5:
+				bastion.brute=true
+				if spawn("brute",bastion.p+Vector2(0,44)):mobs.back().aggro=999.0
+			if bastion.timer<=0:
+				bastion.state="won";message="Бастион взят";message_timer=3;run_progress.award("bastion")
+				loot.append({"kind":"chest","p":bastion.p+Vector2(0,18),"born":time})
+				for j in range(int(rules.reward_orbs)):drop_xp(bastion.p+Vector2.from_angle(j*2.4)*(20+j*3),8)
+				sound("chest_open")
 
 func camera() -> Vector2:
 	if stage=="departure":return transition_camera+Vector2(0,-smoothstep(0,1.6,stage_age)*14)
@@ -62,7 +117,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	player_moving=player_visual.travel>.0001
 	flow_timer-=dt
 	if flow_timer<=0 and flow_cell!=Vector2i(player/CELL):update_flow();flow_timer=.25
-	if stage=="survival":spawn_wave(dt)
+	if stage=="survival":spawn_wave(dt);update_bastion(dt)
 	if stage in ["survival","wither"]:
 		move_mobs(dt)
 		rebuild_hit_grid()
@@ -165,6 +220,8 @@ func prepare_arena():
 	ghast.begin(int(rng.seed))
 	for pool in [mobs,projectiles,effects,particles,pixels,loot,orbs,tasks,props,explosives,tnt_groups,hazards,magma,pending_events]:pool.clear()
 	pending_chest={}
+	landmarks.clear()
+	bastion={}
 	hit_grid.clear()
 	solid_grid.clear()
 	blocked.clear()
@@ -174,6 +231,7 @@ func prepare_arena():
 	message_timer=0
 
 func move_mobs(dt: float):
+	damage_owner="fire"
 	for m in mobs:
 		if m.hp<=0:continue
 		m.animation+=dt
@@ -211,7 +269,8 @@ func move_mobs(dt: float):
 			direction=m.dir
 			speed=0
 		elif m.kind in ["piglin_crossbow","blaze_nether"]:
-			if distance<95:direction=-old.direction_to(player)
+			if m.get("turret",false):speed=0
+			elif distance<95:direction=-old.direction_to(player)
 			elif distance<190:speed=0
 			if m.timer<=0 and distance<280 and visible(old) and line_clear(old,player):
 				var burning=m.kind=="blaze_nether"

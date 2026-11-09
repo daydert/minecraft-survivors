@@ -9,7 +9,7 @@ def check(ok,label):
  global checks
  assert ok,label
  checks+=1
-check(len(catalog)==12 and len({e['id'] for e in catalog})==12,'Exactly twelve unique achievements')
+check(len(catalog)==18 and len({e['id'] for e in catalog})==18,'Exactly eighteen unique achievements (12 + 6 from version 2)')
 font=(ROOT/'assets/fonts/minecraft/minecraft_regular.fnt').read_text();glyphs={int(i) for i in re.findall(r'^char id=(\d+)',font,re.M)}
 for e in catalog:
  check(bool(e['name']) and bool(e['description']),'A readable Russian name and condition: '+e['id'])

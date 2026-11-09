@@ -431,5 +431,28 @@
     "ghast_tear_regen": 0.3,
     "soul_sand_slow": 0.42,
     "gold_boots_relief": 0.2
+  },
+  "bastion": {
+    "distance": 470,
+    "open_at": 360,
+    "trigger": 150,
+    "duration": 40,
+    "wave_every": 4.5,
+    "wave_size": 3,
+    "reward_orbs": 10,
+    "turrets": [
+      [
+        -58,
+        24
+      ],
+      [
+        58,
+        24
+      ],
+      [
+        0,
+        -4
+      ]
+    ]
   }
 }

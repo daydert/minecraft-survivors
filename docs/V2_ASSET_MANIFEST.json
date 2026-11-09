@@ -1,0 +1,577 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/witch.png": {
+      "sha256": "c22f075ec24a49d3b2f108432c098d7d4b52e266b1b6da6aa5de6cda5cf01af4",
+      "bytes": 994
+    },
+    "textures/item/potion.png": {
+      "sha256": "6a09a39bb6c41bc92bd5eca1f51caf5b582a85f68206b164476c8e14a4669416",
+      "bytes": 165
+    },
+    "textures/entity/phantom.png": {
+      "sha256": "97fe36ce3dcf0ec7a1a32c59379e51a959e3963e85dd43b74751d22a2fa607fa",
+      "bytes": 639
+    },
+    "textures/entity/phantom_eyes.png": {
+      "sha256": "7822a936cb20c677fb85789c7fbef2f15d54b41800f90723d2d00bc4b49a2102",
+      "bytes": 112
+    },
+    "textures/block/mossy_cobblestone.png": {
+      "sha256": "68ceb02b0c41e799677320ff46c2c5b6d71450142a3c948e68641a6da66bc469",
+      "bytes": 231
+    },
+    "textures/block/cobblestone.png": {
+      "sha256": "bcda95fdf5afa91747657aa198fc0b69ebf44141de30a718075f74045e9a5def",
+      "bytes": 200
+    },
+    "textures/block/oak_log.png": {
+      "sha256": "61735859c9c9ea82601191a77c6f256d93619cbaf7cad998a3ed5762877a34e6",
+      "bytes": 191
+    },
+    "textures/block/oak_log_top.png": {
+      "sha256": "a520800a833ea0c6214481245ab40397aa0c08b4ffc909046dac266386f9fc01",
+      "bytes": 206
+    },
+    "textures/block/oak_planks.png": {
+      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+      "bytes": 195
+    },
+    "textures/block/water_still.png": {
+      "sha256": "683df6ad9c23a50b7ce9323a5fe231aa79f94a63c6d750f3cf87a1fd44422551",
+      "bytes": 1481
+    },
+    "textures/block/water_still.png.mcmeta": {
+      "sha256": "e9b8025fde1b09b0a4d2a38427b04f98f28a593045be6d177eb2b29164c872b0",
+      "bytes": 44
+    },
+    "textures/block/stone.png": {
+      "sha256": "b5e10adc72442bfb257ce7ba0b9bbe36475a0c8cdfec89b80dc9517203ff3e9f",
+      "bytes": 151
+    },
+    "textures/block/black_concrete.png": {
+      "sha256": "0d2f1cf4f6b7f1abada383bb2dbeb4bf274628a65793b2d388805dd8a5c1b0cb",
+      "bytes": 172
+    },
+    "textures/block/torch.png": {
+      "sha256": "1e0a18d6a5f4e839f07b3a7cbe2703f98d7db1c65eb1c96e1e575eec61410e16",
+      "bytes": 137
+    },
+    "textures/block/polished_blackstone_bricks.png": {
+      "sha256": "91d65c74a532535cd761b4f6760467e907450c9bfa7adc6b2e11587f00942953",
+      "bytes": 190
+    },
+    "textures/block/gilded_blackstone.png": {
+      "sha256": "d192fce017d850d0adfc1f6bd1f9586244923e1cdb81b70d59ae8a6d2c104ae1",
+      "bytes": 221
+    },
+    "textures/block/blackstone.png": {
+      "sha256": "8104d381f680eeb7d71a023aa056b593ef0855821538e435949c94b58033e7cb",
+      "bytes": 202
+    },
+    "textures/block/purpur_block.png": {
+      "sha256": "3e6a2fe3f74a47f110e7870ad2a55814129bd0c1908391c4e5465345a8402dbd",
+      "bytes": 168
+    },
+    "textures/block/purpur_pillar.png": {
+      "sha256": "c611215e993eabfb3f5ed82e7f789b5ed98ba04be2ba8eaa64d21f1f64abc05b",
+      "bytes": 182
+    },
+    "textures/block/purpur_pillar_top.png": {
+      "sha256": "e39723b0da84397ecff57b77480f75fdd7c2465cc55f6ae3e1732ede250f26dc",
+      "bytes": 198
+    },
+    "textures/block/end_rod.png": {
+      "sha256": "b07e8ff07283460ee6c99cab96a542083dcaa25c82ff960ea994d46bcaa1f8d3",
+      "bytes": 158
+    },
+    "textures/block/netherrack.png": {
+      "sha256": "3c0208b749c5393b9bad9d57ed3d830326a02b8cbd8444e96d4d0d277f85625f",
+      "bytes": 213
+    },
+    "textures/entity/zombie/zombie.png": {
+      "sha256": "1b88eea9b63889c2c3399773f887af375defc3aad0e7a375adc84249da54cbbd",
+      "bytes": 700
+    },
+    "textures/block/dark_oak_planks.png": {
+      "sha256": "665f44b119f5a21711c4cb83749d871635134c001cb0c14761c4f02a40dd8645",
+      "bytes": 195
+    },
+    "textures/block/obsidian.png": {
+      "sha256": "d9c7dc812d8e8b995e22caff2b10c1fc663b5e127a94c20a7476cfd88af2cd82",
+      "bytes": 189
+    },
+    "textures/item/phantom_membrane.png": {
+      "sha256": "278576989e6e9ab11a001355db7a7b15959cbff193120dee1288e86e417157d7",
+      "bytes": 210
+    },
+    "textures/item/gold_ingot.png": {
+      "sha256": "e4c1e2ea6d1fa70299163ebff573b4bfda1ef09099bedc4b5789c598f0a65738",
+      "bytes": 187
+    },
+    "textures/item/elytra.png": {
+      "sha256": "7a83137eea9fd1e1eb75906cb573a277a90cc0796e2aa2a04d0605abc5b21717",
+      "bytes": 199
+    },
+    "textures/block/end_stone.png": {
+      "sha256": "1fd05dbb86e8f49c518cabb82f706b71db6e94f03d9fd2b18f053f8e7a01e498",
+      "bytes": 202
+    },
+    "textures/item/wind_charge.png": {
+      "sha256": "accd53e9b2f7903ce24a4e6d778fbf4bc4dc321983871c614af915baa55f97f3",
+      "bytes": 191
+    }
+  },
+  "derived": {
+    "witch_atlas": {
+      "sources": [
+        "entity/witch",
+        "item/potion"
+      ],
+      "size": [
+        704,
+        132
+      ],
+      "sha256": "26374cbcb281ffb9077c00e356a0a0570f6ab373f6c90f58431bd8fc7fd433db"
+    },
+    "phantom_atlas": {
+      "sources": [
+        "entity/phantom",
+        "entity/phantom_eyes"
+      ],
+      "size": [
+        1152,
+        120
+      ],
+      "sha256": "99004419cd398d14db66b4824ac8bccb0f8f988f88a8ba88f767b164ee0a9551"
+    },
+    "ruin_0": {
+      "sources": [
+        "block textures"
+      ],
+      "size": [
+        96,
+        72
+      ],
+      "sha256": "394cb103b9497442a753daa5a5fde94bff327a13236ac7e9caa29788afc74270"
+    },
+    "ruin_1": {
+      "sources": [
+        "block textures"
+      ],
+      "size": [
+        96,
+        72
+      ],
+      "sha256": "2e0f0ba851369ba0427141cdccf59eab95145018dad66a05609ebb7c42f4371b"
+    },
+    "well": {
+      "sources": [
+        "block textures"
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "0cf5e50cd2d6dd6c6b1aac6722183cf00e913bf1d1f46fe254a6f776c7528e87"
+    },
+    "mine_entrance": {
+      "sources": [
+        "block textures"
+      ],
+      "size": [
+        96,
+        72
+      ],
+      "sha256": "d26c165073bdf913e0266c3321dbee5665b8e9cb686ff97dea7c5d32dc8d6ec3"
+    },
+    "bastion": {
+      "sources": [
+        "block textures"
+      ],
+      "size": [
+        192,
+        128
+      ],
+      "sha256": "3a6b54b048ced5e400aaaef0c85232b6d6492e450447f6a6ed98d2feb884f385"
+    },
+    "end_city": {
+      "sources": [
+        "block textures"
+      ],
+      "size": [
+        128,
+        112
+      ],
+      "sha256": "cb0573ef6122c599ccb12c436e1b13feaeee8b66e4d90d6013ee1bc11b291317"
+    },
+    "water_tile": {
+      "sources": [
+        "block/water_still"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "36c05e787b9eb4f9877c98fc6fb1d8104bb760e66d1f0da92d48d158b5f01864"
+    },
+    "water_animation": {
+      "sources": [
+        "block/water_still"
+      ],
+      "size": [
+        512,
+        16
+      ],
+      "sha256": "288a8077bc732ad12bc6d172614f7b6e39196722cf9e3060dad4e058483dc93c"
+    },
+    "block_cobblestone": {
+      "sources": [
+        "block/cobblestone"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4993d8ae7421d19f686765109fa8b0d16564d7d9efc0b86969e3869d3552e66f"
+    },
+    "block_mossy_cobblestone": {
+      "sources": [
+        "block/mossy_cobblestone"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "7ca7aabe7ef39b5cbc7c2b1f76696bc3b4b49b3ebba3e0cbd678d5be71b820c6"
+    },
+    "block_oak_planks": {
+      "sources": [
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3391269efa615afa227191c82b0ff9b8123bebba1b86182d621273d5f160f4c8"
+    },
+    "block_blackstone": {
+      "sources": [
+        "block/blackstone"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "15b303e61514a87a21ed027e3a585eee55e4f99ed36787f0e587f66f1d98f170"
+    },
+    "block_purpur_block": {
+      "sources": [
+        "block/purpur_block"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "2af03178ec44eea0b7a2a05f81cb0771dc0fc39a109db0dcb15bb4feab180472"
+    },
+    "block_end_rod": {
+      "sources": [
+        "block/end_rod"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4a8e7432d5ee36cd83784be953e328dff85b701797e12086fa7f548e4d0aefa7"
+    },
+    "icon_potion": {
+      "sources": [
+        "item/potion"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "6a09a39bb6c41bc92bd5eca1f51caf5b582a85f68206b164476c8e14a4669416",
+      "byte_identical": true
+    },
+    "achievement_blood_moon": {
+      "sources": [
+        "block/netherrack",
+        "entity/zombie/zombie"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "465d8002cfc0b0f8d07b03547608447af20b95e09e48555af8791623fdf15d9d"
+    },
+    "achievement_witch_hunter": {
+      "sources": [
+        "block/dark_oak_planks",
+        "entity/witch"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "03b18388ff245c50f3812b0e6d3f60e4355cd582db75b90b85018e7058103013"
+    },
+    "achievement_phantom_slayer": {
+      "sources": [
+        "block/obsidian",
+        "item/phantom_membrane"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "54944df7706b13275917d9f549172eabf37b4058786db83568bad640fcbb1642"
+    },
+    "achievement_bastion": {
+      "sources": [
+        "block/polished_blackstone_bricks",
+        "item/gold_ingot"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "24ac72191ef0f398b0b1010907d69af02eb50d8c437fd80165f055e065e6a6a3"
+    },
+    "achievement_end_city": {
+      "sources": [
+        "block/purpur_block",
+        "item/elytra"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "6deacf26e6c8544395f200db7f5b5070b10b6ba560976f1a076df3829bec1b86"
+    },
+    "achievement_windswept": {
+      "sources": [
+        "block/end_stone",
+        "item/wind_charge"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "ad3028aea071cd8b77e95974ca4e8767818e77586bd813468adbef163254dd4c"
+    }
+  },
+  "audio": {
+    "entity_witch_hurt1.ogg": {
+      "source": "minecraft/sounds/entity/witch/hurt1.ogg",
+      "sha256": "96f3a790e0eec9ff802bdc5e73bc59aac6c6d58894bad26e6912ff023349d863"
+    },
+    "entity_witch_hurt2.ogg": {
+      "source": "minecraft/sounds/entity/witch/hurt2.ogg",
+      "sha256": "0439f2bea9ed2b8618b474d4cd36af49c347e541554a0c3f19caf58ed2027c0b"
+    },
+    "entity_witch_hurt3.ogg": {
+      "source": "minecraft/sounds/entity/witch/hurt3.ogg",
+      "sha256": "a1012f0af44664d490415c4e18c1ecad3a1ba853bd68937bf49eb75ba0850be0"
+    },
+    "entity_witch_throw1.ogg": {
+      "source": "minecraft/sounds/entity/witch/throw1.ogg",
+      "sha256": "298e184ea4b3ba8c3625aa8548986549b98222182431648b4d46d5797abed898"
+    },
+    "entity_witch_throw2.ogg": {
+      "source": "minecraft/sounds/entity/witch/throw2.ogg",
+      "sha256": "05c7d18f050bd97aa31ab8efb4a4be2409c49b8018ce540597e17a7f0a52e8cc"
+    },
+    "entity_witch_throw3.ogg": {
+      "source": "minecraft/sounds/entity/witch/throw3.ogg",
+      "sha256": "32708b054e80f680a6b3f7fbcb634fb1ee2e5ba3afecba2dfc71f0c1e9216868"
+    },
+    "entity_witch_ambient1.ogg": {
+      "source": "minecraft/sounds/entity/witch/ambient1.ogg",
+      "sha256": "471068681d85760efd6c30b99f1514325cde1df5824e83db1d7596725a9f5923"
+    },
+    "entity_witch_ambient4.ogg": {
+      "source": "minecraft/sounds/entity/witch/ambient4.ogg",
+      "sha256": "cab43ac3555242a6caa73b7503ce301fd550ed4788dbb491da618eaf5eb09d56"
+    },
+    "entity_witch_celebrate.ogg": {
+      "source": "minecraft/sounds/entity/witch/celebrate.ogg",
+      "sha256": "95a812fdbd97cf7ebfccf2dc0bf10e012df506f34fd7edd8d1cd73b341e22199"
+    },
+    "mob_phantom_hurt1.ogg": {
+      "source": "minecraft/sounds/mob/phantom/hurt1.ogg",
+      "sha256": "f213dd79d0c96644d93e01e9d8fadcb467a56ad921c845f61bf4eaa5eb70cb9d"
+    },
+    "mob_phantom_hurt2.ogg": {
+      "source": "minecraft/sounds/mob/phantom/hurt2.ogg",
+      "sha256": "a4780cda49a0a67a5ffacf190ca4cd7e6068ac9f03b560833dd7eef297608923"
+    },
+    "mob_phantom_hurt3.ogg": {
+      "source": "minecraft/sounds/mob/phantom/hurt3.ogg",
+      "sha256": "c0bea472e48f8396c71971281d90ccf8a1c34bc6c06be9c8574c537beeb46b11"
+    },
+    "mob_phantom_swoop1.ogg": {
+      "source": "minecraft/sounds/mob/phantom/swoop1.ogg",
+      "sha256": "bc2e438cba808905e4159080ba65b4199881121f727b96727edba803b314035a"
+    },
+    "mob_phantom_swoop2.ogg": {
+      "source": "minecraft/sounds/mob/phantom/swoop2.ogg",
+      "sha256": "f36ec7594c668a2683c67e078617d2b16d84ce22aa38abeec3b6fcec5f0b3748"
+    },
+    "mob_phantom_swoop3.ogg": {
+      "source": "minecraft/sounds/mob/phantom/swoop3.ogg",
+      "sha256": "7c0bd1c3ef326393d10cc8f161f615339b47ec7a43c90c0eac3146f6eed7079b"
+    },
+    "mob_phantom_swoop4.ogg": {
+      "source": "minecraft/sounds/mob/phantom/swoop4.ogg",
+      "sha256": "f123546f0786a1b88161ff57db0dd8521045c7e4e70ab8811b3e2542af201dd5"
+    },
+    "mob_phantom_flap1.ogg": {
+      "source": "minecraft/sounds/mob/phantom/flap1.ogg",
+      "sha256": "e17791b0d550d54d82c5552f92a513a0ca8c2e47c5e93209083afab335df237c"
+    },
+    "mob_phantom_flap2.ogg": {
+      "source": "minecraft/sounds/mob/phantom/flap2.ogg",
+      "sha256": "8a74282e3530b253ef2b61d316f4c0431f589e80b456e8316961a78150afa102"
+    },
+    "mob_phantom_flap3.ogg": {
+      "source": "minecraft/sounds/mob/phantom/flap3.ogg",
+      "sha256": "e125ca57c3397009492b739f39f51fa75f0131e15549085afd28615fc2c2978e"
+    },
+    "mob_phantom_flap4.ogg": {
+      "source": "minecraft/sounds/mob/phantom/flap4.ogg",
+      "sha256": "545b2691ee789cba89e1f87870792464bb94edce273411fad82ee0d2d382760a"
+    },
+    "mob_phantom_flap5.ogg": {
+      "source": "minecraft/sounds/mob/phantom/flap5.ogg",
+      "sha256": "7a2746e876c9e5fdece910f454d0b0211c60bc27db4c77e8029d35ee39da9c65"
+    },
+    "mob_phantom_flap6.ogg": {
+      "source": "minecraft/sounds/mob/phantom/flap6.ogg",
+      "sha256": "ac6b7303b6620404dbef4a8c977c53233d227769bad16edf10586deffdb1152f"
+    },
+    "random_glass1.ogg": {
+      "source": "minecraft/sounds/random/glass1.ogg",
+      "sha256": "0409013e382d13e121fe464fc99fae4262629e7f6a1f52cff3f5b3475a888c91"
+    },
+    "random_glass2.ogg": {
+      "source": "minecraft/sounds/random/glass2.ogg",
+      "sha256": "c226b5cbd76dcfae6d5f3252b8ccf996cec4e99b43ef0ca3ae6659c35cbf9867"
+    },
+    "random_glass3.ogg": {
+      "source": "minecraft/sounds/random/glass3.ogg",
+      "sha256": "1dd567dda2acb11b303d2592d6bf497ec92dd2818f2469addcb88f44ef052495"
+    },
+    "ambient_cave_cave1.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave1.ogg",
+      "sha256": "086721797a2ddcf6ba4b75cb9787a5340f10a5f73190f1310e4d80b3c7d29fb7"
+    },
+    "ambient_cave_cave2.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave2.ogg",
+      "sha256": "18f5b3001d55b17e767c0b0a13dee62240187d4960ae8c5eef1bea73d1df392a"
+    },
+    "ambient_cave_cave3.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave3.ogg",
+      "sha256": "dd96613af2ea1a58f6bfbe8c2f76c3bece7d7363dd5aeb57af6805546885d478"
+    },
+    "ambient_cave_cave4.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave4.ogg",
+      "sha256": "c667f11f5b8a2c901fb219544e021ee69fc3b0b894cb73a8a55aa5b063df9179"
+    },
+    "ambient_cave_cave5.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave5.ogg",
+      "sha256": "28fdeb79f5f1167031b56b9ce2057ab9221e4d31fb36c2d904051c5a0c22a85c"
+    },
+    "ambient_cave_cave6.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave6.ogg",
+      "sha256": "5f44293d146b2d017e218be222f2ca3d208c7326cacbbc1bac146147229468d5"
+    },
+    "ambient_cave_cave7.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave7.ogg",
+      "sha256": "35a908dc807f457c7355a2d4fa505b6ed3e0e3a0b4a0af5c8dbe954cd33c1bcb"
+    },
+    "ambient_cave_cave8.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave8.ogg",
+      "sha256": "c3ea580bb6d897c9ed6e741c13794a649adf5a13218365e80e2f52a13c467626"
+    },
+    "ambient_cave_cave9.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave9.ogg",
+      "sha256": "f189ae712700029de89f0463a15659547b36552c7878d00b18a7312f935ed8d1"
+    },
+    "ambient_cave_cave10.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave10.ogg",
+      "sha256": "ca537ff2e410b2dada414daf773897ea901f1d09ba33371ca8f4a0e2d6292855"
+    },
+    "ambient_cave_cave11.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave11.ogg",
+      "sha256": "bbf911dbe638faf9f3575fda5899380fc03aec2e861f31382e795786299b41ab"
+    },
+    "ambient_cave_cave12.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave12.ogg",
+      "sha256": "0765a53612d1f63152681752fa377a83dabb4d0317be610445b2afff3505e46d"
+    },
+    "ambient_cave_cave13.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave13.ogg",
+      "sha256": "d322af20706133b52baaa9778b9a53292cea145836206ce32fd1f42051c8cbe0"
+    },
+    "ambient_cave_cave14.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave14.ogg",
+      "sha256": "01ac94ef2ab9d5767aac53bab442e4618ca23820cc151ad1b9699663003ba5a0"
+    },
+    "ambient_cave_cave15.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave15.ogg",
+      "sha256": "0a5872006d1cd73efc223561f7a6a044ada070647392a8204f6340a3c7781757"
+    },
+    "ambient_cave_cave16.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave16.ogg",
+      "sha256": "b394585a2f83dbde23fdbdad76843906ff8d61b8c086692184df118f604b0630"
+    },
+    "ambient_cave_cave17.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave17.ogg",
+      "sha256": "60588f178668844945c25cffcf3a33938fc028a93fd653abb70504120918377a"
+    },
+    "ambient_cave_cave18.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave18.ogg",
+      "sha256": "c614f7112ec3155b8b8139e3582c0480cf9a49d906f2b9cd9c2bfd60d0a78ac7"
+    },
+    "ambient_cave_cave19.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave19.ogg",
+      "sha256": "3918c39e2510936761cc5f3e983e7f6bf98fea67c9029b311868d1ebb15a43e6"
+    },
+    "ambient_cave_cave20.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave20.ogg",
+      "sha256": "064e0622d54070fefe0dd13a35a240f1057f1ff08e02b461a22e3a945850ec4b"
+    },
+    "ambient_cave_cave21.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave21.ogg",
+      "sha256": "bcb9551b28541070f3eac94d977331c9342c48d1382937a608b7b23518960b68"
+    },
+    "ambient_cave_cave22.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave22.ogg",
+      "sha256": "f6cfbc03ede3a7c44fd3d2d1f0f4b6d1822edd74334b95275f3ee529410975fc"
+    },
+    "ambient_cave_cave23.ogg": {
+      "source": "minecraft/sounds/ambient/cave/cave23.ogg",
+      "sha256": "068eb390de1c23be4bb819dc8fffe628a0a3939a8c8e904a3b1b89f909142fdc"
+    },
+    "block_chest_open.ogg": {
+      "source": "minecraft/sounds/block/chest/open.ogg",
+      "sha256": "76546dea0576f1b89217d0bf7bcb0e2e46e7629e57f04ded7cb157e7dd6d06d2"
+    },
+    "mob_breeze_wind_burst1.ogg": {
+      "source": "minecraft/sounds/mob/breeze/wind_burst1.ogg",
+      "sha256": "d5abaa99669175dc787dea327bbcddddddaa9050dc0ddcfef4c17c2aedb0416e"
+    },
+    "mob_breeze_wind_burst2.ogg": {
+      "source": "minecraft/sounds/mob/breeze/wind_burst2.ogg",
+      "sha256": "d3261149c1ff02e02847d8ebc77591626327ce22ae5591d2b80f7799d392013e"
+    },
+    "mob_breeze_wind_burst3.ogg": {
+      "source": "minecraft/sounds/mob/breeze/wind_burst3.ogg",
+      "sha256": "363af7a5a5144798b3233268b90fc60e4763accefa21e8b1fb100c36014cab2c"
+    }
+  }
+}

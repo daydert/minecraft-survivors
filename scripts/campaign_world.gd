@@ -4,6 +4,10 @@ extends "res://scripts/world.gd"
 var win_music=false
 var boss_victory_serial=0
 var run_progress=preload("res://scripts/run_progress.gd").new()
+## Damage dealt per weapon in this run (presentation bookkeeping, never read by combat).
+var damage_by: Dictionary={}
+var damage_owner="sword"
+const OWNERS={"arrow":"bow","trident":"trident","fire":"fire","hoe":"hoe","hoe_spin":"hoe","bolt":"crossbow","rocket":"crossbow","hook":"fishing","cloud":"potion","bottle":"potion","fangs":"fangs","swing":"sword","axe_spin":"axe"}
 
 func chapter_number() -> int:
 	return 1
@@ -13,6 +17,7 @@ func reset(seed_value: int = 0):
 	db.configure(chapter_number())
 	win_music=false
 	boss_victory_serial=0
+	damage_by.clear()
 	super.reset(seed_value)
 	if chapter_number()==1:finale=preload("res://scripts/herobrine_encounter.gd").new()
 	run_progress.reset(chapter_number());run_progress.observe(self)
@@ -24,6 +29,21 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 
 func track_progress(dt: float):
 	run_progress.step(self,dt)
+
+func select_attack_owner(attack: Dictionary):
+	damage_owner=OWNERS.get(attack.get("kind",""),damage_owner)
+
+func update_attacks(dt: float):
+	damage_owner="sword"
+	super.update_attacks(dt)
+
+func move_mobs(dt: float):
+	damage_owner="fire"
+	super.move_mobs(dt)
+
+func hurt(m: Dictionary, amount: float, push: Vector2=Vector2.ZERO):
+	if m.hp>0 and amount>0:damage_by[damage_owner]=damage_by.get(damage_owner,0.0)+minf(amount,m.hp)
+	super.hurt(m,amount,push)
 
 func damage_player(amount: float):
 	var before=hp

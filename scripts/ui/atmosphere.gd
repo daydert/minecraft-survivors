@@ -120,7 +120,8 @@ static func fireflies(g, offset: Vector2) -> Array:
 	return result
 
 static func mist(g, offset: Vector2):
-	var amount := night(g)
+	var fog: float = g.world.fog_amount() if g.world.has_method("fog_amount") else 0.0
+	var amount := minf(1.0, night(g) + fog * 2.5)
 	if amount <= 0.02 or g.world.finale.active:
 		return
 	var cam: Vector2 = -offset + Vector2(320, 180)
@@ -134,7 +135,9 @@ static func mist(g, offset: Vector2):
 			var p := Vector2(cx * 220 + hash01(cx, cy, 32) * 160, cy * 220 + hash01(cx, cy, 33) * 160) + Vector2(clock * 3.0 + sin(clock * 0.1 + cx) * 30, 0) + offset
 			var size := Vector2(110, 34) * (0.8 + hash01(cx, cy, 34) * 0.6)
 			for k in range(4):
-				g.oval(p, size * (1.0 - k * 0.2), Color(0.62, 0.7, 0.82, 0.018 * amount))
+				g.oval(p, size * (1.0 - k * 0.2), Color(0.62, 0.7, 0.82, 0.018 * amount * (1.0 + fog * 2.0)))
+	if fog > 0:
+		g.draw_rect(Rect2(0, 0, 640, 360), Color(0.55, 0.6, 0.66, 0.13 * fog))
 
 # ------------------------------------------------------------------ chapter II
 
@@ -188,6 +191,11 @@ static func collect(g, offset: Vector2):
 	if g.is_nether():
 		nether_lights(g, offset)
 		return
+	if "landmarks" in g.world:
+		for mark in g.world.landmarks:
+			if mark.kind == "mine_entrance":
+				var flick := 1.0 + 0.07 * sin(g.world.clock * 11.0) + 0.04 * sin(g.world.clock * 23.0)
+				g.ambient_lights.append({"p": mark.p + Vector2(-20, -22), "r": 70.0 * flick, "c": Color(1.0, 0.6, 0.25), "power": 0.9, "glow": 0.22})
 	for f in fireflies(g, offset):
 		g.ambient_lights.append({"p": f.p, "r": 22.0, "c": Color(0.85, 1.0, 0.45), "power": 0.55 * f.blink, "glow": 0.22 * f.blink})
 

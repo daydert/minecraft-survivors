@@ -34,6 +34,7 @@ func _ready():
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/ghast_intro_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/end_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/achievement_audio.json")),true)
+	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/v2_audio.json")),true)
 	for path in ["music","music_2","music_3"]:
 		playlist.append(load("res://assets/audio/"+path+".ogg"))
 	music=AudioStreamPlayer.new()

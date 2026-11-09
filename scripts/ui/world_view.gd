@@ -12,6 +12,7 @@ static func draw_world(g):
 	var cam = g.world.camera()
 	if g.world.state == "MENU": cam = Vector2(1024+sin(g.ui_time*0.06)*32,1024+cos(g.ui_time*0.08)*24)
 	var offset = Vector2(320,180)-cam.floor()
+	if not g.coop.active and not g.world.finale.active and (not g.is_nether() or g.world.stage=="survival"):offset-=g.cam_lead.round()
 	if g.world.shake > 0 and g.settings.shake and g.world.state in ["RUNNING","FINALE"]: offset += Vector2(sin(g.world.clock*75),cos(g.world.clock*87)).round()*1.5
 	if g.is_nether():g.nether_renderer.ground(g,offset)
 	elif g.textures.has("ground"):
@@ -20,6 +21,7 @@ static func draw_world(g):
 	if g.world.finale.active:
 		g.draw_texture_rect_region(g.textures.ground_scorched,Rect2(0,0,640,360),Rect2(cam-Vector2(320,180),Vector2(640,360)),Color(1,1,1,g.world.finale.scorch()))
 	if not g.is_nether():Atmosphere.overworld_grass(g,offset)
+	if "water" in g.world and not g.world.water.is_empty():draw_water(g,offset)
 	# Short rail fence and dense forest at the edge of a finite arena.
 	for side in range(4):
 		for j in range(64):
@@ -46,6 +48,12 @@ static func draw_world(g):
 	if g.world.finale.active:g.finale_renderer.floor_effects(g,offset)
 	for m in g.world.mobs:
 		var p: Vector2 = m.p+offset
+		if m.kind == "phantom" and m.phase in ["windup","dive"]:
+			# Dive telegraph: the shadow's landing mark, tightening as the dive nears.
+			var mark: Vector2 = m.mark+offset
+			var k: float = 1.0-m.timer/0.75 if m.phase=="windup" else 1.0
+			g.oval(mark,Vector2(14,5)*(1.6-k*0.6),Color(0.15,0.2,0.5,0.22))
+			g.draw_arc(mark,12.0*(1.6-k*0.6),0,TAU,20,Color(0.55,0.65,1.0,0.5),1)
 		if m.kind == "ravager" and m.phase == "windup":
 			var dir: Vector2 = m.charge
 			var edge = dir.orthogonal()*23
@@ -60,6 +68,9 @@ static func draw_world(g):
 		if Rect2(-80,-80,800,540).has_point(obj.p+offset): actors.append({"sort":obj.p.y,"kind":"prop","obj":obj})
 	for m in g.world.mobs:
 		if Rect2(-140,-140,920,640).has_point(m.p+offset): actors.append({"sort":m.p.y,"kind":"mob","obj":m})
+	if "landmarks" in g.world:
+		for mark in g.world.landmarks:
+			if mark.kind!="pond" and Rect2(-120,-120,880,600).has_point(mark.p+offset):actors.append({"sort":mark.p.y,"kind":"landmark","obj":mark})
 	if g.coop.active and (g.coop.running or g.coop.loading):
 		g.world.save_actor()
 		for a in g.world.players.values():
@@ -71,6 +82,11 @@ static func draw_world(g):
 	for actor in actors:
 		if actor.kind=="throne":
 			g.finale_renderer.stage(g,offset)
+		elif actor.kind=="landmark":
+			var mark=actor.obj
+			var anchor: Vector2={"ruin_0":Vector2(52,60),"ruin_1":Vector2(52,60),"well":Vector2(32,52),"mine_entrance":Vector2(48,60),"bastion":Vector2(96,104)}[mark.kind]
+			g.oval(mark.p+offset+Vector2(0,2),Vector2(80,14) if mark.kind=="bastion" else Vector2(34,8) if mark.kind!="well" else Vector2(20,6),Color(0.05,0.1,0.05,0.3))
+			g.sprite(mark.kind,(mark.p+offset-anchor).floor())
 		elif actor.kind == "prop":
 			var obj = actor.obj
 			var p: Vector2 = obj.p+offset
@@ -111,7 +127,13 @@ static func draw_world(g):
 			var tint = Color.WHITE
 			if g.settings.flashes and (m.flash>0 or (m.kind=="creeper" and m.fuse>=0 and fmod(g.world.clock,0.16)<0.08)): tint = Color(1.8,1.8,1.8)
 			if g.is_nether() and m.kind=="wither":g.nether_renderer.boss(g,m,offset)
+			elif m.kind=="phantom":
+				var lift: float=m.get("altitude",0.0)
+				g.oval(m.p+offset+Vector2(0,1),Vector2(12,3)*(1.0-lift/120.0),Color(0.02,0.04,0.12,0.45-lift/200.0))
+				draw_actor(g,m.kind,m.p+offset-Vector2(0,lift),m.visual_dir,m.animation,m.moving,tint,m.phase,1.0,m.visual)
 			else:draw_actor(g,m.kind,m.p+offset,m.visual_dir,m.animation,m.moving,tint,m.phase,1.0,m.visual)
+			if m.get("blood_moon",false):
+				g.draw_rect(Rect2((m.p+offset+Vector2(-1,-30)).floor(),Vector2(2,2)),Color(0.9,0.1,0.1,0.8))
 			if m.kind=="skeleton" and m.visual.state in ["windup","attack","recover"]:
 				var aim:Vector2=m.visual_dir
 				draw_bow(g,m.p+offset+aim*8+Vector2(0,-10),aim,clampf(m.visual.time/0.5,0,1) if m.visual.state=="windup" else 0)
@@ -145,6 +167,10 @@ static func draw_world(g):
 	Atmosphere.collect(g,offset)
 	Lighting.draw(g,offset)
 	Atmosphere.after_lighting(g,offset)
+	if "bastion" in g.world and g.world.bastion.get("state","") in ["open","assault"] and not g.world.visible(g.world.bastion.p,0):
+		var dir: Vector2 = g.world.camera().direction_to(g.world.bastion.p)
+		var q: Vector2 = Vector2(320,180)+dir*Vector2(292,134)
+		g.draw_colored_polygon(PackedVector2Array([q+dir*8,q-dir*5+dir.orthogonal()*6,q-dir*5-dir.orthogonal()*6]),Color(1,0.75,0.25))
 	for m in g.world.mobs:
 		if m.kind not in ["elite","ravager"] or g.world.visible(m.p,0): continue
 		var dir = g.world.camera().direction_to(m.p)
@@ -153,6 +179,21 @@ static func draw_world(g):
 	if g.is_nether():g.nether_renderer.foreground(g,offset)
 	if g.world.finale.active:g.finale_renderer.foreground(g,offset)
 	if saved_actor: g.world.use_actor(saved_actor)
+
+static func draw_water(g, offset: Vector2):
+	var cam: Vector2=-offset+Vector2(320,180)
+	var t0:=Vector2i(((cam-Vector2(330,190))/16).floor())
+	var t1:=Vector2i(((cam+Vector2(330,190))/16).ceil())
+	var time: float=g.world.clock if g.world.state!="MENU" else g.ui_time
+	for ty in range(t0.y,t1.y):
+		for tx in range(t0.x,t1.x):
+			if not g.world.water.has(Vector2i(tx,ty)):continue
+			var q: Vector2=Vector2(tx,ty)*16+offset
+			g.draw_rect(Rect2(q-Vector2(2,2),Vector2(20,20)),Color(0.22,0.18,0.1,0.55))
+	for ty in range(t0.y,t1.y):
+		for tx in range(t0.x,t1.x):
+			if not g.world.water.has(Vector2i(tx,ty)):continue
+			g.draw_clip("water_animation",Vector2(tx,ty)*16+offset,Vector2(16,16),time+float((tx*7+ty*3)%5)*0.05)
 
 static func draw_nickname(g, value: String, at: Vector2):
 	var width = g.font.get_string_size(value,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
@@ -178,7 +219,7 @@ static func draw_actor(g, kind: String, p: Vector2, dir: Vector2, anim: float, m
 	if g.world.animation.data.actors.get(kind,{}).has("shadow_size"):
 		var shadow=g.world.animation.data.actors[kind].shadow_size
 		shadow_size=Vector2(shadow[0],shadow[1])
-	g.oval(p+Vector2(0,1),shadow_size,Color(0.06,0.12,0.1,0.4))
+	if not visual.get("airborne",false):g.oval(p+Vector2(0,1),shadow_size,Color(0.06,0.12,0.1,0.4))
 	var actor_anchor=Vector2(size.x/2,size.y-3)
 	if g.world.animation.data.actors.has(kind) and g.world.animation.data.actors[kind].has("anchor"):
 		var anchor=g.world.animation.data.actors[kind].anchor;actor_anchor=Vector2(anchor[0],anchor[1])
@@ -352,5 +393,27 @@ static func draw_effect(g, e: Dictionary, offset: Vector2):
 		"damage":
 			if g.settings.numbers:g.text_at(str(e.amount),p+Vector2(-4,-progress*13),8,Color("eddda9"),true)
 		"player_hit":pass
+		"witch_potion":
+			var k: float=clampf(e.age/e.total,0,1)
+			var target: Vector2=e.end+offset
+			g.oval(target,Vector2(e.radius,e.radius*0.4),Color(0.45,0.15,0.45,0.1+k*0.12))
+			g.draw_arc(target,e.radius,0,TAU,24,Color(0.75,0.4,0.85,0.25+k*0.35),1)
+			var start: Vector2=e.start+offset
+			var q: Vector2=start.lerp(target,k)-Vector2(0,sin(k*PI)*34+10*(1-k))
+			g.draw_set_transform(q,k*TAU*1.5)
+			g.sprite("icon_potion",Vector2(-8,-8),Vector2(16,16),Color(0.85,0.5,1.0))
+			g.draw_set_transform(Vector2.ZERO)
+		"potion_splash":
+			var k: float=clampf(e.age/e.total,0,1)
+			for j in range(10):
+				var dir=Vector2.from_angle(j*TAU/10+0.2)
+				g.draw_rect(Rect2((p+dir*Vector2(1,0.5)*e.radius*k-Vector2(0,4)).floor(),Vector2(2,2)),Color(0.75,0.35,0.85,1-k))
+			g.oval(p,Vector2(e.radius,e.radius*0.4)*k,Color(0.55,0.2,0.6,0.25*(1-k)))
+		"witch_heal":
+			var k: float=clampf(e.age/e.total,0,1)
+			for j in range(12):
+				var dir=Vector2.from_angle(j*2.4)
+				var q=p+dir*e.radius*0.6*sqrt(float(j)/12)-Vector2(0,k*24+j%3*3)
+				g.draw_rect(Rect2(q.floor(),Vector2(2,2)),Color(1.0,0.4,0.55,(1-k)*0.9))
 		"break":
 			for j in range(5):g.draw_rect(Rect2(p+Vector2.from_angle(j*TAU/5)*progress*15,Vector2(3,3)),Color("c89850"))

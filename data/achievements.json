@@ -83,5 +83,47 @@
     "tier": "secret",
     "icon": "herobrine",
     "secret": true
+  },
+  {
+    "id": "blood_moon",
+    "name": "Под кровавой луной",
+    "description": "Пережить кровавую луну в главе I.",
+    "tier": "easy",
+    "icon": "blood_moon"
+  },
+  {
+    "id": "end_city",
+    "name": "Пурпурный тайник",
+    "description": "Открыть сундук в городе Края.",
+    "tier": "easy",
+    "icon": "end_city"
+  },
+  {
+    "id": "witch_hunter",
+    "name": "Охота на ведьм",
+    "description": "Победить 12 ведьм за один забег.",
+    "tier": "medium",
+    "icon": "witch_hunter"
+  },
+  {
+    "id": "phantom_slayer",
+    "name": "Бессонница",
+    "description": "Победить 10 фантомов за один забег.",
+    "tier": "medium",
+    "icon": "phantom_slayer"
+  },
+  {
+    "id": "bastion",
+    "name": "Бастион взят",
+    "description": "Удержать бастион до конца штурма.",
+    "tier": "medium",
+    "icon": "bastion"
+  },
+  {
+    "id": "windswept",
+    "name": "Против ветра",
+    "description": "Пережить пять порывов бездны, ни разу не упав.",
+    "tier": "hard",
+    "icon": "windswept"
   }
 ]

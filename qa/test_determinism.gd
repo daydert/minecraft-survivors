@@ -15,6 +15,7 @@ func scenarios() -> Array:
 		{"id":"coop_base_ch1","script":"res://scripts/world.gd","seed":151,"style":"sword","seconds":300.0},
 		{"id":"campaign_ch1","script":"res://scripts/campaign_world.gd","seed":152,"style":"bow","seconds":300.0},
 		{"id":"campaign_ch1_boss","script":"res://scripts/campaign_world.gd","seed":153,"style":"sword","seconds":150.0,"start":705.0},
+		{"id":"overworld_night","script":"res://scripts/overworld_world.gd","seed":158,"style":"sword","seconds":420.0,"start":170.0},
 		{"id":"nether","script":"res://scripts/nether_world.gd","seed":154,"style":"sword","seconds":300.0},
 		{"id":"nether_boss","script":"res://scripts/nether_world.gd","seed":155,"style":"random","seconds":180.0,"start":705.0},
 		{"id":"end","script":"res://scripts/end_world.gd","seed":156,"style":"sword","seconds":300.0},
