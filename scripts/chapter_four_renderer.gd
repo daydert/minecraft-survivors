@@ -4,6 +4,7 @@ extends RefCounted
 const EnemyView=preload("res://scripts/chapter_four_enemy_view.gd")
 const Tells=preload("res://scripts/chapter_four_tells.gd")
 const Horror=preload("res://scripts/chapter_four_horror.gd")
+const FinaleView=preload("res://scripts/chapter_four_finale_view.gd")
 const ArsenalView=preload("res://scripts/chapter_four_arsenal_view.gd")
 const EncounterView=preload("res://scripts/chapter_four_encounter_view.gd")
 const Lighting = preload("res://scripts/ui/lighting.gd")
@@ -21,6 +22,7 @@ func world(g):
 	EnemyView.floor_layer(g,offset)
 	ArsenalView.floor_layer(g,offset)
 	EncounterView.floor_layer(g,offset)
+	FinaleView.floor_layer(g,offset)
 	for mark in w.landmarks:
 		if mark.kind == "crucifix":pillar_floor(g, mark, offset)
 		if mark.get("attack", "") == "windup" and mark.kind == "torch":
@@ -39,7 +41,9 @@ func world(g):
 		if Rect2(-100,-100,840,560).has_point(m.p+offset):actors.append({"sort":m.p.y,"kind":"mob","obj":m})
 	for o in w.loot:
 		if Rect2(-24,-24,688,408).has_point(o.p+offset):actors.append({"sort":o.p.y,"kind":"loot","obj":o})
-	actors.append({"sort":w.player.y,"kind":"player"})
+	var close_up: bool = w.ending.phase in ["three","death","retry"]
+	if not close_up:actors.append({"sort":w.player.y,"kind":"player"})
+	if not w.ending.hb.is_empty() and not close_up and w.ending.phase not in ["coords","road","door","done"]:actors.append({"sort":w.ending.hb.p.y,"kind":"herobrine"})
 	EncounterView.append_actors(g,actors)
 	if w.build.has("embryo"):actors.append({"sort":w.arsenal.pet.p.y,"kind":"pet"})
 	if not w.blood_hand.is_empty():actors.append({"sort":w.blood_hand.p.y+2,"kind":"hand"})
@@ -69,6 +73,7 @@ func world(g):
 				var o = actor.obj
 				g.item_icon(o.kind, o.p+offset-Vector2(8,16+sin(w.clock*3)*2))
 			"hand":hand(g,offset)
+			"herobrine":FinaleView.herobrine(g,offset)
 	for o in w.orbs:
 		var p: Vector2 = (o.p+offset).floor()
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2(p-Vector2(4,5),Vector2(8,8)),Rect2(0,0,16,16),Color(.6,1,.4))
@@ -76,8 +81,10 @@ func world(g):
 	EnemyView.projectiles(g,offset)
 	ArsenalView.air_layer(g,offset)
 	EncounterView.air_layer(g,offset)
+	FinaleView.air_layer(g,offset)
 	for e in w.effects:
-		if EncounterView.effect(g,e,offset):pass
+		if FinaleView.effect(g,e,offset):pass
+		elif EncounterView.effect(g,e,offset):pass
 		elif ArsenalView.effect(g,e,offset):pass
 		elif EnemyView.effect(g,e,offset):pass
 		elif e.kind == "ch4_arc":arc(g,e,offset)
@@ -92,12 +99,15 @@ func world(g):
 			g.draw_rect(Rect2((particle.p+offset).floor(),Vector2.ONE*ceilf(particle.get("size",2))),Color(particle.color,clampf(particle.life/.1,0,1)))
 	Atmosphere.collect(g,offset)
 	EncounterView.lights(g)
+	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","one","two","kneel"]:
+		g.ambient_lights.append({"p":w.ending.hb.p-Vector2(0,26),"r":46.0,"c":Color(.9,.92,1.0),"power":.45,"glow":.04})
 	Lighting.draw(g,offset)
 	Horror.fog(g,offset)
 	Atmosphere.after_lighting(g,offset)
 	Horror.watcher(g,offset)
 	Horror.eyes(g,offset)
 	Horror.grade(g)
+	FinaleView.overlay(g,offset)
 	if w.stage == "arrival":arrival(g)
 	EncounterView.cinematic(g)
 

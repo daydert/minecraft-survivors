@@ -6,6 +6,7 @@ const Enemies = preload("res://scripts/chapter_four_enemies.gd")
 const Equipment = preload("res://scripts/chapter_four_equipment.gd")
 var arsenal = preload("res://scripts/chapter_four_arsenal.gd").new()
 var encounters = preload("res://scripts/chapter_four_encounters.gd").new()
+var ending = preload("res://scripts/chapter_four_finale.gd").new()
 var enemy_shots: Array = []
 var enemy_fields: Array = []
 var enemy_bottles: Array = []
@@ -49,6 +50,7 @@ func reset(seed_value: int = 0):
 		var special: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_encounter_assets.json"))
 		animation.data.actors.merge(special.actors,true)
 	encounters.reset(self)
+	ending.reset(self)
 	stage = "arrival"
 	facing = Vector2.UP
 
@@ -186,9 +188,12 @@ func move_actor(p: Vector2, velocity: Vector2, radius: float) -> Vector2:
 	# Keep long steps from tunnelling through the ruined walls and pyramid.
 	var steps := maxi(1, ceili(velocity.length() / 4.0))
 	for i in range(steps):p = super.move_actor(p, velocity / steps, radius)
+	if stage == "finale" and ending.fighting():
+		p = p.clamp(ending.arena.position + Vector2.ONE * (8 + radius), ending.arena.end - Vector2.ONE * (8 + radius))
 	return p
 
 func camera() -> Vector2:
+	if stage == "finale" and ending.phase not in ["", "summit"]:return ending.camera(self)
 	var cam: Vector2 = super.camera()
 	if stage == "arrival":cam += Vector2(0, -24 * (1 - smoothstep(0, float(db.data.chapter_four.arrival_duration), stage_age)))
 	return cam
@@ -200,7 +205,7 @@ func rebuild_hit_grid():
 		var cell := Vector2i(m.p / CELL)
 		if not hit_grid.has(cell):hit_grid[cell] = []
 		hit_grid[cell].append(m)
-	for m in encounters.candidates():
+	for m in ending.candidates()+encounters.candidates():
 		var cell:=Vector2i(m.p/CELL)
 		if not hit_grid.has(cell):hit_grid[cell]=[]
 		hit_grid[cell].append(m)
@@ -209,6 +214,7 @@ func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if m.get("allied",false) or m.hp<=0:return
 	if not arsenal.piercing:amount*=1-clampf(float(m.get("guard",0)),0,.8)
 	amount*=1+minf(4,m.get("ch4_cracks",0))*.025
+	if m.has("finale_actor"):ending.hurt(self,m,amount,push);return
 	if m.has("encounter_actor"):encounters.hurt(self,m,amount,push);return
 	var before: float=m.hp
 	if not m.has("attack"):
@@ -245,6 +251,7 @@ func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 		sound("ch4_break")
 
 func hook_target(m: Dictionary, evolved_hook: bool):
+	if m.has("finale_actor"):ending.hooked(self,m);return
 	if m.get("encounter_actor","") in ["golem","golem_node","guardian_torch"]:return
 	if m.get("encounter_actor","")=="mass_part":m=encounters.mass
 	if not m.has("attack"):
@@ -353,6 +360,14 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		if stage_age >= float(db.data.chapter_four.arrival_duration):stage = "survival";stage_age = 0
 		return
 	time = minf(db.data.duration, time + dt)
+	if stage == "survival" and time >= float(db.data.duration) and not ending.active():
+		stage = "finale";ending.begin_summit(self)
+	if stage == "finale" and ending.locked():
+		var before_lock: Vector2 = player
+		ending.step(self,dt,movement)
+		player_visual.travel = before_lock.distance_to(player);player_moving = player_visual.travel > .0001
+		animation.advance(self, dt);update_particles(dt);update_effects(dt)
+		return
 	arsenal.tick(self,dt,movement)
 	var before: Vector2 = player
 	if arsenal.bat_left>0:
@@ -367,7 +382,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	flow_timer -= dt
 	if flow_timer <= 0 and flow_cell != Vector2i(player / CELL):update_flow();flow_timer = .25
 	update_aura()
-	if not db.data.chapter_four.exploration_only and time<float(db.data.duration):spawn_wave(dt)
+	if not db.data.chapter_four.exploration_only and time<float(db.data.duration) and stage == "survival":spawn_wave(dt)
 	move_mobs(dt)
 	encounters.tick(self,dt)
 	rebuild_hit_grid()
@@ -380,6 +395,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	Enemies.poses(self)
 	encounters.poses(self)
 	if hp<=0:try_totem()
+	if stage == "finale":ending.step(self,dt,movement)
 	if hp <= 0:
 		state = "RESULT";victory = false;sound("death");return
 	if xp >= db.required_xp(level):next_level()

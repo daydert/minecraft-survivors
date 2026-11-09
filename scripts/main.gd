@@ -115,6 +115,7 @@ func _focus_lost():
 
 func _physics_process(delta):
 	if quitting:return
+	if is_four():world.ending.hold=Input.is_physical_key_pressed(KEY_SPACE) or Input.is_physical_key_pressed(KEY_J) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 	var movement = Vector2.ZERO
 	if Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT): movement.x -= 1
 	if Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT): movement.x += 1
@@ -162,7 +163,8 @@ func _process(delta):
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
 	var theme="victory" if world.get("win_music")==true else "endersteve" if is_end() and world.stage in ["betrayal","last_arrival","last_duel","endsteve_death","hand","hand_pickup","return_portal","portal_ready","rekindle","exit_jump","chapter_four"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
-	audio.set_music_context(("chapter_four_pyramid" if world.encounters.current=="guardian" else "chapter_four") if is_four() else theme,world.state not in ["MENU","RESULT"])
+	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four")
+	audio.set_music_context(four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
 	update_camera_lead()
 	ui_time += delta
@@ -196,6 +198,14 @@ func _process(delta):
 		RenderingServer.force_draw(false)
 
 func _input(event):
+	if is_four() and world.stage=="finale" and world.ending.phase=="three" and world.state=="RUNNING" and screen.is_empty():
+		var qte_action := ""
+		if event is InputEventKey and event.pressed and not event.echo:
+			var code: int=event.physical_keycode if event.physical_keycode!=0 else event.keycode
+			qte_action={KEY_A:"left",KEY_LEFT:"left",KEY_D:"right",KEY_RIGHT:"right",KEY_W:"up",KEY_UP:"up",KEY_S:"down",KEY_DOWN:"down",KEY_SPACE:"attack",KEY_J:"attack",KEY_ENTER:"attack"}.get(code,"")
+		elif event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:qte_action="attack"
+		if not qte_action.is_empty():
+			world.ending.press(qte_action);return
 	if screen == "multiplayer" and event is InputEventKey and (nickname_field.has_focus() or address_field.has_focus()) and event.keycode not in [KEY_ESCAPE,KEY_F11,KEY_F8]: return
 	if event is InputEventMouseMotion:
 		mouse = get_global_mouse_position()
@@ -520,7 +530,7 @@ func draw_scene():
 		finale_renderer.ending(self)
 		return
 	WorldView.draw_world(self)
-	if (not is_four() or world.stage != "arrival") and world.state != "MENU" and (not world.finale.active or world.finale.phase in ["storm","inferno"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]):Hud.draw_hud(self)
+	if (not is_four() or (world.stage != "arrival" and not world.ending.locked())) and world.state != "MENU" and (not world.finale.active or world.finale.phase in ["storm","inferno"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]):Hud.draw_hud(self)
 	if screen=="chapters":MenuScreens.draw_chapters(self)
 	elif screen == "multiplayer": MenuScreens.draw_multiplayer(self)
 	elif not screen.is_empty(): MenuScreens.draw_settings(self)

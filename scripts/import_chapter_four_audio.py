@@ -72,6 +72,32 @@ def generate():
         'ch4_stone_rise': ('block.piston.extend', .6),
         'ch4_stone_hit': ('block.deepslate.hit', .45),
         'ch4_ground_slam': ('entity.iron_golem.attack', .55),
+        # Finale: Herobrine, the fistfight, his death and the door.
+        'ch4_hb_twitch': ('entity.creaking.twitch', .55),
+        'ch4_hb_freeze': ('entity.creaking.freeze', .55),
+        'ch4_hb_teleport': ('entity.enderman.teleport', .4),
+        'ch4_hb_charge': ('block.respawn_anchor.charge', .45),
+        'ch4_hb_lightning': ('entity.lightning_bolt.thunder', .35),
+        'ch4_hb_fire': ('item.firecharge.use', .5),
+        'ch4_hb_blackhole': ('block.conduit.activate', .65),
+        'ch4_hb_collapse': ('entity.generic.explode', .55),
+        'ch4_hb_rift': ('block.sculk_catalyst.bloom', .7),
+        'ch4_hb_blitz': ('entity.breeze.wind_burst', .55),
+        'ch4_hb_rain': ('entity.arrow.shoot', .3),
+        'ch4_hb_day': ('block.conduit.ambient', .7),
+        'ch4_hb_pulse': ('block.beacon.power_select', .4),
+        'ch4_hb_shatter': ('block.glass.break', .75),
+        'ch4_hb_glitch': ('entity.elder_guardian.curse', .45),
+        'ch4_punch': ('entity.player.attack.strong', .75),
+        'ch4_punch_heavy': ('entity.player.attack.knockback', .8),
+        'ch4_punch_miss': ('entity.player.attack.nodamage', .55),
+        'ch4_hurt': ('entity.player.hurt', .7),
+        'ch4_breath': ('entity.player.breath', .55),
+        'ch4_body_fall': ('entity.player.big_fall', .7),
+        'ch4_bone_crack': ('block.bone_block.break', .8),
+        'ch4_head_break': ('entity.zombie.break_wooden_door', .75),
+        'ch4_door_open': ('block.iron_door.open', .6),
+        'ch4_door_close': ('block.iron_door.close', .85),
     }
     output = ROOT / 'assets/audio/chapter_four'
     output.mkdir(exist_ok=True)
@@ -94,6 +120,12 @@ def generate():
     content = raw('sounds/' + track['name'] + '.ogg')
     (output / 'pyramid_5.ogg').write_bytes(content)
     manifest['pyramid_5.ogg'] = dict(source='minecraft/sounds/' + track['name'] + '.ogg', sha256=hashlib.sha256(content).hexdigest())
+    # Finale music from the same client: tense, then relentless, then quiet.
+    for disc, filename in [('music_disc.precipice', 'precipice.ogg'), ('music_disc.creator', 'creator.ogg'), ('music_disc.relic', 'relic.ogg')]:
+        track = next(variants(disc))
+        content = raw('sounds/' + track['name'] + '.ogg')
+        (output / filename).write_bytes(content)
+        manifest[filename] = dict(source='minecraft/sounds/' + track['name'] + '.ogg', sha256=hashlib.sha256(content).hexdigest())
     (ROOT / 'data/chapter_four_audio.json').write_text(json.dumps(mapping, indent=2) + '\n')
     (ROOT / 'docs/CHAPTER_FOUR_AUDIO_MANIFEST.json').write_text(json.dumps(dict(version=version, files=manifest), indent=2) + '\n')
     print('Chapter IV audio:', len(manifest), 'original OGG files')

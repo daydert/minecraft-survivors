@@ -1,0 +1,62 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    }
+  },
+  "derived": {
+    "ch4_hb_calm": {
+      "sources": [
+        "entity/player/wide/steve (white eyes, calm mouth texels)"
+      ],
+      "size": [
+        2832,
+        168
+      ],
+      "sha256": "91d4f15f2c0322895b7950f65a6b69305c45d2fd0c1d04c850f91fecabe5c498"
+    },
+    "ch4_hb_smile": {
+      "sources": [
+        "entity/player/wide/steve (white eyes, smile mouth texels)"
+      ],
+      "size": [
+        2832,
+        168
+      ],
+      "sha256": "8841857ec61b1c109964a80e3064d217241466af2a7643a80d0263d58008ba6e"
+    },
+    "ch4_hb_rage": {
+      "sources": [
+        "entity/player/wide/steve (white eyes, rage mouth texels)"
+      ],
+      "size": [
+        2832,
+        168
+      ],
+      "sha256": "f53cbafe6de4c540fd798ee7420ff3710c0362b8145e31d6687185b5d3ffd700"
+    },
+    "ch4_hb_dim": {
+      "sources": [
+        "entity/player/wide/steve (white eyes, dim mouth texels)"
+      ],
+      "size": [
+        2832,
+        168
+      ],
+      "sha256": "09edcf897ac41a1ac0bfd8ea1f1ec58ab1e037649176175d6fed7f1569ab4fdc"
+    },
+    "ch4_fist_steve": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        1920,
+        168
+      ],
+      "sha256": "48190755654664fd1dbc32dd2e5bbb936754dbda32c0c1b96f66cd7ac2811ed4"
+    }
+  }
+}

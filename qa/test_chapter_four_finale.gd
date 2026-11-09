@@ -1,0 +1,127 @@
+extends SceneTree
+## Chapter IV finale end to end: summit, intro, both stages and every attack,
+## the erase, the fistfight QTE, death, coordinates, road, door and the retries.
+const FW=preload("res://scripts/chapter_four_world.gd")
+var checks=0
+var failures=[]
+func _initialize():run.call_deferred()
+func check(ok: bool, label: String):
+	checks+=1
+	if ok:print("PASS: ",label)
+	else:failures.append(label);push_error(label)
+func advance(w, seconds: float):
+	for i in range(ceili(seconds*60)):w.step(1.0/60)
+func until(w, condition: Callable, limit: float) -> bool:
+	for i in range(ceili(limit*60)):
+		if condition.call():return true
+		w.step(1.0/60)
+	return condition.call()
+
+func fresh():
+	var w=FW.new();w.reset(724);w.state="RUNNING";w.stage="survival";w.stage_age=10;w.note_presented=true
+	w.db.data.chapter_four.exploration_only=true;w.build={};w.time=719.95
+	return w
+
+func run():
+	var w=fresh();var e=w.ending
+	advance(w,.2)
+	check(w.stage=="finale" and e.phase=="summit","At 12:00 the waves stop and the pyramid calls")
+	check(w.mobs.filter(func(m):return m.has("form") and m.hp>0).is_empty(),"Remaining mobs dissolve at the summit")
+	w.player=e.center+Vector2(0,150);advance(w,.05)
+	check(e.phase=="intro" and not e.hb.is_empty(),"Approaching the arena starts Herobrine's introduction")
+	check(e.locked() and w.camera().distance_to(w.player)>=0,"The introduction holds the world still")
+	var said=false
+	for i in range(ceili(8*60)):
+		w.step(1.0/60)
+		if e.text_events.any(func(t):return t.text=="Ты опять здесь."):said=true
+	check(said,"Herobrine says «Ты опять здесь.» without surprise")
+	check(e.phase=="one" and e.fighting(),"Stage I begins after the introduction")
+	w.rebuild_hit_grid()
+	check(w.in_radius(e.hb.p,30).has(e.hb),"Herobrine is a real target for every weapon")
+	var before=e.hb.hp;w.hurt(e.hb,100.0);check(e.hb.hp==before-100.0 and w.damage_by.get(w.damage_owner,0)>=100,"Hits damage Herobrine and are attributed")
+	w.invulnerable=0;w.hp=20
+	e.start(w,"lightning");var marked=e.marks.size()==3
+	w.player=e.marks[0].p;advance(w,1.0)
+	check(marked and w.hp<20,"Lightning marks strike where they were shown")
+	w.hp=20;w.invulnerable=0;e.start(w,"ring");var gap=e.rings[0].gap;var ring_center=e.rings[0].p
+	w.player=ring_center+Vector2.from_angle(gap)*40;advance(w,2.4)
+	check(w.hp==20,"The gap in the fire ring is a safe way out")
+	w.hp=20;w.invulnerable=0;e.start(w,"strike");w.player=e.lanes[0].a.lerp(e.lanes[0].b,.6);advance(w,.8)
+	check(w.hp<20,"The blink strike hits along its cracked lane")
+	e.hb.hp=e.hb.max_hp*.5;e.looked=false;w.hurt(e.hb,1.0)
+	check(e.move=="look","A strong blow makes him look at his hand")
+	w.hurt(e.hb,e.hb.hp+10)
+	check(e.phase=="kneel" and e.locked(),"At zero he drops to one knee")
+	said=false
+	for i in range(ceili(7*60)):
+		w.step(1.0/60)
+		if e.text_events.any(func(t):return t.text=="Хорошо. Давай всерьёз."):said=true
+	check(said and e.phase=="two" and e.hb.hp==float(e.data.two.hp),"«Хорошо. Давай всерьёз.» opens stage II at full strength")
+	for name in ["hole","blitz","rain","rift","tear"]:
+		w.hp=20;w.invulnerable=0;e.start(w,name);var ok=until(w,func():return e.move=="rest",14.0)
+		check(ok and w.hp>0,"Stage II pattern "+name+" plays through and ends in a response window")
+	w.hp=20;w.invulnerable=999;e.start(w,"rift");advance(w,1.4)
+	var walls=0
+	for cell in w.solid_grid:
+		walls+=w.solid_grid[cell].filter(func(o):return o.get("rift",false)).size()
+	check(walls>0,"Raised rift strips block movement")
+	until(w,func():return e.move=="rest",10.0)
+	walls=0
+	for cell in w.solid_grid:
+		walls+=w.solid_grid[cell].filter(func(o):return o.get("rift",false)).size()
+	check(walls==0,"Rift strips sink again and leave the arena open")
+	e.start(w,"day");var bright=0.0;var split_seen=false;var stunned=false
+	for i in range(ceili(16*60)):
+		w.step(1.0/60);bright=maxf(bright,e.sky);split_seen=split_seen or e.split>0.5;stunned=stunned or e.move=="stunned"
+		if e.move=="rest":break
+	check(bright>.9 and split_seen and stunned,"Day acceleration cycles the sky, freezes day and night, then leaves him stunned")
+	w.invulnerable=0;w.hp=0;w.step(1.0/60)
+	check(e.phase=="retry" and w.state=="RUNNING","Dying in stage II retries the stage instead of ending the run")
+	advance(w,2.4)
+	check(e.phase=="two" and w.hp>=12,"The retry restores the stage II checkpoint")
+	w.hurt(e.hb,e.hb.hp+10)
+	check(e.phase=="erase","Defeat in stage II starts the erasure")
+	var build_before=e.checkpoint.build
+	advance(w,float(e.data.erase.duration)+.1)
+	check(e.phase=="three" and w.build.is_empty() and not e.stored.is_empty(),"The erasure strips the gear for the fistfight")
+	check(e.candidates().is_empty(),"No weapon can touch Herobrine during the fistfight")
+	# Fail one prompt on purpose, then answer every prompt correctly.
+	var failed=false
+	var steps=0
+	while e.phase=="three" and steps<60*120:
+		steps+=1
+		var q: Dictionary=e.qte
+		if not q.is_empty() and q.result=="" and q.age>=q.windup+.05:
+			if not failed and q.kind=="dodge":
+				e.press("down" if q.dir!="down" else "up");failed=true
+			else:
+				match q.kind:
+					"dodge":e.press(q.dir)
+					"attack":e.press("attack")
+					"seq":e.press(q.dirs[q.progress])
+			e.hold=q.kind=="hold"
+		w.step(1.0/60)
+	check(failed and e.phase=="death","The fistfight survives a missed prompt and ends in his fall")
+	var lines={}
+	for i in range(ceili(22*60)):
+		for t in e.text_events:lines[t.text]=true
+		w.step(1.0/60)
+	check(lines.has("АХАХАХАХАХХАХА") and lines.has("ТЫ НИЧЕРТА НЕ ПОНЯЛ") and lines.has("Я ВСЕГО ЛИШЬ СОГЛАСИЛСЯ ВЫПОЛНИТЬ ГРЯЗНУЮ РАБОТУ ЗА НЕГО"),"All three final lines are spoken")
+	check(e.phase in ["coords","road"] and e.pose=="headless","The final blow destroys his head; the coordinates follow")
+	until(w,func():return e.phase=="door",30.0)
+	check(e.phase=="door","The road leads to the black door")
+	until(w,func():return w.state=="RESULT",20.0)
+	check(w.state=="RESULT" and w.victory and w.build==e.stored.build,"Stepping through the door ends chapter IV with the build restored")
+	# Retry inside the fistfight
+	w=fresh();e=w.ending;advance(w,.1);w.player=e.center+Vector2(0,150);advance(w,8)
+	w.hurt(e.hb,e.hb.hp+10);advance(w,7);w.hurt(e.hb,e.hb.hp+10);advance(w,float(e.data.erase.duration)+.2)
+	w.hp=1;w.invulnerable=0
+	until(w,func():return e.phase=="retry",30.0)
+	check(e.phase=="retry","Losing the fistfight retries it")
+	advance(w,2.5)
+	check(e.phase=="three" and e.qte_index==0 and w.hp>=12,"The fistfight restarts from its own checkpoint")
+	# Pause freezes everything
+	var age_before=e.age;w.state="PAUSED";advance(w,1.0)
+	check(e.age==age_before,"Pause freezes the finale")
+	print("CHAPTER_FOUR_FINALE_RESULT %d checks; %d failures" % [checks,failures.size()])
+	quit(1 if failures.size()>0 else 0)

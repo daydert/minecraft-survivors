@@ -30,7 +30,12 @@ static func ensure_mesh():
 ## Ambient darkness for the current chapter and moment: {dark, color}.
 static func mood(g) -> Dictionary:
 	var w = g.world
-	if g.is_four():return {"dark": 0.5, "color": Color(0.018,0.02,0.04)}
+	if g.is_four():
+		var e = g.world.ending
+		if g.world.stage == "finale" and e.phase != "":
+			if e.phase in ["three","death","retry","erase"]:return {"dark": 0.6, "color": Color(0.01,0.008,0.015)}
+			return {"dark": lerpf(0.52, 0.06, e.sky), "color": Color(0.018,0.02,0.04).lerp(Color(0.3,0.22,0.12), e.sky)}
+		return {"dark": 0.5, "color": Color(0.018,0.02,0.04)}
 	if g.is_end():
 		if w.stage in ["survival", "end_arrival", "departure"]:
 			return {"dark": 0.17, "color": Color(0.06, 0.02, 0.11)}

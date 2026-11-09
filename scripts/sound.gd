@@ -6,6 +6,11 @@ var wither_music: AudioStreamPlayer
 var dragon_music: AudioStreamPlayer
 var endersteve_music: AudioStreamPlayer
 var four_music: AudioStreamPlayer
+## Chapter IV finale: one player per track; "" means deliberate silence.
+var end_music: AudioStreamPlayer
+var end_track := ""
+var end_mix := 0.0
+const END_TRACKS := {"boss_one": ["chapter_four/boss_one", "chapter_four/precipice"], "boss_two": ["chapter_four/boss_two", "chapter_four/creator"], "boss_fade": ["chapter_four/boss_two", "chapter_four/creator"], "coords": ["chapter_four/coords", "chapter_four/relic"]}
 var four_mix := 0.0
 var pyramid_music: AudioStreamPlayer
 var pyramid_mix:=0.0
@@ -102,6 +107,15 @@ func set_boss_theme(next_theme: String):
 	if theme=="chapter_four_pyramid":
 		if not is_instance_valid(pyramid_music):pyramid_music=theme_player("chapter_four/pyramid_5")
 		if not pyramid_music.playing:pyramid_music.play()
+	if theme.begins_with("chapter_four_end:"):
+		var track: String=theme.get_slice(":",1)
+		var file := ""
+		for candidate in END_TRACKS.get(track,[]):
+			if ResourceLoader.exists("res://assets/audio/"+candidate+".ogg"):file=candidate;break
+		if file!=end_track:
+			if is_instance_valid(end_music):end_music.stop();end_music.queue_free();end_music=null
+			end_track=file
+			if not file.is_empty():end_music=theme_player(file);end_music.play();end_mix=0.0
 
 func set_finale_music(enabled: bool):
 	set_boss_theme("herobrine" if enabled else "")
@@ -140,8 +154,11 @@ func _process(delta):
 	endersteve_mix=move_toward(endersteve_mix,1.0 if theme=="endersteve" else 0.0,delta/.9)
 	four_mix=move_toward(four_mix,1.0 if theme=="chapter_four" else 0.0,delta/.9)
 	pyramid_mix=move_toward(pyramid_mix,1.0 if theme=="chapter_four_pyramid" else 0.0,delta/.9)
+	var end_level := 0.0
+	if theme.begins_with("chapter_four_end:") and not end_track.is_empty():end_level=.3 if theme.ends_with("boss_fade") else 1.0
+	end_mix=move_toward(end_mix,end_level,delta/(2.5 if end_level<end_mix else .9))
 	victory_mix=move_toward(victory_mix,1.0 if theme=="victory" and celebration_state=="music" else 0.0,delta/.4)
-	music_mix=1.0 if theme=="victory" else clampf(herobrine_mix+wither_mix+dragon_mix+endersteve_mix+four_mix+pyramid_mix,0,1)
+	music_mix=1.0 if theme=="victory" or theme.begins_with("chapter_four_end:") else clampf(herobrine_mix+wither_mix+dragon_mix+endersteve_mix+four_mix+pyramid_mix,0,1)
 	update_music_levels()
 	if theme!="herobrine" and herobrine_mix==0 and boss_music.playing:boss_music.stop()
 	if theme!="wither" and wither_mix==0 and wither_music.playing:wither_music.stop()
@@ -149,6 +166,8 @@ func _process(delta):
 	if theme!="endersteve" and endersteve_mix==0 and endersteve_music.playing:endersteve_music.stop()
 	if not theme.begins_with("chapter_four") and four_mix==0 and is_instance_valid(four_music):
 		four_music.stop();four_music.stream=null;four_music.queue_free();four_music=null
+	if not theme.begins_with("chapter_four_end:") and end_mix==0 and is_instance_valid(end_music):
+		end_music.stop();end_music.queue_free();end_music=null;end_track=""
 	if not theme.begins_with("chapter_four") and pyramid_mix==0 and is_instance_valid(pyramid_music):
 		pyramid_music.stop();pyramid_music.stream=null;pyramid_music.queue_free();pyramid_music=null
 
@@ -156,6 +175,9 @@ func update_music_levels():
 	if is_instance_valid(music):
 		music.stream_paused=music_volume<=0 or music_mix>=1
 		music.volume_db=linear_to_db(maxf(.000001,music_volume*(1-music_mix)))
+	if is_instance_valid(end_music):
+		end_music.stream_paused=music_volume<=0
+		end_music.volume_db=linear_to_db(maxf(.000001,music_volume*end_mix))
 	for pair in [[boss_music,herobrine_mix],[wither_music,wither_mix],[dragon_music,dragon_mix],[endersteve_music,endersteve_mix],[victory_music,victory_mix],[four_music,four_mix],[pyramid_music,pyramid_mix]]:
 		if is_instance_valid(pair[0]):
 			pair[0].stream_paused=music_volume<=0

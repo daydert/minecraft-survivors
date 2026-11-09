@@ -1,0 +1,158 @@
+{
+  "sprites": [
+    "ch4_hb_calm",
+    "ch4_hb_smile",
+    "ch4_hb_rage",
+    "ch4_hb_dim",
+    "ch4_fist_steve"
+  ],
+  "frame": [
+    48,
+    56
+  ],
+  "anchor": [
+    24,
+    50
+  ],
+  "herobrine": {
+    "idle": {
+      "start": 0,
+      "count": 4
+    },
+    "walk": {
+      "start": 4,
+      "count": 8
+    },
+    "deflect": {
+      "start": 12,
+      "count": 3
+    },
+    "cast": {
+      "start": 15,
+      "count": 4
+    },
+    "invite": {
+      "start": 19,
+      "count": 2
+    },
+    "look_hand": {
+      "start": 21,
+      "count": 2
+    },
+    "kneel": {
+      "start": 23,
+      "count": 2
+    },
+    "rise": {
+      "start": 25,
+      "count": 4
+    },
+    "float": {
+      "start": 29,
+      "count": 4
+    },
+    "slam": {
+      "start": 33,
+      "count": 3
+    },
+    "guard": {
+      "start": 36,
+      "count": 1
+    },
+    "jab": {
+      "start": 37,
+      "count": 3
+    },
+    "hook": {
+      "start": 40,
+      "count": 3
+    },
+    "stagger": {
+      "start": 43,
+      "count": 2
+    },
+    "grab": {
+      "start": 45,
+      "count": 2
+    },
+    "throw": {
+      "start": 47,
+      "count": 3
+    },
+    "fall": {
+      "start": 50,
+      "count": 4
+    },
+    "lying": {
+      "start": 54,
+      "count": 2
+    },
+    "lying_hit": {
+      "start": 56,
+      "count": 2
+    },
+    "headless": {
+      "start": 58,
+      "count": 1
+    }
+  },
+  "steve": {
+    "idle": {
+      "start": 0,
+      "count": 4
+    },
+    "walk": {
+      "start": 4,
+      "count": 8
+    },
+    "guard": {
+      "start": 12,
+      "count": 1
+    },
+    "jab": {
+      "start": 13,
+      "count": 3
+    },
+    "hook": {
+      "start": 16,
+      "count": 3
+    },
+    "stagger": {
+      "start": 19,
+      "count": 2
+    },
+    "resist": {
+      "start": 21,
+      "count": 2
+    },
+    "throw": {
+      "start": 23,
+      "count": 3
+    },
+    "dodge_l": {
+      "start": 26,
+      "count": 2
+    },
+    "dodge_r": {
+      "start": 28,
+      "count": 2
+    },
+    "grab": {
+      "start": 30,
+      "count": 2
+    },
+    "mount": {
+      "start": 32,
+      "count": 4
+    },
+    "lower_arm": {
+      "start": 36,
+      "count": 4
+    }
+  },
+  "directions": [
+    "down",
+    "up",
+    "side"
+  ]
+}
