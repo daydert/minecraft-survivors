@@ -124,7 +124,7 @@
   ],
   "campaign_ch1_boss": [
     {
-      "core": "04a0909a13413b3b955d8ed27dbcc18f",
+      "core": "3bfc15c54d20d748064f28c4d5e5c958",
       "effects": "d751713988987e9331980363e24189ce",
       "extra": "d751713988987e9331980363e24189ce",
       "mobs": "d751713988987e9331980363e24189ce",
@@ -383,7 +383,7 @@
   ],
   "end_boss": [
     {
-      "core": "9542252dc60995428baeeb5c340d1412",
+      "core": "46219398be9f6b873330a052f45bca8b",
       "effects": "d751713988987e9331980363e24189ce",
       "extra": "ac16ae78b089f7473e89b435e12fde6e",
       "mobs": "d751713988987e9331980363e24189ce",
@@ -519,7 +519,7 @@
   ],
   "nether_boss": [
     {
-      "core": "80ed663ea2142b8cd1b19f9856eee01b",
+      "core": "c5c26e9ac8fd12869b3897f050187bec",
       "effects": "d751713988987e9331980363e24189ce",
       "extra": "0cbbd49250242956a646acdf30f214a9",
       "mobs": "d751713988987e9331980363e24189ce",

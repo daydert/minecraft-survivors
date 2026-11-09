@@ -63,13 +63,24 @@ func spawn(kind: String, at = null) -> bool:
 	m.stun=0.0;m.pull_left=0.0;m.pull_dir=Vector2.ZERO;m.pull_stun=0.0;m.control_resist=0.0
 	return true
 
+## Chapter rule from the "rules" section of nether_balance.json / end_balance.json.
+func rule(id: String) -> float:
+	return float(db.data.rules[id])
+
+## Hero regeneration from ghast tears, shared by chapters II and III.
+func update_regeneration(dt: float):
+	regen_tick-=dt
+	if regen_tick<=0:
+		regen_tick+=rule("regen_interval")
+		if hp>0:hp=minf(20,hp+rule("ghast_tear_regen")*items.get("ghast_tear",0))
+
 ## Mobs that currently ignore the player (chapter II piglins with gold boots).
 func neutral(_m: Dictionary) -> bool:
 	return false
 
 ## Knockback multiplier applied to every weapon hit.
 func knock_factor(_m: Dictionary) -> float:
-	return 1+.12*items.get("feather",0)
+	return 1+rule("feather_knock")*items.get("feather",0)
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if m.hp<=0:return
@@ -90,28 +101,28 @@ func ignite(seconds: float):
 func fire_damage(amount: float):
 	if invulnerable>0 or hp<=0:return
 	var before=hp
-	hp-=maxf(.1,amount*(1-.16*items.get("fire_resist",0)))
+	hp-=maxf(.1,amount*(1-rule("fire_resist_per_level")*items.get("fire_resist",0)))
 	run_progress.damage(before-hp)
-	invulnerable=.35
+	invulnerable=rule("status_hit_invulnerability")
 	player_visual.hurt=.12
 	sound("hurt",.2)
 
 func update_fire(dt: float):
 	for patch in magma:
-		if player.distance_to(patch.p)<patch.radius:ignite(1.2);break
+		if player.distance_to(patch.p)<patch.radius:ignite(rule("magma_burn"));break
 	if player_burn>0:
 		player_burn=maxf(0,player_burn-dt)
 		burn_tick-=dt
-		if burn_tick<=0:burn_tick+=.75;fire_damage(1.5)
+		if burn_tick<=0:burn_tick+=rule("burn_interval");fire_damage(rule("burn_damage"))
 	else:burn_tick=0
 	if player_wither>0:
 		player_wither=maxf(0,player_wither-dt);wither_tick-=dt
-		if wither_tick<=0:wither_tick+=.8;fire_damage(1.5)
+		if wither_tick<=0:wither_tick+=rule("wither_interval");fire_damage(rule("wither_damage"))
 
 func hook_target(m: Dictionary, evolved_hook: bool):
 	if m.control_resist>0:return
 	var distance=maxf(0,m.p.distance_to(player)-m.radius-16)
-	m.pull_left=minf((70 if m.boss else 150)*(1+.12*items.get("feather",0)),distance)
+	m.pull_left=minf((70 if m.boss else 150)*(1+rule("feather_knock")*items.get("feather",0)),distance)
 	m.pull_dir=m.p.direction_to(player)
 	m.pull_stun=(.4 if evolved_hook else .25) if m.boss else (.95 if evolved_hook else .6)
 	m.control_resist=1.8 if m.boss else .8
@@ -168,7 +179,7 @@ func place_explosive(kind: String, s: Dictionary):
 	var count=0
 	for b in explosives:
 		if b.kind==kind:count+=1
-	if count>=(2 if kind=="bed" else 24):return
+	if count>=rule("bed_limit" if kind=="bed" else "explosive_limit"):return
 	var center=move_actor(player,facing*(42 if kind=="bed" else 12),7)
 	var group=next_id()
 	if kind=="bed":
@@ -185,7 +196,7 @@ func split_tnt(b: Dictionary):
 	var aim: Vector2=b.v.normalized() if b.v.length()>5 else b.get("launch_dir",facing)
 	var stats: Dictionary=b.stats.duplicate();stats.cluster=false;stats.damage*=.4;stats.radius*=.6
 	for j in range(3):
-		if explosives.size()>=24:break
+		if explosives.size()>=rule("explosive_limit"):break
 		var dir=aim.rotated((j-1)*.65)
 		var child=tnt_charge(b.p,stats,b.group,false,.45+j*.05,true)
 		child.v=dir*125;child.height=b.height;child.lift=75;child.launched=true
@@ -199,7 +210,7 @@ func update_explosives(dt: float):
 			var spread=[-.12,.12,-.24,.24][(g.index-1)%4]
 			var dir=facing.rotated(spread)
 			var at=move_actor(g.anchor,dir*(19+g.index*3),4)
-			if explosives.size()<24:
+			if explosives.size()<rule("explosive_limit"):
 				var charge=tnt_charge(at,g.stats,g.group,false,maxf(.1,1.5-g.age+.8+g.index*.06))
 				charge.launch_dir=dir
 				explosives.append(charge);sound("hiss",.15)

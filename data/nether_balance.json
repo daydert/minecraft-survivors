@@ -415,5 +415,21 @@
       "at": 690,
       "type": "brute"
     }
-  ]
+  ],
+  "rules": {
+    "feather_knock": 0.12,
+    "fire_resist_per_level": 0.16,
+    "status_hit_invulnerability": 0.35,
+    "magma_burn": 1.2,
+    "burn_interval": 0.75,
+    "burn_damage": 1.5,
+    "wither_interval": 0.8,
+    "wither_damage": 1.5,
+    "bed_limit": 2,
+    "explosive_limit": 24,
+    "regen_interval": 5,
+    "ghast_tear_regen": 0.3,
+    "soul_sand_slow": 0.42,
+    "gold_boots_relief": 0.2
+  }
 }

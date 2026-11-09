@@ -120,7 +120,7 @@ func move_actor(p: Vector2, velocity: Vector2, radius: float) -> Vector2:
 	return q
 
 func movement_speed() -> float:
-	return db.data.player_speed*(1+.08*items.get("sugar",0))*(.58 if slow_time>0 else 1.0)
+	return db.data.player_speed*(1+.08*items.get("sugar",0))*(rule("slow_arrow_factor") if slow_time>0 else 1.0)
 
 func flying() -> bool:return flight>0 or rocket or jump_age>=0 or levitation>0 or levitation_height>0
 
@@ -170,7 +170,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 	if state!="RUNNING":return
 	track_progress(dt)
 	clock+=dt;stage_age+=dt
-	if stage=="survival":time=minf(720,time+dt)
+	if stage=="survival":time=minf(db.data.duration,time+dt)
 	for key in ["invulnerable","shake","message_timer","flight","flight_cooldown","pearl_cooldown","rocket_cooldown","shell_cooldown","shield_guard","slow_time","poison_time","levitation"]:set(key,maxf(0,float(get(key))-dt))
 	var before=player
 	var combat=stage in ["survival","dragon","last_duel"]
@@ -178,8 +178,8 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 		fall_age+=dt
 		if fall_age>.85:
 			fall_age=-1;player=last_safe;invulnerable=0
-			if items.has("shulker_shell") and shell_cooldown<=0:shell_cooldown=50-6*items.shulker_shell
-			else:damage_player(6*(1-.1*items.get("shulker_shell",0)))
+			if items.has("shulker_shell") and shell_cooldown<=0:shell_cooldown=rule("fall_shell_cooldown")-rule("fall_shell_cooldown_per_level")*items.shulker_shell
+			else:damage_player(rule("fall_damage")*(1-rule("fall_shell_reduction")*items.get("shulker_shell",0)))
 			invulnerable=1
 	elif stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]:
 		if dash_left>0:
@@ -188,7 +188,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 			for m in in_radius((before+player)/2,before.distance_to(player)/2+15):
 				if dash_hits.has(m.id):continue
 				dash_hits[m.id]=true;var s=db.stats("spear",build.get("spear",1),evolved.has("spear"),items)
-				hurt(m,s.damage*(3 if rocket else 1)*(.58 if slow_time>0 else 1.0),dash_direction*2)
+				hurt(m,s.damage*(3 if rocket else 1)*(rule("slow_arrow_factor") if slow_time>0 else 1.0),dash_direction*2)
 			break_props(player,16,25)
 			if dash_left<=0:rocket=false
 		else:
@@ -212,10 +212,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 	update_particles(dt);animation.advance(self,dt)
 	update_end_poses(dt)
 	update_shield(dt)
-	regen_tick-=dt
-	if regen_tick<=0:
-		regen_tick+=5
-		if hp>0:hp=minf(20,hp+.3*items.get("ghast_tear",0))
+	update_regeneration(dt)
 	status_tick-=dt
 	if status_tick<=0:
 		status_tick+=1
@@ -451,7 +448,7 @@ func update_attacks(dt: float):
 			"knockback_stick":
 				for m in in_radius(player,s.radius):
 					if facing.dot(player.direction_to(m.p))<-.1:continue
-					hurt(m,s.damage,player.direction_to(m.p));m.knock=player.direction_to(m.p)*s.force*(1+.12*items.get("feather",0));m.launch=1.2;m.collision_hits={}
+					hurt(m,s.damage,player.direction_to(m.p));m.knock=player.direction_to(m.p)*s.force*(1+rule("feather_knock")*items.get("feather",0));m.launch=1.2;m.collision_hits={}
 				add_effect("stick_swing",player,.3,{"direction":facing,"radius":s.radius});sound("swing")
 			"dragon_breath":
 				for j in range(int(s.count)):add_effect("friendly_breath",target.p+Vector2(j*32,0),s.duration,{"radius":s.radius,"damage":s.damage,"tick":0.0})
@@ -628,10 +625,10 @@ func resolve_deaths():
 		else:sound("end_teleport")
 
 func begin_arena():
-	time=720;stage="departure";stage_age=0;invulnerable=3;message_timer=0
+	time=db.data.duration;stage="departure";stage_age=0;invulnerable=3;message_timer=0
 
 func prepare_arena():
-	time=720;slow_time=0;poison_time=0;levitation=0;levitation_height=0;levitation_velocity=0;player_burn=0;player_wither=0
+	time=db.data.duration;slow_time=0;poison_time=0;levitation=0;levitation_height=0;levitation_velocity=0;player_burn=0;player_wither=0
 	stage="dragon_arrival";stage_age=0;player=Vector2(1024,1175);last_safe=player;scene_camera=Vector2(1024,1080);facing=Vector2.UP;hp=minf(20,hp+8)
 	for pool in [mobs,projectiles,effects,particles,pixels,loot,orbs,tasks,props,explosives,tnt_groups,hazards,magma,pending_events,crystals,dragon_history]:pool.clear()
 	blocked.clear();solid_grid.clear();pending_chest={};invulnerable=4;flight=0;dash_left=0;rocket=false;jump_age=-1;fall_age=-1;player_push=Vector2.ZERO

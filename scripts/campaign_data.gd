@@ -8,11 +8,13 @@ func configure(chapter: int):
 		data[group].merge(extra[group],true)
 	data.waves = extra.waves
 	data.events = extra.events
+	data.rules = extra.rules
 	if chapter==3:
 		extra=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_balance.json"))
 		for group in ["weapons","upgrades","passives","recipes","mobs"]:data[group].merge(extra[group],true)
 		data.waves=extra.waves
 		data.events=extra.events
+		data.rules=extra.rules
 		for id in ["gold_boots","fire_resist"]:data.passives.erase(id)
 		data.recipes.bed.passive="shulker_shell"
 		data.recipes.fishing.passive="ender_pearl"

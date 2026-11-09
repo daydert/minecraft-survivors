@@ -8,7 +8,7 @@ func story(w, dt: float):
 		"end_arrival":
 			if w.stage_age>=2.5:w.stage="survival";w.stage_age=0
 		"survival":
-			if w.time>=720:w.begin_arena()
+			if w.time>=w.db.data.duration:w.begin_arena()
 		"departure":
 			if w.stage_age>=1.6:w.prepare_arena()
 		"dragon_arrival":

@@ -47,7 +47,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	track_progress(dt)
 	clock+=dt
 	stage_age+=dt
-	if stage=="survival":time=minf(720,time+dt)
+	if stage=="survival":time=minf(db.data.duration,time+dt)
 	invulnerable=maxf(0,invulnerable-dt)
 	shake=maxf(0,shake-dt)
 	message_timer=maxf(0,message_timer-dt)
@@ -78,10 +78,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	animation.advance(self,dt)
 	advance_nether_poses()
 	update_arena_camera(dt)
-	regen_tick-=dt
-	if regen_tick<=0:
-		regen_tick+=5
-		if hp>0:hp=minf(20,hp+.3*items.get("ghast_tear",0))
+	update_regeneration(dt)
 	if hp<=0:
 		state="RESULT"
 		victory=false
@@ -89,7 +86,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		return
 	match stage:
 		"survival":
-			if time>=720:begin_arena();return
+			if time>=db.data.duration:begin_arena();return
 		"departure":
 			if stage_age>=1.6:prepare_arena()
 		"arrival":
@@ -141,7 +138,7 @@ func enter_portal() -> bool:
 	return true
 
 func begin_arena():
-	time=720
+	time=db.data.duration
 	win_music=false
 	ghast.reset()
 	transition_camera=super.camera()
@@ -291,7 +288,7 @@ func terrain_factor(at: Vector2, boots: int=0) -> float:
 		var offset: Vector2=at-patch.p
 		var cell=(offset/16).round()
 		if absf(cell.x)<=2 and absf(cell.y)<=2 and (cell*16).length()<patch.radius:return 1.0
-	return 1-.42*(1-.2*clampi(boots,0,5))
+	return 1-rule("soul_sand_slow")*(1-rule("gold_boots_relief")*clampi(boots,0,5))
 
 func movement_speed() -> float:
 	return super.movement_speed()*terrain_factor(player,items.get("gold_boots",0))

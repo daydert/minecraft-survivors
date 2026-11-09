@@ -22,7 +22,7 @@ func scenarios() -> Array:
 	]
 
 func fingerprint(w) -> Dictionary:
-	var core=[w.state,w.time,w.clock,w.player,w.facing,w.hp,w.xp,w.level,w.kills,w.score,w.build,w.items,w.evolved,w.cooldowns,w.choices,w.rng.state,w.uid,w.spawn_credit,w.victory]
+	var core=[w.state,float(w.time),w.clock,w.player,w.facing,w.hp,w.xp,w.level,w.kills,w.score,w.build,w.items,w.evolved,w.cooldowns,w.choices,w.rng.state,w.uid,w.spawn_credit,w.victory]
 	var extra=[]
 	for field in ["stage","stage_age","flight","jump_height","shield_charges","dash_left"]:
 		if field in w:extra.append(w.get(field))
