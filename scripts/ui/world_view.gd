@@ -1,5 +1,7 @@
 extends RefCounted
 ## World layer of chapter I / II and coop: terrain, actors, projectiles and effects.
+const Lighting = preload("res://scripts/ui/lighting.gd")
+const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 
 static func draw_world(g):
 	if g.is_end():g.end_renderer.world(g);return
@@ -17,6 +19,7 @@ static func draw_world(g):
 	else: g.draw_rect(Rect2(0,0,640,360),Color("40563a"))
 	if g.world.finale.active:
 		g.draw_texture_rect_region(g.textures.ground_scorched,Rect2(0,0,640,360),Rect2(cam-Vector2(320,180),Vector2(640,360)),Color(1,1,1,g.world.finale.scorch()))
+	if not g.is_nether():Atmosphere.overworld_grass(g,offset)
 	# Short rail fence and dense forest at the edge of a finite arena.
 	for side in range(4):
 		for j in range(64):
@@ -139,9 +142,9 @@ static func draw_world(g):
 		for particle in pool:
 			var size: float = particle.get("size",2.0)*clampf(particle.life/0.1,0.3,1)
 			g.draw_rect(Rect2((particle.p+offset).floor(),Vector2.ONE*ceilf(size)),Color(particle.color,clampf(particle.life/0.1,0,1)))
-	# A quiet uniform night tint keeps warnings and XP clearly separated from grass.
-	var dusk = 0.09 * (1-clampf((g.world.time-660)/60,0,1))
-	g.draw_rect(Rect2(0,0,640,360),Color(0.05,0.12,0.16,dusk))
+	Atmosphere.collect(g,offset)
+	Lighting.draw(g,offset)
+	Atmosphere.after_lighting(g,offset)
 	for m in g.world.mobs:
 		if m.kind not in ["elite","ravager"] or g.world.visible(m.p,0): continue
 		var dir = g.world.camera().direction_to(m.p)

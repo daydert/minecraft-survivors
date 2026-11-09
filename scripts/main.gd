@@ -350,7 +350,7 @@ func action(id: String):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 			if not settings.fullscreen: get_window().size = Vector2i(1280,720)
 			get_window().grab_focus()
-		"shake","flashes","numbers": settings[id] = not settings[id]
+		"shake","flashes","numbers","lighting": settings[id] = not settings[id]
 		"music","effects":
 			adjust_volume(id,.1)
 	save_settings()

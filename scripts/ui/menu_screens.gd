@@ -22,11 +22,11 @@ static func draw_settings(g):
 	g.dim(0.88)
 	g.panel(Rect2(125,27,390,306),Color("20372c"),Color("6c7e58"))
 	g.centered("НАСТРОЙКИ",61,20,g.INK,true)
-	var keys=["music","effects","fullscreen","shake","flashes","numbers"]
-	var labels=["Громкость музыки","Громкость эффектов","Полный экран · F11","Тряска камеры","Вспышки при попадании","Числа урона"]
+	var keys=["music","effects","fullscreen","shake","flashes","numbers","lighting"]
+	var labels=["Громкость музыки","Громкость эффектов","Полный экран · F11","Тряска камеры","Вспышки при попадании","Числа урона","Освещение"]
 	for i in range(keys.size()):
 		var key=keys[i]
-		var y=82+i*32
+		var y=78+i*29
 		g.text_at(labels[i],Vector2(146,y+15),10,g.INK)
 		if i<2:
 			g.button(Rect2(358,y,24,24),"−","volume_"+key+"_down")

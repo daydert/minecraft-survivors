@@ -1,7 +1,9 @@
 extends RefCounted
 ## In-run HUD: hearts, timer, experience, equipment bars and boss bars.
+const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 
 static func draw_hud(g):
+	Atmosphere.health_edges(g)
 	# Vanilla-sized health and experience sit above the two equipment bars.
 	var origin = Vector2(192 if g.coop.active else 172,332)
 	for i in range(10):

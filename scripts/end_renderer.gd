@@ -1,6 +1,8 @@
 extends RefCounted
 ## Chapter III draws vanilla sampled parts, paused simulation effects and restrained UI.
 const PURPLE=Color("bf82e6")
+const Lighting=preload("res://scripts/ui/lighting.gd")
+const Atmosphere=preload("res://scripts/ui/atmosphere.gd")
 var dragon_meta: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_dragon.json"))
 
 func world(g):
@@ -86,6 +88,9 @@ func world(g):
 		if not effect(g,e,offset) and not g.nether_renderer.effect(g,e,offset):g.draw_effect(e,offset)
 	for pool in [w.particles,w.pixels]:
 		for p in pool:g.draw_rect(Rect2((p.p+offset).floor(),Vector2.ONE*p.get("size",2)),Color(p.color,clampf(p.life/.2,0,1)))
+	Atmosphere.collect(g,offset)
+	Lighting.draw(g,offset)
+	Atmosphere.after_lighting(g,offset)
 	cinematic(g,offset)
 
 func scale_review(g):
@@ -104,10 +109,7 @@ func scale_review(g):
 
 func ground(g, offset: Vector2):
 	var w=g.world
-	g.draw_rect(Rect2(0,0,640,360),Color("100d19"))
-	for j in range(90):
-		var p=Vector2(fposmod(j*73.17+offset.x*.25,640),fposmod(j*37.73+offset.y*.25,360))
-		g.draw_rect(Rect2(p.floor(),Vector2.ONE),Color(.38,.24,.44,.15+.13*sin(w.clock*.5+j)))
+	abyss(g,offset)
 	if w.stage in ["survival","end_arrival","departure"]:
 		var cam: Vector2=w.camera()
 		# Exposed edges show the stone thickness above the void.
@@ -116,7 +118,10 @@ func ground(g, offset: Vector2):
 			for x in range(tile.x,tile.x+44):
 				var p=Vector2(x*16+8,y*16+8)
 				if w.on_land(p) and not w.on_land(p+Vector2(0,16)):
-					g.sprite("end_stone_tile",p+offset+Vector2(-8,6),Vector2(16,16),Color(.42,.4,.36))
+					# A tall cliff face that sinks into the void, darker with depth.
+					for k in range(4):
+						var shade=.46-k*.1
+						g.sprite("end_stone_tile",p+offset+Vector2(-8,6+k*12),Vector2(16,16),Color(shade,shade*.93,shade*.9))
 		# One pixel-aligned world transform for the surface, exposed edges and actors.
 		g.sprite("end_island",offset)
 	else:
@@ -125,6 +130,24 @@ func ground(g, offset: Vector2):
 		for side in [0,1]:
 			var y=r.position.y+(r.size.y if side else 0)
 			g.draw_texture_rect(g.textures.end_obsidian,Rect2(r.position.x,y,r.size.x,4),true)
+
+## The abyss: deep violet sky, drifting nebulae and two parallax star layers.
+func abyss(g, offset: Vector2):
+	var clock: float=g.world.clock
+	g.draw_rect(Rect2(0,0,640,360),Color("0d0a16"))
+	for j in range(7):
+		var p=Vector2(fposmod(j*211.3+offset.x*.08,900)-130,fposmod(j*131.7+offset.y*.08,560)-100)
+		for k in range(5):g.oval(p,Vector2(120,70)*(1-k*.17)*(.7+j%3*.2),Color(.32,.1,.45,.035))
+	for j in range(140):
+		var p=Vector2(fposmod(j*73.17+offset.x*.15,640),fposmod(j*37.73+offset.y*.15,360))
+		g.draw_rect(Rect2(p.floor(),Vector2.ONE),Color(.5,.4,.62,.18+.12*sin(clock*.5+j)))
+	for j in range(46):
+		var p=Vector2(fposmod(j*151.9+offset.x*.4,660)-10,fposmod(j*89.3+offset.y*.4,380)-10).floor()
+		var twinkle=.45+.4*sin(clock*(1.3+j%4*.4)+j*1.7)
+		g.draw_rect(Rect2(p,Vector2.ONE),Color(.92,.85,1,twinkle))
+		if j%9==0:
+			g.draw_rect(Rect2(p+Vector2(-1,0),Vector2(3,1)),Color(.85,.7,1,twinkle*.45))
+			g.draw_rect(Rect2(p+Vector2(0,-1),Vector2(1,3)),Color(.85,.7,1,twinkle*.45))
 
 func crystal_base(g, t: Dictionary, offset: Vector2):
 	var p: Vector2=t.p+offset
@@ -138,7 +161,16 @@ func crystal_base(g, t: Dictionary, offset: Vector2):
 	for m in g.world.mobs:
 		if m.kind=="end_dragon":
 			var end: Vector2=m.p+offset-Vector2(0,m.altitude+35)
-			g.draw_line(top,end,Color(.75,.4,.9,.12),3);g.draw_line(top,end,Color(.9,.65,1,.32),1);break
+			# The healing link must read at a glance: glow, pulsing core and energy flowing to the dragon.
+			var pulse=.5+.5*sin(g.world.clock*7+float(t.id))
+			g.draw_line(top,end,Color(.7,.3,.95,.14+pulse*.08),7)
+			g.draw_line(top,end,Color(.85,.55,1,.35+pulse*.15),3)
+			g.draw_line(top,end,Color(1,.9,1,.75),1)
+			for j in range(5):
+				var k=fposmod(g.world.clock*.9+j*.2+float(t.id)*.13,1)
+				var q: Vector2=top.lerp(end,k)
+				g.draw_rect(Rect2(q.floor()-Vector2.ONE,Vector2(3,3)),Color(1,.8,1,.9*(1-k*.5)))
+			break
 
 func end_particles(g, p: Vector2, time: float, seed_value: float, count: int, radius: float):
 	for j in range(count):

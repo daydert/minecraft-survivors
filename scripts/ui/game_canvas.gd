@@ -42,6 +42,10 @@ var buttons: Array = []
 var selected = 0
 var mouse = Vector2.ZERO
 var ui_time = 0.0
+## Presentation-only lights (fireflies, embers): {p, r, c, power, glow} in world space.
+var ambient_lights: Array = []
+var burst_level := 0
+var burst_clock := -10.0
 var router = preload("res://scripts/ui/screen_router.gd").new()
 ## Current full-screen view; "" means the world with its state overlay.
 ## Assigning navigates and forgets the overlay stack (see screen_router.gd).
@@ -54,7 +58,7 @@ var solo_chapter = 1
 var nether_renderer = preload("res://scripts/nether_renderer.gd").new()
 var last_state = "MENU"
 var input_lock = 0.0
-var settings = {"music":0.4,"effects":0.6,"fullscreen":false,"shake":true,"flashes":true,"numbers":false}
+var settings = {"music":0.4,"effects":0.6,"fullscreen":false,"shake":true,"flashes":true,"numbers":false,"lighting":true}
 var qa_mode = ""
 var qa_frames = 0
 var autoplay_style = ""

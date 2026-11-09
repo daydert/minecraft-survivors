@@ -40,6 +40,9 @@ static func prepare_capture(g):
 	g.world.swing(Vector2.RIGHT,g.world.db.stats("sword",8,true,g.world.items))
 	g.world.add_effect("cloud",g.world.player+Vector2(70,20),3,{"radius":38.0,"damage":3})
 	g.world.loot.append({"kind":"chest","p":g.world.player+Vector2(-80,42),"born":g.world.time})
+	if g.qa_mode=="dawn":g.world.time=700
+	if g.qa_mode=="dusk":g.world.time=20
+	if g.qa_mode=="low_hp":g.world.hp=3
 	if g.qa_mode=="level":
 		g.world.choices=["bow","potion","amethyst"]
 		g.world.state="LEVEL_UP"
