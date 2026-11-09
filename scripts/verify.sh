@@ -5,6 +5,7 @@ engine=${SURVIVORS_GODOT_BIN:-./.tools/Godot_v4.7.2-stable_linux.x86_64}
 "$engine" --headless --single-threaded-scene --path . --editor --import --quit > qa/import.log 2>&1
 "$engine" --headless --path . -s qa/test_world.gd
 "$engine" --headless --path . -s qa/ui_flow.gd
+"$engine" --headless --path . -s qa/test_screen_router.gd
 "$engine" --headless --path . -s qa/test_animation.gd
 "$engine" --headless --path . -s qa/test_chapter.gd
 "$engine" --headless --path . -s qa/test_coop.gd

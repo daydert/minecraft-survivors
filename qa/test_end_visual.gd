@@ -27,7 +27,7 @@ func run():
 	check(island.get_data()!=dragon.get_data(),"Boss arena replaces the island after the fade")
 	game.world.clock+=.3;var flap=await render("end_dragon_flap")
 	check(flap.get_data()!=dragon.get_data(),"Dragon wing, neck and tail articulation changes on simulation time")
-	game.world.state="PAUSED";game.screen="inventory";game.inventory_from="RUNNING";var age=game.world.clock;game.world.step(3);await render("end_inventory")
+	game.world.state="RUNNING";game.screen="";game.toggle_inventory();var age=game.world.clock;game.world.step(3);await render("end_inventory")
 	check(game.world.clock==age,"Inventory freezes dragon and weapon cooldown clocks")
 	game.close_inventory();var exact=await render()
 	check(exact.get_data()==flap.get_data(),"Closing inventory restores the exact dragon frame")

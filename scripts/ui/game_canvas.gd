@@ -18,8 +18,6 @@ var achievements=preload("res://scripts/achievements.gd").new()
 var achievements_view=preload("res://scripts/achievements_view.gd").new()
 var achievement_tier="all"
 var achievement_page=0
-var achievements_from=""
-var achievement_state="MENU"
 var achievement_toast=""
 var achievement_toast_age=0.0
 var end_rift=preload("res://scripts/end_rift_view.gd").new()
@@ -44,11 +42,14 @@ var buttons: Array = []
 var selected = 0
 var mouse = Vector2.ZERO
 var ui_time = 0.0
-var screen = ""
+var router = preload("res://scripts/ui/screen_router.gd").new()
+## Current full-screen view; "" means the world with its state overlay.
+## Assigning navigates and forgets the overlay stack (see screen_router.gd).
+var screen: String:
+	get: return router.current
+	set(value): router.goto(value)
 var record = {"time":0.0,"kills":0,"score":0}
 var pause_from = "RUNNING"
-var stats_from = "RUNNING"
-var inventory_from = "RUNNING"
 var solo_chapter = 1
 var nether_renderer = preload("res://scripts/nether_renderer.gd").new()
 var last_state = "MENU"
@@ -68,8 +69,6 @@ var chapter_preview=false
 var secret_keys=""
 var secret_key_time=0
 var lab_chapter=1
-var lab_state=""
-var lab_screen=""
 const BossLab=preload("res://scripts/boss_lab.gd")
 var coop = preload("res://scripts/coop_session.gd").new()
 var nickname_field: LineEdit

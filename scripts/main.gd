@@ -215,7 +215,7 @@ func _input(event):
 		if event.keycode == KEY_ESCAPE:
 			if screen=="achievements":close_achievements()
 			elif screen=="boss_lab":close_boss_lab()
-			elif screen=="recipes":screen="inventory"
+			elif screen=="recipes":close_recipes()
 			elif screen=="inventory":close_inventory()
 			elif screen=="stats": close_stats()
 			elif screen == "multiplayer": action("network_back")
@@ -290,8 +290,8 @@ func action(id: String):
 		"recipes_prev":recipe_page=maxi(0,recipe_page-1)
 		"inventory":toggle_inventory()
 		"close_inventory":close_inventory()
-		"recipes":screen="recipes";recipe_page=0
-		"recipes_back":screen="inventory"
+		"recipes":router.open("recipes",world,false);recipe_page=0
+		"recipes_back":close_recipes()
 		"logs": coop.open_log_folder()
 		"multiplayer":
 			screen = "multiplayer"
@@ -364,8 +364,8 @@ func secret_input(event: InputEventKey) -> bool:
 	if code in [KEY_ENTER,KEY_KP_ENTER] and secret_keys=="davis":
 		secret_keys=""
 		if screen!="boss_lab":
-			lab_state=world.state;lab_screen=screen;lab_chapter=solo_chapter
-			world.state="PAUSED";screen="boss_lab";selected=3
+			lab_chapter=solo_chapter
+			router.open("boss_lab",world);selected=3
 		return true
 	var letter: String={KEY_D:"d",KEY_A:"a",KEY_V:"v",KEY_I:"i",KEY_S:"s"}.get(code,"")
 	var candidate=secret_keys+letter
@@ -376,7 +376,10 @@ func secret_input(event: InputEventKey) -> bool:
 	return false
 
 func close_boss_lab():
-	world.state=lab_state;screen=lab_screen;selected=0;input_lock=.12
+	router.close(world);selected=0;input_lock=.12
+
+func close_recipes():
+	router.close(world,"inventory")
 
 func start_chapter(chapter: int):
 	if coop.active:return
@@ -399,15 +402,12 @@ func toggle_inventory():
 	if coop.active:return
 	if screen=="inventory":close_inventory()
 	elif screen.is_empty() and world.state in ["RUNNING","PAUSED","LEVEL_UP","CHEST","FINALE"]:
-		inventory_from=world.state
-		world.state="PAUSED"
-		screen="inventory"
+		router.open("inventory",world)
 		selected=0
 		input_lock=.12
 
 func close_inventory():
-	screen=""
-	world.state=inventory_from
+	router.close(world)
 	selected=0
 	input_lock=.12
 
@@ -421,16 +421,15 @@ func toggle_stats():
 		selected = 0
 		input_lock = .12
 	elif screen.is_empty() and world.state in ["RUNNING","PAUSED","LEVEL_UP","CHEST","FINALE"]:
-		stats_from = world.state
-		screen = "stats"
-		world.state = "PAUSED"
+		router.open("stats",world)
 		selected = 0
 		input_lock = 0.12
 
 func close_stats():
-	screen = ""
-	if coop.active: coop.command("pause",1 if stats_coop_was_paused else 0)
-	else: world.state = stats_from
+	if coop.active:
+		screen = ""
+		coop.command("pause",1 if stats_coop_was_paused else 0)
+	else: router.close(world)
 	selected = 0
 	input_lock = 0.12
 
@@ -511,12 +510,11 @@ func quit_game():
 
 func open_achievements():
 	if coop.active:return
-	achievements_from=screen;achievement_state=world.state
-	if world.state in ["RUNNING","FINALE","LEVEL_UP","CHEST"]:world.state="PAUSED"
-	achievement_tier="all";achievement_page=0;screen="achievements"
+	router.open("achievements",world,world.state in ["RUNNING","FINALE","LEVEL_UP","CHEST"])
+	achievement_tier="all";achievement_page=0
 
 func close_achievements():
-	screen=achievements_from;world.state=achievement_state;selected=0;input_lock=.12
+	router.close(world);selected=0;input_lock=.12
 
 func achievements_allowed() -> bool:
 	if coop.active or not (world is W) or not world.run_progress.enabled:return false
