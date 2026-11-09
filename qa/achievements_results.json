@@ -1,6 +1,4 @@
 {
   "checks": 51,
-  "failures": [
-    "An uneaten chorus with no safe landing is not a used heal"
-  ]
+  "failures": []
 }

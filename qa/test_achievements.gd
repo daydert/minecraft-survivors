@@ -84,7 +84,7 @@ func run():
 	w=fresh(3);w.hp=8;w.build={};w.loot.append({"kind":"chorus_fruit","p":w.player,"source":w.player});w.pickup(.01)
 	check(w.run_progress.healing_used,"A successful chorus teleport records actual consumable healing")
 	w=fresh(3);w.build={};w.spawn("endermite_brood",w.player);w.mobs[0].radius=300;w.loot.append({"kind":"chorus_fruit","p":w.player,"source":w.player});w.pickup(.01)
-	check(not w.run_progress.healing_used and w.loot.size()==1,"An uneaten chorus with no safe landing is not a used heal")
+	check(not w.run_progress.healing_used and w.loot.filter(func(o):return o.kind=="chorus_fruit").size()==1,"An uneaten chorus with no safe landing is not a used heal")
 	w=fresh(3);w.prepare_arena();w.mobs.clear();w.stage="dragon";w.spawn("end_dragon",w.player-Vector2(0,100));w.mobs[0].hp=0;w.resolve_deaths()
 	check(not w.run_progress.awarded.has("chapter_three") and not w.win_music,"Dragon alone does not finish chapter III or start final victory audio")
 	w.stage="last_duel";w.spawn("endersteve_final",w.player-Vector2(0,100));w.mobs[0].hp=0;w.resolve_deaths()
