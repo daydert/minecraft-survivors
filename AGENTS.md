@@ -1,5 +1,31 @@
 # Контекст для агентов
 
+## Версия 2 (~/MinecraftSurvivors2) — архитектура, приоритет над описанием ниже
+
+Оригинал 0.11.0 остаётся в ~/MinecraftSurvival как бэкап. План: docs/V2_PLAN.md.
+
+- `scripts/main.gd` — только жизненный цикл, ввод, действия и поток экранов.
+  Отрисовка: `scripts/ui/` — `game_canvas.gd` (общее состояние, ресурсы,
+  примитивы и пересылки для рендереров/тестов), `world_view.gd`, `hud.gd`,
+  `menu_screens.gd`, `run_screens.gd`, `gear_screens.gd`. QA-захваты, стресс,
+  автоигра и запись — `scripts/qa_harness.gd`.
+- `scripts/ui/screen_router.gd`: стек экранов. `router.open(экран, world, pause)`
+  запоминает экран и состояние мира, `router.close(world)` восстанавливает их.
+  Присваивание `screen = ...` — обычная навигация и очищает стек. Полей
+  `inventory_from / stats_from / achievements_from / lab_*` больше нет;
+  `pause_from` остаётся (это пауза мира, а не экран).
+- Главы: `world → campaign_world → arsenal_world → nether_world | end_world`.
+  `arsenal_world.gd` — оружие II главы, взрывчатка, огонь/иссушение, контроль
+  мобов, регенерация. Край **не** наследует Незер. Новая глава наследует
+  `arsenal_world.gd`. Правила глав — раздел `rules` в nether_/end_balance.json
+  (`rule("id")`), длительность — `balance.duration`.
+- Страховка рефакторинга: `qa/test_determinism.gd` (отпечатки симуляции всех глав,
+  `-- --record` перезаписывает qa/fixtures/determinism.json только при намеренном
+  изменении геймплея) и `scripts/golden_capture.sh` + `scripts/compare_golden.py`
+  (44 эталонных кадра в qa/golden/). `scripts/visual_summary.sh` — сводка
+  визуальных тестов; «resources still in use at exit» — известный шум выхода.
+
+
 Это существующая игра **Minecraft Survivors**, Godot 4.7.2 stable,
 GDScript, Compatibility. Общение и пользовательский текст — на русском.
 Текущая версия — 0.11.0. Сначала прочитайте `docs/ACHIEVEMENTS_UPDATE.md`. Для главы III сначала прочитайте
