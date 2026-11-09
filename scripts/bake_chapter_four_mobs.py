@@ -289,16 +289,17 @@ def quadruped(imp,kind,state,i,n,sheared=False):
 
 
 def infected_witch(imp,state,i,n):
-    mesh=witch(imp,state,i,n)
+    base=witch(imp,state,i,n)
+    tex=imp.tex('entity/witch')
+    # Replace the head with an articulated jaw and open both torso/robe fronts.
+    # Preserve the actual hat, nose, arms and palm-bound potion hierarchy.
+    mesh=split_head(imp,tex,24,10)
+    mesh += [face for index,face in enumerate(base) if index not in {0,1,2,3,4,5,36,42}]
+    mesh+=open_ribs(imp,11,-4.1,8,11)
     mesh+=tissue(imp,(-7,11,3),(15,17,9))
     mesh+=flesh(imp,(-5,14,9),(11,11,5))
-    # A ruptured face above the robe and a cauldron grown through the back.
-    mesh+=block(imp,'coal_block',(-4,24,-7),(8,6,3))
-    jaw=tissue(imp,(-4.5,21,-8),(9,3,5))
-    for x in [-3,-1,1,3]:
-        jaw+=bone(imp,(x-.5,24,-8),(1,2.5,1))
-        mesh+=bone(imp,(x-.5,27,-7.5),(1,2,1))
-    mesh+=transform(jaw,(-.25,0,.12),pivot=(0,25,-3))
+    mesh+=tissue(imp,(-5,9,-4),(3,7,4))
+    mesh+=flesh(imp,(-4,10,-5),(3,5,3))
     for yy in [16,21,26]:
         mesh+=beam(imp,(-6,yy,9),(-9,yy+2,10),1.4)
         mesh+=beam(imp,(6,yy,9),(9,yy+2,10),1.4)
@@ -356,7 +357,7 @@ def chicken(imp,state,i,n):
     return mesh
 
 
-def generate():
+def generate(only=None):
     version,client,_=find_client(Path.home()/'.local/share/PrismLauncher');imp=Importer(client)
     base=json.loads((ROOT/'data/animations.json').read_text())['actors']['zombie']
     definitions={
@@ -378,8 +379,11 @@ def generate():
       'parasite':(parasite,(24,20),1.0,(12,14)),
       'chicken':(chicken,(24,24),.85,(12,20)),
     }
-    sprites=[];actors={}
+    previous=json.loads((ROOT/'data/chapter_four_mobs.json').read_text()) if only else {}
+    previous_manifest=json.loads((ROOT/'docs/CHAPTER_FOUR_MOBS_MANIFEST.json').read_text()) if only else {}
+    sprites=previous.get('sprites',[]);actors=previous.get('actors',{})
     for name,(builder,frame,scale,anchor) in definitions.items():
+        if only and name not in only:continue
         spec=json.loads(json.dumps(base));spec['states']['death']={'start':22,'durations':[.1,.12,.14,.2],'loop':False};spec['columns']=26;spec['frame_size']=list(frame);spec['anchor']=list(anchor);spec['pivot']=list(anchor)
         spec['shadow_size']=[15,4] if name in ['gravedigger','bone_rider'] else [12,3] if name in ['open_cow','torn_spider'] else [7,2]
         # Action clips use normalized encounter progress; arbitrary attack lengths
@@ -406,11 +410,14 @@ def generate():
         atlas=Image.new('RGBA',(frame[0]*spec['columns'],frame[1]*3))
         for j,f in enumerate(frames):atlas.paste(f.crop(union),((j%spec['columns'])*frame[0],(j//spec['columns'])*frame[1]))
         imp.save(atlas,'ch4_'+name+'_atlas',['vanilla entity/item/block textures; connected custom hierarchy'])
-        sprites.append('ch4_'+name+'_atlas');actors['ch4_'+name]=spec
+        if 'ch4_'+name+'_atlas' not in sprites:sprites.append('ch4_'+name+'_atlas')
+        actors['ch4_'+name]=spec
         print('BAKED',name,flush=True)
     imp.save(bake(block(imp,'coarse_dirt',(-10,0,-6),(20,18,12)),(24,28),1,(12,22),yaw=0,elevation=20),'ch4_earth_wall',['block/coarse_dirt'])
-    sprites.append('ch4_earth_wall')
+    if 'ch4_earth_wall' not in sprites:sprites.append('ch4_earth_wall')
     (ROOT/'data/chapter_four_mobs.json').write_text(json.dumps(dict(sprites=sprites,actors=actors),indent=2)+'\n')
-    (ROOT/'docs/CHAPTER_FOUR_MOBS_MANIFEST.json').write_text(json.dumps(dict(version=version,client_jar=str(client),raw_files=imp.files,derived=imp.derived),indent=2)+'\n')
+    previous_manifest.setdefault('raw_files',{}).update(imp.files);previous_manifest.setdefault('derived',{}).update(imp.derived)
+    previous_manifest.update(version=version,client_jar=str(client))
+    (ROOT/'docs/CHAPTER_FOUR_MOBS_MANIFEST.json').write_text(json.dumps(previous_manifest,indent=2)+'\n')
 
 if __name__=='__main__':generate()

@@ -33,7 +33,7 @@
     "invulnerability": false,
     "diagnostic_cuts": true,
     "natural_run": false,
-    "sha256": "5d50a317084f92f6c541cd8fdff5728e505bcfcbb1b3b899d6487cbba3852aee"
+    "sha256": "87239e64336c9772ac2c774dc367eee29c9adf547e9d7fde1a9560a6893bf997"
   },
   "release": {
     "linux_native": [
@@ -63,6 +63,10 @@
       }
     ],
     "windows_exported": true,
-    "windows_native_tested": false
+    "windows_native_tested": false,
+    "final_witch_smoke": {
+      "exit_code": 0,
+      "errors": []
+    }
   }
 }
