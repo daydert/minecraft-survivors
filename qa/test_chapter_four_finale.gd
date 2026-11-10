@@ -95,6 +95,14 @@ func run():
 		if e.move=="rest":break
 	check(bright>.9 and split_seen and stunned and shadow,"Day acceleration cycles the sky with his shadow as the hand, stops time, then leaves him stunned")
 	check(frozen>=60 and released,"Stopped time hangs rings of shards around the hero and releases them together")
+	var below_safe:=true
+	for i in range(21):
+		e.shadow_angle=-PI*i/20.0
+		if e.in_shadow(e.hb.p+Vector2(0,30)) or e.in_shadow(e.hb.p+Vector2(60,40)):below_safe=false
+	check(below_safe,"The ground below him is never under the shadow hand")
+	var speed: float=w.movement_speed()
+	check(float(e.data.two.hole.pull)<speed*0.75 and float(e.data.two.rain.drift)*e.arena.size.x/float(e.data.two.rain.lanes)<speed,"The hole's pull and the drift of the safe rain lanes stay slower than the hero")
+	check(float(e.data.last.beam_off)>=0.6 and float(e.data.last.beam_speed[1])*120.0<speed,"The last attack's beams close for long enough to cross and turn slower than the hero")
 	e.shadow_angle=0.0;check(e.in_shadow(e.hb.p+Vector2(40,0)) and not e.in_shadow(e.hb.p+Vector2(-40,0)),"The shadow hand covers exactly the ground it is drawn on")
 	w.invulnerable=0;w.hp=0;w.step(1.0/60)
 	check(e.phase=="retry" and w.state=="RUNNING","Dying in stage II retries the stage instead of ending the run")

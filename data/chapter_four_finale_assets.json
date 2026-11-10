@@ -161,6 +161,18 @@
     "exhausted": {
       "start": 65,
       "count": 2
+    },
+    "stroll": {
+      "start": 67,
+      "count": 8
+    },
+    "point": {
+      "start": 75,
+      "count": 2
+    },
+    "snap": {
+      "start": 77,
+      "count": 3
     }
   },
   "steve": {

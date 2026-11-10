@@ -28,13 +28,17 @@ SCALE = 0.86
 def herobrine_skin(imp, face):
     tex = imp.tex("entity/player/wide/steve").copy()
     d = ImageDraw.Draw(tex)
-    eye = (255, 255, 255, 255) if face != "dim" else (70, 70, 74, 255)
+    eye = (255, 255, 255, 255) if face != "dim" else (196, 196, 204, 255)
     d.rectangle((9, 12, 10, 12), fill=eye)
     d.rectangle((13, 12, 14, 12), fill=eye)
     mouth = (40, 6, 8, 255)
     if face == "smile":
-        for x, y in [(10, 14), (11, 15), (12, 15), (13, 14)]:
+        # A wide, fixed grin: corners up, a row of teeth.
+        for x, y in [(9, 13), (14, 13), (9, 14), (14, 14)]:
             d.point((x, y), fill=mouth)
+        for x in range(10, 14):
+            d.point((x, 14), fill=(222, 214, 196, 255))
+            d.point((x, 15), fill=mouth)
     elif face == "rage":
         for x, y in [(10, 15), (11, 14), (12, 14), (13, 15)]:
             d.point((x, y), fill=mouth)
@@ -147,6 +151,11 @@ POSES = {
               {"lean": (-0.55, -0.45, 0), "ra": (-1.75, -0.2, 0), "la": (0.3, 0, -0.4), "rl": (-0.9, 0, 0), "ll": (0.8, 0, 0), "root": (0, -2, 0)}],
     "knocked": [{"lean": (0.6, 0.3, 0.15), "ra": (-0.3, 0, 1.2), "la": (-0.2, 0, -1.1), "head": (-0.6, 0.4, 0), "rl": (-0.5, 0, 0), "ll": (0.2, 0, 0)},
                 {"lean": (0.4, 0.1, 0.1), "ra": (-0.2, 0, 0.7), "la": (-0.4, 0, -0.8), "head": (-0.3, 0.2, 0), "rl": (-0.3, 0, 0), "ll": (0.15, 0, 0)}],
+    "point": [{"ra": (-0.9, 0, 0.15), "la": (0.5, 0, 0.25), "head": (-0.12, 0, 0), "lean": (0.06, 0, 0)},
+              {"ra": (-1.55, -0.05, 0.05), "la": (0.55, 0, 0.3), "head": (-0.15, 0, 0), "lean": (0.08, 0, 0)}],
+    "snap": [{"ra": (-1.2, 0, 0.5), "la": (0.5, 0, 0.25), "head": (-0.1, 0.15, 0), "lean": (0.06, 0, 0)},
+             {"ra": (-2.2, 0, 0.75), "la": (0.55, 0, 0.3), "head": (-0.15, 0.25, 0), "lean": (0.08, 0, 0)},
+             {"ra": (-2.0, 0, 0.9), "la": (0.55, 0, 0.3), "head": (-0.2, 0.2, 0), "lean": (0.1, 0, 0)}],
     "aura": [{"ra": (0.1, 0, 0.35), "la": (0.1, 0, -0.35), "head": (0.28, 0, 0), "lean": (0.06, 0, 0)},
              {"ra": (0.1, 0, 0.42), "la": (0.1, 0, -0.42), "head": (0.3, 0, 0), "lean": (0.09, 0, 0)}],
     "exhausted": [{"lean": (-0.45, 0, 0), "head": (0.5, 0, 0), "ra": (0.2, 0, 0.15), "la": (0.2, 0, -0.15), "rl": (-0.2, 0, 0.1), "ll": (0.2, 0, -0.1), "root": (0, -1, 0)},
@@ -157,9 +166,10 @@ POSES = {
 COUNTS = {"idle": 4, "walk": 8, "deflect": 3, "cast": 4, "invite": 2, "look_hand": 2, "kneel": 2, "rise": 4, "float": 4,
           "slam": 3, "guard": 1, "jab": 3, "hook": 3, "stagger": 2, "grab": 2, "resist": 2, "throw": 3, "dodge_l": 2,
           "dodge_r": 2, "fall": 4, "lying": 2, "lying_hit": 2, "headless": 1, "mount": 4, "lower_arm": 4,
-          "mount_raise": 3, "mount_slam": 2, "mount_still": 2, "lunge": 2, "knocked": 2, "aura": 2, "exhausted": 2}
+          "stroll": 8, "point": 2, "snap": 3, "mount_raise": 3, "mount_slam": 2, "mount_still": 2, "lunge": 2, "knocked": 2, "aura": 2, "exhausted": 2}
 HEROBRINE = ["idle", "walk", "deflect", "cast", "invite", "look_hand", "kneel", "rise", "float", "slam", "guard", "jab",
-             "hook", "stagger", "grab", "throw", "fall", "lying", "lying_hit", "headless", "lunge", "knocked", "aura", "exhausted"]
+             "hook", "stagger", "grab", "throw", "fall", "lying", "lying_hit", "headless", "lunge", "knocked", "aura", "exhausted",
+             "stroll", "point", "snap"]
 STEVE = ["idle", "walk", "guard", "jab", "hook", "stagger", "resist", "throw", "dodge_l", "dodge_r", "grab", "mount", "lower_arm", "mount_raise", "mount_slam", "mount_still", "lunge", "knocked"]
 
 
@@ -170,6 +180,14 @@ def frames_for(name):
         for i in range(n):
             s = math.sin(i / n * math.tau)
             out.append({"rl": (s * 0.7, 0, 0), "ll": (-s * 0.7, 0, 0), "ra": (-s * 0.6, 0, 0.04), "la": (s * 0.6, 0, -0.04), "root": (0, abs(s) * 0.6, 0)})
+        return out
+    if name == "stroll":
+        # Unhurried, hands behind the back, chin up: he has all the time there is.
+        out = []
+        for i in range(n):
+            sn = math.sin(i / n * math.tau)
+            out.append({"rl": (sn * 0.38, 0, 0), "ll": (-sn * 0.38, 0, 0), "ra": (0.5, 0, -0.28), "la": (0.5, 0, 0.28),
+                        "head": (-0.14, sn * 0.06, 0), "lean": (0.07, 0, 0), "root": (0, abs(sn) * 0.4, 0)})
         return out
     if name == "headless":
         return [dict(POSES["lying"][0], headless=True)]

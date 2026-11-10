@@ -334,6 +334,7 @@ func step_tower(w, dt: float):
 	if move in ["storm", "inferno"]:step_storm(w)
 	if move in ["waves", "inferno"]:step_waves(w, dt)
 	if move == "rest":set_pose("aura")
+	elif move_age > 0.5 and pose in ["point", "snap"]:set_pose("aura")
 	if move_age >= move_time:
 		if move != "rest" and move != "":
 			begin_move(w, "rest", float(t.rest))
@@ -345,8 +346,9 @@ func step_tower(w, dt: float):
 func start_tower(w, name: String):
 	var t: Dictionary = data.tower
 	var duration := 0.0
-	cast_fx(w, name == "inferno"); set_pose("cast")
-	if name in ["storm", "inferno"]:
+	cast_fx(w, name == "inferno"); set_pose("point" if name == "storm" else ("snap" if name == "waves" else "cast"))
+	if name == "waves":w.sound("ch4_hb_tick", .05)
+	if name == "storm":
 		var s: Dictionary = t.storm
 		marks.clear()
 		var from := tower_base()
@@ -365,8 +367,19 @@ func start_tower(w, name: String):
 		var base := tower_base()
 		var aim: float = Vector2(w.player.x - base.x, (w.player.y - base.y) * 2.0).angle()
 		for j in range(int(wv.count)):
-			waves.append({"p": base, "r": 0.0, "age": -j * float(wv.every), "gap": aim + (j % 2 * 2 - 1) * 0.7 * j})
+			var shift: float = 0.0 if j == 0 else float(wv.shift) * (1.0 if j % 2 == 1 else -1.0)
+			waves.append({"p": base, "r": 0.0, "age": -j * float(wv.every), "gap": aim + shift})
 		duration = maxf(duration, float(wv.time))
+		if name == "inferno":
+			# Lightning only where the gaps do not lead: standing still is punished, the way through is not.
+			marks.clear()
+			var dist: float = base.distance_to(w.player)
+			for i in range(int(t.inferno_marks)):
+				var side: float = 1.0 if i % 2 == 0 else -1.0
+				var a: float = aim + side * (0.55 + rng.randf() * 1.6)
+				var at: Vector2 = base + Vector2(cos(a), sin(a) * 0.5) * (dist + rng.randf_range(-40, 40))
+				marks.append({"p": at.clamp(arena.position, arena.end), "age": 0.0, "hit": false, "delay": 0.4 + i * 0.5, "r": float(t.storm.big_radius), "windup": 0.9})
+			duration = maxf(duration, 0.4 + int(t.inferno_marks) * 0.5 + 1.3)
 		w.sound("ch4_hb_fire", .2)
 	begin_move(w, name, duration)
 
@@ -397,7 +410,7 @@ func step_waves(w, dt: float):
 ## the hero cuts it open from the inside.
 func begin_vortex(w):
 	phase = "vortex"; age = 0.0; marks.clear(); waves.clear(); move = ""; music = ""
-	vortex_from = w.player; vortex_cut = false; set_pose("cast"); face = "smile"
+	vortex_from = w.player; vortex_cut = false; set_pose("point"); face = "smile"
 	w.sound("herobrine_warp")
 
 func step_vortex(w, dt: float):
@@ -416,7 +429,7 @@ func step_vortex(w, dt: float):
 		w.add_effect("ch4_hb_blink", hb.p, .45, {"dir": hb.visual_dir, "scale": scale()})
 		w.sound("ch4_hb_teleport", .1); w.shake = .3
 	if age >= float(v.duration):
-		phase = "one"; age = 0.0; face = "calm"; set_pose("aura"); music = "boss_one"; text_events.clear()
+		phase = "one"; age = 0.0; face = "smile"; set_pose("aura"); music = "boss_one"; text_events.clear()
 		begin_move(w, "rest", 1.0); save_checkpoint(w, "one")
 
 func step_kneel(w):
@@ -470,7 +483,8 @@ func step_last(w, dt: float):
 		var speeds: Array = l.beam_speed
 		beam_turn += lerpf(float(speeds[0]), float(speeds[1]), k) * dt
 		beams.clear()
-		var hot: bool = age >= rise + float(l.beam_warn)
+		var cycle: float = float(l.beam_on) + float(l.beam_off)
+		var hot: bool = age >= rise + float(l.beam_warn) and fposmod(age - rise - float(l.beam_warn), cycle) < float(l.beam_on)
 		for i in range(int(l.beams)):
 			beams.append({"a": beam_turn + i * TAU / int(l.beams), "hot": hot})
 			if hot:
@@ -501,7 +515,7 @@ func step_last(w, dt: float):
 ## The world is gone. So is his power: he shrinks to a man's size.
 func begin_erase(w):
 	phase = "erase"; age = 0.0; clear_hazards(); face = "rage"; music = ""; sky = 0.0; split = 0.0; text_events.clear()
-	set_pose("exhausted"); glitch = .6
+	set_pose("exhausted"); glitch = .6; set_steve("idle")
 	if stored.is_empty():
 		stored = {"build": w.build.duplicate(), "items": w.items.duplicate(), "evolved": w.evolved.duplicate()}
 	w.build = {}; w.items = {}; w.evolved = {}
@@ -523,8 +537,8 @@ func step_erase(w):
 	if age < float(sh[0]):set_pose("exhausted"); face = "rage"
 	elif age < float(sh[1]):set_pose("stagger" if int(age * 6) % 2 == 0 else "exhausted"); face = "dim"
 	elif age < float(sh[1]) + 1.2:set_pose("look_hand"); face = "dim"
-	elif age < d - 0.6:set_pose("exhausted"); face = "rage"
-	else:set_pose("guard")
+	elif age < d - 0.6:set_pose("exhausted"); face = "smile"
+	else:set_pose("guard"); set_steve("guard")
 	if age > float(sh[1]) + 1.0 and not spoken.has("breath"):spoken["breath"] = true; w.sound("ch4_breath")
 	if age >= d:
 		phase = "three"; age = 0.0; qte_index = 0; qte = {}
@@ -553,18 +567,22 @@ func step_fight(w, dt: float):
 			# He walks at the hero between attacks: unhurried, never running.
 			var walk: float = float(data.two.walk if two else data.one.walk)
 			if w.player.distance_to(hb.p) > float(data.one.keep) and w.clock - hb.deflect > .35:
-				hb.p += hb.p.direction_to(w.player) * walk * dt; set_pose("walk")
+				hb.p += hb.p.direction_to(w.player) * walk * dt; set_pose("stroll")
 			else:
 				set_pose("deflect" if w.clock - hb.deflect < .35 and phase == "one" else "aura")
 			if move_age >= move_time:next_attack(w)
 		"look":
 			set_pose("look_hand")
-			if move_age >= move_time:begin_move(w, "rest", .6); face = "calm"
+			if move_age >= move_time:begin_move(w, "rest", .6); face = "smile"
 		"invite":
 			set_pose("invite")
 			if move_age >= move_time:begin_move(w, "rest", .4)
-		"lightning":step_lightning(w)
-		"ring":step_ring(w, dt)
+		"lightning":
+			step_lightning(w)
+			if move_age > 0.6:set_pose("aura")
+		"ring":
+			step_ring(w, dt)
+			if move_age > 0.5:set_pose("aura")
 		"strike":step_strike(w)
 		"hole":step_hole(w, dt)
 		"blitz_mark", "blitz_dash", "landed":step_blitz(w, dt)
@@ -603,11 +621,12 @@ func start(w, name: String):
 			for i in range(count):
 				var off := Vector2.from_angle(i * TAU / count + rng.randf() * TAU) * float(l.spread) * (0.3 if i == 0 else 1.0)
 				marks.append({"p": w.player + w.tracked_velocity * 0.35 + off, "age": 0.0, "hit": false})
-			begin_move(w, "lightning", float(l.windup) + .5); set_pose("cast"); w.sound("ch4_hb_charge", .2); cast_fx(w)
+			begin_move(w, "lightning", float(l.windup) + .5); set_pose("point"); w.sound("ch4_hb_charge", .2); cast_fx(w)
 		"ring":
 			var r: Dictionary = data.one.ring
-			rings = [{"p": w.player, "gap": rng.randf() * TAU, "age": 0.0}]
-			begin_move(w, "ring", float(r.windup) + float(r.time)); set_pose("cast"); w.sound("ch4_hb_fire", .2); cast_fx(w)
+			var facing: Vector2 = w.facing if w.facing.length_squared() > 0 else Vector2.DOWN
+			rings = [{"p": w.player, "gap": Vector2(facing.x, facing.y * 2.0).angle() + rng.randf_range(-float(r.gap_near), float(r.gap_near)), "age": 0.0}]
+			begin_move(w, "ring", float(r.windup) + float(r.time)); set_pose("snap"); w.sound("ch4_hb_fire", .2); w.sound("ch4_hb_tick", .05); cast_fx(w)
 		"strike":
 			blink(w, w.player - w.facing.normalized() * 70 if w.facing.length_squared() > 0 else w.player + Vector2(0, 70))
 			var s: Dictionary = data.one.strike
@@ -629,7 +648,7 @@ func start(w, name: String):
 			begin_move(w, "blitz_mark", float(b.mark) * path.size() + float(b.delay)); set_pose("guard")
 		"rain":
 			var r: Dictionary = data.two.rain
-			drops.clear(); hb.rain_tick = -1; hb.heavy_n = 0
+			drops.clear(); hb.rain_tick = -1; hb.heavy_n = 0; hb.rain_from = rng.randi_range(4, int(r.lanes) - 5)
 			blink(w, Vector2(center.x, arena.position.y + 46))
 			begin_move(w, "rain", float(r.wave) * int(r.waves)); set_pose("cast"); w.sound("ch4_hb_rain", .2); cast_fx(w, true)
 		"rift":
@@ -769,7 +788,8 @@ func step_rain(w, dt: float):
 	hb.rain_vx = vx; hb.rain_wave = wave
 	if tick != int(hb.get("rain_tick", -1)):
 		hb.rain_tick = tick
-		var safe := int(round((sin(move_age * 1.45 + hb.max_hp) * 0.5 + 0.5) * (lanes_n - 1)))
+		# The safe lanes drift slower than the hero can walk.
+		var safe := int(round(pingpong(move_age * float(r.drift) + float(hb.get("rain_from", 0)), lanes_n - 1)))
 		var top: float = arena.position.y - 10
 		for i in range(lanes_n):
 			if absi(i - safe) <= int(r.safe) - 1:continue
@@ -858,9 +878,11 @@ func step_day(w):
 			var k := (t - elapsed) / c
 			sky = 0.5 - 0.5 * cos(k * TAU)
 			sun = i + k
-			shadow_angle = sun * TAU + PI * 0.5
+			# A sundial: by day the shadow sweeps the upper half, right to left. Below him is always safe.
+			var day_k := clampf((k - 0.25) / 0.5, 0, 1)
+			shadow_angle = lerpf(0.0, -PI, day_k)
 			var sh: Dictionary = d.shadow
-			shadow_on = sky > float(sh.from_sky)
+			shadow_on = k > 0.27 and k < 0.73
 			if shadow_on and in_shadow(w.player):w.receive_hit(float(sh.damage), hb)
 			var quarter := int(sun * 4.0)
 			if quarter != int(hb.tick):hb.tick = quarter; w.sound("ch4_hb_tick", .02)
@@ -1033,16 +1055,19 @@ func resolve_qte(w, ok: bool):
 const MOUNT := Vector2(-1, -3)
 
 func begin_death(w):
-	phase = "death"; age = 0.0; set_pose("lying"); face = "smile"; set_steve("idle"); music = ""; silence = true
-	hb.p = center; hb.visual_dir = Vector2.RIGHT; hb.scale = 1.0
-	w.player = center + Vector2(26, 2); w.facing = Vector2.LEFT
+	phase = "death"; age = 0.0; set_pose("lying"); face = "smile"; set_steve("grab"); music = ""; silence = true
+	hb.p = center + Vector2(28, 0); hb.visual_dir = Vector2.LEFT; hb.scale = 1.0
+	w.player = hb.p - Vector2(20, 0); w.facing = Vector2.RIGHT
 	w.sound("ch4_body_fall")
 
 func step_death(w, dt: float):
 	var d: Dictionary = data.death
-	var mount_at := 0.0
+	var mount_at: float = float(d.drag)
+	# He is dragged by the feet back onto the ground, laughing.
+	if age < mount_at:
+		hb.p = (center + Vector2(28, 0)).lerp(center, smoothstep(0.3, mount_at - 0.2, age))
+		w.player = hb.p - Vector2(20, 0); w.facing = Vector2.RIGHT; set_steve("grab")
 	steve_at = hb.p + MOUNT
-	w.facing = Vector2.LEFT
 	for line in d.lines:
 		if age >= float(line.at) and not spoken.has(line.text) and age < float(d.final):
 			spoken[line.text] = true

@@ -21,40 +21,40 @@
         "entity/player/wide/steve (white eyes, calm mouth texels)"
       ],
       "size": [
-        3216,
+        3840,
         224
       ],
-      "sha256": "9626445e8068608a13c3ff0a822e5b3d3589473a9a868ea08ad5393fdfc5d87e"
+      "sha256": "09a8e8a752e772eade6195825c401d9fd126850ba1a133034c7c365e2dcf0de0"
     },
     "ch4_hb_smile": {
       "sources": [
         "entity/player/wide/steve (white eyes, smile mouth texels)"
       ],
       "size": [
-        3216,
+        3840,
         224
       ],
-      "sha256": "ea610c90c61c309e818ed0836eae4b8535e519453de0a6c2ba01fe8a5f95dde1"
+      "sha256": "0060143f32ed3a2cd8aba62c3d235cae31b21ef3cad571ab427ab75eff8e7450"
     },
     "ch4_hb_rage": {
       "sources": [
         "entity/player/wide/steve (white eyes, rage mouth texels)"
       ],
       "size": [
-        3216,
+        3840,
         224
       ],
-      "sha256": "aae70568841919f2c3647e451565fc00248eab92b323d72e9d7550941e6a31a8"
+      "sha256": "29c60dfad83437b7c300db8ce5d87e3438271d11b03b1311b148df880112d654"
     },
     "ch4_hb_dim": {
       "sources": [
         "entity/player/wide/steve (white eyes, dim mouth texels)"
       ],
       "size": [
-        3216,
+        3840,
         224
       ],
-      "sha256": "abb62dce399d186ef1dd98c95cba2be216beb86cc6a9880791f729d65ae9dc1f"
+      "sha256": "012e5b4924eac98b03b39954e4e025ee8def1d6fbe30b5ea603fcb29986df2c8"
     },
     "ch4_fist_steve": {
       "sources": [

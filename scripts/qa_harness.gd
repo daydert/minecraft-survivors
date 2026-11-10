@@ -453,7 +453,7 @@ static func prepare_four_finale_capture(g):
 		while e.qte.result=="":finale_qte(w,e);w.step(1.0/60)
 		finale_run(w,.12);return
 	while e.phase=="three":finale_qte(w,e);w.step(1.0/60)
-	var death_at: Dictionary={"death_mount":2.0,"death_laugh":2.6,"death_crawl":6.2,"death_plead":11.8,"death_raise":12.3,"death_final":12.85,"death_hold":15.0}
+	var death_at: Dictionary={"death_drag":1.2,"death_mount":2.6,"death_laugh":2.6,"death_crawl":6.2,"death_plead":11.8,"death_raise":12.3,"death_final":12.85,"death_hold":15.0}
 	if death_at.has(mode):finale_run(w,death_at[mode]);return
 	finale_run(w,21.1)
 	if mode=="coords":finale_run(w,3.5);return

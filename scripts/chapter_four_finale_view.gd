@@ -70,7 +70,6 @@ static func herobrine(g, offset: Vector2, scale: float = -1.0, tint_override: Co
 	if e.phase == "erase" and e.glitch > 0 and s < float(e.data.giant):
 		figure(g, "ch4_hb_" + e.face, "herobrine", e.pose, e.pose_age, p, hb.visual_dir, minf(float(e.data.giant), s + 0.2), Color(1, 1, 1, 0.35))
 	figure(g, "ch4_hb_" + e.face, "herobrine", e.pose, e.pose_age, p - Vector2(0, lift * s), hb.visual_dir, s, tint, loop)
-	eyes(g, e, p - Vector2(0, lift * s), s)
 	if intensity > 0.01:aura_front(g, e, p - Vector2(0, lift * s * 0.5), s, intensity, clock)
 
 ## The eyes stay lit in any darkness; they gutter out with his power.
@@ -247,76 +246,65 @@ static func tower(g, offset: Vector2):
 static func h01i(i: int, salt: int) -> float:
 	return Atmosphere.hash01(i, salt, 47)
 
-## Chapter I's vortex closes around him — and he cuts it open from inside.
+## Chapter I's vortex, exactly as it took him then: a blood pool spinning on
+## the ground, the kneeling hero pressed thin. This time he cuts it in two.
 static func vortex(g, e, offset: Vector2):
 	var v: Dictionary = e.data.vortex
 	var clock: float = g.world.clock
-	var q: Vector2 = e.vortex_at() + offset - Vector2(0, 12)
+	var feet: Vector2= e.vortex_at() + offset
+	var q: Vector2 = feet - Vector2(0, 8)
 	var warp: float = float(v.warp)
-	if e.age < warp + 0.7:
-		var alpha: float = sin(clampf(e.age / (warp + 0.7), 0, 1) * PI)
+	if e.age < warp + 0.8:
+		var alpha: float = sin(clampf(e.age / (warp + 0.8), 0, 1) * PI)
 		for i in range(38):
 			var t: float = fposmod(i * 0.173 + e.age * 1.3, 1)
 			var p: Vector2 = e.vortex_from.lerp(e.vortex_at(), t) + offset + Vector2(sin(i * 2.4) * 13, -sin(t * PI) * 30 - i % 4 * 2)
 			g.draw_rect(Rect2(p.floor(), Vector2(2, 2)), Color(0.6, 0.35, 0.8, alpha * 0.8))
-	var grow: float = smoothstep(float(v.grow[0]), float(v.grow[1]), e.age)
-	var squeeze: float = 1.0 - 0.6 * smoothstep(float(v.squeeze[0]), float(v.squeeze[1]), e.age)
+	var progress: float = smoothstep(float(v.grow[0]), float(v.grow[1]), e.age)
+	var strength: float = smoothstep(float(v.grow[0]), float(v.squeeze[1]), e.age)
+	var compression: float = 1.0 - 0.68 * smoothstep(float(v.squeeze[0]), float(v.squeeze[1]), e.age)
 	var cut: float = float(v.cut)
-	var split: float = float(v.split)
-	var r: float = 54.0 * grow
 	if e.age < cut:
-		g.oval(q, Vector2(r * 1.2, r), Color(0.035, 0, 0.009, 0.92))
-		if e.age >= warp:steve_squeezed(g, e.vortex_at() + offset, squeeze, grow, clock)
-		for i in range(110):
+		g.oval(q, Vector2(72, 33) * progress, Color(0.035, 0, 0.009, 0.92))
+		if e.age >= warp:kneel_squeezed(g, feet, compression, strength, clock)
+		for i in range(130):
 			var t: float = fposmod(clock * 0.8 + i * 0.113, 1)
 			var angle: float = i * 2.399 + t * 6
-			var radius: float = (1 - t) * 92 * grow
-			var p: Vector2 = q + Vector2(cos(angle) * radius * 1.2, sin(angle) * radius)
-			g.draw_rect(Rect2(p.floor(), Vector2(1 + i % 3, 1 + i % 2)), Color(0.35 + i % 4 * 0.08, 0.005, 0.025, (1 - t) * grow))
-		g.draw_arc(q, r, 0, TAU, 48, Color(0.75, 0.05, 0.08, 0.8 * grow), 2)
-		g.draw_arc(q, r + 4, 0, TAU, 48, Color(0.5, 0.0, 0.03, 0.35 * grow), 3)
+			var radius: float = (1 - t) * 110 * progress
+			var pt: Vector2 = q + Vector2(cos(angle) * radius, sin(angle) * radius * 0.55)
+			g.draw_rect(Rect2(pt.floor(), Vector2(1 + i % 3, 1 + i % 2)), Color(0.35 + i % 4 * 0.08, 0.005, 0.025, (1 - t) * progress))
 		return
+	# The cut: one white line through the pool; the halves part and drain away.
 	var t: float = e.age - cut
-	var dir := Vector2(1, -0.45).normalized()
-	var line_k: float = clampf(t / 0.08, 0, 1)
-	var a: Vector2 = q - dir * (r + 30) * line_k
-	var b: Vector2 = q + dir * (r + 30) * line_k
-	var sep: float = smoothstep(split - cut, split - cut + 0.9, t) * 70.0
-	var fade: float = 1.0 - smoothstep(split - cut + 0.3, split - cut + 1.2, t)
+	var line_k: float = clampf(t / 0.07, 0, 1)
+	var sep: float = smoothstep(0.15, 1.0, t) * 34.0
+	var fade: float = 1.0 - smoothstep(0.5, 1.5, t)
 	if fade > 0:
 		for side in [-1, 1]:
-			var n: Vector2 = dir.orthogonal() * side
 			var pts := PackedVector2Array()
 			for j in range(25):
-				var ang: float = dir.angle() + (0.0 if side < 0 else PI) + PI * j / 24.0
-				var pt: Vector2 = q + Vector2(cos(ang) * r * 1.2, sin(ang) * r)
-				pts.append(pt + n * sep * -1.0 + Vector2(0, sep * 0.3))
+				var ang: float = (PI if side < 0 else 0.0) + PI * j / 24.0
+				pts.append(q + Vector2(cos(ang) * 72 * (1 + t * 0.3), sin(ang) * 33) + Vector2(0, side * sep))
 			g.draw_colored_polygon(pts, Color(0.035, 0, 0.009, 0.92 * fade))
-			g.draw_polyline(pts, Color(0.7, 0.05, 0.08, fade), 2)
-		for i in range(60):
+			g.draw_polyline(pts, Color(0.6, 0.03, 0.06, fade), 1)
+		for i in range(80):
 			var ang: float = h01i(i, 3) * TAU
-			var p: Vector2 = q + Vector2.from_angle(ang) * (t * (120 + h01i(i, 4) * 160)) + Vector2(0, t * t * 80)
-			g.draw_rect(Rect2(p.floor(), Vector2(2, 2)), Color(0.5, 0.02, 0.05, fade))
-	if t < 0.6:
-		g.draw_line(a, b, Color(1, 1, 1, 0.25 * (1 - t / 0.6)), 12)
-		g.draw_line(a, b, Color(1, 1, 1, 1 - t / 0.6), 3)
-	var saved: Vector2 = g.world.player
+			var pt: Vector2 = q + Vector2(cos(ang), sin(ang) * 0.55) * (40 + t * (90 + h01i(i, 4) * 140))
+			g.draw_rect(Rect2(pt.floor(), Vector2(2, 1)), Color(0.45, 0.02, 0.05, fade))
 	steve(g, offset, 1.0, Vector2.RIGHT)
-	g.world.player = saved
+	if t < 0.7:
+		var a: Vector2 = q + Vector2(-110, 4) * line_k
+		var b: Vector2 = q + Vector2(110, -4) * line_k
+		g.draw_line(a, b, Color(1, 1, 1, 0.25 * (1 - t / 0.7)), 14)
+		g.draw_line(a, b, Color(1, 1, 1, 1 - t / 0.7), 3)
 
-static func steve_squeezed(g, p: Vector2, compression: float, strength: float, clock: float):
-	var a: Dictionary = assets(g)
-	var clip: Dictionary = a.steve.guard
-	var size = Vector2(a.frame[0], a.frame[1])
-	var anchor = Vector2(a.anchor[0], a.anchor[1])
-	if not g.textures.has("ch4_fist_steve"):return
-	var col: int = int(clip.start)
-	for i in range(24):
-		var shift: float = sin(clock * 6 + i * 0.7) * strength * 5.0
-		var sx: float = (i * 2 - 24) * compression + shift
-		var h: float = size.y * (0.4 + 0.6 * compression)
-		g.draw_texture_rect_region(g.textures.ch4_fist_steve, Rect2(p + Vector2(sx, -anchor.y * (0.4 + 0.6 * compression)), Vector2(2 * compression + 0.5, h)),
-			Rect2(col * size.x + i * 2, 0, 2, size.y), Color(1, 1 - strength * 0.45, 1 - strength * 0.4))
+static func kneel_squeezed(g, p: Vector2, compression: float, strength: float, clock: float):
+	if not g.textures.has("duel_kneel"):return
+	var frame: int = g.clip_frame("duel_kneel", 2, false)
+	for i in range(20):
+		var shift: float = sin(clock * 6 + i * 0.7) * strength * 7
+		var q: Vector2 = p + Vector2((i * 2 - 20) * compression + shift, -43 * (0.35 + 0.65 * compression))
+		g.draw_texture_rect_region(g.textures.duel_kneel, Rect2(q, Vector2(2 * compression, 48 * (0.35 + 0.65 * compression))), Rect2(frame * 40 + i * 2, 0, 2, 48), Color(1, 1 - strength * 0.45, 1 - strength * 0.4))
 
 static func fire_ring(g, e, ring: Dictionary, offset: Vector2):
 	var r: Dictionary = e.data.one.ring
@@ -475,7 +463,7 @@ static func day_floor(g, e, offset: Vector2):
 		var q2: Vector2 = p + Vector2(cos(a), sin(a) * 0.62) * (face_r - (8.0 if i % 3 == 0 else 4.0))
 		g.draw_line(q.floor(), q2.floor(), Color(0.85, 0.85, 0.9, 0.55), 2 if i % 3 == 0 else 1)
 	var angles: Array = [e.shadow_angle]
-	if e.split > 0:angles = [PI * 0.25, PI * 0.75]
+	if e.split > 0:angles = [-PI * 0.25, -PI * 0.75]
 	for a in angles:
 		var dir := Vector2(cos(a), sin(a) * 0.62).normalized()
 		var side := dir.orthogonal()
@@ -722,26 +710,53 @@ static func day_sky(g, e, offset: Vector2):
 			var q := Vector2(h(j, 72) * 640, h(j, 73) * 360)
 			g.draw_rect(Rect2(q.floor(), Vector2.ONE), Color(1, 1, 1, 0.5 * k))
 
-## The last attack: the world is erased from the edges in, beams sweep.
+## The last attack: the world is erased from the edges in. Above his hands
+## a black sun; from it, tears in the world sweep round — burning, then
+## flickering shut, so there is always a moment to cross.
 static func last_attack(g, e, offset: Vector2):
 	var clock: float = g.world.clock
 	island(g, e, offset, e.void_r)
 	var p: Vector2 = e.hb.p + offset - Vector2(0, 14 * e.scale())
+	var sun: Vector2 = e.hb.p + offset - Vector2(0, 62 * e.scale())
+	var k: float = smoothstep(0.0, float(e.data.last.duration), e.age)
+	var wdt: float = float(e.data.last.beam_width)
 	for b in e.beams:
 		var dir := Vector2.from_angle(b.a)
-		var end: Vector2 = p + dir * 700
+		var side := dir.orthogonal()
 		if not b.hot:
-			var flick: float = 0.4 + 0.4 * sin(clock * 30.0)
-			g.draw_line(p, end, Color(1, 1, 1, flick * 0.6), 1)
-		else:
-			var wdt: float = float(e.data.last.beam_width)
-			g.draw_line(p, end, Color(1, 1, 1, 0.12), wdt * 2.2)
-			g.draw_line(p, end, Color(0.85, 0.85, 1.0, 0.45), wdt)
-			g.draw_line(p, end, Color(1, 1, 1, 1), 3)
-	var k: float = smoothstep(0.0, float(e.data.last.duration), e.age)
-	var orb: Vector2 = p - Vector2(0, 34 * e.scale())
-	g.draw_circle(orb, 6.0 * (1.0 + k + 0.15 * sin(clock * 25.0)), Color(1, 1, 1, 0.35))
-	g.draw_circle(orb, 3.0 * (1.0 + k), Color(1, 1, 1, 0.95))
+			var flick: float = 0.35 + 0.35 * sin(clock * 34.0)
+			var d := 20.0
+			while d < 640.0:
+				g.draw_line(p + dir * d, p + dir * (d + 8), Color(1, 1, 1, flick), 1)
+				d += 16.0
+			continue
+		var left := PackedVector2Array()
+		var right := PackedVector2Array()
+		for j in range(17):
+			var d: float = j * 42.0
+			var half: float = wdt * (0.9 - j * 0.03) * 0.5 + (h01i(j + int(clock * 24), 5) - 0.5) * 4.0
+			left.append(p + dir * d + side * half)
+			right.append(p + dir * d - side * half)
+		right.reverse()
+		var poly := left + right
+		g.draw_colored_polygon(poly, Color(0.9, 0.9, 1.0, 0.35))
+		g.draw_polyline(left, Color(0.0, 0.0, 0.0, 0.9), 1)
+		var core := PackedVector2Array()
+		for j in range(17):
+			core.append(p + dir * (j * 42.0) + side * (h01i(j + int(clock * 30), 6) - 0.5) * 3.0)
+		g.draw_polyline(core, Color(1, 1, 1, 1), 2)
+		for j in range(10):
+			var d: float = fposmod(clock * 300.0 + j * 64.0, 640.0)
+			g.draw_rect(Rect2((p + dir * d + side * (h01i(j, 7) - 0.5) * wdt).floor(), Vector2(2, 2)), Color(1, 1, 1, 0.9))
+	# The black sun: a hole with a white corona, swelling as he spends himself.
+	var r: float = 7.0 + 6.0 * k
+	for j in range(24):
+		var a: float = j * TAU / 24 + clock * 1.5
+		var len: float = r + 4 + h01i(j + int(clock * 10), 8) * (6 + 10 * k)
+		g.draw_line(sun + Vector2.from_angle(a) * (r + 1), sun + Vector2.from_angle(a) * len, Color(1, 1, 1, 0.75), 1)
+	g.draw_circle(sun, r + 2, Color(1, 1, 1, 0.9))
+	g.draw_circle(sun, r, Color(0, 0, 0, 1))
+	g.draw_line(sun, p, Color(1, 1, 1, 0.25), 2)
 	if e.age > float(e.data.last.duration) - 1.2:
 		var t: float = (e.age - (float(e.data.last.duration) - 1.2)) / 1.2
 		g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, t * t * 0.9))
@@ -800,7 +815,7 @@ static func duel_offsets(e) -> Array:
 					_:st_d.y += 16.0 * bump(t, 0.06, 0.6); st_d.x -= 8.0 * bump(t, 0.06, 0.6)
 			"attack":
 				st_d.x += 20.0 * bump(t, 0.06, 0.5)
-				hb_d.x += (120.0 * smoothstep(0.0, 0.5, t)) if q.hb == "fall" else 30.0 * bump(t, 0.05, 0.7)
+				hb_d.x += (40.0 * smoothstep(0.0, 0.4, t)) if q.hb == "fall" else 30.0 * bump(t, 0.05, 0.7)
 			"hold", "seq", "mash":
 				st_d.x += 18.0 * bump(t, 0.06, 0.5)
 				hb_d.x += 40.0 * bump(t, 0.06, 0.8)
@@ -931,6 +946,19 @@ static func death_scene(g, e, c: Vector2, offset: Vector2):
 	var head: Vector2 = at + Vector2(tab.head[0], tab.head[1]) * s
 	var clip: String = {"mount_raise": "raise", "mount_slam": "slam", "lower_arm": "stand"}.get(e.steve_pose, "still")
 	if e.pose == "headless":clip += "_x"
+	var drag: float = float(e.data.death.drag)
+	if e.age < drag:
+		# Dragged back by the feet from the edge of the void onto the ground.
+		var hp: Vector2 = at + (e.hb.p - e.center) * s
+		var sp: Vector2 = at + (g.world.player - e.center) * s
+		g.oval(hp + Vector2(0, 3), Vector2(50, 8), Color(0, 0, 0, 0.5))
+		for j in range(6):
+			var q: Vector2 = hp + Vector2(30 + j * 9, 1 + (j % 2))
+			g.draw_rect(Rect2(q.floor(), Vector2(6, 2)), Color(0.3, 0.0, 0.02, 0.8 * minf(1.0, e.age)))
+		figure(g, "ch4_hb_smile", "herobrine", "lying", e.pose_age, hp, Vector2.LEFT, s * 0.95, Color(0.85, 0.83, 0.88))
+		figure(g, "ch4_fist_steve", "steve", "grab", e.steve_pose_age, sp, Vector2.RIGHT, s * 0.95, Color.WHITE, true)
+		if e.age > drag - 0.15:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, (e.age - (drag - 0.15)) / 0.15))
+		return
 	if e.impact_frame > 0 and g.settings.flashes:
 		g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1))
 		tableau(g, clip, e.steve_pose_age, at, s, Color(0, 0, 0))
