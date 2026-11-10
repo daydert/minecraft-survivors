@@ -214,7 +214,7 @@ func landmark(g, mark: Dictionary, offset: Vector2):
 		g.sprite(name,p-anchor,Vector2.ZERO,Color(.2,.16,.16,.25))
 		return
 	g.oval(p+Vector2(0,2),Vector2(100,15) if mark.kind=="pyramid" else Vector2(30,7) if mark.kind=="house" else Vector2(12,4),Color(0,0,0,.4))
-	var pulse: float = 1+.025*sin(w.clock*2.2+mark.phase) if mark.kind.begins_with("growth") else 1.0
+	var pulse: float = 1+.025*sin(w.clock*2.2+mark.phase) if mark.kind.begins_with("growth") else (.78 if mark.kind == "crucifix" else 1.0)
 	if mark.get("attack","") == "windup":pulse += .12*(1-float(mark.timer)/float(w.db.data.chapter_four.growth.windup)) if mark.kind != "torch" else 0
 	var color := Color(1.4,1.1,1.1) if mark.get("flash",0)>0 and g.settings.flashes else Color.WHITE
 	# Fade an occluding ruin rather than hiding the hero behind the wall.
@@ -276,5 +276,5 @@ func note(g):
 	g.sprite("icon_ch4_note",Vector2(151,84),Vector2(24,24))
 	g.text_at(g.world.db.data.chapter_four.note.title,Vector2(189,102),16,g.INK,true)
 	var lines: Array = g.world.db.data.chapter_four.note.lines
-	for i in range(lines.size()):g.text_at(lines[i],Vector2(154,137+i*18),8,Color("dddddd"))
+	for i in range(lines.size()):g.text_at(lines[i],Vector2(150,132+i*15),8,Color("dddddd"))
 	g.button(Rect2(226,251,188,25),"Прочитано","ch4_note_close")

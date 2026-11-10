@@ -11,7 +11,7 @@ static func draw_level_up(g):
 		g.wrapped(g.gear_title(g.world.chosen_item,false,g.world.chosen_level),Vector2(194,193),252,12,g.INK,true)
 		if g.world.db.weapons.has(g.world.chosen_item) or g.world.db.passives.has(g.world.chosen_item):g.text_at("Уровень %d" % g.world.chosen_level,Vector2(194,229),8,g.MUTED)
 		return
-	if g.is_end() and g.world.choices.size()>3:
+	if (g.is_end() and g.world.choices.size()>3) or (g.is_four() and (g.world.choices.size()>3 or g.world.rerolls>0)):
 		draw_end_choices(g);return
 	g.dim(0.77)
 	g.centered("НОВЫЙ УРОВЕНЬ",67,23,g.LIME,true)
@@ -73,9 +73,11 @@ static func draw_pause(g):
 	g.button(Rect2(207,250,226,27),"В меню","menu")
 
 static func draw_chest(g):
+	var evolution=g.world.chest_reward.get("evolution",false)
+	if evolution and g.is_four():
+		g.four_renderer.ArsenalView.evolution(g);return
 	g.dim(0.78)
 	g.panel(Rect2(105,47,430,266),Color("203329"),g.GOLD)
-	var evolution=g.world.chest_reward.get("evolution",false)
 	g.centered("ЭВОЛЮЦИЯ" if evolution else "СУНДУК ОТКРЫТ",82,21,g.GOLD,true)
 	var id=g.world.chest_reward.get("id","apple")
 	if g.world.chest_delay>0:

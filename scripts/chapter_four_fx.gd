@@ -102,6 +102,9 @@ func burst(p: Vector2, big: bool, blood: bool):
 	if bursts.size() >= 8:bursts.pop_front()
 	bursts.append({"p": p, "age": 0.0, "big": big, "blood": blood, "seed": rng.randi() % 997})
 
+func freeze(w, seconds: float):
+	w.hitstop = maxf(w.hitstop, seconds)
+
 func shove(w, direction: Vector2, amount: float, shake: float = 0.0):
 	kick += direction * amount
 	kick = kick.limit_length(7.0)

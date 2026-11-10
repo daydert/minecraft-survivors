@@ -307,7 +307,7 @@ func action(id: String):
 		"chapter_4":start_chapter(4)
 		"ch4_note_close":close_four_note()
 		"end_reroll":
-			if is_end():world.reroll_choices()
+			if is_end() or is_four():world.reroll_choices()
 		"skip_reward":
 			if not coop.active and world is W:world.skip_reward()
 		"recipes_next":recipe_page+=1

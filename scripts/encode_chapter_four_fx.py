@@ -23,7 +23,7 @@ for n,cue in enumerate(cues):
     graph+=f'[{n+2}:a]volume={spec["gain"]*.55*variant.get("volume",1)},adelay={delay}|{delay}[c{n}];'
     labels.append(f'[c{n}]')
 graph+=''.join(labels)+f'amix=inputs={len(labels)}:normalize=0,alimiter=limit=0.95,atrim=0:{seconds},afade=t=out:st={seconds-.8}:d=0.8,apad=whole_dur={seconds}[a]'
-target=OUT/'chapter_four_fx.mp4'
+target=OUT/(sys.argv[1] if len(sys.argv)>1 and sys.argv[1].endswith('.mp4') else 'chapter_four_fx.mp4')
 args+=['-filter_complex',graph,'-map','[v]','-map','[a]','-c:v','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-t',str(seconds),'-movflags','+faststart',str(target)]
 subprocess.run(args,check=True)
 print(target,seconds)

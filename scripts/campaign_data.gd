@@ -68,7 +68,25 @@ func equipment_icon(id: String, level: int, evolution: bool = false) -> String:
 func title(id: String, evolution: bool = false) -> String:
 	return {"golden_carrot":"Золотая морковь","experience":"Опыт","ender_eye":"Око Эндера"}.get(id,super.title(id,evolution))
 
+## What the next level of a chapter IV passive changes, in its own numbers.
+func four_passive(id: String, level: int) -> String:
+	var r: Dictionary=data.four_arsenal.rules;var n:=level;var m:=level+1
+	match id:
+		"bedrock":return "Отбрасывание −%d%% → −%d%% · защита стоя %d%% → %d%%"%[12*n,12*m,int(100*float(r.bedrock_defense)*n),int(100*float(r.bedrock_defense)*m)]
+		"thorns":return "Ответный урон %s → %s"%[number(float(r.thorns_damage)*n),number(float(r.thorns_damage)*m)]
+		"bat_wings":return "Вампиризм %d%% → %d%% урона · до %s → %s HP/с"%[n,m,number(float(r.vamp_per_level)*n),number(float(r.vamp_per_level)*m)]
+		"heart_booster":return "Ускорение ×%s → ×%s · перезарядка %d → %d с%s"%[number(r.heart_speed[n-1]),number(r.heart_speed[m-1]),int(r.heart_recharge[n-1]),int(r.heart_recharge[m-1])," · второй заряд" if m==4 else ""]
+		"mirror_shard":return "Повтор после %d → %d ударов · сила %d%% → %d%%"%[int(r.mirror_hits[n-1]),int(r.mirror_hits[m-1]),int(100*(float(r.mirror_scale)-.03*(5-n))),int(100*(float(r.mirror_scale)-.03*(5-m)))]
+		"black_candle":return "Урон стоя до +%d%% → +%d%%"%[int(100*float(r.candle_per_level)*n),int(100*float(r.candle_per_level)*m)]
+		"empty_totem":return "Здоровье после возрождения %d → %d"%[3+3*n,3+3*m]
+		"gunpowder":return "Взрывной урон +%d%% → +%d%%"%[6*n,6*m]
+		"end_eye":return ["Ещё один предмет на выбор.","Один переброс при новом уровне.","Пятый предмет на выбор.","Второй переброс.","Третий переброс."][clampi(n,0,4)]
+	return ""
+
 func description(id: String, level: int) -> String:
+	if data.has("four_arsenal") and level>0 and level<5 and (data.four_arsenal.passives.has(id) or id=="end_eye"):
+		var text: String=four_passive(id,level)
+		if not text.is_empty():return text
 	if data.has("four_arsenal") and data.four_arsenal.descriptions.has(id):
 		if level==0:return data.four_arsenal.descriptions[id]
 		var a: Dictionary=stats(id,level);var b: Dictionary=stats(id,mini(8,level+1))
@@ -83,6 +101,7 @@ func description(id: String, level: int) -> String:
 		var labels={"damage":"Урон","radius":"Радиус","interval":"Интервал","range":"Дальность","speed":"Сила рывка","height":"Высота прыжка","force":"Отдача","duration":"Облако","count":"Удары щита"}
 		for k in labels:
 			if a.get(k,0)!=b.get(k,0):return "%s %s → %s%s" % [labels[k],number(a.get(k,0)),number(b.get(k,0))," с" if k in ["interval","duration"] else ""]
+	if id=="end_eye" and data.has("four_arsenal"):return four_passive(id,level)
 	if id=="end_eye":return ["Добавляет ещё один предмет на выбор.","Один переброс предметов при повышении уровня.","Ещё один предмет на выбор.","Один из пяти предметов меняется.","Три из пяти предметов меняются."][clampi(level,0,4)]
 	if id=="rabbit_foot":return "Лечение с врагов: шанс +3%." if level<4 else "Шанс +3%. Вместо яблок выпадает золотая морковь."
 	if id=="elytra":return "Пробел: полёт над пропастями." if level==0 else "Длительность полёта +0,5 с."

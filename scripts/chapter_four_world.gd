@@ -2,6 +2,8 @@ extends "res://scripts/arsenal_world.gd"
 ## IV owns its terrain, waves and arsenal. Special encounters and the final
 ## boss are the following stages of the chapter plan.
 const TERRAIN := "res://data/chapter_four_terrain.json"
+## The evolution scene plays for this long before "Continue" (skippable).
+const EVOLUTION_REVEAL := 1.7
 const Enemies = preload("res://scripts/chapter_four_enemies.gd")
 const Equipment = preload("res://scripts/chapter_four_equipment.gd")
 var arsenal = preload("res://scripts/chapter_four_arsenal.gd").new()
@@ -30,6 +32,11 @@ var aura_state := "none"
 var aura_changed_at := -10.0
 var victory_stage := ""
 var damage_popups: Dictionary={}
+## Impact freeze for boss blows: the whole simulation holds for a moment.
+var hitstop := 0.0
+## Level-up rerolls granted by the Eye of the End.
+var rerolls := 0
+const ELITE_NAMES := {"gravedigger":"Могильщик","bellringer":"Звонарь","bone_rider":"Костяной всадник"}
 
 func chapter_number() -> int:
 	return 4
@@ -41,7 +48,7 @@ func reset(seed_value: int = 0):
 	enemy_shots.clear();enemy_fields.clear();enemy_bottles.clear();mob_walls.clear();chickens.clear();mob_slow=1.0
 	note_read = false;note_pending = false;note_presented = false
 	aura_state = "none";aura_changed_at = -10.0;victory_stage = ""
-	damage_popups.clear()
+	damage_popups.clear();hitstop = 0.0;rerolls = 0
 	super.reset(seed_value)
 	var actors: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_mobs.json"))
 	animation.data.actors.merge(actors.actors,true)
@@ -124,11 +131,21 @@ func spawn(kind: String, at = null) -> bool:
 	if kind=="infected_witch" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.witches):return false
 	if kind=="growth_skeleton" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.skeletons):return false
 	if def.elite and mobs.filter(func(m):return m.get("boss",false) and m.hp>0).size()>=int(limits.elites):return false
+	var entrance: bool=def.elite and at==null and stage=="survival"
+	if entrance:
+		# Elites rise out of the ground in view instead of walking in off-screen.
+		for i in range(10):
+			var p: Vector2=player+Vector2.from_angle(i*2.39996+time)*(150+i%3*14)
+			if free_at(p,16) and not in_blood(p) and visible(p,-30):at=p;break
 	if not super.spawn(kind,at):return false
 	var m: Dictionary=mobs.back()
 	m.merge({"form":kind,"skin":"ch4_"+kind,"undead":true,"ai":def.ai,"boss":def.elite,"haste":0.0,"haste_scale":1.0,"changed":false,"cast":"","phase_duration":1.0,"phase_age":0.0,"lift":0.0,"passes":0,"pass_origin":m.p,"wall_points":[],"exploded":false,"expired":false,"expires":clock+float(def.ai.get("lifetime",99999))},true)
 	m.timer=1.2+float(m.id%7)*.27
 	m.phase="walk"
+	if entrance:
+		m.emerge=clock;m.stun=maxf(m.stun,1.1);m.visual_dir=m.p.direction_to(player)
+		fx.quake(self,m.p,1.4);fx.erupt(self,m.p,"dirt",9)
+		message=ELITE_NAMES.get(kind,"");message_timer=2.5;sound("ch4_growth_rip")
 	return true
 
 func move_mobs(dt: float):
@@ -357,6 +374,8 @@ func update_hand(dt: float):
 
 func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	if state != "RUNNING":return
+	if hitstop > 0:
+		hitstop = maxf(0.0, hitstop - dt);return
 	track_progress(dt)
 	clock += dt;stage_age += dt
 	invulnerable = maxf(0, invulnerable - dt);shake = maxf(0, shake - dt)
@@ -438,6 +457,27 @@ func close_chest():
 	super.close_chest()
 	if evolution:fx.evolve(self, id)
 
+## More items per run without a softer fight: every drop is worth more.
+func drop_xp(p: Vector2, value: int):
+	super.drop_xp(p, int(round(value * float(db.data.chapter_four.get("xp_scale", 1.0)))) if value > 0 else value)
+
+func next_level():
+	super.next_level()
+	rerolls = [0, 0, 1, 1, 2, 3][clampi(int(items.get("end_eye", 0)), 0, 5)]
+
+func make_choices() -> Array:
+	var result: Array = super.make_choices()
+	var eye: int = int(items.get("end_eye", 0))
+	var count: int = 3 + (1 if eye >= 1 else 0) + (1 if eye >= 3 else 0)
+	var pool: Array = eligible().filter(func(id): return not result.has(id))
+	while result.size() < count and not pool.is_empty():
+		var i: int = rng.randi_range(0, pool.size() - 1);result.append(pool[i]);pool.remove_at(i)
+	return result
+
+func reroll_choices() -> bool:
+	if state != "LEVEL_UP" or rerolls <= 0:return false
+	rerolls -= 1;choices = make_choices();sound("select");return true
+
 func movement_speed() -> float:
 	if arsenal.bat_left>0:return float(arsenal.rules(self).bat_speed)
 	return float(db.data.player_speed) * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow)
@@ -466,7 +506,7 @@ func open_chest(chest: Dictionary):
 	arsenal.clear(id)
 	run_progress.evolution(id);run_progress.observe(self)
 	chest_reward={"id":id,"evolution":true,"text":recipe.effect}
-	pending_chest={};chest_delay=.65;state="CHEST";sound("chest")
+	pending_chest={};chest_delay=EVOLUTION_REVEAL;state="CHEST";sound("chest")
 
 func discard(id: String) -> bool:
 	if not super.discard(id):return false

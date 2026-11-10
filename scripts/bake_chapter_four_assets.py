@@ -79,9 +79,9 @@ def ground(imp):
     vein = imp.tex("block/sculk_vein")
     tone = field(4, TILES, 9)
     rot_rng = np.random.default_rng(11)
-    out = Image.new("RGBA", (SIZE, SIZE))
     kinds = np.zeros((TILES, TILES), dtype=np.uint8)  # 0 ground 1 road 2 blood 3 flesh
     blood_noise = field(7, TILES, 6)
+    # Gameplay cells keep the per-tile classification (veins, data).
     for ty in range(TILES):
         for tx in range(TILES):
             p = (tx * 16 + 8, ty * 16 + 8)
@@ -94,19 +94,51 @@ def ground(imp):
             if any(segment_distance(p, a, b) < 22 for a, b in ROADS):
                 kind = 1
             kinds[ty, tx] = kind
-            if kind == 1:
-                tile = road
-            elif kind == 2:
-                tile = wet if blood_noise[ty, tx] > 0.72 else blood[(tx * 7 + ty * 3) % 2]
-            elif kind == 3:
-                tile = flesh[(tx + ty) % 2]
-            else:
-                pick = min(len(base) - 1, int(tone[ty, tx] * 1.6 * len(base)) % len(base))
-                tile = ash if rot_rng.random() < 0.05 else base[pick]
-            tile = tile.rotate(90 * int(rot_rng.integers(4)))
-            out.paste(tile, (tx * 16, ty * 16))
-            if kind == 3 and rot_rng.random() < 0.35:
-                out.alpha_composite(tinted(vein, (155, 45, 40)), (tx * 16, ty * 16))
+    # Every surface is laid out as a full layer; the pixels then pick a layer from
+    # a smooth field, so blood, flesh and road edges are ragged, never 16px steps.
+    layers = {k: Image.new("RGBA", (SIZE, SIZE)) for k in ["ground", "road", "blood", "wet", "flesh"]}
+    for ty in range(TILES):
+        for tx in range(TILES):
+            turn = 90 * int(rot_rng.integers(4))
+            pick = min(len(base) - 1, int(tone[ty, tx] * 1.6 * len(base)) % len(base))
+            choice = {"ground": ash if rot_rng.random() < 0.05 else base[pick], "road": road,
+                      "blood": blood[(tx * 7 + ty * 3) % 2], "wet": wet, "flesh": flesh[(tx + ty) % 2]}
+            for name, tile in choice.items():
+                layers[name].paste(tile.rotate(turn), (tx * 16, ty * 16))
+            if rot_rng.random() < 0.35:
+                layers["flesh"].alpha_composite(tinted(vein, (155, 45, 40)), (tx * 16, ty * 16))
+    step = 2
+    n = SIZE // step
+    ys, xs = (np.mgrid[0:n, 0:n] + 0.5) * step
+    gx, gy = np.clip(xs / 16 - 0.5, 0, TILES - 1.001), np.clip(ys / 16 - 0.5, 0, TILES - 1.001)
+    x0, y0 = gx.astype(int), gy.astype(int)
+    fx, fy = gx - x0, gy - y0
+    bn = (blood_noise[y0, x0] * (1 - fx) + blood_noise[y0, np.minimum(x0 + 1, TILES - 1)] * fx) * (1 - fy) \
+        + (blood_noise[np.minimum(y0 + 1, TILES - 1), x0] * (1 - fx) + blood_noise[np.minimum(y0 + 1, TILES - 1), np.minimum(x0 + 1, TILES - 1)] * fx) * fy
+    jitter = (field(23, n, 4) - 0.5) * 0.16 + (field(29, n, 1) - 0.5) * 0.03
+    infection = np.zeros((n, n))
+    for c, r in FLESH:
+        infection = np.maximum(infection, 1 - np.hypot(xs - c[0], ys - c[1]) / r)
+    pk = np.zeros((n, n), dtype=np.uint8)
+    pk[(infection > 0.5 + 0.28 * bn + jitter) | (bn + jitter * 0.6 > 0.93)] = 2
+    pk[infection > 0.74 + 0.18 * bn + jitter] = 3
+    wet_mask = (pk == 2) & (bn + jitter > 0.72)
+    road_d = np.full((n, n), np.inf)
+    for a, b in ROADS:
+        a, b = np.array(a, float), np.array(b, float)
+        d = b - a
+        t = np.clip(((xs - a[0]) * d[0] + (ys - a[1]) * d[1]) / d.dot(d), 0, 1)
+        road_d = np.minimum(road_d, np.hypot(xs - a[0] - t * d[0], ys - a[1] - t * d[1]))
+    pk[road_d < 22 + jitter * 60] = 1
+    pick = np.repeat(np.repeat(pk, step, 0), step, 1)
+    wet_full = np.repeat(np.repeat(wet_mask, step, 0), step, 1)
+    arr = {k: np.asarray(v) for k, v in layers.items()}
+    result = arr["ground"].copy()
+    result[pick == 1] = arr["road"][pick == 1]
+    result[(pick == 2) & ~wet_full] = arr["blood"][(pick == 2) & ~wet_full]
+    result[wet_full] = arr["wet"][wet_full]
+    result[pick == 3] = arr["flesh"][pick == 3]
+    out = Image.fromarray(result)
     imp.save(out.convert("RGB"), "ch4_ground", ["block/" + n for n in base_names] + ["block/gravel", "block/dirt_path_top", "block/crimson_nylium", "block/red_concrete_powder", "block/nether_wart_block", "block/sculk_vein"])
     return kinds
 

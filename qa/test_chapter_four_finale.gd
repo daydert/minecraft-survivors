@@ -10,10 +10,13 @@ func check(ok: bool, label: String):
 	if ok:print("PASS: ",label)
 	else:failures.append(label);push_error(label)
 func advance(w, seconds: float):
-	for i in range(ceili(seconds*60)):w.step(1.0/60)
+	for i in range(ceili(seconds*60)):
+		if w.state=="LEVEL_UP":w.skip_reward()
+		w.step(1.0/60)
 func until(w, condition: Callable, limit: float) -> bool:
 	for i in range(ceili(limit*60)):
 		if condition.call():return true
+		if w.state=="LEVEL_UP":w.skip_reward()
 		w.step(1.0/60)
 	return condition.call()
 

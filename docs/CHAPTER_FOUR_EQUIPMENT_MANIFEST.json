@@ -2066,63 +2066,63 @@
     },
     "icon_ch4_shotgun": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "17651f51a7ca2e28ad525d00d7086d4cc28173ddf333dcf1f279f63fb86b590d"
+      "sha256": "904f73fdd4ecc954e67ad7f94a533292e590dd9898ebbce7292b184dd56a2b91"
     },
     "icon_ch4_shotgun_evo": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "17651f51a7ca2e28ad525d00d7086d4cc28173ddf333dcf1f279f63fb86b590d"
+      "sha256": "3e6cd537e111b732e72536830213a35fc4d1258a7aa1f11d4fbf7b4786f9c9b5"
     },
     "icon_ch4_blood_pool": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+      "sha256": "2360842d5099f02056445c669bc67298b54f5d8110cf55e723778fa0f3a40231"
     },
     "icon_ch4_blood_pool_evo": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+      "sha256": "1b3177a4abaa766d3f5ae0d7e2df25ac08c85e7daa6754312f6b5d9f77b1e2b5"
     },
     "icon_ch4_embryo": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+      "sha256": "78798e5f4050e7bbb715373b2799e00162f14bc7693b3f9e3a8623b48c48c279"
     },
     "icon_ch4_embryo_evo": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "5770fe88736de1d437efe17142e18da4ae778ba10d706f399b17d44606a50337"
+      "sha256": "b2c8d65a96f4b914b83a62fc342f16c6b3af9fa0c804ac5fb6eb3651a15c90bf"
     },
     "icon_ch4_bell": {
       "sources": [
@@ -2146,43 +2146,43 @@
     },
     "icon_ch4_bone_saw": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "ec800a86a2c205bddadfa2a64d605315a96f418312cc7e2a127347147dc6b066"
+      "sha256": "98da224b69791c59d28eb7638f3a55606365f9064306024e0865468bf6030fe2"
     },
     "icon_ch4_bone_saw_evo": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "ec800a86a2c205bddadfa2a64d605315a96f418312cc7e2a127347147dc6b066"
+      "sha256": "b58fbb6ab4af986cb7d56a83f30c691cc997324423baf846c1320c4a48e5e7c5"
     },
     "icon_ch4_red_torch": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "bca25c0460024f5c6e1e6c96f706b216f56b2971ea53f6e16e5a2307e287581d"
+      "sha256": "73a019a93175424d7ebd7cf3156810fca6abbf3a8afe13653faef075e3b65f2e"
     },
     "icon_ch4_red_torch_evo": {
       "sources": [
-        "native textured held tool"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "bca25c0460024f5c6e1e6c96f706b216f56b2971ea53f6e16e5a2307e287581d"
+      "sha256": "63a90af7de95a1b465a7bdc160ffa1ec581bdc5064d6d5116f64da392dc1674e"
     },
     "icon_ch4_sky_tnt": {
       "sources": [
@@ -2246,23 +2246,23 @@
     },
     "icon_ch4_mirror_shard": {
       "sources": [
-        "native textured equipment geometry"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "49e2097a6d528d6be209d912b557023cbbbcaccc5c51105544d976a0a7fd36ea"
+      "sha256": "4ec13a0b13b397ee81eb3c0c4bc5ec7def9bb890111713899c931fc97e40e23d"
     },
     "icon_ch4_black_candle": {
       "sources": [
-        "native textured equipment geometry"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "7062eae91d172d2485de34e452852520b22fa3bdf3b07e990bfd048385fe4e5c"
+      "sha256": "fb7393643c8731508e30d473b574492de098bfc596205085e6657a2129749848"
     },
     "icon_ch4_empty_totem": {
       "sources": [
@@ -2286,13 +2286,13 @@
     },
     "icon_ch4_thorns": {
       "sources": [
-        "native textured equipment geometry"
+        "scripts/bake_chapter_four_icons.py: original icon, vanilla texture grain"
       ],
       "size": [
         16,
         16
       ],
-      "sha256": "4971110731cf1f2843e2050b76f64860159e3d6c313906bdf170709e924c2289"
+      "sha256": "6abf97197258e5a945a5bf6fd4c7751fc5df048c18921d4edb83824960061ab1"
     },
     "icon_ch4_bat_wings": {
       "sources": [

@@ -153,7 +153,7 @@ func update_mass(w,dt: float):
 		mass.small=true;mass.scale=.96;mass.radius=21
 		for part in parts:
 			if part.hp>0:detach(w,part)
-		enter(mass,"recover",1.2);w.sound("ch4_mass_shed");w.fx.burst(mass.p-Vector2(0,22),true,true);w.fx.erupt(w,mass.p,"flesh",12);w.fx.quake(w,mass.p,1.2)
+		enter(mass,"recover",1.2);w.sound("ch4_mass_shed");w.fx.burst(mass.p-Vector2(0,22),true,true);w.fx.erupt(w,mass.p,"flesh",12);w.fx.quake(w,mass.p,1.2);w.fx.freeze(w,.14)
 	mass.skin="ch4d_mass_"+str(mass.mask)
 	if mass.phase=="recover":
 		if mass.timer<=0:enter(mass,"walk",.5)
@@ -201,7 +201,7 @@ func update_mass(w,dt: float):
 func struck(w,m: Dictionary):
 	var before: float=w.hp
 	w.receive_hit(m.damage,m)
-	if w.hp<before:w.fx.burst(w.player-Vector2(0,12),true,true);w.fx.shove(w,m.p.direction_to(w.player),5.0,.2)
+	if w.hp<before:w.fx.burst(w.player-Vector2(0,12),true,true);w.fx.shove(w,m.p.direction_to(w.player),5.0,.2);w.fx.freeze(w,.07)
 
 func sweep_segment(progress: float=-1) -> Array:
 	var k: float=clampf(mass.phase_age/maxf(.01,mass.phase_duration),0,1) if progress<0 else progress
@@ -253,7 +253,7 @@ func update_golem(w,dt: float):
 		if golem.timer<=0:golem.skin="ch4d_golem_saved";golem.allied=true;golem.undead=false;golem.help_until=w.clock+data.golem.help_duration;enter(golem,"walk",.8);w.loot.append({"kind":"chest","p":golem.p+Vector2(0,20),"born":w.time})
 		return
 	if not rescued and nodes.filter(func(n):return n.encounter_actor=="golem_node" and n.hp>0).is_empty():
-		rescued=true;golem.allied=true;golem.undead=false;enter(golem,"release",data.golem.release);w.drop_xp(golem.p,data.golem.reward_xp);w.sound("ch4_golem_free");w.add_effect("ch4d_release",golem.p,1.4);w.fx.quake(w,golem.p,1.2);w.fx.ring(golem.p,170.0,1.0,"evolve");w.fx.flash(golem.p-Vector2(0,24),220.0,Color(1,.9,.6),.7);return
+		rescued=true;golem.allied=true;golem.undead=false;enter(golem,"release",data.golem.release);w.drop_xp(golem.p,data.golem.reward_xp);w.sound("ch4_golem_free");w.add_effect("ch4d_release",golem.p,1.4);w.fx.quake(w,golem.p,1.2);w.fx.ring(golem.p,170.0,1.0,"evolve");w.fx.flash(golem.p-Vector2(0,24),220.0,Color(1,.9,.6),.7);w.fx.freeze(w,.14);return
 	# The director keeps only one hostile encounter preparing attacks at a time.
 	if busy() and not rescued:return
 	if controlled(golem):return

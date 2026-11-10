@@ -189,6 +189,7 @@ func item_icon(id: String, p: Vector2, scale_factor: float = 1.0, evolution: boo
 	var name: String = world.db.icon(id,evolution)
 	if not coop.active and world.db.has_method("equipment_icon"):
 		name=world.db.equipment_icon(id,world.build.get(id,world.items.get(id,1)) if equipment_level<0 else equipment_level,evolution)
+	if name=="end_eye" and not textures.has("icon_end_eye"):load_texture("icon_end_eye")
 	if name in ["netherite","flamebow","channeling"] or (evolution and minecraft_assets.clips.has(name+"_enchanted")):
 		draw_clip(name+"_enchanted",p,Vector2.ONE*16*scale_factor,item_time())
 	else: sprite("icon_"+name,p,Vector2.ONE*16*scale_factor)

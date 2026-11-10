@@ -8,6 +8,7 @@ static func configure(db):
 	for id in data.exclude_passives:db.passives.erase(id)
 	db.recipes.fishing.passive="ghast_tear"
 	db.data.four_buffs={"damage":1.0,"speed":1.0}
+	if db.data.weapons.has("potion"):db.data.weapons.potion.name="Зелья"
 
 static func stats(db,id: String,level: int,evolution: bool,items: Dictionary) -> Dictionary:
 	var s: Dictionary=db.stats_standard(id,level,evolution and id!="sword",items)
@@ -41,5 +42,6 @@ static func ready(w,id: String) -> bool:
 
 static func icon(db,id: String,evolution: bool) -> String:
 	if evolution and db.recipes.has(id):return db.recipes[id].icon
+	if id=="end_eye":return "end_eye"
 	if id in db.data.four_arsenal.weapons or id in db.data.four_arsenal.passives or id=="potion":return "ch4_"+id
 	return ""

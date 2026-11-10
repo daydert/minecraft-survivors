@@ -5,6 +5,50 @@
     "textures/entity/bat.png": {
       "sha256": "6d13496ffff10bb9302825f0ba1845051f1d99246d873248a9686066ebdb8174",
       "bytes": 329
+    },
+    "textures/block/dark_oak_planks.png": {
+      "sha256": "665f44b119f5a21711c4cb83749d871635134c001cb0c14761c4f02a40dd8645",
+      "bytes": 195
+    },
+    "textures/block/iron_block.png": {
+      "sha256": "dafa9944ba49fe71958553eded50e87d7bea9c7410cfe568745989bede101c49",
+      "bytes": 169
+    },
+    "textures/block/bone_block_side.png": {
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "bytes": 139
+    },
+    "textures/block/redstone_block.png": {
+      "sha256": "104718f1f17c7016eeff145ca59d16a9ab026cad26de9dfba8a7815ccd8f18ed",
+      "bytes": 171
+    },
+    "textures/block/black_candle.png": {
+      "sha256": "12e76d52487e6119aefc6a7c921d2ebcab7bbfc655b84a71bdf678225117aacb",
+      "bytes": 117
+    },
+    "textures/block/dark_oak_log.png": {
+      "sha256": "b5d28ee7e1c88d8d1719468c9d798157159a82ab84209ec4236373de21496d0e",
+      "bytes": 191
+    },
+    "textures/block/red_concrete_powder.png": {
+      "sha256": "39f9bb7a9f0e11986b65cec8bb58252405f26f048ee3c62397038e3a0eff9e1d",
+      "bytes": 564
+    },
+    "textures/block/nether_wart_block.png": {
+      "sha256": "11c7567e6945e4425cb5eb22bf4b973600fc0ace33f9e556759eb949564e34b1",
+      "bytes": 178
+    },
+    "textures/block/glass.png": {
+      "sha256": "cb89c706dce86eac3123cef087d359b5f23098b658a468fb91662b4a9922bcd0",
+      "bytes": 147
+    },
+    "textures/block/black_wool.png": {
+      "sha256": "8cefbc855a4ff04f6125ded6a69e8bd21144802fc466b179665c8c0203daffd9",
+      "bytes": 360
+    },
+    "textures/block/oak_planks.png": {
+      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+      "bytes": 195
     }
   },
   "derived": {
@@ -17,6 +61,253 @@
         72
       ],
       "sha256": "4fcb8e8933a8fe227d4080580bc627f28cd8912cbc2bb5ea7c52e8a8dc5397df"
+    },
+    "icon_ch4_shotgun": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "904f73fdd4ecc954e67ad7f94a533292e590dd9898ebbce7292b184dd56a2b91"
+    },
+    "icon_ch4_shotgun_evo": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3e6cd537e111b732e72536830213a35fc4d1258a7aa1f11d4fbf7b4786f9c9b5"
+    },
+    "icon_ch4_bone_saw": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "98da224b69791c59d28eb7638f3a55606365f9064306024e0865468bf6030fe2"
+    },
+    "icon_ch4_bone_saw_evo": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b58fbb6ab4af986cb7d56a83f30c691cc997324423baf846c1320c4a48e5e7c5"
+    },
+    "icon_ch4_red_torch": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "73a019a93175424d7ebd7cf3156810fca6abbf3a8afe13653faef075e3b65f2e"
+    },
+    "icon_ch4_red_torch_evo": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "63a90af7de95a1b465a7bdc160ffa1ec581bdc5064d6d5116f64da392dc1674e"
+    },
+    "icon_ch4_black_candle": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fb7393643c8731508e30d473b574492de098bfc596205085e6657a2129749848"
+    },
+    "icon_ch4_mirror_shard": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4ec13a0b13b397ee81eb3c0c4bc5ec7def9bb890111713899c931fc97e40e23d"
+    },
+    "icon_ch4_thorns": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "6abf97197258e5a945a5bf6fd4c7751fc5df048c18921d4edb83824960061ab1"
+    },
+    "icon_ch4_blood_pool": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "2360842d5099f02056445c669bc67298b54f5d8110cf55e723778fa0f3a40231"
+    },
+    "icon_ch4_blood_pool_evo": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1b3177a4abaa766d3f5ae0d7e2df25ac08c85e7daa6754312f6b5d9f77b1e2b5"
+    },
+    "icon_ch4_embryo": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "78798e5f4050e7bbb715373b2799e00162f14bc7693b3f9e3a8623b48c48c279"
+    },
+    "icon_ch4_embryo_evo": {
+      "sources": [
+        "block/dark_oak_planks",
+        "block/iron_block",
+        "block/bone_block_side",
+        "block/redstone_block",
+        "block/black_wool",
+        "block/glass",
+        "block/dark_oak_log",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b2c8d65a96f4b914b83a62fc342f16c6b3af9fa0c804ac5fb6eb3651a15c90bf"
     }
   }
 }

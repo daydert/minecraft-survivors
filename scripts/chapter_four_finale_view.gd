@@ -1063,8 +1063,24 @@ static func death_scene(g, e, c: Vector2, offset: Vector2):
 		for j in range(6):
 			var q: Vector2 = hp + Vector2(30 + j * 9, 1 + (j % 2))
 			g.draw_rect(Rect2(q.floor(), Vector2(6, 2)), Color(0.3, 0.0, 0.02, 0.8 * minf(1.0, e.age)))
-		figure(g, "ch4_hb_smile", "herobrine", "lying", e.pose_age, hp, Vector2.LEFT, s * 0.95, Color(0.85, 0.83, 0.88))
-		figure(g, "ch4_fist_steve", "steve", "grab", e.steve_pose_age, sp, Vector2.RIGHT, s * 0.95, Color.WHITE, true)
+		# His head stays on the ground; Steve holds him up by the ankles, so the
+		# body is tilted from the head to the hero's hands.
+		var sc: float = s * 0.95
+		var a: Dictionary = assets(g)
+		var head_off := Vector2(a.lying_head[0], a.lying_head[1])
+		var hb_head: Vector2 = hp + Vector2(-head_off.x, head_off.y) * sc
+		var lift: float = 0.5 + 0.04 * sin(e.age * 9.0)
+		var length: float = 22.0 * sc
+		var feet: Vector2 = hb_head + Vector2(-cos(lift), -sin(lift)) * length
+		sp = feet - Vector2(7.7, -15.4) * sc
+		if g.textures.has("ch4_hb_smile"):
+			var lying: Dictionary = a.herobrine.lying
+			var col: int = int(lying.start) + int(e.pose_age * 6.0) % int(lying.count)
+			var fsize := Vector2(a.frame[0], a.frame[1]);var fanchor := Vector2(a.anchor[0], a.anchor[1])
+			g.draw_set_transform(hb_head.floor(), lift, Vector2(-1, 1))
+			g.draw_texture_rect_region(g.textures.ch4_hb_smile, Rect2(-(fanchor + head_off) * sc, fsize * sc), Rect2(Vector2(col * fsize.x, 2 * fsize.y), fsize), Color(0.85, 0.83, 0.88))
+			g.draw_set_transform(Vector2.ZERO)
+		figure(g, "ch4_fist_steve", "steve", "grab", e.steve_pose_age, sp, Vector2.RIGHT, sc, Color.WHITE, true)
 		if e.age > drag - 0.15:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, (e.age - (drag - 0.15)) / 0.15))
 		return
 	if e.impact_frame > 0 and g.settings.flashes:
