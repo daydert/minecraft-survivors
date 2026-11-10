@@ -501,6 +501,46 @@
       "source": "minecraft/sounds/block/iron_door/close3.ogg",
       "sha256": "feb84da1099d5ae1d51b56d58efacce6b015aef9d385abce91d34a612119ec40"
     },
+    "random_click.ogg": {
+      "source": "minecraft/sounds/random/click.ogg",
+      "sha256": "9c5cecb187a4128f5d7a9f492854d2c1ba60413d413b3d5df36b9720d53a3b15"
+    },
+    "mob_warden_roar_1.ogg": {
+      "source": "minecraft/sounds/mob/warden/roar_1.ogg",
+      "sha256": "37f1be4af324a4bd4c6141653f7f7d5e6eb38eb34fd318880b25d5a19478244a"
+    },
+    "mob_warden_roar_2.ogg": {
+      "source": "minecraft/sounds/mob/warden/roar_2.ogg",
+      "sha256": "d8031d8ac8d7c9c2fedad2aff32a268f31de66e8fb72a768aefdd3166830c18f"
+    },
+    "mob_warden_roar_3.ogg": {
+      "source": "minecraft/sounds/mob/warden/roar_3.ogg",
+      "sha256": "f4a1ca2f25d0b7d05f296459fd7892ca2c3c2861d4daf1a13e3d29e4bd86b2d6"
+    },
+    "mob_warden_sonic_boom1.ogg": {
+      "source": "minecraft/sounds/mob/warden/sonic_boom1.ogg",
+      "sha256": "9edc2796b7e9ef97d61bd814a8a6b3e78e25cd8f410a733a2010416a95acceb6"
+    },
+    "mob_warden_sonic_boom2.ogg": {
+      "source": "minecraft/sounds/mob/warden/sonic_boom2.ogg",
+      "sha256": "e7cacd5568320b66b277a77b5ee0cf5014e4e1ee70d341a535af90b3b5541a8a"
+    },
+    "mob_warden_sonic_boom3.ogg": {
+      "source": "minecraft/sounds/mob/warden/sonic_boom3.ogg",
+      "sha256": "d3a7953a576e138f94f5706495dd84d63d0ece226d5d24ca688d8c1760ec442a"
+    },
+    "portal_trigger.ogg": {
+      "source": "minecraft/sounds/portal/trigger.ogg",
+      "sha256": "07e0d99b8770799c42e6d2564139125b91a06c24e815cfb42021485d3b2ff72b"
+    },
+    "mob_guardian_attack_loop.ogg": {
+      "source": "minecraft/sounds/mob/guardian/attack_loop.ogg",
+      "sha256": "a7554ac8bf4052988f83f7a293bf938887a99c0e4f05b45f38eea2940c3dc04d"
+    },
+    "random_break.ogg": {
+      "source": "minecraft/sounds/random/break.ogg",
+      "sha256": "232f9beec1cb73323d61ab365770e5bb68384b2ed31cd589f85dbf4c3aac5775"
+    },
     "ancestry.ogg": {
       "source": "minecraft/sounds/music/game/ancestry.ogg",
       "sha256": "c69011c3990c5708e5ede20b36454a467d67f457c1e02031da5d58762cdc3946"

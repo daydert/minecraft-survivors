@@ -1160,5 +1160,102 @@
         "pitch": 1
       }
     ]
+  },
+  "ch4_hb_tick": {
+    "minecraft_event": "block.lever.click",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/random_click.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_hb_roar": {
+    "minecraft_event": "entity.warden.roar",
+    "gain": 0.75,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_roar_1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_roar_2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_roar_3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_impact": {
+    "minecraft_event": "entity.warden.sonic_boom",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_sonic_boom1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_sonic_boom2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_warden_sonic_boom3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_hb_suck": {
+    "minecraft_event": "block.portal.trigger",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/portal_trigger.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_hb_shrink": {
+    "minecraft_event": "block.beacon.deactivate",
+    "gain": 0.8,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_deactivate.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_hb_beam": {
+    "minecraft_event": "entity.guardian.attack",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_guardian_attack_loop.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_hb_strip": {
+    "minecraft_event": "entity.item.break",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/random_break.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
   }
 }

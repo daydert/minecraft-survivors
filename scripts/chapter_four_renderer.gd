@@ -42,7 +42,7 @@ func world(g):
 		if Rect2(-100,-100,840,560).has_point(m.p+offset):actors.append({"sort":m.p.y,"kind":"mob","obj":m})
 	for o in w.loot:
 		if Rect2(-24,-24,688,408).has_point(o.p+offset):actors.append({"sort":o.p.y,"kind":"loot","obj":o})
-	var close_up: bool = w.ending.phase in ["three","death","retry"]
+	var close_up: bool = w.ending.phase in ["erase","three","death","retry"]
 	if not close_up:actors.append({"sort":w.player.y,"kind":"player"})
 	if not w.ending.hb.is_empty() and not close_up and w.ending.phase not in ["coords","road","door","done"]:actors.append({"sort":w.ending.hb.p.y,"kind":"herobrine"})
 	EncounterView.append_actors(g,actors)
@@ -101,11 +101,13 @@ func world(g):
 			g.draw_rect(Rect2((particle.p+offset).floor(),Vector2.ONE*ceilf(particle.get("size",2))),Color(particle.color,clampf(particle.life/.1,0,1)))
 	Atmosphere.collect(g,offset)
 	EncounterView.lights(g)
-	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","one","two","kneel"]:
+	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","one","two","kneel","last","erase"]:
 		var e = w.ending
+		if not e.hole.is_empty():g.ambient_lights.append({"p":e.hole.p,"r":120.0,"c":Color(.8,.6,1.0),"power":.8,"glow":.25})
+		if e.phase == "last":g.ambient_lights.append({"p":e.hb.p,"r":260.0,"c":Color(1,1,1),"power":.9,"glow":.2})
 		for ef in w.effects:
 			if ef.kind=="ch4_hb_ignite":g.ambient_lights.append({"p":ef.p,"r":90.0,"c":Color(1,.25,.12),"power":.9,"glow":.25})
-		g.ambient_lights.append({"p":e.hb.p-Vector2(0,26),"r":56.0,"c":Color(.9,.92,1.0),"power":.55,"glow":.05})
+		g.ambient_lights.append({"p":e.hb.p-Vector2(0,26*e.scale()),"r":56.0*e.scale(),"c":Color(.9,.92,1.0),"power":.55,"glow":.05})
 		g.ambient_lights.append({"p":e.center,"r":230.0,"c":Color(.72,.74,.86),"power":.42,"glow":.0})
 		var r: Rect2 = e.arena
 		for i in range(10):
@@ -114,6 +116,8 @@ func world(g):
 				g.ambient_lights.append({"p":q-Vector2(0,12),"r":58.0,"c":Color(1,.22,.12),"power":.6,"glow":.12})
 		for ring in e.rings:
 			if ring.has("r"):g.ambient_lights.append({"p":ring.p,"r":ring.r+40.0,"c":Color(1,.5,.2),"power":.7,"glow":.18})
+	if w.ending.phase == "door" and w.ending.door_state in ["open","look","enter"]:
+		g.ambient_lights.append({"p":Vector2(w.ending.data.door.p[0],w.ending.data.door.p[1])+Vector2(0,14),"r":110.0,"c":Color(.9,.92,1.0),"power":.85,"glow":.2})
 	Lighting.draw(g,offset)
 	Horror.fog(g,offset)
 	Atmosphere.after_lighting(g,offset)

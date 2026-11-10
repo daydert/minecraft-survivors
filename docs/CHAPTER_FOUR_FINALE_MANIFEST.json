@@ -5,6 +5,14 @@
     "textures/entity/player/wide/steve.png": {
       "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
       "bytes": 848
+    },
+    "textures/environment/celestial/sun.png": {
+      "sha256": "c7188d5685ec66b0200d716e53161803c119f609d9b2a67f6a86b30bd96043eb",
+      "bytes": 458
+    },
+    "textures/environment/celestial/moon/full_moon.png": {
+      "sha256": "46e8a21f0045ceeba2cea48e5457a2fe8130ec9cdecb729a64a74a8acf771d61",
+      "bytes": 497
     }
   },
   "derived": {
@@ -13,50 +21,70 @@
         "entity/player/wide/steve (white eyes, calm mouth texels)"
       ],
       "size": [
-        2832,
+        3216,
         168
       ],
-      "sha256": "91d4f15f2c0322895b7950f65a6b69305c45d2fd0c1d04c850f91fecabe5c498"
+      "sha256": "ad6ba9e97cdeeafd9ca91c1752c877a6148824b59c7a09eb45aacba5f4acc9da"
     },
     "ch4_hb_smile": {
       "sources": [
         "entity/player/wide/steve (white eyes, smile mouth texels)"
       ],
       "size": [
-        2832,
+        3216,
         168
       ],
-      "sha256": "8841857ec61b1c109964a80e3064d217241466af2a7643a80d0263d58008ba6e"
+      "sha256": "f39965fa2129f8c6d727d3912a13650217a3b7114f73136ebdfe6b97f7ee29c5"
     },
     "ch4_hb_rage": {
       "sources": [
         "entity/player/wide/steve (white eyes, rage mouth texels)"
       ],
       "size": [
-        2832,
+        3216,
         168
       ],
-      "sha256": "f53cbafe6de4c540fd798ee7420ff3710c0362b8145e31d6687185b5d3ffd700"
+      "sha256": "15d21b503cc3af3e8d62fd1cfc2c1a4ce661a524811722f620cd5c345ebe11d1"
     },
     "ch4_hb_dim": {
       "sources": [
         "entity/player/wide/steve (white eyes, dim mouth texels)"
       ],
       "size": [
-        2832,
+        3216,
         168
       ],
-      "sha256": "09edcf897ac41a1ac0bfd8ea1f1ec58ab1e037649176175d6fed7f1569ab4fdc"
+      "sha256": "ca1b3537788aa3561b2706abcbffbd2b1462c566244c93e3a3862531400c030d"
     },
     "ch4_fist_steve": {
       "sources": [
         "entity/player/wide/steve"
       ],
       "size": [
-        1920,
+        2448,
         168
       ],
-      "sha256": "48190755654664fd1dbc32dd2e5bbb936754dbda32c0c1b96f66cd7ac2811ed4"
+      "sha256": "da1ed20996e59ef59ee703f8605afa262d02a760d57ed079c55da6470cdc28ef"
+    },
+    "ch4_sun": {
+      "sources": [
+        "environment/celestial/sun"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "6f5af61f6415eee527caf55f8aeb8d1b9061bc4cff7597b80808b724f86cb4f5"
+    },
+    "ch4_moon": {
+      "sources": [
+        "environment/celestial/moon/full_moon"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "c754ef0662d6a9b5728b8ff9071880a9c3ec1dfc7c66df1a391c131ab7735cba"
     }
   }
 }

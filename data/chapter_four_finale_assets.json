@@ -4,7 +4,13 @@
     "ch4_hb_smile",
     "ch4_hb_rage",
     "ch4_hb_dim",
-    "ch4_fist_steve"
+    "ch4_fist_steve",
+    "ch4_sun",
+    "ch4_moon"
+  ],
+  "lying_head": [
+    -10.5,
+    -4.0
   ],
   "frame": [
     48,
@@ -94,6 +100,22 @@
     "headless": {
       "start": 58,
       "count": 1
+    },
+    "lunge": {
+      "start": 59,
+      "count": 2
+    },
+    "knocked": {
+      "start": 61,
+      "count": 2
+    },
+    "aura": {
+      "start": 63,
+      "count": 2
+    },
+    "exhausted": {
+      "start": 65,
+      "count": 2
     }
   },
   "steve": {
@@ -148,6 +170,26 @@
     "lower_arm": {
       "start": 36,
       "count": 4
+    },
+    "mount_raise": {
+      "start": 40,
+      "count": 3
+    },
+    "mount_slam": {
+      "start": 43,
+      "count": 2
+    },
+    "mount_still": {
+      "start": 45,
+      "count": 2
+    },
+    "lunge": {
+      "start": 47,
+      "count": 2
+    },
+    "knocked": {
+      "start": 49,
+      "count": 2
     }
   },
   "directions": [

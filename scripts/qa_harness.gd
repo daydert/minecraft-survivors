@@ -405,6 +405,7 @@ static func finale_qte(w, e):
 		"dodge":e.press(q.dir)
 		"attack":e.press("attack")
 		"seq":e.press(q.dirs[q.progress])
+		"mash":e.press("attack")
 	e.hold=q.kind=="hold"
 
 static func prepare_four_finale_capture(g):
@@ -415,28 +416,38 @@ static func prepare_four_finale_capture(g):
 	g.settings.shake=false;w.time=719.95
 	finale_run(w,.1);w.player=e.center+Vector2(0,150);finale_run(w,.05)
 	if mode=="intro":finale_run(w,4.0);return
-	w.invulnerable=999;finale_run(w,7.5)
+	w.invulnerable=999;finale_run(w,8.4)
 	if mode.begins_with("one_"):
 		e.start(w,mode.trim_prefix("one_"))
 		finale_run(w,{"lightning":.6,"ring":1.2,"strike":.45}[mode.trim_prefix("one_")]);return
 	w.hurt(e.hb,e.hb.hp+1)
 	if mode=="kneel":finale_run(w,4.6);return
-	finale_run(w,6.8)
+	finale_run(w,7.0)
 	if mode.begins_with("two_"):
 		var name: String=mode.trim_prefix("two_")
 		e.hb.hp=e.hb.max_hp*.8;e.day_done=[0,1]
-		var at: float={"hole":2.0,"blitz":1.75,"rain":1.6,"rift":2.2,"tear":2.0,"rift_warn":.8}.get(name,1.0)
-		e.start(w,"rift" if name=="rift_warn" else name);finale_run(w,at);return
-	if mode in ["day","day_split"]:
-		e.start(w,"day");finale_run(w,3.2 if mode=="day" else 8.6);return
+		var at: float={"hole":2.6,"hole_burst":3.55,"blitz":1.75,"rain":1.6,"rain2":3.4,"rain3":5.6,"rift":2.2,"tear":2.0,"rift_warn":.8}.get(name,1.0)
+		var attack: String={"rift_warn":"rift","rain2":"rain","rain3":"rain","hole_burst":"hole"}.get(name,name)
+		e.start(w,attack);finale_run(w,at);return
+	if mode in ["day","day_noon","day_split","day_release"]:
+		e.start(w,"day");finale_run(w,{"day":2.0,"day_noon":5.5,"day_split":11.9,"day_release":12.8}[mode]);return
 	e.day_done=[0,1];w.hurt(e.hb,e.hb.hp+1)
-	if mode=="erase":finale_run(w,1.8);return
+	if mode=="last":finale_run(w,5.0);return
+	if mode=="last_end":finale_run(w,9.9);return
+	finale_run(w,float(e.data.last.duration)+.05)
+	if mode=="erase":finale_run(w,2.2);return
+	if mode=="erase_end":finale_run(w,4.6);return
 	finale_run(w,float(e.data.erase.duration)+.1)
-	if mode=="three":
-		for i in range(ceili(1.0*60)):finale_qte(w,e);w.step(1.0/60)
-		e.qte.age=e.qte.windup+.3;return
+	if mode in ["three","three_hit","three_mash"]:
+		var target: int={"three":0,"three_hit":1,"three_mash":11}[mode]
+		while e.qte_index<target:finale_qte(w,e);w.step(1.0/60)
+		if mode=="three":
+			for i in range(ceili(1.0*60)):finale_qte(w,e);w.step(1.0/60)
+			e.qte.age=e.qte.windup+.3;return
+		while e.qte.result=="":finale_qte(w,e);w.step(1.0/60)
+		finale_run(w,.12);return
 	while e.phase=="three":finale_qte(w,e);w.step(1.0/60)
-	var death_at: Dictionary={"death_laugh":2.6,"death_crawl":6.2,"death_plead":11.8,"death_final":12.75,"death_hold":15.0}
+	var death_at: Dictionary={"death_mount":2.0,"death_laugh":2.6,"death_crawl":6.2,"death_plead":11.8,"death_raise":12.3,"death_final":12.85,"death_hold":15.0}
 	if death_at.has(mode):finale_run(w,death_at[mode]);return
 	finale_run(w,21.1)
 	if mode=="coords":finale_run(w,3.5);return
@@ -449,8 +460,25 @@ static func prepare_four_finale_capture(g):
 ## Film pilot for the finale: reads the same hazards the player sees and moves
 ## out of them. Diagnostic only (the recording also keeps the hero invulnerable).
 static func finale_pilot(w, e) -> Vector2:
-	if not e.fighting() or e.hb.is_empty():return Vector2.ZERO
+	if not e.dangerous() or e.hb.is_empty():return Vector2.ZERO
 	var p: Vector2=w.player
+	if e.phase=="last":
+		var want: Vector2=e.center+Vector2(0,1).rotated(sin(w.clock*.7)*1.2)*e.void_r*0.45
+		var lw: Vector2=(want-p)/40.0
+		for b in e.beams:
+			var dir: Vector2=Vector2.from_angle(b.a)
+			var rel: Vector2=p-e.hb.p
+			if rel.dot(dir)>0 and absf(rel.dot(dir.orthogonal()))<30:lw+=dir.orthogonal()*signf(rel.dot(dir.orthogonal()))*2
+		return lw.limit_length()
+	if e.split>0 and not e.knife_gaps.is_empty():
+		var dk: float=p.distance_to(e.knife_center)
+		var radii: Array=e.data.two.day.knives.radius
+		for j in range(radii.size()):
+			if dk<float(radii[j])+8:
+				return ((e.knife_center+Vector2.from_angle(e.knife_gaps[j])*(float(radii[j])+14))-p).limit_length(20)/20.0
+		return Vector2.ZERO
+	if e.shadow_on and e.in_shadow(p):
+		return Vector2(cos(e.shadow_angle),sin(e.shadow_angle)*.62).orthogonal()
 	var to_hb: Vector2=p.direction_to(e.hb.p)
 	var d: float=p.distance_to(e.hb.p)
 	var wish: Vector2=to_hb.orthogonal()*0.8+to_hb*clampf((d-70.0)/40.0,-1,1)
@@ -465,7 +493,10 @@ static func finale_pilot(w, e) -> Vector2:
 	if e.move=="rain":
 		var lanes: int=int(e.data.two.rain.lanes)
 		var safe_x: float=e.arena.position.x+(e.hb.get("rain_safe",lanes/2)+0.5)*e.arena.size.x/lanes
+		safe_x+=float(e.hb.get("rain_vx",0.0))*((p.y-e.arena.position.y)-e.arena.size.y*.5)/float(e.data.two.rain.speed)
 		wish=Vector2(signf(safe_x-p.x)*minf(1,absf(safe_x-p.x)/12),0.3)
+		for drop in e.drops:
+			if not drop.hit and drop.p.distance_to(p)<26:wish+=drop.p.direction_to(p)*2
 	if not e.seam.is_empty() and absf(p.x-e.seam.x)<40:wish.x+=signf(p.x-e.seam.x)*2
 	for leg in e.path:
 		if leg.get("marked",false):
@@ -486,7 +517,7 @@ static func record_four_finale(g, tree: SceneTree) -> Dictionary:
 	var last_music:="?";var last_phase:="?"
 	var folder:="res://qa/recordings/chapter_four_finale_frames"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(folder))
-	var limit:=30*330
+	var limit:=30*640
 	while frame<limit and w.state!="RESULT":
 		for tick in range(2):
 			if w.state=="LEVEL_UP":w.skip_reward()
@@ -494,7 +525,7 @@ static func record_four_finale(g, tree: SceneTree) -> Dictionary:
 			var move:=Vector2.ZERO
 			if e.phase in ["","summit"]:move=w.player.direction_to(e.center)
 			else:move=finale_pilot(w,e)
-			if e.fighting():w.invulnerable=maxf(w.invulnerable,.2);w.hp=maxf(w.hp,14)
+			if e.dangerous():w.invulnerable=maxf(w.invulnerable,.2);w.hp=maxf(w.hp,14)
 			finale_qte(w,e)
 			w.step(1.0/60,move)
 		var t: float=frame/30.0

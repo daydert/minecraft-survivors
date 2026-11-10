@@ -98,6 +98,13 @@ def generate():
         'ch4_head_break': ('entity.zombie.break_wooden_door', .75),
         'ch4_door_open': ('block.iron_door.open', .6),
         'ch4_door_close': ('block.iron_door.close', .85),
+        'ch4_hb_tick': ('block.lever.click', .55),
+        'ch4_hb_roar': ('entity.warden.roar', .75),
+        'ch4_impact': ('entity.warden.sonic_boom', .6),
+        'ch4_hb_suck': ('block.portal.trigger', .45),
+        'ch4_hb_shrink': ('block.beacon.deactivate', .8),
+        'ch4_hb_beam': ('entity.guardian.attack', .5),
+        'ch4_hb_strip': ('entity.item.break', .6),
     }
     output = ROOT / 'assets/audio/chapter_four'
     output.mkdir(exist_ok=True)

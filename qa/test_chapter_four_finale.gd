@@ -19,7 +19,7 @@ func until(w, condition: Callable, limit: float) -> bool:
 
 func fresh():
 	var w=FW.new();w.reset(724);w.state="RUNNING";w.stage="survival";w.stage_age=10;w.note_presented=true
-	w.db.data.chapter_four.exploration_only=true;w.build={};w.time=719.95
+	w.db.data.chapter_four.exploration_only=true;w.build={"sword":3,"bow":2};w.items={"armor":1};w.time=719.95
 	return w
 
 func run():
@@ -28,10 +28,10 @@ func run():
 	check(w.stage=="finale" and e.phase=="summit","At 12:00 the waves stop and the pyramid calls")
 	check(w.mobs.filter(func(m):return m.has("form") and m.hp>0).is_empty(),"Remaining mobs dissolve at the summit")
 	w.player=e.center+Vector2(0,150);advance(w,.05)
-	check(e.phase=="intro" and not e.hb.is_empty(),"Approaching the arena starts Herobrine's introduction")
+	check(e.phase=="intro" and not e.hb.is_empty() and e.scale()>=2.0,"Approaching the arena starts Herobrine's introduction at twice a man's height")
 	check(e.locked() and w.camera().distance_to(w.player)>=0,"The introduction holds the world still")
 	var said=false
-	for i in range(ceili(8*60)):
+	for i in range(ceili(9*60)):
 		w.step(1.0/60)
 		if e.text_events.any(func(t):return t.text=="Ты опять здесь."):said=true
 	check(said,"Herobrine says «Ты опять здесь.» without surprise")
@@ -40,7 +40,7 @@ func run():
 	check(w.in_radius(e.hb.p,30).has(e.hb),"Herobrine is a real target for every weapon")
 	var before=e.hb.hp;w.hurt(e.hb,100.0);check(e.hb.hp==before-100.0 and w.damage_by.get(w.damage_owner,0)>=100,"Hits damage Herobrine and are attributed")
 	w.invulnerable=0;w.hp=20
-	e.start(w,"lightning");var marked=e.marks.size()==3
+	e.start(w,"lightning");var marked=e.marks.size()==int(e.data.one.lightning.count)
 	w.player=e.marks[0].p;advance(w,1.0)
 	check(marked and w.hp<20,"Lightning marks strike where they were shown")
 	w.hp=20;w.invulnerable=0;e.start(w,"ring");var gap=e.rings[0].gap;var ring_center=e.rings[0].p
@@ -56,7 +56,7 @@ func run():
 	for i in range(ceili(7*60)):
 		w.step(1.0/60)
 		if e.text_events.any(func(t):return t.text=="Хорошо. Давай всерьёз."):said=true
-	check(said and e.phase=="two" and e.hb.hp==float(e.data.two.hp),"«Хорошо. Давай всерьёз.» opens stage II at full strength")
+	check(said and e.phase=="two" and e.hb.max_hp==float(e.data.two.hp),"«Хорошо. Давай всерьёз.» opens stage II at full strength")
 	for name in ["hole","blitz","rain","rift","tear"]:
 		w.hp=20;w.invulnerable=0;e.start(w,name);var ok=until(w,func():return e.move=="rest",14.0)
 		check(ok and w.hp>0,"Stage II pattern "+name+" plays through and ends in a response window")
@@ -70,22 +70,31 @@ func run():
 	for cell in w.solid_grid:
 		walls+=w.solid_grid[cell].filter(func(o):return o.get("rift",false)).size()
 	check(walls==0,"Rift strips sink again and leave the arena open")
-	e.start(w,"day");var bright=0.0;var split_seen=false;var stunned=false
-	for i in range(ceili(16*60)):
-		w.step(1.0/60);bright=maxf(bright,e.sky);split_seen=split_seen or e.split>0.5;stunned=stunned or e.move=="stunned"
+	w.invulnerable=999;e.start(w,"day");var bright=0.0;var split_seen=false;var stunned=false;var shadow=false;var frozen=0;var released=false
+	for i in range(ceili(20*60)):
+		w.step(1.0/60);bright=maxf(bright,e.sky);split_seen=split_seen or e.split>0.5;stunned=stunned or e.move=="stunned";shadow=shadow or e.shadow_on
+		frozen=maxi(frozen,e.shots.filter(func(b):return b.get("frozen",false)).size())
+		released=released or (frozen>0 and e.shots.any(func(b):return b.kind=="knife" and not b.get("frozen",false)))
 		if e.move=="rest":break
-	check(bright>.9 and split_seen and stunned,"Day acceleration cycles the sky, freezes day and night, then leaves him stunned")
+	check(bright>.9 and split_seen and stunned and shadow,"Day acceleration cycles the sky with his shadow as the hand, stops time, then leaves him stunned")
+	check(frozen>=60 and released,"Stopped time hangs rings of shards around the hero and releases them together")
+	e.shadow_angle=0.0;check(e.in_shadow(e.hb.p+Vector2(40,0)) and not e.in_shadow(e.hb.p+Vector2(-40,0)),"The shadow hand covers exactly the ground it is drawn on")
 	w.invulnerable=0;w.hp=0;w.step(1.0/60)
 	check(e.phase=="retry" and w.state=="RUNNING","Dying in stage II retries the stage instead of ending the run")
 	advance(w,2.4)
 	check(e.phase=="two" and w.hp>=12,"The retry restores the stage II checkpoint")
 	e.day_done=[];e.hb.hp=e.hb.max_hp;w.hurt(e.hb,e.hb.max_hp*2)
 	check(e.phase=="two" and e.hb.hp>e.hb.max_hp*.55,"Stage II cannot be burst past its day acceleration")
-	e.day_done=[0,1];w.hurt(e.hb,e.hb.hp+10)
-	check(e.phase=="erase","Defeat in stage II starts the erasure")
-	var build_before=e.checkpoint.build
-	advance(w,float(e.data.erase.duration)+.1)
-	check(e.phase=="three" and w.build.is_empty() and not e.stored.is_empty(),"The erasure strips the gear for the fistfight")
+	w.invulnerable=999;e.day_done=[0,1];var gear_before: int=w.build.size()+w.items.size();w.hurt(e.hb,e.hb.hp+10)
+	check(e.phase=="last" and e.text_events.any(func(t):return t.text=="ХВАТИТ."),"Defeat in stage II does not end him: «ХВАТИТ.» and his last attack")
+	advance(w,float(e.data.last.duration)*0.6)
+	check(w.build.size()+w.items.size()<gear_before and e.void_r<float(e.data.last.void_from) and not e.beams.is_empty(),"The last attack tears the gear off piece by piece and erases the world from the edges")
+	advance(w,float(e.data.last.duration)*0.4+.05)
+	check(e.phase=="erase" and e.scale()>=2.0,"After the last attack he still stands at full size")
+	advance(w,float(e.data.erase.shrink[1])+.1)
+	check(e.scale()==1.0,"Spent, he shrinks to a man's size")
+	advance(w,float(e.data.erase.duration)-float(e.data.erase.shrink[1]))
+	check(e.phase=="three" and w.build.is_empty() and not e.stored.is_empty(),"The fistfight starts with nothing in either hand")
 	check(e.candidates().is_empty(),"No weapon can touch Herobrine during the fistfight")
 	# Fail one prompt on purpose, then answer every prompt correctly.
 	var failed=false
@@ -101,6 +110,7 @@ func run():
 					"dodge":e.press(q.dir)
 					"attack":e.press("attack")
 					"seq":e.press(q.dirs[q.progress])
+					"mash":e.press("attack")
 			e.hold=q.kind=="hold"
 		w.step(1.0/60)
 	check(failed and e.phase=="death","The fistfight survives a missed prompt and ends in his fall")
@@ -109,14 +119,17 @@ func run():
 		for t in e.text_events:lines[t.text]=true
 		w.step(1.0/60)
 	check(lines.has("АХАХАХАХАХХАХА") and lines.has("ТЫ НИЧЕРТА НЕ ПОНЯЛ") and lines.has("Я ВСЕГО ЛИШЬ СОГЛАСИЛСЯ ВЫПОЛНИТЬ ГРЯЗНУЮ РАБОТУ ЗА НЕГО"),"All three final lines are spoken")
-	check(e.phase in ["coords","road"] and e.pose=="headless","The final blow destroys his head; the coordinates follow")
+	check(e.phase in ["coords","road"] and e.pose=="headless" and e.music=="","The final blow destroys his head; the coordinates follow in silence")
 	until(w,func():return e.phase=="door",30.0)
 	check(e.phase=="door","The road leads to the black door")
 	until(w,func():return w.state=="RESULT",20.0)
 	check(w.state=="RESULT" and w.victory and w.build==e.stored.build,"Stepping through the door ends chapter IV with the build restored")
 	# Retry inside the fistfight
-	w=fresh();e=w.ending;advance(w,.1);w.player=e.center+Vector2(0,150);advance(w,8)
-	w.hurt(e.hb,e.hb.hp+10);advance(w,7);e.day_done=[0,1];w.hurt(e.hb,e.hb.hp+10);advance(w,float(e.data.erase.duration)+.2)
+	w=fresh();e=w.ending;advance(w,.1);w.player=e.center+Vector2(0,150);advance(w,9)
+	w.hurt(e.hb,e.hb.hp+10);advance(w,7.2);e.day_done=[0,1];var full: int=w.build.size();w.hurt(e.hb,e.hb.hp+10)
+	advance(w,4.0);w.invulnerable=0;w.hp=0;w.step(1.0/60);advance(w,2.4)
+	check(e.phase=="last" and w.build.size()==full,"Dying in the last attack replays it with the gear restored")
+	w.invulnerable=999;advance(w,float(e.data.last.duration)+float(e.data.erase.duration)+.3)
 	w.hp=1;w.invulnerable=0
 	until(w,func():return e.phase=="retry",30.0)
 	check(e.phase=="retry","Losing the fistfight retries it")

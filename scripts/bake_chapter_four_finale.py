@@ -57,9 +57,13 @@ def jbox(tex, origin, size, uv, pivot, angles=(0, 0, 0), inflate=0.0):
     return transform(mesh, (-rx, ry, -rz), offset=(pivot[0], 24 - pivot[1], pivot[2]))
 
 
-def figure(tex, pose, headless=False):
+def figure(tex, pose, headless=False, only_head=False):
     p = lambda k: pose.get(k, (0, 0, 0))
     upper = []
+    if only_head:
+        upper = jbox(tex, (-4, -8, -4), (8, 8, 8), (0, 0), (0, 0, 0), p("head"))
+        upper = transform(upper, p("lean"), pivot=(0, 12, 0))
+        return transform(upper, p("whole"), pivot=pose.get("whole_pivot", (0, 0, 0)), offset=pose.get("root", (0, 0, 0)))
     if not headless:
         upper += jbox(tex, (-4, -8, -4), (8, 8, 8), (0, 0), (0, 0, 0), p("head"))
         upper += jbox(tex, (-4, -8, -4), (8, 8, 8), (32, 0), (0, 0, 0), p("head"), 0.5)
@@ -124,23 +128,38 @@ POSES = {
     "fall": [{"lean": (-0.3, 0, 0), "ra": (-0.6, 0, 0.8), "la": (-0.6, 0, -0.8), "head": (-0.3, 0, 0)},
              {"whole": (0.8, 0, 0), "ra": (-1.0, 0, 1.0), "la": (-1.0, 0, -1.0), "head": (-0.4, 0, 0)},
              {"whole": (1.45, 0, 0), "ra": (0.3, 0, 0.9), "la": (0.3, 0, -0.9), "head": (-0.2, 0, 0)}],
-    "lying": [{"whole": (1.5, 0, 0), "ra": (0.3, 0, 0.8), "la": (0.3, 0, -0.85), "head": (-0.1, 0.2, 0), "rl": (0, 0, 0.12), "ll": (0, 0, -0.1)},
-              {"whole": (1.5, 0, 0), "ra": (0.25, 0, 0.75), "la": (0.35, 0, -0.9), "head": (-0.15, -0.15, 0), "rl": (0, 0, 0.12), "ll": (0, 0, -0.1)}],
-    "lying_hit": [{"whole": (1.5, 0, 0), "ra": (0.4, 0, 1.0), "la": (-0.2, 0, -1.2), "head": (0, 0.7, 0.2)}, {"whole": (1.5, 0, 0), "ra": (0.2, 0, 0.6), "la": (0.5, 0, -0.7), "head": (0, -0.6, -0.2)}],
+    "lying": [{"whole": (1.5, 0, 0), "root": (0, 0, -13), "ra": (0.3, 0, 0.8), "la": (0.3, 0, -0.85), "head": (-0.1, 0.2, 0), "rl": (0, 0, 0.12), "ll": (0, 0, -0.1)},
+              {"whole": (1.5, 0, 0), "root": (0, 0, -13), "ra": (0.25, 0, 0.75), "la": (0.35, 0, -0.9), "head": (-0.15, -0.15, 0), "rl": (0, 0, 0.12), "ll": (0, 0, -0.1)}],
+    "lying_hit": [{"whole": (1.5, 0, 0), "root": (0, 0, -13), "ra": (0.4, 0, 1.0), "la": (-0.2, 0, -1.2), "head": (0, 0.7, 0.2)}, {"whole": (1.5, 0, 0), "root": (0, 0, -13), "ra": (0.2, 0, 0.6), "la": (0.5, 0, -0.7), "head": (0, -0.6, -0.2)}],
     # Steve: astride the fallen, punching downward; lowering the fist afterwards.
-    "mount": [{"root": (0, -8, 0), "rl": (-1.4, 0, 0.3), "ll": (-1.4, 0, -0.3), "lean": (0.5, 0, 0), "ra": (-2.6, 0, 0.1), "la": (-0.6, 0, -0.2), "head": (0.5, 0, 0)},
-              {"root": (0, -8, 0), "rl": (-1.4, 0, 0.3), "ll": (-1.4, 0, -0.3), "lean": (0.8, 0, 0), "ra": (-0.6, 0, 0.1), "la": (-0.5, 0, -0.2), "head": (0.7, 0, 0)},
-              {"root": (0, -8, 0), "rl": (-1.4, 0, 0.3), "ll": (-1.4, 0, -0.3), "lean": (0.5, 0, 0), "la": (-2.6, 0, -0.1), "ra": (-0.6, 0, 0.2), "head": (0.5, 0, 0)},
-              {"root": (0, -8, 0), "rl": (-1.4, 0, 0.3), "ll": (-1.4, 0, -0.3), "lean": (0.8, 0, 0), "la": (-0.6, 0, -0.1), "ra": (-0.5, 0, 0.2), "head": (0.7, 0, 0)}],
+    "mount": [{"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.2, 0, 0), "ra": (-3.0, 0, 0.15), "la": (-0.9, 0, -0.3), "head": (0.35, 0, 0)},
+              {"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.8, 0, 0), "ra": (-0.6, 0, 0.05), "la": (-0.6, 0, -0.3), "head": (0.65, 0, 0)},
+              {"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.2, 0, 0), "la": (-3.0, 0, -0.15), "ra": (-0.9, 0, 0.3), "head": (0.35, 0, 0)},
+              {"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.8, 0, 0), "la": (-0.6, 0, -0.05), "ra": (-0.6, 0, 0.3), "head": (0.65, 0, 0)}],
+    "mount_raise": [{"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.3, 0, 0), "ra": (-1.2, 0, 0.1), "la": (-0.9, 0, -0.3), "head": (0.45, 0, 0)},
+                    {"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (-0.15, 0, 0), "ra": (-3.1, 0, 0.1), "la": (-3.0, 0, -0.1), "head": (0.1, 0, 0)}],
+    "mount_slam": [{"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (-0.15, 0, 0), "ra": (-3.1, 0, 0.1), "la": (-3.0, 0, -0.1), "head": (0.1, 0, 0)},
+                   {"root": (0, -7, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.95, 0, 0), "ra": (-0.5, 0, 0.1), "la": (-0.5, 0, -0.1), "head": (0.75, 0, 0)}],
+    "mount_still": [{"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.7, 0, 0), "ra": (-0.6, 0, 0.1), "la": (-0.55, 0, -0.1), "head": (0.6, 0, 0)},
+                    {"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.66, 0, 0), "ra": (-0.6, 0, 0.1), "la": (-0.55, 0, -0.1), "head": (0.55, 0, 0)}],
+    "lunge": [{"lean": (0.35, -0.3, 0), "ra": (-1.6, -0.1, 0), "la": (-0.4, 0, -0.3), "rl": (-0.5, 0, 0), "ll": (0.6, 0, 0), "root": (0, -1, 0)},
+              {"lean": (0.5, -0.45, 0), "ra": (-1.7, -0.2, 0), "la": (0.2, 0, -0.4), "rl": (-0.7, 0, 0), "ll": (0.8, 0, 0), "root": (0, -2, 0)}],
+    "knocked": [{"lean": (-0.55, 0.3, 0.2), "ra": (-0.3, 0, 1.2), "la": (-0.2, 0, -1.1), "head": (-0.6, 0.4, 0), "rl": (0.3, 0, 0), "ll": (-0.2, 0, 0)},
+                {"lean": (-0.35, 0.1, 0.1), "ra": (-0.2, 0, 0.7), "la": (-0.4, 0, -0.8), "head": (-0.3, 0.2, 0)}],
+    "aura": [{"ra": (0.1, 0, 0.35), "la": (0.1, 0, -0.35), "head": (0.28, 0, 0), "lean": (-0.05, 0, 0)},
+             {"ra": (0.1, 0, 0.42), "la": (0.1, 0, -0.42), "head": (0.3, 0, 0), "lean": (-0.08, 0, 0)}],
+    "exhausted": [{"lean": (0.45, 0, 0), "head": (0.5, 0, 0), "ra": (0.2, 0, 0.15), "la": (0.2, 0, -0.15), "rl": (-0.2, 0, 0.1), "ll": (0.2, 0, -0.1), "root": (0, -1, 0)},
+                  {"lean": (0.55, 0, 0), "head": (0.6, 0, 0), "ra": (0.25, 0, 0.1), "la": (0.25, 0, -0.1), "rl": (-0.2, 0, 0.1), "ll": (0.2, 0, -0.1), "root": (0, -1.5, 0)}],
     "lower_arm": [{"ra": (-2.4, 0, 0.1), "head": (0.2, 0, 0)}, {"ra": (-1.6, 0, 0.1), "head": (0.3, 0, 0)}, {"ra": (-0.6, 0, 0.05), "head": (0.35, 0, 0)}, {"ra": (0, 0, 0.02), "head": (0.3, 0, 0)}],
 }
 # Frames per pose: keyframes are interpolated to this many frames.
 COUNTS = {"idle": 4, "walk": 8, "deflect": 3, "cast": 4, "invite": 2, "look_hand": 2, "kneel": 2, "rise": 4, "float": 4,
           "slam": 3, "guard": 1, "jab": 3, "hook": 3, "stagger": 2, "grab": 2, "resist": 2, "throw": 3, "dodge_l": 2,
-          "dodge_r": 2, "fall": 4, "lying": 2, "lying_hit": 2, "headless": 1, "mount": 4, "lower_arm": 4}
+          "dodge_r": 2, "fall": 4, "lying": 2, "lying_hit": 2, "headless": 1, "mount": 4, "lower_arm": 4,
+          "mount_raise": 3, "mount_slam": 2, "mount_still": 2, "lunge": 2, "knocked": 2, "aura": 2, "exhausted": 2}
 HEROBRINE = ["idle", "walk", "deflect", "cast", "invite", "look_hand", "kneel", "rise", "float", "slam", "guard", "jab",
-             "hook", "stagger", "grab", "throw", "fall", "lying", "lying_hit", "headless"]
-STEVE = ["idle", "walk", "guard", "jab", "hook", "stagger", "resist", "throw", "dodge_l", "dodge_r", "grab", "mount", "lower_arm"]
+             "hook", "stagger", "grab", "throw", "fall", "lying", "lying_hit", "headless", "lunge", "knocked", "aura", "exhausted"]
+STEVE = ["idle", "walk", "guard", "jab", "hook", "stagger", "resist", "throw", "dodge_l", "dodge_r", "grab", "mount", "lower_arm", "mount_raise", "mount_slam", "mount_still", "lunge", "knocked"]
 
 
 def frames_for(name):
@@ -191,7 +210,22 @@ def generate():
     fist, fist_layout = atlas(imp.tex("entity/player/wide/steve"), STEVE)
     imp.save(fist, "ch4_fist_steve", ["entity/player/wide/steve"])
     sprites.append("ch4_fist_steve")
-    data = {"sprites": sprites, "frame": list(FRAME), "anchor": list(CENTER), "herobrine": layout, "steve": fist_layout,
+    for name in ["sun", "moon/full_moon"]:
+        sky = imp.tex("environment/celestial/" + name).copy()
+        # The sky is drawn additively in the game: black means transparent.
+        px = sky.load()
+        for y in range(sky.size[1]):
+            for x in range(sky.size[0]):
+                r, g_, b, a_ = px[x, y]
+                lum = max(r, g_, b)
+                px[x, y] = (min(255, r * 255 // max(1, lum)), min(255, g_ * 255 // max(1, lum)), min(255, b * 255 // max(1, lum)), lum * a_ // 255)
+        imp.save(sky, "ch4_" + name.split("/")[0], ["environment/celestial/" + name])
+        sprites.append("ch4_" + name.split("/")[0])
+    # Where the head sits in the side view of the lying pose (for the final blow).
+    head = bake(figure(imp.tex("entity/player/wide/steve"), POSES["lying"][0], only_head=True), FRAME, SCALE, CENTER, yaw=DIRECTIONS["side"], elevation=20)
+    box_ = Image.fromarray(np.array(head)).getbbox() if not isinstance(head, Image.Image) else head.getbbox()
+    head_at = [(box_[0] + box_[2]) / 2 - CENTER[0], (box_[1] + box_[3]) / 2 - CENTER[1]]
+    data = {"sprites": sprites, "lying_head": head_at, "frame": list(FRAME), "anchor": list(CENTER), "herobrine": layout, "steve": fist_layout,
             "directions": list(DIRECTIONS)}
     (ROOT / "data/chapter_four_finale_assets.json").write_text(json.dumps(data, indent=2) + "\n")
     (ROOT / "docs/CHAPTER_FOUR_FINALE_MANIFEST.json").write_text(json.dumps({"version": version, "client_jar": str(client), "raw_files": imp.files, "derived": imp.derived}, indent=2) + "\n")
