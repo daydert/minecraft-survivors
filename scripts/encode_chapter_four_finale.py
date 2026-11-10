@@ -7,14 +7,14 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "qa/recordings"
-TRACKS = {"boss_one": ("boss_one.ogg", 0.55), "boss_two": ("boss_two.ogg", 0.55), "boss_fade": ("boss_two.ogg", 0.18), "coords": ("relic.ogg", 0.5)}
+TRACKS = {"ch4": ("ancestry.ogg", 0.5), "pyramid": ("pyramid_5.ogg", 0.5), "boss_one": ("boss_one.ogg", 0.55), "boss_two": ("boss_two.ogg", 0.55), "boss_fade": ("boss_two.ogg", 0.18), "coords": ("relic.ogg", 0.5)}
 
 
-def encode(clean=False):
-    data = json.loads((OUT / "chapter_four_finale_timeline.json").read_text())
+def encode(clean=False, name="finale"):
+    data = json.loads((OUT / f"chapter_four_{name}_timeline.json").read_text())
     fps = data["fps"]
     seconds = data["frames"] / fps
-    frames = OUT / "chapter_four_finale_frames"
+    frames = OUT / f"chapter_four_{name}_frames"
     args = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-framerate", str(fps), "-i", str(frames / "%05d.png")]
     graph = "[0:v]scale=1280:720:flags=neighbor[v];"
     labels = []
@@ -52,7 +52,7 @@ def encode(clean=False):
         labels.append(f"[c{n}]")
         n += 1
     graph += "".join(labels) + f"amix=inputs={len(labels)}:normalize=0,alimiter=limit=0.95,atrim=0:{seconds:.3f},apad=whole_dur={seconds:.3f}[a]"
-    target = OUT / "chapter_four_finale.mp4"
+    target = OUT / f"chapter_four_{name}.mp4"
     args += ["-filter_complex", graph, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "medium", "-crf", "18",
              "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-t", f"{seconds:.3f}", "-movflags", "+faststart", str(target)]
     subprocess.run(args, check=True)
@@ -64,4 +64,6 @@ def encode(clean=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--clean", action="store_true")
-    encode(parser.parse_args().clean)
+    parser.add_argument("--name", default="finale")
+    args = parser.parse_args()
+    encode(args.clean, args.name)

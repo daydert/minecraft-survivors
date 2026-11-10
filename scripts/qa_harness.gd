@@ -556,12 +556,18 @@ static func prepare_four_encounter_capture(g):
 	var w=g.world;var e=w.encounters;var mode: String=g.qa_mode.trim_prefix("ch4d_")
 	w.state="RUNNING";w.stage="survival";w.stage_age=30;w.clock=200;w.note_presented=true;w.invulnerable=999
 	w.db.data.chapter_four.exploration_only=true;w.build={"sword":8,"bow":6,"shotgun":5};g.settings.shake=false
-	match mode:
+	var base: String=mode.get_slice("_",0)
+	match base:
 		"mass":w.time=361;e.launch_mass(w);w.player=e.mass.p+Vector2(0,130)
 		"golem":w.time=160;e.golem.visible=true;w.player=e.golem.p+Vector2(0,110);e.launch_golem(w)
 		"guardian":w.time=520;w.player=e.arena().get_center()+Vector2(0,40);e.launch_guardian(w)
-	var preview: float={"mass":2.2,"golem":1.6,"guardian":3.0}.get(mode,1.0)
-	for i in range(ceili(preview*60)):w.step(1.0/60)
+	var preview: float={"mass":2.2,"golem":1.6,"guardian":3.0,"mass_fight":7.5,"mass_death":5.5,"golem_free":5.0,"guardian_fight":8.6,"guardian_death":5.0}.get(mode,1.0)
+	for i in range(ceili(preview*60)):
+		if mode=="mass_death" and i==ceili(4.6*60):e.hurt(w,e.mass,e.mass.hp+1,Vector2.ZERO)
+		if mode=="golem_free" and i==ceili(3.0*60):
+			for n in e.nodes:n.hp=0
+		if mode=="guardian_death" and i==ceili(4.2*60):e.hurt(w,e.guardian,e.guardian.hp+1,Vector2.ZERO)
+		w.step(1.0/60)
 	w.invulnerable=0
 
 static func prepare_four_arsenal_capture(g):
@@ -612,3 +618,46 @@ static func record_four_arsenal(g,tree: SceneTree) -> Dictionary:
 			w.sounds.clear();g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
 			tree.root.get_texture().get_image().save_png("res://qa/recordings/chapter_four_c_frames/%05d.png"%frame);frame+=1
 	return {"fps":30,"frames":frame,"segments":segments,"sound_events":cues,"diagnostic_cuts":true,"invulnerability":false,"max_gear":true,"content_stage":"C"}
+
+## Diagnostic film of the three mid-chapter bosses (invulnerable hero, scripted kills).
+static func record_four_bosses(g, tree: SceneTree) -> Dictionary:
+	var frame:=0;var cues:Array=[];var music:Array=[]
+	var folder:="res://qa/recordings/chapter_four_bosses_frames"
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(folder))
+	for scene in ["golem","mass","guardian"]:
+		g.start_chapter(4);g.world.reset(724)
+		var w=g.world;var e=w.encounters
+		w.state="RUNNING";w.stage="survival";w.stage_age=30;w.note_presented=true;w.note_read=true
+		w.db.data.chapter_four.exploration_only=true;w.build={"sword":7,"bow":6,"shotgun":4};w.items={"armor":3}
+		g.settings.shake=true;w.invulnerable=999
+		match scene:
+			"golem":w.time=160;e.golem.visible=true;w.player=e.golem.p+Vector2(0,120);e.launch_golem(w)
+			"mass":w.time=361;e.launch_mass(w);w.player=e.mass.p+Vector2(0,130)
+			"guardian":w.time=520;w.player=e.arena().get_center()+Vector2(0,60);e.launch_guardian(w)
+		music.append({"track":"pyramid" if scene=="guardian" else "ch4","time":frame/30.0})
+		var length: float={"golem":13.0,"mass":22.0,"guardian":20.0}[scene]
+		var killed:=false
+		for f in range(int(length*30)):
+			var t: float=f/30.0
+			for tick in range(2):
+				if w.state=="LEVEL_UP":w.skip_reward()
+				if w.state=="CHEST":w.chest_delay=0;w.close_chest()
+				w.invulnerable=999;w.hp=maxf(w.hp,10)
+				var target: Vector2=e.golem.p if scene=="golem" else (e.mass.p if scene=="mass" else e.guardian.p)
+				var away: Vector2=target.direction_to(w.player)
+				var want: Vector2=target+away.rotated(.5*sin(t*.6))*(70.0 if scene!="guardian" else 110.0)
+				var move: Vector2=((want-w.player)/30.0).limit_length()
+				if scene=="golem" and not killed and t>5.0:
+					for n in e.nodes:n.hp=0
+					killed=true
+				if scene=="mass" and not killed and t>length-6.5:e.hurt(w,e.mass,e.mass.hp+1,Vector2.ZERO);killed=true
+				if scene=="guardian" and not killed and t>length-6.0:e.hurt(w,e.guardian,e.guardian.hp+1,Vector2.ZERO);killed=true
+				w.step(1.0/60,move)
+			for id in w.sounds:cues.append({"id":id,"time":frame/30.0})
+			w.sounds.clear()
+			g.ui_time+=1.0/30;g.update_camera_lead()
+			g.queue_redraw();await tree.process_frame;RenderingServer.force_draw(false)
+			tree.root.get_texture().get_image().save_png(folder+"/%05d.png"%frame)
+			frame+=1
+	return {"fps":30,"frames":frame,"music":music,"sound_events":cues,"diagnostic":"invulnerable hero, scripted orbit and kills","state":"done"}
+

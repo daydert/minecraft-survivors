@@ -131,32 +131,50 @@ func world(g):
 	EncounterView.cinematic(g)
 
 func blood(g, offset: Vector2):
+	# Pools are gameplay cells; they are drawn as one wet body: overlapping
+	# blots with a black rim, darker depths, a slow sheen and stray drops.
 	var w = g.world
-	var start := Vector2i((-offset/16).floor())
-	var end := start+Vector2i(42,25)
+	var start := Vector2i((-offset/16).floor())-Vector2i(1,1)
+	var end := start+Vector2i(44,27)
+	var dried: bool = w.ending.phase in ["road","door"]
+	var cells: Array = []
 	for y in range(start.y,end.y):
 		for x in range(start.x,end.x):
-			var cell := Vector2i(x,y)
-			if not w.pools.has(cell):continue
-			var p := Vector2(cell*16)+offset
-			g.draw_rect(Rect2(p-Vector2.ONE,Vector2(18,18)),Color(.09,.018,.022))
-	for y in range(start.y,end.y):
-		for x in range(start.x,end.x):
-			var cell := Vector2i(x,y)
-			if not w.pools.has(cell):continue
-			var p := Vector2(cell*16)+offset
-			if w.ending.phase in ["road","door"]:
-				# After his death the pools stand empty: dark, dried and cracked.
-				g.draw_rect(Rect2(p,Vector2(16,16)),Color(.13,.05,.05))
-				if Atmosphere.hash01(x,y,83)<.5:g.draw_line(p+Vector2(2,4+x%5),p+Vector2(12,9+y%4),Color(.05,.02,.02),1)
-				continue
-			g.draw_clip("ch4_blood_animation",p,Vector2(16,16),w.clock)
-			if not w.pools.has(cell+Vector2i.UP):g.draw_line(p,p+Vector2(16,0),Color(.43,.11,.1),1)
-			if not w.pools.has(cell+Vector2i.DOWN):g.draw_line(p+Vector2(0,15),p+Vector2(16,15),Color(.18,.015,.025),1)
-			if Atmosphere.hash01(x,y,81)<.2:
-				var shine := .12+.10*sin(w.clock*1.1+x*.5+y*.8)
-				var q := p+Vector2(3+int(x+y)%4,7)
-				g.draw_line(q,q+Vector2(5,0),Color(.9,.4,.34,shine),1)
+			if w.pools.has(Vector2i(x,y)):cells.append(Vector2i(x,y))
+	if cells.is_empty():return
+	var rim := Color(.07,.0,.01) if not dried else Color(.06,.025,.025)
+	var body := Color(.27,.0,.025) if not dried else Color(.14,.05,.05)
+	var deep := Color(.16,.0,.018) if not dried else Color(.1,.035,.035)
+	for pass_i in range(3):
+		for cell in cells:
+			var x: int = cell.x;var y: int = cell.y
+			var p := Vector2(cell*16)+offset+Vector2(8,8)+Vector2(Atmosphere.hash01(x,y,84)-.5,Atmosphere.hash01(x,y,85)-.5)*5.0
+			var edge: bool = not (w.pools.has(cell+Vector2i.UP) and w.pools.has(cell+Vector2i.DOWN) and w.pools.has(cell+Vector2i.LEFT) and w.pools.has(cell+Vector2i.RIGHT))
+			var r: float = 10.5+Atmosphere.hash01(x,y,86)*3.5
+			match pass_i:
+				0:
+					g.oval(p+Vector2(0,1),Vector2(r+1.5,(r+1.5)*.8),rim)
+					if edge and Atmosphere.hash01(x,y,87)<.6:
+						var a: float = Atmosphere.hash01(x,y,88)*TAU
+						g.oval(p+Vector2(cos(a),sin(a)*.8)*(r+4),Vector2(2.5,2),rim)
+				1:
+					g.oval(p,Vector2(r,r*.8),body)
+					if not edge:
+						var inner: bool = w.pools.has(cell+Vector2i(2,0)) and w.pools.has(cell-Vector2i(2,0)) and w.pools.has(cell+Vector2i(0,2)) and w.pools.has(cell-Vector2i(0,2))
+						if inner:g.oval(p,Vector2(15,12),Color(deep,.35))
+					if edge and Atmosphere.hash01(x,y,87)<.6:
+						var a: float = Atmosphere.hash01(x,y,88)*TAU
+						g.oval(p+Vector2(cos(a),sin(a)*.8)*(r+4),Vector2(1.5,1.2),body)
+				2:
+					if dried:
+						if Atmosphere.hash01(x,y,83)<.35:g.draw_line(p+Vector2(-5,-2),p+Vector2(4,3),Color(.04,.015,.015),1)
+						continue
+					if Atmosphere.hash01(x,y,81)<.22:
+						var shine := .14+.12*sin(w.clock*1.1+x*.5+y*.8)
+						g.draw_line(p+Vector2(-4,-3),p+Vector2(2,-4),Color(.95,.45,.4,shine),1)
+					if Atmosphere.hash01(x,y,89)<.04:
+						var t: float = fposmod(w.clock*.5+Atmosphere.hash01(x,y,90),1.0)
+						g.draw_arc(p,2+t*8,0,TAU,16,Color(.7,.12,.12,(1-t)*.5),1)
 
 func pillar_floor(g, mark: Dictionary, offset: Vector2):
 	var w = g.world

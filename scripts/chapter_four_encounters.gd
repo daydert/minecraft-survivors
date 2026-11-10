@@ -435,6 +435,11 @@ func visual_camera(w,base: Vector2) -> Vector2:
 	if current=="mass" and mass.phase=="intro":
 		var k: float=smoothstep(0,.8,mass.phase_age)*(1-smoothstep(data.mass.intro-.9,data.mass.intro,mass.phase_age))
 		return base+(mass.p-w.player).limit_length(160)*.35*k
+	# During the fight the camera keeps the boss in the frame with the hero.
+	if not mass.is_empty() and mass.phase not in ["gone","intro"]:
+		return base+(mass.p-w.player).limit_length(240)*.4
+	if golem.get("started",false) and golem.phase in ["intro","release"]:
+		return base+(golem.p-w.player).limit_length(200)*.45
 	return base
 
 func title() -> String:
