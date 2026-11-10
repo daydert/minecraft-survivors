@@ -409,7 +409,7 @@ func movement_speed() -> float:
 	return float(db.data.player_speed) * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow)
 
 func active_item(id: String) -> bool:
-	if stage=="arrival":return false
+	if stage=="arrival" or (stage=="finale" and ending.locked()):return false
 	return arsenal.activate(self,id)
 
 func eligible() -> Array:

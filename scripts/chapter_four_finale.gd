@@ -110,6 +110,7 @@ func scale() -> float:
 
 func begin_summit(w):
 	phase = "summit"; age = 0.0
+	w.encounters.finish_for_finale(w)
 	for m in w.mobs:
 		if m.has("form") and m.hp > 0:
 			m.expired = true; m.hp = 0

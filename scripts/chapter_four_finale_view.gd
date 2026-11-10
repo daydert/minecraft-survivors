@@ -872,13 +872,14 @@ static func close_floor(g, centre: Vector2, rx: float, ry: float, clock: float):
 		top.append(pt)
 		uvs.append(((pt - centre) / 3.0 + Vector2(900, 790)) / 2048.0)
 	# The broken underside: earth strata hanging into the void.
-	var cliff := PackedVector2Array()
-	for i in range(n / 2 + 1):
-		cliff.append(top[i % n])
-	for i in range(n / 2, -1, -1):
-		var drop: float = 26.0 + h01i(i, 12) * 22.0 * absf(sin(i * TAU / n))
-		cliff.append(top[i % n] + Vector2(0, drop))
-	g.draw_colored_polygon(cliff, Color(0.09, 0.065, 0.065))
+	# Roughness folds the contour back near its ends. Separate vertical faces
+	# retain the same outline and strata without a self-intersecting polygon.
+	for i in range(n / 2):
+		var a: Vector2 = top[i]
+		var b: Vector2 = top[i + 1]
+		var drop_a: float = 26.0 + h01i(i, 12) * 22.0 * absf(sin(i * TAU / n))
+		var drop_b: float = 26.0 + h01i(i + 1, 12) * 22.0 * absf(sin((i + 1) * TAU / n))
+		g.draw_colored_polygon(PackedVector2Array([a, b, b + Vector2(0, drop_b), a + Vector2(0, drop_a)]), Color(0.09, 0.065, 0.065))
 	for k in range(3):
 		var band := PackedVector2Array()
 		for i in range(n / 2 + 1):band.append(top[i % n] + Vector2(0, 6 + k * 7))

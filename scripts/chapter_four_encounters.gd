@@ -26,6 +26,14 @@ func reset(w):
 	golem=actor(w,"golem",point(data.golem.anchor),99999,data.golem.radius)
 	golem.skin="ch4d_golem";golem.phase="dormant";golem.started=false;golem.home=golem.p;golem.visible=false;golem.allied=false
 
+## At 12:00 the survival encounters leave the stage without granting a kill
+## or a rescue reward. Their attacks, collision and camera must not enter E.
+func finish_for_finale(w):
+	clear_geometry(w)
+	mass={};guardian={};current=""
+	for list in [parts,loose,nodes,shots,proposal,beams,debris]:list.clear()
+	golem.visible=false;golem.started=false
+
 func point(a: Array) -> Vector2:return Vector2(a[0],a[1])
 func busy() -> bool:return current in ["mass","guardian"]
 func reserve(p: Vector2) -> bool:
@@ -87,6 +95,7 @@ func launch_guardian(w):
 	w.sound("ch4_guardian_awake")
 
 func tick(w,dt: float):
+	if w.stage!="survival":return
 	if not w.db.data.chapter_four.exploration_only:
 		if w.time>=data.golem.at:golem.visible=true
 		if golem.visible and not golem.started and w.player.distance_to(golem.p)<data.golem.trigger and not busy():launch_golem(w)

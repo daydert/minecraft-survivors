@@ -660,4 +660,3 @@ static func record_four_bosses(g, tree: SceneTree) -> Dictionary:
 			tree.root.get_texture().get_image().save_png(folder+"/%05d.png"%frame)
 			frame+=1
 	return {"fps":30,"frames":frame,"music":music,"sound_events":cues,"diagnostic":"invulnerable hero, scripted orbit and kills","state":"done"}
-

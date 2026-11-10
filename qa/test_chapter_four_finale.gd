@@ -23,6 +23,7 @@ func fresh():
 	return w
 
 func run():
+	handoff_checks()
 	var w=fresh();var e=w.ending
 	advance(w,.2)
 	check(w.stage=="finale" and e.phase=="summit","At 12:00 the waves stop and the pyramid calls")
@@ -165,3 +166,35 @@ func run():
 	check(e.age==age_before,"Pause freezes the finale")
 	print("CHAPTER_FOUR_FINALE_RESULT %d checks; %d failures" % [checks,failures.size()])
 	quit(1 if failures.size()>0 else 0)
+
+func handoff_checks():
+	for encounter in ["guardian","mass","golem"]:
+		var w=fresh();var e=w.encounters
+		w.build={};w.player=w.ending.center+Vector2(0,300);w.invulnerable=999
+		match encounter:
+			"guardian":
+				e.launch_guardian(w);e.enter(e.guardian,"walk",.1)
+				e.proposal=e.plan_geometry(w,0);e.commit_geometry(w)
+			"mass":e.launch_mass(w,w.player+Vector2(0,-100))
+			"golem":e.launch_golem(w)
+		var kills: int=w.kills;var loot: int=w.loot.size();var xp_before: float=w.xp
+		w.time=719.99;w.step(.02)
+		check(w.ending.phase=="summit" and e.candidates().is_empty() and not e.busy(),"12:00 retires the unfinished "+encounter+" before the finale")
+		var solids_left:=0
+		for cell in w.solid_grid:
+			solids_left+=w.solid_grid[cell].filter(func(s):return s.get("encounter","")=="guardian").size()
+		check(solids_left==0 and e.blocks.is_empty() and e.shots.is_empty() and e.beams.is_empty() and not e.golem.visible,"The "+encounter+" leaves no attacks, raised collision or rescue actor")
+		check(w.kills==kills and w.loot.size()==loot and w.xp==xp_before,"Retiring the "+encounter+" does not award a kill, chest or XP")
+		w.db.data.chapter_four.exploration_only=false;advance(w,1.0)
+		check(e.candidates().is_empty() and e.current.is_empty() and not e.golem.visible,"Survival encounters cannot restart after 12:00: "+encounter)
+		w.player=w.ending.center+Vector2(0,150);w.step(.02)
+		check(w.ending.phase=="intro" and e.visual_camera(w,w.camera())==w.camera(),"The "+encounter+" cannot override the finale camera")
+	# Both active items must retain their costs and charges during locked scenes.
+	var w=fresh();w.stage="finale";w.items={"heart_booster":5,"bat_wings":5};w.evolved={"bat_wings":true}
+	w.arsenal.tick(w,.01,Vector2.ZERO)
+	for phase in ["intro","vortex","kneel","erase","three","death","coords","road","door","retry"]:
+		w.ending.phase=phase
+		var before=var_to_str([w.hp,w.arsenal.heart_charges,w.arsenal.heart_price,w.arsenal.heart_buff,w.arsenal.bat_left,w.arsenal.bat_recharge])
+		check(not w.active_item("heart") and not w.active_item("bat") and before==var_to_str([w.hp,w.arsenal.heart_charges,w.arsenal.heart_price,w.arsenal.heart_buff,w.arsenal.bat_left,w.arsenal.bat_recharge]),"Active equipment spends nothing in locked phase "+phase)
+	w.ending.phase="one"
+	check(w.active_item("heart") and w.active_item("bat"),"Active equipment remains available during the actual boss fight")

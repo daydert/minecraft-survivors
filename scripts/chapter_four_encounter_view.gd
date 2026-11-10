@@ -242,6 +242,7 @@ static func arc(g,p: Vector2,a: float,b: float,r: float,color: Color):
 
 static func hud(g):
 	var w=g.world;var e=w.encounters
+	if w.stage!="survival":return
 	var title: String=e.title()
 	if not title.is_empty():
 		var m: Dictionary=e.mass if e.current=="mass" else e.guardian

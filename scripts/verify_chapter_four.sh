@@ -13,6 +13,9 @@ python scripts/check_chapter_four_assets.py
 python scripts/check_chapter_four_mobs.py
 python scripts/check_chapter_four_equipment.py
 if [ "${1:-}" = "--visual" ]; then
+ "$engine" --path . --display-driver wayland --audio-driver Dummy -s qa/test_chapter_four_finale_visual.gd > qa/chapter_four_e_visual.log 2>&1
+ cat qa/chapter_four_e_visual.log
+ if rg 'SCRIPT ERROR|^ERROR:' qa/chapter_four_e_visual.log | rg -v '^ERROR: [0-9]+ resources still in use at exit'; then exit 1; fi
  "$engine" --path . --display-driver wayland --audio-driver Dummy -s qa/test_chapter_four_arsenal_visual.gd > qa/chapter_four_c_visual.log 2>&1
  cat qa/chapter_four_c_visual.log
  if rg 'SCRIPT ERROR|^ERROR:' qa/chapter_four_c_visual.log | rg -v '^ERROR: [0-9]+ resources still in use at exit'; then exit 1; fi

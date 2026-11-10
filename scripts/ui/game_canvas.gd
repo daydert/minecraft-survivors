@@ -125,6 +125,10 @@ func ensure_four_assets():
 	four_assets_loaded = true
 
 func unload_four_assets():
+	if has_meta("ch4_finale_assets"):
+		for name in get_meta("ch4_finale_assets").sprites:textures.erase(name)
+		remove_meta("ch4_finale_assets")
+	if has_meta("ch4_enc_memory"):remove_meta("ch4_enc_memory")
 	for name in four_assets.sprites+four_mobs.sprites+four_equipment.get("sprites",[])+four_held_cache+four_encounter_assets.get("sprites",[])+four_actor_cache:textures.erase(name)
 	four_held_cache.clear();four_equipment={}
 	four_actor_cache.clear();four_encounter_assets={}
