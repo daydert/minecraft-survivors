@@ -270,7 +270,9 @@ static func prepare_end_capture(g):
 				var saved_build=g.world.build;g.world.build={};g.world.player=Vector2(1130,1180)
 				for i in range(140):g.world.step(1.0/60,Vector2.ZERO)
 				g.world.build=saved_build
-			elif g.qa_mode=="end_rekindle":g.world.stage="rekindle";g.world.stage_age=1.45;g.world.hand_taken=true;g.world.player=g.world.portal_position+Vector2(0,46);g.world.facing=Vector2.UP;g.world.jump_start=g.world.player
+			elif g.qa_mode=="end_rekindle":
+				g.world.effects.clear();g.world.stage="restore";g.world.stage_age=5.0;g.world.npc={"p":g.world.portal_position+Vector2(0,30),"from":g.world.portal_position+Vector2(0,30),"dir":Vector2.UP}
+				g.world.player=g.world.seats()[1];g.world.facing=Vector2.DOWN;g.world.jump_start=g.world.player
 			elif g.qa_mode=="end_jump":g.world.stage="exit_jump";g.world.stage_age=0;g.world.portal_lit=true;g.world.jump_start=g.world.portal_position+Vector2(0,35)
 			elif g.qa_mode=="end_steve_death":
 				g.world.stage="last_duel";g.world.spawn("endersteve_final",g.world.portal_position+Vector2(30,20));g.world.mobs[0].hp=0;g.world.resolve_deaths()

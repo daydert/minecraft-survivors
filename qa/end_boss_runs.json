@@ -3,22 +3,22 @@
     "build": "Рывок",
     "complete": true,
     "corpse": [
-      1386.0,
-      776.743774414062
+      976.263977050781,
+      882.446716308594
     ],
     "crystals_destroyed": 6,
     "dragon_win": true,
     "final_win": true,
     "god_mode": false,
     "hp": 20.0,
-    "minimum_hp": 16.0,
+    "minimum_hp": 13.5,
     "phase_two": true,
     "player": [
-      1039.00866699219,
-      1046.41625976562
+      1027.74951171875,
+      1073.17260742188
     ],
     "remaining_boss_hp": 0,
-    "seconds": 311.63,
+    "seconds": 151.08,
     "seed": 724,
     "stage": "chapter_four"
   },
@@ -26,31 +26,8 @@
     "build": "Дыхание",
     "complete": true,
     "corpse": [
-      790.362243652344,
-      1032.32165527344
-    ],
-    "crystals_destroyed": 6,
-    "dragon_win": true,
-    "final_win": true,
-    "god_mode": false,
-    "hp": 20.0,
-    "minimum_hp": 20.0,
-    "phase_two": true,
-    "player": [
-      1007.24737548828,
-      1052.7158203125
-    ],
-    "remaining_boss_hp": 0,
-    "seconds": 101.48,
-    "seed": 724,
-    "stage": "chapter_four"
-  },
-  {
-    "build": "Край",
-    "complete": true,
-    "corpse": [
-      1209.03918457031,
-      846.521118164062
+      1037.17138671875,
+      1226.07458496094
     ],
     "crystals_destroyed": 6,
     "dragon_win": true,
@@ -60,11 +37,34 @@
     "minimum_hp": 18.0,
     "phase_two": true,
     "player": [
-      1033.11743164062,
-      1042.18566894531
+      1027.541015625,
+      1073.20703125
     ],
     "remaining_boss_hp": 0,
-    "seconds": 271.3,
+    "seconds": 124.8,
+    "seed": 724,
+    "stage": "chapter_four"
+  },
+  {
+    "build": "Край",
+    "complete": true,
+    "corpse": [
+      1071.25708007812,
+      1034.79553222656
+    ],
+    "crystals_destroyed": 6,
+    "dragon_win": true,
+    "final_win": true,
+    "god_mode": false,
+    "hp": 20.0,
+    "minimum_hp": 18.0,
+    "phase_two": true,
+    "player": [
+      1027.74951171875,
+      1073.17260742188
+    ],
+    "remaining_boss_hp": 0,
+    "seconds": 179.82,
     "seed": 724,
     "stage": "chapter_four"
   },
@@ -72,22 +72,22 @@
     "build": "Смешанная",
     "complete": true,
     "corpse": [
-      1073.22204589844,
-      880.386047363281
+      915.709228515625,
+      1261.4765625
     ],
     "crystals_destroyed": 6,
     "dragon_win": true,
     "final_win": true,
     "god_mode": false,
     "hp": 20.0,
-    "minimum_hp": 17.0,
+    "minimum_hp": 20.0,
     "phase_two": true,
     "player": [
-      1027.11083984375,
-      1039.57946777344
+      1027.541015625,
+      1073.20703125
     ],
     "remaining_boss_hp": 0,
-    "seconds": 128.42,
+    "seconds": 135.17,
     "seed": 724,
     "stage": "chapter_four"
   }

@@ -1,9 +1,30 @@
 extends RefCounted
 ## Encounter clocks and all telegraphs advance only with the solo simulation.
-const BETRAYAL_IMPACT=3.15
+const BETRAYAL_IMPACT=3.4
+const BETRAYAL_END=10.2
 const DEATH_DURATION=7.6
+const YIELD_TIME=3.0
+const SIT_LENGTH=34.0
+const RESTORE_LIT=6.2
+const RESTORE_END=10.4
+## He breaks the way out the moment it looks like the chapter is won.
+const BETRAYAL_LINES=[[2.2,"Стой.",1.6],[6.0,"Туда нельзя.",2.2],[8.1,"Не заставляй меня.",2.0]]
+## On the edge of the island. Plain speech; Steve does not answer.
+const SIT_LINES=[[1.2,"Ну вот.",2.4],[4.4,"Я ведь тоже когда-то до него дошёл.",3.4],[8.6,"Думал, справлюсь. Не справился.",3.2],
+	[12.6,"Очнулся здесь. И с тех пор одно и то же: дракон, портал, ты.",4.2],[17.8,"Каждый раз ты приходишь. И каждый раз я тебя не пускаю.",4.2],
+	[23.0,"А в этот раз ты меня победил.",3.0],[26.8,"Значит, может, у тебя и получится.",3.4],[30.4,"Держи. Пригодится.",2.8]]
+const RESTORE_LINES=[[2.4,"Иди. И не останавливайся.",3.0]]
+
+func cue(w, dt: float, at: float) -> bool:
+	return w.stage_age>=at and w.stage_age-dt<at
+
+func lines(w, dt: float, table: Array):
+	for l in table:
+		if cue(w,dt,l[0]):w.say(l[1],l[2])
 
 func story(w, dt: float):
+	for l in w.lines:l.age+=dt
+	w.lines=w.lines.filter(func(l):return l.age<l.life)
 	match w.stage:
 		"end_arrival":
 			if w.stage_age>=2.5:w.stage="survival";w.stage_age=0
@@ -12,36 +33,60 @@ func story(w, dt: float):
 		"departure":
 			if w.stage_age>=1.6:w.prepare_arena()
 		"dragon_arrival":
+			# He comes in low across the island before the fight.
+			for m in w.mobs:
+				if m.kind=="end_dragon":
+					var k: float=smoothstep(.4,3.4,w.stage_age)
+					m.p=Vector2(504,930).lerp(Vector2(1024,1000),k);m.altitude=lerpf(70,45,k);m.dir=Vector2.RIGHT;m.moving=true
+			if cue(w,dt,2.1):w.sound("dragon_growl");w.shake=.45;w.fx.quake(w,Vector2(900,980),2.0)
 			if w.stage_age>=4:w.stage="dragon";w.stage_age=0;w.sound("dragon_growl")
 		"dragon_death":
-			if w.stage_age>=4.5:w.stage="exit_portal";w.stage_age=0;w.portal_lit=true;w.sound("portal_open")
+			if w.stage_age>=4.5:
+				w.stage="exit_portal";w.stage_age=0;w.portal_lit=true;w.sound("portal_open")
+				# It sounds and looks like the end of the chapter; that is the point.
+				w.win_music=true;w.sound("boss_win",.2)
 		"exit_portal":
 			if w.player.distance_to(w.portal_position)<94:
-				w.stage="betrayal";w.stage_age=0;w.win_music=false;w.sound("end_teleport")
+				w.stage="betrayal";w.stage_age=0;w.facing=Vector2.UP
 		"betrayal":
+			if w.stage_age<1.5:w.player=w.player.move_toward(w.portal_position+Vector2(0,62),dt*26);w.facing=Vector2.UP
+			if cue(w,dt,1.6):w.sound("end_teleport");w.shake=.15
+			if cue(w,dt,2.6):w.sound("ch4_hb_charge")
+			lines(w,dt,BETRAYAL_LINES)
 			if w.stage_age>=BETRAYAL_IMPACT and w.portal_lit:
-				w.portal_lit=false;w.shake=.6;w.sound("explosion");w.sound("blood_rift")
+				w.portal_lit=false;w.win_music=false;w.shake=.9;w.hitstop=.28
+				for id in ["end_portal_break","explosion","ch4_hb_shatter","end_music_cut"]:w.sound(id)
 				w.add_effect("portal_shatter",w.portal_position,3.8,{"radius":100.0})
-			if w.stage_age>=6.4:
-				w.stage="last_arrival";w.stage_age=0;w.spawn("endersteve_final",w.portal_position+Vector2(0,-35));w.hp=minf(20,w.hp+6);w.invulnerable=3.5
+				w.add_effect("end_card_shatter",w.portal_position,3.0)
+			if w.stage_age>=BETRAYAL_END:
+				w.stage="last_arrival";w.stage_age=0;w.spawn("endersteve_final",w.betrayer_position());w.hp=minf(20,w.hp+6);w.invulnerable=3.5
 		"last_arrival":
 			if w.stage_age>=2.2:w.stage="last_duel";w.stage_age=0;w.sound("warning")
-		"endsteve_death":
-			for cue in [2.6,4.5,6.1]:
-				if w.stage_age>=cue and w.stage_age-dt<cue:
-					w.sound("end_teleport" if cue<6 else "blood_rift");w.shake=.12 if cue<6 else .4
-					if cue>6:w.add_effect("ender_death_burst",w.endsteve_corpse.p-Vector2(0,20),1.2)
-			if w.stage_age>=DEATH_DURATION:
-				w.stage="hand";w.stage_age=0;w.loot.append({"kind":"end_hand","p":w.hand_position()})
-				w.boss_defeated("endersteve_final")
-		"hand_pickup":
-			if w.stage_age>=.6:w.stage="return_portal";w.stage_age=0
-		"return_portal":
-			if w.player_moving and w.player.distance_to(w.portal_position)<51:
-				w.stage="rekindle";w.stage_age=0;w.facing=w.player.direction_to(w.portal_position);w.sound("portal_ignite")
-		"rekindle":
-			if w.stage_age>=1.8 and not w.portal_lit:w.portal_lit=true;w.sound("portal_open");w.shake=.15
-			if w.stage_age>=2.8:w.stage="portal_ready";w.stage_age=0
+		"yield":
+			if cue(w,dt,1.8):w.say("Хватит.",2.0)
+			if w.stage_age>=YIELD_TIME:w.stage="approach";w.stage_age=0
+		"approach":
+			if w.player.distance_to(w.npc.p)<34:
+				w.stage="to_edge";w.stage_age=0
+		"to_edge":
+			var seats: Array=w.seats()
+			w.npc.p=w.npc.p.move_toward(seats[0],dt*34);w.player=w.player.move_toward(seats[1],dt*38)
+			w.npc.dir=w.npc.p.direction_to(seats[0]) if w.npc.p!=seats[0] else Vector2.DOWN
+			w.facing=w.player.direction_to(seats[1]) if w.player!=seats[1] else Vector2.DOWN
+			if (w.npc.p==seats[0] and w.player==seats[1]) or w.stage_age>7:
+				w.npc.p=seats[0];w.player=seats[1];w.facing=Vector2.DOWN;w.npc.dir=Vector2.DOWN
+				w.stage="sit";w.stage_age=0;w.sound("ch4_breath");w.sound("end_wind")
+		"sit":
+			lines(w,dt,SIT_LINES)
+			if cue(w,dt,31.0):w.keepsake=true;w.sound("pickup")
+			if w.stage_age>=SIT_LENGTH:w.stage="restore";w.stage_age=0;w.npc.from=w.npc.p
+		"restore":
+			var stand: Vector2=w.portal_position+Vector2(0,30)
+			w.npc.p=w.npc.from.lerp(stand,smoothstep(.6,2.6,w.stage_age));w.npc.dir=Vector2.UP if w.stage_age>.6 else Vector2.DOWN
+			lines(w,dt,RESTORE_LINES)
+			if cue(w,dt,3.6):w.sound("portal_ignite")
+			if w.stage_age>=RESTORE_LIT and not w.portal_lit:w.portal_lit=true;w.sound("portal_open");w.shake=.2;w.sound("ch4_hb_glitch")
+			if w.stage_age>=RESTORE_END:w.stage="portal_ready";w.stage_age=0;w.npc={}
 		"portal_ready":
 			if w.player_moving and w.player.distance_to(w.portal_position)<18:
 				w.stage="exit_jump";w.stage_age=0;w.jump_start=w.player;w.facing=Vector2.UP;w.sound("portal_travel")
@@ -52,17 +97,31 @@ func step(w, m: Dictionary, dt: float):
 	if m.kind=="end_dragon":dragon(w,m,dt)
 	else:endersteve(w,m,dt)
 
+## Echoes of himself from other loops run their old lines at the hero, one after another.
+func echoes(w, m: Dictionary):
+	var count: int=5 if m.rage else 3
+	if not m.get("echoes_spoken",false):m.echoes_spoken=true;w.say("Нас тут было много.",2.2)
+	for j in range(count):
+		var a: float=m.attack_serial*.9+j*TAU/count
+		var from: Vector2=w.player+Vector2.from_angle(a)*135
+		cut(w,from,w.player-Vector2.from_angle(a)*135,.85+j*.32,10,true)
+	w.sound("end_teleport");w.fx.ring(m.p,90.0,.6,"evolve")
+
+func bolt(w, p: Vector2, wait: float):
+	w.hazards.append({"kind":"end_bolt","p":p,"wait":wait,"total":wait,"radius":22.0,"damage":5.0,"remaining":.15})
+
 func cloud(w, p: Vector2, radius: float, wait: float=.9, life: float=2.8):
-	w.hazards.append({"p":p,"wait":wait,"total":wait,"radius":radius,"damage":2.0,"remaining":life,"end_cloud":true})
+	w.hazards.append({"p":p,"wait":wait,"total":wait,"radius":radius,"damage":3.0,"remaining":life,"end_cloud":true})
 
 func cut(w, start: Vector2, end: Vector2, wait: float, width: float=12, echo: bool=false):
-	w.hazards.append({"kind":"end_cut","p":start,"end":end,"wait":wait,"total":wait,"radius":width,"damage":4.0,"remaining":.2,"echo":echo})
+	w.hazards.append({"kind":"end_cut","p":start,"end":end,"wait":wait,"total":wait,"radius":width,"damage":5.0,"remaining":.2,"echo":echo})
 
 func dragon(w, m: Dictionary, dt: float):
 	var alive=w.crystals.filter(func(t):return t.alive).size()
 	if alive>0:m.hp=minf(m.max_hp,m.hp+float(alive)*7*dt)
 	if not m.phase_two and alive==0 and m.hp<=m.max_hp*.5+1:
 		m.phase_two=true;m.phase="rage";m.timer=1.8;w.sound("dragon_growl");w.add_effect("dragon_roar",m.p,1.8,{"radius":90.0})
+		w.fx.quake(w,m.p,2.0);w.fx.ring(m.p,160.0,1.0,"evolve");w.fx.flash(m.p,220.0,Color(.8,.4,1),.5)
 	var old: Vector2=m.p;m.fire_tick-=dt;m.rush_tick-=dt
 	var fast=1.45 if m.phase_two else 1.0
 	match m.phase:
@@ -73,18 +132,23 @@ func dragon(w, m: Dictionary, dt: float):
 			if m.phase_two and m.timer<=0:
 				m.phase="descend";m.timer=1.7;m.mark=w.portal_position+Vector2(0,-25)
 			elif m.rush_tick<=0:
-				m.pattern=(m.pattern+1)%3;m.burst_tick=0
-				if m.pattern==1:
+				m.pattern=(m.pattern+1)%(4 if m.phase_two else 3);m.burst_tick=0
+				if m.pattern==3:
+					# Breath along the ground, a line of fire walking toward the hero.
+					m.phase="breath_line";m.timer=2.2;var d: Vector2=m.p.direction_to(w.player)
+					for j in range(10):cloud(w,(m.p+d*(40+j*34)).clamp(w.END_ARENA.position+Vector2(20,20),w.END_ARENA.end-Vector2(20,20)),24,.7+j*.11,1.5)
+				elif m.pattern==1:
 					m.phase="sweep_windup";m.timer=1.15;m.charge=Vector2(1 if w.player.x>1024 else -1,0);m.mark=Vector2(w.player.x,clampf(w.player.y-100,790,1190))
 				else:m.phase="windup";m.timer=.95;m.charge=m.p.direction_to(w.player+w.tracked_velocity*.45)
 				w.sound("dragon_growl")
 		"windup":
 			m.dir=m.charge;m.altitude=lerpf(m.altitude,20,dt*3)
-			if m.timer<=0:m.phase="rush";m.timer=1.25;m.rush_tick=7.5/fast;w.sound("dragon_flap")
+			if m.timer<=0:m.phase="rush";m.timer=1.25;m.rush_tick=7.5/fast;w.sound("dragon_flap");w.fx.shove(w,m.charge,3.0,.12)
 		"rush":
 			m.p+=m.charge*215*fast*dt;m.dir=m.charge;m.altitude=14
+			if int(m.timer*20)!=int((m.timer+dt)*20):w.fx.dust(m.p,2,22,Color(.7,.65,.6,.4))
 			if m.p.distance_to(w.player)<42:
-				if w.contact_hit(m.p,6):w.player_push=m.charge*245
+				if w.contact_hit(m.p,6):w.player_push=m.charge*170
 			if m.pattern==2:
 				m.burst_tick-=dt
 				if m.burst_tick<=0:
@@ -106,7 +170,9 @@ func dragon(w, m: Dictionary, dt: float):
 			if m.timer<=0:m.phase="circle";m.timer=3
 		"descend":
 			m.dir=m.p.direction_to(m.mark);m.p=m.p.move_toward(m.mark,90*dt);m.altitude=maxf(0,m.altitude-dt*30)
-			if m.timer<=0:m.phase="perch";m.timer=5.5;m.altitude=0;m.burst_tick=.55;m.volley=0
+			if m.timer<=0:
+				m.phase="perch";m.timer=5.5;m.altitude=0;m.burst_tick=.55;m.volley=0
+				w.fx.quake(w,m.p,2.2,m.p+m.dir*70);w.fx.erupt(w,m.p,"stone",12);w.sound("mace_smash")
 		"perch":
 			m.altitude=0;m.dir=m.dir.lerp(m.p.direction_to(w.player),minf(1,dt*2)).normalized();m.burst_tick-=dt
 			if m.burst_tick<=0:
@@ -116,7 +182,14 @@ func dragon(w, m: Dictionary, dt: float):
 				# Alternating double fans retain a close melee opening behind the head.
 				for side in [-1,1]:
 					for j in range(5):shot(w,m.p,m.dir.rotated(side*(.4+j*.18)),88+j*10,2,.08*side)
+			if m.timer<=0:m.phase="slump";m.timer=2.2;w.sound("dragon_growl",.3)
+		"slump":
+			# Head on the ground, worn out: the opening for heavy hits.
+			m.altitude=0
 			if m.timer<=0:m.phase="takeoff";m.timer=1.4;w.sound("dragon_flap")
+		"breath_line":
+			m.altitude=lerpf(m.altitude,22,dt*3);m.dir=m.dir.lerp(m.p.direction_to(w.player),dt*2).normalized()
+			if m.timer<=0:m.phase="circle";m.timer=4.0
 		"takeoff":
 			m.altitude=minf(45,m.altitude+dt*35);m.p+=Vector2.UP*45*dt
 			if m.timer<=0:m.phase="circle";m.timer=6;m.rush_tick=1.8
@@ -124,7 +197,7 @@ func dragon(w, m: Dictionary, dt: float):
 		m.fire_tick=2.25 if m.phase_two else 3.1;m.volley+=1
 		var direction: Vector2=m.p.direction_to(w.player+w.tracked_velocity*.4)
 		for j in range(3 if m.phase_two else 1):
-			w.fire_projectile("dragon_fireball",m.p,direction.rotated((j-1)*.23 if m.phase_two else 0),{"speed":110+j*9,"damage":3,"range":500,"radius":8,"life":5},false)
+			w.fire_projectile("dragon_fireball",m.p,direction.rotated((j-1)*.23 if m.phase_two else 0),{"speed":110+j*9,"damage":4,"range":500,"radius":8,"life":5},false)
 		var count=24 if m.phase_two else 16
 		var gap=direction.angle()+PI/2
 		for j in range(count):
@@ -137,22 +210,36 @@ func dragon(w, m: Dictionary, dt: float):
 	m.moving=old.distance_to(m.p)>.01
 
 func shot(w, p: Vector2, dir: Vector2, speed: float, damage: float, turn: float=0, blade: bool=false):
-	w.fire_projectile("end_blade" if blade else "end_bullet",p,dir,{"speed":speed,"damage":damage,"range":760,"radius":3,"life":8,"turn":turn},false)
+	# Boss shots hurt: one mistake is felt, three are a problem.
+	w.fire_projectile("end_blade" if blade else "end_bullet",p,dir,{"speed":speed,"damage":damage+1.0,"range":760,"radius":3,"life":8,"turn":turn},false)
 
 func recover(m, seconds: float=1.0):
 	m.phase="recover";m.timer=seconds;m.altitude=0
+	# After a clean hit he stops and lets you see it.
+	if m.get("taunt",false):m.taunt=false;m.phase="pose";m.timer=.9
+
+## His order of moves: the plain ones, and every few a big one he has done a thousand times.
+const SEQUENCE=[0,1,2,9,3,4,10,5,6,11]
+const RAGE_SEQUENCE=[0,7,9,1,3,8,10,2,4,11,5,6]
+const TAUNTS=["Медленно.","Я это уже видел.","Ещё раз.","Не так."]
+
+func taunt(w, m: Dictionary):
+	m.taunt=true
+	if w.clock>=m.get("taunt_at",0.0):m.taunt_at=w.clock+11.0;w.say(TAUNTS[int(m.get("taunts",0))%TAUNTS.size()],1.6);m.taunts=int(m.get("taunts",0))+1
 
 func endersteve(w, m: Dictionary, dt: float):
 	if m.hp<m.max_hp*.5 and not m.rage:
 		m.rage=true;m.phase="rage";m.timer=1.6;m.altitude=0;w.sound("dragon_growl");w.add_effect("ender_rage",m.p,1.6,{"radius":95.0})
+		w.fx.quake(w,m.p,1.8);w.fx.ring(m.p,140.0,1.0,"evolve");w.fx.flash(m.p,200.0,Color(.75,.35,1),.6);w.say("Ну давай.",1.8)
 	m.burst_tick-=dt
 	match m.phase:
 		"walk","recover":
 			m.dir=m.p.direction_to(w.player)
 			if m.phase=="walk":m.p=w.move_actor(m.p,m.dir*m.speed*(1.25 if m.rage else .8)*dt,m.radius)
 			if m.timer<=0:
-				m.pattern=(m.pattern+1)%7;m.combo=(2 if m.rage else 1) if m.pattern==3 else 0;m.charge=m.p.direction_to(w.player);m.mark=(w.player+w.tracked_velocity*.3).clamp(w.END_ARENA.position+Vector2(50,50),w.END_ARENA.end-Vector2(50,50))
-				if m.pattern in [0,3]:w.teleport_mob(m,w.player-w.facing*90);m.charge=m.p.direction_to(w.player)
+				m.seq=int(m.get("seq",-1))+1;var order: Array=RAGE_SEQUENCE if m.rage else SEQUENCE;m.pattern=order[m.seq%order.size()];m.combo=(2 if m.rage else 1) if m.pattern==3 else 0;m.charge=m.p.direction_to(w.player);m.mark=(w.player+w.tracked_velocity*.3).clamp(w.END_ARENA.position+Vector2(50,50),w.END_ARENA.end-Vector2(50,50))
+				if m.pattern in [0,3]:
+					w.fx.flash(m.p,80.0,Color(.8,.5,1),.15);w.teleport_mob(m,w.player-w.facing*90);m.charge=m.p.direction_to(w.player);w.fx.flash(m.p,80.0,Color(.8,.5,1),.15)
 				m.phase="windup";m.timer=.85 if not m.rage else .7;m.windup_total=m.timer;m.burst_tick=0
 				if m.pattern==5:
 					cloud(w,m.mark,43,1.85,.35)
@@ -162,15 +249,17 @@ func endersteve(w, m: Dictionary, dt: float):
 			if m.timer<=0:m.phase="walk";m.timer=.5
 		"windup":
 			if m.timer<=0:
-				m.phase="rush" if m.pattern in [0,3] else "leap" if m.pattern==5 else "pursuit" if m.pattern==6 else "cast"
-				m.timer=.6 if m.phase=="rush" else 1.0 if m.phase=="leap" else 2.0 if m.phase=="pursuit" else 3.1
+				m.phase="rush" if m.pattern in [0,3] else "leap" if m.pattern==5 else "pursuit" if m.pattern==6 else "blink_chain" if m.pattern==9 else "echoes" if m.pattern==10 else "skyfall" if m.pattern==11 else "cast"
+				m.timer=.6 if m.phase=="rush" else 1.0 if m.phase=="leap" else 2.0 if m.phase=="pursuit" else .16*(8 if m.rage else 6) if m.phase=="blink_chain" else 2.4 if m.phase=="echoes" else 3.4 if m.phase=="skyfall" else 3.1
+				if m.phase=="echoes":echoes(w,m)
+				if m.phase=="skyfall":m.altitude=0;m.mark=w.player;w.sound("wind_burst");w.fx.dust(m.p,8,20)
 				m.burst_tick=0;m.attack_serial=0
 		"rush":
 			m.p=w.move_actor(m.p,m.charge*(275 if m.rage else 240)*dt,m.radius);m.dir=m.charge
 			if m.burst_tick<=0:
 				m.burst_tick=.14;w.add_effect("ender_slash",m.p,.35,{"direction":m.charge,"radius":45.0})
 			if m.p.distance_to(w.player)<36:
-				if w.contact_hit(m.p,5):w.player_push=m.charge*100
+				if w.contact_hit(m.p,5):w.player_push=m.charge*100;taunt(w,m)
 			if m.timer<=0:
 				if m.combo>0:
 					m.combo-=1;w.teleport_mob(m,w.player-m.charge.rotated(PI/2)*90);m.charge=m.p.direction_to(w.player);m.phase="windup";m.timer=.58;m.windup_total=.58
@@ -180,6 +269,7 @@ func endersteve(w, m: Dictionary, dt: float):
 			m.p=m.leap_start.lerp(m.mark,smoothstep(0,1,t));m.altitude=sin(t*PI)*55;m.dir=m.charge
 			if m.timer<=0:
 				w.shake=.2;w.sound("mace_smash");w.add_effect("ender_slash",m.p,.5,{"direction":m.charge,"radius":65.0})
+				w.fx.quake(w,m.p,1.6,m.p+m.charge*60);w.fx.erupt(w,m.p,"stone",9);w.fx.ring(m.p,70.0,.5,"toll")
 				for j in range(16):shot(w,m.p,Vector2.from_angle(j*TAU/16),96,2,0,true)
 				recover(m,1.25)
 		"pursuit":
@@ -188,13 +278,45 @@ func endersteve(w, m: Dictionary, dt: float):
 				m.charge=m.p.direction_to(w.player);m.phase="cleave_windup";m.timer=.65;m.windup_total=.65
 		"cleave_windup":
 			if m.timer<=0:
-				m.phase="cleave";m.timer=.46;w.add_effect("ender_slash",m.p,.46,{"direction":m.charge,"radius":75.0})
+				m.phase="cleave";m.timer=.46;w.add_effect("ender_slash",m.p,.46,{"direction":m.charge,"radius":75.0});w.fx.slash(w,m.p,m.charge,75.0)
 		"cleave":
 			var delta: Vector2=w.player-m.p
-			if delta.length()<75 and delta.normalized().dot(m.charge)>.1:w.contact_hit(m.p,5)
+			if delta.length()<75 and delta.normalized().dot(m.charge)>.1 and w.contact_hit(m.p,5):taunt(w,m)
 			if m.timer<=0:
 				for j in range(5):shot(w,m.p,m.charge.rotated((j-2)*.24),125,2,0,true)
 				recover(m,1.15)
+		"pose":
+			# Sword lowered, looking at you: the opening he gives on purpose.
+			m.dir=m.p.direction_to(w.player)
+			if m.timer<=0:m.phase="walk";m.timer=.6
+		"blink_chain":
+			# Thousand cuts: blink after blink around the hero, every path a delayed cut.
+			if m.burst_tick<=0:
+				m.burst_tick=.16;var old: Vector2=m.p
+				var target: Vector2=(w.player+Vector2.from_angle(m.attack_serial*2.3+.4)*118).clamp(w.END_ARENA.position+Vector2(40,40),w.END_ARENA.end-Vector2(40,40))
+				w.teleport_mob(m,target)
+				if old.distance_to(m.p)>20:cut(w,old,m.p,m.timer+.55,10,false)
+				m.attack_serial+=1;w.fx.flash(m.p,60.0,Color(.8,.5,1),.12)
+			if m.timer<=0:m.phase="pose";m.timer=1.1;m.charge=m.p.direction_to(w.player);w.sound("ch4_hb_freeze")
+		"echoes":
+			m.dir=m.p.direction_to(w.player)
+			if m.timer<=0:recover(m,1.2)
+		"skyfall":
+			var age: float=3.4-m.timer
+			if age<.9:m.altitude=lerpf(0,240,smoothstep(0,.9,age))
+			elif age<2.7:m.altitude=240;m.mark=m.mark.lerp(w.player,minf(1,dt*3.5))
+			else:m.altitude=lerpf(240,0,smoothstep(2.7,3.4,age))
+			if age>=2.7:m.p=m.mark
+			if m.timer<=0:
+				m.altitude=0;m.p=m.mark;w.shake=.5
+				if w.player.distance_to(m.p)<48 and w.contact_hit(m.p,8):taunt(w,m)
+				var gap: float=m.p.direction_to(w.player).angle()+PI*.5
+				for j in range(26):
+					var a: float=j*TAU/26
+					if absf(wrapf(a-gap,-PI,PI))<.32 or absf(wrapf(a-gap-PI,-PI,PI))<.32:continue
+					shot(w,m.p,Vector2.from_angle(a),105,2,0,true)
+				w.fx.quake(w,m.p,2.6,m.p+Vector2(0,60));w.fx.erupt(w,m.p,"stone",16);w.fx.stain(m.p,22.0,"scorch",w.clock);w.fx.ring(m.p,120.0,.7,"toll");w.sound("mace_smash");w.sound("explosion")
+				m.phase="pose";m.timer=1.2
 		"cast":
 			m.dir=m.p.direction_to(w.player)
 			if m.burst_tick<=0:
@@ -209,6 +331,13 @@ func endersteve(w, m: Dictionary, dt: float):
 							var a=j*TAU/28+m.attack_serial*.12
 							if absf(wrapf(a-gap,-PI,PI))<.29 or absf(wrapf(a-gap-PI,-PI,PI))<.29:continue
 							shot(w,m.p,Vector2.from_angle(a),75+(j%3)*17,2,.16 if m.attack_serial%2 else -.16,j%3==0)
+					7:
+						# Herobrine's tower storm, learned the hard way: marks, then bolts.
+						for j in range(4):bolt(w,(w.player+w.tracked_velocity*.35+Vector2.from_angle(m.attack_serial*1.3+j*TAU/4)*(0 if j==0 else 46)).clamp(w.END_ARENA.position+Vector2(40,40),w.END_ARENA.end-Vector2(40,40)),1.0)
+					8:
+						# Crossed cuts: two of his lanes at once, the safe corners between.
+						var d:=Vector2.from_angle(PI/4+m.attack_serial*PI/2)
+						cut(w,m.mark-d*110,m.mark+d*110,1.0,11,true);cut(w,m.mark-d.orthogonal()*110,m.mark+d.orthogonal()*110,1.0,11,true)
 					4:
 						# Echo bodies preview exactly the segment that will be cut.
 						var direction=Vector2.from_angle(m.attack_serial*PI/2+.35)

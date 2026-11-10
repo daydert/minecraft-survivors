@@ -41,6 +41,25 @@ var crystals: Array=[]
 var dragon_history: Array=[]
 var scene_camera=Vector2(1024,1024)
 var endsteve_corpse={}
+## Presentation-only impact layer shared with chapter IV (purple palette here).
+var fx=preload("res://scripts/chapter_four_fx.gd").new()
+var heal_drop_cd:=0.0
+## Traces of earlier loops on the island: a ghost fight, ruined portals, gateways.
+var echo: Dictionary={}
+var echo_done:=false
+var relics: Array=[]
+var gateways: Array=[]
+var gateway_cd:=0.0
+## EnderSteve's Eye of the End, given on the rim; chapter IV starts with it.
+var keepsake:=false
+## Spoken lines on screen: {text, age, life}. Presentation and story only.
+var lines: Array=[]
+## EnderSteve after the duel: kneels, sits with the hero, restores the portal.
+var npc: Dictionary={}
+## Short impact freeze for the portal break.
+var hitstop:=0.0
+var echo_count:=0
+const ECHO_LINES=["Уходи отсюда.","Ты опять не слушаешь.","Я тоже так шёл. Прямо к нему.","Сколько ещё раз?","Ладно. Посмотрим, на что ты способен."]
 var hand_taken=false
 var heal_rng=RandomNumberGenerator.new()
 var reward_rng=RandomNumberGenerator.new()
@@ -55,10 +74,27 @@ var falls=0
 
 func chapter_number() -> int:return 3
 
+func say(text: String, life: float=3.0):
+	lines.append({"text":text,"age":0.0,"life":life})
+
+## Where he stands between the hero and the portal.
+func betrayer_position() -> Vector2:
+	return portal_position+Vector2(0,30)
+
+## Two places on the south rim of the island, facing the camera and the void.
+func seats() -> Array:
+	var result: Array=[]
+	for x in [portal_position.x-14,portal_position.x+14]:
+		var y: float=portal_position.y+40
+		while y<portal_position.y+400 and on_land(Vector2(x,y+4)):y+=2
+		result.append(Vector2(x,y-1))
+	return result
+
 func hand_position() -> Vector2:
 	return (endsteve_corpse.get("p",portal_position)+Vector2(12,3)).clamp(END_ARENA.position+Vector2(12,12),END_ARENA.end-Vector2(12,12))
 
 func reset(seed_value: int=0):
+	fx.reset(self);fx.ender=true;heal_drop_cd=0.0;echo={};echo_done=false;relics.clear();gateways.clear();gateway_cd=0.0;keepsake=false
 	flight=0;flight_cooldown=0;pearl_cooldown=0;rocket_cooldown=0;shell_cooldown=0
 	dash_left=0;dash_hits.clear();rocket=false;jump_age=-1;jump_height=0;fall_age=-1
 	player_push=Vector2.ZERO;shield_charges=0;shield_timer=0;shield_guard=0
@@ -66,6 +102,7 @@ func reset(seed_value: int=0):
 	choice_age=0;choice_tick=0;rerolls=0;last_choices.clear();crystals.clear();dragon_history.clear()
 	chosen_item="";chosen_index=-1;choice_hold=0
 	endsteve_corpse={};hand_taken=false;end_complete=false;damage_source="melee"
+	lines.clear();npc={};hitstop=0.0;echo_count=0
 	landmarks.clear();city={};gust={};falls=0
 	super.reset(seed_value)
 	var extra: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_animations.json"))
@@ -101,7 +138,42 @@ func make_map():
 			solid_grid[cell].append({"p":p,"r":9.0})
 			blocked[Vector2i(p/CELL)]=true
 	place_city(decor)
+	place_relics(decor)
 	assign_healing()
+
+## Ruined portals from loops that ended badly, and two pairs of gateways.
+func place_relics(decor: RandomNumberGenerator):
+	var spots: Array=[]
+	for attempt in range(400):
+		if spots.size()>=7:break
+		var p=Vector2(decor.randf_range(200,1848),decor.randf_range(200,1848))
+		if not supported_at(p,34) or p.distance_to(player)<220:continue
+		if not city.is_empty() and p.distance_to(city.p)<160:continue
+		if spots.any(func(q):return q.distance_to(p)<260):continue
+		spots.append(p)
+	for i in range(spots.size()):
+		if i<3:relics.append({"p":spots[i],"id":i})
+		else:gateways.append({"p":spots[i],"to":(i-3)^1})
+	if gateways.size()%2==1:gateways.pop_back()
+
+func update_loop_world(dt: float):
+	gateway_cd=maxf(0,gateway_cd-dt)
+	if stage!="survival":return
+	if gateway_cd<=0 and fall_age<0:
+		for gw in gateways:
+			if player.distance_to(gw.p)<12 and gw.to<gateways.size():
+				teleport_to(gateways[gw.to].p+Vector2(0,20));gateway_cd=2.5;sound("portal_travel",.3);break
+	if not echo_done and time>=360:
+		echo_done=true
+		for i in range(12):
+			var p=player+Vector2.from_angle(-PI/2+i*2.39996)*130
+			if supported_at(p,40):echo={"p":p,"age":0.0,"foe":p+Vector2(60,-14)};break
+	if not echo.is_empty():
+		var before: float=echo.age;echo.age+=dt
+		for cue in [[1.0,"swing"],[1.8,"swing"],[2.6,"hurt"],[3.4,"swing"],[4.2,"ch4_hb_fire"],[5.4,"ch4_body_fall"],[7.0,"end_teleport"]]:
+			if echo.age>=cue[0] and before<cue[0]:sound(cue[1],.05)
+		if echo.age>=6.2 and before<6.2:say("Опять…",2.0)
+		if echo.age>=9.5:echo={}
 
 func place_city(decor: RandomNumberGenerator):
 	var rules: Dictionary=db.data.end_city
@@ -231,6 +303,7 @@ func teleport_to(p: Vector2):
 
 func step(dt: float, movement: Vector2=Vector2.ZERO):
 	if state!="RUNNING":return
+	if hitstop>0:hitstop=maxf(0,hitstop-dt);return
 	track_progress(dt)
 	clock+=dt;stage_age+=dt
 	if stage=="survival":time=minf(db.data.duration,time+dt)
@@ -244,7 +317,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 			if items.has("shulker_shell") and shell_cooldown<=0:shell_cooldown=rule("fall_shell_cooldown")-rule("fall_shell_cooldown_per_level")*items.shulker_shell
 			else:damage_player(rule("fall_damage")*(1-rule("fall_shell_reduction")*items.get("shulker_shell",0)))
 			invulnerable=1
-	elif stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]:
+	elif stage in ["survival","dragon","last_duel","exit_portal","approach","portal_ready"]:
 		if dash_left>0:
 			dash_left=maxf(0,dash_left-dt);invulnerable=maxf(invulnerable,.08)
 			player=move_actor(player,dash_direction*movement_speed()*(5.8 if rocket else db.stats("spear",build.get("spear",1),false,items).speed)*dt,6)
@@ -259,6 +332,8 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 				facing=movement.normalized();player=move_actor(player,(movement.limit_length()*movement_speed()+player_push)*dt,6);moved+=dt
 			else:player=move_actor(player,player_push*dt,6)
 		player_push=player_push.move_toward(Vector2.ZERO,dt*180)
+		# A blow may stagger the hero but never throws him off the island by itself.
+		if player_push.length_squared()>1 and not on_land(player+player_push.normalized()*16):player_push=Vector2.ZERO
 		update_elevation(dt)
 		if on_land(player):
 			if not flying() and supported_at(player):last_safe=player
@@ -270,7 +345,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 		if flow_timer<=0 and flow_cell!=Vector2i(player/CELL):update_flow();flow_timer=.3
 		if stage=="survival":spawn_wave(dt);update_city();update_gust(dt)
 		move_mobs(dt);rebuild_hit_grid();update_attacks(dt);update_projectiles(dt);update_explosives(dt);update_hazards(dt);resolve_deaths()
-	update_effects(dt)
+	update_effects(dt);fx.update(self,dt);update_loop_world(dt);heal_drop_cd=maxf(0,heal_drop_cd-dt)
 	if fall_age<0:pickup(dt)
 	update_particles(dt);animation.advance(self,dt)
 	update_end_poses(dt)
@@ -295,10 +370,14 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 			target=target.clamp(player-Vector2(260,120),player+Vector2(260,100))
 		if stage in ["dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump"]:target=player.lerp(portal_position,.5)+Vector2(0,-25)
 		if stage=="endsteve_death":target=player.lerp(endsteve_corpse.p,.6)-Vector2(0,30)
+		if stage in ["yield","approach"] and not npc.is_empty():target=player.lerp(npc.p,.5)-Vector2(0,24)
+		if stage in ["to_edge","sit"]:target=(seats()[0]+seats()[1])/2-Vector2(0,34)
+		if stage=="restore":target=player.lerp(portal_position,.6)-Vector2(0,24)
 		scene_camera=scene_camera.lerp(target,1-exp(-dt*2.5))
 
 func camera() -> Vector2:
 	if stage in ["survival","end_arrival","departure"]:return player.clamp(VIEW/2,Vector2.ONE*SIZE-VIEW/2)
+	if stage in ["to_edge","sit","restore"]:return scene_camera.clamp(Vector2(900,860),Vector2(1148,1460))
 	return scene_camera.clamp(Vector2(940,860),Vector2(1108,1188))
 
 func update_elevation(dt: float):
@@ -309,10 +388,14 @@ func update_elevation(dt: float):
 	if jump_age>=0:
 		jump_age+=dt
 		jump_height=sin(clampf(jump_age/.95,0,1)*PI)*jump_stats.height
+		invulnerable=maxf(invulnerable,.06)
 		if jump_age>=.95:
 			jump_age=-1;jump_height=0
 			var damage=jump_stats.damage*(1+jump_stats.height/24)
 			damage_owner="mace";end_blast(player,jump_stats.radius,damage,"mace_impact")
+			for m in in_radius(player,jump_stats.radius):
+				if m.kind not in ["arena_crystal"]:m.stun=maxf(m.get("stun",0.0),.2 if m.get("boss",false) else .6)
+			fx.quake(self,player,1.2);fx.erupt(self,player,"stone",8)
 			if evolved.has("mace"):add_effect("end_aftershock",player,.8,{"radius":jump_stats.radius*1.4,"damage":damage*.5,"triggered":false})
 			sound("mace_smash");shake=.2
 
@@ -346,6 +429,7 @@ func contact_hit(source: Vector2, damage: float, projectile: Dictionary={}) -> b
 	if fall_age>=0 or dash_left>0 or invulnerable>0:return false
 	if block_hit(source,projectile):return false
 	var old=hp;damage_player(damage)
+	if hp<old:fx.burst(player-Vector2(0,12),false,false);fx.shove(self,source.direction_to(player),4.0,.15)
 	return hp<old
 
 func spawn(kind: String, at=null) -> bool:
@@ -362,10 +446,16 @@ func spawn(kind: String, at=null) -> bool:
 	if kind=="arena_crystal":m.hp=180;m.max_hp=180;m.boss=false
 	if kind=="end_dragon":m.altitude=45.0;m.phase="circle";m.orbit=0.0;m.fire_tick=2.2;m.rush_tick=8.0;m.phase_two=false;m.burst_tick=0.0;m.dir=Vector2.RIGHT;m.pattern=0;m.volley=0
 	if kind=="endersteve_final":m.phase="walk";m.pattern=-1;m.burst_tick=0.0;m.rage=false
-	if kind=="endersteve":message="ЭндерСтив";message_timer=2;sound("warning")
+	if kind=="endersteve":say(ECHO_LINES[echo_count%ECHO_LINES.size()],3.0);echo_count+=1;sound("warning")
 	return true
 
 func hurt(m: Dictionary, amount: float, push: Vector2=Vector2.ZERO):
+	if m.kind=="end_dragon" and m.get("phase","")=="slump":amount*=1.5
+	# He guards while attacking: real damage lands in the openings he leaves.
+	if m.kind=="endersteve_final" and m.phase not in ["pose","recover","walk","rage"]:
+		amount*=.35
+		if m.hp>0 and clock>=m.get("guard_fx",0.0):m.guard_fx=clock+.15;fx.ring(m.p-Vector2(0,10),12.0,.18,"thorns");sound("shield_block",.1)
+	if m.hp>0 and (m.kind!="end_dragon" or stage=="dragon"):fx.hit(self,m,amount,push,damage_owner)
 	if m.kind=="end_dragon":
 		if stage!="dragon":return
 		if damage_source=="melee" and not rocket and elevation()+14<m.altitude:return
@@ -486,6 +576,9 @@ func update_end_poses(dt: float=0):
 				if m.moving and m.pose_age>.35:animation.set_pose(m.visual,"walk",m.visual.gait)
 				else:animation.set_pose(m.visual,"recover",m.pose_age/.35*.24)
 			elif m.phase=="rage":animation.set_pose(m.visual,"roar",m.pose_age/1.6*.9)
+			elif m.phase=="pose":animation.set_pose(m.visual,"idle",0.0)
+			elif m.phase in ["blink_chain","echoes"]:animation.set_pose(m.visual,"cast",fposmod(m.pose_age,1.0))
+			elif m.phase=="skyfall":animation.set_pose(m.visual,"slash",.2)
 			m.visual_dir=m.charge if m.phase in ["windup","slash","rush","cleave_windup","cleave","leap"] else m.dir
 
 func update_attacks(dt: float):
@@ -504,7 +597,14 @@ func update_attacks(dt: float):
 		cooldowns[id]=s.interval;animation.strike(self,id,facing)
 		match id:
 			"spear":
-				if dash_left<=0 and fall_age<0 and on_land(player+facing*28):start_dash(s.range/(movement_speed()*s.speed));sound("swing")
+				var aim: Vector2=player.direction_to(target.p)
+				if dash_left<=0 and fall_age<0 and on_land(player+aim*28) and on_land(player+aim*s.range):
+					facing=aim;start_dash(s.range/(movement_speed()*s.speed));sound("swing")
+				else:
+					# No safe ground ahead: the spear is thrust instead of charging.
+					for m in in_radius(player+aim*s.range*.5,s.range*.5+12):
+						if Geometry2D.get_closest_point_to_segment(m.p,player,player+aim*s.range).distance_to(m.p)<m.radius+10:hurt(m,s.damage*.8,aim*2)
+					add_effect("spear_thrust",player,.25,{"direction":aim,"range":s.range});sound("swing")
 			"mace":
 				if jump_age<0 and not rocket:jump_age=0;jump_stats=s;jump_height=0;sound("wind_burst")
 			"end_crystal":
@@ -588,13 +688,13 @@ func update_projectiles(dt: float):
 		if Geometry2D.get_closest_point_to_segment(player,old,b.p).distance_to(player)<9 and fall_age<0:
 			var landed=contact_hit(old,b.damage,b)
 			if landed:
-				if b.kind=="shulker_bullet":levitation=10
+				if b.kind=="shulker_bullet":levitation=6
 				if b.kind=="slow_arrow":slow_time=3.5
 				if b.kind=="poison_arrow":poison_time=4
 				if b.kind=="dragon_fireball":hazards.append({"p":b.p,"wait":0.0,"radius":36.0,"damage":2.0,"remaining":4.5,"fire":false,"end_cloud":true})
 			dead=true
 		if dead and b.kind=="dragon_fireball" and not b.get("impact",false):
-			hazards.append({"p":b.p,"wait":.7,"total":.7,"radius":34.0,"damage":2.0,"remaining":4.0,"end_cloud":true});add_effect("dragon_impact",b.p,.6,{"radius":36.0})
+			hazards.append({"p":b.p,"wait":.7,"total":.7,"radius":34.0,"damage":2.0,"remaining":4.0,"end_cloud":true});add_effect("dragon_impact",b.p,.6,{"radius":36.0});fx.blast(self,b.p,30.0)
 		if not dead:projectiles.append(b)
 
 func update_hazards(dt: float):
@@ -612,7 +712,10 @@ func update_hazards(dt: float):
 				if Geometry2D.get_closest_point_to_segment(player,h.p,h.end).distance_to(player)<h.radius+6 and jump_height+levitation_height<20:contact_hit(h.p,h.damage)
 			if h.remaining<=0:hazards.remove_at(i)
 			continue
-		if not h.get("triggered",false):h.triggered=true;h.remaining=h.get("remaining",.2);h.tick=0.0;add_effect("dragon_cloud",h.p,h.remaining,{"radius":h.radius})
+		if not h.get("triggered",false):
+			h.triggered=true;h.remaining=h.get("remaining",.2);h.tick=0.0
+			if h.get("kind","")=="end_bolt":add_effect("end_bolt",h.p,.45,{"radius":h.radius});fx.quake(self,h.p,.8);fx.flash(h.p,120.0,Color(.8,.5,1),.2);fx.stain(h.p,h.radius*.5,"scorch",clock);sound("ch4_hb_lightning",.08)
+			else:add_effect("dragon_cloud",h.p,h.remaining,{"radius":h.radius})
 		h.remaining-=dt;h.tick-=dt
 		if h.tick<=0:
 			h.tick+=.45
@@ -658,7 +761,10 @@ func pickup(dt: float):
 		if o.kind=="end_hand":
 			hand_taken=true;stage="hand_pickup";stage_age=0;facing=player.direction_to(o.p);sound("pickup");loot.remove_at(i);continue
 		if o.kind=="chest":
-			if not city.is_empty() and o.p.distance_to(city.p)<40:run_progress.award("end_city")
+			if not city.is_empty() and o.p.distance_to(city.p)<40:
+				run_progress.award("end_city")
+				# Scratched into the lid by someone who has opened it many times.
+				if not city.get("note_read",false):city.note_read=true;say("На крышке выцарапано: «Не ходи к порталу. Пожалуйста».",4.5)
 			if not pending_chest.is_empty():continue
 			pending_chest=o.duplicate()
 		else:apply_upgrade(o.kind)
@@ -676,19 +782,28 @@ func resolve_deaths():
 		if m.kind=="arena_crystal":
 			for t in crystals:
 				if t.id==m.id:t.alive=false
-			add_effect("crystal_blast",m.p,.8,{"radius":55.0});sound("explosion")
+			add_effect("crystal_blast",m.p,.8,{"radius":55.0});sound("explosion");fx.blast(self,m.p,40.0);fx.erupt(self,m.p,"stone",10)
 		elif m.kind=="end_dragon":dragon_dead=true;defeated_boss=m.duplicate(true)
 		elif m.kind=="endersteve_final":steve_dead=true;endsteve_corpse=m.duplicate(true)
-		elif m.kind=="endersteve":loot.append({"kind":"chest","p":m.p,"born":time})
-		if m.kind not in ["arena_crystal","end_dragon","endersteve_final"] and heal_rng.randf()<.03*items.get("rabbit_foot",0):loot.append({"kind":"golden_carrot" if items.get("rabbit_foot",0)>=5 else "apple","p":m.p})
+		elif m.kind=="endersteve":loot.append({"kind":"chest","p":m.p,"born":time});add_effect("end_teleport",m.p,.7,{"radius":30.0});sound("end_teleport")
+		if m.kind not in ["arena_crystal","end_dragon","endersteve_final"]:fx.death(self,m)
+		# The foot was a free full heal every few kills; now rarer, with a pause between drops.
+		if m.kind not in ["arena_crystal","end_dragon","endersteve_final"] and heal_drop_cd<=0 and heal_rng.randf()<.012*items.get("rabbit_foot",0):
+			heal_drop_cd=3.0;loot.append({"kind":"golden_carrot" if items.get("rabbit_foot",0)>=5 and heal_rng.randf()<.35 else "apple","p":m.p})
 	super.resolve_deaths()
 	if dragon_dead or steve_dead:
 		for pool in [mobs,projectiles,hazards,explosives,tnt_groups,effects,tasks,orbs,loot]:pool.clear()
 		rebuild_hit_grid();invulnerable=2;player_push=Vector2.ZERO;dash_left=0;rocket=false;jump_age=-1;jump_height=0
 		slow_time=0;poison_time=0;player_burn=0;player_wither=0;flight=0;levitation=0;levitation_height=0;levitation_velocity=0
-		stage="dragon_death" if dragon_dead else "endsteve_death";stage_age=0
-		if dragon_dead:sound("dragon_death")
-		else:sound("end_teleport")
+		stage="dragon_death" if dragon_dead else "yield";stage_age=0
+		if dragon_dead:
+			sound("dragon_death");fx.quake(self,defeated_boss.p,3.0);fx.flash(defeated_boss.p,320.0,Color(.9,.6,1),.9);fx.ring(defeated_boss.p,200.0,1.2,"evolve")
+		else:
+			# Defeat is not death: he goes down on his knees and stays.
+			npc={"p":endsteve_corpse.p,"dir":endsteve_corpse.visual_dir,"from":endsteve_corpse.p}
+			boss_victory_serial+=1
+			if hp>0:run_progress.finish(self)
+			sound("ch4_body_fall");sound("end_teleport")
 
 func begin_arena():
 	time=db.data.duration;stage="departure";stage_age=0;invulnerable=3;message_timer=0

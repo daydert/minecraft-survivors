@@ -3,6 +3,7 @@ extends RefCounted
 const PURPLE=Color("bf82e6")
 const Lighting=preload("res://scripts/ui/lighting.gd")
 const Atmosphere=preload("res://scripts/ui/atmosphere.gd")
+const FxView=preload("res://scripts/chapter_four_fx_view.gd")
 var dragon_meta: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_dragon.json"))
 
 func world(g):
@@ -12,7 +13,10 @@ func world(g):
 	var offset=Vector2(320,180)-w.camera().floor()
 	if w.stage=="survival":offset-=g.cam_lead.round()
 	if w.shake>0 and g.settings.shake and w.state=="RUNNING":offset+=Vector2(sin(w.clock*75),cos(w.clock*87)).round()*2
+	if g.settings.shake:offset+=w.fx.kick.round()
 	ground(g,offset)
+	FxView.floor_layer(g,offset)
+	loop_traces(g,offset)
 	for h in w.hazards:
 		if h.wait<=0:continue
 		var p: Vector2=h.p+offset;var alpha=.4+.35*(1-h.wait/h.get("total",1))
@@ -22,6 +26,14 @@ func world(g):
 			g.draw_line(p+side,end+side,Color(.8,.5,.95,alpha),1);g.draw_line(p-side,end-side,Color(.8,.5,.95,alpha),1)
 			if h.get("echo",false):
 				g.draw_actor("endersteve_final",p,p.direction_to(end),0,false,Color(.7,.4,1,.4),"windup",1,{"state":"windup","time":.16*(1-h.wait/h.total)})
+			continue
+		if h.get("kind","")=="end_bolt":
+			var k: float=1-h.wait/h.total
+			for j in range(8):
+				var a0: float=j*TAU/8+k*.6
+				g.draw_line(p+Vector2.from_angle(a0)*Vector2(h.radius,h.radius*.55),p+Vector2.from_angle(a0)*Vector2(h.radius,h.radius*.55)*(1-.35*k),Color(.95,.7,1,alpha),2)
+			g.oval(p,Vector2(h.radius,h.radius*.55)*k,Color(.7,.3,1,.2))
+			g.draw_line(p-Vector2(0,200),p-Vector2(0,200-200*k*k),Color(.85,.6,1,.25*k),1)
 			continue
 		g.draw_arc(p,h.radius,0,TAU,32,Color(.8,.5,.95,alpha),1)
 		g.oval(p,Vector2(h.radius,h.radius*.6),Color(.6,.25,.8,.12))
@@ -60,7 +72,10 @@ func world(g):
 				var m=a.obj;var p: Vector2=m.p+offset
 				if "steve" in m.kind:
 					end_particles(g,p,w.clock,float(m.id),14 if m.kind=="endersteve_final" else 7,21 if m.kind=="endersteve_final" else 14)
-				if m.kind=="endersteve_final" and m.phase=="leap":
+				if m.kind=="endersteve_final":aura(g,m,p)
+				if m.kind=="endersteve_final" and m.phase=="skyfall":
+					skyfall(g,m,offset)
+				elif m.kind=="endersteve_final" and m.phase=="leap":
 					g.oval(p,Vector2(8,3),Color(0,0,0,.35))
 					pose(g,"end_duel_leap",p-Vector2(0,m.altitude),m.charge,clampf(m.pose_age,0,1))
 				else:g.draw_actor(m.kind,p,m.visual_dir,m.animation,m.moving,Color(1.8,1.8,1.8) if g.settings.flashes and m.flash>0 else Color.WHITE,m.phase,1,m.visual)
@@ -90,12 +105,15 @@ func world(g):
 		if m.kind=="end_dragon":dragon(g,m,offset)
 	for b in w.projectiles:
 		if not projectile(g,b,offset):g.draw_projectile(b,offset)
+	if not w.echo.is_empty():echo_scene(g,offset)
+	FxView.air_layer(g,offset)
 	for e in w.effects:
 		if e.kind in ["friendly_breath","dragon_cloud"]:continue
 		if not effect(g,e,offset) and not g.nether_renderer.effect(g,e,offset):g.draw_effect(e,offset)
 	for pool in [w.particles,w.pixels]:
 		for p in pool:g.draw_rect(Rect2((p.p+offset).floor(),Vector2.ONE*p.get("size",2)),Color(p.color,clampf(p.life/.2,0,1)))
 	Atmosphere.collect(g,offset)
+	FxView.lights(g)
 	Lighting.draw(g,offset)
 	Atmosphere.after_lighting(g,offset)
 	gust_streaks(g)
@@ -119,7 +137,7 @@ func ground(g, offset: Vector2):
 	var w=g.world
 	abyss(g,offset)
 	if w.stage in ["survival","end_arrival","departure"]:
-		var cam: Vector2=w.camera()
+		var cam: Vector2=-offset+Vector2(320,180)
 		# Exposed edges show the stone thickness above the void.
 		var tile=Vector2i((cam-Vector2(336,196))/16)
 		for y in range(tile.y,tile.y+26):
@@ -180,6 +198,12 @@ func crystal_base(g, t: Dictionary, offset: Vector2):
 	g.oval(p+Vector2(0,4),Vector2(18,5),Color(0,0,0,.32))
 	g.sprite("end_obsidian",p-Vector2(12,3),Vector2(24,16))
 	g.sprite("end_obsidian",p-Vector2(12,7),Vector2(24,6),Color(1.2,1.2,1.2))
+	# Tally marks scratched into the obsidian: someone has counted his days here.
+	var groups: int=3+int(t.id)%3
+	for j in range(groups):
+		var q: Vector2=p+Vector2(-10+j*5,4)
+		for k in range(4 if j<groups-1 else 2+int(t.id)%3):g.draw_line(q+Vector2(k,0),q+Vector2(k,3),Color(.75,.55,.9,.55),1)
+		if j<groups-1:g.draw_line(q+Vector2(-1,3),q+Vector2(4,0),Color(.75,.55,.9,.55),1)
 	if not t.alive:return
 	var top=p-Vector2(0,16+sin(g.world.clock*3+float(t.id))*.9)
 	g.draw_set_transform(top,sin(g.world.clock*.8)*.08)
@@ -207,18 +231,25 @@ func end_particles(g, p: Vector2, time: float, seed_value: float, count: int, ra
 func dragon(g, m: Dictionary, offset: Vector2, death: float=0):
 	var w=g.world;var p: Vector2=m.p+offset-Vector2(0,m.altitude)
 	var row=posmod(roundi(atan2(-m.dir.x,m.dir.y)/TAU*dragon_meta.directions),int(dragon_meta.directions))
-	var state="perch" if m.phase=="perch" else "roar" if m.phase=="rage" else "flight"
+	var state="perch" if m.phase in ["perch","slump"] else "roar" if m.phase=="rage" else "flight"
 	var clip: Dictionary=dragon_meta.states[state]
 	var frame=int(clip.start)+int(w.clock*clip.fps*(1.35 if m.phase in ["rush","takeoff"] else 1.0))%int(clip.count)
 	var size=Vector2(dragon_meta.frame_size[0],dragon_meta.frame_size[1]);var anchor=Vector2(dragon_meta.anchor[0],dragon_meta.anchor[1])
 	g.oval(m.p+offset,Vector2(74,17),Color(0,0,0,.28))
 	var tint=Color(1.6,1.4,1.6,1-death) if g.settings.flashes and m.flash>0 else Color(1,1,1,1-death)
 	g.draw_texture_rect_region(g.textures.end_dragon_atlas,Rect2((p-anchor*.9).floor(),size*.9),Rect2(Vector2(frame*size.x,row*size.y),size),tint)
+	if m.get("phase","")=="slump":
+		var head: Vector2=p+m.dir*58-Vector2(0,22)
+		for j in range(5):
+			var a0: float=w.clock*4+j*TAU/5
+			g.draw_rect(Rect2((head+Vector2(cos(a0)*14,sin(a0)*5)).floor(),Vector2(2,2)),Color(1,.85,1,.9))
 
 func player(g, offset: Vector2):
 	var w=g.world;var p: Vector2=w.player+offset
 	if w.stage=="hand_pickup":
 		pose(g,"end_player_pickup",p,w.facing,clampf(w.stage_age/.6,0,1));return
+	if w.stage=="sit" or (w.stage=="to_edge" and w.player==w.seats()[1]) or (w.stage=="restore" and w.stage_age<1.0):
+		seated(g,"steve",p,w.clock);return
 	if w.stage=="exit_jump":
 		var a: float=w.stage_age;var progress=smoothstep(.18,1.15,a);var fall=smoothstep(1.1,2.4,a)
 		p=w.jump_start.lerp(w.portal_position,progress)+offset-Vector2(0,sin(progress*PI)*34)
@@ -279,7 +310,7 @@ func portal(g, offset: Vector2):
 	var w=g.world
 	if w.stage in ["dragon_arrival","dragon","departure"]:return
 	var p: Vector2=w.portal_position+offset
-	var broken=w.stage in ["last_arrival","last_duel","endsteve_death","hand","hand_pickup","return_portal"] or (w.stage=="betrayal" and w.stage_age>=w.end_boss.BETRAYAL_IMPACT)
+	var broken=w.stage in ["last_arrival","last_duel","endsteve_death","yield","approach","to_edge","sit"] or (w.stage=="betrayal" and w.stage_age>=w.end_boss.BETRAYAL_IMPACT) or (w.stage=="restore" and w.stage_age<3.6)
 	for y in range(-2,3):
 		for x in range(-2,3):
 			if x*x+y*y>6:continue
@@ -287,11 +318,12 @@ func portal(g, offset: Vector2):
 			var rubble=home*1.8+Vector2(sin(x*13+y)*16,cos(x+y*3)*11)
 			if broken:home=rubble
 			elif w.stage=="rekindle":home=rubble.lerp(home,smoothstep(.5,1.8,w.stage_age))
+			elif w.stage=="restore":home=rubble.lerp(home,smoothstep(3.6,5.8,w.stage_age))
 			g.sprite("end_bedrock",p+home,Vector2(12,7) if broken else Vector2(16,12),Color(.55,.5,.6) if broken else Color(.7,.7,.75))
 	if not broken:
 		if w.portal_lit:g.draw_texture_rect(g.textures.end_portal,Rect2(p-Vector2(19,10),Vector2(38,20)),true)
 		for y in range(3):g.sprite("end_bedrock",p-Vector2(6,15+y*9),Vector2(12,12))
-		if w.stage in ["dragon_death","exit_portal","betrayal"]:g.sprite("end_egg_model",p-Vector2(14,61))
+		if w.stage in ["dragon_death","exit_portal"] or (w.stage=="betrayal" and w.stage_age<w.end_boss.BETRAYAL_IMPACT):g.sprite("end_egg_model",p-Vector2(14,61))
 	if w.portal_lit:end_particles(g,p,w.clock,9,18,24)
 
 func projectile(g, b: Dictionary, offset: Vector2) -> bool:
@@ -359,6 +391,17 @@ func effect(g, e: Dictionary, offset: Vector2) -> bool:
 				g.draw_clip("sweep_animation",Vector2(-radius*.55,-radius*.4),Vector2(radius*1.4,radius*.8),e.age,Color(.9,.55,1,(1-t)*.8),false)
 				g.draw_set_transform(Vector2.ZERO)
 
+		"end_bolt":
+			# A purple bolt from above, branching where it lands.
+			var last: Vector2=p-Vector2(0,220)
+			for j in range(1,9):
+				var q: Vector2=p-Vector2(0,220-j*27.5)+Vector2(sin(j*7.1+e.age*40)*7*(1-j/9.0),0)
+				g.draw_line(last,q,Color(.6,.25,.9,1-t),5);g.draw_line(last,q,Color(1,.92,1,1-t),2);last=q
+			for j in range(5):g.draw_line(p,p+Vector2.from_angle(j*TAU/5+.3)*Vector2(24,12)*(.5+t),Color(.9,.7,1,1-t),1)
+		"spear_thrust":
+			var dir: Vector2=e.direction;var reach: float=e.range*smoothstep(0,.35,t)
+			g.draw_line(p-Vector2(0,10),p-Vector2(0,10)+dir*reach,Color(.85,.75,1,(1-t)*.5),5)
+			g.draw_line(p-Vector2(0,10),p-Vector2(0,10)+dir*reach,Color(1,1,1,1-t),1)
 		"shield_impact":
 			for j in range(7):g.draw_line(p,p+Vector2.from_angle(j*TAU/7)*t*17,Color(1,1,1,1-t),1)
 		"end_afterimage":
@@ -403,65 +446,33 @@ func cinematic(g, offset: Vector2):
 		for j in range(18):
 			var angle=j*2.39996+a*.13;var r=(35+j%5*13)*smoothstep(0,2.5,a);var dir=Vector2.from_angle(angle)
 			g.draw_colored_polygon(PackedVector2Array([p,p+dir*r+dir.orthogonal()*5,p+dir*r-dir.orthogonal()*5]),Color(.8,.45,1,sin(clampf(a/4.5,0,1)*PI)*.35))
-	if w.stage=="betrayal":
-		var p: Vector2=w.portal_position+offset+Vector2(0,-22)
-		var arrival=smoothstep(0,.8,a)
-		var impact=w.end_boss.BETRAYAL_IMPACT
-		var pose_name="teleport" if a<.8 else "cast" if a<1.8 else "windup" if a<2.8 else "slash" if a<3.5 else "recover"
-		var pose_time=(1-arrival)*.6 if a<.8 else a-1 if a<1.8 else clampf((a-1.8),0,1)*.16 if a<2.8 else clampf((a-2.8)/.45,0,1)*.52 if a<3.5 else .24
-		end_particles(g,p,w.clock,6,36,30+smoothstep(1.4,2.9,a)*25)
-		g.draw_actor("endersteve_final",p-Vector2(0,(1-arrival)*32),Vector2.DOWN,a,false,Color(1,1,1,arrival),pose_name,1,{"state":pose_name,"time":pose_time})
-		if a>1.8 and a<impact:
-			var strength=smoothstep(1.8,3,a)
-			for j in range(9):
-				var q=p+Vector2.from_angle(j*2.39996+w.clock*.2)*(58*(1-strength)+13)
-				g.draw_line(q,q.move_toward(p-Vector2(0,23),7),Color(.85,.5,1,strength*.6),1)
-			g.draw_line(p+Vector2(-5,-42),p+Vector2(-5,-24),Color(.9,.65,1,strength),2)
-		if a>impact and a<impact+.36:
-			var t=(a-impact)/.36
-			g.draw_line(p-Vector2(0,54),p+Vector2(0,30),Color(.95,.8,1,1-t),3)
-			if g.settings.flashes:g.draw_rect(Rect2(0,0,640,360),Color(.8,.6,1,(1-t)*.2))
-	if w.stage=="endsteve_death" and not w.endsteve_corpse.is_empty():
-		var p: Vector2=w.endsteve_corpse.p+offset
-		var progress=clampf(a/w.end_boss.DEATH_DURATION,0,1)
-		var frame=mini(47,int(progress*48))
-		var row=w.animation.direction_row(w.endsteve_corpse.visual_dir)
-		g.oval(p,Vector2(8,3),Color(0,0,0,.35*(1-smoothstep(4,6,a))))
-		var tint=Color(1,1,1,1-smoothstep(6.6,7.2,a))
-		if row==2 and w.endsteve_corpse.visual_dir.x<0:
-			g.draw_set_transform(p,0,Vector2(-1,1))
-			g.draw_texture_rect_region(g.textures.end_finale_death,Rect2(-64,-100,128,128),Rect2(frame*128,row*128,128,128),tint);g.draw_set_transform(Vector2.ZERO)
-		else:g.draw_texture_rect_region(g.textures.end_finale_death,Rect2(p-Vector2(64,100),Vector2(128,128)),Rect2(frame*128,row*128,128,128),tint)
-		if a>2:
-			end_particles(g,p,w.clock,6,45,20+smoothstep(2,5,a)*26)
-		if a>3.6 and a<6.6:
-			var center=p-Vector2(0,22)
-			var glow=sin(clampf((a-3.6)/3,0,1)*PI)
-			for j in range(7):
-				var dir=Vector2.from_angle(j*2.39996+w.clock*.08)
-				var length=(38+j%3*14)*glow
-				g.draw_colored_polygon(PackedVector2Array([center,center+dir*length+dir.orthogonal()*2,center+dir*length-dir.orthogonal()*2]),Color(.7,.35,.95,glow*.25))
-		if a>6.25:
-			var land=smoothstep(6.25,7.25,a)
-			var hand=p.lerp(w.hand_position()+offset,land)-Vector2(0,(1-land)*18+sin(land*PI)*16)
-			g.draw_set_transform(hand,(1-land)*1.4)
-			g.sprite("icon_end_hand",Vector2(-8,-16),Vector2(16,16),Color(1,1,1,smoothstep(6.25,6.6,a)));g.draw_set_transform(Vector2.ZERO)
-	if w.stage in ["end_arrival","departure","dragon_arrival","dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump"]:
+	if w.stage=="betrayal":betrayal(g,offset,a)
+	if w.stage=="sit":closeup(g,a)
+	if w.stage=="dragon_arrival":title_card(g,a,"ЭНДЕР-ДРАКОН","хозяин этого острова")
+	if not w.npc.is_empty():ender_npc(g,offset)
+	if w.stage in ["end_arrival","departure","dragon_arrival","dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump","yield","to_edge","sit","restore"]:
 		var bars=18.0
 		if w.stage in ["dragon_arrival","last_arrival","end_arrival"]:bars*=1-smoothstep(1,3.9 if w.stage=="dragon_arrival" else 2.2,a)
 		if w.stage=="endsteve_death":bars*=1-smoothstep(6.6,7.6,a)
+		if w.stage in ["to_edge","sit"]:bars=26.0*smoothstep(0,1.5,a if w.stage=="to_edge" else 9.0)
+		if w.stage=="restore":bars=26.0*(1-smoothstep(9.0,10.4,a))
 		g.draw_rect(Rect2(0,0,640,bars),Color.BLACK);g.draw_rect(Rect2(0,360-bars,640,bars),Color.BLACK)
 	if w.stage=="departure":g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(.2,1.55,a)))
 	elif w.stage in ["end_arrival","dragon_arrival"]:
 		g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,1-smoothstep(0,1.2,a)))
 		if w.stage=="end_arrival" and a>.6:g.centered("Глава III · Край",95,16,Color(1,1,1,1-smoothstep(1.7,2.5,a)),true)
 	elif w.stage=="exit_jump":g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(2.2,3.4,a)))
+	subtitles(g)
 
 func hud(g):
 	var w=g.world
 	for m in w.mobs:
 		if m.kind not in ["end_dragon","endersteve_final"]:continue
-		g.centered("Эндер-дракон" if m.kind=="end_dragon" else "ЭндерСтив",41,8,Color.WHITE,true)
+		var title: String="Эндер-дракон" if m.kind=="end_dragon" else "ЭндерСтив"
+		# His name settles only after a moment: first he is just Steve.
+		if m.kind=="endersteve_final" and w.stage=="last_duel" and w.stage_age<3.0:
+			title="Стив" if w.stage_age<1.4 or int(w.clock*30)%5==0 else "ЭндерСтив"
+		g.centered(title,41,8,Color.WHITE,true)
 		g.draw_rect(Rect2(191,46,258,6),Color("333333"));g.draw_rect(Rect2(192,47,256*clampf(m.hp/m.max_hp,0,1),4),Color("9b739a"))
 		if m.kind=="end_dragon":
 			var count=w.crystals.filter(func(t):return t.alive).size()
@@ -507,3 +518,286 @@ func ending(g):
 		g.draw_texture_rect_region(texture,rect,source,Color(.85,.75,.85) if shift_value else Color.WHITE)
 	g.button(Rect2(199,263,242,27),"Продолжить","chapter_4")
 	g.button(Rect2(199,304,242,27),"В меню","menu")
+
+## Full body drawn lower so the legs hang over the rim of the island.
+func seated(g, kind: String, p: Vector2, clock: float, tint: Color=Color.WHITE):
+	var breath: float=round(sin(clock*1.6))*.5
+	g.draw_actor(kind,p+Vector2(0,10+breath),Vector2.DOWN,0,false,tint,"idle",1,{"state":"idle","time":0.0})
+
+func death_frame(g, p: Vector2, direction: Vector2, frame: int, tint: Color=Color.WHITE):
+	var row=g.world.animation.direction_row(direction)
+	var region:=Rect2(clampi(frame,0,47)*128,row*128,128,128)
+	if row==2 and direction.x<0:
+		g.draw_set_transform(p,0,Vector2(-1,1));g.draw_texture_rect_region(g.textures.end_finale_death,Rect2(-64,-100,128,128),region,tint);g.draw_set_transform(Vector2.ZERO)
+	else:g.draw_texture_rect_region(g.textures.end_finale_death,Rect2(p-Vector2(64,100),Vector2(128,128)),region,tint)
+
+const DISSOLVE_AT:=6.4
+
+## EnderSteve after the duel, by stage: on his knees, walking, sitting, at the portal.
+func ender_npc(g, offset: Vector2):
+	var w=g.world;var n: Dictionary=w.npc;var a: float=w.stage_age;var p: Vector2=n.p+offset
+	match w.stage:
+		"yield","approach":
+			var k: float=clampf(a/1.4,0,1) if w.stage=="yield" else 1.0
+			g.oval(p,Vector2(8,3),Color(0,0,0,.35))
+			death_frame(g,p,n.dir,int(k*11))
+			end_particles(g,p,w.clock,6,10,14)
+		"to_edge":
+			if n.p.distance_to(w.seats()[0])>.5:g.draw_actor("endersteve_final",p,n.dir,w.clock,true,Color.WHITE,"walk",1,{"state":"walk","time":w.clock})
+			else:seated(g,"endersteve_final",p,w.clock)
+		"sit":
+			seated(g,"endersteve_final",p,w.clock+1.3)
+			end_particles(g,p-Vector2(0,4),w.clock,6,5,10)
+		"restore":
+			if a<.6:seated(g,"endersteve_final",p,w.clock);return
+			if a<2.6:
+				g.draw_actor("endersteve_final",p,n.dir,w.clock,true,Color.WHITE,"walk",1,{"state":"walk","time":w.clock});return
+			var portal: Vector2=w.portal_position+offset
+			if a<DISSOLVE_AT:
+				g.draw_actor("endersteve_final",p,Vector2.UP,a,false,Color.WHITE,"cast",1,{"state":"cast","time":a-2.6})
+				var strength: float=smoothstep(2.8,4.2,a)
+				for j in range(10):
+					var q: Vector2=p-Vector2(0,16)+Vector2.from_angle(j*2.39996+w.clock*1.4)*(6+j%3*3)
+					g.draw_line(q,q.lerp(portal,.25+.75*fposmod(w.clock*.8+j*.1,1)),Color(.85,.55,1,strength*.55),1)
+				end_particles(g,p,w.clock,6,22,26)
+				return
+			# He comes apart into the light of the portal he gave back.
+			var k: float=clampf((a-DISSOLVE_AT)/(w.end_boss.RESTORE_END-DISSOLVE_AT-.4),0,1)
+			death_frame(g,p,Vector2.UP,26+int(k*20),Color(1,1,1,1-smoothstep(.85,1,k)))
+			for j in range(40):
+				var t: float=fposmod(k*1.6+j*.037,1.0)
+				var start: Vector2=p-Vector2(0,10+j%20)
+				var q: Vector2=start.lerp(portal-Vector2(0,4),t*t)+Vector2(sin(j*1.7+w.clock*3)*6*(1-t),0)
+				g.draw_rect(Rect2(q.floor(),Vector2.ONE*(1+j%2)),Color(.75,.4,1,(1-t)*(1-k*.6)))
+			# A few frames of unreadable symbols in the light: something is under the world.
+			if g.settings.flashes and int(w.clock*60)%41 in [0,1] and k>.2 and k<.9:
+				var glyphs:="§#ÆØ∆ΞЖ¥¤ÐΣ"
+				for j in range(6):
+					g.text_at(glyphs.substr(int(w.clock*31+j*3)%glyphs.length(),1),p+Vector2(-24+j*9,-30-int(w.clock*90+j*7)%20),8,Color(.95,.85,1,.9))
+
+## The chapter looks finished; he breaks the way out and the end card with it.
+func betrayal(g, offset: Vector2, a: float):
+	var w=g.world;var impact: float=w.end_boss.BETRAYAL_IMPACT
+	var p: Vector2=w.betrayer_position()+offset
+	var card: float=smoothstep(.2,1.2,a)*(1-smoothstep(impact,impact+.02,a))
+	if card>0:
+		g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,.25*card))
+		g.centered("ГЛАВА III ПРОЙДЕНА",112,16,Color(1,.92,.7,card),true)
+		var rect:=Rect2(234,246,172,26)
+		var shake:=Vector2.ZERO
+		if a>2.6:shake=Vector2(sin(w.clock*70),cos(w.clock*53))*smoothstep(2.6,impact,a)*2
+		g.draw_style_box(g.button_styles[1 if int(w.clock*2)%2==0 else 0],Rect2(rect.position+shake,rect.size))
+		var label:="Продолжить"
+		var width: float=g.bold.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
+		g.text_at(label,rect.position+shake+Vector2((rect.size.x-width)/2,17),8,Color(1,1,1,card),true)
+	if a>=1.6:
+		var arrival: float=smoothstep(1.6,2.1,a)
+		var pose_name: String="teleport" if a<2.1 else "idle" if a<2.6 else "windup" if a<impact else "slash" if a<impact+.5 else "recover" if a<5.0 else "idle"
+		var pose_time: float=(1-arrival)*.6 if a<2.1 else 0.0 if a<2.6 else clampf((a-2.6)/(impact-2.6),0,1)*.16 if a<impact else clampf((a-impact)/.5,0,1)*.52 if a<impact+.5 else .24
+		var facing: Vector2=Vector2.DOWN if a<2.6 or a>5.0 else Vector2.UP
+		end_particles(g,p,w.clock,6,30,26+smoothstep(2.6,impact,a)*30)
+		g.draw_actor("endersteve_final",p-Vector2(0,(1-arrival)*30),facing,a,false,Color(1,1,1,arrival),pose_name,1,{"state":pose_name,"time":pose_time})
+		if a>2.6 and a<impact:
+			var strength: float=smoothstep(2.6,impact,a)
+			for j in range(12):
+				var q: Vector2=p-Vector2(0,20)+Vector2.from_angle(j*2.39996+w.clock*.3)*(70*(1-strength)+10)
+				g.draw_line(q,q.move_toward(p-Vector2(0,22),8),Color(.85,.5,1,strength*.7),1)
+	if a>=impact and a<impact+.12 and g.settings.flashes:
+		g.draw_rect(Rect2(0,0,640,360),Color(1,1,1))
+		g.draw_actor("endersteve_final",p,Vector2.UP,a,false,Color(0,0,0),"slash",1,{"state":"slash","time":.3})
+		g.draw_actor("steve",w.player+offset,Vector2.UP,0,false,Color(0,0,0),"idle",1,{"state":"idle","time":0.0})
+	if a>=impact:
+		var t: float=a-impact
+		if t<.5:g.draw_line(p-Vector2(0,60),p+Vector2(0,40),Color(.95,.8,1,1-t*2),3)
+		# The end card and its button fall apart like glass.
+		var alpha: float=1-smoothstep(1.2,2.6,t)
+		if alpha>0:
+			for j in range(46):
+				var origin:=Vector2(234+(j%12)*14.5,246+(j/12)*7) if j<36 else Vector2(200+(j-36)*24,104+(j%2)*10)
+				var dir: Vector2=(origin-Vector2(320,250)).normalized()+Vector2(sin(j*1.3)*.4,-.6)
+				var q: Vector2=origin+dir*t*(90+j%5*30)+Vector2(0,t*t*260)
+				g.draw_set_transform(q,t*(j%5-2)*3)
+				g.draw_rect(Rect2(-3,-2,6+j%3*2,4),Color(.55,.55,.58,alpha) if j<36 else Color(1,.92,.7,alpha))
+				g.draw_rect(Rect2(-3,-2,6+j%3*2,1),Color(.85,.85,.88,alpha) if j<36 else Color(1,1,.9,alpha))
+				g.draw_set_transform(Vector2.ZERO)
+		g.draw_rect(Rect2(0,0,640,360),Color(.18,0,.25,.35*(1-smoothstep(.3,4.0,t))))
+
+## His words at the bottom of the screen, typed out at speaking pace.
+func subtitles(g):
+	var w=g.world
+	if w.lines.is_empty():return
+	var l: Dictionary=w.lines.back()
+	var shown: int=mini(l.text.length(),int(l.age*28))
+	var alpha: float=minf(1,l.age/.2)*(1-smoothstep(l.life-.35,l.life,l.age))
+	var width: float=g.font.get_string_size(l.text,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
+	g.draw_rect(Rect2(320-width/2-10,316,width+20,18),Color(0,0,0,.55*alpha))
+	g.text_at(l.text.substr(0,shown),Vector2(320-width/2,329),8,Color(.88,.78,1,alpha))
+
+
+## His presence: a purple glow around the silhouette and flames rising off it,
+## strongest when he stops to look at you and when he is angry.
+func aura(g, m: Dictionary, p: Vector2):
+	var w=g.world;var power: float=.35+(.35 if m.rage else 0.0)+(.45 if m.phase=="pose" else 0.0)
+	if m.phase=="skyfall" and m.altitude>200:return
+	var lift: float=m.altitude if m.phase=="skyfall" else 0.0
+	var q: Vector2=p-Vector2(0,lift)
+	g.oval(p,Vector2(14,4)*(1+power*.4),Color(.25,.05,.35,.25*power))
+	g.draw_actor("endersteve_final",q+Vector2(0,1),m.visual_dir,m.animation,m.moving,Color(.75,.35,1,.22*power),m.phase,1.12,m.visual)
+	for j in range(int(8+power*10)):
+		var t: float=fposmod(w.clock*(.9+j%3*.25)+j*.137,1.0)
+		var x: float=sin(j*2.4)*(7+j%3*2)+sin(w.clock*4+j)*1.5
+		g.draw_rect(Rect2((q+Vector2(x,-4-t*(30+power*14))).floor(),Vector2(1,2+j%2)),Color(.8,.45,1,(1-t)*power))
+	if m.phase=="pose":
+		for j in range(6):
+			var a0: float=w.clock*2+j*TAU/6
+			g.draw_line(q+Vector2.from_angle(a0)*Vector2(16,6),q+Vector2.from_angle(a0)*Vector2(22,8),Color(.9,.65,1,.5),1)
+
+## Sky fall: he is gone above the screen, his shadow hunts the hero, then he lands.
+func skyfall(g, m: Dictionary, offset: Vector2):
+	var w=g.world;var mark: Vector2=m.mark+offset;var age: float=3.4-m.timer
+	var locked: bool=age>=2.7
+	var k: float=1-clampf(m.altitude/240,0,1)
+	g.oval(mark,Vector2(10+22*k,4+8*k),Color(.1,0,.15,.35+.35*k))
+	g.draw_arc(mark,26+(1-k)*20,0,TAU,32,Color(1,.5,.9,.8) if locked else Color(.8,.5,1,.45),2 if locked else 1)
+	if locked:
+		for j in range(4):
+			var d:=Vector2.from_angle(j*PI/2+w.clock*3)
+			g.draw_line(mark+d*30,mark+d*40,Color(1,.6,1,.9),2)
+	if m.altitude<230:
+		var p: Vector2=m.p+offset-Vector2(0,m.altitude)
+		for j in range(5):g.draw_line(p-Vector2(0,10+j*6),p-Vector2(0,30+j*14),Color(.85,.6,1,.4-j*.06),1)
+		g.draw_actor("endersteve_final",p,Vector2.DOWN,m.animation,false,Color.WHITE,"slash",1,{"state":"slash","time":.2})
+
+
+## Ruined portals from loops that ended here, and the gateways between them.
+func loop_traces(g, offset: Vector2):
+	var w=g.world
+	if w.stage not in ["survival","end_arrival","departure"]:return
+	for r in w.relics:
+		var p: Vector2=r.p+offset
+		if not Rect2(-80,-80,800,520).has_point(p):continue
+		g.oval(p,Vector2(40,14),Color(.12,.05,.16,.35))
+		for j in range(11):
+			var a0: float=j*2.39996+r.id
+			var q: Vector2=p+Vector2(cos(a0)*(14+j%4*7),sin(a0)*(6+j%3*3))
+			g.sprite("end_bedrock",q-Vector2(6,4),Vector2(12,7),Color(.55,.5,.6))
+		g.sprite("end_egg",p+Vector2(10,-6),Vector2(7,7),Color(.6,.5,.7,.9))
+		for j in range(3+r.id):
+			var q: Vector2=p+Vector2(-12+j*5,-2)
+			for k in range(4):g.draw_line(q+Vector2(k,0),q+Vector2(k,3),Color(.75,.55,.9,.6),1)
+	for gw in w.gateways:
+		var p: Vector2=gw.p+offset
+		if not Rect2(-60,-200,760,600).has_point(p):continue
+		var pulse: float=.5+.5*sin(w.clock*3+gw.p.x)
+		g.oval(p,Vector2(12,4),Color(0,0,0,.4))
+		g.draw_rect(Rect2(p-Vector2(7,10),Vector2(14,10)),Color(.03,.02,.05))
+		g.draw_rect(Rect2(p-Vector2(7,10),Vector2(14,1)),Color(.5,.4,.6))
+		g.draw_line(p-Vector2(0,10),p-Vector2(0,130),Color(.75,.5,1,.18+.12*pulse),5)
+		g.draw_line(p-Vector2(0,10),p-Vector2(0,130),Color(1,.9,1,.5+.3*pulse),1)
+		end_particles(g,p-Vector2(0,6),w.clock,gw.p.x,10,10)
+		if w.player.distance_to(gw.p)<60:g.draw_arc(p,12,0,TAU,20,Color(.85,.6,1,.5*pulse),1)
+
+## At six minutes the island replays an older loop: a pale Steve fights someone
+## who is not there, burns, kneels and is gone. Nothing here can be touched.
+func echo_scene(g, offset: Vector2):
+	var w=g.world;var e: Dictionary=w.echo;var a: float=e.age
+	var p: Vector2=e.p+offset;var foe: Vector2=e.foe+offset
+	var alpha: float=smoothstep(0,1,a)*(1-smoothstep(7.0,9.0,a))
+	var ghost:=Color(.75,.55,1,.6*alpha)
+	var dir: Vector2=p.direction_to(foe)
+	if a>=5.0 and a<8.2:
+		var ha: float=smoothstep(5.0,5.6,a)*(1-smoothstep(7.6,8.2,a))
+		g.draw_actor("steve",foe,-dir,0,false,Color(.02,.02,.03,.85*ha),"idle",1,{"state":"idle","time":0.0})
+		g.draw_rect(Rect2((foe+Vector2(-3,-20)).floor(),Vector2(2,1)),Color(1,1,1,ha))
+		g.draw_rect(Rect2((foe+Vector2(1,-20)).floor(),Vector2(2,1)),Color(1,1,1,ha))
+	if a>=4.2 and a<5.6:
+		var r: float=lerpf(60,18,smoothstep(4.2,5.4,a))
+		for j in range(28):
+			var q: Vector2=p+Vector2.from_angle(j*TAU/28+a)*Vector2(r,r*.5)
+			g.draw_rect(Rect2((q-Vector2(0,4+sin(a*20+j)*2)).floor(),Vector2(2,4)),Color(1,.8,1,.8*alpha))
+	if a<5.4:
+		var state: String="idle"
+		var t: float=0.0
+		if a>=1.0 and a<4.2:
+			var c: float=fposmod(a-1.0,.8)
+			state="windup" if c<.3 else "attack" if c<.45 else "recover";t=c/.8
+			if a>=2.6 and a<2.9:state="hurt";p+= -dir*(a-2.6)*30
+		g.draw_actor("steve",p,dir,a,false,ghost,state,1,{"state":state,"time":t})
+		if state=="attack":
+			for j in range(4):g.draw_line(foe+Vector2(-4,-14),foe+Vector2(-4,-14)+Vector2.from_angle(j*1.6+a*9)*8,Color(1,1,1,alpha),1)
+	else:
+		pose(g,"end_player_pickup",p,dir,.5,Color(ghost,ghost.a*(1-smoothstep(7.0,8.6,a))))
+		for j in range(18):
+			var t: float=fposmod(a*.7+j*.06,1.0)
+			g.draw_rect(Rect2((p+Vector2(sin(j*2.4)*9,-6-t*40)).floor(),Vector2.ONE),Color(.8,.6,1,(1-t)*alpha))
+	g.ambient_lights.append({"p":e.p,"r":70.0,"c":Color(.7,.5,1),"power":.5*alpha,"glow":.1})
+
+## A boss name, still and large, a line under it.
+func title_card(g, a: float, name: String, sub: String):
+	var k: float=smoothstep(1.2,1.8,a)*(1-smoothstep(3.4,3.95,a))
+	if k<=0:return
+	var width: float=g.font.get_string_size(name,HORIZONTAL_ALIGNMENT_LEFT,-1,24).x
+	g.text_at(name,Vector2(320-width/2,250).floor(),24,Color(.93,.88,.98,k))
+	var line: float=width*smoothstep(1.4,2.2,a)
+	g.draw_rect(Rect2(320-line/2,258,line,1),Color(.75,.4,1,k))
+	var sw: float=g.font.get_string_size(sub,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
+	g.text_at(sub,Vector2(320-sw/2,272).floor(),8,Color(.75,.7,.8,k*smoothstep(1.8,2.4,a)))
+
+## The rim, close: both of them over the void, the island at their backs.
+func closeup(g, a: float):
+	var w=g.world;var total: float=w.end_boss.SIT_LENGTH
+	if a>=.6 and a<=total-.6:
+		g.draw_rect(Rect2(0,0,640,360),Color(.04,.015,.07))
+		for j in range(70):
+			var x: float=Atmosphere.hash01(j,1,77)*640;var y: float=Atmosphere.hash01(j,2,77)*215
+			var tw: float=.4+.6*sin(w.clock*(1+Atmosphere.hash01(j,3,77)*2)+j)
+			g.draw_rect(Rect2(Vector2(x,y).floor(),Vector2.ONE*(1+int(Atmosphere.hash01(j,4,77)*1.5))),Color(.85,.8,1,.25+.5*tw))
+		for j in range(3):
+			var x: float=fposmod(80+j*230-w.clock*(2+j),760)-60
+			g.oval(Vector2(x,150+j*24),Vector2(46-j*8,8-j),Color(.12,.08,.16,.9))
+			g.oval(Vector2(x,147+j*24),Vector2(44-j*8,5-j),Color(.2,.17,.22,.9))
+		var top:=224
+		for x in range(0,640,16):
+			var depth: int=3+int(Atmosphere.hash01(x,5,77)*3)
+			for r in range(2):g.sprite("end_stone_tile",Vector2(x,top-32+r*16),Vector2(16,16),Color(1,1,1))
+			for r in range(depth):g.sprite("end_stone_tile",Vector2(x,top+r*16),Vector2(16,16),Color(.62-r*.08,.58-r*.08,.66-r*.08))
+		g.draw_rect(Rect2(0,top-1,640,2),Color(.25,.22,.2,.6))
+		var ender: Vector2=Vector2(282,top+30);var steve: Vector2=Vector2(358,top+30)
+		g.oval(Vector2(320,top+2),Vector2(70,4),Color(0,0,0,.25))
+		var ed: Vector2=Vector2.RIGHT if a>=17.8 and a<26.0 else Vector2.DOWN
+		var sd: Vector2=Vector2.LEFT if (a>=23.0 and a<29.0) or (a>=30.4 and a<32.0) else Vector2.DOWN
+		var breath: float=round(sin(w.clock*1.4))
+		seated_close(g,"endersteve_final",ender-Vector2(0,30-breath),ed,3)
+		seated_close(g,"steve",steve-Vector2(0,30-round(sin(w.clock*1.4+1.3))),sd,3)
+		for j in range(14):
+			var t: float=fposmod(w.clock*.25+j*.071,1.0)
+			g.draw_rect(Rect2((ender+Vector2(-14+sin(j*2.4)*16,-60-t*90)).floor(),Vector2(2,2)),Color(.75,.45,1,(1-t)*.7))
+		if a>=30.4 and a<32.6:
+			var k: float=smoothstep(30.4,31.4,a)
+			var at: Vector2=Vector2(300,top-50).lerp(Vector2(340,top-50),k)-Vector2(0,sin(k*PI)*14)
+			g.sprite("icon_end_eye",at-Vector2(12,12),Vector2(24,24),Color(1,1,1,1-smoothstep(32.0,32.6,a)))
+			g.draw_circle(at,10+sin(w.clock*6)*2,Color(.6,1,.8,.15))
+		for j in range(18):
+			var x: float=fposmod(j*61.0+w.clock*(30+j%4*8),700)-30
+			g.draw_rect(Rect2(Vector2(x,100+j*13).floor(),Vector2(3,1)),Color(.8,.75,.85,.25))
+	var black: float=maxf(1-absf(a-.6)/.6,1-absf(a-(total-.6))/.6)
+	if black>0:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,clampf(black,0,1)))
+
+
+## Seated on the rim, seen from the front: the body to the hips at the edge,
+## the legs below it shortened as they hang over the side and swing a little.
+func seated_close(g, kind: String, hip: Vector2, direction: Vector2, s: float):
+	var w=g.world;var meta: Dictionary=w.animation.data.actors.get(kind,{})
+	var size:=Vector2(meta.frame_size[0],meta.frame_size[1]) if meta.has("frame_size") else Vector2(32,32)
+	var anchor:=Vector2(meta.anchor[0],meta.anchor[1]) if meta.has("anchor") else Vector2(size.x/2,size.y-3)
+	var tex=g.textures.get(kind+"_atlas")
+	if tex==null:return
+	var frame: int=w.animation.frame(kind,"idle",0.0) if w.animation.data.actors.has(kind) else 0
+	var row: int=w.animation.direction_row(direction);var flip: bool=row==2 and direction.x<0
+	var cut: float=anchor.y-10.0
+	var origin:=Vector2(frame*size.x,row*size.y)
+	var swing: float=round(sin(w.clock*1.1+hip.x)*1.0)
+	g.draw_set_transform(hip.floor(),0,Vector2(-1,1) if flip else Vector2.ONE)
+	g.draw_texture_rect_region(tex,Rect2(Vector2(-anchor.x*s,swing),Vector2(size.x*s,(anchor.y-cut)*s*.62)),Rect2(origin+Vector2(0,cut),Vector2(size.x,anchor.y-cut)))
+	g.draw_texture_rect_region(tex,Rect2(Vector2(-anchor.x*s,-cut*s),Vector2(size.x*s,cut*s)),Rect2(origin,Vector2(size.x,cut)))
+	g.draw_set_transform(Vector2.ZERO)

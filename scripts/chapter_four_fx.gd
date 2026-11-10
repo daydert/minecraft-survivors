@@ -27,6 +27,8 @@ var tremor := 0.0
 var tremor_next := 0.0
 var opening := 0
 var deaths := 0
+## Chapter III: purple ender blood and dust instead of red.
+var ender := false
 
 func reset(_w):
 	rng.seed = 40417
@@ -43,6 +45,7 @@ func material(m: Dictionary) -> String:
 	if m.get("encounter_actor", "") in ["guardian", "guardian_torch"]:return "stone"
 	if m.get("encounter_actor", "") == "golem":return "iron"
 	if "skeleton" in kind or "rider" in kind:return "bone"
+	if ender:return "ender"
 	return "flesh"
 
 # ------------------------------------------------------------------ ground
@@ -137,7 +140,7 @@ func hit(w, m: Dictionary, amount: float, push: Vector2, owner: String):
 	var count: int = clampi(1 + int(amount / 14.0), 1, 4) + (2 if heavy else 0)
 	if owner in ["blood_pool", "red_torch", "fire", "potion"]:count = 1
 	var at: Vector2 = m.p
-	if kind == "flesh":spray(at, push, count, 95.0, 1.1, 70.0, 14.0)
+	if kind in ["flesh", "ender"]:spray(at, push, count, 95.0, 1.1, 70.0, 14.0)
 	elif kind == "bone":
 		for j in range(mini(2, count)):gib(at, (push.rotated(rng.randf() - 0.5) if push.length_squared() > 0.01 else Vector2.from_angle(rng.randf() * TAU)) * (50 + rng.randf() * 60), 80 + rng.randf() * 60, "bone", 14.0)
 	else:
@@ -154,7 +157,11 @@ func death(w, m: Dictionary):
 	var blown: bool = owner in ["sky_tnt", "tnt", "bed", "explosion"]
 	var big: bool = m.get("boss", false)
 	var at: Vector2 = m.p
-	if kind == "flesh":
+	if kind == "ender":
+		chunks(at, direction, 3, 100.0, 2.0, "ender", 130.0)
+		spray(at, direction, 6, 90.0, 1.8)
+		if big:pool(at, 12.0, w.clock)
+	elif kind == "flesh":
 		if close:
 			chunks(at, direction, 6, 210.0, 0.7, "flesh", 120.0)
 			spray(at, direction, 10, 170.0, 0.7, 80.0)
@@ -321,7 +328,7 @@ func update(w, dt: float):
 		for i in range(list.size() - 1, -1, -1):
 			list[i].age += dt
 			if list[i].age >= list[i].get("life", 0.7):list.remove_at(i)
-	var bats: bool = w.arsenal.bat_left > 0
+	var bats: bool = "arsenal" in w and w.arsenal.bat_left > 0
 	if bats != bat_was:
 		bat_was = bats
 		flock(w, w.player, not bats)
@@ -329,7 +336,7 @@ func update(w, dt: float):
 
 ## The world gives way as the twelfth minute approaches: tremors and dust.
 func escalate(w, dt: float):
-	if w.stage != "survival" or w.db.data.chapter_four.exploration_only:return
+	if not "ending" in w or w.stage != "survival" or w.db.data.chapter_four.exploration_only:return
 	var left: float = float(w.db.data.duration) - float(w.time)
 	if left > 150.0 or left <= 0.0:return
 	tremor = maxf(0.0, tremor - dt)

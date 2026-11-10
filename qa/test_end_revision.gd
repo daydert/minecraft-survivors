@@ -30,8 +30,8 @@ func run():
 	check(w.chosen_item.is_empty() and w.state!="LEVEL_UP","Reward is granted and combat resumes after the short receipt")
 	w=fresh();w.prepare_arena();w.stage="last_duel";w.mobs.clear();w.crystals.clear();w.build={};w.spawn("endersteve_final",Vector2(1024,1020));var m=w.mobs[0]
 	var signatures=[];var saw_leap=false;var saw_echo=false;var saw_cleave=false
-	for pattern in range(7):
-		w.projectiles.clear();w.hazards.clear();w.effects.clear();m.p=Vector2(1024,1020);w.player=Vector2(1024,1120);m.phase="walk";m.timer=0;m.pattern=pattern-1;m.rage=false;m.hp=m.max_hp;m.combo=0
+	for pattern in [0,1,2,3,4,5,6,9,10,11]:
+		w.projectiles.clear();w.hazards.clear();w.effects.clear();m.p=Vector2(1024,1020);w.player=Vector2(1024,1120);m.phase="walk";m.timer=0;m.seq=w.end_boss.SEQUENCE.find(pattern)-1;m.rage=false;m.hp=m.max_hp;m.combo=0
 		var phases={};var kinds={};var hazards={};w.invulnerable=100
 		for i in range(300):
 			w.clock+=1.0/60;w.move_mobs(1.0/60);w.update_hazards(1.0/60);w.update_effects(1.0/60);w.update_end_poses(1.0/60)
@@ -41,10 +41,10 @@ func run():
 			if m.phase=="leap":saw_leap=saw_leap or m.altitude>30
 			if m.phase=="cleave":saw_cleave=true
 			if hazards.has("end_cut"):saw_echo=true
-			if m.phase=="recover":break
+			if m.phase in ["recover","pose"] and i>20:break
 		var signature=str(phases.keys())+str(kinds.keys())+str(hazards.keys())+str(w.projectiles.size())
 		signatures.append(signature)
-		check(phases.has("recover") and (not kinds.is_empty() or phases.has("rush") or hazards.has("end_cut")),"Final attack %d has active threats and a recovery window" % (pattern+1))
+		check((phases.has("recover") or phases.has("pose")) and (not kinds.is_empty() or phases.has("rush") or hazards.has("end_cut")),"Final attack %d has active threats and a recovery window" % (pattern+1))
 	check(saw_leap and saw_echo and saw_cleave,"Duel includes an airborne strike, delayed echo cuts and a close sword cleave")
 	var unique={}
 	for signature in signatures:unique[signature]=true
@@ -52,7 +52,7 @@ func run():
 	w.projectiles.clear();w.hazards.clear();w.player=Vector2(1024,1100);w.invulnerable=0;w.hp=20
 	w.end_boss.cut(w,Vector2(960,1100),Vector2(1088,1100),.8)
 	w.update_hazards(.79);check(w.hp==20,"Echo cut cannot hurt during its visible preparation")
-	w.update_hazards(.02);check(w.hp==16,"Echo cut deals real damage on its warned segment")
+	w.update_hazards(.02);check(w.hp==15,"Echo cut deals real damage on its warned segment")
 	w.invulnerable=0;w.hp=20;w.hazards.clear();w.player=Vector2(1024,1140);w.end_boss.cut(w,Vector2(960,1100),Vector2(1088,1100),.8);w.update_hazards(.81)
 	check(w.hp==20,"Stepping clear of an echo segment avoids its damage")
 	w=fresh();w.build={"axe":8};w.items={};w.mobs.clear();w.spawn("endermite_brood",w.player+Vector2(20,0));w.rebuild_hit_grid();m=w.mobs[0];var hp=m.hp
@@ -63,8 +63,8 @@ func run():
 	hp=m.hp;w.state="PAUSED";w.discard("axe");w.update_effects(.4)
 	check(m.hp==hp and not w.effects.any(func(e):return e.kind=="axe_spin"),"Removing the axe cancels its delayed return hit")
 	w=fresh();w.prepare_arena();w.mobs.clear();w.build={};w.stage="last_duel";w.spawn("endersteve_final",w.END_ARENA.end-Vector2(6,26));w.mobs[0].hp=0;w.resolve_deaths()
-	for i in range(464):w.step(1.0/60)
-	w.player=w.END_ARENA.end-Vector2(6,20);w.step(1.0/60)
-	check(w.hand_taken and w.loot.is_empty(),"A boss killed against the arena wall still leaves a reachable hand")
+	for i in range(200):w.step(1.0/60)
+	w.player=w.npc.p+Vector2(-8,-8);w.step(1.0/60)
+	check(w.stage=="to_edge","A boss beaten against the arena wall can still be approached")
 	FileAccess.open("res://qa/end_revision_results.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures},"  "))
 	print("END_REVISION_RESULT ",checks," checks; ",failures.size()," failures");quit(0 if failures.is_empty() else 1)

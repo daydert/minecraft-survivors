@@ -55,6 +55,8 @@ func reset(seed_value: int = 0):
 	var equipment: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_arsenal.json"))
 	for id in equipment.weapons:animation.data.weapons[id]={"windup":.2,"attack":.12,"recover":.36}
 	arsenal.reset(self)
+	# EnderSteve's keepsake from the rim of the island.
+	if db.passives.has("end_eye"):items["end_eye"]=1
 	if FileAccess.file_exists("res://data/chapter_four_encounter_assets.json"):
 		var special: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_encounter_assets.json"))
 		animation.data.actors.merge(special.actors,true)

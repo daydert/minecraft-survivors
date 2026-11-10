@@ -46,6 +46,7 @@ func _ready():
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/v2_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_external_audio.json")),true)
+	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/end_external_audio.json")),true)
 	for path in ["music","music_2","music_3"]:
 		playlist.append(load("res://assets/audio/"+path+".ogg"))
 	music=AudioStreamPlayer.new()
@@ -159,7 +160,7 @@ func _process(delta):
 	if theme.begins_with("chapter_four_end:") and not end_track.is_empty():end_level=.3 if theme.ends_with("boss_fade") else 1.0
 	end_mix=move_toward(end_mix,end_level,delta/(2.5 if end_level<end_mix else .9))
 	victory_mix=move_toward(victory_mix,1.0 if theme=="victory" and celebration_state=="music" else 0.0,delta/.4)
-	music_mix=1.0 if theme=="victory" or theme.begins_with("chapter_four_end:") else clampf(herobrine_mix+wither_mix+dragon_mix+endersteve_mix+four_mix+pyramid_mix,0,1)
+	music_mix=1.0 if theme in ["victory","silence"] or theme.begins_with("chapter_four_end:") else clampf(herobrine_mix+wither_mix+dragon_mix+endersteve_mix+four_mix+pyramid_mix,0,1)
 	update_music_levels()
 	if theme!="herobrine" and herobrine_mix==0 and boss_music.playing:boss_music.stop()
 	if theme!="wither" and wither_mix==0 and wither_music.playing:wither_music.stop()

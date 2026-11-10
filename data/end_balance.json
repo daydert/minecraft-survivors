@@ -2,18 +2,18 @@
   "weapons": {
     "spear": {
       "name": "Железное копьё",
-      "damage": 19,
-      "interval": 3.8,
+      "damage": 30,
+      "interval": 2.6,
       "radius": 13,
       "speed": 3.2,
-      "range": 95,
+      "range": 105,
       "count": 1
     },
     "mace": {
       "name": "Булава",
-      "damage": 26,
-      "interval": 5.2,
-      "radius": 34,
+      "damage": 34,
+      "interval": 3.8,
+      "radius": 44,
       "speed": 0,
       "range": 62,
       "count": 1,
@@ -61,16 +61,16 @@
   "upgrades": {
     "spear": [
       {
-        "damage": 7
+        "damage": 10
       },
       {
         "range": 14
       },
       {
-        "interval": -0.4
+        "interval": -0.3
       },
       {
-        "damage": 10
+        "damage": 14
       },
       {
         "speed": 0.3
@@ -79,7 +79,7 @@
         "radius": 4
       },
       {
-        "damage": 16
+        "damage": 20
       }
     ],
     "mace": [
@@ -87,7 +87,7 @@
         "height": 8
       },
       {
-        "damage": 10
+        "damage": 14
       },
       {
         "height": 12
@@ -99,7 +99,7 @@
         "height": 14
       },
       {
-        "interval": -0.7
+        "interval": -0.6
       },
       {
         "height": 18
@@ -209,7 +209,7 @@
     },
     "rabbit_foot": {
       "name": "Кроличья лапка",
-      "effect": "Враги чаще оставляют лечение."
+      "effect": "Враги иногда оставляют лечение."
     },
     "end_eye": {
       "name": "Око Края",
@@ -302,16 +302,16 @@
       "radius": 6
     },
     "end_dragon": {
-      "hp": 8200,
+      "hp": 5200,
       "speed": 68,
       "damage": 5,
       "xp": 0,
       "radius": 28
     },
     "endersteve_final": {
-      "hp": 10500,
+      "hp": 6500,
       "speed": 56,
-      "damage": 5,
+      "damage": 7,
       "xp": 0,
       "radius": 6
     },
@@ -351,7 +351,7 @@
     },
     {
       "at": 270,
-      "rate": 2.9,
+      "rate": 2.46,
       "weights": {
         "endermite": 0.3,
         "enderman": 0.25,
@@ -362,7 +362,7 @@
     },
     {
       "at": 420,
-      "rate": 3.8,
+      "rate": 3.23,
       "weights": {
         "endermite": 0.25,
         "enderman": 0.25,
@@ -373,7 +373,7 @@
     },
     {
       "at": 570,
-      "rate": 4.6,
+      "rate": 3.91,
       "weights": {
         "endermite": 0.2,
         "enderman": 0.25,
@@ -418,7 +418,7 @@
     "explosive_limit": 24,
     "regen_interval": 5,
     "ghast_tear_regen": 0.3,
-    "fall_damage": 6,
+    "fall_damage": 4,
     "fall_shell_reduction": 0.1,
     "fall_shell_cooldown": 50,
     "fall_shell_cooldown_per_level": 6,

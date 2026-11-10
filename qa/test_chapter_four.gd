@@ -40,7 +40,7 @@ func run():
 	var q: Vector2=w.move_actor(pyramid+Vector2(0,40),Vector2(0,-150),6)
 	check(q.y>pyramid.y,"Long movement cannot tunnel through the pyramid")
 	w.player=note;w.step(1.0/60)
-	check(w.note_pending and not w.note_read and w.items.is_empty(),"Finding the note requests an overlay without using a passive slot")
+	check(w.note_pending and not w.note_read and w.items.keys()==["end_eye"],"Finding the note requests an overlay without using a passive slot")
 	w.player=Vector2(600,780);w.update_aura()
 	var base=w.db.stats("sword",1,false,{})
 	check(w.aura_state=="despair","Pillars cause despair before the note")

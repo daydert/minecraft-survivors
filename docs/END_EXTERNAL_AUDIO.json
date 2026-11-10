@@ -1,0 +1,48 @@
+{
+  "ext_portal_break.ogg": {
+    "sources": [
+      {
+        "url": "https://opengameart.org/content/glass-break",
+        "file": "glass_breaking.wav",
+        "author": "TinyWorlds",
+        "license": "CC0",
+        "sha256": "37d29069c885afe3f7ca639293fa679fb6511a6a1e54316f0e403e4493f502b3"
+      },
+      {
+        "url": "https://opengameart.org/content/ice-breakingshattering",
+        "file": "IceShatters_0.zip (LedasLuzta5.ogg)",
+        "author": "IgnasD",
+        "license": "CC0",
+        "sha256": "b84ea396fac1af183dd2cb205a01edaa94b493ffb36965eafe59912e41cf9eb7"
+      }
+    ],
+    "converted": "ffmpeg amix + loudnorm, Ogg Vorbis",
+    "converted_sha256": "de9975fac544442f8afeaad4d850af376f438b945308da1fc433e1161d373c85"
+  },
+  "ext_music_cut.ogg": {
+    "sources": [
+      {
+        "url": "https://opengameart.org/content/50-cc0-retro-synth-sfx",
+        "file": "50-CC0-retro-synth-SFX.zip (retro_die_02.ogg)",
+        "author": "rubberduck",
+        "license": "CC0",
+        "sha256": "db9370bfbe228d1fc3912ec455ad358129eeec593169fc02701ff48d888db9cb"
+      }
+    ],
+    "converted": "ffmpeg asetrate 0.55, lowpass, loudnorm",
+    "converted_sha256": "eda9e901eac17d411b654d2c0ff1780cfb214d0b30c1740526b8d2ad85cea78e"
+  },
+  "ext_wind.ogg": {
+    "sources": [
+      {
+        "url": "https://opengameart.org/content/windy-ambient-noise",
+        "file": "windy_ambiance_0.ogg",
+        "author": "Some Weirdo",
+        "license": "CC0",
+        "sha256": "3ae3bcf15ae9d698eaad4effe4f76f245f9d25650eab7b082460e22975f9eee2"
+      }
+    ],
+    "converted": "ffmpeg first 34 s, fades, mono, loudnorm",
+    "converted_sha256": "0cde4e1894b006ca7fcaf9bb118d38d44f172b2b1c064e4b200dd33db8619ff9"
+  }
+}

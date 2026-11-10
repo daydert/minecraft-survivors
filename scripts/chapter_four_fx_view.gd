@@ -4,7 +4,7 @@ extends RefCounted
 const FinaleView = preload("res://scripts/chapter_four_finale_view.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const SCREEN := Rect2(-70, -70, 780, 500)
-const GIB := {"flesh": Color(0.47, 0.03, 0.05), "bone": Color(0.8, 0.77, 0.68), "stone": Color(0.5, 0.47, 0.44), "dirt": Color(0.24, 0.19, 0.18), "iron": Color(0.7, 0.7, 0.66)}
+const GIB := {"ender": Color(0.45, 0.16, 0.6), "flesh": Color(0.47, 0.03, 0.05), "bone": Color(0.8, 0.77, 0.68), "stone": Color(0.5, 0.47, 0.44), "dirt": Color(0.24, 0.19, 0.18), "iron": Color(0.7, 0.7, 0.66)}
 
 static func hh(i: int, salt: int) -> float:
 	return Atmosphere.hash01(i, salt, 43)
@@ -18,12 +18,19 @@ static func floor_layer(g, offset: Vector2):
 	for pool in fx.pools:
 		var p: Vector2 = pool.p + offset
 		if not SCREEN.has_point(p):continue
+		if fx.ender:
+			var sz: float = pool.size * smoothstep(0.0, 1.6, w.clock - pool.born)
+			g.oval(p, Vector2(sz * 1.7 + 1, sz * 0.42 + 1), Color(0.12, 0.02, 0.18, 0.9));g.oval(p, Vector2(sz * 1.6, sz * 0.38), Color(0.4, 0.14, 0.55, 0.9))
+			continue
 		FinaleView.blood_pool(g, p, pool.size * smoothstep(0.0, 1.6, w.clock - pool.born), w.clock)
 	for s in fx.stains:
 		var p: Vector2 = s.p + offset
 		if not SCREEN.has_point(p):continue
 		match s.kind:
 			"blood":
+				if fx.ender:
+					g.oval(p, Vector2(s.r * 1.2 + 1, s.r * 0.45 + 1), Color(0.14, 0.03, 0.2, 0.75));g.oval(p, Vector2(s.r * 1.1, s.r * 0.4), Color(0.42, 0.16, 0.58, 0.8))
+					continue
 				if s.r < 2.4:
 					g.draw_rect(Rect2(p.floor() - Vector2(1, 0), Vector2(3, 2)), Color(0.13, 0.0, 0.01, 0.9))
 					g.draw_rect(Rect2(p.floor(), Vector2(2, 1)), Color(0.38, 0.0, 0.03, 0.95))
@@ -165,8 +172,8 @@ static func air_layer(g, offset: Vector2):
 		var p: Vector2 = d.p + offset - Vector2(0, d.z)
 		if not SCREEN.has_point(p):continue
 		var tail: Vector2 = (d.v + Vector2(0, -d.vz)) * 0.028
-		g.draw_line(p - tail, p, Color(0.42, 0.0, 0.03, 0.9), maxf(1.0, d.size * 0.6))
-		g.draw_rect(Rect2(p.floor(), Vector2(d.size, d.size).ceil()), Color(0.66, 0.02, 0.05))
+		g.draw_line(p - tail, p, Color(0.32, 0.08, 0.45, 0.9) if fx.ender else Color(0.42, 0.0, 0.03, 0.9), maxf(1.0, d.size * 0.6))
+		g.draw_rect(Rect2(p.floor(), Vector2(d.size, d.size).ceil()), Color(0.66, 0.3, 0.88) if fx.ender else Color(0.66, 0.02, 0.05))
 		if d.size >= 2:g.draw_rect(Rect2(p.floor(), Vector2.ONE), Color(1, 0.45, 0.45))
 	for s in fx.shells:
 		if s.z <= 0:continue
@@ -224,7 +231,7 @@ static func lights(g):
 	for f in fx.flashes:
 		var k: float = 1.0 - f.age / f.life
 		g.ambient_lights.append({"p": f.p, "r": f.r * (0.7 + 0.3 * k), "c": f.color, "power": f.power * k, "glow": 0.3 * k})
-	if g.world.arsenal.bat_left > 0:
+	if "arsenal" in g.world and g.world.arsenal.bat_left > 0:
 		g.ambient_lights.append({"p": g.world.player - Vector2(0, 12), "r": 90.0, "c": Color(1, 0.3, 0.3), "power": 0.75, "glow": 0.12})
 	if fx.glow > 0:
 		g.ambient_lights.append({"p": g.world.player - Vector2(0, 14), "r": 150.0, "c": Color(1, 0.9, 0.6), "power": 0.8 * clampf(fx.glow, 0, 1), "glow": 0.18 * clampf(fx.glow, 0, 1)})
@@ -266,6 +273,7 @@ static func flock(g, p: Vector2, direction: Vector2, clock: float, left: float, 
 # ------------------------------------------------------------------ dread
 
 static func urgency(w) -> float:
+	if not "ending" in w:return 0.0
 	if w.stage != "survival":return 1.0 if w.stage == "finale" and w.ending.phase in ["", "summit"] else 0.0
 	return clampf(1.0 - (float(w.db.data.duration) - float(w.time)) / 150.0, 0.0, 1.0)
 
@@ -281,7 +289,7 @@ static func fissure(w, cx: int, cy: int, u: float):
 static func visible_fissures(g, offset: Vector2) -> Array:
 	var w = g.world
 	var u := urgency(w)
-	if u <= 0.0 or w.ending.phase not in ["", "summit"]:return []
+	if u <= 0.0 or not "ending" in w or w.ending.phase not in ["", "summit"]:return []
 	var result: Array = []
 	var origin := Vector2i((-offset / 72.0).floor())
 	for cy in range(origin.y - 1, origin.y + 7):

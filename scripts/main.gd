@@ -162,7 +162,7 @@ func _process(delta):
 	sync_network_fields()
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
-	var theme="victory" if world.get("win_music")==true else "endersteve" if is_end() and world.stage in ["betrayal","last_arrival","last_duel","endsteve_death","hand","hand_pickup","return_portal","portal_ready","rekindle","exit_jump","chapter_four"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
+	var theme="victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
 	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four")
 	audio.set_music_context(four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
@@ -482,13 +482,14 @@ func _draw():
 	achievements_view.toast(self)
 	var end_power=0.0
 	if is_end():
-		if world.stage=="betrayal":end_power=sin(clampf(world.stage_age/6.4,0,1)*PI)*.9
+		if world.stage=="betrayal":end_power=.95*smoothstep(1.4,3.4,world.stage_age)*(1-smoothstep(5.0,10.0,world.stage_age))
 		elif world.stage=="last_arrival":end_power=.55*(1-smoothstep(2,3.2,world.stage_age))
 		elif world.stage=="last_duel":
 			for boss in world.mobs:
 				if boss.kind=="endersteve_final" and boss.phase=="rage":end_power=sin(clampf(1-boss.timer/1.6,0,1)*PI)*.45
 		elif world.stage=="endsteve_death":end_power=.7*sin(smoothstep(1.7,7.1,world.stage_age)*PI)
 		elif world.stage=="rekindle":end_power=sin(clampf(world.stage_age/2.8,0,1)*PI)*.35
+		elif world.stage=="restore":end_power=.5*smoothstep(3.6,6.2,world.stage_age)*(1-smoothstep(8.0,10.4,world.stage_age))
 	var end_focus=world.endsteve_corpse.p-Vector2(0,20) if is_end() and world.stage=="endsteve_death" else world.portal_position if is_end() else Vector2.ZERO
 	end_rift.configure(end_power>0 and screen.is_empty() and world.state=="RUNNING",end_focus+Vector2(320,180)-world.camera() if is_end() else Vector2.ZERO,end_power,world.clock)
 	var duel=world.finale.has_method("blood_progress")

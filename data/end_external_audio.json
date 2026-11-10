@@ -1,0 +1,32 @@
+{
+  "end_portal_break": {
+    "gain": 0.9,
+    "variants": [
+      {
+        "path": "res://assets/audio/end_ext/ext_portal_break.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "end_music_cut": {
+    "gain": 0.8,
+    "variants": [
+      {
+        "path": "res://assets/audio/end_ext/ext_music_cut.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "end_wind": {
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/end_ext/ext_wind.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  }
+}

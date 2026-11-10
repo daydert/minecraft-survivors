@@ -28,24 +28,20 @@ func run():
 	check(w.chosen_item==item and game.buttons.all(func(b):return not b.id.begins_with("choice_")),"Receipt draws the chosen icon and name without live card buttons")
 	w.tick_choices(.3);var same=await render();check(receipt.get_data()==same.get_data(),"Receipt remains visually fixed while its short display timer elapses")
 	w.tick_choices(.3);w.state="RUNNING";w.build={};w.items={};w.prepare_arena();w.stage="exit_portal";w.portal_lit=true;w.mobs.clear();w.crystals.clear();w.player=w.portal_position+Vector2(0,80);w.scene_camera=w.portal_position+Vector2(0,10)
-	advance(.02);await render("betrayal_arrive");advance(2.35);var windup=await render("betrayal_windup");advance(.6);await render("betrayal_strike");advance(.4);var impact=await render("betrayal_impact")
-	check(not w.portal_lit and windup.get_data()!=impact.get_data(),"Portal charge, sword strike and actual rubble use distinct rendered stages")
-	advance(5.5);w.stage="last_duel";var m=w.mobs[0];w.player=w.portal_position+Vector2(110,80);w.scene_camera=w.portal_position+Vector2(30,20);m.p=w.portal_position+Vector2(-45,-45)
+	advance(.02);await render("betrayal_arrive");advance(1.2);await render("betrayal_card");advance(1.6);var windup=await render("betrayal_windup");advance(.7);var impact=await render("betrayal_impact");advance(1.5);await render("betrayal_after")
+	check(not w.portal_lit and windup.get_data()!=impact.get_data(),"End card, charge and the broken portal use distinct rendered stages")
+	advance(7.0);w.stage="last_duel";var m=w.mobs[0];w.player=w.portal_position+Vector2(110,80);w.scene_camera=w.portal_position+Vector2(30,20);m.p=w.portal_position+Vector2(-45,-45)
 	for pattern in [4,5,6]:
 		m.phase="walk";m.timer=0;m.pattern=pattern-1;w.hazards.clear();w.projectiles.clear();w.effects.clear();w.invulnerable=999
 		advance(1.25 if pattern==5 else 2)
 		await render("attack_"+str(pattern))
 	m.p=w.portal_position+Vector2(70,55);w.player=w.portal_position+Vector2(-55,80);m.hp=0;w.resolve_deaths();w.scene_camera=w.portal_position+Vector2(0,15)
-	advance(1);var knees=await render("death_knees");advance(2);await render("death_cracks");advance(2);var fracture=await render("death_fracture");advance(1.4);await render("death_light");advance(1.3);await render("hand")
-	check(w.stage=="hand" and w.loot.size()==1 and knees.get_data()!=fracture.get_data(),"Defeat progresses through knees, cracks and disintegration to a single hand")
-	w.player=w.hand_position()+Vector2(0,5);advance(.1,Vector2.UP);await render("pickup");advance(.7);var p=w.player;advance(2)
-	check(w.stage=="return_portal" and w.player==p,"Rendered finale returns movement and waits after hand pickup")
-	for i in range(120):
-		if w.stage!="return_portal":break
-		w.step(1.0/60,w.player.direction_to(w.portal_position))
-	advance(1.2);await render("rekindle");advance(1.7);await render("ready")
+	advance(1);var knees=await render("yield_knees");advance(2.4)
+	w.player=w.npc.p+Vector2(0,24);advance(.1);await render("to_edge");advance(7.5);var sitting=await render("sit")
+	check(w.stage=="sit" and knees.get_data()!=sitting.get_data(),"Defeat leads from his knees to the two of them sitting on the rim")
+	advance(13);await render("sit_talk");advance(22);await render("restore_walk");advance(3);await render("restore_cast");advance(4);var p=w.player;await render("dissolve");advance(3.5);await render("ready")
 	check(w.stage=="portal_ready" and w.portal_lit,"Portal reconstruction ends with player still outside")
-	for i in range(120):
+	for i in range(420):
 		if w.stage=="exit_jump":break
 		w.step(1.0/60,w.player.direction_to(w.portal_position))
 	advance(.65);await render("jump");advance(.8);await render("jump_fall");advance(2.1);await render("overworld")
