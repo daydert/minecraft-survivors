@@ -7,6 +7,8 @@ const Equipment = preload("res://scripts/chapter_four_equipment.gd")
 var arsenal = preload("res://scripts/chapter_four_arsenal.gd").new()
 var encounters = preload("res://scripts/chapter_four_encounters.gd").new()
 var ending = preload("res://scripts/chapter_four_finale.gd").new()
+## Presentation-only impact state (gore, stains, smoke); see chapter_four_fx.gd.
+var fx = preload("res://scripts/chapter_four_fx.gd").new()
 var enemy_shots: Array = []
 var enemy_fields: Array = []
 var enemy_bottles: Array = []
@@ -51,6 +53,7 @@ func reset(seed_value: int = 0):
 		animation.data.actors.merge(special.actors,true)
 	encounters.reset(self)
 	ending.reset(self)
+	fx.reset(self)
 	stage = "arrival"
 	facing = Vector2.UP
 
@@ -169,6 +172,7 @@ func resolve_deaths():
 			kills+=1;drop_xp(m.p,m.xp)
 			if m.boss:loot.append({"kind":"chest","p":m.p,"born":time})
 			add_effect("ch4_remains",m.p,.6,{"skin":m.skin,"dir":m.visual_dir})
+			fx.death(self,m)
 		if m.exploded and threats.filter(func(t):return t.hp>0 and t.has("parasite_at")).size()<int(db.data.chapter_four.enemy_limits.cysts):
 			var cyst={"kind":"growth","p":m.p,"variant":1,"id":next_id(),"phase":float(m.id)}
 			make_threat(cyst,db.data.chapter_four.growth);cyst.hp=18.0;cyst.max_hp=18.0;cyst.radius=9.0;cyst.timer=999.0
@@ -223,6 +227,7 @@ func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 			m.kind=db.data.forms[kind].base
 			super.hurt(m,amount,push)
 			m.kind=kind
+			fx.hit(self,m,minf(before,amount),push,damage_owner)
 			arsenal.melee_hit(self,m,minf(before,amount))
 			if m.hp>0:
 				if kind=="bellringer" and m.phase=="windup":Enemies.cancel(m,1.6)
@@ -239,8 +244,10 @@ func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if not m.get("expiring",false):damage_by[damage_owner] = damage_by.get(damage_owner, 0.0) + minf(m.hp, amount)
 	m.hp -= amount;m.flash = .1
 	emit_pixels("impact", m.p - Vector2(0, 10), 3, push)
+	fx.hit(self,m,amount,push,damage_owner)
 	if m.hp <= 0:
 		m.attack = "dead";m.dead = true
+		fx.erupt(self,m.p,"flesh" if m.kind != "torch" else "dirt",7 if m.kind == "growth_big" else 4)
 		if m.kind != "torch":
 			var grid_cell := Vector2i(m.p / 64.0)
 			solid_grid[grid_cell] = solid_grid[grid_cell].filter(func(s):return s.p != m.p)
@@ -357,7 +364,9 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	if stage == "arrival":
 		player_visual.travel = 0;player_moving = false
 		animation.advance(self, dt)
-		if stage_age >= float(db.data.chapter_four.arrival_duration):stage = "survival";stage_age = 0
+		var total: float = float(db.data.chapter_four.arrival_duration)
+		if stage_age >= total-1.25 and stage_age-dt < total-1.25:sound("ch4_hb_twitch")
+		if stage_age >= total:stage = "survival";stage_age = 0
 		return
 	time = minf(db.data.duration, time + dt)
 	if stage == "survival" and time >= float(db.data.duration) and not ending.active():
@@ -366,8 +375,9 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		var before_lock: Vector2 = player
 		ending.step(self,dt,movement)
 		player_visual.travel = before_lock.distance_to(player);player_moving = player_visual.travel > .0001
-		animation.advance(self, dt);update_particles(dt);update_effects(dt)
+		animation.advance(self, dt);update_particles(dt);update_effects(dt);fx.update(self,dt)
 		return
+	if stage == "survival" and fx.opening == 0 and stage_age >= .45:first_contact()
 	arsenal.tick(self,dt,movement)
 	var before: Vector2 = player
 	if arsenal.bat_left>0:
@@ -390,7 +400,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	arsenal.step(self,dt)
 	update_hazards(dt);update_fire(dt);update_threats(dt);resolve_deaths()
 	Enemies.environment(self,dt)
-	update_effects(dt);pickup(dt);update_particles(dt)
+	update_effects(dt);pickup(dt);update_particles(dt);fx.update(self,dt)
 	animation.advance(self, dt);update_regeneration(dt)
 	Enemies.poses(self)
 	encounters.poses(self)
@@ -403,6 +413,30 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	if not note_presented:
 		var note := Vector2(terrain.note[0], terrain.note[1])
 		if player.distance_to(note) < 18:note_presented = true;note_pending = true
+
+## The first enemies of the chapter do not walk in: they claw out of the soil
+## around the hero. Skipped in exploration fixtures and when the run starts late.
+func first_contact():
+	fx.opening = 1
+	if db.data.chapter_four.exploration_only or time > 3.0:return
+	var risen := 0
+	for j in range(8):
+		if risen >= 6:break
+		var p: Vector2 = player + Vector2.from_angle(j * TAU / 8 + .35) * (96 + j % 2 * 22)
+		if not free_at(p, 9) or in_blood(p) or not spawn("flayed_zombie", p):continue
+		var m: Dictionary = mobs.back()
+		m.stun = 1.2 + risen * .07;m.emerge = clock + risen * .07;m.visual_dir = p.direction_to(player);m.dir = m.visual_dir
+		fx.erupt(self, p, "dirt", 5)
+		risen += 1
+	if risen > 0:
+		sound("ch4_growth_rip");shake = maxf(shake, .2)
+		fx.shove(self, Vector2(0, 1), 2.0)
+
+func close_chest():
+	var evolution: bool = state == "CHEST" and chest_delay <= 0 and chest_reward.get("evolution", false)
+	var id: String = chest_reward.get("id", "")
+	super.close_chest()
+	if evolution:fx.evolve(self, id)
 
 func movement_speed() -> float:
 	if arsenal.bat_left>0:return float(arsenal.rules(self).bat_speed)
@@ -461,18 +495,19 @@ func damage_player(amount: float):
 	hp-=taken;run_progress.damage(taken)
 	invulnerable=.95 if evolved.has("armor") and items.has("armor") else .65
 	player_visual.hurt=.12;shake=.12;sound("hurt",.15);add_effect("player_hit",player,.22)
+	fx.spray(player,Vector2.ZERO if arsenal.incoming.is_empty() else arsenal.incoming.p.direction_to(player),5,80.0,1.4)
 	var attacker: Dictionary=arsenal.incoming
 	if not attacker.is_empty():player=move_actor(player,resist_displacement(attacker.p.direction_to(player)*9),6)
 	if not attacker.is_empty() and attacker.hp>0 and items.has("thorns") and arsenal.retaliation<=0:
 		arsenal.retaliation=float(arsenal.rules(self).maiden_interval)
 		arsenal.hit(self,attacker,float(arsenal.rules(self).thorns_damage)*items.thorns*(1.5 if evolved.has("armor") else 1),"thorns",Vector2.ZERO,true)
 		if evolved.has("armor") and arsenal.heal_lock<=0 and hp>0:hp=minf(20,hp+.35)
-		add_effect("ch4_thorns",player,.25,{"end":attacker.p})
+		add_effect("ch4_thorns",player,.25,{"end":attacker.p});fx.pulse(self,"thorns")
 	if hp<=0:try_totem()
 
 func try_totem() -> bool:
 	if hp>0 or not items.has("empty_totem") or arsenal.totem_spent:return false
-	arsenal.totem_spent=true;hp=3+3*items.empty_totem;invulnerable=2.2+.2*items.empty_totem;sound("ch4_totem");add_effect("ch4_revive",player,1.2)
+	arsenal.totem_spent=true;hp=3+3*items.empty_totem;invulnerable=2.2+.2*items.empty_totem;sound("ch4_totem");add_effect("ch4_revive",player,1.2);fx.pulse(self,"revive")
 	return true
 
 func resist_displacement(velocity: Vector2) -> Vector2:

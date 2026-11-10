@@ -38,6 +38,8 @@ var ghost_ready:=0.0
 var secondary:=false
 var piercing:=false
 var incoming: Dictionary={}
+## Presentation only: the enemy a vampiric wisp should leave.
+var incoming_leech: Dictionary={}
 var potion_poison:=2.5
 var pet_guard:=0.0
 var pet_bite:=0.0
@@ -88,7 +90,7 @@ func activate(w,id: String) -> bool:
 		if w.hp<=heart_price:
 			w.message="Недостаточно здоровья";w.message_timer=1.2;return false
 		w.run_progress.damage(heart_price);w.hp-=heart_price;heart_charges-=1;heart_quiet=0;heart_price=minf(float(r.heart_price_max),heart_price+float(r.heart_price_step));heart_buff=float(r.heart_duration);heal_lock=float(r.heart_heal_lock)
-		heart_pulse=.7;w.sound("ch4_heartbeat");w.add_effect("ch4_overload",w.player,.55);return true
+		heart_pulse=.7;w.sound("ch4_heartbeat");w.add_effect("ch4_overload",w.player,.55);w.fx.pulse(w,"heart");return true
 	if id=="bat" and w.items.has("bat_wings") and w.evolved.has("bat_wings") and bat_recharge<=0:
 		bat_left=float(r.bat_duration);bat_recharge=float(r.bat_cooldown);bat_direction=w.facing;bat_hits.clear();w.sound("ch4_bat");return true
 	return false
@@ -96,12 +98,13 @@ func activate(w,id: String) -> bool:
 func vampire(w,amount: float):
 	if heal_lock>0 or vamp_budget<=0 or w.hp<=0:return
 	var healed: float=minf(amount,vamp_budget)
+	if healed>0 and not incoming_leech.is_empty():w.fx.leech(w,incoming_leech.p)
 	vamp_budget-=healed;w.hp=minf(float(w.db.data.player_hp),w.hp+healed)
 
 func melee_hit(w,m: Dictionary,damage: float):
 	if secondary or w.damage_owner not in MELEE or damage<=0:return
 	var wings: int=w.items.get("bat_wings",0)
-	if wings>0:vampire(w,damage*.01*wings*(1.2 if m.get("bat_mark",0.0)>w.clock else 1.0))
+	if wings>0:incoming_leech=m;vampire(w,damage*.01*wings*(1.2 if m.get("bat_mark",0.0)>w.clock else 1.0));incoming_leech={}
 	if not w.items.has("mirror_shard"):return
 	var key: String=w.damage_owner+":"+str(w.attack_visuals.get(w.damage_owner,{}).get("at",w.clock))
 	if key==mirror_key:return
@@ -153,7 +156,7 @@ func release(w,id: String,a: Dictionary):
 			for m in w.in_radius(w.player,s.radius):
 				if a.dir.dot(w.player.direction_to(m.p))>.35 and m.get("control_resist",0.0)<=0 and m.get("phase","") in ["windup","smash_wait"]:
 					m.stun=.22 if m.get("boss",false) else .4;m.control_resist=1.8 if m.get("boss",false) else .8;w.Enemies.cancel(m,.8)
-			w.add_effect("ch4_bedrock_cut",w.player,.35,{"end":w.player+a.dir*s.radius,"dir":a.dir});w.sound("ch4_heavy")
+			w.add_effect("ch4_bedrock_cut",w.player,.35,{"end":w.player+a.dir*s.radius,"dir":a.dir});w.sound("ch4_heavy");w.fx.slash(w,w.player,a.dir,s.radius)
 		"shotgun":
 			pellets(w,a)
 			if evo:events.append({"kind":"shotgun","wait":.14,"a":a.duplicate(true)})
@@ -167,7 +170,7 @@ func release(w,id: String,a: Dictionary):
 				hit(w,m,s.damage,id,w.player.direction_to(m.p))
 				m.ch4_cracks=mini(4,int(m.get("ch4_cracks",0))+1);m.slow=maxf(m.get("slow",0),.5)
 				if m.get("control_resist",0.0)<=0:m.stun=maxf(m.get("stun",0),.14);m.control_resist=.8 if not m.get("boss",false) else 1.8
-			w.add_effect("ch4_friendly_bell",w.player,.6);w.sound("ch4_bell")
+			w.add_effect("ch4_friendly_bell",w.player,.6);w.sound("ch4_bell");w.fx.toll(w,w.player,s.radius)
 			if evo and ghost_ready<=0:
 				var marks: Array=[]
 				for m in w.in_radius(w.player,s.radius+35).slice(0,6):marks.append(m.p)
@@ -193,7 +196,7 @@ func pellets(w,a: Dictionary):
 		if shots.size()>=int(rules(w).shot_limit):break
 		var angle: float=(float(j)/maxf(1,s.pellets-1)-.5)*.8
 		shots.append({"p":w.player,"dir":a.dir.rotated(angle),"distance":0.0,"range":float(s.reach),"damage":float(s.damage),"age":0.0})
-	w.add_effect("ch4_muzzle",w.player+a.dir*15,.16,{"dir":a.dir});w.sound("ch4_shotgun")
+	w.add_effect("ch4_muzzle",w.player+a.dir*15,.16,{"dir":a.dir});w.sound("ch4_shotgun");w.fx.muzzle(w,w.player,a.dir)
 
 func potion(w,poison: bool):
 	var level: int=w.build.get("potion",0)
@@ -222,7 +225,7 @@ func step(w,dt: float):
 				contact.time+=dt;contact.tick-=dt;a.contacts[m.id]=contact
 				if contact.tick<=0:
 					contact.tick+=maxf(.01,.1/float(w.db.data.four_buffs.speed));a.cut=true
-					hit(w,m,a.stats.damage*(1+minf(2,contact.time*2)),id)
+					hit(w,m,a.stats.damage*(1+minf(2,contact.time*2)),id);w.fx.saw(w,m.p,point.direction_to(w.player))
 			for target in a.contacts.keys():
 				if not touching.has(target):a.contacts.erase(target)
 			if k>.78 and not a.returned:
@@ -235,7 +238,7 @@ func step(w,dt: float):
 		var b=shots[i];var old: Vector2=b.p;b.p+=b.dir*390*dt;b.distance+=390*dt;b.age+=dt;var dead: bool=b.distance>=b.range
 		for m in w.in_radius((old+b.p)/2,old.distance_to(b.p)/2+4):
 			if Geometry2D.get_closest_point_to_segment(m.p,old,b.p).distance_to(m.p)<m.radius+3:
-				hit(w,m,b.damage*lerpf(1.7,.35,clampf(b.distance/b.range,0,1)),"shotgun",b.dir);dead=true;break
+				hit(w,m,b.damage*lerpf(1.7,.35,clampf(b.distance/b.range,0,1)),"shotgun",b.dir);w.fx.pellet_hit(w,b.p,b.dir);dead=true;break
 		if dead:shots.remove_at(i)
 	for i in range(events.size()-1,-1,-1):
 		var e=events[i];e.wait-=dt;e.age=e.get("age",0.0)+dt
@@ -252,6 +255,7 @@ func step(w,dt: float):
 					for m in w.in_radius(p,27):
 						if not hit_ids.has(m.id):hit(w,m,e.damage,"bell",p.direction_to(m.p));hit_ids[m.id]=true
 				w.add_effect("ch4_ghost_impact",e.p,.5);w.sound("ch4_bell")
+				for p in e.marks:w.fx.toll(w,p,27.0,true)
 			"potion_land":
 				if e.poison:
 					for m in w.in_radius(e.p,35):hit(w,m,e.damage,"potion");m.slow=maxf(m.get("slow",0.0),1.0 if e.level>=5 else 0.0)
@@ -259,6 +263,7 @@ func step(w,dt: float):
 					if w.player.distance_to(e.p)<40:heal_potion(w,1.2+e.level*.12)
 					var old_owner: String=w.damage_owner;w.damage_owner="potion";w.heal_undead(e.p,40,e.damage);w.damage_owner=old_owner
 				w.add_effect("ch4_heal_splash" if not e.poison else "ch4_poison_splash",e.p,.45)
+				w.fx.dust(e.p,5,14,Color(.3,.6,.14,.4) if e.poison else Color(.85,.2,.26,.36))
 				if e.level>=7:
 					while clouds.size()>=int(rules(w).cloud_limit):clouds.pop_front()
 					clouds.append({"p":e.p,"poison":e.poison,"life":5.5 if w.evolved.has("potion") else 4.0,"tick":.65,"damage":e.damage*.2})
@@ -268,7 +273,7 @@ func step(w,dt: float):
 		if w.player.distance_to(pool.p)<pool.radius:pool.life=float(rules(w).pool_leave_life)
 		if pool.tick<=0:
 			pool.tick=.8
-			for m in w.in_radius(pool.p,pool.radius):hit(w,m,pool.damage+pool.power,"blood_pool");w.add_effect("ch4_blood_spike",m.p,.3)
+			for m in w.in_radius(pool.p,pool.radius):hit(w,m,pool.damage+pool.power,"blood_pool");w.add_effect("ch4_blood_spike",m.p,.3);w.fx.spike(w,m.p)
 	pools=pools.filter(func(p):return p.life>0)
 	for i in range(clouds.size()-1,-1,-1):
 		var c=clouds[i];c.life-=dt;c.tick-=dt
@@ -289,7 +294,7 @@ func step(w,dt: float):
 		b.speed+=290*dt;b.height-=b.speed*dt
 		if b.height<=0:
 			for m in w.in_radius(b.p,b.radius):hit(w,m,b.damage,"sky_tnt",b.p.direction_to(m.p))
-			w.break_props(b.p,b.radius,b.damage);w.add_effect("ch4_sky_blast",b.p,.35,{"radius":b.radius});w.sound("explosion",.12);drops.remove_at(i)
+			w.break_props(b.p,b.radius,b.damage);w.add_effect("ch4_sky_blast",b.p,.35,{"radius":b.radius});w.sound("explosion",.12);w.fx.blast(w,b.p,b.radius);drops.remove_at(i)
 	for i in range(echoes.size()-1,-1,-1):
 		var e=echoes[i];e.wait-=dt;e.age+=dt
 		if e.wait<=0 and not e.hit:e.hit=true;sweep(w,e.p,e.dir,e.radius,e.damage,"mirror_shard",true,e.owner)
@@ -337,7 +342,7 @@ func update_pet(w,dt: float):
 			hit(w,target,s.damage*(1.7 if pet.stage==4 else 1),"embryo",pet.dir)
 			if pet.stage==4:
 				for delay in [.15,.3]:events.append({"kind":"pet_follow","wait":delay,"p":target.p,"id":target.id,"damage":s.damage*.35})
-			w.add_effect("ch4_pet_bite",target.p,.25)
+			w.add_effect("ch4_pet_bite",target.p,.25);w.fx.bite(w,target.p,pet.dir)
 	if pet.stage>=3 and pet_guard<=0 and pet.p.distance_to(w.player)<65:
 		for i in range(w.enemy_shots.size()-1,-1,-1):
 			if w.enemy_shots[i].p.distance_to(w.player)<24:w.enemy_shots.remove_at(i);pet_guard=float(rules(w).pet_guard_interval);w.add_effect("ch4_pet_bite",pet.p,.3);break

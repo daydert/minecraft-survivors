@@ -1,6 +1,7 @@
 extends RefCounted
 ## IV equipment shares the body hierarchy; effects read only simulation queues.
 const Materials=preload("res://scripts/chapter_four_equipment.gd")
+const FxView=preload("res://scripts/chapter_four_fx_view.gd")
 
 static func gear(w,id: String) -> String:
 	if id=="sword" and w.evolved.has(id):return "bedrock"
@@ -48,13 +49,7 @@ static func player(g,offset: Vector2):
 	if w.player_visual.hurt>0:state="hurt";progress=(.12-w.player_visual.hurt)/.12
 	var p: Vector2=w.player+offset
 	if a.bat_left>0:
-		# Several full body silhouettes turn into a compact moving flock.
-		for j in range(7):
-			var q: Vector2=p+Vector2(sin(w.clock*12+j*2.4)*14,cos(w.clock*10+j*1.7)*8-11)
-			var span: float=4+sin(w.clock*28+j)*2
-			for side in [-1,1]:g.draw_colored_polygon(PackedVector2Array([q+Vector2(side*span,-3),q+Vector2(side*.5,0),q+Vector2(side*span*.6,2)]),Color(.15,.035,.055))
-			g.draw_rect(Rect2(q-Vector2(1,0),Vector2(2,3)),Color(.12,.025,.04))
-			g.draw_rect(Rect2(q,Vector2(1,1)),Color(.9,.2,.15))
+		FxView.flock(g,p,a.bat_direction,w.clock,a.bat_left,float(a.rules(w).bat_duration))
 		return
 	var recoil:=Vector2.ZERO
 	if a.heart_buff>0 and g.settings.shake:recoil=Vector2(sin(w.clock*65),cos(w.clock*41))*.7
@@ -115,8 +110,12 @@ static func pet(g,offset: Vector2):
 static func air_layer(g,offset: Vector2):
 	var w=g.world;var a=w.arsenal
 	for b in a.shots:
-		var p: Vector2=b.p+offset-Vector2(0,8)
-		g.draw_line(p-b.dir*5,p,Color(.9,.82,.55),1)
+		var p: Vector2=b.p+offset-Vector2(0,10)
+		var tail: float=minf(b.distance,22.0)
+		var heat: float=1.0-clampf(b.distance/b.range,0,1)
+		g.draw_line(p-b.dir*tail,p,Color(1,.55,.2,.35*heat),3)
+		g.draw_line(p-b.dir*tail*.7,p,Color(1,.9,.6,.9),1)
+		g.draw_rect(Rect2(p.floor()-Vector2.ONE,Vector2(2,2)),Color(1,1,.85))
 	for e in a.events:
 		if e.kind=="ghost_bell":
 			var p: Vector2=e.p+offset-Vector2(0,20+sin(clampf(e.age/.85,0,1)*PI)*18)
@@ -146,8 +145,12 @@ static func effect(g,e: Dictionary,offset: Vector2) -> bool:
 		"ch4_muzzle":
 			var dir: Vector2=e.dir;var side: Vector2=dir.orthogonal()
 			p-=Vector2(0,10)
-			g.draw_colored_polygon(PackedVector2Array([p-side*3,p+dir*(2+14*(1-k)),p+side*3]),Color(1,.7,.26,1-k))
-			g.draw_line(p-side*5,p+side*5,Color(1,.85,.5,1-k),1)
+			if k<.5:
+				var f: float=1-k*2
+				g.draw_colored_polygon(PackedVector2Array([p+side*6*f,p+dir*28*f+side*5*f,p+dir*38*f,p+dir*28*f-side*5*f,p-side*6*f]),Color(1,.55,.15,.85*f))
+				g.draw_colored_polygon(PackedVector2Array([p-side*3*f,p+dir*24*f,p+side*3*f]),Color(1,.95,.7,f))
+				for s in [-1,1]:g.draw_line(p,p+(dir+side*s*.9).normalized()*14*f,Color(1,.8,.4,f),1)
+			g.oval(p+dir*4,Vector2(6,4)*(1-k),Color(1,1,.9,1-k))
 		"ch4_blood_spike","ch4_pet_bite":
 			for j in range(3):
 				var q: Vector2=p+Vector2((j-1)*5,0)
@@ -156,7 +159,16 @@ static func effect(g,e: Dictionary,offset: Vector2) -> bool:
 			for j in range(12):
 				var d:=Vector2.from_angle(j*TAU/12);var q: Vector2=p+d*Vector2(30+k*65,12+k*28)
 				g.draw_line(q,q+d*Vector2(9,3),Color(.8,.7,.45,1-k),1)
-		"ch4_heal_splash","ch4_poison_splash","ch4_sky_blast":
+		"ch4_sky_blast":
+			var r: float=float(e.get("radius",26))
+			if k<.35:
+				var f: float=k/.35
+				g.oval(p-Vector2(0,6),Vector2(r*(.5+f*.7),r*(.32+f*.4)),Color(1,.55+.4*(1-f),.2,1-f))
+				g.oval(p-Vector2(0,8),Vector2(r*.45,r*.3)*(1-f),Color(1,1,.85,1-f))
+			for j in range(10):
+				var d:=Vector2.from_angle(j*2.39996);var q: Vector2=p+d*(6+k*r*1.2)+Vector2(0,-sin(k*PI)*(10+j%5*3))
+				g.draw_rect(Rect2(q.floor(),Vector2(2,2)),Color(1,.5,.2,1-k))
+		"ch4_heal_splash","ch4_poison_splash":
 			for j in range(12):
 				var d:=Vector2.from_angle(j*2.39996);var q: Vector2=p+d*(6+k*(e.get("radius",26)))+Vector2(0,-sin(k*PI)*(8+j%5))
 				g.draw_rect(Rect2(q.floor(),Vector2(2,2)),Color(.4,.7,.14,1-k) if e.kind=="ch4_poison_splash" else Color(1,.5,.2,1-k) if e.kind=="ch4_sky_blast" else Color(.9,.24,.25,1-k))

@@ -1,0 +1,12 @@
+{
+  "sprites": [
+    "ch4_fx_bat"
+  ],
+  "bat": {
+    "frame": [
+      28,
+      24
+    ],
+    "phases": 6
+  }
+}

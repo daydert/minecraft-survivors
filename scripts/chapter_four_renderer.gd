@@ -7,6 +7,7 @@ const Horror=preload("res://scripts/chapter_four_horror.gd")
 const FinaleView=preload("res://scripts/chapter_four_finale_view.gd")
 const ArsenalView=preload("res://scripts/chapter_four_arsenal_view.gd")
 const EncounterView=preload("res://scripts/chapter_four_encounter_view.gd")
+const FxView=preload("res://scripts/chapter_four_fx_view.gd")
 const Lighting = preload("res://scripts/ui/lighting.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const ANCHORS = {"house": Vector2(56,66), "crucifix": Vector2(32,88), "growth": Vector2(24,40), "growth_big": Vector2(64,96), "torch": Vector2(8,21), "pyramid": Vector2(144,150)}
@@ -16,9 +17,11 @@ func world(g):
 	var offset: Vector2 = Vector2(320,180) - w.encounters.visual_camera(w,w.camera()).floor()
 	if w.stage == "survival" and w.encounters.current!="guardian":offset -= g.cam_lead.round()
 	if w.shake > 0 and g.settings.shake and w.state == "RUNNING":offset += Vector2(sin(w.clock*75), cos(w.clock*87)).round()
+	if g.settings.shake:offset += w.fx.kick.round()
 	g.draw_texture_rect_region(g.textures.ch4_ground, Rect2(0,0,640,360), Rect2(-offset,Vector2(640,360)))
 	blood(g, offset)
 	Horror.veins(g, offset)
+	FxView.floor_layer(g,offset)
 	EnemyView.floor_layer(g,offset)
 	var gearless: bool = w.ending.phase in ["erase","three","death","retry","coords","road","door"]
 	if not gearless:ArsenalView.floor_layer(g,offset)
@@ -69,7 +72,11 @@ func world(g):
 			"pet":ArsenalView.pet(g,offset)
 			"mob":
 				var m = actor.obj
-				if m.has("form"):EnemyView.actor(g,m,offset)
+				var depth: float = FxView.emerging(g,m,offset)
+				if depth > 0:
+					EnemyView.actor(g,m,offset+Vector2(0,depth))
+					FxView.soil_cover(g,m,offset,depth)
+				elif m.has("form"):EnemyView.actor(g,m,offset)
 				else:g.draw_actor(m.kind,m.p+offset,m.visual_dir,m.animation,m.moving,Color.WHITE,m.phase,1,m.visual)
 			"loot":
 				var o = actor.obj
@@ -84,6 +91,7 @@ func world(g):
 	EnemyView.projectiles(g,offset)
 	if not gearless:ArsenalView.air_layer(g,offset)
 	EncounterView.air_layer(g,offset)
+	FxView.air_layer(g,offset)
 	FinaleView.air_layer(g,offset)
 	for e in w.effects:
 		if FinaleView.effect(g,e,offset):pass
@@ -103,6 +111,7 @@ func world(g):
 			g.draw_rect(Rect2((particle.p+offset).floor(),Vector2.ONE*ceilf(particle.get("size",2))),Color(particle.color,clampf(particle.life/.1,0,1)))
 	Atmosphere.collect(g,offset)
 	EncounterView.lights(g)
+	FxView.lights(g)
 	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","tower","vortex","one","two","kneel","last","erase"]:
 		var e = w.ending
 		if not e.hole.is_empty():g.ambient_lights.append({"p":e.hole.p,"r":120.0,"c":Color(.8,.6,1.0),"power":.8,"glow":.25})
@@ -123,6 +132,8 @@ func world(g):
 	Lighting.draw(g,offset)
 	Horror.fog(g,offset)
 	Atmosphere.after_lighting(g,offset)
+	FxView.dread_glow(g,offset)
+	FxView.arrival_watcher(g,offset)
 	Horror.watcher(g,offset)
 	Horror.eyes(g,offset)
 	Horror.grade(g)

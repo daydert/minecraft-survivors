@@ -1,0 +1,22 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/bat.png": {
+      "sha256": "6d13496ffff10bb9302825f0ba1845051f1d99246d873248a9686066ebdb8174",
+      "bytes": 329
+    }
+  },
+  "derived": {
+    "ch4_fx_bat": {
+      "sources": [
+        "entity/bat"
+      ],
+      "size": [
+        168,
+        72
+      ],
+      "sha256": "4fcb8e8933a8fe227d4080580bc627f28cd8912cbc2bb5ea7c52e8a8dc5397df"
+    }
+  }
+}

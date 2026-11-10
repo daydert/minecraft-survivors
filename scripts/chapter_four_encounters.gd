@@ -72,6 +72,7 @@ func launch_mass(w,at=null):
 	for j in range(4):
 		var part=actor(w,"mass_part",p,data.mass.part_hp,9);part.boss=true;part.attack="attached";part.component=j+1;part.owner=mass.id;part.offset=[Vector2(-18,-15),Vector2(18,-15),Vector2(0,8),Vector2(0,24)][j];parts.append(part)
 	enter(mass,"intro",data.mass.intro);current="mass";w.sound("ch4_mass_birth");sync_parts()
+	w.fx.quake(w,p,1.3);w.fx.erupt(w,p,"flesh",8);w.fx.pool(p,16.0,w.clock)
 
 func launch_golem(w):
 	if golem.started or rescued:return
@@ -79,7 +80,7 @@ func launch_golem(w):
 	for j in range(3):
 		var offset: Vector2=[Vector2(-33,7),Vector2(32,9),Vector2(0,30)][j]
 		var node=actor(w,"golem_node",golem.p+offset,data.golem.nodes_hp,10);node.attack="anchored";node.offset=offset;node.owner=golem.id;node.boss=false;nodes.append(node)
-	w.sound("ch4_golem_strain")
+	w.sound("ch4_golem_strain");w.fx.quake(w,golem.p,.8)
 
 func launch_guardian(w):
 	if guardian_done or current=="mass":return
@@ -92,7 +93,7 @@ func launch_guardian(w):
 	for j in range(4):
 		var p: Vector2=rect.position+Vector2(20 if j%2==0 else rect.size.x-20,40+(j/2)*(rect.size.y-72))
 		var node=actor(w,"guardian_torch",p,data.guardian.torch_hp,7);node.attack="anchored";node.disabled=false;node.boss=false;node.slot=j;node.owner=guardian.id;nodes.append(node)
-	w.sound("ch4_guardian_awake")
+	w.sound("ch4_guardian_awake");w.fx.quake(w,guardian.p,1.4);w.fx.erupt(w,guardian.p,"stone",10)
 
 func tick(w,dt: float):
 	if w.stage!="survival":return
@@ -144,14 +145,15 @@ func update_mass(w,dt: float):
 		return
 	if mass.phase=="gone" or controlled(mass):return
 	if mass.phase=="intro":
-		if mass.timer<=0:enter(mass,"walk",.7)
+		if mass.timer<=0:
+			enter(mass,"walk",.7);w.fx.burst(mass.p-Vector2(0,26),true,true);w.fx.erupt(w,mass.p,"flesh",10);w.fx.quake(w,mass.p,1.5)
 		return
 	if mass.hp<=0:die_mass(w);return
 	if mass.hp<mass.max_hp*.33 and not mass.small:
 		mass.small=true;mass.scale=.96;mass.radius=21
 		for part in parts:
 			if part.hp>0:detach(w,part)
-		enter(mass,"recover",1.2);w.sound("ch4_mass_shed")
+		enter(mass,"recover",1.2);w.sound("ch4_mass_shed");w.fx.burst(mass.p-Vector2(0,22),true,true);w.fx.erupt(w,mass.p,"flesh",12);w.fx.quake(w,mass.p,1.2)
 	mass.skin="ch4d_mass_"+str(mass.mask)
 	if mass.phase=="recover":
 		if mass.timer<=0:enter(mass,"walk",.5)
@@ -174,7 +176,7 @@ func update_mass(w,dt: float):
 	if mass.phase=="attack":
 		if mass.cast=="haul":
 			var before: Vector2=mass.p;mass.p=w.move_actor(mass.p,mass.charge*data.mass.haul_speed*dt,mass.radius)
-			if Geometry2D.get_closest_point_to_segment(w.player,before,mass.p).distance_to(w.player)<mass.radius+6:w.receive_hit(mass.damage,mass)
+			if Geometry2D.get_closest_point_to_segment(w.player,before,mass.p).distance_to(w.player)<mass.radius+6:struck(w,mass)
 		elif mass.cast=="fan":
 			mass.burst_timer-=dt
 			if mass.burst_timer<=0 and mass.burst<int(data.mass.fan_count):
@@ -190,8 +192,16 @@ func update_mass(w,dt: float):
 		elif mass.cast=="sweep":
 			var segment: Array=sweep_segment()
 			if Geometry2D.get_closest_point_to_segment(w.player,segment[0],segment[1]).distance_to(w.player)<data.mass.sweep_width and not mass.attack_hits.has("player"):
-				mass.attack_hits.player=true;w.receive_hit(mass.damage,mass)
-		if mass.timer<=0:enter(mass,"recover",data.mass.recover*(.7 if mass.small else 1))
+				mass.attack_hits.player=true;struck(w,mass)
+		if mass.timer<=0:
+			if mass.cast=="haul":w.fx.quake(w,mass.p,1.0)
+			enter(mass,"recover",data.mass.recover*(.7 if mass.small else 1))
+
+## A boss blow that connects: an impact frame on the hero, then the hit.
+func struck(w,m: Dictionary):
+	var before: float=w.hp
+	w.receive_hit(m.damage,m)
+	if w.hp<before:w.fx.burst(w.player-Vector2(0,12),true,true);w.fx.shove(w,m.p.direction_to(w.player),5.0,.2)
 
 func sweep_segment(progress: float=-1) -> Array:
 	var k: float=clampf(mass.phase_age/maxf(.01,mass.phase_duration),0,1) if progress<0 else progress
@@ -204,13 +214,13 @@ func detach(w,part: Dictionary):
 	part.detached=true;part.hp=0;mass.mask=int(mass.mask)&~(1<<(int(part.component)-1));mass.skin="ch4d_mass_"+str(mass.mask)
 	if loose.size()<int(data.rules.loose_limit):
 		var m=actor(w,"loose",part.p,data.mass.loose_hp,9);m.component=part.component;m.skin="ch4d_loose_"+str(part.component);m.life=float(data.mass.loose_life);m.lift=16.0;m.damage=2.0;enter(m,"recover",.6);loose.append(m)
-	w.add_effect("ch4d_detach",part.p,.55);w.sound("ch4_mass_shed",.25)
+	w.add_effect("ch4d_detach",part.p,.55);w.sound("ch4_mass_shed",.25);w.fx.erupt(w,part.p,"flesh",6);w.fx.pool(part.p,8.0,w.clock);w.fx.burst(part.p-Vector2(0,12),false,true)
 
 func update_loose(w,dt: float):
 	for i in range(loose.size()-1,-1,-1):
 		var m=loose[i];m.life-=dt;m.lift=maxf(0,m.lift-35*dt)
 		if m.hp<=0 or m.life<=0:
-			if m.hp<=0:w.drop_xp(m.p,2);w.kills+=1;w.arsenal.after_kill(w,m)
+			if m.hp<=0:w.drop_xp(m.p,2);w.kills+=1;w.arsenal.after_kill(w,m);w.fx.death(w,m)
 			loose.remove_at(i);continue
 		if m.pull_left>0:
 			var distance: float=minf(m.pull_left,380*dt);m.p=w.move_actor(m.p,m.pull_dir*distance,m.radius);m.pull_left-=distance
@@ -243,7 +253,7 @@ func update_golem(w,dt: float):
 		if golem.timer<=0:golem.skin="ch4d_golem_saved";golem.allied=true;golem.undead=false;golem.help_until=w.clock+data.golem.help_duration;enter(golem,"walk",.8);w.loot.append({"kind":"chest","p":golem.p+Vector2(0,20),"born":w.time})
 		return
 	if not rescued and nodes.filter(func(n):return n.encounter_actor=="golem_node" and n.hp>0).is_empty():
-		rescued=true;golem.allied=true;golem.undead=false;enter(golem,"release",data.golem.release);w.drop_xp(golem.p,data.golem.reward_xp);w.sound("ch4_golem_free");w.add_effect("ch4d_release",golem.p,1.4);return
+		rescued=true;golem.allied=true;golem.undead=false;enter(golem,"release",data.golem.release);w.drop_xp(golem.p,data.golem.reward_xp);w.sound("ch4_golem_free");w.add_effect("ch4d_release",golem.p,1.4);w.fx.quake(w,golem.p,1.2);w.fx.ring(golem.p,170.0,1.0,"evolve");w.fx.flash(golem.p-Vector2(0,24),220.0,Color(1,.9,.6),.7);return
 	# The director keeps only one hostile encounter preparing attacks at a time.
 	if busy() and not rescued:return
 	if controlled(golem):return
@@ -264,12 +274,12 @@ func update_golem(w,dt: float):
 	if golem.phase=="windup":
 		if golem.timer<=0:
 			var end: Vector2=golem.p+golem.charge*float(data.golem.reach)
-			if not rescued and Geometry2D.get_closest_point_to_segment(w.player,golem.p,end).distance_to(w.player)<data.golem.width:w.receive_hit(data.golem.damage,golem)
+			if not rescued and Geometry2D.get_closest_point_to_segment(w.player,golem.p,end).distance_to(w.player)<data.golem.width:golem.damage=data.golem.damage;struck(w,golem)
 			for m in w.in_radius((golem.p+end)/2,data.golem.reach*.65):
 				if not m.get("encounter_actor","").is_empty() or m.get("allied",false):continue
 				if Geometry2D.get_closest_point_to_segment(m.p,golem.p,end).distance_to(m.p)<data.golem.width+m.radius:
 					w.arsenal.hit(w,m,data.golem.mob_damage,"golem_ally" if rescued else "golem",golem.charge,true)
-			w.add_effect("ch4d_golem_slam",golem.p,.4,{"end":end,"width":float(data.golem.width)});w.sound("ch4_golem_slam");enter(golem,"attack",.35)
+			w.add_effect("ch4d_golem_slam",golem.p,.4,{"end":end,"width":float(data.golem.width)});w.sound("ch4_golem_slam");enter(golem,"attack",.35);w.fx.quake(w,end,1.3,golem.p+golem.charge*14)
 		return
 	if golem.phase=="attack":
 		if golem.timer<=0:enter(golem,"recover",data.golem.recover)
@@ -330,6 +340,8 @@ func commit_geometry(w):
 			var p: Vector2=grid_point(cell);var delta: Vector2=m.p-p;var limit: float=float(data.guardian.block_radius)+m.radius
 			if delta.length()<limit:m.p=p+(delta.normalized() if delta.length_squared()>.01 else Vector2.RIGHT)*(limit+1)
 	w.sound("ch4_stone_rise")
+	for cell in blocks:w.fx.dust(grid_point(cell),3,18)
+	if not blocks.is_empty():w.fx.shove(w,Vector2(0,1),3.0,.18)
 
 func update_guardian(w,dt: float):
 	if guardian.phase!="windup":proposal=[]
@@ -353,6 +365,7 @@ func update_guardian(w,dt: float):
 			if node.encounter_actor=="guardian_torch":node.disabled=false;node.hp=node.max_hp
 		if guardian.pattern%2==0:plan_beams(w)
 	elif guardian.phase=="attack" and guardian.timer<=0:
+		for cell in blocks:w.fx.dust(grid_point(cell),2,16)
 		clear_geometry(w);enter(guardian,"recover",data.guardian.recover);w.sound("ch4_guardian_open")
 	elif guardian.phase=="recover" and guardian.timer<=0:enter(guardian,"walk",.35)
 
@@ -371,8 +384,13 @@ func update_beams(w,dt: float):
 		var endpoints: Array=nodes.filter(func(n):return n.id in [beam.from,beam.to] and n.hp>0 and not n.get("disabled",false))
 		if endpoints.size()!=2:beams.remove_at(i);continue
 		if beam.wait<=0:
+			if not beam.live:
+				for j in range(5):w.fx.stain(beam.a.lerp(beam.b,(j+.5)/5.0),6.0,"scorch",w.clock)
+				w.fx.flash(beam.a.lerp(beam.b,.5),130.0,Color(1,.45,.15),.25,.8);w.fx.shove(w,Vector2.ZERO,0,.1)
 			beam.live=true;beam.life-=dt
-			if not beam.hit and Geometry2D.get_closest_point_to_segment(w.player,beam.a,beam.b).distance_to(w.player)<float(data.guardian.beam_width):beam.hit=true;w.damage_player(data.guardian.beam_damage)
+			if not beam.hit and Geometry2D.get_closest_point_to_segment(w.player,beam.a,beam.b).distance_to(w.player)<float(data.guardian.beam_width):
+				var before: float=w.hp;beam.hit=true;w.damage_player(data.guardian.beam_damage)
+				if w.hp<before:w.fx.burst(w.player-Vector2(0,12),false,false)
 			if beam.life<=0:beams.remove_at(i)
 
 func clear_geometry(w):
@@ -385,6 +403,7 @@ func hurt(w,m: Dictionary,amount: float,push: Vector2):
 	if m.encounter_actor=="loose":m.knock=push*40
 	w.damage_by[w.damage_owner]=w.damage_by.get(w.damage_owner,0.0)+damage
 	w.add_effect("damage",m.p-Vector2(0,20),.5,{"amount":ceili(damage)})
+	w.fx.hit(w,m,damage,push,w.damage_owner)
 	w.emit_pixels("impact",m.p-Vector2(0,12),3,push);w.sound("ch4_stone_hit" if m.encounter_actor in ["guardian","guardian_torch"] else "ch4_flesh_hit",.1)
 	if m.encounter_actor in ["mass","mass_part","loose","guardian"]:w.arsenal.melee_hit(w,m,damage)
 	match m.encounter_actor:
@@ -397,9 +416,9 @@ func hurt(w,m: Dictionary,amount: float,push: Vector2):
 		"guardian":
 			if m.hp<=0:die_guardian(w)
 		"guardian_torch":
-			if m.hp<=0:m.disabled=true;w.add_effect("ch4d_torch_break",m.p,.4)
+			if m.hp<=0:m.disabled=true;w.add_effect("ch4d_torch_break",m.p,.4);w.fx.erupt(w,m.p,"stone",5)
 		"golem_node":
-			if m.hp<=0:w.add_effect("ch4d_detach",m.p,.6);w.sound("ch4_growth_rip",.2)
+			if m.hp<=0:w.add_effect("ch4d_detach",m.p,.6);w.sound("ch4_growth_rip",.2);w.fx.erupt(w,m.p,"flesh",7);w.fx.pool(m.p,7.0,w.clock);w.fx.burst(m.p-Vector2(0,10),false,true)
 
 func die_mass(w):
 	if mass.phase in ["death","gone"]:return
@@ -407,6 +426,7 @@ func die_mass(w):
 	w.arsenal.after_kill(w,mass)
 	for part in parts:part.hp=0
 	burst(w,mass.p,"flesh",20);w.sound("ch4_mass_death")
+	w.fx.erupt(w,mass.p,"flesh",18);w.fx.spray(mass.p,Vector2.ZERO,20,170.0,TAU,190.0);w.fx.quake(w,mass.p,1.8);w.fx.flash(mass.p,200.0,Color(1,.3,.25),.4)
 func die_guardian(w):
 	if guardian.phase in ["death","gone"]:return
 	enter(guardian,"death",data.guardian.death);clear_geometry(w)
@@ -414,6 +434,7 @@ func die_guardian(w):
 	for node in nodes:
 		if node.encounter_actor=="guardian_torch":node.disabled=true
 	burst(w,guardian.p,"stone",24);w.sound("ch4_guardian_death")
+	w.fx.erupt(w,guardian.p,"stone",20);w.fx.quake(w,guardian.p,2.0);w.fx.burst(guardian.p-Vector2(0,30),true,false);w.fx.flash(guardian.p-Vector2(0,30),240.0,Color(1,.95,.8),.5)
 func burst(w,p: Vector2,kind: String,count: int):
 	for j in range(count):
 		if debris.size()>=int(data.rules.debris_limit):break
