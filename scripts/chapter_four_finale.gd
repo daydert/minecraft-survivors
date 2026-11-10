@@ -68,6 +68,7 @@ var glitch := 0.0
 var hitstop := 0.0
 var impact_frame := 0.0
 var impacts: Array = []    # fistfight contacts: {at, on, big}
+var stains: Array = []     # blood left on the close-up floor by every blow
 var road_index := 0
 var door_state := ""
 var spoken: Dictionary = {}
@@ -81,7 +82,7 @@ func reset(w):
 	looked = false; face = "calm"; shadow_on = false; knife_gaps.clear(); void_r = 0.0; strip_index = 0
 	pose = "idle"; pose_age = 0.0; day_done.clear(); stored = {}; checkpoint = {}; qte_index = 0; qte = {}; presses.clear()
 	hold = false; steve_pose = "idle"; text_events.clear(); silence = false; music = ""; retry_from = ""; flash = 0.0; glitch = 0.0
-	hitstop = 0.0; impact_frame = 0.0; impacts.clear(); waves.clear(); tower_h = 0.0; tower_queue.clear(); vortex_cut = false
+	hitstop = 0.0; impact_frame = 0.0; impacts.clear(); stains.clear(); waves.clear(); tower_h = 0.0; tower_queue.clear(); vortex_cut = false
 	road_index = 0; door_state = ""; spoken.clear(); head_at = -1.0; punch_at = -10.0
 	var pyramid := Vector2(w.terrain.pyramid[0], w.terrain.pyramid[1])
 	center = pyramid + Vector2(data.arena.offset[0], data.arena.offset[1])
@@ -1026,6 +1027,8 @@ func step_three(w, dt: float):
 
 func impact(w, on: String, big: bool, sound: bool = true, stop: bool = true):
 	impacts.append({"at": age, "on": on, "big": big, "seed": impacts.size() + qte_index * 7})
+	if sound or big:
+		stains.append({"x": rng.randf_range(-20.0, 70.0) * (1.0 if on == "hb" else -1.0), "y": rng.randf_range(-10.0, 14.0), "r": rng.randf_range(3.0, 6.0) + (5.0 if big else 0.0), "seed": rng.randi() % 997})
 	if stop:hitstop = .16 if big else .07
 	w.shake = maxf(w.shake, .35 if big else .14)
 	if sound:w.sound("ch4_punch_heavy" if big else "ch4_punch", .03)
@@ -1056,7 +1059,7 @@ const MOUNT := Vector2(-1, -3)
 
 func begin_death(w):
 	phase = "death"; age = 0.0; set_pose("lying"); face = "smile"; set_steve("grab"); music = ""; silence = true
-	hb.p = center + Vector2(28, 0); hb.visual_dir = Vector2.LEFT; hb.scale = 1.0
+	hb.p = center + Vector2(76, 0); hb.visual_dir = Vector2.LEFT; hb.scale = 1.0
 	w.player = hb.p - Vector2(20, 0); w.facing = Vector2.RIGHT
 	w.sound("ch4_body_fall")
 
@@ -1065,7 +1068,7 @@ func step_death(w, dt: float):
 	var mount_at: float = float(d.drag)
 	# He is dragged by the feet back onto the ground, laughing.
 	if age < mount_at:
-		hb.p = (center + Vector2(28, 0)).lerp(center, smoothstep(0.3, mount_at - 0.2, age))
+		hb.p = (center + Vector2(76, 0)).lerp(center, smoothstep(0.3, mount_at - 0.2, age))
 		w.player = hb.p - Vector2(20, 0); w.facing = Vector2.RIGHT; set_steve("grab")
 	steve_at = hb.p + MOUNT
 	for line in d.lines:

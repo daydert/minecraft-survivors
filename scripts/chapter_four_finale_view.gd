@@ -605,18 +605,37 @@ static func effect(g, ef: Dictionary, offset: Vector2) -> bool:
 ## The final blow: cubes of the head scatter with the two white eye pixels.
 ## Local space (the head on the ground at the origin); the caller scales it.
 static func head_burst(g, p: Vector2, age: float):
-	var colors = [Color("2e1f10"), Color("b4846d"), Color("aa7d66"), Color("6b2a1c"), Color("7a0c10"), Color("4a0508")]
+	var colors = [Color("2e1f10"), Color("b4846d"), Color("aa7d66"), Color("6b2a1c"), Color("7a0c10"), Color("4a0508"), Color("9a0a12")]
 	var ground: float = p.y + 4.0
-	var pool: float = minf(1.0, age * 0.6)
-	for j in range(6):
-		var w: float = (8.0 + j * 4.0) * pool
-		g.draw_rect(Rect2(Vector2(p.x - w / 2 - 2, ground - 1 + j * 0.4).floor(), Vector2(w, 1.5 + j % 2)), Color(0.32, 0.0, 0.02, 0.9))
-	for j in range(34):
-		var a: float = -PI * 0.5 + (h(j, 60) - 0.5) * 2.9
-		var speed: float = 22.0 + h(j, 61) * 50.0
-		var t: float = minf(age, 0.9)
+	# The gush: a column of blood thrown up, then raining back down.
+	for j in range(90):
+		var a: float = -PI * 0.5 + (h(j, 60) - 0.5) * 2.2
+		var speed: float = 30.0 + h(j, 61) * 70.0
+		var delay: float = h(j, 64) * 0.25
+		var t: float = clampf(age - delay, 0.0, 1.4)
+		if t <= 0:continue
+		var floor_y: float = ground + h(j, 62) * 2.0
+		var vy: float = sin(a) * speed
+		var t_land: float = (-vy + sqrt(vy * vy + 600.0 * (floor_y - p.y))) / 300.0
+		var landed: bool = t >= t_land
+		t = minf(t, t_land)
+		var q: Vector2 = p + Vector2(cos(a), sin(a)) * speed * t + Vector2(0, 150.0 * t * t)
+		q.y = minf(q.y, floor_y)
+		var sz: float = 0.6 + h(j, 63) * 1.4
+		if landed:
+			g.draw_rect(Rect2(q.floor(), Vector2(sz + 0.6, 0.6)), Color(0.32, 0.0, 0.02, 0.95))
+		else:
+			g.draw_line(q, q - Vector2(cos(a), sin(a) + t * 3.0).normalized() * 2.0, Color(0.55, 0.0, 0.04, 0.9), sz * 0.6)
+			g.draw_rect(Rect2(q, Vector2(sz, sz)), Color(0.66, 0.02, 0.06))
+	# Pieces of the head.
+	for j in range(40):
+		var a: float = -PI * 0.5 + (h(j, 65) - 0.5) * 2.9
+		var speed: float = 22.0 + h(j, 66) * 55.0
+		var floor_y: float = ground + h(j, 67) * 2.0
+		var vy: float = sin(a) * speed
+		var t: float = minf(age, (-vy + sqrt(vy * vy + 480.0 * (floor_y - p.y))) / 240.0)
 		var q: Vector2 = p + Vector2(cos(a), sin(a)) * speed * t + Vector2(0, 120.0 * t * t)
-		q.y = minf(q.y, ground + h(j, 62) * 2.0)
+		q.y = minf(q.y, floor_y)
 		var size: float = 1.0 + float(j % 3 == 0)
 		g.draw_rect(Rect2(q.floor(), Vector2(size, size)), colors[j % colors.size()])
 	for j in range(2):
@@ -624,6 +643,13 @@ static func head_burst(g, p: Vector2, age: float):
 		var q: Vector2 = p + Vector2(-3 + j * 6, -9) * minf(1.0, age * 3.0) + Vector2(0, 80.0 * t * t)
 		q.y = minf(q.y, ground)
 		g.draw_rect(Rect2(q.floor(), Vector2.ONE), Color.WHITE)
+	# Streaks thrown along the floor.
+	var streak: float = minf(1.0, age * 2.5)
+	for j in range(10):
+		var dir: float = -1.0 if j % 2 == 0 else 1.0
+		var length: float = (8.0 + h(j, 68) * 22.0) * streak
+		var y: float = ground - 1.0 + (h(j, 69) - 0.5) * 3.0
+		g.draw_line(Vector2(p.x, y), Vector2(p.x + dir * length, y + (h(j, 70) - 0.5) * 2.0), Color(0.3, 0.0, 0.02, 0.9), 0.8)
 
 # ------------------------------------------------------------------ overlays (after lighting)
 
@@ -639,7 +665,6 @@ static func overlay(g, offset: Vector2):
 	if e.move == "day" and (e.sky > 0.0 or e.split > 0.0 or e.sun > 0.0):day_sky(g, e, offset)
 	if e.phase == "last":last_attack(g, e, offset)
 	if e.phase == "vortex":vortex(g, e, offset)
-	if e.phase in ["erase", "three", "death", "retry"]:island(g, e, offset, -1.0)
 	if e.phase in ["erase", "three", "retry", "death"]:duel(g, e, offset)
 	if e.phase in ["one", "two"]:boss_bar(g, e)
 	if e.phase == "three":prompt(g, e)
@@ -815,7 +840,7 @@ static func duel_offsets(e) -> Array:
 					_:st_d.y += 16.0 * bump(t, 0.06, 0.6); st_d.x -= 8.0 * bump(t, 0.06, 0.6)
 			"attack":
 				st_d.x += 20.0 * bump(t, 0.06, 0.5)
-				hb_d.x += (40.0 * smoothstep(0.0, 0.4, t)) if q.hb == "fall" else 30.0 * bump(t, 0.05, 0.7)
+				hb_d.x += (150.0 * smoothstep(0.0, 0.45, t)) if q.hb == "fall" else 30.0 * bump(t, 0.05, 0.7)
 			"hold", "seq", "mash":
 				st_d.x += 18.0 * bump(t, 0.06, 0.5)
 				hb_d.x += 40.0 * bump(t, 0.06, 0.8)
@@ -833,9 +858,58 @@ static func duel(g, e, offset: Vector2):
 	duel_inner(g, e, offset)
 	profile = false
 
+## The last patch of the world, seen close: a slab of the same ground at the
+## scale of the figures on it, its broken edge and the void under it.
+static func close_floor(g, centre: Vector2, rx: float, ry: float, clock: float):
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(0.006, 0.004, 0.008))
+	var top := PackedVector2Array()
+	var uvs := PackedVector2Array()
+	var n := 64
+	for i in range(n):
+		var a: float = i * TAU / n
+		var rough: float = 1.0 + (h01i(i, 11) - 0.5) * 0.06
+		var pt: Vector2 = centre + Vector2(cos(a) * rx, sin(a) * ry) * rough
+		top.append(pt)
+		uvs.append(((pt - centre) / 3.0 + Vector2(900, 790)) / 2048.0)
+	# The broken underside: earth strata hanging into the void.
+	var cliff := PackedVector2Array()
+	for i in range(n / 2 + 1):
+		cliff.append(top[i % n])
+	for i in range(n / 2, -1, -1):
+		var drop: float = 26.0 + h01i(i, 12) * 22.0 * absf(sin(i * TAU / n))
+		cliff.append(top[i % n] + Vector2(0, drop))
+	g.draw_colored_polygon(cliff, Color(0.09, 0.065, 0.065))
+	for k in range(3):
+		var band := PackedVector2Array()
+		for i in range(n / 2 + 1):band.append(top[i % n] + Vector2(0, 6 + k * 7))
+		g.draw_polyline(band, Color(0.05, 0.035, 0.035), 1)
+	if g.textures.has("ch4_ground"):
+		var colors := PackedColorArray()
+		colors.resize(n); colors.fill(Color(0.8, 0.78, 0.8))
+		g.draw_polygon(top, colors, uvs, g.textures.ch4_ground)
+	else:
+		g.draw_colored_polygon(top, Color(0.2, 0.18, 0.2))
+	# Light falls on the middle, the edges sink into the dark.
+	for k in range(5):
+		var f0: float = 1.0 - k * 0.09
+		var f1: float = f0 - 0.09
+		var band := PackedVector2Array()
+		for i in range(n + 1):band.append(centre + Vector2(cos(i * TAU / n) * rx, sin(i * TAU / n) * ry) * f0)
+		for i in range(n, -1, -1):band.append(centre + Vector2(cos(i * TAU / n) * rx, sin(i * TAU / n) * ry) * f1)
+		g.draw_colored_polygon(band, Color(0, 0, 0, 0.5 - k * 0.1))
+	var rim := top.duplicate()
+	rim.append(top[0])
+	g.draw_polyline(rim, Color(0.42, 0.38, 0.4, 0.8), 1)
+	for j in range(14):
+		var a: float = h01i(j, 13) * PI
+		var fall: float = fposmod(clock * (16.0 + h01i(j, 14) * 10.0) + j * 9.0, 60.0)
+		var q: Vector2 = centre + Vector2(cos(a) * rx, sin(a) * ry) + Vector2(0, 20 + fall)
+		g.draw_rect(Rect2(q.floor(), Vector2(2, 2)), Color(0.3, 0.25, 0.26, 1.0 - fall / 60.0))
+
 static func duel_inner(g, e, offset: Vector2):
 	var clock: float = g.world.clock
 	var c: Vector2 = e.center + offset
+	close_floor(g, c + Vector2(0, -4) if e.phase != "death" else c + Vector2(0, 30), 270.0, 48.0, clock)
 	if e.phase == "death":
 		death_scene(g, e, c, offset)
 		return
@@ -863,7 +937,8 @@ static func duel_inner(g, e, offset: Vector2):
 			g.draw_line(mid + d * 30, mid + d * (120 + h(j, 81) * 200), Color(0, 0, 0), 2 + j % 3)
 		g.draw_line(mid + Vector2(-90, 50), mid + Vector2(90, -50), Color(0.75, 0.0, 0.05), 5)
 		return
-	g.oval(c + Vector2(0, 2), Vector2(70, 10), Color(1, 1, 1, 0.04))
+	g.oval(c + Vector2(0, 2), Vector2(70, 10), Color(0, 0, 0, 0.35))
+	for st in e.stains:splat(g, c + Vector2(st.x, st.y), st.r, int(st.seed), 1.0)
 	draw_hb_at(g, e, hp, offset, s, Color(0, 0, 0, 0))
 	var saved: Vector2 = g.world.player
 	g.world.player = sp - offset
@@ -881,7 +956,7 @@ static func erase_scene(g, e, c: Vector2, offset: Vector2):
 	var hs: float = DUEL * e.scale()
 	var hp: Vector2 = c + (e.hb.p - e.center) * DUEL
 	var sp: Vector2 = c + (g.world.player - e.center) * DUEL
-	g.oval(c + Vector2(0, 2), Vector2(80, 12), Color(1, 1, 1, 0.04))
+	g.oval(c + Vector2(0, 2), Vector2(80, 12), Color(0, 0, 0, 0.35))
 	for ef in g.world.effects:
 		if ef.kind != "ch4_hb_drain":continue
 		var k: float = clampf(ef.age / maxf(0.001, ef.total), 0, 1)
@@ -910,6 +985,34 @@ static func speed_lines(g, at: Vector2, clock: float, alpha: float):
 		var r0: float = 120.0 + h(j, 83) * 80.0
 		g.draw_line(at + d * r0, at + d * (r0 + 120 + h(j, 84) * 200), Color(1, 1, 1, alpha * (0.4 + 0.6 * h(j + int(clock * 20), 85))), 1)
 
+## A blood stain on the floor: a dark-rimmed blot, satellites, one wet glint.
+static func splat(g, p: Vector2, r: float, seed: int, k: float):
+	g.oval(p + Vector2(0, 1), Vector2(r * 1.7 + 1, r * 0.55 + 1) * k, Color(0.12, 0.0, 0.01, 0.95))
+	g.oval(p, Vector2(r * 1.6, r * 0.5) * k, Color(0.36, 0.0, 0.03, 0.95))
+	for j in range(6):
+		var a: float = h(j + seed, 93) * TAU
+		var d: float = r * (1.2 + h(j + seed, 94) * 1.8) * k
+		var q: Vector2 = p + Vector2(cos(a) * d * 1.7, sin(a) * d * 0.5)
+		var sz: float = 1.0 + floorf(h(j + seed, 95) * 3.0)
+		g.draw_rect(Rect2(q.floor(), Vector2(sz + 1, sz)), Color(0.3, 0.0, 0.02, 0.95))
+	g.draw_rect(Rect2((p + Vector2(-r * 0.5, -r * 0.15)).floor(), Vector2(maxf(1, r * 0.6) * k, 1)), Color(0.9, 0.35, 0.35, 0.6))
+
+## A pool that keeps spreading: lobes, a black rim, the wet shine of it.
+static func blood_pool(g, p: Vector2, size: float, clock: float):
+	if size <= 0:return
+	for j in range(7):
+		var a: float = j * TAU / 7 + 0.4
+		var q: Vector2 = p + Vector2(cos(a) * size * 0.9, sin(a) * size * 0.22)
+		g.oval(q + Vector2(0, 1), Vector2(size * 0.75, size * 0.2) + Vector2(1, 1), Color(0.1, 0.0, 0.01, 0.95))
+	g.oval(p + Vector2(0, 1), Vector2(size * 1.7, size * 0.38) + Vector2(1, 1), Color(0.1, 0.0, 0.01, 0.95))
+	for j in range(7):
+		var a: float = j * TAU / 7 + 0.4
+		var q: Vector2 = p + Vector2(cos(a) * size * 0.9, sin(a) * size * 0.22)
+		g.oval(q, Vector2(size * 0.75, size * 0.2), Color(0.38, 0.0, 0.03, 1))
+	g.oval(p, Vector2(size * 1.7, size * 0.38), Color(0.42, 0.01, 0.04, 1))
+	g.oval(p + Vector2(-size * 0.2, -size * 0.06), Vector2(size * 1.0, size * 0.18), Color(0.55, 0.03, 0.06, 1))
+	g.draw_line(p + Vector2(-size * 0.9, -size * 0.12), p + Vector2(-size * 0.2, -size * 0.16), Color(1, 0.55, 0.55, 0.45 + 0.1 * sin(clock * 2.0)), 1)
+
 static func impact_burst(g, at: Vector2, t: float, big: bool, seed: int, blood: bool):
 	if t < 0 or t > 0.7:return
 	var k: float = t / 0.7
@@ -922,10 +1025,14 @@ static func impact_burst(g, at: Vector2, t: float, big: bool, seed: int, blood: 
 		g.draw_line(at + d * r0, at + d * (r0 + (24.0 - t * 30.0) * size), Color(1, 1, 1, 1.0 - k * 1.4), 2)
 	g.draw_arc(at, (10.0 + t * 110.0) * size, 0, TAU, 32, Color(1, 1, 1, 0.7 - k * 1.2), 2)
 	if blood:
-		for j in range(12):
-			var a: float = -PI * 0.5 + (h(j + seed, 87) - 0.2) * 2.4
-			var q: Vector2 = at + Vector2(cos(a), sin(a)) * t * (90.0 + 80.0 * h(j + seed, 88)) * size + Vector2(0, t * t * 260.0)
-			g.draw_rect(Rect2(q.floor(), Vector2(2, 2) * (1 + int(big))), Color(0.6, 0.02, 0.05, 1.0 - k))
+		for j in range(28 if big else 16):
+			var a: float = -PI * 0.5 + (h(j + seed, 87) - 0.2) * 2.6
+			var sp: float = (70.0 + 120.0 * h(j + seed, 88)) * size
+			var q: Vector2 = at + Vector2(cos(a), sin(a)) * t * sp + Vector2(0, t * t * 320.0)
+			var sz: float = (2.0 + floorf(h(j + seed, 92) * 3.0)) * (1.4 if big else 1.0)
+			g.draw_line(q, q - Vector2(cos(a), sin(a) + t * 2.0).normalized() * sz * 1.5, Color(0.45, 0.0, 0.03, 1.0 - k), sz * 0.6)
+			g.draw_rect(Rect2(q.floor(), Vector2(sz, sz)), Color(0.62, 0.02, 0.05, 1.0 - k))
+			if j % 3 == 0:g.draw_rect(Rect2(q.floor(), Vector2(1, 1)), Color(1, 0.45, 0.45, 1.0 - k))
 
 ## His end: one baked tableau of both bodies, the hero astride his chest.
 static func tableau(g, clip: String, t: float, at: Vector2, s: float, tint: Color = Color.WHITE):
@@ -966,13 +1073,18 @@ static func death_scene(g, e, c: Vector2, offset: Vector2):
 			var d := Vector2.from_angle(j * TAU / 16 + h(j, 89) * 0.3)
 			g.draw_line(head + d * 20, head + d * (100 + h(j, 90) * 220), Color(0.7, 0.0, 0.04), 2 + j % 3)
 		return
-	g.oval(at + Vector2(0, 3), Vector2(70, 10), Color(1, 1, 1, 0.04))
+	g.oval(at + Vector2(0, 2), Vector2(70, 8), Color(0, 0, 0, 0.4))
 	var hits: int = 0
 	for t in e.data.death.punches:
 		if e.age >= float(t):hits += 1
 	if hits > 0:
-		var pool: float = 6.0 + hits * 3.0 + (14.0 if e.head_at >= 0 else 0.0) * minf(1.0, (e.age - e.head_at) * 0.5)
-		g.oval(Vector2(head.x + 4, at.y + 1), Vector2(pool * 1.6, pool * 0.35), Color(0.3, 0.0, 0.02, 0.9))
+		var pool: float = 6.0 + hits * 3.5 + (34.0 * minf(1.0, (e.age - e.head_at) * 0.35) if e.head_at >= 0 else 0.0)
+		blood_pool(g, Vector2(head.x + 6, at.y + 2), pool, g.world.clock)
+	for j in range(hits * 3 + (24 if e.head_at >= 0 else 0)):
+		var a: float = h(j, 96) * PI - PI
+		var d: float = 20.0 + h(j, 97) * (60.0 if j < hits * 3 else 150.0)
+		var q: Vector2 = Vector2(head.x, at.y + 2) + Vector2(cos(a) * d, absf(sin(a)) * d * 0.18 * (1 if j % 2 else -1))
+		splat(g, q, 2.0 + h(j, 98) * (3.0 if j < hits * 3 else 5.0), j, 1.0)
 	tableau(g, clip, e.steve_pose_age, at, s)
 	# The swing: a pale arc from the drawn-back fist down onto his face.
 	var since: float = e.age - e.punch_at
