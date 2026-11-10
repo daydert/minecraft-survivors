@@ -21,8 +21,10 @@ static func recipes(g):
 			if c.get("evolved",false):
 				g.draw_rect(Rect2(p+Vector2(x-2,4),Vector2(20,20)),Color(.85,.68,.25),false,1)
 			g.item_icon(c.id,p+Vector2(x,6),1,c.get("evolved",false))
-			g.text_at(str(int(c.level))+(" эво" if c.get("evolved",false) else ""),p+Vector2(x+3,34),8,Color(.6,.8,.4) if ready else (Color(.85,.68,.25) if c.get("evolved",false) else g.MUTED))
-			x+=26
+			var label: String=str(int(c.level))+(" эво" if c.get("evolved",false) else "")
+			var width: float=g.font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
+			g.text_at(label,p+Vector2(x+(-2 if c.get("evolved",false) else 3),34),8,Color(.6,.8,.4) if ready else (Color(.85,.68,.25) if c.get("evolved",false) else g.MUTED))
+			x+=maxi(26,int(width)+8)
 			if j<components.size()-1:g.text_at("+",p+Vector2(x-6,18),8,g.MUTED)
 		g.text_at("=",p+Vector2(x-3,18),8,g.MUTED)
 		g.item_icon(id,p+Vector2(x+11,6),1,true)

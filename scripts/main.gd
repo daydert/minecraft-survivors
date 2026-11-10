@@ -1,5 +1,6 @@
 extends "res://scripts/ui/game_canvas.gd"
 ## Game node: lifecycle, input, actions and screen flow. Drawing lives in scripts/ui/.
+const ChapterOneView=preload("res://scripts/chapter_one_view.gd")
 
 func _ready():
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -83,9 +84,9 @@ func _ready():
 		probe.game = self
 		add_child(probe)
 
-func load_settings():
+func load_settings(path: String = "user://settings.cfg"):
 	var cfg = ConfigFile.new()
-	if cfg.load("user://settings.cfg") == OK:
+	if cfg.load(path) == OK:
 		for key in settings:
 			var value = cfg.get_value("settings",key,settings[key])
 			if typeof(value) == typeof(settings[key]): settings[key] = value
@@ -96,13 +97,13 @@ func load_settings():
 	settings.effects = snappedf(clampf(settings.effects,0,1),.1)
 	if settings.fullscreen: DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
-func save_settings():
+func save_settings(path: String = "user://settings.cfg"):
 	var cfg = ConfigFile.new()
 	for key in settings: cfg.set_value("settings",key,settings[key])
 	for key in record: cfg.set_value("record",key,record[key])
 	cfg.set_value("network","nick",network_nick)
 	cfg.set_value("network","address",network_address)
-	cfg.save("user://settings.cfg")
+	cfg.save(path)
 
 func _focus_lost():
 	if coop.active:
@@ -211,6 +212,8 @@ func _input(event):
 		mouse = get_global_mouse_position()
 		for i in range(buttons.size()):
 			if buttons[i].rect.has_point(mouse): selected = i
+	if world.state=="INTRO" and screen.is_empty() and ((event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_ESCAPE]) or (event is InputEventMouseButton and event.pressed)):
+		world.skip_intro();input_lock=.2;return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if is_four() and world.state=="RUNNING" and screen.is_empty():
 			if event.physical_keycode==KEY_E:world.active_item("heart");return
@@ -340,7 +343,7 @@ func action(id: String):
 			if coop.active:
 				if coop.hosting: coop.start_run()
 				return
-			start_chapter(solo_chapter)
+			start_chapter(solo_chapter,id=="start")
 		"menu":
 			collect_achievements()
 			if coop.active:
@@ -350,6 +353,7 @@ func action(id: String):
 			solo_chapter=1
 			unload_end_assets()
 			unload_four_assets()
+			ChapterOneView.unload(self)
 			world.finale.reset()
 			audio.set_finale_music(false)
 			world.state = "MENU"
@@ -375,7 +379,9 @@ func action(id: String):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 			if not settings.fullscreen: get_window().size = Vector2i(1280,720)
 			get_window().grab_focus()
-		"shake","flashes","numbers","lighting": settings[id] = not settings[id]
+		"shake","flashes","numbers","lighting","camera_lead":
+			settings[id] = not settings[id]
+			if id=="camera_lead":cam_lead=Vector2.ZERO;lead_clock=world.clock
 		"music","effects":
 			adjust_volume(id,.1)
 	save_settings()
@@ -404,7 +410,11 @@ func close_boss_lab():
 	router.close(world);selected=0;input_lock=.12
 
 func update_camera_lead():
-	if coop.active or world.state!="RUNNING":
+	if not settings.get("camera_lead",false) or coop.active or world.state=="MENU":
+		cam_lead=Vector2.ZERO
+		lead_clock=world.clock
+		return
+	if world.state!="RUNNING":
 		lead_clock=world.clock
 		return
 	var dt: float=clampf(world.clock-lead_clock,0,.1)
@@ -415,7 +425,7 @@ func update_camera_lead():
 func close_recipes():
 	router.close(world,"inventory")
 
-func start_chapter(chapter: int):
+func start_chapter(chapter: int, intro: bool=true):
 	if coop.active:return
 	collect_achievements()
 	solo_chapter=chapter
@@ -423,8 +433,10 @@ func start_chapter(chapter: int):
 	else:unload_end_assets()
 	if chapter==4:ensure_four_assets()
 	else:unload_four_assets()
+	if chapter!=1:ChapterOneView.unload(self)
 	world=FW.new() if chapter==4 else EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
 	world.reset()
+	if chapter==1 and intro:world.begin_intro()
 	audio.reset_run_music()
 	cam_lead=Vector2.ZERO;lead_clock=0.0
 	screen=""
@@ -531,7 +543,7 @@ func draw_scene():
 		finale_renderer.ending(self)
 		return
 	WorldView.draw_world(self)
-	if (not is_four() or (world.stage != "arrival" and not world.ending.locked())) and world.state != "MENU" and (not world.finale.active or world.finale.phase in ["storm","inferno"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]):Hud.draw_hud(self)
+	if (not is_four() or (world.stage != "arrival" and not world.ending.locked())) and world.state != "MENU" and world.state!="INTRO" and (not world.finale.active or world.finale.phase in ["storm","inferno","tease"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]):Hud.draw_hud(self)
 	if screen=="chapters":MenuScreens.draw_chapters(self)
 	elif screen == "multiplayer": MenuScreens.draw_multiplayer(self)
 	elif not screen.is_empty(): MenuScreens.draw_settings(self)

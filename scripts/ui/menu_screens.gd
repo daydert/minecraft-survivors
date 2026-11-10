@@ -21,21 +21,21 @@ static func draw_chapters(g):
 
 static func draw_settings(g):
 	g.dim(0.88)
-	g.panel(Rect2(125,27,390,306),Color("20372c"),Color("6c7e58"))
-	g.centered("НАСТРОЙКИ",61,20,g.INK,true)
-	var keys=["music","effects","fullscreen","shake","flashes","numbers","lighting"]
-	var labels=["Громкость музыки","Громкость эффектов","Полный экран · F11","Тряска камеры","Вспышки при попадании","Числа урона","Освещение"]
+	g.panel(Rect2(125,15,390,330),Color("20372c"),Color("6c7e58"))
+	g.centered("НАСТРОЙКИ",49,20,g.INK,true)
+	var keys=["music","effects","fullscreen","camera_lead","shake","flashes","numbers","lighting"]
+	var labels=["Громкость музыки","Громкость эффектов","Полный экран · F11","Смещение камеры","Тряска камеры","Вспышки при попадании","Числа урона","Освещение"]
 	for i in range(keys.size()):
 		var key=keys[i]
-		var y=78+i*29
+		var y=66+i*27
 		g.text_at(labels[i],Vector2(146,y+15),10,g.INK)
 		if i<2:
 			g.button(Rect2(358,y,24,24),"−","volume_"+key+"_down")
 			g.text_at("%d%%" % roundi(g.settings[key]*100),Vector2(392,y+15),8,g.INK)
 			g.button(Rect2(468,y,24,24),"+","volume_"+key+"_up")
 		else:g.button(Rect2(408,y,84,24),"Вкл" if g.settings[key] else "Выкл",key)
-	g.button(Rect2(147,287,161,27),"Папка логов","logs")
-	g.button(Rect2(327,287,166,27),"Назад","back")
+	g.button(Rect2(147,300,161,27),"Папка логов","logs")
+	g.button(Rect2(327,300,166,27),"Назад","back")
 
 static func draw_multiplayer(g):
 	g.dim(.88)

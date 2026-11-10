@@ -32,7 +32,7 @@ func run():
 	game.set_process_input(false);game.set_process(false);game.set_physics_process(false);game.qa_mode="remains_review"
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360);game.settings.shake=false
 	game.action("chapter_1");game.world.reset(724);game.world.build={}
-	game.world.finale.begin(game.world);advance(4.1);game.world.finale.boss.hp=0;game.world.step(.02)
+	game.world.finale.begin(game.world);game.world.finale.skip_to_fight(game.world);advance(.1);game.world.finale.boss.hp=0;game.world.step(.02)
 	until("vanish");advance(1.6);var emerging=await render("after_wave")
 	var view=game.finale_renderer.duel.remains_view
 	check(is_instance_valid(view) and view.visible and body_pixels(emerging)>=12,"The damaged body is clearly visible while the clearing wave passes")
@@ -54,7 +54,7 @@ func run():
 	check(game.world.finale.complete and not game.world.victory and game.buttons.any(func(b):return b.id=="chapter_2"),"The original chapter ending and route into the Nether remain intact")
 	game.action("chapter_2");await render()
 	check(not view.visible,"The corpse layer stays hidden in another chapter")
-	game.action("chapter_1");game.world.build={};game.world.finale.begin(game.world);advance(4.1)
+	game.action("chapter_1");game.world.build={};game.world.finale.begin(game.world);game.world.finale.skip_to_fight(game.world);advance(.1)
 	game.world.hp=0;game.world.step(.02);advance(.9);var defeated=await render("ordinary_defeated")
 	check(body_pixels(defeated)>=35,"Ordinary death keeps Steve visible as the room darkens")
 	until("portal");advance(1);var ordinary=await render("ordinary_loss")

@@ -14,8 +14,92 @@ var moon_announced := false
 var phantoms_announced := false
 var slain: Dictionary = {}
 
+## The walk-in: Steve follows the path through the party gate, and the gap
+## grows shut behind him. Only main.gd starts it; tests begin at once.
+const INTRO_LENGTH := 11.6
+const INTRO_START := Vector2(1024, 2196)
+const INTRO_SIGN := Vector2(1024, 2062)
+const RUN_START := Vector2(1024, 1978)
+var intro_age := -1.0
+var gate_grow := 1.0
+var intro_step_timer := 0.0
+var intro_cues := 0
+
 func chapter_number() -> int:
 	return 1
+
+func begin_intro():
+	state = "INTRO"
+	intro_age = 0.0
+	gate_grow = 0.0
+	intro_cues = 0
+	intro_step_timer = 0.0
+	player = INTRO_START
+	facing = Vector2.UP
+
+func skip_intro():
+	if state != "INTRO":
+		return
+	finish_intro()
+
+func finish_intro():
+	player = RUN_START
+	facing = Vector2.UP
+	gate_grow = 1.0
+	intro_age = -1.0
+	player_moving = false
+	state = "RUNNING"
+	update_flow()
+
+func intro_cue(bit: int, at: float, id: String) -> bool:
+	if intro_age >= at and not (intro_cues & (1 << bit)):
+		intro_cues |= 1 << bit
+		if not id.is_empty():
+			sound(id, 0.02)
+		return true
+	return false
+
+func intro_step(dt: float):
+	clock += dt
+	intro_age += dt
+	var a: float = intro_age
+	var old: Vector2 = player
+	if a < 3.8:
+		player = INTRO_START.lerp(INTRO_SIGN, smoothstep(0.0, 1.0, a / 3.8) * 0.3 + a / 3.8 * 0.7)
+		facing = Vector2.UP
+	elif a < 5.6:
+		player = INTRO_SIGN
+		facing = Vector2(-0.6, -1).normalized()
+	elif a < 7.6:
+		player = INTRO_SIGN.lerp(RUN_START, (a - 5.6) / 2.0)
+		facing = Vector2.UP
+	else:
+		player = RUN_START
+		facing = Vector2.DOWN if a < 9.8 else Vector2.UP
+	gate_grow = smoothstep(7.5, 8.9, a)
+	intro_cue(0, 7.55, "ch1_fence_grow")
+	intro_cue(1, 7.7, "ch1_wood_place")
+	intro_cue(2, 8.1, "ch1_wood_place")
+	intro_cue(3, 8.5, "ch1_wood_place")
+	intro_cue(4, 8.95, "ch1_fence_grow")
+	player_visual.travel = player.distance_to(old)
+	player_moving = player_visual.travel > 0.0001
+	if player_moving:
+		intro_step_timer -= dt
+		if intro_step_timer <= 0:
+			intro_step_timer = 0.42
+			sound("ch1_step", 0.1)
+	animation.advance(self, dt)
+	update_particles(dt)
+	if a >= INTRO_LENGTH:
+		finish_intro()
+
+func camera() -> Vector2:
+	if state == "INTRO":
+		var normal: Vector2 = RUN_START.clamp(VIEW / 2.0, Vector2.ONE * SIZE - VIEW / 2.0)
+		var follow := Vector2(1024, maxf(normal.y, player.y - 34))
+		return follow.lerp(normal, smoothstep(INTRO_LENGTH - 2.0, INTRO_LENGTH - 0.2, intro_age))
+	return super.camera()
 
 func reset(seed_value: int = 0):
 	landmarks.clear()
@@ -27,6 +111,8 @@ func reset(seed_value: int = 0):
 	moon_announced = false
 	phantoms_announced = false
 	slain.clear()
+	intro_age = -1.0
+	gate_grow = 1.0
 	super.reset(seed_value)
 	night = db.data.night
 	var extra: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/v2_assets.json"))
@@ -192,6 +278,9 @@ func spawn(kind: String, at = null) -> bool:
 # ------------------------------------------------------------------ new mobs
 
 func step(dt: float, movement: Vector2 = Vector2.ZERO):
+	if state == "INTRO":
+		intro_step(dt)
+		return
 	super.step(dt, movement)
 	for m in mobs:
 		if m.kind == "witch":

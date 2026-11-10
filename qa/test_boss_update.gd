@@ -74,15 +74,15 @@ func run():
 	check(not c.win_music and c.boss_victory_serial==0,"Miniboss deaths do not start chapter-victory audio")
 	c.reset(724);c.finale.begin(c);var f=c.finale
 	check(f.has_method("duel_phase") and f.boss.hp==5200 and c.mobs.size()==1,"Solo Herobrine begins as a damageable first-stage boss")
-	advance(c,4.1);c.rebuild_hit_grid();var before=f.boss.hp;c.hurt(f.boss,40)
+	f.skip_to_fight(c);advance(c,.1);c.rebuild_hit_grid();var before=f.boss.hp;c.hurt(f.boss,40)
 	check(f.boss.hp==before-40,"Ordinary weapon damage reduces Herobrine health")
 	var wave={"gap":0.0,"radius":100.0}
 	check(not f.wave_active(0,wave) and not f.wave_active(PI,wave) and f.wave_active(PI/2,wave),"Fire rings have two real collision-free openings")
 	c.invulnerable=0;c.hp=1;f.hit(c,3)
 	check(c.hp<=0,"First-stage damage is no longer clamped to one remaining HP")
-	c.reset(724);c.finale.begin(c);f=c.finale;advance(c,4.1);f.boss.hp=0;c.step(.016)
+	c.reset(724);c.finale.begin(c);f=c.finale;f.skip_to_fight(c);advance(c,.1);f.boss.hp=0;c.step(.016)
 	check(f.phase=="rising" and not c.win_music and not c.sounds.has("boss_win"),"Optional first-stage win starts the rise without a victory stinger")
-	advance(c,3.25);advance(c,.55)
+	advance(c,3.25);advance(c,f.DESCEND_LENGTH+.4);advance(c,.55)
 	check(f.teleported and c.player==f.KNEEL_AT,"Second stage teleports the hero before kneeling")
 	advance(c,1)
 	check(f.phase=="kneel","The authored sequence includes a separate kneeling phase")

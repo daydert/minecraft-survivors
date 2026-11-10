@@ -5,7 +5,7 @@ var intro=preload("res://scripts/ghast_intro_renderer.gd").new()
 func ground(g, offset: Vector2):
 	var w=g.world
 	if w.stage in ["survival","departure"]:
-		g.draw_texture_rect_region(g.textures.nether_ground,Rect2(0,0,640,360),Rect2(w.camera()-Vector2(320,180),Vector2(640,360)))
+		g.draw_texture_rect_region(g.textures.nether_ground,Rect2(0,0,640,360),Rect2(-offset,Vector2(640,360)))
 	else:
 		g.draw_rect(Rect2(0,0,640,360),Color("150e11"))
 		var p: Vector2=(w.ARENA.position+offset).floor()

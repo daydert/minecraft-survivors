@@ -37,7 +37,7 @@ func run():
 	audio.set_music_context("",false);audio._process(1)
 	check(audio.music.stream.loop and not audio.music.stream_paused and not audio.boss_music.playing,"Menu restores normal playback after either boss")
 	for stream in audio.playlist:
-		check(stream.get_length()>260 and stream is AudioStreamOggVorbis,"Playlist contains a complete decodable Vorbis track")
+		check(stream.get_length()>240 and stream is AudioStreamOggVorbis,"Playlist contains a complete decodable Vorbis track")
 	check(absf(audio.wither_music.stream.get_length()-67.78365)<.02,"Wither theme retains the full supplied duration")
 	audio.update_volumes(.4,.6)
 	audio.play("boss_win")

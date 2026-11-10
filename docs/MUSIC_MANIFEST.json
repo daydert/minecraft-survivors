@@ -15,12 +15,12 @@
     ]
   },
   "music_3": {
-    "source": "/home/daydert/Downloads/Telegram Desktop/Music3.mp3",
-    "source_sha256": "2632c05745ed281cce0da50434607c3ec934edde540b2559638b1b42999dfead",
+    "source": "/home/daydert/Downloads/ost3.ogg",
+    "source_sha256": "4102293fd60a49d7a398bdff0aedc75795a161ebad25a60e3c654f26998b63c7",
     "path": "assets/audio/music_3.ogg",
-    "sha256": "08bbda33c3361f5356365c71fb7bf94daf1b7c0695aa1610998065c376a26007",
-    "byte_identical": false,
-    "duration": 270.024853,
+    "sha256": "4102293fd60a49d7a398bdff0aedc75795a161ebad25a60e3c654f26998b63c7",
+    "byte_identical": true,
+    "duration": 243.509615,
     "streams": [
       {
         "codec_name": "vorbis",

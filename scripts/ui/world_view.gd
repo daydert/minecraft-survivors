@@ -2,6 +2,7 @@ extends RefCounted
 ## World layer of chapter I / II and coop: terrain, actors, projectiles and effects.
 const Lighting = preload("res://scripts/ui/lighting.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
+const ChapterOne = preload("res://scripts/chapter_one_view.gd")
 
 static func draw_world(g):
 	if g.is_four():g.four_renderer.world(g);return
@@ -13,29 +14,26 @@ static func draw_world(g):
 	var cam = g.world.camera()
 	if g.world.state == "MENU": cam = Vector2(1024+sin(g.ui_time*0.06)*32,1024+cos(g.ui_time*0.08)*24)
 	var offset = Vector2(320,180)-cam.floor()
-	if not g.coop.active and not g.world.finale.active and (not g.is_nether() or g.world.stage=="survival"):offset-=g.cam_lead.round()
-	if g.world.shake > 0 and g.settings.shake and g.world.state in ["RUNNING","FINALE"]: offset += Vector2(sin(g.world.clock*75),cos(g.world.clock*87)).round()*1.5
+	if g.settings.get("camera_lead",false) and g.world.state!="MENU" and not g.coop.active and not g.world.finale.active and (not g.is_nether() or g.world.stage=="survival"):offset-=g.cam_lead.round()
+	if g.world.shake > 0 and g.settings.shake and g.world.state in ["RUNNING","FINALE"]: offset += (Vector2(sin(g.world.clock*75),cos(g.world.clock*87)).round()*1.5).round()
+	offset=offset.round()
 	if g.is_nether():g.nether_renderer.ground(g,offset)
 	elif g.textures.has("ground"):
-		g.draw_texture_rect_region(g.textures.ground,Rect2(Vector2.ZERO,Vector2(640,360)),Rect2(cam-Vector2(320,180),Vector2(640,360)))
+		g.draw_texture_rect_region(g.textures.ground,Rect2(Vector2.ZERO,Vector2(640,360)),Rect2(-offset,Vector2(640,360)))
 	else: g.draw_rect(Rect2(0,0,640,360),Color("40563a"))
+	if not g.is_nether():ChapterOne.ground(g,offset)
 	if g.world.finale.active:
-		g.draw_texture_rect_region(g.textures.ground_scorched,Rect2(0,0,640,360),Rect2(cam-Vector2(320,180),Vector2(640,360)),Color(1,1,1,g.world.finale.scorch()))
+		g.draw_texture_rect_region(g.textures.ground_scorched,Rect2(0,0,640,360),Rect2(-offset,Vector2(640,360)),Color(1,1,1,g.world.finale.scorch()))
 	if not g.is_nether():Atmosphere.overworld_grass(g,offset)
 	if "water" in g.world and not g.world.water.is_empty():draw_water(g,offset)
-	# Short rail fence and dense forest at the edge of a finite arena.
-	for side in range(4):
-		for j in range(64):
-			var p = Vector2(24+j*32,22) if side == 0 else (Vector2(24+j*32,2026) if side == 1 else (Vector2(22,24+j*32) if side == 2 else Vector2(2026,24+j*32)))
-			var s = p + offset
-			if not Rect2(-40,-60,720,480).has_point(s): continue
-			if g.is_nether():
-				g.sprite("nether_pillar_"+str(j%3),s-Vector2(32,50))
-				continue
-			g.sprite(("tree_dead_" if g.world.finale.active and g.world.finale.scorch()>.2 else "tree_")+str(j%3),s-Vector2(32,50))
-			g.draw_line(s+Vector2(-16,-1),s+Vector2(16,-1),Color("9b8758"),3)
-			g.draw_line(s+Vector2(-16,3),s+Vector2(16,3),Color("6f603f"),2)
-			g.draw_rect(Rect2(s+Vector2(-2,-7),Vector2(4,13)),Color("b09a68"))
+	# Oak fence around the field; the Nether keeps its pillars.
+	if g.is_nether():
+		for side in range(4):
+			for j in range(64):
+				var p = Vector2(24+j*32,22) if side == 0 else (Vector2(24+j*32,2026) if side == 1 else (Vector2(22,24+j*32) if side == 2 else Vector2(2026,24+j*32)))
+				var s = p + offset
+				if Rect2(-40,-60,720,480).has_point(s):g.sprite("nether_pillar_"+str(j%3),s-Vector2(32,50))
+	else:ChapterOne.border(g,offset)
 	if g.is_nether():g.nether_renderer.floor_effects(g,offset)
 	for o in g.world.orbs:
 		var p: Vector2 = o.p+offset
@@ -63,6 +61,9 @@ static func draw_world(g):
 			g.draw_line(p+edge,p+dir*160+edge,Color("deab76"),1)
 	var actors: Array = []
 	if g.world.finale.active:actors.append({"sort":g.world.finale.CENTER.y+18,"kind":"throne"})
+	if not g.is_nether() and offset.y+ChapterOne.FENCE_S<460:actors.append({"sort":ChapterOne.FENCE_S,"kind":"south_fence"})
+	if g.world.finale.active and g.world.finale.has_method("small_visible") and g.world.finale.small_visible():actors.append({"sort":g.world.finale.hb_p.y,"kind":"small_hb"})
+	if g.world.finale.active and g.world.finale.has_method("small_visible") and not g.world.finale.villager.is_empty():actors.append({"sort":g.world.finale.villager.p.y,"kind":"villager"})
 	for obj in g.world.props:
 		if obj.type == "pumpkin" and obj.hp <= 0: continue
 		if g.world.finale.active and g.world.finale.scorch()>.65 and obj.type in ["flowers","pumpkin","stump"]:continue
@@ -83,6 +84,9 @@ static func draw_world(g):
 	for actor in actors:
 		if actor.kind=="throne":
 			g.finale_renderer.stage(g,offset)
+		elif actor.kind=="south_fence":ChapterOne.south(g,offset)
+		elif actor.kind=="small_hb":g.finale_renderer.duel.small_herobrine(g,offset)
+		elif actor.kind=="villager":g.finale_renderer.duel.villager(g,offset)
 		elif actor.kind=="landmark":
 			var mark=actor.obj
 			var anchor: Vector2={"ruin_0":Vector2(52,60),"ruin_1":Vector2(52,60),"well":Vector2(32,52),"mine_entrance":Vector2(48,60),"bastion":Vector2(96,104)}[mark.kind]
@@ -125,6 +129,7 @@ static func draw_world(g):
 		elif actor.kind == "mob":
 			var m = actor.obj
 			if m.kind=="herobrine":continue
+			if m.kind=="ch1_crawler":g.finale_renderer.duel.crawler(g,m,offset);continue
 			var tint = Color.WHITE
 			if g.settings.flashes and (m.flash>0 or (m.kind=="creeper" and m.fuse>=0 and fmod(g.world.clock,0.16)<0.08)): tint = Color(1.8,1.8,1.8)
 			if g.is_nether() and m.kind=="wither":g.nether_renderer.boss(g,m,offset)
@@ -168,6 +173,7 @@ static func draw_world(g):
 	Atmosphere.collect(g,offset)
 	Lighting.draw(g,offset)
 	Atmosphere.after_lighting(g,offset)
+	if g.world.state=="INTRO":ChapterOne.intro_overlay(g)
 	if "bastion" in g.world and g.world.bastion.get("state","") in ["open","assault"] and not g.world.visible(g.world.bastion.p,0):
 		var dir: Vector2 = g.world.camera().direction_to(g.world.bastion.p)
 		var q: Vector2 = Vector2(320,180)+dir*Vector2(292,134)

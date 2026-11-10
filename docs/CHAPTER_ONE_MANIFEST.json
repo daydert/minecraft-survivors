@@ -1,0 +1,303 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    },
+    "textures/entity/villager/villager.png": {
+      "sha256": "ac6a775858c742fecd5dd18e8f99f308701650e770d30da97773daab92b6f5bd",
+      "bytes": 700
+    },
+    "textures/entity/villager/type/plains.png": {
+      "sha256": "54ea90f039d36436afb94bdb56a4a332746d3390a483db9765e3f651c53b619d",
+      "bytes": 686
+    },
+    "textures/entity/creeper/creeper.png": {
+      "sha256": "e5f1cbe223f6838049e4632b250cad7b70c1d30e9717ad7bfe32912731887283",
+      "bytes": 2832
+    },
+    "textures/block/red_concrete_powder.png": {
+      "sha256": "39f9bb7a9f0e11986b65cec8bb58252405f26f048ee3c62397038e3a0eff9e1d",
+      "bytes": 564
+    },
+    "textures/block/mushroom_stem.png": {
+      "sha256": "9633dd875492cf5240be3e2442e4729c2350912f4b0b565c9f01640195466401",
+      "bytes": 170
+    },
+    "textures/block/bone_block_side.png": {
+      "sha256": "548c772217b2dea162d70a604ada5352457da3d6b9d9b53762cc15e4ac2667b9",
+      "bytes": 139
+    },
+    "textures/block/coal_block.png": {
+      "sha256": "4987dbd954475908df08f13e8114510285825fb8c189263317d4a0c1bf78b030",
+      "bytes": 177
+    },
+    "textures/block/oak_planks.png": {
+      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+      "bytes": 195
+    },
+    "textures/block/dirt_path_top.png": {
+      "sha256": "653ab9be45372827da221f787435e2ad5adddc6257c29d45fe56947963784ac3",
+      "bytes": 170
+    },
+    "textures/entity/signs/oak.png": {
+      "sha256": "c7499514fe10875fa9d0433282a7b27405cc2358bc64b250745e3891ee5be0b0",
+      "bytes": 426
+    }
+  },
+  "derived": {
+    "ch1_hb_calm": {
+      "sources": [
+        "entity/player/wide/steve (white eyes, calm mouth texels)"
+      ],
+      "size": [
+        3456,
+        224
+      ],
+      "sha256": "c6c968ecc1741df7d1e6e3add7a8c46ae03ed095fe41edb98b7c831f6009a50a"
+    },
+    "ch1_hb_smile": {
+      "sources": [
+        "entity/player/wide/steve (white eyes, smile mouth texels)"
+      ],
+      "size": [
+        3456,
+        224
+      ],
+      "sha256": "0cd71e526702aba3739f6fc5afd92279d29985b7c93ea90d6648145dfc1d2407"
+    },
+    "ch1_hb_rage": {
+      "sources": [
+        "entity/player/wide/steve (white eyes, rage mouth texels)"
+      ],
+      "size": [
+        3456,
+        224
+      ],
+      "sha256": "7a07d2f040b309c6a83b9607fe7ef46fb1520225a461f5b4e0d4c45cdd7c9bf0"
+    },
+    "ch1_steve": {
+      "sources": [
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        1152,
+        224
+      ],
+      "sha256": "74a82b0fb681e8ea643e0c89f4dc230cb806b6e84e26588932cac85f190ef5e7"
+    },
+    "ch1_steve_holed": {
+      "sources": [
+        "entity/player/wide/steve (chest cut through)"
+      ],
+      "size": [
+        1152,
+        224
+      ],
+      "sha256": "b8de846d1fdb2177b4c5b4997a31c4d655c5cf0b414433ee74cccb1d3fc217af"
+    },
+    "ch1_villager_twist": {
+      "sources": [
+        "entity/villager/villager",
+        "entity/villager/type/plains"
+      ],
+      "size": [
+        864,
+        56
+      ],
+      "sha256": "aa64f8a81c69e275f0e313406e562a788164383789c3e6ea40c278e70c78f264"
+    },
+    "ch1_crawler": {
+      "sources": [
+        "entity/villager/villager"
+      ],
+      "size": [
+        320,
+        96
+      ],
+      "sha256": "5d545ece7847860f54d53527aa28d775eec3f56297dc1aa9760feaf281e0ee93"
+    },
+    "ch1_fence_post": {
+      "sources": [
+        "block/oak_planks"
+      ],
+      "size": [
+        12,
+        24
+      ],
+      "sha256": "5fc37d9f977650d62e4ab17e6638a5679da206ee7860d1a66b1296511d2e33bc"
+    },
+    "ch1_fence_rail": {
+      "sources": [
+        "block/oak_planks"
+      ],
+      "size": [
+        32,
+        24
+      ],
+      "sha256": "9b3b143cd2f889ee5a8e1f16ddc061a329a60fa2aac65d9348d0d12e8d336957"
+    },
+    "ch1_planks": {
+      "sources": [
+        "block/oak_planks"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3391269efa615afa227191c82b0ff9b8123bebba1b86182d621273d5f160f4c8"
+    },
+    "ch1_path": {
+      "sources": [
+        "block/dirt_path_top"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "0be0d864639cbf9c1a7de53db175d53175aadb2ade6d027f342e07953fee5d93"
+    },
+    "ch1_sign": {
+      "sources": [
+        "entity/signs/oak"
+      ],
+      "size": [
+        26,
+        14
+      ],
+      "sha256": "ab455b3ca17a19d88af20fd88ded52097f90f073c40f2fcbfa8508c9ddda620c"
+    }
+  },
+  "sound_files": {
+    "mob_villager_hit1.ogg": {
+      "source": "minecraft/sounds/mob/villager/hit1.ogg",
+      "sha256": "b3b490739a3ab8635b9c3ff12dc1e6d7f7affe005507acb473027cf2d0308b5d"
+    },
+    "mob_villager_hit2.ogg": {
+      "source": "minecraft/sounds/mob/villager/hit2.ogg",
+      "sha256": "0634c40cd179749244035bd6f19a428a9b805994f007dacb263cc6d14cc30dc9"
+    },
+    "mob_villager_hit3.ogg": {
+      "source": "minecraft/sounds/mob/villager/hit3.ogg",
+      "sha256": "08b0502aa147804386a06ade071503405e3d18594979aaf90d0b76ffeee5f08b"
+    },
+    "mob_villager_hit4.ogg": {
+      "source": "minecraft/sounds/mob/villager/hit4.ogg",
+      "sha256": "e6f9514fc0fe3f2325cc89a0d502bb8cd017bfc1135fc5c71e448f7e47e60089"
+    },
+    "mob_villager_no1.ogg": {
+      "source": "minecraft/sounds/mob/villager/no1.ogg",
+      "sha256": "3bcb42d9d2ab6c7dd92c745c24ef17cfecec1bba4f87999ab57fb5b61e5f3bb4"
+    },
+    "mob_villager_no2.ogg": {
+      "source": "minecraft/sounds/mob/villager/no2.ogg",
+      "sha256": "9e115a015ba0d03adc53be61abf0f3810108fc1e1025463adc82761c52f7247e"
+    },
+    "mob_villager_no3.ogg": {
+      "source": "minecraft/sounds/mob/villager/no3.ogg",
+      "sha256": "aa3e0bf89a529d5e354f190ad88b5fced6bc3d33262910490602a1008f17b292"
+    },
+    "dig_wood1.ogg": {
+      "source": "minecraft/sounds/dig/wood1.ogg",
+      "sha256": "313dbced391ecb42a63c85bc874b7fa226215acabadf5069e223dff6c5ebad99"
+    },
+    "dig_wood2.ogg": {
+      "source": "minecraft/sounds/dig/wood2.ogg",
+      "sha256": "76685444e4e4bb0f62cc8347866ed3eab5e1fe6a55fbd217edc2e7a66b50a6e7"
+    },
+    "dig_wood3.ogg": {
+      "source": "minecraft/sounds/dig/wood3.ogg",
+      "sha256": "6b439a67286d392e3a7bc96f67ea51ed17aa8d22610f243249df88d4ba5aa9e7"
+    },
+    "dig_wood4.ogg": {
+      "source": "minecraft/sounds/dig/wood4.ogg",
+      "sha256": "b8a75c1b0658d0bc4e0e8e2d44585182feda102551e266fd42490034cc08c4f5"
+    },
+    "block_fence_gate_close1.ogg": {
+      "source": "minecraft/sounds/block/fence_gate/close1.ogg",
+      "sha256": "d45736a8eb5be0d0b3ec64d9eeec372e948ccd3dc0c650f70df0cc0de97d9c45"
+    },
+    "block_fence_gate_close2.ogg": {
+      "source": "minecraft/sounds/block/fence_gate/close2.ogg",
+      "sha256": "871a3aeb29ad42995659e444af2c16a985499c535e45c014375db2494024fa0d"
+    },
+    "step_grass1.ogg": {
+      "source": "minecraft/sounds/step/grass1.ogg",
+      "sha256": "c1b8f2bc316d7747b8bee882863a0f99c1e098a42e0bb9c845d1a26518e030e0"
+    },
+    "step_grass2.ogg": {
+      "source": "minecraft/sounds/step/grass2.ogg",
+      "sha256": "569994e55dd74d1afd032b909e596f6a8c1f30b7fb52b51109aac0e712f7a3f7"
+    },
+    "step_grass3.ogg": {
+      "source": "minecraft/sounds/step/grass3.ogg",
+      "sha256": "6bffe2b44871fb50cb5f4555985268237997b00bfe84f8bee229ce10403500bf"
+    },
+    "step_grass4.ogg": {
+      "source": "minecraft/sounds/step/grass4.ogg",
+      "sha256": "5231ab247fb8662decbb82596bebd5423f4f1e6f2fcfb74f4acf35a8b2482843"
+    },
+    "step_grass5.ogg": {
+      "source": "minecraft/sounds/step/grass5.ogg",
+      "sha256": "8dbca599a34e6b7450f3aaffcc05242b31df90d7c10374204e4f267d902444dd"
+    },
+    "step_grass6.ogg": {
+      "source": "minecraft/sounds/step/grass6.ogg",
+      "sha256": "a005880a296487f2b8e97a9cb9ca0cf58869d89ea143d7e4d0379c90830e3817"
+    },
+    "mob_zombie_villager_hurt1.ogg": {
+      "source": "minecraft/sounds/mob/zombie_villager/hurt1.ogg",
+      "sha256": "95f875c36cd32e748d5abdd9378d4572b4a00aac2e81e842549b44256cc97cbc"
+    },
+    "mob_zombie_villager_hurt2.ogg": {
+      "source": "minecraft/sounds/mob/zombie_villager/hurt2.ogg",
+      "sha256": "ae12d2f8f8b4910b111a997847c4ea7be99e662b8a02e22634f55929512ecfb6"
+    },
+    "item_trident_ground_impact1.ogg": {
+      "source": "minecraft/sounds/item/trident/ground_impact1.ogg",
+      "sha256": "9bf9cb5eb0078fbcf6f279d32ebe3adf6757aaf6c5fccf971343dd0937c5d0c5"
+    },
+    "item_trident_ground_impact2.ogg": {
+      "source": "minecraft/sounds/item/trident/ground_impact2.ogg",
+      "sha256": "4f3a8f4355c94f4d52d025e19efd412258529b4343bb3ceebd79fcbfe4676b85"
+    },
+    "item_trident_ground_impact3.ogg": {
+      "source": "minecraft/sounds/item/trident/ground_impact3.ogg",
+      "sha256": "db2cbe9f34e6c478388fcfb5229854681779350001a2b910c5bb7504d10bc72d"
+    },
+    "item_trident_ground_impact4.ogg": {
+      "source": "minecraft/sounds/item/trident/ground_impact4.ogg",
+      "sha256": "26d4cca65bd996e62e5e592a51e77cb50e6fd139183ba49d92ccf4c1bcab8ee3"
+    },
+    "entity_player_attack_sweep1.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep1.ogg",
+      "sha256": "37cfe39d4d85697e1431af93f045e94ccb78578bacb6e9ce52f6fbc91d7a417f"
+    },
+    "entity_player_attack_sweep2.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep2.ogg",
+      "sha256": "fa6ef1546275d20167e2e11591e93df5b8bfe8b87fe92b41609ce689350c4650"
+    },
+    "entity_player_attack_sweep3.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep3.ogg",
+      "sha256": "270a0f370684ed5435bc8984cf50985a8c10acd32c5a6d244ab6ed9161300485"
+    },
+    "entity_player_attack_sweep4.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep4.ogg",
+      "sha256": "246db3ef55af0bf7f570a085c668008382fa323fcd1187e9fba4c8f34c0c9bbc"
+    },
+    "entity_player_attack_sweep5.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep5.ogg",
+      "sha256": "379fb59765ff3325b30c74ca51261bb52308a416440d5ccec9502b264b73f18f"
+    },
+    "entity_player_attack_sweep6.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep6.ogg",
+      "sha256": "afee5cd1f4ea7c7bc40aa1ad081c83945eda95f7626d21f4499c5d07d7f8974e"
+    },
+    "entity_player_attack_sweep7.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep7.ogg",
+      "sha256": "7b732b48bb4080f7fc1b3305102786dc7b679d4510066f177d87b9d02c3d95f6"
+    }
+  }
+}

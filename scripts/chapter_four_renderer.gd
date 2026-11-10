@@ -15,7 +15,7 @@ const ANCHORS = {"house": Vector2(56,66), "crucifix": Vector2(32,88), "growth": 
 func world(g):
 	var w = g.world
 	var offset: Vector2 = Vector2(320,180) - w.encounters.visual_camera(w,w.camera()).floor()
-	if w.stage == "survival" and w.encounters.current!="guardian":offset -= g.cam_lead.round()
+	if w.stage == "survival" and w.encounters.current!="guardian" and g.settings.get("camera_lead",false):offset -= g.cam_lead.round()
 	if w.shake > 0 and g.settings.shake and w.state == "RUNNING":offset += Vector2(sin(w.clock*75), cos(w.clock*87)).round()
 	if g.settings.shake:offset += w.fx.kick.round()
 	g.draw_texture_rect_region(g.textures.ch4_ground, Rect2(0,0,640,360), Rect2(-offset,Vector2(640,360)))

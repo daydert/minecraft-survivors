@@ -42,6 +42,7 @@ func move_mobs(dt: float):
 	super.move_mobs(dt)
 
 func hurt(m: Dictionary, amount: float, push: Vector2=Vector2.ZERO):
+	if m.get("dodge_all",false) and finale.has_method("dodge"):finale.dodge(self,m);return
 	if m.hp>0 and amount>0:damage_by[damage_owner]=damage_by.get(damage_owner,0.0)+minf(amount,m.hp)
 	super.hurt(m,amount,push)
 

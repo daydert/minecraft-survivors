@@ -35,7 +35,7 @@ func run():
 	game=load("res://scenes/main.tscn").instantiate();root.add_child(game)
 	game.set_process_input(false);game.set_process(false);game.set_physics_process(false);game.qa_mode="review"
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360);game.settings.shake=false
-	game.action("chapter_1");var old_world=game.world
+	game.action("chapter_1");game.world.skip_intro();var old_world=game.world
 	key(KEY_I);check(game.screen=="inventory","Ordinary I still opens the inventory")
 	key(KEY_ESCAPE);key(KEY_D,true);check(game.secret_keys.is_empty(),"Autorepeat cannot enter secret letters")
 	for code in [KEY_D,KEY_A,KEY_V,KEY_I,KEY_S]:key(code)
@@ -64,13 +64,13 @@ func run():
 	game.world.player-=Vector2(0,-18);game.world.player_wither=3
 	await render("bed_and_withered_hearts")
 	check(game.textures.has("heart_wither") and game.world.explosives[0].kind=="bed","Corrected vanilla bed and original withered hearts render together")
-	game.action("chapter_1");game.world.build={};game.world.finale.begin(game.world);advance(4.1)
-	game.world.hp=0;game.world.step(.02);await render("herobrine_loss")
+	game.action("chapter_1");game.world.build={};game.world.finale.begin(game.world);game.world.finale.skip_to_fight(game.world);advance(.1)
+	game.world.hp=0;game.world.step(.02);advance(game.world.finale.SHOW_LENGTH+.4);await render("herobrine_loss")
 	check(game.world.state=="FINALE" and game.world.finale.phase=="defeated","First-stage death keeps the story scene on screen")
 	until("fall");advance(2);await render("loss_fall_into_nether")
 	until("end");await render("loss_chapter_complete")
 	check(game.buttons.any(func(b):return b.id=="chapter_2") and not game.buttons.any(func(b):return b.id=="retry"),"Both outcomes lead to chapter II without the ordinary defeat screen")
-	game.action("chapter_1");game.world.build={};game.world.finale.begin(game.world);advance(4.1)
+	game.action("chapter_1");game.world.build={};game.world.finale.begin(game.world);game.world.finale.skip_to_fight(game.world);advance(.1)
 	game.world.finale.boss.hp=0;game.world.step(.02);until("rift")
 	advance(1.5);await render("rift_local")
 	advance(2.3);await render("rift_expanding")

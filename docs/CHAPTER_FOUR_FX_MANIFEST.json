@@ -49,6 +49,10 @@
     "textures/block/oak_planks.png": {
       "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
       "bytes": 195
+    },
+    "textures/block/glass.png.mcmeta": {
+      "sha256": "03ef274873ccbeae639bd58df2bf22261195588cc63f15a43c5107807cf6bcde",
+      "bytes": 61
     }
   },
   "derived": {
@@ -250,7 +254,7 @@
         16,
         16
       ],
-      "sha256": "2360842d5099f02056445c669bc67298b54f5d8110cf55e723778fa0f3a40231"
+      "sha256": "0b37fb4c5eca5cf8aec1383ef7b1bc5bd9ad4f8b691865d9d21f1ca852d318f7"
     },
     "icon_ch4_blood_pool_evo": {
       "sources": [
@@ -269,7 +273,7 @@
         16,
         16
       ],
-      "sha256": "1b3177a4abaa766d3f5ae0d7e2df25ac08c85e7daa6754312f6b5d9f77b1e2b5"
+      "sha256": "f6fafad720e1c6a79b3252f43860d311b1e900cdc7e232ed4226a40a8277401e"
     },
     "icon_ch4_embryo": {
       "sources": [

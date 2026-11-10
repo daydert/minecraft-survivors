@@ -45,6 +45,7 @@ func _ready():
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/achievement_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/v2_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_audio.json")),true)
+	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_one_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_external_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/end_external_audio.json")),true)
 	for path in ["music","music_2","music_3"]:

@@ -14,7 +14,7 @@ func run():
 				while w.stage!="wither":w.step(1.0/60)
 			var ticks=0;var movement=Vector2.ZERO
 			while ticks<60*180:
-				if chapter==1 and w.finale.phase not in ["arrival","storm","inferno"]:break
+				if chapter==1 and w.finale.phase not in ["arrival","greet","tease","throne","storm","inferno"]:break
 				if chapter==2 and (w.stage!="wither" or w.state=="RESULT"):break
 				if ticks%5==0:movement=bot.movement(w) if chapter==1 else bot.boss_movement(w,preset in [0,2])
 				w.step(1.0/60,movement);ticks+=1

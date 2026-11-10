@@ -1,0 +1,210 @@
+{
+  "ch1_villager_hurt": {
+    "minecraft_event": "entity.villager.hurt",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_villager_hit1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_villager_hit2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_villager_hit3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_villager_hit4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch1_villager_no": {
+    "minecraft_event": "entity.villager.no",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_villager_no1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_villager_no2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_villager_no3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch1_wood_place": {
+    "minecraft_event": "block.wood.place",
+    "gain": 0.8,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/dig_wood1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/dig_wood2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/dig_wood3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/dig_wood4.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch1_fence_grow": {
+    "minecraft_event": "block.fence_gate.close",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/block_fence_gate_close1.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/block_fence_gate_close2.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch1_step": {
+    "minecraft_event": "block.grass.step",
+    "gain": 0.35,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/step_grass1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/step_grass2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/step_grass3.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/step_grass4.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/step_grass5.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/step_grass6.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "hurt_ch1_crawler": {
+    "minecraft_event": "entity.zombie_villager.hurt",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/mob_zombie_villager_hurt1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/mob_zombie_villager_hurt2.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch1_parry": {
+    "minecraft_event": "item.trident.hit_ground",
+    "gain": 0.9,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/item_trident_ground_impact1.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/item_trident_ground_impact2.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/item_trident_ground_impact3.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/item_trident_ground_impact4.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch1_whoosh": {
+    "minecraft_event": "entity.player.attack.sweep",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep1.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep2.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep3.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep4.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep5.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep6.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/minecraft/entity_player_attack_sweep7.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      }
+    ]
+  }
+}

@@ -97,7 +97,8 @@ static func prepare_herobrine_capture(g):
 	g.world.reset(724)
 	g.world.build={}
 	g.world.finale.begin(g.world)
-	for i in range(4*60):g.world.step(1.0/60)
+	g.world.finale.skip_to_fight(g.world)
+	for i in range(6):g.world.step(1.0/60)
 	var target={"finale":"storm","portal":"portal","fall":"fall","chapter_end":"end","herobrine_seated":"storm","herobrine_rise":"rising","herobrine_kneel":"kneel","herobrine_rift":"rift","herobrine_wipe":"vanish","herobrine_loss":"fall","herobrine_end":"end"}.get(g.qa_mode,"storm")
 	if target!="storm":
 		if g.qa_mode=="herobrine_loss":g.world.hp=0

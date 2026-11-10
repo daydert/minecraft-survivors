@@ -11,7 +11,7 @@ func world(g):
 	if g.qa_mode=="end_scale":scale_review(g);return
 	var w=g.world
 	var offset=Vector2(320,180)-w.camera().floor()
-	if w.stage=="survival":offset-=g.cam_lead.round()
+	if w.stage=="survival" and g.settings.get("camera_lead",false):offset-=g.cam_lead.round()
 	if w.shake>0 and g.settings.shake and w.state=="RUNNING":offset+=Vector2(sin(w.clock*75),cos(w.clock*87)).round()*2
 	if g.settings.shake:offset+=w.fx.kick.round()
 	ground(g,offset)
@@ -449,7 +449,8 @@ func cinematic(g, offset: Vector2):
 	if w.stage=="betrayal":betrayal(g,offset,a)
 	if w.stage=="sit":closeup(g,a)
 	if w.stage=="dragon_arrival":title_card(g,a,"ЭНДЕР-ДРАКОН","хозяин этого острова")
-	if not w.npc.is_empty():ender_npc(g,offset)
+	var close_shot: bool=w.stage=="sit" and a>=.6 and a<=w.end_boss.SIT_LENGTH-.6
+	if not w.npc.is_empty() and not close_shot:ender_npc(g,offset)
 	if w.stage in ["end_arrival","departure","dragon_arrival","dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump","yield","to_edge","sit","restore"]:
 		var bars=18.0
 		if w.stage in ["dragon_arrival","last_arrival","end_arrival"]:bars*=1-smoothstep(1,3.9 if w.stage=="dragon_arrival" else 2.2,a)
@@ -630,8 +631,10 @@ func subtitles(g):
 	var shown: int=mini(l.text.length(),int(l.age*28))
 	var alpha: float=minf(1,l.age/.2)*(1-smoothstep(l.life-.35,l.life,l.age))
 	var width: float=g.font.get_string_size(l.text,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
-	g.draw_rect(Rect2(320-width/2-10,316,width+20,18),Color(0,0,0,.55*alpha))
-	g.text_at(l.text.substr(0,shown),Vector2(320-width/2,329),8,Color(.88,.78,1,alpha))
+	# Above the hearts and hotbar while the HUD is up.
+	var y: float=276.0 if w.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"] else 316.0
+	g.draw_rect(Rect2(320-width/2-10,y,width+20,18),Color(0,0,0,.55*alpha))
+	g.text_at(l.text.substr(0,shown),Vector2(320-width/2,y+13),8,Color(.88,.78,1,alpha))
 
 
 ## His presence: a purple glow around the silhouette and flames rising off it,

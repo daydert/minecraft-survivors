@@ -152,7 +152,7 @@ def thorns(t):
 
 def blood_pool(t, evo=False):
     i = Icon();b, bone = t["blood"], t["bone"]
-    i.ellipse((0, 8), (15, 14), b[1], BLOOD);i.ellipse((2, 9), (12, 12), b[2], BLOOD);i.ellipse((4, 10), (9, 12), b[0], BLOOD)
+    i.ellipse((1, 8), (14, 14), b[1], BLOOD);i.ellipse((3, 9), (12, 12), b[2], BLOOD);i.ellipse((4, 10), (9, 12), b[0], BLOOD)
     i.line((3, 9), (7, 9), b[3], 1, BLOOD)
     if evo:
         for x, h in [(4, 5), (8, 7), (11, 4)]:

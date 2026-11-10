@@ -25,7 +25,7 @@ func run():
 	game.settings.shake=false
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360)
 	game.action("chapter_1");game.world.reset(724);game.world.build={}
-	game.world.finale.begin(game.world);advance(4.2)
+	game.world.finale.begin(game.world);game.world.finale.skip_to_fight(game.world);advance(.1)
 	await render("herobrine_seated")
 	check(game.world.finale.phase=="storm","Solo encounter renders its first stage")
 	game.world.finale.fight_age=16

@@ -1,0 +1,166 @@
+{
+  "sprites": [
+    "ch1_hb_calm",
+    "ch1_hb_smile",
+    "ch1_hb_rage",
+    "ch1_steve",
+    "ch1_steve_holed",
+    "ch1_villager_twist",
+    "ch1_crawler",
+    "ch1_fence_post",
+    "ch1_fence_rail",
+    "ch1_planks",
+    "ch1_path",
+    "ch1_sign"
+  ],
+  "frame": [
+    48,
+    56
+  ],
+  "anchor": [
+    24,
+    50
+  ],
+  "herobrine": {
+    "idle": {
+      "start": 0,
+      "count": 4
+    },
+    "walk": {
+      "start": 4,
+      "count": 8
+    },
+    "stroll": {
+      "start": 12,
+      "count": 8
+    },
+    "wave": {
+      "start": 20,
+      "count": 6
+    },
+    "laugh": {
+      "start": 26,
+      "count": 2
+    },
+    "shrug": {
+      "start": 28,
+      "count": 2
+    },
+    "dodge_l": {
+      "start": 30,
+      "count": 2
+    },
+    "dodge_r": {
+      "start": 32,
+      "count": 2
+    },
+    "sway": {
+      "start": 34,
+      "count": 3
+    },
+    "cast": {
+      "start": 37,
+      "count": 4
+    },
+    "snap": {
+      "start": 41,
+      "count": 3
+    },
+    "point": {
+      "start": 44,
+      "count": 2
+    },
+    "invite": {
+      "start": 46,
+      "count": 2
+    },
+    "knocked": {
+      "start": 48,
+      "count": 2
+    },
+    "stagger": {
+      "start": 50,
+      "count": 2
+    },
+    "twist": {
+      "start": 52,
+      "count": 6
+    },
+    "lift": {
+      "start": 58,
+      "count": 2
+    },
+    "donut_wind": {
+      "start": 60,
+      "count": 3
+    },
+    "donut": {
+      "start": 63,
+      "count": 2
+    },
+    "donut_hold": {
+      "start": 65,
+      "count": 2
+    },
+    "pull_out": {
+      "start": 67,
+      "count": 3
+    },
+    "aura": {
+      "start": 70,
+      "count": 2
+    }
+  },
+  "steve": {
+    "idle": {
+      "start": 0,
+      "count": 4
+    },
+    "walk": {
+      "start": 4,
+      "count": 8
+    },
+    "parry": {
+      "start": 12,
+      "count": 4
+    },
+    "knocked": {
+      "start": 16,
+      "count": 2
+    },
+    "guard": {
+      "start": 18,
+      "count": 1
+    },
+    "pierced": {
+      "start": 19,
+      "count": 2
+    },
+    "sag": {
+      "start": 21,
+      "count": 3
+    }
+  },
+  "twist": {
+    "frame": [
+      48,
+      56
+    ],
+    "anchor": [
+      24,
+      50
+    ],
+    "count": 18
+  },
+  "crawler": {
+    "frame": [
+      40,
+      32
+    ],
+    "anchor": [
+      20,
+      27
+    ],
+    "count": 8
+  }
+}

@@ -4,7 +4,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 SOURCES={
  'music_2':Path('/home/daydert/Downloads/Telegram Desktop/Music2.mp3'),
- 'music_3':Path('/home/daydert/Downloads/Telegram Desktop/Music3.mp3'),
+ 'music_3':Path('/home/daydert/Downloads/ost3.ogg'),
  'music_wither':ROOT/'builds/audio_2026-10-28_18-28-58.ogg',
  'boss_win':Path('/home/daydert/Downloads/Telegram Desktop/wineffect.ogg'),
  'music_victory':Path('/home/daydert/Downloads/Telegram Desktop/audio_2026-10-29_00-31-58.ogg'),
