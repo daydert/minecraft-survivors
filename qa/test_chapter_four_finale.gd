@@ -35,7 +35,24 @@ func run():
 		w.step(1.0/60)
 		if e.text_events.any(func(t):return t.text=="Ты опять здесь."):said=true
 	check(said,"Herobrine says «Ты опять здесь.» without surprise")
-	check(e.phase=="one" and e.fighting(),"Stage I begins after the introduction")
+	check(e.phase=="tower","The introduction ends with him raising a tower")
+	advance(w,2.0)
+	check(e.tower_h>=float(e.data.tower.height) and e.hb.get("perched",false) and e.candidates().is_empty(),"He stands on the tower out of reach")
+	w.hp=20;w.invulnerable=0;e.start_tower(w,"storm");w.player=e.marks[0].p;advance(w,float(e.data.tower.storm.windup)+.05)
+	check(w.hp<20,"The tower storm walks lightning onto the hero")
+	w.hp=20;w.invulnerable=0;e.waves.clear();e.start_tower(w,"waves");var wv: Dictionary=e.waves[0]
+	var away: Vector2=Vector2.from_angle(wv.gap+PI);w.player=wv.p+Vector2(away.x,away.y*0.5)*120.0;advance(w,120.0/float(e.data.tower.waves.speed)+.05)
+	check(w.hp<20,"Chapter I fire waves roll out from the foot of the tower")
+	w.player=wv.p+Vector2(cos(wv.gap),sin(wv.gap)*0.5)*200.0;w.hp=20;w.invulnerable=0;e.waves=[wv];advance(w,(200.0-wv.r)/float(e.data.tower.waves.speed)+.05)
+	check(w.hp==20,"The gap in a fire wave is a safe way through")
+	w.invulnerable=999
+	check(until(w,func():return e.phase=="vortex",90.0) and e.locked(),"The tower ends in the vortex from chapter I")
+	advance(w,float(e.data.vortex.cut)+.1)
+	check(e.vortex_cut,"The hero cuts the vortex open from inside")
+	check(until(w,func():return e.phase=="one",10.0) and e.fighting() and not e.hb.get("perched",false),"He comes down from the tower and stage I begins")
+	advance(w,3.0)
+	check(e.tower_h==0.0,"The tower sinks back into the ground")
+	w.invulnerable=0
 	w.rebuild_hit_grid()
 	check(w.in_radius(e.hb.p,30).has(e.hb),"Herobrine is a real target for every weapon")
 	var before=e.hb.hp;w.hurt(e.hb,100.0);check(e.hb.hp==before-100.0 and w.damage_by.get(w.damage_owner,0)>=100,"Hits damage Herobrine and are attributed")
@@ -125,7 +142,7 @@ func run():
 	until(w,func():return w.state=="RESULT",20.0)
 	check(w.state=="RESULT" and w.victory and w.build==e.stored.build,"Stepping through the door ends chapter IV with the build restored")
 	# Retry inside the fistfight
-	w=fresh();e=w.ending;advance(w,.1);w.player=e.center+Vector2(0,150);advance(w,9)
+	w=fresh();e=w.ending;advance(w,.1);w.player=e.center+Vector2(0,150);w.invulnerable=999;until(w,func():return e.phase=="one",120.0);w.invulnerable=0
 	w.hurt(e.hb,e.hb.hp+10);advance(w,7.2);e.day_done=[0,1];var full: int=w.build.size();w.hurt(e.hb,e.hb.hp+10)
 	advance(w,4.0);w.invulnerable=0;w.hp=0;w.step(1.0/60);advance(w,2.4)
 	check(e.phase=="last" and w.build.size()==full,"Dying in the last attack replays it with the gear restored")

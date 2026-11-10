@@ -417,6 +417,12 @@ static func prepare_four_finale_capture(g):
 	finale_run(w,.1);w.player=e.center+Vector2(0,150);finale_run(w,.05)
 	if mode=="intro":finale_run(w,4.0);return
 	w.invulnerable=999;finale_run(w,8.4)
+	if mode=="tower":finale_run(w,2.0);e.start_tower(w,"storm");finale_run(w,1.0);return
+	if mode=="tower_waves":finale_run(w,2.0);e.start_tower(w,"waves");finale_run(w,2.2);return
+	if mode.begins_with("vortex"):
+		while e.phase!="vortex":w.step(1.0/60)
+		finale_run(w,{"vortex":2.8,"vortex_cut":3.85,"vortex_down":5.9}[mode]);return
+	while e.phase!="one":w.step(1.0/60)
 	if mode.begins_with("one_"):
 		e.start(w,mode.trim_prefix("one_"))
 		finale_run(w,{"lightning":.6,"ring":1.2,"strike":.45}[mode.trim_prefix("one_")]);return
@@ -486,6 +492,12 @@ static func finale_pilot(w, e) -> Vector2:
 		if not m.hit and p.distance_to(m.p)<34:wish+=m.p.direction_to(p)*3
 	for ring in e.rings:
 		if ring.has("r"):wish=(ring.p+Vector2.from_angle(ring.gap)*(ring.r+30))-p;wish=wish.normalized()*2
+	for wv in e.waves:
+		if wv.age<0:continue
+		var flat: Vector2=Vector2(p.x-wv.p.x,(p.y-wv.p.y)*2.0)
+		if absf(flat.length()-wv.r)<46 and absf(angle_difference(flat.angle(),wv.gap))>.35:
+			var target: Vector2=wv.p+Vector2(cos(wv.gap),sin(wv.gap)*.5)*wv.r
+			wish=(target-p).normalized()*2
 	for lane in e.lanes:
 		var q: Vector2=Geometry2D.get_closest_point_to_segment(p,lane.a,lane.b)
 		if q.distance_to(p)<26:wish+=q.direction_to(p)*3

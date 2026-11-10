@@ -3,8 +3,13 @@
   "summit_trigger": 230,
   "giant": 2.0,
   "intro": {"duration": 8.2, "turn": [2.6, 4.2], "line_at": 4.6, "rise_at": 6.2},
+  "tower": {"at": [0, -140], "height": 64, "reach": 36, "rise": 1.6, "rest": 0.9,
+            "queue": ["storm", "waves", "storm", "waves", "inferno"],
+            "storm": {"chain": 8, "every": 0.14, "windup": 0.8, "radius": 22, "big": 3, "big_radius": 34, "big_delay": 1.25, "damage": 4},
+            "waves": {"count": 3, "every": 1.0, "speed": 120, "band": 10, "gap": 0.85, "damage": 3, "time": 4.6}},
+  "vortex": {"warp": 0.45, "grow": [0.5, 1.6], "squeeze": [0.9, 3.4], "cut": 3.7, "split": 3.95, "react": 4.9, "down": 5.8, "duration": 6.8, "at": [0, 30]},
   "one": {
-    "hp": 5200,
+    "hp": 4400,
     "radius": 15,
     "rest": [0.85, 1.4],
     "walk": 22, "keep": 80,
@@ -16,7 +21,7 @@
   },
   "kneel": {"duration": 6.8, "rise_at": 3.0, "line_at": 4.4},
   "two": {
-    "hp": 9000,
+    "hp": 7800,
     "rest": 1.05,
     "walk": 30,
     "angry_below": 0.34, "angry_speed": 1.2,

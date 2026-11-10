@@ -9,7 +9,7 @@ extends RefCounted
 ## to a man's size: the fistfight happens on what is left.
 var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_finale.json"))
 var rng := RandomNumberGenerator.new()
-var phase := ""            # summit intro one kneel two last erase three death coords road door done retry
+var phase := ""            # summit intro tower vortex one kneel two last erase three death coords road door done retry
 var age := 0.0
 var started := false
 var hb: Dictionary = {}
@@ -28,6 +28,11 @@ var path: Array = []       # blitz points
 var strips: Array = []     # rift strips
 var seam: Dictionary = {}
 var drops: Array = []      # heavy rain drops aimed at the hero
+var waves: Array = []      # tower: fire waves rolling out from its foot
+var tower_h := 0.0
+var tower_queue: Array = []
+var vortex_from := Vector2.ZERO
+var vortex_cut := false
 var beams: Array = []      # last attack: angles of the sweeping beams
 var beam_turn := 0.0
 var void_r := 0.0
@@ -76,7 +81,7 @@ func reset(w):
 	looked = false; face = "calm"; shadow_on = false; knife_gaps.clear(); void_r = 0.0; strip_index = 0
 	pose = "idle"; pose_age = 0.0; day_done.clear(); stored = {}; checkpoint = {}; qte_index = 0; qte = {}; presses.clear()
 	hold = false; steve_pose = "idle"; text_events.clear(); silence = false; music = ""; retry_from = ""; flash = 0.0; glitch = 0.0
-	hitstop = 0.0; impact_frame = 0.0; impacts.clear()
+	hitstop = 0.0; impact_frame = 0.0; impacts.clear(); waves.clear(); tower_h = 0.0; tower_queue.clear(); vortex_cut = false
 	road_index = 0; door_state = ""; spoken.clear(); head_at = -1.0; punch_at = -10.0
 	var pyramid := Vector2(w.terrain.pyramid[0], w.terrain.pyramid[1])
 	center = pyramid + Vector2(data.arena.offset[0], data.arena.offset[1])
@@ -88,14 +93,14 @@ func active() -> bool:
 
 ## Phases in which the world stands still: no spawns, weapons or free movement.
 func locked() -> bool:
-	return phase in ["intro", "kneel", "erase", "three", "death", "coords", "road", "door", "retry"]
+	return phase in ["intro", "vortex", "kneel", "erase", "three", "death", "coords", "road", "door", "retry"]
 
 func fighting() -> bool:
 	return phase in ["one", "two"]
 
 ## Phases in which his attacks can hurt the hero.
 func dangerous() -> bool:
-	return phase in ["one", "two", "last"]
+	return phase in ["tower", "one", "two", "last"]
 
 func scale() -> float:
 	return float(hb.get("scale", 1.0)) if not hb.is_empty() else 1.0
@@ -190,6 +195,15 @@ func camera(w) -> Vector2:
 		"intro":
 			var focus: Vector2 = hb.p + Vector2(0, 10)
 			return w.player.lerp(focus, smoothstep(0.4, 2.2, age) * (1.0 - smoothstep(7.2, 8.2, age) * 0.6))
+		"tower":
+			var feet: Vector2 = tower_base() - Vector2(0, tower_h)
+			var want: Vector2 = w.player.lerp(feet, 0.35)
+			want.y = clampf(want.y, feet.y + 40, feet.y + 75)
+			camera_at = camera_at.lerp(want, .08)
+			return camera_at
+		"vortex":
+			camera_at = camera_at.lerp(vortex_at().lerp(tower_base() - Vector2(0, tower_h + 30), 0.3), .06)
+			return camera_at
 		"one", "two":
 			var mid: Vector2 = (w.player + hb.p - Vector2(0, 30 * scale())) / 2 + Vector2(0, -10)
 			mid.x = clampf(mid.x, w.player.x - 230, w.player.x + 230); mid.y = clampf(mid.y, w.player.y - 120, w.player.y + 100)
@@ -231,6 +245,8 @@ func step(w, dt: float, movement: Vector2):
 		"summit":
 			if w.player.distance_to(center) < float(data.summit_trigger):start_intro(w)
 		"intro":step_intro(w)
+		"tower":step_tower(w, dt)
+		"vortex":step_vortex(w, dt)
 		"one", "two":step_fight(w, dt)
 		"kneel":step_kneel(w)
 		"last":step_last(w, dt)
@@ -244,7 +260,10 @@ func step(w, dt: float, movement: Vector2):
 		"road":step_road(w, dt)
 		"door":step_door(w, dt)
 	update_shots(w, dt)
-	if w.hp <= 0 and phase in ["one", "two", "last", "three"]:
+	if phase in ["one", "two"] and tower_h > 0:
+		tower_h = maxf(0.0, tower_h - dt * 70.0)
+		if tower_h == 0.0:tower_solid(w, false)
+	if w.hp <= 0 and phase in ["tower", "one", "two", "last", "three"]:
 		begin_retry(w)
 
 func step_intro(w):
@@ -269,6 +288,134 @@ func step_intro(w):
 		if not spoken.has("rise"):
 			spoken["rise"] = true; cast_fx(w, true); w.shake = .35; w.sound("ch4_hb_roar", .1); flash = .1
 	if age >= float(data.intro.duration):
+		begin_tower(w)
+
+# ------------------------------------------------------------------ the tower (a callback to chapter I)
+
+func tower_base() -> Vector2:
+	return center + Vector2(data.tower.at[0], data.tower.at[1])
+
+func vortex_at() -> Vector2:
+	return center + Vector2(data.vortex.at[0], data.vortex.at[1])
+
+func tower_solid(w, on: bool):
+	var base := tower_base()
+	var cell := Vector2i(base / 64.0)
+	if on:
+		if not w.solid_grid.has(cell):w.solid_grid[cell] = []
+		w.solid_grid[cell].append({"p": base, "r": 20.0, "rift": true, "tower": true})
+	elif w.solid_grid.has(cell):
+		w.solid_grid[cell] = w.solid_grid[cell].filter(func(o): return not o.get("tower", false))
+
+## He raises a tower out of the ground and rains chapter I down from it:
+## lightning that walks to the hero and fire waves rolling out from its foot.
+func begin_tower(w):
+	phase = "tower"; age = 0.0; face = "smile"; set_pose("cast"); music = "boss_one"; text_events.clear()
+	tower_queue = data.tower.queue.duplicate(); move = ""; move_age = 0.0; move_time = 0.0
+	hb.perched = false
+	w.sound("ch4_stone_rise", .1); w.sound("ch4_hb_roar", .1)
+	save_checkpoint(w, "tower")
+
+func step_tower(w, dt: float):
+	var t: Dictionary = data.tower
+	var rise: float = float(t.rise)
+	if age < rise:
+		tower_h = float(t.height) * smoothstep(0.0, rise, age); w.shake = maxf(w.shake, .12)
+		if age > rise * 0.75 and not hb.perched:
+			w.add_effect("ch4_hb_blink", hb.p, .45, {"dir": hb.visual_dir, "scale": scale()})
+			hb.p = tower_base(); hb.perched = true; hb.visual_dir = Vector2.DOWN
+			w.sound("ch4_hb_teleport", .1); tower_solid(w, true)
+		return
+	tower_h = float(t.height)
+	# The fight below the tower stays in sight of it.
+	w.player.y = minf(w.player.y, tower_base().y + float(t.reach) + 140.0)
+	hb.visual_dir = Vector2.DOWN if absf(hb.p.direction_to(w.player).x) < 0.7 else hb.p.direction_to(w.player)
+	move_age += dt
+	if move in ["storm", "inferno"]:step_storm(w)
+	if move in ["waves", "inferno"]:step_waves(w, dt)
+	if move == "rest":set_pose("aura")
+	if move_age >= move_time:
+		if move != "rest" and move != "":
+			begin_move(w, "rest", float(t.rest))
+		elif tower_queue.is_empty():
+			begin_vortex(w)
+		else:
+			start_tower(w, tower_queue.pop_front())
+
+func start_tower(w, name: String):
+	var t: Dictionary = data.tower
+	var duration := 0.0
+	cast_fx(w, name == "inferno"); set_pose("cast")
+	if name in ["storm", "inferno"]:
+		var s: Dictionary = t.storm
+		marks.clear()
+		var from := tower_base()
+		var dir: Vector2 = from.direction_to(w.player)
+		var n := int(s.chain)
+		for i in range(n):
+			var at: Vector2 = w.player + dir * (i - n * 0.6) * 26.0 + dir.orthogonal() * rng.randf_range(-10, 10)
+			marks.append({"p": at.clamp(arena.position, arena.end), "age": 0.0, "hit": false, "delay": i * float(s.every), "r": float(s.radius), "windup": float(s.windup)})
+		for i in range(int(s.big)):
+			var at: Vector2 = w.player + w.tracked_velocity * 0.5 + Vector2.from_angle(i * TAU / int(s.big) + rng.randf() * TAU) * 40.0
+			marks.append({"p": at.clamp(arena.position, arena.end), "age": 0.0, "hit": false, "delay": float(s.big_delay), "r": float(s.big_radius), "windup": float(s.windup)})
+		duration = float(s.big_delay) + float(s.windup) + 0.4
+		w.sound("ch4_hb_charge", .2)
+	if name in ["waves", "inferno"]:
+		var wv: Dictionary = t.waves
+		var base := tower_base()
+		var aim: float = Vector2(w.player.x - base.x, (w.player.y - base.y) * 2.0).angle()
+		for j in range(int(wv.count)):
+			waves.append({"p": base, "r": 0.0, "age": -j * float(wv.every), "gap": aim + (j % 2 * 2 - 1) * 0.7 * j})
+		duration = maxf(duration, float(wv.time))
+		w.sound("ch4_hb_fire", .2)
+	begin_move(w, name, duration)
+
+func step_storm(w):
+	for m in marks:
+		m.age = move_age - float(m.get("delay", 0.0))
+		if not m.hit and m.age >= float(m.windup):
+			m.hit = true
+			w.add_effect("ch4_hb_bolt", m.p, .55, {"radius": float(m.r)})
+			w.add_effect("ch4_hb_scorch", m.p, 2.4, {"radius": float(m.r)})
+			if w.player.distance_to(m.p) < float(m.r):w.receive_hit(float(data.tower.storm.damage), hb)
+			flash = maxf(flash, .08); w.shake = maxf(w.shake, .14); w.sound("ch4_hb_lightning", .08)
+
+func step_waves(w, dt: float):
+	var wv: Dictionary = data.tower.waves
+	for i in range(waves.size() - 1, -1, -1):
+		var f: Dictionary = waves[i]
+		f.age += dt
+		if f.age < 0:continue
+		f.r = f.age * float(wv.speed)
+		var off: Vector2 = w.player - f.p
+		var flat := Vector2(off.x, off.y * 2.0)
+		var in_gap: bool = absf(angle_difference(flat.angle(), f.gap)) < float(wv.gap) * 0.5
+		if absf(flat.length() - f.r) < float(wv.band) and not in_gap:w.receive_hit(float(wv.damage), hb)
+		if f.r > 760:waves.remove_at(i)
+
+## The vortex from chapter I's secret ending. This time it does not close:
+## the hero cuts it open from the inside.
+func begin_vortex(w):
+	phase = "vortex"; age = 0.0; marks.clear(); waves.clear(); move = ""; music = ""
+	vortex_from = w.player; vortex_cut = false; set_pose("cast"); face = "smile"
+	w.sound("herobrine_warp")
+
+func step_vortex(w, dt: float):
+	var v: Dictionary = data.vortex
+	if age >= float(v.warp) and w.player != vortex_at():
+		w.player = vortex_at(); w.facing = Vector2.UP
+	if age >= float(v.grow[0]) and not spoken.has("vortex"):spoken["vortex"] = true; w.sound("blood_rift")
+	if age < float(v.cut):set_steve("guard")
+	if age >= float(v.cut) and not vortex_cut:
+		vortex_cut = true; hitstop = .22; flash = .45; w.shake = .55; impact_frame = .1
+		w.sound("ch4_impact"); w.sound("ch4_hb_shatter", .05); set_steve("throw")
+	if age >= float(v.react) and age < float(v.down):set_pose("look_hand"); face = "calm"
+	if age >= float(v.down) and hb.get("perched", false):
+		w.add_effect("ch4_hb_blink", hb.p - Vector2(0, tower_h), .45, {"dir": hb.visual_dir, "scale": scale()})
+		hb.perched = false; hb.p = center + Vector2(0, -90); set_pose("aura")
+		w.add_effect("ch4_hb_blink", hb.p, .45, {"dir": hb.visual_dir, "scale": scale()})
+		w.sound("ch4_hb_teleport", .1); w.shake = .3
+	if age >= float(v.duration):
 		phase = "one"; age = 0.0; face = "calm"; set_pose("aura"); music = "boss_one"; text_events.clear()
 		begin_move(w, "rest", 1.0); save_checkpoint(w, "one")
 
@@ -537,9 +684,9 @@ func step_ring(w, dt: float):
 		var k := clampf((move_age - float(r.windup)) / float(r.time), 0, 1)
 		ring.r = lerpf(float(r.start), float(r.end), k)
 		var off: Vector2 = w.player - ring.p
-		var a := off.angle()
-		var in_gap := absf(angle_difference(a, ring.gap)) < float(r.gap) * 0.5
-		if absf(off.length() - ring.r) < float(r.band) and not in_gap:w.receive_hit(float(r.damage), hb)
+		var flat := Vector2(off.x, off.y * 2.0)
+		var in_gap := absf(angle_difference(flat.angle(), ring.gap)) < float(r.gap) * 0.5
+		if absf(flat.length() - ring.r) < float(r.band) and not in_gap:w.receive_hit(float(r.damage), hb)
 	if move_age >= move_time:rings.clear(); rest(w)
 
 func step_strike(w):
@@ -789,7 +936,7 @@ func update_shots(w, dt: float):
 		if dead:shots.remove_at(i)
 
 func clear_hazards():
-	shots.clear(); marks.clear(); rings.clear(); lanes.clear(); hole = {}; path.clear(); seam = {}; drops.clear(); beams.clear()
+	shots.clear(); marks.clear(); rings.clear(); lanes.clear(); hole = {}; path.clear(); seam = {}; drops.clear(); beams.clear(); waves.clear()
 	move = ""; sky = 0.0; split = 0.0; shadow_on = false; knife_gaps.clear()
 
 # ------------------------------------------------------------------ stage III: the fistfight
@@ -893,11 +1040,9 @@ func begin_death(w):
 
 func step_death(w, dt: float):
 	var d: Dictionary = data.death
-	var mount_at := 1.1
+	var mount_at := 0.0
 	steve_at = hb.p + MOUNT
 	w.facing = Vector2.LEFT
-	if age < 0.4:set_steve("idle")
-	elif age < mount_at:set_steve("walk"); w.player = w.player.lerp(steve_at, minf(1, dt * 5))
 	for line in d.lines:
 		if age >= float(line.at) and not spoken.has(line.text) and age < float(d.final):
 			spoken[line.text] = true
@@ -961,7 +1106,7 @@ func step_door(w, dt: float):
 		door_state = "look"; w.facing = Vector2.LEFT; set_steve("idle")
 	elif age < 9.8:
 		door_state = "enter"; w.facing = Vector2.UP; set_steve("walk")
-		w.player = w.player.move_toward(door + Vector2(0, 2), 22 * dt)
+		w.player = w.player.move_toward(door + Vector2(0, -4), 20 * dt)
 	elif age < 10.4:
 		door_state = "gone"
 	else:
@@ -989,8 +1134,11 @@ func restore_checkpoint(w):
 	hb.hp = float(checkpoint.hb_hp); hb.max_hp = float(data.one.hp if retry_from == "one" else data.two.hp)
 	w.player = checkpoint.player
 	phase = retry_from; age = 0.0
-	if phase == "one" or phase == "two":
-		hb.p = center + Vector2(0, -90); begin_move(w, "rest", 1.2); hb.scale = float(data.giant)
+	if phase == "tower":
+		hb.scale = float(data.giant); begin_tower(w); age = float(data.tower.rise); hb.p = tower_base(); hb.perched = true
+		tower_h = float(data.tower.height); tower_solid(w, false); tower_solid(w, true)
+	elif phase == "one" or phase == "two":
+		hb.p = center + Vector2(0, -90); begin_move(w, "rest", 1.2); hb.scale = float(data.giant); hb.perched = false
 		if phase == "two":day_done.clear()
 		music = "boss_one" if phase == "one" else "boss_two"
 	elif phase == "last":

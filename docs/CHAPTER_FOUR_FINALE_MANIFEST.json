@@ -22,9 +22,9 @@
       ],
       "size": [
         3216,
-        168
+        224
       ],
-      "sha256": "ad6ba9e97cdeeafd9ca91c1752c877a6148824b59c7a09eb45aacba5f4acc9da"
+      "sha256": "9626445e8068608a13c3ff0a822e5b3d3589473a9a868ea08ad5393fdfc5d87e"
     },
     "ch4_hb_smile": {
       "sources": [
@@ -32,9 +32,9 @@
       ],
       "size": [
         3216,
-        168
+        224
       ],
-      "sha256": "f39965fa2129f8c6d727d3912a13650217a3b7114f73136ebdfe6b97f7ee29c5"
+      "sha256": "ea610c90c61c309e818ed0836eae4b8535e519453de0a6c2ba01fe8a5f95dde1"
     },
     "ch4_hb_rage": {
       "sources": [
@@ -42,9 +42,9 @@
       ],
       "size": [
         3216,
-        168
+        224
       ],
-      "sha256": "15d21b503cc3af3e8d62fd1cfc2c1a4ce661a524811722f620cd5c345ebe11d1"
+      "sha256": "aae70568841919f2c3647e451565fc00248eab92b323d72e9d7550941e6a31a8"
     },
     "ch4_hb_dim": {
       "sources": [
@@ -52,9 +52,9 @@
       ],
       "size": [
         3216,
-        168
+        224
       ],
-      "sha256": "ca1b3537788aa3561b2706abcbffbd2b1462c566244c93e3a3862531400c030d"
+      "sha256": "abb62dce399d186ef1dd98c95cba2be216beb86cc6a9880791f729d65ae9dc1f"
     },
     "ch4_fist_steve": {
       "sources": [
@@ -62,9 +62,9 @@
       ],
       "size": [
         2448,
-        168
+        224
       ],
-      "sha256": "da1ed20996e59ef59ee703f8605afa262d02a760d57ed079c55da6470cdc28ef"
+      "sha256": "e4e5b5279fceb7562fdbc812d0bf13fdb3def485257a15969e031dbedef45058"
     },
     "ch4_sun": {
       "sources": [
@@ -85,6 +85,17 @@
         32
       ],
       "sha256": "c754ef0662d6a9b5728b8ff9071880a9c3ec1dfc7c66df1a391c131ab7735cba"
+    },
+    "ch4_death_tableau": {
+      "sources": [
+        "entity/player/wide/steve",
+        "entity/player/wide/steve (white eyes)"
+      ],
+      "size": [
+        2016,
+        72
+      ],
+      "sha256": "c2b33dd1dfd1724ba0b3fbe0f13a55b2531273213c512ff5b6d68924031c6093"
     }
   }
 }

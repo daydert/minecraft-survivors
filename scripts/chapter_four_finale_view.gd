@@ -8,6 +8,7 @@ const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const ROWS := {"down": 0, "up": 1, "side": 2}
 const DUEL := 2.6
 const DEATH := 3.0
+static var profile := false
 
 static func assets(g) -> Dictionary:
 	if not g.has_meta("ch4_finale_assets"):
@@ -36,7 +37,8 @@ static func figure(g, sheet: String, who: String, pose: String, t: float, p: Vec
 	var size = Vector2(a.frame[0], a.frame[1])
 	var anchor = Vector2(a.anchor[0], a.anchor[1])
 	var row = row_of(dir)
-	var flip = dir.x < 0 and row == 2
+	if profile and row == 2:row = 3
+	var flip = dir.x < 0 and row >= 2
 	if not g.textures.has(sheet):return
 	var dest = Rect2(-anchor * scale, size * scale)
 	g.draw_set_transform(p.floor(), 0, Vector2(-1 if flip else 1, 1))
@@ -52,6 +54,7 @@ static func herobrine(g, offset: Vector2, scale: float = -1.0, tint_override: Co
 	if hb.is_empty():return
 	var s: float = e.scale() if scale < 0 else scale
 	var p: Vector2 = hb.p + offset
+	if hb.get("perched", false):p.y -= e.tower_h
 	var clock: float = g.world.clock
 	var lift = 0.0
 	if e.pose == "float":lift = 6.0 + sin(clock * 2.0) * 2.0
@@ -141,10 +144,11 @@ static func floor_layer(g, offset: Vector2):
 	var clock: float = g.world.clock
 	if e.phase in ["one", "two", "kneel"]:arena_edge(g, e, offset)
 	for m in e.marks:
-		var k: float = clampf(m.age / float(e.data.one.lightning.windup), 0, 1)
+		if m.age < 0:continue
+		var k: float = clampf(m.age / float(m.get("windup", e.data.one.lightning.windup)), 0, 1)
 		if not m.hit:
 			var q: Vector2 = (m.p + offset).floor()
-			var r: float = float(e.data.one.lightning.radius)
+			var r: float = float(m.get("r", e.data.one.lightning.radius))
 			Tells.ring(g, q, r, k, clock, Color(0.75, 0.88, 1.0))
 			var a: float = 0.15 + 0.6 * k
 			if k > 0.85:a = 0.75 + 0.25 * sin(clock * 40.0)
@@ -152,6 +156,7 @@ static func floor_layer(g, offset: Vector2):
 			g.draw_rect(Rect2(q.x, q.y - 220, 1, 220), Color(1, 1, 1, a))
 			g.oval(q, Vector2(r, r * 0.5) * (0.4 + 0.6 * k), Color(0.6, 0.8, 1.0, 0.12 + 0.18 * k))
 	for ring in e.rings:fire_ring(g, e, ring, offset)
+	for wv in e.waves:fire_wave(g, e, wv, offset)
 	for lane in e.lanes:
 		if not lane.hit:Tells.lane(g, lane.a + offset, lane.b + offset, float(e.data.one.strike.width), clampf(lane.age / float(e.data.one.strike.windup), 0, 1), int(lane.a.x), clock)
 	if not e.hole.is_empty():black_hole_floor(g, e, offset)
@@ -184,6 +189,134 @@ static func arena_edge(g, e, offset: Vector2):
 			if j % 4 == 0:
 				g.draw_rect(Rect2(q - Vector2(1, 12), Vector2(2, 9)), Color(0.35, 0.25, 0.2))
 				g.draw_rect(Rect2(q - Vector2(1, 14), Vector2(2, 2)), Color(1, 0.25, 0.12, 0.7 + 0.3 * sin(g.world.clock * 9 + j)))
+
+## Chapter I's fire waves, rolling out from the foot of his tower.
+static func fire_wave(g, e, wv: Dictionary, offset: Vector2):
+	if wv.age < 0:
+		var k: float = clampf(1.0 + wv.age / 0.8, 0, 1)
+		Tells.ring(g, wv.p + offset, 30.0, k, g.world.clock)
+		return
+	var gap: float = float(e.data.tower.waves.gap)
+	var count: int = maxi(16, int(TAU * wv.r / 13.0))
+	var clock: float = g.world.clock
+	for i in range(count):
+		var a: float = i * TAU / count
+		if absf(angle_difference(a, wv.gap)) < gap * 0.5:continue
+		var q: Vector2 = wv.p + offset + Vector2(cos(a), sin(a) * 0.5) * wv.r
+		if not Rect2(-20, -30, 680, 420).has_point(q):continue
+		g.draw_clip("fire_animation", (q - Vector2(8, 20)).floor(), Vector2(16, 20), clock + i * 0.05)
+	var gp: Vector2 = wv.p + offset + Vector2(cos(wv.gap), sin(wv.gap) * 0.5) * wv.r
+	g.draw_rect(Rect2(gp.floor() - Vector2(2, 2), Vector2(4, 4)), Color(1, 1, 1, 0.7))
+
+## The tower he raises out of the arena: blackstone, cracked with fire, the
+## two fire sockets of the throne from chapter I on its crown.
+static func tower(g, offset: Vector2):
+	var e = g.world.ending
+	if e.tower_h <= 0:return
+	var base: Vector2 = e.tower_base() + offset
+	var h: float = e.tower_h
+	var wdt := 46.0
+	var clock: float = g.world.clock
+	g.oval(base + Vector2(0, 2), Vector2(34, 9), Color(0, 0, 0, 0.55))
+	var top: float = base.y - h
+	var y: float = top
+	while y < base.y:
+		var hh: float = minf(16.0, base.y - y)
+		for x in range(int(wdt / 16.0) + 1):
+			var ww: float = minf(16.0, wdt - x * 16)
+			if ww <= 0:continue
+			var shade: float = 0.62 if x < 2 else 0.45
+			if g.textures.has("block_blackstone"):
+				g.draw_texture_rect_region(g.textures.block_blackstone, Rect2(base.x - wdt / 2 + x * 16, y, ww, hh), Rect2(0, 0, ww, hh), Color(shade, shade * 0.9, shade))
+		y += 16.0
+	g.draw_rect(Rect2(base.x + wdt / 2 - 10, top, 10, h), Color(0, 0, 0, 0.35))
+	for j in range(5):
+		var cy: float = top + 10 + j * (h - 14) / 5.0
+		var cx: float = base.x - wdt / 2 + 6 + h01i(j, 1) * (wdt - 12)
+		g.draw_line(Vector2(cx, cy), Vector2(cx + 5, cy + 6), Color(1, 0.3, 0.1, 0.5 + 0.3 * sin(clock * 3 + j)), 1)
+	g.draw_rect(Rect2(base.x - wdt / 2 - 3, top - 4, wdt + 6, 5), Color(0.12, 0.1, 0.12))
+	for j in range(4):
+		g.draw_rect(Rect2(base.x - wdt / 2 - 3 + j * 14, top - 9, 7, 5), Color(0.16, 0.13, 0.16))
+	for side in [-1, 1]:
+		g.draw_clip("fire_animation", Vector2(base.x + side * (wdt / 2 - 2) - 7, top - 26).floor(), Vector2(14, 20), clock + side)
+	if e.phase == "tower" and e.age < float(e.data.tower.rise):
+		for j in range(18):
+			var q := base + Vector2((h01i(j, 2) - 0.5) * 80, -fposmod(clock * 30 + j * 7, 24))
+			g.draw_rect(Rect2(q.floor(), Vector2(2, 2)), Color(0.35, 0.3, 0.32, 0.8))
+
+static func h01i(i: int, salt: int) -> float:
+	return Atmosphere.hash01(i, salt, 47)
+
+## Chapter I's vortex closes around him — and he cuts it open from inside.
+static func vortex(g, e, offset: Vector2):
+	var v: Dictionary = e.data.vortex
+	var clock: float = g.world.clock
+	var q: Vector2 = e.vortex_at() + offset - Vector2(0, 12)
+	var warp: float = float(v.warp)
+	if e.age < warp + 0.7:
+		var alpha: float = sin(clampf(e.age / (warp + 0.7), 0, 1) * PI)
+		for i in range(38):
+			var t: float = fposmod(i * 0.173 + e.age * 1.3, 1)
+			var p: Vector2 = e.vortex_from.lerp(e.vortex_at(), t) + offset + Vector2(sin(i * 2.4) * 13, -sin(t * PI) * 30 - i % 4 * 2)
+			g.draw_rect(Rect2(p.floor(), Vector2(2, 2)), Color(0.6, 0.35, 0.8, alpha * 0.8))
+	var grow: float = smoothstep(float(v.grow[0]), float(v.grow[1]), e.age)
+	var squeeze: float = 1.0 - 0.6 * smoothstep(float(v.squeeze[0]), float(v.squeeze[1]), e.age)
+	var cut: float = float(v.cut)
+	var split: float = float(v.split)
+	var r: float = 54.0 * grow
+	if e.age < cut:
+		g.oval(q, Vector2(r * 1.2, r), Color(0.035, 0, 0.009, 0.92))
+		if e.age >= warp:steve_squeezed(g, e.vortex_at() + offset, squeeze, grow, clock)
+		for i in range(110):
+			var t: float = fposmod(clock * 0.8 + i * 0.113, 1)
+			var angle: float = i * 2.399 + t * 6
+			var radius: float = (1 - t) * 92 * grow
+			var p: Vector2 = q + Vector2(cos(angle) * radius * 1.2, sin(angle) * radius)
+			g.draw_rect(Rect2(p.floor(), Vector2(1 + i % 3, 1 + i % 2)), Color(0.35 + i % 4 * 0.08, 0.005, 0.025, (1 - t) * grow))
+		g.draw_arc(q, r, 0, TAU, 48, Color(0.75, 0.05, 0.08, 0.8 * grow), 2)
+		g.draw_arc(q, r + 4, 0, TAU, 48, Color(0.5, 0.0, 0.03, 0.35 * grow), 3)
+		return
+	var t: float = e.age - cut
+	var dir := Vector2(1, -0.45).normalized()
+	var line_k: float = clampf(t / 0.08, 0, 1)
+	var a: Vector2 = q - dir * (r + 30) * line_k
+	var b: Vector2 = q + dir * (r + 30) * line_k
+	var sep: float = smoothstep(split - cut, split - cut + 0.9, t) * 70.0
+	var fade: float = 1.0 - smoothstep(split - cut + 0.3, split - cut + 1.2, t)
+	if fade > 0:
+		for side in [-1, 1]:
+			var n: Vector2 = dir.orthogonal() * side
+			var pts := PackedVector2Array()
+			for j in range(25):
+				var ang: float = dir.angle() + (0.0 if side < 0 else PI) + PI * j / 24.0
+				var pt: Vector2 = q + Vector2(cos(ang) * r * 1.2, sin(ang) * r)
+				pts.append(pt + n * sep * -1.0 + Vector2(0, sep * 0.3))
+			g.draw_colored_polygon(pts, Color(0.035, 0, 0.009, 0.92 * fade))
+			g.draw_polyline(pts, Color(0.7, 0.05, 0.08, fade), 2)
+		for i in range(60):
+			var ang: float = h01i(i, 3) * TAU
+			var p: Vector2 = q + Vector2.from_angle(ang) * (t * (120 + h01i(i, 4) * 160)) + Vector2(0, t * t * 80)
+			g.draw_rect(Rect2(p.floor(), Vector2(2, 2)), Color(0.5, 0.02, 0.05, fade))
+	if t < 0.6:
+		g.draw_line(a, b, Color(1, 1, 1, 0.25 * (1 - t / 0.6)), 12)
+		g.draw_line(a, b, Color(1, 1, 1, 1 - t / 0.6), 3)
+	var saved: Vector2 = g.world.player
+	steve(g, offset, 1.0, Vector2.RIGHT)
+	g.world.player = saved
+
+static func steve_squeezed(g, p: Vector2, compression: float, strength: float, clock: float):
+	var a: Dictionary = assets(g)
+	var clip: Dictionary = a.steve.guard
+	var size = Vector2(a.frame[0], a.frame[1])
+	var anchor = Vector2(a.anchor[0], a.anchor[1])
+	if not g.textures.has("ch4_fist_steve"):return
+	var col: int = int(clip.start)
+	for i in range(24):
+		var shift: float = sin(clock * 6 + i * 0.7) * strength * 5.0
+		var sx: float = (i * 2 - 24) * compression + shift
+		var h: float = size.y * (0.4 + 0.6 * compression)
+		g.draw_texture_rect_region(g.textures.ch4_fist_steve, Rect2(p + Vector2(sx, -anchor.y * (0.4 + 0.6 * compression)), Vector2(2 * compression + 0.5, h)),
+			Rect2(col * size.x + i * 2, 0, 2, size.y), Color(1, 1 - strength * 0.45, 1 - strength * 0.4))
 
 static func fire_ring(g, e, ring: Dictionary, offset: Vector2):
 	var r: Dictionary = e.data.one.ring
@@ -517,6 +650,7 @@ static func overlay(g, offset: Vector2):
 	if not e.hole.is_empty():black_hole_glow(g, e, offset)
 	if e.move == "day" and (e.sky > 0.0 or e.split > 0.0 or e.sun > 0.0):day_sky(g, e, offset)
 	if e.phase == "last":last_attack(g, e, offset)
+	if e.phase == "vortex":vortex(g, e, offset)
 	if e.phase in ["erase", "three", "death", "retry"]:island(g, e, offset, -1.0)
 	if e.phase in ["erase", "three", "retry", "death"]:duel(g, e, offset)
 	if e.phase in ["one", "two"]:boss_bar(g, e)
@@ -678,8 +812,13 @@ static func duel_offsets(e) -> Array:
 		if imp.on == "hb" and q.result == "":hb_d.x += 12.0 * bump(since, 0.03, 0.25); st_d.x += 10.0 * bump(since, 0.03, 0.2)
 	return [hb_d, st_d]
 
-## The fistfight and the death are shown close.
+## The fistfight and the death are shown close, in clean profile.
 static func duel(g, e, offset: Vector2):
+	profile = true
+	duel_inner(g, e, offset)
+	profile = false
+
+static func duel_inner(g, e, offset: Vector2):
 	var clock: float = g.world.clock
 	var c: Vector2 = e.center + offset
 	if e.phase == "death":
@@ -773,37 +912,53 @@ static func impact_burst(g, at: Vector2, t: float, big: bool, seed: int, blood: 
 			var q: Vector2 = at + Vector2(cos(a), sin(a)) * t * (90.0 + 80.0 * h(j + seed, 88)) * size + Vector2(0, t * t * 260.0)
 			g.draw_rect(Rect2(q.floor(), Vector2(2, 2) * (1 + int(big))), Color(0.6, 0.02, 0.05, 1.0 - k))
 
-## His end, from the side: he is on his back, the hero on his chest.
+## His end: one baked tableau of both bodies, the hero astride his chest.
+static func tableau(g, clip: String, t: float, at: Vector2, s: float, tint: Color = Color.WHITE):
+	var tab: Dictionary = assets(g).tableau
+	if not tab.clips.has(clip) or not g.textures.has("ch4_death_tableau"):return
+	var c: Dictionary = tab.clips[clip]
+	var fps: float = 3.0 if clip.begins_with("still") else (4.0 if clip.begins_with("stand") else 11.0)
+	var index: int = int(t * fps)
+	index = index % int(c.count) if clip.begins_with("still") else mini(int(c.count) - 1, index)
+	var size := Vector2(tab.frame[0], tab.frame[1])
+	var anchor := Vector2(tab.anchor[0], tab.anchor[1])
+	g.draw_texture_rect_region(g.textures.ch4_death_tableau, Rect2((at - anchor * s).floor(), size * s), Rect2(Vector2((int(c.start) + index) * size.x, 0), size), tint)
+
 static func death_scene(g, e, c: Vector2, offset: Vector2):
 	var s: float = DEATH
-	var hp: Vector2 = c + (e.hb.p - e.center) * s
-	var sp: Vector2 = c + (g.world.player - e.center) * s
-	var head: Vector2 = hp + Vector2(assets(g).lying_head[0], assets(g).lying_head[1]) * s
+	var at: Vector2 = c + Vector2(-8, 34)
+	var tab: Dictionary = assets(g).tableau
+	var head: Vector2 = at + Vector2(tab.head[0], tab.head[1]) * s
+	var clip: String = {"mount_raise": "raise", "mount_slam": "slam", "lower_arm": "stand"}.get(e.steve_pose, "still")
+	if e.pose == "headless":clip += "_x"
 	if e.impact_frame > 0 and g.settings.flashes:
 		g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1))
-		draw_hb_lying(g, e, hp, offset, s, Color(0, 0, 0))
-		var saved: Vector2 = g.world.player
-		g.world.player = sp - offset
-		steve(g, offset, s, Vector2.LEFT, Color(0, 0, 0))
-		g.world.player = saved
+		tableau(g, clip, e.steve_pose_age, at, s, Color(0, 0, 0))
 		for j in range(16):
 			var d := Vector2.from_angle(j * TAU / 16 + h(j, 89) * 0.3)
 			g.draw_line(head + d * 20, head + d * (100 + h(j, 90) * 220), Color(0.7, 0.0, 0.04), 2 + j % 3)
 		return
-	g.oval(hp + Vector2(0, 3), Vector2(60, 9), Color(1, 1, 1, 0.04))
-	# Blood pools under his head and grows with every blow.
+	g.oval(at + Vector2(0, 3), Vector2(70, 10), Color(1, 1, 1, 0.04))
 	var hits: int = 0
 	for t in e.data.death.punches:
 		if e.age >= float(t):hits += 1
 	if hits > 0:
 		var pool: float = 6.0 + hits * 3.0 + (14.0 if e.head_at >= 0 else 0.0) * minf(1.0, (e.age - e.head_at) * 0.5)
-		g.oval(Vector2(head.x - 4, hp.y + 1), Vector2(pool * 1.6, pool * 0.35), Color(0.3, 0.0, 0.02, 0.9))
-	draw_hb_lying(g, e, hp, offset, s, Color(0.78, 0.76, 0.8))
-	var saved: Vector2 = g.world.player
-	g.world.player = sp - offset
-	steve(g, offset, s, Vector2.LEFT)
-	g.world.player = saved
+		g.oval(Vector2(head.x + 4, at.y + 1), Vector2(pool * 1.6, pool * 0.35), Color(0.3, 0.0, 0.02, 0.9))
+	tableau(g, clip, e.steve_pose_age, at, s)
+	# The swing: a pale arc from the drawn-back fist down onto his face.
 	var since: float = e.age - e.punch_at
+	var swing: float = since if e.head_at < 0 else e.age - e.head_at
+	if swing >= 0.0 and swing < 0.22 and clip.begins_with("slam"):
+		var shoulder: Vector2 = at + Vector2(-1, -22) * s
+		var radius: float = shoulder.distance_to(head)
+		var a1: float = (head - shoulder).angle()
+		var a0: float = a1 - 2.2
+		for k in range(3):
+			var pts := PackedVector2Array()
+			for j in range(13):
+				pts.append(shoulder + Vector2.from_angle(lerpf(a0, a1, j / 12.0)) * (radius - k * 5.0))
+			g.draw_polyline(pts, Color(1, 1, 1, (0.7 - k * 0.2) * (1.0 - swing / 0.22)), 3 - k)
 	if since >= 0.0 and since < 0.5 and e.head_at < 0.0:
 		impact_burst(g, head + Vector2(0, -2), since, false, int(e.punch_at * 10), true)
 		Atmosphere.draw_edges(g, Color(0.5, 0.0, 0.03, 0.4 * (1.0 - since / 0.5)))
@@ -814,16 +969,6 @@ static func death_scene(g, e, c: Vector2, offset: Vector2):
 		g.draw_set_transform(Vector2.ZERO)
 		if t < 0.6:impact_burst(g, head, t, true, 99, true)
 		Atmosphere.draw_edges(g, Color(0.45, 0.0, 0.03, 0.6 * maxf(0.0, 1.0 - t * 0.5)))
-
-static func draw_hb_lying(g, e, at: Vector2, offset: Vector2, s: float, tint: Color):
-	var saved: Vector2 = e.hb.p
-	var dir: Vector2 = e.hb.visual_dir
-	e.hb.p = at - offset; e.hb.visual_dir = Vector2.RIGHT
-	herobrine(g, offset, s, tint)
-	if e.pose in ["lying", "lying_hit"] and tint.r > 0.1:
-		var head: Vector2 = at + Vector2(assets(g).lying_head[0], assets(g).lying_head[1]) * s
-		g.draw_rect(Rect2((head + Vector2(-1, -2) * s).floor(), Vector2(s, s * 0.7)), Color.WHITE)
-	e.hb.p = saved; e.hb.visual_dir = dir
 
 static func key_glyph(g, at: Vector2, action: String, k: float, state: String, size: float = 1.4):
 	var c = Color(1, 1, 1, 0.95)
@@ -927,7 +1072,7 @@ static func laugh(g, t: Dictionary, age: float):
 			var local: float = age - appear
 			var swell = 8 + int(minf(16.0, local * 10.0 + sin(local * 7.0 + i) * 4.0)) / 8 * 8
 			var jitter = Vector2(Atmosphere.hash01(frame, i + copy * 50, 11) - 0.5, Atmosphere.hash01(frame, i + copy * 50, 12) - 0.5) * (4.0 + local * 3.0)
-			var base = Vector2(320 + (i - n / 2.0) * (18 + local * 4.0), 110 + sin(local * 3.0 + i * 0.8) * (8 + local * 6.0) + copy * 30)
+			var base = Vector2(320 + (i - n / 2.0) * (18 + local * 4.0), 74 + sin(local * 3.0 + i * 0.8) * (8 + local * 6.0) + copy * 26)
 			if cut_k > 0:base += Vector2.from_angle(i * 2.39) * cut_k * 200.0
 			var a: float = (1.0 if copy == 0 else 0.35 / copy) * (1.0 - cut_k)
 			if a <= 0.01:continue
@@ -946,7 +1091,7 @@ static func crawl(g, t: Dictionary, age: float):
 		var local: float = age - appear
 		var drift = Vector2(sin(i * 1.7 + local * 0.9) * local * 3.0, local * local * 2.0 * Atmosphere.hash01(i, 3, 13))
 		var jitter = Vector2(Atmosphere.hash01(frame, i, 14) - 0.5, Atmosphere.hash01(frame, i, 15) - 0.5) * 2.0
-		var p = Vector2(320 + (i - n / 2.0) * 14, 120) + drift + jitter
+		var p = Vector2(320 + (i - n / 2.0) * 14, 84) + drift + jitter
 		if cut_k > 0:p += Vector2(0, -1).rotated((i - n / 2.0) * 0.2) * cut_k * 140.0
 		var a: float = 1.0 - cut_k
 		g.text_at(text[i], p.floor() + Vector2(1, 1), 16, Color(0.5, 0.0, 0.04, a))
@@ -968,7 +1113,7 @@ static func plead(g, t: Dictionary, age: float):
 			if index >= typed:break
 			var shake: float = 1.5 + age * 0.6
 			var jitter = Vector2(Atmosphere.hash01(frame, index, 16) - 0.5, Atmosphere.hash01(frame, index, 17) - 0.5) * shake
-			var p = Vector2(320 + (i - line.length() / 2.0) * 13, 92 + li * 24) + jitter
+			var p = Vector2(320 + (i - line.length() / 2.0) * 13, 62 + li * 24) + jitter
 			var a = 1.0
 			if cut:
 				var since: float = age - t.cut
@@ -1059,10 +1204,16 @@ static func door(g, e, offset: Vector2):
 		var panel_w: float = size.x * (1.0 - open)
 		if panel_w > 0.5:g.draw_rect(Rect2(top_left + Vector2(size.x - panel_w, 0), Vector2(panel_w, size.y)), Color(0.02, 0.02, 0.025))
 		g.draw_rect(Rect2(top_left, Vector2(size.x, 3)), Color(0, 0, 0))
-	if e.door_state == "enter":
-		var steve_p: Vector2 = g.world.player + offset
-		if Rect2(top_left, size).grow(4).has_point(steve_p - Vector2(0, 4)):
-			var into: float = clampf((top_left.y + size.y - steve_p.y) / 12.0, 0, 1)
-			g.draw_rect(Rect2(top_left.x + 3, steve_p.y - 42, size.x - 6, 42), Color(0.9, 0.92, 0.98, into))
+	# The hero walks into the opening: the light takes him, the frame stays in front.
+	if e.door_state not in ["gone", "closed"]:
+		var sp: Vector2 = g.world.player + offset
+		var into: float = clampf((p.y + 18.0 - sp.y) / 16.0, 0, 1) if e.door_state == "enter" else 0.0
+		var tint := Color(0.82, 0.82, 0.86).lerp(Color(1.8, 1.8, 1.9), into)
+		tint.a = 1.0 - into * 0.95
+		steve(g, offset, 1.0 - into * 0.15, Vector2.ZERO, tint)
+		if e.door_state == "enter":
+			g.draw_rect(Rect2(top_left, Vector2(3, size.y)), Color(0, 0, 0))
+			g.draw_rect(Rect2(top_left + Vector2(size.x - 3, 0), Vector2(3, size.y)), Color(0, 0, 0))
+			g.draw_rect(Rect2(top_left, Vector2(size.x, 3)), Color(0, 0, 0))
 	if e.door_state in ["gone", "closed"] and e.age > 11.2:
 		g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, smoothstep(11.2, 13.2, e.age)))

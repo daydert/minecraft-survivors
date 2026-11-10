@@ -43,8 +43,9 @@ func world(g):
 	for o in w.loot:
 		if Rect2(-24,-24,688,408).has_point(o.p+offset):actors.append({"sort":o.p.y,"kind":"loot","obj":o})
 	var close_up: bool = w.ending.phase in ["erase","three","death","retry"]
-	if not close_up:actors.append({"sort":w.player.y,"kind":"player"})
-	if not w.ending.hb.is_empty() and not close_up and w.ending.phase not in ["coords","road","door","done"]:actors.append({"sort":w.ending.hb.p.y,"kind":"herobrine"})
+	if not close_up and w.ending.phase not in ["vortex","door"]:actors.append({"sort":w.player.y,"kind":"player"})
+	if not w.ending.hb.is_empty() and not close_up and w.ending.phase not in ["coords","road","door","done"]:actors.append({"sort":w.ending.hb.p.y+.5,"kind":"herobrine"})
+	if w.ending.tower_h > 0:actors.append({"sort":w.ending.tower_base().y,"kind":"tower"})
 	EncounterView.append_actors(g,actors)
 	if w.build.has("embryo"):actors.append({"sort":w.arsenal.pet.p.y,"kind":"pet"})
 	if not w.blood_hand.is_empty():actors.append({"sort":w.blood_hand.p.y+2,"kind":"hand"})
@@ -75,6 +76,7 @@ func world(g):
 				g.item_icon(o.kind, o.p+offset-Vector2(8,16+sin(w.clock*3)*2))
 			"hand":hand(g,offset)
 			"herobrine":FinaleView.herobrine(g,offset)
+			"tower":FinaleView.tower(g,offset)
 	for o in w.orbs:
 		var p: Vector2 = (o.p+offset).floor()
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2(p-Vector2(4,5),Vector2(8,8)),Rect2(0,0,16,16),Color(.6,1,.4))
@@ -101,13 +103,13 @@ func world(g):
 			g.draw_rect(Rect2((particle.p+offset).floor(),Vector2.ONE*ceilf(particle.get("size",2))),Color(particle.color,clampf(particle.life/.1,0,1)))
 	Atmosphere.collect(g,offset)
 	EncounterView.lights(g)
-	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","one","two","kneel","last","erase"]:
+	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","tower","vortex","one","two","kneel","last","erase"]:
 		var e = w.ending
 		if not e.hole.is_empty():g.ambient_lights.append({"p":e.hole.p,"r":120.0,"c":Color(.8,.6,1.0),"power":.8,"glow":.25})
 		if e.phase == "last":g.ambient_lights.append({"p":e.hb.p,"r":260.0,"c":Color(1,1,1),"power":.9,"glow":.2})
 		for ef in w.effects:
 			if ef.kind=="ch4_hb_ignite":g.ambient_lights.append({"p":ef.p,"r":90.0,"c":Color(1,.25,.12),"power":.9,"glow":.25})
-		g.ambient_lights.append({"p":e.hb.p-Vector2(0,26*e.scale()),"r":56.0*e.scale(),"c":Color(.9,.92,1.0),"power":.55,"glow":.05})
+		g.ambient_lights.append({"p":e.hb.p-Vector2(0,26*e.scale()+(e.tower_h if e.hb.get("perched",false) else 0.0)),"r":56.0*e.scale(),"c":Color(.9,.92,1.0),"power":.55,"glow":.05})
 		g.ambient_lights.append({"p":e.center,"r":230.0,"c":Color(.72,.74,.86),"power":.42,"glow":.0})
 		var r: Rect2 = e.arena
 		for i in range(10):

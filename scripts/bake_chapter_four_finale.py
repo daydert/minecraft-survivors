@@ -19,6 +19,7 @@ from import_minecraft_assets import ROOT, Importer, bake, box, find_client
 from bake_minecraft_characters import DIRECTIONS, transform
 
 FRAME = (48, 56)
+PROFILE = -80  # fourth row: a clean profile for the fistfight close-up
 CENTER = (24, 50)
 SCALE = 0.86
 
@@ -115,16 +116,16 @@ POSES = {
               {"root": (0, -6, 0), "rl": (-1.45, 0, 0), "ll": (0.95, 0, 0), "lean": (0.4, 0, 0), "head": (0.55, 0, 0), "ra": (0.2, 0, 0.1), "la": (-0.8, 0, -0.1)}],
     "rise": [{"root": (0, -6, 0), "rl": (-1.45, 0, 0), "ll": (0.95, 0, 0), "lean": (0.3, 0, 0), "head": (0.4, 0, 0)}, {"root": (0, -2, 0), "rl": (-0.5, 0, 0), "ll": (0.3, 0, 0), "lean": (0.1, 0.25, 0.1), "head": (-0.1, 0.35, 0.2)}, {"lean": (0, -0.2, -0.08), "head": (-0.12, 0.25, -0.15)}],
     "float": [{"root": (0, 5, 0), "rl": (0.18, 0, 0.05), "ll": (0.12, 0, -0.05), "ra": (0, 0, 0.55), "la": (0, 0, -0.55), "head": (-0.3, 0, 0)}, {"root": (0, 7, 0), "rl": (0.25, 0, 0.05), "ll": (0.2, 0, -0.05), "ra": (-0.2, 0, 0.7), "la": (-0.2, 0, -0.7), "head": (-0.38, 0, 0)}],
-    "slam": [{"ra": (-2.6, 0, 0.2), "la": (-2.6, 0, -0.2), "lean": (-0.2, 0, 0)}, {"ra": (-1.0, 0, 0.1), "la": (-1.0, 0, -0.1), "lean": (0.35, 0, 0)}, {"ra": (-0.4, 0, 0.2), "la": (-0.4, 0, -0.2), "lean": (0.45, 0, 0), "head": (0.2, 0, 0)}],
-    "guard": [{"ra": (-1.35, -0.5, 0.2), "la": (-1.35, 0.5, -0.2), "head": (0.15, 0, 0), "lean": (0.1, 0, 0)}],
-    "jab": [{"ra": (-0.6, 0, 0), "la": (-1.3, 0.4, 0), "lean": (0, 0.2, 0)}, {"ra": (-1.6, -0.1, 0), "la": (-1.0, 0.4, 0), "lean": (0.15, -0.25, 0)}, {"ra": (-1.1, 0, 0), "la": (-1.2, 0.4, 0), "lean": (0.05, -0.1, 0)}],
-    "hook": [{"la": (-0.4, 0, -0.4), "ra": (-1.3, -0.4, 0), "lean": (0, -0.35, 0)}, {"la": (-1.5, -0.9, -0.2), "ra": (-1.0, -0.4, 0), "lean": (0.1, 0.45, 0)}, {"la": (-1.1, -0.4, -0.1), "ra": (-1.2, -0.4, 0), "lean": (0.05, 0.15, 0)}],
-    "stagger": [{"lean": (-0.35, 0.2, 0.15), "ra": (-0.4, 0, 0.9), "la": (-0.2, 0, -0.6), "head": (-0.4, 0.3, 0)}, {"lean": (-0.2, -0.1, -0.1), "ra": (-0.2, 0, 0.4), "la": (-0.5, 0, -0.9), "head": (-0.15, -0.2, 0)}],
-    "grab": [{"ra": (-1.3, 0, 0.3), "la": (-1.3, 0, -0.3), "lean": (0.1, 0, 0)}, {"ra": (-1.55, 0, -0.05), "la": (-1.55, 0, 0.05), "lean": (0.25, 0, 0)}],
-    "resist": [{"ra": (-1.5, 0, -0.1), "la": (-1.5, 0, 0.1), "lean": (0.35, 0, 0), "rl": (0.4, 0, 0), "ll": (-0.5, 0, 0)}, {"ra": (-1.5, 0, -0.15), "la": (-1.5, 0, 0.15), "lean": (0.45, 0, 0.05), "rl": (0.5, 0, 0), "ll": (-0.6, 0, 0)}],
-    "throw": [{"ra": (-1.4, 0.4, 0), "la": (-1.4, 0.4, 0), "lean": (0.2, 0.5, 0)}, {"ra": (-2.2, -0.6, 0.3), "la": (-2.0, -0.6, -0.2), "lean": (-0.1, -0.7, 0)}, {"ra": (-0.8, -0.9, 0.4), "la": (-0.6, -0.9, 0), "lean": (0.3, -0.9, 0)}],
-    "dodge_l": [{"lean": (0, 0, -0.35), "root": (-2, -1, 0), "ra": (-1.2, 0, 0.2), "la": (-1.2, 0, -0.2)}, {"lean": (0.1, 0, -0.5), "root": (-4, -2, 0), "ra": (-1.3, 0, 0.3), "la": (-1.3, 0, -0.1)}],
-    "dodge_r": [{"lean": (0, 0, 0.35), "root": (2, -1, 0), "ra": (-1.2, 0, 0.2), "la": (-1.2, 0, -0.2)}, {"lean": (0.1, 0, 0.5), "root": (4, -2, 0), "ra": (-1.3, 0, 0.1), "la": (-1.3, 0, -0.3)}],
+    "slam": [{"ra": (-2.6, 0, 0.2), "la": (-2.6, 0, -0.2), "lean": (0.2, 0, 0)}, {"ra": (-1.0, 0, 0.1), "la": (-1.0, 0, -0.1), "lean": (-0.35, 0, 0)}, {"ra": (-0.4, 0, 0.2), "la": (-0.4, 0, -0.2), "lean": (-0.45, 0, 0), "head": (0.2, 0, 0)}],
+    "guard": [{"ra": (-1.35, -0.5, 0.2), "la": (-1.35, 0.5, -0.2), "head": (0.15, 0, 0), "lean": (-0.1, 0, 0), "rl": (-0.25, 0, 0), "ll": (0.25, 0, 0)}],
+    "jab": [{"ra": (-0.6, 0, 0), "la": (-1.3, 0.4, 0), "lean": (0, 0.2, 0), "rl": (-0.25, 0, 0), "ll": (0.25, 0, 0)}, {"ra": (-1.65, -0.1, 0), "la": (-1.0, 0.4, 0), "lean": (-0.2, -0.25, 0), "rl": (-0.35, 0, 0), "ll": (0.35, 0, 0)}, {"ra": (-1.1, 0, 0), "la": (-1.2, 0.4, 0), "lean": (-0.1, -0.1, 0), "rl": (-0.25, 0, 0), "ll": (0.25, 0, 0)}],
+    "hook": [{"la": (-0.4, 0, -0.4), "ra": (-1.3, -0.4, 0), "lean": (0, -0.35, 0)}, {"la": (-1.5, -0.9, -0.2), "ra": (-1.0, -0.4, 0), "lean": (-0.15, 0.45, 0), "rl": (-0.3, 0, 0), "ll": (0.3, 0, 0)}, {"la": (-1.1, -0.4, -0.1), "ra": (-1.2, -0.4, 0), "lean": (-0.05, 0.15, 0)}],
+    "stagger": [{"lean": (0.4, 0.2, 0.1), "ra": (-0.4, 0, 0.9), "la": (-0.2, 0, -0.6), "head": (-0.4, 0.3, 0), "rl": (-0.3, 0, 0), "ll": (0.2, 0, 0)}, {"lean": (0.25, -0.1, -0.05), "ra": (-0.2, 0, 0.4), "la": (-0.5, 0, -0.9), "head": (-0.15, -0.2, 0)}],
+    "grab": [{"ra": (-1.3, 0, 0.3), "la": (-1.3, 0, -0.3), "lean": (-0.15, 0, 0), "rl": (-0.4, 0, 0), "ll": (0.4, 0, 0)}, {"ra": (-1.55, 0, -0.05), "la": (-1.55, 0, 0.05), "lean": (-0.3, 0, 0), "rl": (-0.45, 0, 0), "ll": (0.5, 0, 0)}],
+    "resist": [{"ra": (-1.5, 0, -0.1), "la": (-1.5, 0, 0.1), "lean": (-0.35, 0, 0), "rl": (-0.5, 0, 0), "ll": (0.6, 0, 0)}, {"ra": (-1.5, 0, -0.15), "la": (-1.5, 0, 0.15), "lean": (-0.45, 0, 0.05), "rl": (-0.55, 0, 0), "ll": (0.7, 0, 0)}],
+    "throw": [{"ra": (-1.4, 0.4, 0), "la": (-1.4, 0.4, 0), "lean": (0.2, 0.5, 0)}, {"ra": (-2.2, -0.6, 0.3), "la": (-2.0, -0.6, -0.2), "lean": (-0.1, -0.7, 0)}, {"ra": (-0.8, -0.9, 0.4), "la": (-0.6, -0.9, 0), "lean": (-0.35, -0.9, 0), "rl": (-0.4, 0, 0), "ll": (0.5, 0, 0)}],
+    "dodge_l": [{"lean": (0.3, 0, -0.2), "root": (-2, -1, 0), "ra": (-1.2, 0, 0.2), "la": (-1.2, 0, -0.2), "rl": (0.3, 0, 0), "ll": (-0.3, 0, 0)}, {"lean": (0.45, 0, -0.3), "root": (-4, -2, 0), "ra": (-1.3, 0, 0.3), "la": (-1.3, 0, -0.1), "rl": (0.4, 0, 0), "ll": (-0.4, 0, 0)}],
+    "dodge_r": [{"lean": (-0.35, 0, 0.2), "root": (0, -3, 0), "ra": (-1.2, 0, 0.2), "la": (-1.2, 0, -0.2), "rl": (-0.6, 0, 0), "ll": (0.6, 0, 0), "head": (0.2, 0, 0)}, {"lean": (-0.55, 0, 0.3), "root": (0, -5, 0), "ra": (-1.3, 0, 0.1), "la": (-1.3, 0, -0.3), "rl": (-0.9, 0, 0), "ll": (0.8, 0, 0), "head": (0.3, 0, 0)}],
     "fall": [{"lean": (-0.3, 0, 0), "ra": (-0.6, 0, 0.8), "la": (-0.6, 0, -0.8), "head": (-0.3, 0, 0)},
              {"whole": (0.8, 0, 0), "ra": (-1.0, 0, 1.0), "la": (-1.0, 0, -1.0), "head": (-0.4, 0, 0)},
              {"whole": (1.45, 0, 0), "ra": (0.3, 0, 0.9), "la": (0.3, 0, -0.9), "head": (-0.2, 0, 0)}],
@@ -142,14 +143,14 @@ POSES = {
                    {"root": (0, -7, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.95, 0, 0), "ra": (-0.5, 0, 0.1), "la": (-0.5, 0, -0.1), "head": (0.75, 0, 0)}],
     "mount_still": [{"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.7, 0, 0), "ra": (-0.6, 0, 0.1), "la": (-0.55, 0, -0.1), "head": (0.6, 0, 0)},
                     {"root": (0, -6, 0), "rl": (1.35, 0, 0.3), "ll": (1.35, 0, -0.3), "lean": (0.66, 0, 0), "ra": (-0.6, 0, 0.1), "la": (-0.55, 0, -0.1), "head": (0.55, 0, 0)}],
-    "lunge": [{"lean": (0.35, -0.3, 0), "ra": (-1.6, -0.1, 0), "la": (-0.4, 0, -0.3), "rl": (-0.5, 0, 0), "ll": (0.6, 0, 0), "root": (0, -1, 0)},
-              {"lean": (0.5, -0.45, 0), "ra": (-1.7, -0.2, 0), "la": (0.2, 0, -0.4), "rl": (-0.7, 0, 0), "ll": (0.8, 0, 0), "root": (0, -2, 0)}],
-    "knocked": [{"lean": (-0.55, 0.3, 0.2), "ra": (-0.3, 0, 1.2), "la": (-0.2, 0, -1.1), "head": (-0.6, 0.4, 0), "rl": (0.3, 0, 0), "ll": (-0.2, 0, 0)},
-                {"lean": (-0.35, 0.1, 0.1), "ra": (-0.2, 0, 0.7), "la": (-0.4, 0, -0.8), "head": (-0.3, 0.2, 0)}],
-    "aura": [{"ra": (0.1, 0, 0.35), "la": (0.1, 0, -0.35), "head": (0.28, 0, 0), "lean": (-0.05, 0, 0)},
-             {"ra": (0.1, 0, 0.42), "la": (0.1, 0, -0.42), "head": (0.3, 0, 0), "lean": (-0.08, 0, 0)}],
-    "exhausted": [{"lean": (0.45, 0, 0), "head": (0.5, 0, 0), "ra": (0.2, 0, 0.15), "la": (0.2, 0, -0.15), "rl": (-0.2, 0, 0.1), "ll": (0.2, 0, -0.1), "root": (0, -1, 0)},
-                  {"lean": (0.55, 0, 0), "head": (0.6, 0, 0), "ra": (0.25, 0, 0.1), "la": (0.25, 0, -0.1), "rl": (-0.2, 0, 0.1), "ll": (0.2, 0, -0.1), "root": (0, -1.5, 0)}],
+    "lunge": [{"lean": (-0.35, -0.3, 0), "ra": (-1.6, -0.1, 0), "la": (-0.4, 0, -0.3), "rl": (-0.7, 0, 0), "ll": (0.6, 0, 0), "root": (0, -1, 0)},
+              {"lean": (-0.55, -0.45, 0), "ra": (-1.75, -0.2, 0), "la": (0.3, 0, -0.4), "rl": (-0.9, 0, 0), "ll": (0.8, 0, 0), "root": (0, -2, 0)}],
+    "knocked": [{"lean": (0.6, 0.3, 0.15), "ra": (-0.3, 0, 1.2), "la": (-0.2, 0, -1.1), "head": (-0.6, 0.4, 0), "rl": (-0.5, 0, 0), "ll": (0.2, 0, 0)},
+                {"lean": (0.4, 0.1, 0.1), "ra": (-0.2, 0, 0.7), "la": (-0.4, 0, -0.8), "head": (-0.3, 0.2, 0), "rl": (-0.3, 0, 0), "ll": (0.15, 0, 0)}],
+    "aura": [{"ra": (0.1, 0, 0.35), "la": (0.1, 0, -0.35), "head": (0.28, 0, 0), "lean": (0.06, 0, 0)},
+             {"ra": (0.1, 0, 0.42), "la": (0.1, 0, -0.42), "head": (0.3, 0, 0), "lean": (0.09, 0, 0)}],
+    "exhausted": [{"lean": (-0.45, 0, 0), "head": (0.5, 0, 0), "ra": (0.2, 0, 0.15), "la": (0.2, 0, -0.15), "rl": (-0.2, 0, 0.1), "ll": (0.2, 0, -0.1), "root": (0, -1, 0)},
+                  {"lean": (-0.55, 0, 0), "head": (0.6, 0, 0), "ra": (0.25, 0, 0.1), "la": (0.25, 0, -0.1), "rl": (-0.2, 0, 0.1), "ll": (0.2, 0, -0.1), "root": (0, -1.5, 0)}],
     "lower_arm": [{"ra": (-2.4, 0, 0.1), "head": (0.2, 0, 0)}, {"ra": (-1.6, 0, 0.1), "head": (0.3, 0, 0)}, {"ra": (-0.6, 0, 0.05), "head": (0.35, 0, 0)}, {"ra": (0, 0, 0.02), "head": (0.3, 0, 0)}],
 }
 # Frames per pose: keyframes are interpolated to this many frames.
@@ -190,12 +191,61 @@ def atlas(tex, names):
         layout[name] = {"start": len(columns), "count": COUNTS[name]}
         columns += frames_for(name)
     w, h = FRAME
-    out = Image.new("RGBA", (w * len(columns), h * 3))
-    for row_i, row in enumerate(DIRECTIONS):
+    yaws = list(DIRECTIONS.values()) + [PROFILE]
+    out = Image.new("RGBA", (w * len(columns), h * len(yaws)))
+    for row_i, yaw in enumerate(yaws):
         for col, pose in enumerate(columns):
             mesh = figure(tex, pose, pose.get("headless", False))
-            out.paste(bake(mesh, FRAME, SCALE, CENTER, yaw=DIRECTIONS[row], elevation=20), (col * w, row_i * h))
+            out.paste(bake(mesh, FRAME, SCALE, CENTER, yaw=yaw, elevation=20), (col * w, row_i * h))
     return out, layout
+
+
+# ------------------------------------------------------------------ the death tableau
+# Both bodies in one mesh so the hero really kneels astride the chest: the
+# z-buffer puts one knee behind the body and one in front.
+TABLEAU = (112, 72)
+TABLEAU_CENTER = (56, 54)
+TABLEAU_YAW = 70
+
+
+def straddle(arm):
+    # Kneeling astride the chest: knees on the ground either side of it,
+    # thighs forward, the body upright over him; seen from the front.
+    base = {"root": (0, -3, 3), "whole": (0, math.pi, 0), "rl": (-0.9, 0, 0.75), "ll": (-0.9, 0, -0.75),
+            "lean": (-0.2, 0, 0), "head": (0.5, 0, 0), "ra": (-0.8, 0, 0.3)}
+    base.update(arm)
+    return base
+
+
+def tableau(imp):
+    hb = herobrine_skin(imp, "smile")
+    st = imp.tex("entity/player/wide/steve")
+    lying = dict(POSES["lying"][0])
+    hit = dict(POSES["lying_hit"][0], root=(0, 0, -13))
+    still = straddle({"la": (-1.0, 0, -0.2), "lean": (-0.3, 0, 0), "head": (0.6, 0, 0)})
+    still2 = straddle({"la": (-1.05, 0, -0.2), "lean": (-0.26, 0, 0), "head": (0.55, 0, 0)})
+    up = straddle({"la": (1.15, 0, -0.25), "ra": (-0.9, 0, 0.35), "lean": (0.25, 0.2, 0), "head": (0.15, 0, 0)})
+    down = straddle({"la": (-1.1, 0, -0.05), "ra": (-0.7, 0, 0.3), "lean": (-0.65, -0.15, 0), "head": (0.75, 0, 0)})
+    stand = {"root": (0, 0, -24), "whole": (0, math.pi, 0), "head": (0.35, 0, 0)}
+    clips = {
+        "still": [(lying, still), (lying, still2)],
+        "raise": [(lying, mix(still, up, 0.4)), (lying, mix(still, up, 0.8)), (lying, up)],
+        "slam": [(lying, mix(up, down, 0.55)), (hit, down)],
+    }
+    for name in list(clips):
+        clips[name + "_x"] = [(dict(h, headless=True), m) for h, m in clips[name]]
+    clips["stand_x"] = [(dict(lying, headless=True), dict(stand, ra=(a, 0, 0.05))) for a in (-2.2, -1.5, -0.7, 0.0)]
+    columns, layout = [], {}
+    for name, frames in clips.items():
+        layout[name] = {"start": len(columns), "count": len(frames)}
+        columns += frames
+    w, h = TABLEAU
+    out = Image.new("RGBA", (w * len(columns), h))
+    for col, (body, hero) in enumerate(columns):
+        mesh = figure(hb, body, body.get("headless", False)) + figure(st, hero)
+        out.paste(bake(mesh, TABLEAU, SCALE, TABLEAU_CENTER, yaw=TABLEAU_YAW, elevation=20), (col * w, 0))
+    head = bake(figure(hb, lying, only_head=True), TABLEAU, SCALE, TABLEAU_CENTER, yaw=TABLEAU_YAW, elevation=20).getbbox()
+    return out, layout, [(head[0] + head[2]) / 2 - TABLEAU_CENTER[0], (head[1] + head[3]) / 2 - TABLEAU_CENTER[1]]
 
 
 def generate():
@@ -225,8 +275,11 @@ def generate():
     head = bake(figure(imp.tex("entity/player/wide/steve"), POSES["lying"][0], only_head=True), FRAME, SCALE, CENTER, yaw=DIRECTIONS["side"], elevation=20)
     box_ = Image.fromarray(np.array(head)).getbbox() if not isinstance(head, Image.Image) else head.getbbox()
     head_at = [(box_[0] + box_[2]) / 2 - CENTER[0], (box_[1] + box_[3]) / 2 - CENTER[1]]
-    data = {"sprites": sprites, "lying_head": head_at, "frame": list(FRAME), "anchor": list(CENTER), "herobrine": layout, "steve": fist_layout,
-            "directions": list(DIRECTIONS)}
+    death, death_layout, death_head = tableau(imp)
+    imp.save(death, "ch4_death_tableau", ["entity/player/wide/steve", "entity/player/wide/steve (white eyes)"])
+    sprites.append("ch4_death_tableau")
+    data = {"sprites": sprites, "lying_head": head_at, "tableau": {"frame": list(TABLEAU), "anchor": list(TABLEAU_CENTER), "clips": death_layout, "head": death_head}, "frame": list(FRAME), "anchor": list(CENTER), "herobrine": layout, "steve": fist_layout,
+            "directions": list(DIRECTIONS) + ["profile"]}
     (ROOT / "data/chapter_four_finale_assets.json").write_text(json.dumps(data, indent=2) + "\n")
     (ROOT / "docs/CHAPTER_FOUR_FINALE_MANIFEST.json").write_text(json.dumps({"version": version, "client_jar": str(client), "raw_files": imp.files, "derived": imp.derived}, indent=2) + "\n")
     print("Finale baked", sprites, sum(v["count"] for v in layout.values()), "Herobrine frames")

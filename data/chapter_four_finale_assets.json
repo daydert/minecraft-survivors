@@ -6,12 +6,57 @@
     "ch4_hb_dim",
     "ch4_fist_steve",
     "ch4_sun",
-    "ch4_moon"
+    "ch4_moon",
+    "ch4_death_tableau"
   ],
   "lying_head": [
     -10.5,
     -4.0
   ],
+  "tableau": {
+    "frame": [
+      112,
+      72
+    ],
+    "anchor": [
+      56,
+      54
+    ],
+    "clips": {
+      "still": {
+        "start": 0,
+        "count": 2
+      },
+      "raise": {
+        "start": 2,
+        "count": 3
+      },
+      "slam": {
+        "start": 5,
+        "count": 2
+      },
+      "still_x": {
+        "start": 7,
+        "count": 2
+      },
+      "raise_x": {
+        "start": 9,
+        "count": 3
+      },
+      "slam_x": {
+        "start": 12,
+        "count": 2
+      },
+      "stand_x": {
+        "start": 14,
+        "count": 4
+      }
+    },
+    "head": [
+      12.5,
+      -3.0
+    ]
+  },
   "frame": [
     48,
     56
@@ -195,6 +240,7 @@
   "directions": [
     "down",
     "up",
-    "side"
+    "side",
+    "profile"
   ]
 }
