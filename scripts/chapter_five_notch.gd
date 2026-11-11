@@ -70,6 +70,7 @@ var quake = preload("res://scripts/chapter_five_quake.gd").new()
 ## Quake input from main.gd: wish (strafe, forward), look delta, held buttons.
 var quake_input: Dictionary = {"wish":Vector2.ZERO, "turn":Vector2.ZERO, "fire":false, "jump":false}
 var shake3d := 0.0
+var finale = preload("res://scripts/chapter_five_finale.gd").new()
 
 func reset():
 	phase = "";age = 0.0;line = "";id = -1;hp = FIGHT_HP;walls.clear();falls.clear();popups.clear();slow_left = 0.0;retry_of = ""
@@ -106,7 +107,8 @@ func clear_arena(w):
 
 func skip():
 	if phase == "intro" and age > 1.0:age = INTRO_LENGTH - .1
-	elif phase in ["to_ut", "to_lanes", "lanes_won", "to_quake", "quake_won"] and age > .8:age = 99.0
+	elif phase in ["to_ut", "to_lanes", "lanes_won", "to_quake", "quake_won", "to_code"] and age > .8:age = 99.0
+	elif phase == "chair":finale.skip_line()
 
 func step(w, dt: float, movement: Vector2):
 	age += dt;pose_age += dt
@@ -145,7 +147,21 @@ func step(w, dt: float, movement: Vector2):
 		"quake":deathmatch(w, dt)
 		"quake_won":
 			if cue(0, .1):say("…Ты что, правда играл в это раньше?", 2.8)
-			if age >= 3.2:finish(w)
+			if age >= 3.2:change("to_code")
+		"to_code":
+			if cue(0, .1):say("Ладно. Последняя игра. Моя настоящая — код.", 2.8)
+			if age >= 3.0:start_code(w)
+		"code":code(w, dt)
+		"erase":
+			finale_sounds(w, finale.step(dt))
+			if finale.phase == "erase" and finale.thrown >= 3.2:start_fists(w)
+		"fists":fists(w, dt, movement)
+		"chair":
+			var r: String = finale.step(dt);finale_sounds(w, r)
+			if r == "done":finale.change("flight");change("flight")
+		"flight":
+			var r: String = finale.step(dt);finale_sounds(w, r)
+			if r == "done":finish(w)
 		"retry":
 			if age >= 2.4:
 				w.hp = 20.0;w.invulnerable = 1.5
@@ -155,6 +171,8 @@ func step(w, dt: float, movement: Vector2):
 					"lanes":start_lanes(w)
 					"fighter":start_fighter(w)
 					"quake":start_quake(w)
+					"code":start_code(w, true)
+					"fists":start_fists(w)
 
 func idle_world(w, dt: float):
 	w.player_visual.travel = 0.0;w.player_moving = false
@@ -166,7 +184,7 @@ func lose(w, which: String):
 	say("Чекпоинт. Ещё раз.", 2.0)
 
 func finish(w):
-	# Stage E (the fighter and the arena) follows; until then the run ends here.
+	# The flight is over: Steve is somewhere else now.
 	phase = "done"
 	w.state = "RESULT";w.victory = true
 
@@ -291,6 +309,10 @@ func start_ut(w):
 	w.sound("ch4_hb_glitch", .1)
 
 func press(w, action: String):
+	if phase in ["code", "erase"]:finale.press(action);return
+	if phase == "fists":
+		if fighter.state == "finisher" and action == "accept":fighter.finish_blow();return
+		fighter.press({"accept":"punch", "kick":"grab"}.get(action, ""));return
 	if phase == "lanes":lane_press(w, action);return
 	if phase == "fighter":
 		fighter.press({"accept":"punch", "kick":"kick", "special":"special"}.get(action, ""));return
@@ -420,6 +442,11 @@ func lane_press(w, action: String):
 
 func click(w, at: Vector2) -> bool:
 	if phase == "fighter":fighter.press("punch");return true
+	if phase == "fists":
+		if fighter.state == "finisher":fighter.finish_blow()
+		else:fighter.press("punch")
+		return true
+	if phase == "code" and finale.phase == "duel" and finale.advanced and Rect2(520, 326, 100, 22).has_point(at):finale.key("run");return true
 	if phase == "quake":return true
 	if phase == "ut":
 		for i in range(menu_options().size()):
@@ -559,3 +586,60 @@ func deathmatch(w, dt: float):
 				if id.begins_with("pickup"):w.sound("pickup", .05)
 	if quake.state == "won":change("quake_won")
 	elif quake.state == "lost":lose(w, "quake")
+
+# ------------------------------------------------------------------ the end
+
+func start_code(w, keep_choice := false):
+	clear_arena(w)
+	change("code")
+	if keep_choice:finale.start_duel()
+	else:finale.reset();finale.begin_pick()
+
+func code(w, dt: float):
+	var r: String = finale.step(dt)
+	finale_sounds(w, r)
+	if r == "won":
+		finale.begin_erase();change("erase")
+	elif r == "lost":
+		say("Готово. Медленно.", 2.0);lose(w, "code")
+
+func finale_sounds(w, _r: String):
+	for id in finale.sounds:
+		match id:
+			"type":w.sound("ch4_hb_tick", .02)
+			"wrong":w.sound("ch4_punch_miss", .05)
+			"win":w.sound("level", .1)
+			"resist":w.sound("ch4_heartbeat", .08)
+			"glitch":w.sound("ch4_hb_glitch", .1)
+			"throw":w.sound("ch1_whoosh", .1)
+			"console":w.sound("ch4_hb_shatter", .1);w.sound("explosion", .1)
+			"scan":w.sound("ch4_hb_pulse", .1)
+			"draw":w.sound("ch4_heavy", .1)
+			"stab":w.sound("ch4_flesh_hit", .05);w.sound("ch4_bone_crack", .05)
+			"door":w.sound("ch4_door_open", .1)
+			"theme":w.sound("ch5_ending_theme", .1)
+			"fade":w.sound("ch5_ending_fade", .1)
+			"arrive":w.sound("ch4_hb_teleport", .1)
+			"sting":w.sound("ch5_ending_sting", .1)
+	finale.sounds.clear()
+	if not finale.line.is_empty() and finale.line != line:say(finale.line, finale.line_length)
+
+func start_fists(w):
+	clear_arena(w)
+	fighter.reset("fists");change("fists")
+	say("Без игр. Просто кулаки.", 2.0)
+
+func fists(w, dt: float, movement: Vector2):
+	var events: Array = fighter.step(dt, movement)
+	for e in events:
+		match e:
+			"hit":w.sound("ch4_punch", .03);shake3d = .1
+			"hit_heavy":w.sound("ch4_punch_heavy", .03);shake3d = .2
+			"block":w.sound("shield_block", .03)
+			"grab":w.sound("ch4_hb_tick", .05)
+			"finisher":w.sound("ch4_heartbeat", .1)
+			"wire":w.sound("ch4_flesh_hit", .05);w.sound("ch4_hb_shatter", .05);shake3d = .4
+	shake3d = maxf(0, shake3d - dt)
+	if fighter.state == "done":
+		if fighter.winner == 0:finale.change("chair");change("chair")
+		else:lose(w, "fists")

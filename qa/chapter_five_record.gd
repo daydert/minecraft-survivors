@@ -13,48 +13,45 @@ func run():
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(folder))
 	game.action("chapter_5");var w=game.world;game.settings.shake=true;game.settings.numbers=false
 	var n=w.notch
-	n.begin(w);n.start_fighter(w)
+	n.begin(w);n.change("quake_won");n.age=2.0
+	await idle(w,4.5)
+	var f=n.finale
+	await idle(w,1.2);f.press("right");await idle(w,.6);f.press("left");await idle(w,.6);f.press("accept")
+	var sol: Array=f.SOLUTIONS["java"]
+	await idle(w,2.0)
+	var picks:=0
+	while not f.pool.is_empty() and n.phase=="code":
+		await idle(w,1.1)
+		for i in range(f.pool.size()):
+			if sol[f.pool[i]]==sol[f.built.size()]:
+				f.pool_choice=i;await idle(w,.35);f.pick(i);break
+		picks+=1
+		if picks==3:f.pick((f.pool_choice+1)%maxi(1,f.pool.size()))
+	await idle(w,3.0)
+	for k in range(16):
+		await idle(w,.28);n.press(w,"accept")
+	await idle(w,4.0)
 	var fi=n.fighter
 	await idle(w,2.4)
-	for f in range(int(26*30)):
+	for fr in range(int(24*30)):
 		var s=fi.steve();var nt=fi.notch()
 		var d: float=nt.x-s.x
-		var move=Vector2(signf(d) if absf(d)>1.1 else 0.0,0)
-		if nt.move in ["punch","kick","punch3"] and fi.phase_of(nt)=="start" and absf(d)<1.8:move=Vector2(0,1)
-		if f%40==0 and absf(d)>3:n.press(w,"special")
-		elif absf(d)<1.3 and f%9==0:n.press(w,"accept" if f%27!=0 else "kick")
-		if f%150==75:move=Vector2(signf(d),-1)
+		var move=Vector2(signf(d) if absf(d)>1.2 else 0.0,0)
+		if fi.held(0)==null and fr<200:
+			var tgt=fi.items[1].x
+			move=Vector2(signf(tgt-s.x) if absf(tgt-s.x)>.3 else 0.0,0)
+			if absf(tgt-s.x)<.6:n.press(w,"kick")
+		elif absf(d)<1.6 and fr%10==0:n.press(w,"accept")
 		for i in range(2):
 			s.hp=maxf(s.hp,30)
-			if f>600:nt.hp=minf(nt.hp,40)
+			if fr>420:nt.hp=minf(nt.hp,8)
 			w.step(1.0/60,move)
 		await shoot(w)
 		if fi.state!="fight":break
-	await idle(w,6.5)
-	await idle(w,2.5)
-	var qk=n.quake
-	for f in range(int(48*30)):
-		var st=qk.steve();var nb=qk.notch()
-		var to: Vector3=nb.p-st.p
-		var want_yaw: float=atan2(-to.x,-to.z)
-		var dy: float=angle_difference(st.yaw,want_yaw)
-		var pitch_want: float=atan2(to.y+.4,Vector2(to.x,to.z).length())-.06
-		var turn=Vector2(clampf(-dy,-.08,.08),clampf(st.pitch-pitch_want,-.05,.05))
-		var sees: bool=qk.line_clear(qk.eye(st),qk.eye(nb))
-		var wish=Vector2(sin(f*.03),1.0 if to.length()>9 else -.4)
-		var fire: bool=sees and absf(dy)<.12 and nb.dead<=0
-		var jump: bool=f%70==0
-		if f==200:turn.y=1.5;fire=true;jump=true
-		n.quake_input={"wish":wish,"turn":turn,"fire":fire,"jump":jump}
-		for i in range(2):
-			st.hp=maxf(st.hp,30);nb.frags=mini(nb.frags,1)
-			if st.dead>0:st.dead=0;st.hp=100
-			if f>500:nb.hp=minf(nb.hp,30)
-			w.step(1.0/60,Vector2.ZERO)
-			n.quake_input.turn=Vector2.ZERO;n.quake_input.fire=false if i==0 else n.quake_input.fire
-		await shoot(w)
-		if n.phase!="quake":break
-	await idle(w,4.0)
+	await idle(w,1.2);n.press(w,"accept")
+	await idle(w,3.5)
+	await idle(w,f.CHAIR_LENGTH+.5)
+	await idle(w,f.FLIGHT_LENGTH+1.0)
 	var timeline={"fps":30,"frames":state.frame,"sound_events":state.cues,"music":state.music}
 	FileAccess.open("res://qa/recordings/chapter_five_timeline.json",FileAccess.WRITE).store_string(JSON.stringify(timeline,"  "))
 	game.audio.shutdown();game.quitting=true

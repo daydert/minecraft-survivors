@@ -161,8 +161,10 @@ def icons():
     return len(sprites)
 
 def notch_skin(imp):
-    """A digital Notch: the player model with darker hair, a beard, green
-    eyes and a white shirt that comes apart into lines of cyan code."""
+    """Notch's canonical skin (assets/skins/notch.png, supplied by the user)."""
+    canon = ROOT / "assets/skins/notch.png"
+    if canon.exists():
+        return Image.open(canon).convert("RGBA")
     tex = imp.tex("entity/player/wide/steve").copy()
     px = tex.load()
     for y in range(64):
@@ -188,7 +190,7 @@ def notch():
     imp = Importer(client)
     names = ["idle", "walk", "cast", "invite", "look_hand", "float", "slam", "point", "snap", "aura", "stagger", "knocked", "lunge", "throw", "exhausted", "fall", "lying"]
     image, layout = four.atlas(notch_skin(imp), names)
-    imp.save(image, "ch5_notch", ["entity/player/wide/steve (digital Notch recolour)"])
+    imp.save(image, "ch5_notch", ["assets/skins/notch.png (canonical Notch skin)"])
     t = lambda name: frame0(imp.tex(name))
     plants = {"dispenser": cube(t("block/dispenser_front"), t("block/furnace_side"), t("block/furnace_top")),
               "redstone_ore": cube(t("block/redstone_ore"), t("block/redstone_ore"), t("block/redstone_ore")),
@@ -220,7 +222,7 @@ def textures3d():
     version, client, _ = find_client(Path.home() / ".local/share/PrismLauncher")
     imp = Importer(client)
     imp.save(imp.tex("entity/player/wide/steve"), "ch5_skin_steve", ["entity/player/wide/steve"])
-    imp.save(notch_skin(imp), "ch5_skin_notch", ["entity/player/wide/steve (digital Notch recolour)"])
+    imp.save(notch_skin(imp), "ch5_skin_notch", ["assets/skins/notch.png (canonical Notch skin)"])
     names = ["ch5_skin_steve", "ch5_skin_notch"]
     for n in QUAKE:
         imp.save(frame0(imp.tex("block/" + n)), "ch5q_" + n, ["block/" + n]);names.append("ch5q_" + n)

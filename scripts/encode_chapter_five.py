@@ -1,4 +1,4 @@
-"""Encode the Chapter V stage E film with its music cues and sound events."""
+"""Encode the Chapter V stage F film with its music cues and sound events."""
 from pathlib import Path
 import json, shutil, subprocess, sys
 ROOT=Path(__file__).resolve().parent.parent
@@ -7,7 +7,7 @@ data=json.loads((OUT/'chapter_five_timeline.json').read_text())
 seconds=data['frames']/data['fps']
 tracks={"music":"music.ogg","herobrine":"music_herobrine.ogg"}
 events={}
-for m in ['minecraft_audio','nether_audio','end_audio','chapter_four_audio','end_external_audio','v2_audio','duel_audio','chapter_one_audio']:
+for m in ['minecraft_audio','nether_audio','end_audio','chapter_four_audio','end_external_audio','v2_audio','duel_audio','chapter_one_audio','chapter_five_audio']:
     p=ROOT/f'data/{m}.json'
     if p.exists():events.update(json.loads(p.read_text()))
 args=['ffmpeg','-hide_banner','-loglevel','error','-y','-framerate',str(data['fps']),'-i',str(OUT/'chapter_five_frames/%05d.png')]
@@ -27,7 +27,7 @@ for cue in data['sound_events']:
     graph+=f'[{n}:a]volume={spec["gain"]*.6*var.get("volume",1)},adelay={d}|{d}[s{n}];';labels.append(f'[s{n}]');n+=1
     if n>480:break
 graph+=''.join(labels)+f'amix=inputs={len(labels)}:normalize=0,alimiter=limit=0.95,atrim=0:{seconds},apad=whole_dur={seconds}[a]'
-target=OUT/'chapter_five_e.mp4'
+target=OUT/'chapter_five_f.mp4'
 args+=['-filter_complex',graph,'-map','[v]','-map','[a]','-c:v','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-t',str(seconds),'-movflags','+faststart',str(target)]
 subprocess.run(args,check=True);print(target,seconds)
 if '--clean' in sys.argv:shutil.rmtree(OUT/'chapter_five_frames')

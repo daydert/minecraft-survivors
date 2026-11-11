@@ -1,0 +1,4 @@
+{
+  "ch5_ending_theme": {"gain": 1.0, "variants": [{"path": "res://assets/audio/chapter_five/ending_theme.ogg", "volume": 1, "pitch": 1}]},
+  "ch5_ending_sting": {"gain": 1.0, "variants": [{"path": "res://assets/audio/chapter_five/ending_sting.ogg", "volume": 1, "pitch": 1}]}
+}

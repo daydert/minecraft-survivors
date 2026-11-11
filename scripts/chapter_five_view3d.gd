@@ -49,8 +49,11 @@ func ensure(g, which: String, size: Vector2i):
 	if scene != null:scene.queue_free()
 	rigs.clear();nodes.clear();pool.clear()
 	scene = Node3D.new();viewport.add_child(scene)
-	if which == "fighter":build_fighter()
-	else:build_quake()
+	match which:
+		"fighter", "fists":build_fighter()
+		"chair":build_chair()
+		"flight":build_flight()
+		_:build_quake()
 
 func release():
 	if viewport != null and is_instance_valid(viewport):viewport.queue_free()
@@ -167,7 +170,13 @@ func sync_fighter(fi):
 		r.root.rotation = Vector3(0, PI / 2 * f.face, 0)
 		if f.ko:r.root.rotation.x = -minf(1.0, fi.age * 3.0) * 1.45;r.root.position.y = f.y + .15
 		else:r.root.rotation.x = 0.0
-		pose(r, fighter_pose(f, fi))
+		var fp: Dictionary = fighter_pose(f, fi)
+		if fi.mode == "fists" and f.who == "notch" and fi.state in ["finisher", "wire", "done"]:
+			fp = {"rl":Vector3(-1.5, 0, 0), "ll":Vector3(0, 0, 0), "drop":-.45, "torso":Vector3(.35, 0, 0), "head":Vector3(.4, 0, 0), "ra":Vector3(.2, 0, -.2), "la":Vector3(.2, 0, .2)}
+			if fi.state != "finisher":fp.torso = Vector3(-.2, 0, 0);fp.head = Vector3(-.5, 0, 0);fp.ra = Vector3(-.4, 0, -.6);fp.la = Vector3(-.4, 0, .6)
+		if fi.mode == "fists" and f.who == "steve" and fi.state in ["wire", "done"]:fp.ra = Vector3(-1.57, 0, 0);fp.torso = Vector3(0, -.4, 0)
+		if fi.held(fi.fighters.find(f)) != null and f.move.is_empty():fp.ra = Vector3(-.4, 0, -.2)
+		pose(r, fp)
 		r.root.visible = f.glitch <= 0 or int(fi.age * 30) % 2 == 0
 		r.root.scale = Vector3.ONE * (1.0 if f.who == "steve" else 1.12)
 	var mid: float = (fi.fighters[0].x + fi.fighters[1].x) / 2.0
@@ -182,6 +191,28 @@ func sync_fighter(fi):
 	for sp in fi.sparks:
 		var n: Node3D = take("spark", "")
 		n.position = Vector3(sp.x, sp.y, .3);n.scale = Vector3.ONE * (1.0 + sp.age * 6);shown.append(n)
+	for i in range(fi.items.size()):
+		var it: Dictionary = fi.items[i]
+		var key: String = "item%d" % i
+		if not nodes.has(key):
+			var l := Label3D.new();l.text = it.text;l.font_size = 36;l.pixel_size = .008;l.modulate = Color(1, .85, .35)
+			l.outline_size = 8;l.outline_modulate = Color(.2, .05, 0);scene.add_child(l);nodes[key] = l
+		var label: Label3D = nodes[key]
+		label.visible = true
+		if it.holder >= 0:
+			var hand: Node3D = rigs[fi.fighters[it.holder].who].ra
+			label.global_position = hand.global_position + hand.global_transform.basis * Vector3(0, -.75, .35)
+			label.rotation = Vector3(0, 0, PI / 2 * fi.fighters[it.holder].face)
+		else:
+			label.position = Vector3(it.x, .12 + sin(fi.age * 2 + i) * .05, .6);label.rotation = Vector3(-PI / 2.4, 0, 0)
+	if fi.mode == "fists" and fi.state in ["wire", "done"]:
+		var w: Node3D = take("wire", "")
+		var s: Dictionary = fi.steve();var n: Dictionary = fi.notch()
+		var k: float = clampf(fi.age / .25, 0, 1)
+		var from := Vector3(s.x + s.face * .4, 1.1, 0);var to := Vector3(n.x + s.face * 1.2 * k, 1.05, 0)
+		w.position = (from + to) / 2.0;w.scale = Vector3(maxf(.01, from.distance_to(to)), 1, 1);shown.append(w)
+		for j in range(3):
+			var sp: Node3D = take("spark", "");sp.position = Vector3(n.x, 1.05 + sin(fi.age * 30 + j) * .2, .2);sp.scale = Vector3.ONE * (.6 + fmod(fi.age * 7 + j, 1.0));shown.append(sp)
 	hide_rest(shown)
 	for i in range(16):
 		var l: Label3D = nodes["code%d" % i]
@@ -205,6 +236,13 @@ func take(kind: String, variant: String) -> Node3D:
 			var b := BoxMesh.new();b.size = Vector3(.12, .12, .12);n.mesh = b;n.material_override = flat(Color(.6, .6, .6, .5), 0.0, true)
 		"blast":
 			var s := SphereMesh.new();s.radius = 1.0;s.height = 2.0;n.mesh = s;n.material_override = flat(Color(1, .55, .15, .6), 5.0, true)
+		"wire":
+			var b := BoxMesh.new();b.size = Vector3(1, .05, .05);n.mesh = b;n.material_override = flat(Color(.15, .15, .17))
+		"star":
+			var b := BoxMesh.new();b.size = Vector3(.06, .06, .6);n.mesh = b;n.material_override = flat(Color(.9, .95, 1), 3.0)
+		"glyph":
+			var l := Label3D.new();l.text = "01";l.font_size = 32;l.pixel_size = .01;l.modulate = Color(.3, 1, .7)
+			l.billboard = BaseMaterial3D.BILLBOARD_ENABLED;l.set_meta("used", true);scene.add_child(l);pool[key].append(l);return l
 	n.set_meta("used", true);scene.add_child(n);pool[key].append(n)
 	return n
 
@@ -283,3 +321,159 @@ func sync_quake(qk):
 		sp.position = it.p + Vector3(0, .5 + sin(qk.age * 2.5 + i) * .12, 0)
 	for k in nodes:
 		if String(k).begins_with("lamp"):nodes[k].light_energy = 1.4 + sin(qk.age * 9.0 + k.length()) * .15 + (0.6 if int(qk.age * 13 + k.length()) % 17 == 0 else 0.0)
+
+# ------------------------------------------------------------------ the chair
+
+func room(bg: Color, ambient: Color):
+	var env := WorldEnvironment.new();var e := Environment.new();env.environment = e
+	e.background_mode = Environment.BG_COLOR;e.background_color = bg
+	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;e.ambient_light_color = ambient;e.ambient_light_energy = .7
+	scene.add_child(env)
+
+func block(at: Vector3, size: Vector3, tex_name: String) -> MeshInstance3D:
+	var m := MeshInstance3D.new();var b := BoxMesh.new();b.size = size;m.mesh = b;m.position = at
+	m.material_override = material(tex_name, true);scene.add_child(m);return m
+
+func build_chair():
+	room(Color(.02, .02, .03), Color(.4, .45, .55))
+	var lamp := SpotLight3D.new();lamp.position = Vector3(0, 4.5, .5);lamp.rotation = Vector3(-PI / 2, 0, 0);lamp.spot_range = 8;lamp.spot_angle = 32;lamp.light_energy = 3.0;lamp.light_color = Color(1, .95, .85);scene.add_child(lamp)
+	var glow := OmniLight3D.new();glow.position = Vector3(1.6, 1.6, -1);glow.omni_range = 5;glow.light_color = Color(.3, 1, .8);glow.light_energy = 1.2;scene.add_child(glow);nodes.glow = glow
+	block(Vector3(0, -.5, 0), Vector3(14, 1, 10), "ch5q_polished_deepslate")
+	for x in [-.35, .35]:
+		for z in [-.35, .35]:block(Vector3(x, .25, z), Vector3(.12, .5, .12), "ch5q_dark_oak_planks")
+	block(Vector3(0, .55, 0), Vector3(.9, .1, .9), "ch5q_dark_oak_planks")
+	block(Vector3(0, 1.15, -.42), Vector3(.9, 1.1, .1), "ch5q_dark_oak_planks")
+	var console := block(Vector3(2.3, .9, -1.2), Vector3(1.4, 1.1, .3), "ch5q_polished_blackstone_bricks")
+	var screen := Label3D.new();screen.position = Vector3(2.3, 1.1, -1.03);screen.font_size = 28;screen.pixel_size = .006;screen.modulate = Color(.3, 1, .6)
+	screen.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT;screen.text = "scan: 0%";scene.add_child(screen);nodes.screen = screen
+	rigs.notch = make_rig("ch5_skin_notch");rigs.steve = make_rig("ch5_skin_steve")
+	var sword := Sprite3D.new();sword.texture = tex("ch5q_item_iron_sword");sword.pixel_size = .028;sword.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	sword.position = Vector3(-1 * PX, -11 * PX, .25);sword.rotation = Vector3(0, PI / 2, -PI * .75);rigs.steve.ra.add_child(sword);nodes.sword = sword
+	var cable := MeshInstance3D.new();var cb := BoxMesh.new();cb.size = Vector3(1, .03, .03);cable.mesh = cb;cable.material_override = flat(Color(.1, .1, .12));scene.add_child(cable);nodes.cable = cable
+	for k in range(3):
+		var chain := MeshInstance3D.new();var ch := BoxMesh.new();ch.size = Vector3(.62, .07, .36);chain.mesh = ch;chain.material_override = flat(Color(.5, .52, .56))
+		scene.add_child(chain);nodes["chain%d" % k] = chain
+	var cam := Camera3D.new();cam.fov = 42;scene.add_child(cam);nodes.cam = cam
+
+func sync_chair(f, clock: float):
+	var a: float = f.age
+	var n: Dictionary = rigs.notch;var s: Dictionary = rigs.steve
+	n.root.position = Vector3(0, .6 - 12 * PX + .02, .05);n.root.rotation = Vector3(0, 0, 0)
+	var struggle: float = sin(clock * 9) * .08 if a > 20.8 and a < 30 else 0.0
+	var np := {"rl":Vector3(-1.57, 0, 0), "ll":Vector3(-1.57, 0, 0), "ra":Vector3(.5, 0, -.25), "la":Vector3(.5, 0, .25), "head":Vector3(-.05 + struggle, struggle, 0), "torso":Vector3(struggle * .5, 0, 0)}
+	if a < 1.2:np.head = Vector3(.5 - a * .4, 0, 0)
+	if a > f.CHAIR_STAB:
+		var k: float = clampf((a - f.CHAIR_STAB) / 1.2, 0, 1)
+		var fade: float = clampf((a - 36.0) / 5.0, 0, 1)
+		np.torso = Vector3(.25 * k + .2 * fade, 0, 0);np.head = Vector3(.3 * k + .5 * fade, 0, .1 * fade)
+		n.root.visible = fade < .98 and (fade < .3 or int(clock * 20) % int(maxf(2, 8 - fade * 6)) != 0)
+	pose(n, np)
+	for k in range(3):
+		var c: MeshInstance3D = nodes["chain%d" % k]
+		c.position = n.torso.global_position + Vector3(0, .25 + k * .22, 0);c.visible = n.root.visible
+	var step: float = clampf((a - f.CHAIR_SWORD - .6) / 1.6, 0, 1)
+	s.root.position = Vector3(-1.6 + step * .85, 0, .35);s.root.rotation = Vector3(0, PI / 2, 0)
+	var sp := {"ra":Vector3(-.6, 0, -.1), "la":Vector3(.1, 0, .1)}
+	if a > f.CHAIR_SWORD:sp.ra = Vector3(-.9, 0, -.2)
+	if a > f.CHAIR_STAB - .4:
+		var k: float = clampf((a - (f.CHAIR_STAB - .4)) / .4, 0, 1)
+		sp.ra = Vector3(-.9 - .7 * k, 0, 0);sp.torso = Vector3(.1 * k, -.3 * k, 0);s.root.position.x += .25 * k
+	if a > f.CHAIR_STAB + 3.0:sp.head = Vector3(.25, 0, 0)
+	pose(s, sp)
+	s.root.position.y = 0
+	(nodes.sword as Sprite3D).visible = a > f.CHAIR_SWORD
+	var scanning: bool = a > f.CHAIR_SCAN[0] and a < f.CHAIR_SWORD
+	var cable: MeshInstance3D = nodes.cable
+	cable.visible = scanning
+	if scanning:
+		var from: Vector3 = Vector3(2.0, 1.0, -1.0);var to: Vector3 = n.head.global_position + Vector3(0, .3, 0)
+		cable.position = (from + to) / 2.0;cable.scale = Vector3(from.distance_to(to), 1, 1);cable.look_at(to, Vector3.UP);cable.rotate_object_local(Vector3.UP, PI / 2)
+	(nodes.screen as Label3D).text = "scan: %d%%\n%s" % [int(f.scan() * 100), "exit() found" if f.scan() >= 1.0 else "reading…"]
+	nodes.glow.light_energy = 1.0 + (sin(clock * 12) * .4 if scanning else 0.0)
+	var shown: Array = []
+	if scanning:
+		for k in range(10):
+			var g: Node3D = take("glyph", "");var t: float = fmod(clock * .6 + k * .1, 1.0)
+			g.position = (n.head.global_position + Vector3(0, .4, 0)).lerp(Vector3(2.3, 1.3, -1.0), t) + Vector3(0, sin(t * PI) * .5, 0)
+			(g as Label3D).text = ["0", "1", "{", "}", ";", "()"][k % 6];shown.append(g)
+	hide_rest(shown)
+	var cam: Camera3D = nodes.cam
+	var push: float = clampf((a - f.CHAIR_STAB + 1.0) / 2.0, 0, 1) if a > f.CHAIR_STAB - 1.0 else 0.0
+	cam.position = Vector3(.4 + sin(clock * .2) * .2, 1.7 - push * .2, 4.2 - push * .7)
+	cam.look_at(Vector3(-.2, 1.05, 0))
+
+# ------------------------------------------------------------------ the door and the flight
+
+func build_flight():
+	room(Color(0, 0, 0), Color(.6, .6, .7))
+	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.5, .4, 0);sun.light_energy = 1.2;scene.add_child(sun)
+	rigs.steve = make_rig("ch5_skin_steve")
+	var door := Node3D.new();door.position = Vector3(1.0, 0, -6);scene.add_child(door);nodes.door = door
+	var leaf := MeshInstance3D.new();var lb := BoxMesh.new();lb.size = Vector3(1.0, 2.0, .12);leaf.mesh = lb;leaf.position = Vector3(-.5, 1.0, 0)
+	leaf.material_override = material("ch5q_iron_block", true);door.add_child(leaf)
+	var frame := MeshInstance3D.new();var fb := BoxMesh.new();fb.size = Vector3(1.3, 2.3, .08);frame.mesh = fb;frame.position = Vector3(.5, 1.15, -.08)
+	frame.material_override = flat(Color(1, 1, 1), 4.0);door.get_parent().add_child(frame);nodes.light = frame;frame.position = door.position + Vector3(-.5, 1.15, -.1)
+	var worlds: Array = []
+	var specs := [["ch5q_cut_copper", 6.0], ["ch5q_crying_obsidian", 4.0], ["ch5q_magma", 7.0], ["ch5q_glowstone", 3.0], ["ch5q_deepslate_tiles", 5.0], ["ch5q_gilded_blackstone", 4.5], ["ch5q_copper_grate", 3.5], ["ch5q_redstone_block", 5.5]]
+	for i in range(specs.size()):
+		var m := MeshInstance3D.new()
+		var shape: Mesh
+		match i % 4:
+			0:
+				var sm := SphereMesh.new();sm.radius = specs[i][1];sm.height = specs[i][1] * 2;shape = sm
+			1:
+				var tm := TorusMesh.new();tm.inner_radius = specs[i][1] * .7;tm.outer_radius = specs[i][1];shape = tm
+			2:
+				var bm := BoxMesh.new();bm.size = Vector3.ONE * specs[i][1] * 1.4;shape = bm
+			3:
+				var cm := CylinderMesh.new();cm.top_radius = specs[i][1];cm.bottom_radius = specs[i][1] * .3;cm.height = specs[i][1] * 1.2;shape = cm
+		m.mesh = shape;m.material_override = material(specs[i][0], true, 1.2)
+		var side: float = -1.0 if i % 2 == 0 else 1.0
+		m.position = Vector3(side * (12 + (i % 3) * 6), (i % 3 - 1) * 6.0, -40 - i * 55)
+		scene.add_child(m);worlds.append(m)
+	nodes.worlds = worlds
+	var other := Node3D.new();scene.add_child(other);nodes.other = other;other.visible = false
+	for k in range(5):
+		var hill := MeshInstance3D.new();var hs := SphereMesh.new();hs.radius = 9.0 + k * 3;hs.height = hs.radius * 2;hill.mesh = hs
+		var mat := StandardMaterial3D.new();mat.albedo_color = Color(.18 + k * .04, .55 - k * .04, .2);mat.roughness = 1.0;hill.material_override = mat
+		hill.position = Vector3(-18 + k * 9, -hs.radius + 1.0 + (k % 2) * .8, -10 - k * 4);other.add_child(hill)
+	var cam := Camera3D.new();cam.fov = 60;cam.far = 800;scene.add_child(cam);nodes.cam = cam
+
+func sync_flight(f, clock: float):
+	var a: float = f.age
+	var s: Dictionary = rigs.steve;var cam: Camera3D = nodes.cam
+	var env: Environment = (scene.get_child(0) as WorldEnvironment).environment
+	var shown: Array = []
+	if a < 5.0:
+		var walk: float = clampf(a / 3.0, 0, 1)
+		s.root.position = Vector3(1.0 - .5, 0, -1.0 - walk * 4.2);s.root.rotation = Vector3(0, PI, 0)
+		var sw: float = sin(a * 7) * .7 if walk < 1 else 0.0
+		pose(s, {"rl":Vector3(sw, 0, 0), "ll":Vector3(-sw, 0, 0), "ra":Vector3(-sw * .6 - (1.2 if a > 3.0 else 0.0), 0, 0), "la":Vector3(sw * .6, 0, 0)})
+		nodes.door.rotation = Vector3(0, -clampf((a - 3.2) / .8, 0, 1) * 1.6, 0)
+		nodes.door.visible = true;nodes.light.visible = a > 3.2
+		cam.position = Vector3(2.4, 1.8, 2.5);cam.look_at(Vector3(.5, 1.2, -5.5))
+		env.background_color = Color(0, 0, 0)
+	else:
+		nodes.door.visible = false;nodes.light.visible = false
+		var t: float = a - 5.0
+		var z: float = -t * 26.0
+		var bob: float = sin(clock * 1.7) * .3
+		s.root.position = Vector3(0, 2.0 + bob, z);s.root.rotation = Vector3(-1.3, PI, 0)
+		pose(s, {"ra":Vector3(.2, 0, -.15), "la":Vector3(.2, 0, .15), "rl":Vector3(.1, 0, 0), "ll":Vector3(-.1, 0, 0), "head":Vector3(-1.0, 0, 0)})
+		cam.position = Vector3(1.8 + sin(clock * .3) * .5, 3.0, z + 5.0);cam.look_at(Vector3(0, 2.2, z - 6))
+		env.background_color = Color(.02, .01, .05).lerp(Color(.08, .03, .14), .5 + .5 * sin(t * .4))
+		for k in range(60):
+			var st: Node3D = take("star", "")
+			var seed_x: float = fmod(k * 37.7, 40.0) - 20.0;var seed_y: float = fmod(k * 23.3, 24.0) - 10.0
+			st.position = Vector3(seed_x, seed_y, z - fmod(k * 13.0 - t * 40.0, 120.0) - 4.0);shown.append(st)
+		for m in nodes.worlds:m.rotation.y = clock * .2 + m.position.z
+		if a >= f.FLIGHT_OTHER:
+			# Somewhere else: a soft, smooth world that is not made of blocks.
+			nodes.other.visible = true
+			s.root.position = Vector3(0, 0, -6.0 + 4.0);s.root.rotation = Vector3(0, PI * .85, 0)
+			nodes.other.position = Vector3(0, 0, -6.0)
+			pose(s, {"head":Vector3(-.1, .3, 0)})
+			cam.position = Vector3(2.6, 1.6, 2.8);cam.look_at(Vector3(-1.0, 1.0, -6))
+			env.background_color = Color(.3, .55, .95)
+			env.ambient_light_color = Color(.7, .75, .9);env.ambient_light_energy = .45
+	hide_rest(shown)

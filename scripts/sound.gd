@@ -199,8 +199,21 @@ func update_volumes(m: float, fx: float):
 			voice.stream_paused=false
 			voice.volume_db = linear_to_db(maxf(0.000001,effects_volume*float(voice.get_meta("gain",1.0))))
 
+var ending_player: AudioStreamPlayer
 func play(id: String):
 	if id=="boss_win":celebrate();return
+	if id=="ch5_ending_theme":
+		if not is_instance_valid(ending_player):
+			ending_player=AudioStreamPlayer.new();add_child(ending_player)
+			ending_player.stream=load("res://assets/audio/chapter_five/ending_theme.ogg")
+		ending_player.volume_db=linear_to_db(maxf(.001,music_volume*1.6));ending_player.play();return
+	if id=="ch5_ending_fade":
+		if is_instance_valid(ending_player) and ending_player.playing:create_tween().tween_property(ending_player,"volume_db",-60.0,3.5)
+		return
+	if id=="ch5_ending_sting":
+		var sting=AudioStreamPlayer.new();add_child(sting)
+		sting.stream=load("res://assets/audio/chapter_five/ending_sting.ogg");sting.volume_db=linear_to_db(maxf(.001,effects_volume))
+		sting.finished.connect(sting.queue_free);sting.play();return
 	if effects_volume <= 0: return
 	if not sound_map.has(id):
 		push_warning("Unknown Minecraft sound event: "+id)

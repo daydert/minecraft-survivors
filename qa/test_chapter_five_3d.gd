@@ -71,7 +71,7 @@ func run():
 	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2.ZERO,"fire":true,"jump":false};advance(.6)
 	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2.ZERO,"fire":false,"jump":false}
 	check(n.phase=="quake_won","Three frags win the arena")
-	advance(3.6);check(w.state=="RESULT" and w.victory,"…and close stage E for now")
+	advance(3.6);check(n.phase=="to_code","…and lead into the code duel")
 	game.action("chapter_5");w=game.world;n=w.notch;n.begin(w);n.start_quake(w);n.quake.notch().frags=3;advance(2.2)
 	check(n.phase=="retry" and n.retry_of=="quake","Three frags for Notch return to the checkpoint")
 	print("CHAPTER_FIVE_3D_RESULT %d checks; %d failures" % [checks,failures.size()])

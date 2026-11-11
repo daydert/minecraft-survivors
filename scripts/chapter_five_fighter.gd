@@ -12,6 +12,7 @@ const MOVES := {
 	"kick": {"start":.17, "active":.1, "recover":.3, "damage":11.0, "reach":1.65, "knock":4.0, "stun":.42},
 	"dive": {"start":.05, "active":.4, "recover":.12, "damage":9.0, "reach":1.2, "knock":3.0, "stun":.35},
 	"uppercut": {"start":.12, "active":.12, "recover":.4, "damage":12.0, "reach":1.3, "knock":3.0, "stun":.5, "launch":9.0},
+	"swing": {"start":.12, "active":.1, "recover":.26, "damage":13.0, "reach":1.95, "knock":5.0, "stun":.45},
 	"cast": {"start":.32, "active":.05, "recover":.35, "damage":0.0, "reach":0.0, "knock":0.0, "stun":0.0}}
 var state := "intro"
 var age := 0.0
@@ -27,11 +28,19 @@ var ai_plan := ""
 var teleport_timer := 7.0
 ## Tests can hold Notch still.
 var ai := true
+## "fight": the fighting game; "fists": the brawl after the console, with
+## lines of code to pick up and a finishing wire.
+var mode := "fight"
+var items: Array = []
+const LINES := ["System.exit(0);", "return null;", "int hp = 0;", "while (true)", "steve.kill();", "throw new Error();"]
 
-func reset():
+func reset(which := "fight"):
+	mode = which;items.clear()
+	if mode == "fists":
+		for i in range(4):items.append({"x":-5.0 + i * 3.4, "text":LINES[i], "holder":-1, "uses":0})
 	state = "intro";age = 0.0;bolts.clear();sparks.clear();hitstop = 0.0;slow = 0.0;winner = -1;jump_held = false
 	ai_timer = 1.2;ai_plan = "";teleport_timer = 7.0
-	fighters = [make(-2.5, 1.0, 100.0, "steve"), make(2.5, -1.0, 120.0, "notch")]
+	fighters = [make(-2.5, 1.0, 100.0, "steve"), make(2.5, -1.0, 100.0 if mode == "fists" else 120.0, "notch")]
 
 func make(x: float, face: float, hp: float, who: String) -> Dictionary:
 	return {"who":who, "x":x, "y":0.0, "vx":0.0, "vy":0.0, "face":face, "hp":hp, "max":hp, "move":"", "t":0.0, "hit":false,
@@ -61,6 +70,11 @@ func press(action: String):
 		"punch":
 			if s.y > .01:
 				start(s, "dive");return
+			if held(0) != null:
+				if start(s, "swing"):
+					var it = held(0);it.uses -= 1
+					if it.uses <= 0:it.holder = -1;it.x = s.x
+				return
 			var next := "punch"
 			if s.chain_window > 0 and s.chain >= 2:next = "punch3"
 			if start(s, next):
@@ -68,7 +82,27 @@ func press(action: String):
 				s.chain_window = .45
 		"kick":start(s, "kick")
 		"special":
-			if s.cool <= 0 and start(s, "cast"):s.cool = 2.4
+			if mode == "fight" and s.cool <= 0 and start(s, "cast"):s.cool = 2.4
+		"grab":grab(0)
+
+func held(i: int):
+	for it in items:
+		if it.holder == i:return it
+	return null
+
+func grab(i: int) -> bool:
+	var f: Dictionary = fighters[i]
+	if held(i) != null or f.y > 0 or not f.move.is_empty():return false
+	for it in items:
+		if it.holder == -1 and absf(it.x - f.x) < .9:
+			it.holder = i;it.uses = 3;grabbed.append(i);return true
+	return false
+var grabbed: Array = []
+
+## The finishing wire, once Notch is down in the brawl.
+func finish_blow():
+	if state == "finisher" and age > .6:state = "wire";age = 0.0;wired = true
+var wired := false
 
 func step(dt: float, movement: Vector2) -> Array:
 	var events: Array = []
@@ -77,9 +111,17 @@ func step(dt: float, movement: Vector2) -> Array:
 		hitstop -= dt;return events
 	if slow > 0:
 		slow -= dt;dt *= .3
+	for g in grabbed:events.append("grab")
+	grabbed.clear()
+	if wired:wired = false;events.append("wire")
 	match state:
 		"intro":
 			if age >= 2.2:state = "fight";age = 0.0
+		"finisher":
+			for f in fighters:body(f, dt, events)
+		"wire":
+			for f in fighters:body(f, dt, events)
+			if age >= 2.8:state = "done"
 		"fight","ko":
 			if state == "fight":
 				control(steve(), movement, dt)
@@ -95,6 +137,10 @@ func step(dt: float, movement: Vector2) -> Array:
 			if state == "fight":
 				for i in range(2):
 					if fighters[i].hp <= 0:
+						if mode == "fists" and i == 1:
+							var n: Dictionary = fighters[1];n.hp = 0.0;n.move = "";n.stun = 99.0;n.vx = 0.0
+							var s: Dictionary = fighters[0];s.move = "";s.vx = 0.0
+							winner = 0;state = "finisher";age = 0.0;events.append("finisher");break
 						fighters[i].ko = true;fighters[i].move = "";winner = 1 - i;state = "ko";age = 0.0;slow = .9
 						events.append("ko")
 			elif age >= 2.6:state = "done"
@@ -123,14 +169,15 @@ func think(n: Dictionary, s: Dictionary, dt: float, events: Array):
 		n.block = true;n.vx = 0.0;return
 	if s.y > .8 and dist < 2.0 and n.y <= 0:
 		start(n, "uppercut");return
+	if mode == "fists" and held(1) == null and int(age * 5) % 9 == 0 and grab(1):return
 	teleport_timer -= dt
-	if teleport_timer <= 0 and n.y <= 0:
+	if mode == "fight" and teleport_timer <= 0 and n.y <= 0:
 		teleport_timer = 6.5
 		n.glitch = .35;n.x = clampf(s.x - s.face * 1.3, -STAGE, STAGE);n.face = -s.face
 		events.append("teleport");return
 	ai_timer -= dt
 	if dist > 3.2:
-		if ai_timer <= 0:
+		if ai_timer <= 0 and mode == "fight":
 			ai_timer = 2.6
 			start(n, "cast");return
 		n.vx = signf(s.x - n.x) * WALK * .8
@@ -141,7 +188,11 @@ func think(n: Dictionary, s: Dictionary, dt: float, events: Array):
 		if ai_timer <= 0:
 			ai_timer = .55
 			var roll: int = int(age * 13) % 6
-			if roll < 3:
+			if roll < 3 and held(1) != null:
+				if start(n, "swing"):
+					var it = held(1);it.uses -= 1
+					if it.uses <= 0:it.holder = -1;it.x = n.x
+			elif roll < 3:
 				if start(n, "punch"):n.chain += 1
 				if n.chain >= 3:n.chain = 0;start(n, "punch3")
 			elif roll < 5:start(n, "kick")
@@ -162,6 +213,7 @@ func body(f: Dictionary, dt: float, events: Array):
 			events.append("cast_" + f.who)
 		if f.move == "uppercut" and phase_of(f) == "active" and f.y <= 0:f.vy = 6.0
 		if f.t >= m.start + m.active + m.recover or (f.move == "dive" and f.y <= 0 and f.t > .1):f.move = ""
+	if f.y <= 0 and (f.stun > 0 or f.ko or (f.who == "notch" and not ai)):f.vx = move_toward(f.vx, 0, dt * 16)
 	f.vy -= GRAVITY * dt
 	f.x = clampf(f.x + f.vx * dt, -STAGE, STAGE)
 	f.y += f.vy * dt
@@ -178,7 +230,7 @@ func resolve(a: Dictionary, b: Dictionary, events: Array):
 	var dx: float = (b.x - a.x) * a.face
 	if dx < -.2 or dx > m.reach or absf(b.y - a.y) > 1.3:return
 	a.hit = true
-	land(b, m.damage, a.face, m, events, a.move in ["punch3", "kick", "uppercut"])
+	land(b, m.damage, a.face, m, events, a.move in ["punch3", "kick", "uppercut", "swing"])
 
 func land(b: Dictionary, damage: float, from_face: float, m: Dictionary, events: Array, heavy: bool):
 	var blocked: bool = b.block and b.face != from_face

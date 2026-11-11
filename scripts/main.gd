@@ -187,7 +187,7 @@ func _process(delta):
 	sync_network_fields()
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
-	var theme="victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
+	var theme="silence" if is_five() and world.stage=="notch" and world.notch.phase in ["chair","flight","done","erase"] else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
 	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four")
 	audio.set_music_context(four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
@@ -236,12 +236,28 @@ func _input(event):
 		mouse = get_global_mouse_position()
 		for i in range(buttons.size()):
 			if buttons[i].rect.has_point(mouse): selected = i
+	if is_five() and world.stage=="notch" and world.state=="RUNNING" and screen.is_empty() and world.notch.phase=="code" and world.notch.finale.phase=="duel" and world.notch.finale.advanced:
+		if event is InputEventKey and event.pressed:
+			var f=world.notch.finale
+			var named={KEY_ENTER:"enter",KEY_KP_ENTER:"enter",KEY_BACKSPACE:"backspace",KEY_DELETE:"delete",KEY_TAB:"tab",KEY_LEFT:"left",KEY_RIGHT:"right",KEY_UP:"up",KEY_DOWN:"down",KEY_HOME:"home",KEY_END:"end",KEY_F5:"run"}
+			if event.keycode==KEY_ESCAPE:pass
+			elif (event.keycode in [KEY_ENTER,KEY_KP_ENTER] and event.ctrl_pressed) or event.keycode==KEY_F5:f.key("run");return
+			elif named.has(event.keycode):f.key(named[event.keycode]);return
+			elif event.unicode>=32:f.type_text(char(event.unicode));return
+		elif event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:
+			if world.notch.click(world,get_global_mouse_position()):return
 	if is_five() and world.stage=="notch" and world.state=="RUNNING" and screen.is_empty():
 		var notch_action := ""
 		if event is InputEventKey and event.pressed and not event.echo:
 			var code: int=event.physical_keycode if event.physical_keycode!=0 else event.keycode
 			notch_action={KEY_A:"left",KEY_LEFT:"left",KEY_D:"right",KEY_RIGHT:"right",KEY_W:"up",KEY_UP:"up",KEY_S:"down",KEY_DOWN:"down",KEY_SPACE:"accept",KEY_ENTER:"accept",KEY_Z:"accept",KEY_J:"accept",KEY_E:"kick",KEY_K:"kick",KEY_Q:"special",KEY_L:"special",KEY_1:"1",KEY_2:"2",KEY_3:"3",KEY_4:"4"}.get(code,"")
-			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won","to_quake","quake_won"]:world.notch.skip();return
+			if code==KEY_5:notch_action="5"
+			elif code==KEY_6:notch_action="6"
+			elif code==KEY_7:notch_action="7"
+			elif code==KEY_8:notch_action="8"
+			elif code==KEY_9:notch_action="9"
+			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won","to_quake","quake_won","to_code","chair"]:world.notch.skip();return
+			if world.notch.phase in ["code","erase","fists"] and not notch_action.is_empty():world.notch.press(world,notch_action);return
 			if world.notch.phase=="fighter" and notch_action in ["accept","kick","special"]:world.notch.press(world,notch_action);return
 			if world.notch.phase=="quake":return
 			if not notch_action.is_empty() and world.notch.phase in ["ut","lanes"]:

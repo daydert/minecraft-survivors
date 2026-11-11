@@ -39,6 +39,16 @@ func world(g):
 			NotchView.fighter(g);return
 		if ph in ["quake", "quake_won"]:
 			NotchView.quake(g);return
+		if ph == "code":
+			NotchView.code(g);return
+		if ph == "erase":
+			NotchView.erase(g);return
+		if ph == "fists":
+			NotchView.fists(g);return
+		if ph == "chair":
+			NotchView.chair(g);return
+		if ph in ["flight", "done"]:
+			NotchView.flight(g);return
 	NotchView.release(g)
 	var offset: Vector2 = Vector2(320, 180) - w.camera().floor()
 	if g.settings.get("camera_lead", false):offset -= g.cam_lead.round()

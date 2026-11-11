@@ -294,3 +294,179 @@ static func quake(g):
 static func big(g, text: String, at: Vector2, c: Color):
 	g.draw_string(g.bold, at + Vector2(2, 2), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32, Color(0, 0, 0, .8))
 	g.draw_string(g.bold, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32, c)
+
+# ------------------------------------------------------------------ the code duel
+
+const KEYWORDS := ["for", "int", "if", "else", "while", "let", "in", "range", "len", "def", "void", "function", "return"]
+
+static func code_line(g, text: String, at: Vector2, size: int, dim := false):
+	var x: float = at.x
+	var word := ""
+	var parts: Array = []
+	for c in text + " ":
+		if c.is_valid_identifier() or c.is_valid_int() or c == "_":word += c
+		else:
+			if not word.is_empty():parts.append(word);word = ""
+			parts.append(c)
+	for p in parts:
+		var col := Color(.85, .87, .92)
+		if p in KEYWORDS:col = Color(.85, .55, 1)
+		elif p.is_valid_int():col = Color(.6, .9, .6)
+		elif p in ["{", "}", "(", ")", "[", "]"]:col = Color(.95, .8, .4)
+		if dim:col.a = .5
+		g.draw_string(g.font, Vector2(x, at.y), p, HORIZONTAL_ALIGNMENT_LEFT, -1, size, col)
+		x += g.font.get_string_size(p, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+
+static func code(g):
+	var w = g.world;var n = w.notch;var f = n.finale
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(.03, .035, .05))
+	if f.phase == "pick":
+		g.centered("Последняя игра: пузырьковая сортировка", 70, 16, Color.WHITE, true)
+		g.centered("Успей раньше Нотча.", 92, 8, Color(1, 1, 1, .6))
+		for i in range(f.LANGS.size()):
+			var r := Rect2(130 + i * 132, 130, 116, 40)
+			var on: bool = i == f.lang_index
+			g.draw_rect(r, Color(.1, .12, .16));g.draw_rect(r, YELLOW if on else Color(.4, .4, .5), false, 2 if on else 1)
+			g.draw_string(g.bold, r.position + Vector2((r.size.x - g.bold.get_string_size(f.LANG_NAMES[f.LANGS[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x) / 2, 27), f.LANG_NAMES[f.LANGS[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 16, YELLOW if on else Color.WHITE)
+		for i in range(2):
+			var r := Rect2(150 + i * 176, 196, 164, 52)
+			var on: bool = f.advanced == (i == 1)
+			g.draw_rect(r, Color(.1, .12, .16));g.draw_rect(r, YELLOW if on else Color(.4, .4, .5), false, 2 if on else 1)
+			g.draw_string(g.bold, r.position + Vector2(10, 20), ["Новичок", "Не новичок"][i], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, YELLOW if on else Color.WHITE)
+			g.draw_string(g.font, r.position + Vector2(10, 38), ["собрать из строк · 55 с", "написать самому · 3 мин"][i], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, 1, 1, .6))
+		g.centered("←/→ — язык · ↑/↓ — режим · Пробел — начать", 290, 8, Color(1, 1, 1, .45))
+		retry(g, n);return
+	var lang: String = f.lang()
+	var header: Array = f.HEADERS[lang]
+	var left := Rect2(14, 40, 380, 270)
+	var right := Rect2(404, 40, 222, 270)
+	g.draw_rect(left, Color(.06, .065, .09));g.draw_rect(left, Color(.3, .35, .45), false, 1)
+	g.draw_rect(right, Color(.06, .065, .09));g.draw_rect(right, Color(.3, 1, .9, .5), false, 1)
+	g.text_at("steve." + {"java":"java", "python":"py", "js":"js"}[lang], left.position + Vector2(6, -6), 8, Color(1, 1, 1, .7))
+	g.text_at("notch.java", right.position + Vector2(6, -6), 8, Color(.3, 1, .9, .8))
+	var y: float = left.position.y + 16
+	code_line(g, header[0], Vector2(left.position.x + 8, y), 8, true);y += 12
+	var indent: float = 16.0
+	if f.advanced:
+		for i in range(f.editor.size()):
+			code_line(g, f.editor[i], Vector2(left.position.x + 8 + indent, y + i * 12), 8)
+			if i == f.row and int(w.clock * 2.5) % 2 == 0:
+				var cx: float = left.position.x + 8 + indent + g.font.get_string_size(f.editor[i].substr(0, f.col), HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
+				g.draw_rect(Rect2(cx, y + i * 12 - 9, 1, 11), Color.WHITE)
+		y += f.editor.size() * 12
+	else:
+		var sol: Array = f.SOLUTIONS[lang]
+		for i in f.built:
+			code_line(g, sol[i], Vector2(left.position.x + 8 + indent, y), 8);y += 12
+		g.draw_rect(Rect2(left.position.x + 8 + indent, y - 9, 140, 11), Color(1, 1, 1, .06 + .05 * sin(w.clock * 5)))
+		y += 12
+	if not header[1].is_empty():code_line(g, header[1], Vector2(left.position.x + 8, y), 8, true)
+	if not f.advanced:
+		var sol: Array = f.SOLUTIONS[lang]
+		var by := 214.0
+		g.text_at("Следующая строка (↑/↓ + Пробел или 1–9):", Vector2(left.position.x + 8, left.end.y - 8 - f.pool.size() * 12 - 6), 8, Color(1, 1, 1, .5))
+		for i in range(f.pool.size()):
+			var py: float = left.end.y - 8 - (f.pool.size() - 1 - i) * 12
+			var on: bool = i == f.pool_choice
+			if on:g.draw_rect(Rect2(left.position.x + 4, py - 9, left.size.x - 8, 11), Color(1, .9, .3, .15))
+			g.draw_string(g.font, Vector2(left.position.x + 8, py), str(i + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, YELLOW)
+			code_line(g, sol[f.pool[i]].strip_edges(), Vector2(left.position.x + 24, py), 8)
+		if f.wrong_flash > 0:g.draw_rect(left, Color(1, .2, .2, f.wrong_flash * .5))
+	else:
+		var rb := Rect2(520, 326, 100, 22)
+		g.draw_rect(rb, Color(.1, .3, .15));g.draw_rect(rb, Color(.3, 1, .5), false, 1)
+		g.draw_string(g.bold, rb.position + Vector2(10, 15), "Запуск · F5", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.4, 1, .6))
+		g.text_at("Массив — a. Сортируй на месте. Ctrl+Enter или F5 — запуск.", Vector2(14, 340), 8, Color(1, 1, 1, .45))
+	var shown: int = int(f.NOTCH_CODE.length() * f.notch_progress)
+	var lines: PackedStringArray = f.NOTCH_CODE.substr(0, shown).split("\n")
+	for i in range(lines.size()):code_line(g, lines[i], Vector2(right.position.x + 6, right.position.y + 16 + i * 12), 8)
+	g.draw_rect(Rect2(right.position.x, right.end.y + 6, right.size.x, 6), Color(0, 0, 0, .6))
+	g.draw_rect(Rect2(right.position.x, right.end.y + 6, right.size.x * f.notch_progress, 6), Color(.3, 1, .9))
+	figure(g, "snap" if f.notch_progress > .9 else "idle", n.age, right.get_center() + Vector2(60, 110), Vector2.LEFT, 1.0)
+	var secs: int = int(ceil(f.duration() * (1 - f.notch_progress)))
+	g.centered("%d:%02d" % [secs / 60, secs % 60], 26, 16, Color(1, .4, .3) if secs < 10 else Color.WHITE, true)
+	if not f.result.is_empty():
+		g.draw_rect(Rect2(14, 314, 500, 14), Color(0, 0, 0, .7))
+		g.text_at(f.result, Vector2(18, 325), 8, Color(.4, 1, .5) if f.result_ok else Color(1, .4, .35))
+	subtitles(g, n, 296.0)
+	retry(g, n)
+
+# ------------------------------------------------------------------ the erasure
+
+static func erase(g):
+	var w = g.world;var n = w.notch;var f = n.finale
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(.02, .02, .035))
+	var console := Rect2(380, 70, 200, 130)
+	var broken: bool = f.thrown >= .7
+	if not broken:
+		g.draw_rect(console.grow(6), Color(.7, .7, .68));g.draw_rect(console, Color(.01, .05, .02))
+		for i in range(8):
+			var t: String = ["delete(steve);", "steve.pixels.clear();", "for (Pixel p : steve)", "    p.remove();", "// he was never here", "gc.collect(steve);", "> deleting… %d%%" % int(f.erase * 100), ""][i]
+			g.draw_string(g.font, console.position + Vector2(6, 14 + i * 14), t, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.35, 1, .45))
+	else:
+		var k: float = clampf((f.thrown - .7) / 1.2, 0, 1)
+		for i in range(60):
+			var d := Vector2.from_angle(i * 2.39996) * (20 + k * 260 * (.4 + fmod(i * .37, 1.0)))
+			g.draw_string(g.font, (console.get_center() + d).floor(), "01{};"[i % 5], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.35, 1, .45, 1 - k))
+		if f.thrown < 1.0 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, (1.0 - f.thrown) * 2.0))
+	var npose: String = "stagger" if broken else ("point" if f.erase > .1 else "idle")
+	figure(g, npose, n.age, Vector2(470 if not broken else 486, 300), Vector2.LEFT, 2.0)
+	var sp := Vector2(170, 300)
+	g.oval(sp, Vector2(16, 5), Color(0, 0, 0, .4))
+	g.draw_actor("steve", sp, Vector2.RIGHT, w.clock, false, Color.WHITE, "idle", 2.0, w.player_visual)
+	var cut: float = 64.0 * f.erase
+	for y in range(int(cut / 2)):
+		var yy: float = sp.y - 64 + y * 2
+		var off: float = round(sin(y * 1.7 + w.clock * 20) * 3)
+		g.draw_rect(Rect2(sp.x - 22 + off, yy, 44, 2), Color(.02, .02, .035))
+		if y % 3 == 0:g.draw_rect(Rect2(sp.x - 22 + fmod(y * 13.0, 40.0), yy, 2, 2), Color(.97, 0, .86))
+	if f.thrown >= 0 and f.thrown < .7:
+		var t: float = f.thrown / .7
+		var at: Vector2 = (sp + Vector2(10, -40)).lerp(console.get_center(), t) - Vector2(0, sin(t * PI) * 40)
+		g.draw_set_transform(at, t * 14.0, Vector2.ONE * 2)
+		g.draw_texture_rect(view(g).tex("ch5q_item_iron_sword"), Rect2(-8, -8, 16, 16), false)
+		g.draw_set_transform(Vector2.ZERO)
+	if f.thrown < 0:
+		g.centered("Пробел — держаться! (%d)" % maxi(0, 14 - f.presses), 330, 16, Color(1, 1, 1, .6 + .4 * sin(w.clock * 8)), true)
+	subtitles(g, n, 40.0)
+
+# ------------------------------------------------------------------ brawl, chair, flight
+
+static func fists(g):
+	var w = g.world;var n = w.notch;var fi = n.fighter
+	var v = view(g);v.ensure(g, "fists", Vector2i(640, 360));v.sync_fighter(fi)
+	var shake: Vector2 = Vector2(round(sin(w.clock * 70) * 3), round(cos(w.clock * 61) * 2)) * (n.shake3d / .4) if g.settings.shake else Vector2.ZERO
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(shake, Vector2(640, 360)), false)
+	var s: Dictionary = fi.steve();var nt: Dictionary = fi.notch()
+	bar(g, Rect2(24, 22, 260, 12), s.hp / s.max, false)
+	bar(g, Rect2(356, 22, 260, 12), nt.hp / nt.max, true)
+	g.text_at("STEVE", Vector2(24, 50), 16, Color.WHITE, true)
+	g.text_at("NOTCH", Vector2(616 - g.bold.get_string_size("NOTCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x, 50), 16, Color.WHITE, true)
+	if fi.state == "intro":g.centered("БЕЗ ПРАВИЛ", 170, 32, Color(1, .4, .3), true)
+	if fi.state == "finisher" and fi.age > .6:g.centered("Пробел — провод", 170, 16, Color(1, 1, 1, .6 + .4 * sin(w.clock * 8)), true)
+	if fi.state == "fight":g.text_at("E — подобрать строку кода · с ней удар сильнее", Vector2(30, 350), 8, Color(1, 1, 1, .45))
+	if fi.state in ["wire", "done"] and fi.age > 1.6:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((fi.age - 1.6) / 1.0, 0, 1)))
+	subtitles(g, n, 300.0)
+	retry(g, n)
+
+static func chair(g):
+	var w = g.world;var n = w.notch;var f = n.finale
+	var v = view(g);v.ensure(g, "chair", Vector2i(640, 360));v.sync_chair(f, w.clock)
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
+	g.draw_rect(Rect2(0, 0, 640, 26), Color.BLACK);g.draw_rect(Rect2(0, 334, 640, 26), Color.BLACK)
+	if f.age < 1.0:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - f.age))
+	if f.age > f.CHAIR_LENGTH - 2.0:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((f.age - (f.CHAIR_LENGTH - 2.0)) / 1.6, 0, 1)))
+	if f.age > f.CHAIR_STAB and f.age < f.CHAIR_STAB + .12 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(.6, 0, 0, .4))
+	if f.age > 2.0:g.text_at("Пробел — дальше", Vector2(540, 350), 8, Color(1, 1, 1, .3))
+	subtitles(g, n, 306.0)
+
+static func flight(g):
+	var w = g.world;var n = w.notch;var f = n.finale
+	var v = view(g);v.ensure(g, "flight", Vector2i(640, 360));v.sync_flight(f, w.clock)
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
+	var a: float = f.age
+	if a < 1.0:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - a))
+	if a > 4.0 and a < 5.6:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, 1 - absf(a - 4.8) / .8))
+	if a > f.FLIGHT_OTHER - .8 and a < f.FLIGHT_OTHER + .8:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, 1 - absf(a - f.FLIGHT_OTHER) / .8))
+	if a >= f.FLIGHT_STING:g.draw_rect(Rect2(0, 0, 640, 360), Color.BLACK)
+	if a >= f.FLIGHT_STING + 1.0:g.centered("…", 176, 16, Color(1, 1, 1, clampf(a - f.FLIGHT_STING - 1.0, 0, 1)), true)
