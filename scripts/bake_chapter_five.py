@@ -210,5 +210,25 @@ def notch():
     sheet.save(ROOT / "qa/chapter_five_notch.png")
     return sum(v["count"] for v in layout.values())
 
+QUAKE = ["polished_deepslate", "deepslate_tiles", "cracked_deepslate_tiles", "cut_copper", "exposed_cut_copper", "copper_grate",
+         "iron_block", "polished_blackstone_bricks", "gilded_blackstone", "lava_still", "magma", "redstone_block", "chiseled_copper",
+         "dark_oak_planks", "glowstone", "crying_obsidian"]
+
+def textures3d():
+    """Skins and block faces for the 3D fights: Steve, digital Notch, and a
+    rusty, dark arena built from vanilla copper, deepslate and blackstone."""
+    version, client, _ = find_client(Path.home() / ".local/share/PrismLauncher")
+    imp = Importer(client)
+    imp.save(imp.tex("entity/player/wide/steve"), "ch5_skin_steve", ["entity/player/wide/steve"])
+    imp.save(notch_skin(imp), "ch5_skin_notch", ["entity/player/wide/steve (digital Notch recolour)"])
+    names = ["ch5_skin_steve", "ch5_skin_notch"]
+    for n in QUAKE:
+        imp.save(frame0(imp.tex("block/" + n)), "ch5q_" + n, ["block/" + n]);names.append("ch5q_" + n)
+    for n in ["golden_apple", "iron_chestplate", "firework_rocket", "iron_sword"]:
+        imp.save(imp.tex("item/" + n), "ch5q_item_" + n, ["item/" + n]);names.append("ch5q_item_" + n)
+    (ROOT / "data/chapter_five_3d.json").write_text(json.dumps({"textures": names}, indent=1) + "\n")
+    return len(names)
+
 if __name__ == "__main__":
+    print("CH5_3D", textures3d())
     print("CH5_CODE", code_lines(), "CH5_ICONS", icons(), "CH5_NOTCH", notch())

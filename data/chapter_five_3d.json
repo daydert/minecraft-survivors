@@ -1,0 +1,26 @@
+{
+ "textures": [
+  "ch5_skin_steve",
+  "ch5_skin_notch",
+  "ch5q_polished_deepslate",
+  "ch5q_deepslate_tiles",
+  "ch5q_cracked_deepslate_tiles",
+  "ch5q_cut_copper",
+  "ch5q_exposed_cut_copper",
+  "ch5q_copper_grate",
+  "ch5q_iron_block",
+  "ch5q_polished_blackstone_bricks",
+  "ch5q_gilded_blackstone",
+  "ch5q_lava_still",
+  "ch5q_magma",
+  "ch5q_redstone_block",
+  "ch5q_chiseled_copper",
+  "ch5q_dark_oak_planks",
+  "ch5q_glowstone",
+  "ch5q_crying_obsidian",
+  "ch5q_item_golden_apple",
+  "ch5q_item_iron_chestplate",
+  "ch5q_item_firework_rocket",
+  "ch5q_item_iron_sword"
+ ]
+}

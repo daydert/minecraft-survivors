@@ -65,6 +65,11 @@ var schedule: Array = []
 var lane_age := 0.0
 var cursor_wait := 0.0
 var serial := 0
+var fighter = preload("res://scripts/chapter_five_fighter.gd").new()
+var quake = preload("res://scripts/chapter_five_quake.gd").new()
+## Quake input from main.gd: wish (strafe, forward), look delta, held buttons.
+var quake_input: Dictionary = {"wish":Vector2.ZERO, "turn":Vector2.ZERO, "fire":false, "jump":false}
+var shake3d := 0.0
 
 func reset():
 	phase = "";age = 0.0;line = "";id = -1;hp = FIGHT_HP;walls.clear();falls.clear();popups.clear();slow_left = 0.0;retry_of = ""
@@ -101,7 +106,7 @@ func clear_arena(w):
 
 func skip():
 	if phase == "intro" and age > 1.0:age = INTRO_LENGTH - .1
-	elif phase in ["to_ut", "to_lanes", "lanes_won"] and age > .8:age = 99.0
+	elif phase in ["to_ut", "to_lanes", "lanes_won", "to_quake", "quake_won"] and age > .8:age = 99.0
 
 func step(w, dt: float, movement: Vector2):
 	age += dt;pose_age += dt
@@ -132,6 +137,14 @@ func step(w, dt: float, movement: Vector2):
 		"lanes":lanes(w, dt, movement)
 		"lanes_won":
 			if cue(0, .1):say("Ха. Неплохо. Но это была разминка.", 2.8)
+			if age >= 3.2:start_fighter(w)
+		"fighter":fight3d(w, dt, movement)
+		"to_quake":
+			if cue(0, .1):say("Ладно, ладно. А теперь моя любимая.", 2.8)
+			if age >= 3.0:start_quake(w)
+		"quake":deathmatch(w, dt)
+		"quake_won":
+			if cue(0, .1):say("…Ты что, правда играл в это раньше?", 2.8)
 			if age >= 3.2:finish(w)
 		"retry":
 			if age >= 2.4:
@@ -140,6 +153,8 @@ func step(w, dt: float, movement: Vector2):
 					"fight":start_fight(w)
 					"ut":start_ut(w)
 					"lanes":start_lanes(w)
+					"fighter":start_fighter(w)
+					"quake":start_quake(w)
 
 func idle_world(w, dt: float):
 	w.player_visual.travel = 0.0;w.player_moving = false
@@ -277,6 +292,8 @@ func start_ut(w):
 
 func press(w, action: String):
 	if phase == "lanes":lane_press(w, action);return
+	if phase == "fighter":
+		fighter.press({"accept":"punch", "kick":"kick", "special":"special"}.get(action, ""));return
 	if phase != "ut":return
 	var options: Array = menu_options()
 	match ut_state:
@@ -402,6 +419,8 @@ func lane_press(w, action: String):
 		"1", "2", "3", "4":card = int(action) - 1
 
 func click(w, at: Vector2) -> bool:
+	if phase == "fighter":fighter.press("punch");return true
+	if phase == "quake":return true
 	if phase == "ut":
 		for i in range(menu_options().size()):
 			if menu_rect(i).has_point(at):
@@ -493,3 +512,50 @@ func lanes(w, dt: float, movement: Vector2):
 	if schedule.is_empty() and zombies.is_empty():change("lanes_won")
 
 func row_y(row: int) -> float:return LANE_ORIGIN.y + (row + .5) * CELL.y
+
+# ------------------------------------------------------------------ 3D: the fighting game
+
+func start_fighter(w):
+	clear_arena(w)
+	fighter.reset();change("fighter")
+	say("Раунд один. Ну, давай.", 2.0)
+
+func fight3d(w, dt: float, movement: Vector2):
+	var events: Array = fighter.step(dt, movement)
+	for e in events:
+		match e:
+			"hit":w.sound("ch4_punch", .03);shake3d = .1
+			"hit_heavy":w.sound("ch4_punch_heavy", .03);shake3d = .2
+			"block":w.sound("shield_block", .03)
+			"cast_steve":w.sound("ch4_hb_tick", .05)
+			"cast_notch":w.sound("ch4_hb_beam", .05)
+			"teleport":w.sound("ch4_hb_teleport", .05)
+			"ko":w.sound("ch4_hb_shatter", .05);shake3d = .4
+			"thud":w.sound("ch4_body_fall", .05)
+	shake3d = maxf(0, shake3d - dt)
+	if fighter.state == "done":
+		if fighter.winner == 0:change("to_quake")
+		else:lose(w, "fighter")
+
+# ------------------------------------------------------------------ 3D: the arena
+
+func start_quake(w):
+	clear_arena(w)
+	quake.reset();change("quake")
+	quake_input = {"wish":Vector2.ZERO, "turn":Vector2.ZERO, "fire":false, "jump":false}
+
+func deathmatch(w, dt: float):
+	var input: Dictionary = quake_input
+	quake.step(dt, input.wish, input.turn, input.fire, input.jump)
+	quake_input.turn = Vector2.ZERO
+	for id in quake.sounds:
+		match id:
+			"rocket":w.sound("rocket_launch", .05)
+			"boom":w.sound("explosion", .03)
+			"gib":w.sound("ch4_flesh_hit", .05)
+			"pad":w.sound("wind_burst", .1)
+			"spawn":w.sound("ch4_hb_teleport", .1)
+			_:
+				if id.begins_with("pickup"):w.sound("pickup", .05)
+	if quake.state == "won":change("quake_won")
+	elif quake.state == "lost":lose(w, "quake")

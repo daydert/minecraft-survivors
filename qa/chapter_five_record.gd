@@ -12,36 +12,49 @@ func run():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(folder))
 	game.action("chapter_5");var w=game.world;game.settings.shake=true;game.settings.numbers=false
-	w.bosses.terminal_done=true;w.bosses.loop_done=true
-	jump(w,712.0,{"sword":8,"bow":7,"command_block":6,"barrier":6,"debug_stick":6})
-	await segment(w,9.0)
 	var n=w.notch
-	await idle(w,13.0)
-	n.age=n.INTRO_LENGTH-2.6
-	await idle(w,3.0)
-	await segment(w,22.0)
-	n.hp=minf(n.hp,120.0)
-	while n.phase=="fight":await segment(w,.5)
+	n.begin(w);n.start_fighter(w)
+	var fi=n.fighter
+	await idle(w,2.4)
+	for f in range(int(26*30)):
+		var s=fi.steve();var nt=fi.notch()
+		var d: float=nt.x-s.x
+		var move=Vector2(signf(d) if absf(d)>1.1 else 0.0,0)
+		if nt.move in ["punch","kick","punch3"] and fi.phase_of(nt)=="start" and absf(d)<1.8:move=Vector2(0,1)
+		if f%40==0 and absf(d)>3:n.press(w,"special")
+		elif absf(d)<1.3 and f%9==0:n.press(w,"accept" if f%27!=0 else "kick")
+		if f%150==75:move=Vector2(signf(d),-1)
+		for i in range(2):
+			s.hp=maxf(s.hp,30)
+			if f>600:nt.hp=minf(nt.hp,40)
+			w.step(1.0/60,move)
+		await shoot(w)
+		if fi.state!="fight":break
+	await idle(w,6.5)
+	await idle(w,2.5)
+	var qk=n.quake
+	for f in range(int(48*30)):
+		var st=qk.steve();var nb=qk.notch()
+		var to: Vector3=nb.p-st.p
+		var want_yaw: float=atan2(-to.x,-to.z)
+		var dy: float=angle_difference(st.yaw,want_yaw)
+		var pitch_want: float=atan2(to.y+.4,Vector2(to.x,to.z).length())-.06
+		var turn=Vector2(clampf(-dy,-.08,.08),clampf(st.pitch-pitch_want,-.05,.05))
+		var sees: bool=qk.line_clear(qk.eye(st),qk.eye(nb))
+		var wish=Vector2(sin(f*.03),1.0 if to.length()>9 else -.4)
+		var fire: bool=sees and absf(dy)<.12 and nb.dead<=0
+		var jump: bool=f%70==0
+		if f==200:turn.y=1.5;fire=true;jump=true
+		n.quake_input={"wish":wish,"turn":turn,"fire":fire,"jump":jump}
+		for i in range(2):
+			st.hp=maxf(st.hp,30);nb.frags=mini(nb.frags,1)
+			if st.dead>0:st.dead=0;st.hp=100
+			if f>500:nb.hp=minf(nb.hp,30)
+			w.step(1.0/60,Vector2.ZERO)
+			n.quake_input.turn=Vector2.ZERO;n.quake_input.fire=false if i==0 else n.quake_input.fire
+		await shoot(w)
+		if n.phase!="quake":break
 	await idle(w,4.0)
-	await idle(w,1.0);n.press(w,"right");await idle(w,.4);n.press(w,"right");await idle(w,.4);n.press(w,"right");await idle(w,.6);n.press(w,"accept")
-	await idle(w,1.5);n.press(w,"accept")
-	await soul(w,6.2)
-	await idle(w,.6);n.ut_choice=0;n.press(w,"accept");await idle(w,.62);n.press(w,"accept")
-	await idle(w,1.2);n.press(w,"accept")
-	await soul(w,6.2)
-	await idle(w,.4);n.ut_choice=1;n.press(w,"accept");await idle(w,1.6);n.press(w,"accept")
-	await soul(w,6.2)
-	n.ut_hp=10;await idle(w,.4);n.ut_choice=0;n.press(w,"accept");await idle(w,.62);n.press(w,"accept")
-	await idle(w,6.0)
-	var plan=[[1,0,0],[1,0,2],[0,1,1],[0,1,3],[1,0,4],[0,1,2],[2,4,1],[2,4,3],[0,1,0],[0,1,4],[3,6,2]]
-	for step in plan:
-		await idle(w,1.2)
-		n.redstone=maxi(n.redstone,200);n.card_ready[step[0]]=0.0
-		n.card=step[0];n.cursor=Vector2i(step[1],step[2]);n.press(w,"accept")
-	await idle(w,28.0)
-	n.schedule.clear()
-	for z in n.zombies:z.hp=0
-	await idle(w,5.0)
 	var timeline={"fps":30,"frames":state.frame,"sound_events":state.cues,"music":state.music}
 	FileAccess.open("res://qa/recordings/chapter_five_timeline.json",FileAccess.WRITE).store_string(JSON.stringify(timeline,"  "))
 	game.audio.shutdown();game.quitting=true

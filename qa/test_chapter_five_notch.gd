@@ -79,7 +79,7 @@ func run():
 	while n.phase=="lanes" and t<240.0:
 		n.redstone=999;advance(1.0);t+=1.0
 	check(n.phase in ["lanes_won","done"] or w.state=="RESULT","A held line wins the lanes")
-	advance(4.0);check(w.state=="RESULT" and w.victory,"…and closes stage D for now")
+	advance(4.0);check(n.phase=="fighter","…and leads into the fighting game")
 	game.action("chapter_5");w=game.world;n=w.notch;w.bosses.terminal_done=true;w.bosses.loop_done=true
 	n.begin(w);n.start_lanes(w);n.zombies.append({"kind":"zombie","row":0,"x":n.LANE_ORIGIN.x-20,"hp":10.0,"max":10.0,"speed":9.0,"bite":0.0,"flash":0.0,"visual":w.animation.actor(),"age":0.0});advance(.1)
 	check(n.phase=="retry" and n.retry_of=="lanes","A zombie through the line restarts the lanes")

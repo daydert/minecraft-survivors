@@ -1,0 +1,78 @@
+extends SceneTree
+## Chapter V stage E: the side-view fighting game and the deathmatch arena.
+var game
+var checks=0
+var failures=[]
+var out="res://qa/chapter_five/"
+func _initialize():run.call_deferred()
+func check(ok: bool,label: String):
+	checks+=1
+	if ok:print("PASS: ",label)
+	else:failures.append(label);push_error(label)
+func render(name: String="") -> Image:
+	game.queue_redraw();await process_frame;await process_frame;await process_frame;RenderingServer.force_draw(false)
+	var image=root.get_texture().get_image()
+	if not name.is_empty():image.save_png(out+name+".png")
+	return image
+func advance(seconds: float,movement: Vector2=Vector2.ZERO):
+	for i in range(ceili(seconds*60)):game.world.step(1.0/60,movement)
+func run():
+	game=load("res://scenes/main.tscn").instantiate();root.add_child(game)
+	game.set_process(false);game.set_physics_process(false);game.set_process_input(false);game.qa_mode="review";game.settings.shake=false
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360)
+	game.action("chapter_5");var w=game.world;var n=w.notch
+	n.begin(w);n.start_fighter(w);var fi=n.fighter
+	check(n.phase=="fighter" and fi.state=="intro","After the lanes comes the fighting game")
+	advance(1.0);await render("e_round")
+	advance(1.4);check(fi.state=="fight","Round one starts")
+	var s=fi.steve();var nt=fi.notch()
+	s.x=nt.x-1.0;fi.ai=false
+	var hp: float=nt.hp;n.press(w,"accept");advance(.2)
+	check(nt.hp<hp or nt.block,"A punch lands or is blocked")
+	advance(.3);await render("e_fight")
+	nt.block=true;nt.move="";hp=nt.hp;s.move="";s.stun=0;fi.start(s,"kick");s.x=nt.x-1.2;s.face=1.0;nt.face=-1.0
+	for i in range(30):
+		nt.block=true;fi.step(1.0/60,Vector2.ZERO)
+	check(hp-nt.hp<3.0,"Blocking soaks most of a kick")
+	s.cool=0;s.move="";s.stun=0;n.press(w,"special");advance(.5)
+	check(fi.bolts.size()>0 or nt.hp<hp,"Q throws a projectile")
+	s.hp=100;nt.hp=1;s.x=nt.x-1.0;nt.block=false;nt.move="";nt.stun=0;s.move="";s.stun=0;fi.start(s,"punch");advance(.3)
+	check(fi.state=="ko" and fi.winner==0,"K.O.")
+	advance(.5);await render("e_ko")
+	advance(3.0);check(n.phase=="to_quake","Winning the fight leads to his favourite game")
+	fi.ai=true
+	n.start_fighter(w);fi=n.fighter;advance(2.4);fi.steve().hp=0;advance(4.0)
+	check(n.phase=="retry" and n.retry_of=="fighter","Losing the fight returns to its checkpoint")
+	# arena
+	n.start_quake(w);var qk=n.quake
+	advance(2.2);check(qk.state=="fight","The deathmatch starts")
+	await render("e_quake_start")
+	var st=qk.steve();var start: Vector3=st.p
+	n.quake_input={"wish":Vector2(0,1),"turn":Vector2.ZERO,"fire":false,"jump":false};advance(.5)
+	check(st.p.distance_to(start)>2.0,"W walks forward")
+	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2(0,1.4),"fire":true,"jump":true};advance(1.0/60)
+	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2.ZERO,"fire":false,"jump":false}
+	var peak:=0.0
+	for i in range(60):
+		advance(1.0/60);peak=maxf(peak,st.p.y)
+	check(peak>2.5 and st.hp<100,"A rocket at your feet launches you: rocket jump")
+	await render("e_quake_air")
+	advance(1.5);qk.ai=false;var nb=qk.notch();st.p=Vector3(-14,0,8);st.v=Vector3.ZERO;nb.p=Vector3(-14,0,2);nb.v=Vector3.ZERO;nb.hp=10;st.yaw=0.0;st.pitch=-.12;st.cool=0;st.dead=0
+	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2.ZERO,"fire":true,"jump":false};advance(.6)
+	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2.ZERO,"fire":false,"jump":false}
+	check(st.frags==1 and not qk.feed.is_empty(),"A rocket into Notch is a frag with an obituary")
+	await render("e_quake_frag")
+	advance(2.0);check(nb.dead<=0 and nb.hp==100,"He respawns")
+	qk.ai=true
+	var shots_before: int=qk.rockets.size();advance(3.0)
+	check(nb.ammo<20 or qk.rockets.size()!=shots_before,"Notch shoots back")
+	await render("e_quake_fight")
+	qk.ai=false;st.frags=2;st.p=Vector3(-14,0,8);st.v=Vector3.ZERO;st.dead=0;nb.p=Vector3(-14,0,2);nb.v=Vector3.ZERO;nb.dead=0;nb.hp=5;st.yaw=0.0;st.pitch=-.12;st.cool=0;st.ammo=10
+	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2.ZERO,"fire":true,"jump":false};advance(.6)
+	n.quake_input={"wish":Vector2.ZERO,"turn":Vector2.ZERO,"fire":false,"jump":false}
+	check(n.phase=="quake_won","Three frags win the arena")
+	advance(3.6);check(w.state=="RESULT" and w.victory,"…and close stage E for now")
+	game.action("chapter_5");w=game.world;n=w.notch;n.begin(w);n.start_quake(w);n.quake.notch().frags=3;advance(2.2)
+	check(n.phase=="retry" and n.retry_of=="quake","Three frags for Notch return to the checkpoint")
+	print("CHAPTER_FIVE_3D_RESULT %d checks; %d failures" % [checks,failures.size()])
+	quit(1 if failures.size() else 0)

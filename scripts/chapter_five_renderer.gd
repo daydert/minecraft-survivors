@@ -35,6 +35,11 @@ func world(g):
 			NotchView.battle(g);return
 		if ph in ["lanes", "lanes_won"]:
 			NotchView.lanes(g);return
+		if ph in ["fighter", "to_quake"]:
+			NotchView.fighter(g);return
+		if ph in ["quake", "quake_won"]:
+			NotchView.quake(g);return
+	NotchView.release(g)
 	var offset: Vector2 = Vector2(320, 180) - w.camera().floor()
 	if g.settings.get("camera_lead", false):offset -= g.cam_lead.round()
 	if w.shake > 0 and g.settings.shake and w.state == "RUNNING":offset += Vector2(sin(w.clock * 75), cos(w.clock * 87)).round()

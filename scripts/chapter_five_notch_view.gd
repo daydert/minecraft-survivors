@@ -215,3 +215,82 @@ static func lanes(g):
 		if pu.get("screen", false):g.draw_string(g.font, (pu.p - Vector2(8, 20 + pu.age * 14)).floor(), pu.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .35, .3, 1 - pu.age / 1.8))
 	subtitles(g, n, 316.0)
 	retry(g, n)
+
+# ------------------------------------------------------------------ 3D phases
+
+static func view(g):
+	if not g.has_meta("ch5_view3d"):
+		var v = load("res://scripts/chapter_five_view3d.gd").new()
+		g.add_child(v);g.set_meta("ch5_view3d", v)
+	return g.get_meta("ch5_view3d")
+
+static func release(g):
+	if g.has_meta("ch5_view3d"):
+		var v = g.get_meta("ch5_view3d")
+		if is_instance_valid(v):v.release();v.queue_free()
+		g.remove_meta("ch5_view3d")
+
+static func fighter(g):
+	var w = g.world;var n = w.notch;var fi = n.fighter
+	var v = view(g);v.ensure(g, "fighter", Vector2i(640, 360));v.sync_fighter(fi)
+	var shake: Vector2 = Vector2(round(sin(w.clock * 70) * 3), round(cos(w.clock * 61) * 2)) * (n.shake3d / .4) if g.settings.shake else Vector2.ZERO
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(shake, Vector2(640, 360)), false)
+	var s: Dictionary = fi.steve();var nt: Dictionary = fi.notch()
+	bar(g, Rect2(24, 22, 260, 12), s.hp / s.max, false)
+	bar(g, Rect2(356, 22, 260, 12), nt.hp / nt.max, true)
+	g.text_at("STEVE", Vector2(24, 50), 16, Color.WHITE, true)
+	g.text_at("NOTCH", Vector2(616 - g.bold.get_string_size("NOTCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x, 50), 16, Color.WHITE, true)
+	g.centered("99", 34, 16, YELLOW, true)
+	g.draw_rect(Rect2(24, 62, 60, 3), Color(0, 0, 0, .6))
+	g.draw_rect(Rect2(24, 62, 60 * (1 - s.cool / 2.4), 3), Color(1, .3, .2))
+	g.text_at("Q", Vector2(88, 67), 8, Color(1, .5, .4))
+	match fi.state:
+		"intro":
+			g.centered("РАУНД 1" if fi.age < 1.3 else "В БОЙ!", 170, 32, Color(1, .9, .3, 1.0), true)
+		"ko","done":
+			if fi.age > .3:g.centered("K.O.", 170, 32, Color(1, .25, .2), true)
+	g.text_at("A/D — ходьба · W — прыжок · S — блок · Пробел — удар · E — пинок · Q — снаряд", Vector2(30, 350), 8, Color(1, 1, 1, .45))
+	subtitles(g, n, 300.0)
+	retry(g, n)
+
+static func bar(g, r: Rect2, k: float, mirror: bool):
+	g.draw_rect(r.grow(2), Color(0, 0, 0, .8))
+	g.draw_rect(r, Color(.5, .05, .05))
+	var wd: float = r.size.x * clampf(k, 0, 1)
+	g.draw_rect(Rect2(r.position + Vector2(r.size.x - wd if mirror else 0.0, 0), Vector2(wd, r.size.y)), YELLOW)
+	g.draw_rect(r.grow(2), Color(1, 1, 1, .8), false, 1)
+
+static func quake(g):
+	var w = g.world;var n = w.notch;var qk = n.quake
+	var v = view(g);v.ensure(g, "quake", Vector2i(320, 180));v.sync_quake(qk)
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
+	var s: Dictionary = qk.steve()
+	if s.flash > 0:g.draw_rect(Rect2(0, 0, 640, 360), Color(.8, 0, 0, s.flash * 1.5))
+	if s.quad > 0:g.draw_rect(Rect2(0, 0, 640, 360), Color(.2, .3, 1, .12))
+	g.draw_line(Vector2(316, 180), Vector2(324, 180), Color.WHITE, 1);g.draw_line(Vector2(320, 176), Vector2(320, 184), Color.WHITE, 1)
+	var bar := Rect2(0, 316, 640, 44)
+	if g.textures.has("ch5q_dark_oak_planks"):pass
+	g.draw_rect(bar, Color(.16, .1, .06))
+	for x in range(0, 640, 32):g.draw_rect(Rect2(x, 316, 31, 43), Color(.2, .13, .08))
+	g.draw_line(Vector2(0, 316), Vector2(640, 316), Color(.45, .3, .15), 2)
+	var skin: Texture2D = v.tex("ch5_skin_steve")
+	var face_tint := Color(1, .6 + .4 * s.hp / 100.0, .6 + .4 * s.hp / 100.0)
+	g.draw_texture_rect_region(skin, Rect2(282, 320, 36, 36), Rect2(8, 8, 8, 8), face_tint)
+	big(g, str(int(s.armor)), Vector2(70, 352), Color(.8, .8, .8))
+	g.draw_texture_rect(v.tex("ch5q_item_iron_chestplate"), Rect2(20, 324, 32, 32), false)
+	big(g, str(int(s.hp)), Vector2(400, 352), Color(1, .35, .3) if s.hp < 25 else YELLOW)
+	big(g, str(s.ammo), Vector2(560, 352), YELLOW)
+	g.draw_texture_rect(v.tex("ch5q_item_firework_rocket"), Rect2(512, 324, 32, 32), false)
+	var nt: Dictionary = qk.notch()
+	g.text_at("Стив %d : %d Нотч · до %d" % [s.frags, nt.frags, qk.FRAGS], Vector2(470, 18), 8, Color.WHITE, true)
+	for i in range(qk.feed.size()):g.text_at(qk.feed[i].text, Vector2(10, 18 + i * 12), 8, Color(1, .9, .6, 1 - qk.feed[i].age / 5.0))
+	if s.quad > 0:g.text_at("QUAD %d" % int(ceil(s.quad)), Vector2(10, 300), 16, Color(.5, .6, 1), true)
+	if s.dead > 0:g.centered("Ты убит. Возрождение…", 150, 16, Color(1, .3, .3), true)
+	if qk.state == "intro":g.centered("ДЕЗМАТЧ · ДО 3 ФРАГОВ", 120, 16, Color(1, .8, .3), true)
+	if qk.age < 6.0:g.text_at("WASD — ходьба · мышь — обзор · ЛКМ — ракета · Пробел — прыжок · стрелки — обзор", Vector2(120, 306), 8, Color(1, 1, 1, .5 * (1 - qk.age / 6.0)))
+	subtitles(g, n, 280.0)
+	retry(g, n)
+
+static func big(g, text: String, at: Vector2, c: Color):
+	g.draw_string(g.bold, at + Vector2(2, 2), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32, Color(0, 0, 0, .8))
+	g.draw_string(g.bold, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, 32, c)
