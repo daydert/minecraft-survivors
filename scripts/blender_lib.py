@@ -223,3 +223,20 @@ def beam_between(name, a, b, thick, material, tile=2.0, parent=None):
 def export(path):
     bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", export_apply=True, export_yup=True, export_lights=False, export_cameras=False)
     print("EXPORTED", path)
+
+
+def group(name, at, parent=None):
+    """An empty: children built with local coordinates move with it (animated parts)."""
+    ob = bpy.data.objects.new(name, None)
+    ob.location = g2b(at)
+    bpy.context.scene.collection.objects.link(ob)
+    if parent:
+        ob.parent = parent
+    return ob
+
+
+def clear_scene():
+    for ob in list(bpy.data.objects):
+        bpy.data.objects.remove(ob, do_unlink=True)
+    for me in list(bpy.data.meshes):
+        bpy.data.meshes.remove(me)

@@ -957,6 +957,29 @@ func mark(n: Node3D, kind: String, speed := 1.0) -> Node3D:
 ## 9 Command & Conquer: Generals, 10 Europa Universalis IV.
 func diorama(kind: int, at: Vector3, scale: float) -> Node3D:
 	var root := Node3D.new();root.position = at;root.scale = Vector3.ONE * scale;scene.add_child(root)
+	var path: String = "res://assets/models/ch5_game_%d.glb" % kind
+	if ResourceLoader.exists(path):
+		var model: Node3D = (load(path) as PackedScene).instantiate();root.add_child(model)
+		var anims: Array = [];var top: float = 0.0
+		var stack: Array = [model]
+		while not stack.is_empty():
+			var n: Node = stack.pop_back();stack.append_array(n.get_children())
+			if String(n.name).begins_with("anim_"):
+				var parts: PackedStringArray = String(n.name).split("_")
+				var spd: float = float(parts[2].substr(1).split(".")[0]) / 10.0 if parts.size() > 2 else 1.0
+				n.set_meta("anim", parts[1]);n.set_meta("speed", spd);n.set_meta("home", (n as Node3D).position);anims.append(n)
+			if n is MeshInstance3D:
+				var mi: MeshInstance3D = n
+				if not String(mi.name).begins_with("sky") and not String(mi.name).begins_with("beam"):top = maxf(top, mi.get_aabb().end.y)
+				for i in range(mi.mesh.get_surface_count()):
+					var m: Material = mi.mesh.surface_get_material(i)
+					if m is BaseMaterial3D:
+						var bm: BaseMaterial3D = m
+						if not bm.resource_name.begins_with("screen"):bm.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+						if String(mi.name).begins_with("beam"):
+							bm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA;bm.albedo_color.a = .18;bm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED;bm.cull_mode = BaseMaterial3D.CULL_DISABLED
+		root.set_meta("anims", anims);root.set_meta("top", top)
+		return root
 	match kind:
 		0:
 			wbox(root, Vector3(0, -.25, 0), Vector3(16, .5, 16), wmat("ch5w_tf2_concrete", 6))
@@ -1193,13 +1216,15 @@ func build_flight():
 	var marks: Array = logos()
 	for i in range(LOGOS.size()):
 		var side: float = -1.0 if i % 2 == 0 else 1.0
-		var at := Vector3(side * (15 + (i % 3) * 4), (i % 3 - 1) * 5.0 - 2.0, -60 - i * 48)
-		var d := diorama(i, at, 1.0)
+		var at := Vector3(side * (14 + (i % 3) * 2.5), (i % 3 - 1) * 4.0 - 5.0, -60 - i * 48)
+		var d := diorama(i, at, 1.5)
 		d.rotation.y = -side * .55;worlds.append(d)
 		if marks[i] != null:
 			var logo := Sprite3D.new();logo.texture = marks[i];logo.pixel_size = 11.0 / maxf(1, logo.texture.get_width());logo.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 			logo.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS;logo.shaded = false;logo.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
-			logo.position = at + Vector3(0, {3:14.5, 4:14.5, 8:15.0}.get(i, 11.5), 0);scene.add_child(logo);worlds.append(logo)
+			logo.pixel_size = 14.0 / maxf(1, logo.texture.get_width())
+			var logo_h: float = logo.texture.get_height() * logo.pixel_size
+			logo.position = at + Vector3(0, minf(float(d.get_meta("top", 10.0)), 9.5 if i == 8 else 16.0) * 1.5 + 2.5 + logo_h / 2.0, 9.0 if i == 8 else 0.0);scene.add_child(logo);worlds.append(logo)
 		omni(at + Vector3(-side * 6, 8, 8), Color(1, .95, .9), 1.6, 30.0)
 	nodes.worlds = worlds
 	var portal := MeshInstance3D.new();var pm := SphereMesh.new();pm.radius = 6;pm.height = 12;portal.mesh = pm;portal.material_override = flat(Color(1, .95, .85), 8.0)
@@ -1307,17 +1332,17 @@ func sync_flight(f, clock: float):
 func animate_worlds(clock: float):
 	for w in nodes.worlds:
 		if w is Sprite3D:continue
-		for c in w.get_children():
+		for c in (w.get_meta("anims", []) as Array) + w.get_children():
 			if not c.has_meta("anim"):continue
 			var sp: float = c.get_meta("speed");var home: Vector3 = c.get_meta("home")
 			match String(c.get_meta("anim")):
 				"spin":c.rotation.y = clock * sp
+				"stride":c.position = home + Vector3(sin(clock * sp) * 1.5, abs(sin(clock * sp * 2.0)) * .15, 0)
 				"bob":c.position = home + Vector3(0, abs(sin(clock * sp * 2.0)) * .3, 0)
 				"hover":c.position = home + Vector3(sin(clock * sp) * .8, sin(clock * sp * 1.7) * .4, 0);c.rotation.y = clock * sp
 				"drive":c.position = home + Vector3(0, 0, -fmod(clock * sp * 4.0, 12.0) + 6.0)
 				"fall":c.position = home + Vector3(sin(clock * sp * 2.0) * .6, -fmod(clock * sp * 2.0, 10.0) + 5.0, 0);c.rotation = Vector3(clock * sp * 3, clock * sp * 2, 0)
 				"flicker":c.scale = Vector3(1, 1.5 + sin(clock * 23.0) * .3, 1)
-				"stride":c.position = home + Vector3(sin(clock * sp) * 1.5, 0, 0)
 
 ## Credits: a slow drift past the other worlds.
 func sync_credits(f, clock: float):

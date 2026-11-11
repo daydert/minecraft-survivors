@@ -25,7 +25,8 @@ func run():
 	game.action("chapter_5");var w=game.world;game.settings.shake=true;var n=w.notch
 	n.begin(w);n.start_fighter(w);var fi=n.fighter
 	await idle(w,2.4)
-	var plan=[["walk",.8],["punch",0],["punch",.15],["punch",.15],["walk",.4],["special_up",0],["wait",1.2],["walk",.6],["kick",0],["wait",.6],["back",.6],["special",0],["wait",1.4],["special_back",0],["wait",.5],["punch",0],["punch",.15],["punch",.15],["wait",.8],["special_down",0],["wait",1.0],["walk",.8],["grab",0],["wait",1.2],["super",0],["wait",2.4],["walk",.8],["punch",0],["punch",.15],["punch",.15],["wait",1.0]]
+	fi.paused=true;await idle(w,3.0);fi.paused=false
+	var plan=[["walk",.8],["punch",0],["punch",.15],["punch",.15],["walk",.4],["special_up",0],["wait",1.2],["walk",.6],["kick",0],["wait",.6],["back",.6],["special",0],["wait",1.4],["special_back",0],["wait",.5],["punch",0],["punch",.15],["punch",.15],["wait",.8],["special_down",0],["wait",1.0],["walk",.5],["punch",0],["special_fwd",0],["wait",1.0],["jump",0],["wait",.25],["special",0],["wait",1.0],["walk",.8],["grab",0],["wait",1.2],["super",0],["wait",2.4],["walk",.8],["punch",0],["punch",.15],["punch",.15],["wait",1.0]]
 	for loop in range(3):
 		for step in plan:
 			var s=fi.steve();var nt=fi.notch();var d: float=signf(nt.x-s.x)
@@ -46,11 +47,25 @@ func run():
 				"special_up":s.cool=0;fi.input_dir=Vector2(0,-1);fi.press("special");await idle(w,.05)
 				"special_down":s.cool=0;fi.input_dir=Vector2(0,1);fi.press("special");await idle(w,.05)
 				"special_back":s.cool=0;fi.input_dir=Vector2(-d,0);fi.press("special");await idle(w,.05)
+				"special_fwd":s.cool=0;fi.input_dir=Vector2(d,0);fi.press("special");await idle(w,.05)
+				"jump":
+					for f2 in range(3):await tick(w,Vector2(d * .5,-1))
 			if fi.state!="fight":break
+		if fi.state=="finish":
+			await idle(w,1.2)
+			var s2=fi.steve();var nt2=fi.notch();var d2: float=signf(nt2.x-s2.x)
+			for f3 in range(40):
+				if absf(nt2.x-s2.x)<1.6:break
+				await tick(w,Vector2(d2,0))
+			for dv in [Vector2(0,1),Vector2.ZERO,Vector2(d2,0),Vector2.ZERO,Vector2(0,1)]:
+				await tick(w,dv);await tick(w,dv)
+			fi.input_dir=Vector2(0,1);fi.press("punch")
+			while fi.state=="fatality":await idle(w,.2)
+			break
 		while fi.state in ["ko","intro"]:await idle(w,.2)
 		if n.phase!="fighter":break
 		if loop==1:fi.notch().hp=minf(fi.notch().hp,15)
-	n.start_ut(w);await idle(w,1.5);n.press(w,"right");await idle(w,.3);n.press(w,"right");await idle(w,.3);n.press(w,"right");await idle(w,.3);n.press(w,"accept")
+	n.start_ut(w);n.ut_wave=6;await idle(w,1.5);n.press(w,"right");await idle(w,.3);n.press(w,"right");await idle(w,.3);n.press(w,"right");await idle(w,.3);n.press(w,"accept")
 	await idle(w,1.6);n.press(w,"accept");n.press(w,"accept")
 	for k in range(4):
 		for f in range(int(6.6*30)):
@@ -69,12 +84,15 @@ func run():
 		else:
 			n.ut_choice=1;n.press(w,"accept");await idle(w,1.8);n.press(w,"accept");n.press(w,"accept")
 	n.start_lanes(w);await idle(w,2.0)
-	var plants=[[1,0,2],[1,0,1],[0,1,2],[0,1,1],[0,1,3],[1,0,3],[2,4,2],[0,1,0],[0,1,4],[2,4,1],[2,4,3],[3,6,2]]
+	var plants=[[1,0,2],[1,0,1],[0,1,2],[4,1,1],[0,1,3],[1,0,3],[5,4,2],[4,1,0],[0,1,4],[6,3,1],[7,5,3],[2,4,0],[7,6,2],[5,4,4]]
 	for p in plants:
 		await idle(w,1.0);n.redstone=maxi(n.redstone,200);n.card_ready[p[0]]=0.0;n.card=p[0];n.cursor=Vector2i(p[1],p[2]);n.press(w,"accept")
 		for d in n.drops:
 			if not d.taken and d.life>1.0:n.click(w,d.p)
-	await idle(w,22.0)
+	var kinds=["baby","spider","slime","vindicator","skeleton","zombie","creeper","ravager"]
+	for k in range(kinds.size()):
+		n.spawn_walker(w,kinds[k],k%5,n.LANE_ORIGIN.x+n.COLS*n.CELL.x+20);await idle(w,1.2)
+	await idle(w,18.0)
 	n.start_quake(w);var qk=n.quake
 	for f in range(int(32*30)):
 		var st=qk.steve();var nb=qk.notch()
@@ -103,7 +121,7 @@ func run():
 	await idle(w,3.8)
 	f.change("chair");n.change("chair");await idle(w,9.0);f.age=19.0;await idle(w,4.0);f.age=29.0;await idle(w,15.5)
 	await idle(w,f.FLIGHT_LENGTH+.3)
-	await idle(w,16.0)
+	await idle(w,f.CREDITS_LENGTH)
 	var timeline={"fps":30,"frames":state.frame,"sound_events":state.cues,"music":state.music}
 	FileAccess.open("res://qa/recordings/chapter_five_timeline.json",FileAccess.WRITE).store_string(JSON.stringify(timeline,"  "))
 	game.audio.shutdown();game.quitting=true

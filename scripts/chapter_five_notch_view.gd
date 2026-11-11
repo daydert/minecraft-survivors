@@ -217,7 +217,7 @@ static func battle(g):
 						g.draw_line(Vector2(box.position.x, b.p.y), Vector2(box.end.x, b.p.y), Color(1, .4, .1, .12 + .1 * float(blink)), 1)
 						g.draw_line(Vector2(b.p.x, box.position.y), Vector2(b.p.x, box.end.y), Color(1, .4, .1, .12 + .1 * float(blink)), 1)
 					"fire":
-						var k2: float = 1.0 - b.age / b.life
+						var k2: float = 1.0 - float(b.get("age", 0.0)) / b.life
 						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color(1, .55, .1, k2))
 						g.draw_rect(Rect2(b.p - b.size / 2 + Vector2(0, b.size.y * .3) * float(b.size.x > b.size.y) + Vector2(b.size.x * .3, 0) * float(b.size.x <= b.size.y), b.size * Vector2(1, .4) if b.size.x > b.size.y else b.size * Vector2(.4, 1)), Color(1, .95, .6, k2))
 					_:g.draw_circle(b.p, 3.5, Color(1, .6, .2) if b.get("reversed", false) else Color.WHITE)
