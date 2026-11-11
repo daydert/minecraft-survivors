@@ -395,40 +395,19 @@ static func code(g):
 
 static func erase(g):
 	var w = g.world;var n = w.notch;var f = n.finale
-	g.draw_rect(Rect2(0, 0, 640, 360), Color(.02, .02, .035))
-	var console := Rect2(380, 70, 200, 130)
-	var broken: bool = f.thrown >= .7
-	if not broken:
-		g.draw_rect(console.grow(6), Color(.7, .7, .68));g.draw_rect(console, Color(.01, .05, .02))
-		for i in range(8):
-			var t: String = ["delete(steve);", "steve.pixels.clear();", "for (Pixel p : steve)", "    p.remove();", "// he was never here", "gc.collect(steve);", "> deleting… %d%%" % int(f.erase * 100), ""][i]
-			g.draw_string(g.font, console.position + Vector2(6, 14 + i * 14), t, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.35, 1, .45))
-	else:
-		var k: float = clampf((f.thrown - .7) / 1.2, 0, 1)
-		for i in range(60):
-			var d := Vector2.from_angle(i * 2.39996) * (20 + k * 260 * (.4 + fmod(i * .37, 1.0)))
-			g.draw_string(g.font, (console.get_center() + d).floor(), "01{};"[i % 5], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.35, 1, .45, 1 - k))
-		if f.thrown < 1.0 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, (1.0 - f.thrown) * 2.0))
-	var npose: String = "stagger" if broken else ("point" if f.erase > .1 else "idle")
-	figure(g, npose, n.age, Vector2(470 if not broken else 486, 300), Vector2.LEFT, 2.0)
-	var sp := Vector2(170, 300)
-	g.oval(sp, Vector2(16, 5), Color(0, 0, 0, .4))
-	g.draw_actor("steve", sp, Vector2.RIGHT, w.clock, false, Color.WHITE, "idle", 2.0, w.player_visual)
-	var cut: float = 64.0 * f.erase
-	for y in range(int(cut / 2)):
-		var yy: float = sp.y - 64 + y * 2
-		var off: float = round(sin(y * 1.7 + w.clock * 20) * 3)
-		g.draw_rect(Rect2(sp.x - 22 + off, yy, 44, 2), Color(.02, .02, .035))
-		if y % 3 == 0:g.draw_rect(Rect2(sp.x - 22 + fmod(y * 13.0, 40.0), yy, 2, 2), Color(.97, 0, .86))
-	if f.thrown >= 0 and f.thrown < .7:
-		var t: float = f.thrown / .7
-		var at: Vector2 = (sp + Vector2(10, -40)).lerp(console.get_center(), t) - Vector2(0, sin(t * PI) * 40)
-		g.draw_set_transform(at, t * 14.0, Vector2.ONE * 2)
-		g.draw_texture_rect(view(g).tex("ch5q_item_iron_sword"), Rect2(-8, -8, 16, 16), false)
-		g.draw_set_transform(Vector2.ZERO)
+	var v = view(g);v.ensure(g, "erase", Vector2i(640, 360));v.sync_erase(f, w.clock)
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
+	g.draw_rect(Rect2(0, 0, 640, 24), Color.BLACK);g.draw_rect(Rect2(0, 336, 640, 24), Color.BLACK)
+	if f.age < .8:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - f.age / .8))
+	if f.thrown >= .6 and f.thrown < .78 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, (.78 - f.thrown) * 5.0))
+	if f.erase > .05 and f.thrown < 0:
+		for i in range(int(f.erase * 10)):
+			var y: float = fmod(i * 47.0 + w.clock * 300.0, 312.0) + 24
+			g.draw_rect(Rect2(0, y, 640, 2), Color(.97, 0, .86, .18))
 	if f.thrown < 0:
-		g.centered("Пробел — держаться! (%d)" % maxi(0, 14 - f.presses), 330, 16, Color(1, 1, 1, .6 + .4 * sin(w.clock * 8)), true)
-	subtitles(g, n, 40.0)
+		g.centered("Пробел — держаться!", 318, 16, Color(1, 1, 1, .6 + .4 * sin(w.clock * 8)), true)
+		g.draw_rect(Rect2(220, 324, 200, 4), Color(0, 0, 0, .6));g.draw_rect(Rect2(220, 324, 200 * clampf(f.presses / 14.0, 0, 1), 4), Color(.4, 1, .6))
+	subtitles(g, n, 30.0)
 
 # ------------------------------------------------------------------ brawl, chair, flight
 
@@ -459,6 +438,30 @@ static func chair(g):
 	if f.age > f.CHAIR_STAB and f.age < f.CHAIR_STAB + .12 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(.6, 0, 0, .4))
 	if f.age > 2.0:g.text_at("Пробел — дальше", Vector2(540, 350), 8, Color(1, 1, 1, .3))
 	subtitles(g, n, 306.0)
+
+static func credits(g):
+	var w = g.world;var n = w.notch;var f = n.finale
+	var v = view(g);v.ensure(g, "flight", Vector2i(640, 360));v.sync_credits(f, w.clock)
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, .55 + .45 * (1 - clampf(f.age / 2.0, 0, 1))))
+	g.draw_rect(Rect2(120, 140, 400, 70), Color(0, 0, 0, .35))
+	g.draw_rect(Rect2(0, 0, 640, 30), Color.BLACK);g.draw_rect(Rect2(0, 330, 640, 30), Color.BLACK)
+	for c in f.CREDITS:
+		var t: float = f.age - c[0]
+		if t < 0 or t > 4.6:continue
+		var k: float = clampf(t / .9, 0, 1) * clampf((4.6 - t) / .9, 0, 1)
+		var rise: float = (1 - k) * 6
+		if c[0] == 1.0:
+			g.centered(c[1], 168 + rise, 32, Color(1, 1, 1, k), true)
+			g.centered("глава V · Исходный код", 196 + rise, 8, Color(.6, 1, .9, k * .8))
+			continue
+		if not c[1].is_empty():g.centered(c[1], 160 + rise, 8 if not c[2].is_empty() else 16, Color(.6, 1, .9, k * .85), c[2].is_empty())
+		if not c[2].is_empty():g.centered(c[2], 186 + rise, 32 if c[1] != "" else 16, Color(1, 1, 1, k), true)
+	for i in range(18):
+		var y: float = fmod(i * 61.0 + w.clock * (8 + i % 4 * 3), 300.0) + 30
+		g.draw_string(g.font, Vector2(fmod(i * 97.0, 620.0) + 10, y), "01{};"[i % 5], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.3, 1, .7, .12))
+	if f.age > 3.0:g.text_at("Пробел — пропустить", Vector2(530, 348), 8, Color(1, 1, 1, .25))
+	if f.age > f.CREDITS_LENGTH - 1.5:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((f.age - (f.CREDITS_LENGTH - 1.5)) / 1.5, 0, 1)))
 
 static func flight(g):
 	var w = g.world;var n = w.notch;var f = n.finale

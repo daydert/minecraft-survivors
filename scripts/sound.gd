@@ -200,6 +200,12 @@ func update_volumes(m: float, fx: float):
 			voice.volume_db = linear_to_db(maxf(0.000001,effects_volume*float(voice.get_meta("gain",1.0))))
 
 var ending_player: AudioStreamPlayer
+## Chapter V credits and ending music stop when the run is left.
+func stop_extras():
+	if is_instance_valid(ending_player):ending_player.stop()
+	for c in get_children():
+		if c.has_meta("credits"):c.queue_free()
+
 func play(id: String):
 	if id=="boss_win":celebrate();return
 	if id=="ch5_ending_theme":
@@ -210,6 +216,11 @@ func play(id: String):
 	if id=="ch5_ending_fade":
 		if is_instance_valid(ending_player) and ending_player.playing:create_tween().tween_property(ending_player,"volume_db",-60.0,3.5)
 		return
+	if id=="ch5_credits":
+		var credits=AudioStreamPlayer.new();add_child(credits)
+		credits.stream=load("res://assets/audio/music_3.ogg");credits.volume_db=-40.0
+		credits.play();create_tween().tween_property(credits,"volume_db",linear_to_db(maxf(.001,music_volume)),3.0)
+		credits.set_meta("credits",true);return
 	if id=="ch5_ending_sting":
 		var sting=AudioStreamPlayer.new();add_child(sting)
 		sting.stream=load("res://assets/audio/chapter_five/ending_sting.ogg");sting.volume_db=linear_to_db(maxf(.001,effects_volume))

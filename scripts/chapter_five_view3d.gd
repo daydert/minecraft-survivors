@@ -51,6 +51,7 @@ func ensure(g, which: String, size: Vector2i):
 	scene = Node3D.new();viewport.add_child(scene)
 	match which:
 		"fighter", "fists":build_fighter()
+		"erase":build_erase()
 		"chair":build_chair()
 		"flight":build_flight()
 		_:build_quake()
@@ -236,6 +237,8 @@ func take(kind: String, variant: String) -> Node3D:
 			var b := BoxMesh.new();b.size = Vector3(.12, .12, .12);n.mesh = b;n.material_override = flat(Color(.6, .6, .6, .5), 0.0, true)
 		"blast":
 			var s := SphereMesh.new();s.radius = 1.0;s.height = 2.0;n.mesh = s;n.material_override = flat(Color(1, .55, .15, .6), 5.0, true)
+		"pixel":
+			var b := BoxMesh.new();b.size = Vector3(.07, .07, .07);n.mesh = b;n.material_override = flat(Color(.97, 0, .86) if variant == "0" else Color(.2, 1, 1), 3.0)
 		"wire":
 			var b := BoxMesh.new();b.size = Vector3(1, .05, .05);n.mesh = b;n.material_override = flat(Color(.15, .15, .17))
 		"star":
@@ -322,158 +325,435 @@ func sync_quake(qk):
 	for k in nodes:
 		if String(k).begins_with("lamp"):nodes[k].light_energy = 1.4 + sin(qk.age * 9.0 + k.length()) * .15 + (0.6 if int(qk.age * 13 + k.length()) % 17 == 0 else 0.0)
 
-# ------------------------------------------------------------------ the chair
+# ------------------------------------------------------------------ cinematic helpers
 
-func room(bg: Color, ambient: Color):
+func room(bg: Color, ambient: Color, energy := .7) -> Environment:
 	var env := WorldEnvironment.new();var e := Environment.new();env.environment = e
 	e.background_mode = Environment.BG_COLOR;e.background_color = bg
-	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;e.ambient_light_color = ambient;e.ambient_light_energy = .7
-	scene.add_child(env)
+	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;e.ambient_light_color = ambient;e.ambient_light_energy = energy
+	scene.add_child(env);nodes.env = e
+	return e
 
-func block(at: Vector3, size: Vector3, tex_name: String) -> MeshInstance3D:
+func block(at: Vector3, size: Vector3, tex_name: String, emission := 0.0) -> MeshInstance3D:
 	var m := MeshInstance3D.new();var b := BoxMesh.new();b.size = size;m.mesh = b;m.position = at
-	m.material_override = material(tex_name, true);scene.add_child(m);return m
+	m.material_override = material(tex_name, true, emission);scene.add_child(m);return m
+
+func glow_box(at: Vector3, size: Vector3, color: Color, energy: float) -> MeshInstance3D:
+	var m := MeshInstance3D.new();var b := BoxMesh.new();b.size = size;m.mesh = b;m.position = at
+	m.material_override = flat(color, energy);scene.add_child(m);return m
+
+func label(text: String, at: Vector3, size: int, color: Color, px := .006) -> Label3D:
+	var l := Label3D.new();l.text = text;l.position = at;l.font_size = size;l.pixel_size = px;l.modulate = color
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT;l.outline_size = 0;scene.add_child(l);return l
+
+func omni(at: Vector3, color: Color, energy: float, reach: float) -> OmniLight3D:
+	var l := OmniLight3D.new();l.position = at;l.light_color = color;l.light_energy = energy;l.omni_range = reach;scene.add_child(l);return l
+
+## A held sword: blade along the arm, in the arm's swing plane.
+func sword_in(hand: Node3D, px := .03) -> Node3D:
+	var holder := Node3D.new();holder.position = Vector3(-1 * PX, -10 * PX, 0);holder.rotation = Vector3(0, PI / 2, 0);hand.add_child(holder)
+	var s := Sprite3D.new();s.texture = tex("ch5q_item_iron_sword");s.pixel_size = px;s.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	s.double_sided = true;s.shaded = true;s.rotation = Vector3(0, 0, deg_to_rad(-135));s.position = Vector3(0, -8.5 * px, 0);holder.add_child(s)
+	return holder
+
+func shot(cam: Camera3D, from: Vector3, to: Vector3, fov: float, shake := 0.0, clock := 0.0):
+	cam.fov = fov
+	cam.position = from + Vector3(sin(clock * 13.0), cos(clock * 11.0), 0) * shake
+	cam.look_at(to)
+
+func burst(at: Vector3, count: int, clock: float, spread: float, rise: float, life: float, glyphs := true) -> Array:
+	var out: Array = []
+	for k in range(count):
+		var t: float = fmod(clock * .7 + k * .137, life) / life
+		var d := Vector3(sin(k * 2.39996), 0, cos(k * 2.39996)) * spread * t
+		var n: Node3D = take("glyph" if glyphs else "pixel", str(k % 2))
+		n.position = at + d + Vector3(0, rise * t, 0)
+		if not glyphs:n.scale = Vector3.ONE * (1.0 - t * .6);n.rotation = Vector3(t * 4.0, k, t * 3.0)
+		if glyphs:(n as Label3D).text = ["0", "1", "{", "}", ";", "()", "//"][k % 7];(n as Label3D).modulate.a = 1.0 - t
+		out.append(n)
+	return out
+
+# ------------------------------------------------------------------ the erasure
+
+func build_erase():
+	room(Color(.01, .012, .02), Color(.3, .4, .5), .5)
+	block(Vector3(0, -.5, 0), Vector3(20, 1, 14), "ch5q_polished_deepslate")
+	block(Vector3(0, 2.2, -3.2), Vector3(5.2, 3.2, .4), "ch5q_polished_blackstone_bricks")
+	var screen := glow_box(Vector3(0, 2.3, -2.98), Vector3(4.4, 2.4, .05), Color(.02, .2, .08), 1.0);nodes.screen = screen
+	for k in [-1, 1]:
+		block(Vector3(k * 4.2, 1.6, -2.6), Vector3(2.2, 1.6, .3), "ch5q_polished_blackstone_bricks").rotation.y = -k * .35
+		var side := glow_box(Vector3(k * 4.15, 1.6, -2.42), Vector3(1.9, 1.3, .04), Color(.02, .2, .08), 1.0);side.rotation.y = -k * .35;nodes["side%d" % k] = side
+	for k in range(9):
+		var l := label("", Vector3(-2.05, 3.35 - k * .25, -2.94), 30, Color(.35, 1, .5));nodes["line%d" % k] = l
+	for k in range(6):glow_box(Vector3(-3 + k * 1.2, .02, -1.5 + k * .3), Vector3(.06, .04, 3.0), Color(.05, .05, .06), 0.0)
+	nodes.light = omni(Vector3(0, 2.4, -1.6), Color(.3, 1, .6), 2.5, 9.0)
+	nodes.key = omni(Vector3(-3, 3.5, 3), Color(.7, .75, 1.0), 1.4, 12.0)
+	rigs.notch = make_rig("ch5_skin_notch");rigs.steve = make_rig("ch5_skin_steve")
+	nodes.sword = sword_in(rigs.steve.ra)
+	var flying := Sprite3D.new();flying.texture = tex("ch5q_item_iron_sword");flying.pixel_size = .04;flying.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;flying.double_sided = true
+	scene.add_child(flying);nodes.flying = flying
+	var cam := Camera3D.new();scene.add_child(cam);nodes.cam = cam
+
+const ERASE_CODE := ["delete(steve);", "for (Pixel p : steve.pixels())", "    p.remove();", "steve.memory.clear();", "// he was never here", "gc.collect(steve);", "> deleting… %d%%", "", "> _"]
+
+func sync_erase(f, clock: float):
+	var a: float = f.age;var cam: Camera3D = nodes.cam
+	var n: Dictionary = rigs.notch;var s: Dictionary = rigs.steve
+	var broken: bool = f.thrown >= .6
+	n.root.position = Vector3(1.3, 0, -1.4);n.root.rotation = Vector3(0, -.6, 0)
+	var typing: float = sin(clock * 18) * .15
+	if not broken:pose(n, {"ra":Vector3(-1.2 + typing, 0, -.2), "la":Vector3(-1.2 - typing, 0, .2), "head":Vector3(.2, .3, 0)})
+	else:
+		var k: float = clampf((f.thrown - .6) / .5, 0, 1)
+		n.root.position += Vector3(.9, 0, .4) * k;n.root.rotation.x = -k * 1.3
+		pose(n, {"ra":Vector3(-.3, 0, -1.0), "la":Vector3(-.3, 0, 1.0), "head":Vector3(-.4, 0, 0)})
+	s.root.position = Vector3(-1.6, 0, 1.2);s.root.rotation = Vector3(0, PI * .75, 0)
+	var resist: float = clampf(f.presses / 14.0, 0, 1)
+	var sp := {"rl":Vector3(-.2, 0, 0), "ll":Vector3(.2, 0, 0), "torso":Vector3(.35 * (1 - resist), 0, 0), "head":Vector3(.3, 0, 0), "ra":Vector3(-.4, 0, 0), "la":Vector3(-.2, 0, 0), "drop":-.15 * (1 - resist)}
+	if f.thrown >= 0 and f.thrown < .6:sp.ra = Vector3(-3.0 + f.thrown * 5.0, 0, 0);sp.torso = Vector3(-.2, .5, 0)
+	pose(s, sp)
+	var order := ["ll", "rl", "la", "ra", "torso", "head"]
+	for i in range(order.size()):
+		var gone: bool = f.erase * 6.4 > i + 1
+		var flick: bool = f.erase * 6.4 > i + .6 and not gone and int(clock * 24) % 2 == 0
+		for c in s[order[i]].get_children():
+			if c is MeshInstance3D:
+				c.visible = not gone and not flick
+	(nodes.sword as Node3D).visible = f.thrown < 0
+	var fl: Sprite3D = nodes.flying
+	fl.visible = f.thrown >= 0 and f.thrown < .6
+	if fl.visible:
+		var t: float = f.thrown / .6
+		fl.position = Vector3(-1.4, 1.5, 1.0).lerp(Vector3(0, 2.4, -2.9), t) + Vector3(0, sin(t * PI) * .5, 0)
+		fl.rotation = Vector3(0, 0, -t * 18.0)
+	for k in range(9):
+		var l: Label3D = nodes["line%d" % k]
+		var txt: String = ERASE_CODE[k] % int(f.erase * 100) if "%d" in ERASE_CODE[k] else ERASE_CODE[k]
+		if broken:txt = ["FATAL ERROR", "", "  0x0000DEAD", "", "  terminal.exe", "  has stopped", "", "", ""][k] if f.thrown < 1.6 else ""
+		l.text = txt.substr(0, mini(txt.length(), int(a * 30) - k * 6)) if not broken else txt
+		l.modulate = Color(1, .25, .2) if broken else Color(.35, 1, .5)
+	var scr: StandardMaterial3D = (nodes.screen as MeshInstance3D).material_override
+	if broken:
+		var dead: float = clampf((f.thrown - 1.2) / .8, 0, 1)
+		scr.emission = Color(1, .1, .05).lerp(Color(0, 0, 0), dead) if int(clock * 20) % 3 != 0 or dead > .9 else Color(1, 1, 1)
+		nodes.light.light_color = Color(1, .2, .1);nodes.light.light_energy = (3.0 + sin(clock * 40) * 2.0) * (1 - dead) + .2
+		for k in [-1, 1]:((nodes["side%d" % k] as MeshInstance3D).material_override as StandardMaterial3D).emission = Color(.6, 0, 0) * (1 - dead)
+	else:
+		scr.emission = Color(.02, .25, .1);nodes.light.light_energy = 2.2 + sin(clock * 3) * .2
+	var shown: Array = []
+	if f.erase > .02:shown += burst(s.root.position + Vector3(0, .6, 0), int(6 + f.erase * 14), clock, .8, 2.2, 1.4, false)
+	if broken and f.thrown < 2.4:shown += burst(Vector3(0, 2.3, -2.7), 24, clock * 2.0, 3.0, 1.0, .9, true)
+	hide_rest(shown)
+	if f.thrown < 0:
+		if a < 3.2:shot(cam, Vector3(-2.6, 1.9, 3.6), Vector3(.6, 1.6, -1.6), 46, 0.0, clock)
+		else:
+			var push: float = clampf((a - 3.2) / 8.0, 0, 1)
+			shot(cam, Vector3(-.4 - push * .3, 1.4, 2.6 - push * .8), Vector3(-1.6, 1.0, 1.2), 50 - push * 10, .01 * f.erase, clock)
+	elif f.thrown < .6:shot(cam, Vector3(1.8, 1.8, 2.4), fl.position, 55, 0.0, clock)
+	elif f.thrown < 1.4:shot(cam, Vector3(.6, 2.2, -.4), Vector3(0, 2.3, -3.0), 60, .06 * (1.4 - f.thrown), clock)
+	else:shot(cam, Vector3(-2.2, 1.6, 3.2), Vector3(1.6, .8, -1.0), 48, 0.0, clock)
+
+# ------------------------------------------------------------------ the chair
 
 func build_chair():
-	room(Color(.02, .02, .03), Color(.4, .45, .55))
-	var lamp := SpotLight3D.new();lamp.position = Vector3(0, 4.5, .5);lamp.rotation = Vector3(-PI / 2, 0, 0);lamp.spot_range = 8;lamp.spot_angle = 32;lamp.light_energy = 3.0;lamp.light_color = Color(1, .95, .85);scene.add_child(lamp)
-	var glow := OmniLight3D.new();glow.position = Vector3(1.6, 1.6, -1);glow.omni_range = 5;glow.light_color = Color(.3, 1, .8);glow.light_energy = 1.2;scene.add_child(glow);nodes.glow = glow
-	block(Vector3(0, -.5, 0), Vector3(14, 1, 10), "ch5q_polished_deepslate")
+	room(Color(.01, .01, .015), Color(.25, .28, .35), .45)
+	var lamp := SpotLight3D.new();lamp.position = Vector3(0, 3.6, .2);lamp.rotation = Vector3(-PI / 2, 0, 0);lamp.spot_range = 6;lamp.spot_angle = 30
+	lamp.light_energy = 4.0;lamp.light_color = Color(1, .92, .8);lamp.shadow_enabled = true;scene.add_child(lamp);nodes.lamp = lamp
+	var bulb := glow_box(Vector3(0, 3.55, .2), Vector3(.18, .18, .18), Color(1, .9, .7), 6.0);nodes.bulb = bulb
+	var wire := glow_box(Vector3(0, 4.2, .2), Vector3(.02, 1.2, .02), Color(.05, .05, .05), 0.0);nodes.wire = wire
+	nodes.glow = omni(Vector3(2.2, 1.6, -1.0), Color(.3, 1, .7), 1.2, 5.0)
+	block(Vector3(0, -.5, 0), Vector3(16, 1, 12), "ch5q_polished_deepslate")
+	block(Vector3(0, 3, -4), Vector3(16, 7, .5), "ch5q_deepslate_tiles")
 	for x in [-.35, .35]:
 		for z in [-.35, .35]:block(Vector3(x, .25, z), Vector3(.12, .5, .12), "ch5q_dark_oak_planks")
 	block(Vector3(0, .55, 0), Vector3(.9, .1, .9), "ch5q_dark_oak_planks")
 	block(Vector3(0, 1.15, -.42), Vector3(.9, 1.1, .1), "ch5q_dark_oak_planks")
-	var console := block(Vector3(2.3, .9, -1.2), Vector3(1.4, 1.1, .3), "ch5q_polished_blackstone_bricks")
-	var screen := Label3D.new();screen.position = Vector3(2.3, 1.1, -1.03);screen.font_size = 28;screen.pixel_size = .006;screen.modulate = Color(.3, 1, .6)
-	screen.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT;screen.text = "scan: 0%";scene.add_child(screen);nodes.screen = screen
+	block(Vector3(2.3, .9, -1.2), Vector3(1.4, 1.1, .3), "ch5q_polished_blackstone_bricks")
+	nodes.screen = label("scan: 0%", Vector3(1.7, 1.25, -1.03), 28, Color(.3, 1, .6))
 	rigs.notch = make_rig("ch5_skin_notch");rigs.steve = make_rig("ch5_skin_steve")
-	var sword := Sprite3D.new();sword.texture = tex("ch5q_item_iron_sword");sword.pixel_size = .028;sword.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	sword.position = Vector3(-1 * PX, -11 * PX, .25);sword.rotation = Vector3(0, PI / 2, -PI * .75);rigs.steve.ra.add_child(sword);nodes.sword = sword
-	var cable := MeshInstance3D.new();var cb := BoxMesh.new();cb.size = Vector3(1, .03, .03);cable.mesh = cb;cable.material_override = flat(Color(.1, .1, .12));scene.add_child(cable);nodes.cable = cable
+	nodes.sword = sword_in(rigs.steve.ra, .032)
+	var cable := MeshInstance3D.new();var cb := BoxMesh.new();cb.size = Vector3(1, .03, .03);cable.mesh = cb;cable.material_override = flat(Color(.08, .08, .1));scene.add_child(cable);nodes.cable = cable
 	for k in range(3):
-		var chain := MeshInstance3D.new();var ch := BoxMesh.new();ch.size = Vector3(.62, .07, .36);chain.mesh = ch;chain.material_override = flat(Color(.5, .52, .56))
+		var chain := MeshInstance3D.new();var ch := BoxMesh.new();ch.size = Vector3(.6, .07, .36);chain.mesh = ch;chain.material_override = material("ch5q_iron_block", true)
 		scene.add_child(chain);nodes["chain%d" % k] = chain
-	var cam := Camera3D.new();cam.fov = 42;scene.add_child(cam);nodes.cam = cam
+	var cam := Camera3D.new();scene.add_child(cam);nodes.cam = cam
 
 func sync_chair(f, clock: float):
 	var a: float = f.age
-	var n: Dictionary = rigs.notch;var s: Dictionary = rigs.steve
-	n.root.position = Vector3(0, .6 - 12 * PX + .02, .05);n.root.rotation = Vector3(0, 0, 0)
-	var struggle: float = sin(clock * 9) * .08 if a > 20.8 and a < 30 else 0.0
-	var np := {"rl":Vector3(-1.57, 0, 0), "ll":Vector3(-1.57, 0, 0), "ra":Vector3(.5, 0, -.25), "la":Vector3(.5, 0, .25), "head":Vector3(-.05 + struggle, struggle, 0), "torso":Vector3(struggle * .5, 0, 0)}
-	if a < 1.2:np.head = Vector3(.5 - a * .4, 0, 0)
-	if a > f.CHAIR_STAB:
-		var k: float = clampf((a - f.CHAIR_STAB) / 1.2, 0, 1)
-		var fade: float = clampf((a - 36.0) / 5.0, 0, 1)
-		np.torso = Vector3(.25 * k + .2 * fade, 0, 0);np.head = Vector3(.3 * k + .5 * fade, 0, .1 * fade)
-		n.root.visible = fade < .98 and (fade < .3 or int(clock * 20) % int(maxf(2, 8 - fade * 6)) != 0)
+	var n: Dictionary = rigs.notch;var s: Dictionary = rigs.steve;var cam: Camera3D = nodes.cam
+	var swing: float = sin(clock * .9) * .12
+	nodes.lamp.rotation = Vector3(-PI / 2 + swing, 0, swing * .5);nodes.bulb.position = Vector3(sin(swing) * .8, 3.55, .2);nodes.wire.position = Vector3(sin(swing) * .4, 4.2, .2)
+	nodes.lamp.light_energy = 5.5 - (2.0 if int(clock * 17) % 23 == 0 else 0.0)
+	var stab: float = f.CHAIR_STAB
+	n.root.position = Vector3(0, .6 - 12 * PX + .02, .05);n.root.rotation = Vector3.ZERO
+	var struggle: float = sin(clock * 9) * .09 if a > 20.8 and a < 30 else 0.0
+	var np := {"rl":Vector3(-1.57, 0, .05), "ll":Vector3(-1.57, 0, -.05), "ra":Vector3(.55, 0, -.2), "la":Vector3(.55, 0, .2), "head":Vector3(-.05 + struggle, struggle * 2, 0), "torso":Vector3(struggle * .5, 0, 0)}
+	if a < 1.4:np.head = Vector3(.6 - a * .45, 0, 0)
+	if a > 12.6 and a < 21.0:np.head = Vector3(.1, -.25, 0)
+	var fade: float = clampf((a - (stab + 3.0)) / 5.0, 0, 1)
+	if a > stab:
+		var k: float = clampf((a - stab) / .5, 0, 1)
+		np.torso = Vector3(-.25 * k + .5 * fade, 0, 0);np.head = Vector3(-.5 * k + .9 * fade, 0, .15 * fade)
 	pose(n, np)
+	for part in ["ll", "rl", "la", "ra", "torso", "head"]:
+		var gone: bool = fade > [.15, .25, .4, .5, .75, .95][["ll", "rl", "la", "ra", "torso", "head"].find(part)]
+		for c in n[part].get_children():
+			if c is MeshInstance3D:c.visible = not gone and not (fade > .05 and int(clock * 30 + part.length()) % 7 == 0)
 	for k in range(3):
 		var c: MeshInstance3D = nodes["chain%d" % k]
-		c.position = n.torso.global_position + Vector3(0, .25 + k * .22, 0);c.visible = n.root.visible
-	var step: float = clampf((a - f.CHAIR_SWORD - .6) / 1.6, 0, 1)
-	s.root.position = Vector3(-1.6 + step * .85, 0, .35);s.root.rotation = Vector3(0, PI / 2, 0)
-	var sp := {"ra":Vector3(-.6, 0, -.1), "la":Vector3(.1, 0, .1)}
-	if a > f.CHAIR_SWORD:sp.ra = Vector3(-.9, 0, -.2)
-	if a > f.CHAIR_STAB - .4:
-		var k: float = clampf((a - (f.CHAIR_STAB - .4)) / .4, 0, 1)
-		sp.ra = Vector3(-.9 - .7 * k, 0, 0);sp.torso = Vector3(.1 * k, -.3 * k, 0);s.root.position.x += .25 * k
-	if a > f.CHAIR_STAB + 3.0:sp.head = Vector3(.25, 0, 0)
+		var drop: float = clampf((fade - .6) / .4, 0, 1)
+		c.position = Vector3(0, .82 + k * .22 - drop * (.75 + k * .2), .05);c.rotation = Vector3(drop * .3 * (k - 1), 0, drop * .2)
+	# Steve: waits by the console, then the sword and the walk.
+	var walk: float = clampf((a - (f.CHAIR_SWORD + .8)) / 1.6, 0, 1)
+	var from := Vector3(-1.6, 0, .4);var to := Vector3(0, 0, 1.05)
+	s.root.position = from.lerp(to, walk)
+	s.root.rotation = Vector3(0, lerpf(PI / 2, PI, walk), 0)
+	var gait: float = sin(a * 7) * .6 if walk > 0 and walk < 1 else 0.0
+	var sp := {"ra":Vector3(-.5, 0, -.1), "la":Vector3(.05, 0, .1), "rl":Vector3(gait, 0, 0), "ll":Vector3(-gait, 0, 0)}
+	if a > f.CHAIR_SWORD:sp.ra = Vector3(-.3, 0, -.15)
+	if a > stab - .45:
+		var k: float = clampf((a - (stab - .45)) / .45, 0, 1)
+		sp.ra = Vector3(-.3 - 1.25 * k, 0, 0);sp.torso = Vector3(.15 * k, 0, 0);sp.rl = Vector3(-.4 * k, 0, 0);sp.ll = Vector3(.3 * k, 0, 0)
+		s.root.position = to + Vector3(0, 0, -.22 * k)
+	if a > stab + 2.6:sp.head = Vector3(.35, 0, 0)
+	if a > stab + 6.5:sp.ra = Vector3(-.2, 0, -.1);s.root.position = to + Vector3(0, 0, .2)
 	pose(s, sp)
-	s.root.position.y = 0
-	(nodes.sword as Sprite3D).visible = a > f.CHAIR_SWORD
+	(nodes.sword as Node3D).visible = a > f.CHAIR_SWORD
 	var scanning: bool = a > f.CHAIR_SCAN[0] and a < f.CHAIR_SWORD
 	var cable: MeshInstance3D = nodes.cable
 	cable.visible = scanning
 	if scanning:
-		var from: Vector3 = Vector3(2.0, 1.0, -1.0);var to: Vector3 = n.head.global_position + Vector3(0, .3, 0)
-		cable.position = (from + to) / 2.0;cable.scale = Vector3(from.distance_to(to), 1, 1);cable.look_at(to, Vector3.UP);cable.rotate_object_local(Vector3.UP, PI / 2)
+		var c_from: Vector3 = Vector3(2.0, 1.0, -1.0);var c_to: Vector3 = n.head.global_position + Vector3(0, .3, 0)
+		cable.position = (c_from + c_to) / 2.0;cable.scale = Vector3(c_from.distance_to(c_to), 1, 1);cable.look_at(c_to, Vector3.UP);cable.rotate_object_local(Vector3.UP, PI / 2)
 	(nodes.screen as Label3D).text = "scan: %d%%\n%s" % [int(f.scan() * 100), "exit() found" if f.scan() >= 1.0 else "reading…"]
-	nodes.glow.light_energy = 1.0 + (sin(clock * 12) * .4 if scanning else 0.0)
+	nodes.glow.light_energy = (1.0 + sin(clock * 12) * .4) if scanning else (.25 if a < f.CHAIR_SCAN[0] else 0.0)
 	var shown: Array = []
 	if scanning:
 		for k in range(10):
 			var g: Node3D = take("glyph", "");var t: float = fmod(clock * .6 + k * .1, 1.0)
 			g.position = (n.head.global_position + Vector3(0, .4, 0)).lerp(Vector3(2.3, 1.3, -1.0), t) + Vector3(0, sin(t * PI) * .5, 0)
-			(g as Label3D).text = ["0", "1", "{", "}", ";", "()"][k % 6];shown.append(g)
+			(g as Label3D).text = ["0", "1", "{", "}", ";", "()"][k % 6];(g as Label3D).modulate.a = 1.0;shown.append(g)
+	if fade > 0 and fade < 1:shown += burst(Vector3(0, 1.0, .1), 26, clock, 1.2, 2.4, 1.6, true)
 	hide_rest(shown)
-	var cam: Camera3D = nodes.cam
-	var push: float = clampf((a - f.CHAIR_STAB + 1.0) / 2.0, 0, 1) if a > f.CHAIR_STAB - 1.0 else 0.0
-	cam.position = Vector3(.4 + sin(clock * .2) * .2, 1.7 - push * .2, 4.2 - push * .7)
-	cam.look_at(Vector3(-.2, 1.05, 0))
+	var h: float = clock
+	if a < 4.0:shot(cam, Vector3(3.4 - a * .25, 2.6, 4.4 - a * .3), Vector3(0, 1.0, 0), 40, 0.0, h)
+	elif a < 12.6:shot(cam, Vector3(-2.2, 1.65, 1.6), Vector3(0, 1.25, 0), 36, .005, h)
+	elif a < 21.4:shot(cam, Vector3(.35, 1.45, 1.35), Vector3(0, 1.32, 0), 34, .008, h)
+	elif a < f.CHAIR_SWORD:shot(cam, Vector3(.6, .55, 1.7), Vector3(0, 1.3, 0), 44, .012, h)
+	elif a < stab - .5:shot(cam, Vector3(-3.8, 1.7, 3.2), Vector3(-.5, 1.0, .5), 40, 0.0, h)
+	elif a < stab + 1.6:shot(cam, Vector3(4.2, 1.35, .7), Vector3(0, 1.05, .45), 30 - clampf(a - stab, 0, 1) * 5, .03 * clampf(1.0 - absf(a - stab) * 2, 0, 1), h)
+	elif a < stab + 7.5:shot(cam, Vector3(.25, 1.35, 1.0), Vector3(0, 1.2, .05), 36, 0.0, h)
+	else:shot(cam, Vector3(2.8, 2.4, 4.0), Vector3(0, .9, 0), 44, 0.0, h)
 
-# ------------------------------------------------------------------ the door and the flight
+# ------------------------------------------------------------------ the door, the flight, the other world
+
+func pixel_world() -> ImageTexture:
+	var im := Image.create(64, 36, false, Image.FORMAT_RGBA8)
+	for y in range(36):
+		for x in range(64):
+			var hill: float = 22 + sin(x * .21) * 4 + sin(x * .07 + 1.3) * 3
+			var c := Color(.35, .6, 1.0).lerp(Color(.7, .85, 1.0), y / 36.0)
+			if y > hill:c = Color(.45, .3, .15) if y > hill + 2 else Color(.25, .75, .2)
+			if (x * 7 + y * 3) % 97 == 0 and y < 14:c = Color(1, 1, 1)
+			if x % 16 == 5 and y > hill - 6 and y <= hill:c = Color(.15, .5, .15) if y < hill - 2 else Color(.4, .25, .1)
+			if x >= 30 and x <= 33 and y >= int(hill) - 4 and y < int(hill):c = Color(.9, .2, .2) if y < int(hill) - 2 else Color(.2, .3, .9)
+			im.set_pixel(x, y, c)
+	return ImageTexture.create_from_image(im)
+
+func neon_grid() -> ImageTexture:
+	var im := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	for y in range(32):
+		for x in range(32):im.set_pixel(x, y, Color(1, .2, .8) if x % 8 == 0 or y % 8 == 0 else Color(.08, 0, .12))
+	return ImageTexture.create_from_image(im)
+
+func diorama(kind: int, at: Vector3, scale: float) -> Node3D:
+	var root := Node3D.new();root.position = at;root.scale = Vector3.ONE * scale;scene.add_child(root)
+	match kind:
+		0:
+			var q := MeshInstance3D.new();var qm := QuadMesh.new();qm.size = Vector2(16, 9);q.mesh = qm
+			var m := StandardMaterial3D.new();m.albedo_texture = pixel_world();m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED;m.cull_mode = BaseMaterial3D.CULL_DISABLED
+			q.material_override = m;root.add_child(q)
+			var frame := MeshInstance3D.new();var fm := BoxMesh.new();fm.size = Vector3(16.6, 9.6, .2);frame.mesh = fm;frame.position.z = -.15;frame.material_override = flat(Color(.1, .1, .12));root.add_child(frame)
+		1:
+			var track := MeshInstance3D.new();var tm := TorusMesh.new();tm.inner_radius = 6;tm.outer_radius = 8;track.mesh = tm;track.scale = Vector3(1, .15, 1)
+			track.material_override = flat(Color(.25, .25, .28));root.add_child(track)
+			for k in range(4):
+				var car := MeshInstance3D.new();var cm := BoxMesh.new();cm.size = Vector3(1.0, .5, 1.8);car.mesh = cm
+				car.material_override = flat([Color(1, .2, .2), Color(.2, .5, 1), Color(1, .85, .2), Color(.2, .9, .4)][k], .8)
+				car.position = Vector3(sin(k * 1.57) * 7, .4, cos(k * 1.57) * 7);car.rotation.y = k * 1.57;root.add_child(car);car.name = "car%d" % k
+		2:
+			var island := MeshInstance3D.new();var cm := CylinderMesh.new();cm.top_radius = 5;cm.bottom_radius = .5;cm.height = 5;island.mesh = cm
+			island.material_override = material("ch5q_dark_oak_planks", true);root.add_child(island)
+			var grass := MeshInstance3D.new();var gm := CylinderMesh.new();gm.top_radius = 5.1;gm.bottom_radius = 5.1;gm.height = .4;grass.mesh = gm;grass.position.y = 2.6
+			grass.material_override = flat(Color(.3, .7, .3));root.add_child(grass)
+			for k in range(3):
+				var tower := MeshInstance3D.new();var tw := CylinderMesh.new();tw.top_radius = .7;tw.bottom_radius = .8;tw.height = 3 + k;tower.mesh = tw
+				tower.position = Vector3(-1.8 + k * 1.8, 4.3 + k * .5, 0);tower.material_override = flat(Color(.85, .82, .75));root.add_child(tower)
+				var roof := MeshInstance3D.new();var rf := CylinderMesh.new();rf.top_radius = 0;rf.bottom_radius = 1.0;rf.height = 1.6;roof.mesh = rf
+				roof.position = tower.position + Vector3(0, (3 + k) / 2.0 + .8, 0);roof.material_override = flat(Color(.6, .15, .2));root.add_child(roof)
+		3:
+			var ship := MeshInstance3D.new();var pm := PrismMesh.new();pm.size = Vector3(6, 2, 10);ship.mesh = pm;ship.rotation = Vector3(-PI / 2, 0, 0)
+			ship.material_override = material("ch5q_iron_block", true);root.add_child(ship)
+			for k in [-1, 1]:
+				var eng := MeshInstance3D.new();var em := SphereMesh.new();em.radius = .8;em.height = 1.6;eng.mesh = em;eng.position = Vector3(k * 1.6, 0, 5.2)
+				eng.material_override = flat(Color(.3, .8, 1), 6.0);root.add_child(eng)
+		4:
+			var floor := MeshInstance3D.new();var fm := PlaneMesh.new();fm.size = Vector2(18, 18);floor.mesh = fm
+			var m := StandardMaterial3D.new();m.albedo_texture = neon_grid();m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;m.emission_enabled = true;m.emission_texture = m.albedo_texture;m.emission_energy_multiplier = 2.0
+			m.uv1_scale = Vector3(4, 4, 4);floor.material_override = m;root.add_child(floor)
+			var sun := MeshInstance3D.new();var sm := SphereMesh.new();sm.radius = 4;sm.height = 8;sun.mesh = sm;sun.position = Vector3(0, 3, -8);sun.material_override = flat(Color(1, .5, .2), 3.0);root.add_child(sun)
+		5:
+			var planet := MeshInstance3D.new();var sm := SphereMesh.new();sm.radius = 6;sm.height = 12;planet.mesh = sm
+			planet.material_override = material(["ch5q_cut_copper", "ch5q_crying_obsidian", "ch5q_magma"][int(at.z) % 3], true, 1.0);root.add_child(planet)
+			var ring := MeshInstance3D.new();var rm := TorusMesh.new();rm.inner_radius = 8;rm.outer_radius = 9.5;ring.mesh = rm;ring.scale = Vector3(1, .05, 1);ring.rotation.z = .4
+			ring.material_override = flat(Color(.9, .8, .6), 1.0);root.add_child(ring)
+	return root
+
+## Logos of other games, if the player put them in assets/logos/.
+func logos() -> Array:
+	var out: Array = []
+	var dir := DirAccess.open("res://assets/logos")
+	if dir == null:return out
+	for f in dir.get_files():
+		if f.ends_with(".png"):out.append(load("res://assets/logos/" + f))
+	return out
 
 func build_flight():
-	room(Color(0, 0, 0), Color(.6, .6, .7))
-	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.5, .4, 0);sun.light_energy = 1.2;scene.add_child(sun)
+	var e := room(Color(0, 0, 0), Color(.6, .6, .7), .7)
+	e.glow_enabled = true;e.glow_intensity = .6;e.glow_bloom = 0.0;e.glow_hdr_threshold = 1.2
+	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.5, .4, 0);sun.light_energy = 1.0;scene.add_child(sun);nodes.sun = sun
 	rigs.steve = make_rig("ch5_skin_steve")
 	var door := Node3D.new();door.position = Vector3(1.0, 0, -6);scene.add_child(door);nodes.door = door
 	var leaf := MeshInstance3D.new();var lb := BoxMesh.new();lb.size = Vector3(1.0, 2.0, .12);leaf.mesh = lb;leaf.position = Vector3(-.5, 1.0, 0)
 	leaf.material_override = material("ch5q_iron_block", true);door.add_child(leaf)
-	var frame := MeshInstance3D.new();var fb := BoxMesh.new();fb.size = Vector3(1.3, 2.3, .08);frame.mesh = fb;frame.position = Vector3(.5, 1.15, -.08)
-	frame.material_override = flat(Color(1, 1, 1), 4.0);door.get_parent().add_child(frame);nodes.light = frame;frame.position = door.position + Vector3(-.5, 1.15, -.1)
-	var worlds: Array = []
-	var specs := [["ch5q_cut_copper", 6.0], ["ch5q_crying_obsidian", 4.0], ["ch5q_magma", 7.0], ["ch5q_glowstone", 3.0], ["ch5q_deepslate_tiles", 5.0], ["ch5q_gilded_blackstone", 4.5], ["ch5q_copper_grate", 3.5], ["ch5q_redstone_block", 5.5]]
-	for i in range(specs.size()):
-		var m := MeshInstance3D.new()
-		var shape: Mesh
-		match i % 4:
-			0:
-				var sm := SphereMesh.new();sm.radius = specs[i][1];sm.height = specs[i][1] * 2;shape = sm
-			1:
-				var tm := TorusMesh.new();tm.inner_radius = specs[i][1] * .7;tm.outer_radius = specs[i][1];shape = tm
-			2:
-				var bm := BoxMesh.new();bm.size = Vector3.ONE * specs[i][1] * 1.4;shape = bm
-			3:
-				var cm := CylinderMesh.new();cm.top_radius = specs[i][1];cm.bottom_radius = specs[i][1] * .3;cm.height = specs[i][1] * 1.2;shape = cm
-		m.mesh = shape;m.material_override = material(specs[i][0], true, 1.2)
-		var side: float = -1.0 if i % 2 == 0 else 1.0
-		m.position = Vector3(side * (12 + (i % 3) * 6), (i % 3 - 1) * 6.0, -40 - i * 55)
-		scene.add_child(m);worlds.append(m)
-	nodes.worlds = worlds
-	var other := Node3D.new();scene.add_child(other);nodes.other = other;other.visible = false
+	var opening := glow_box(door.position + Vector3(-.5, 1.0, -.12), Vector3(1.0, 2.0, .05), Color(1, 1, 1), 8.0);nodes.opening = opening
+	var frame := block(door.position + Vector3(-.5, 1.05, -.05), Vector3(1.3, 2.25, .1), "ch5q_polished_blackstone_bricks");nodes.frame = frame
 	for k in range(5):
-		var hill := MeshInstance3D.new();var hs := SphereMesh.new();hs.radius = 9.0 + k * 3;hs.height = hs.radius * 2;hill.mesh = hs
-		var mat := StandardMaterial3D.new();mat.albedo_color = Color(.18 + k * .04, .55 - k * .04, .2);mat.roughness = 1.0;hill.material_override = mat
-		hill.position = Vector3(-18 + k * 9, -hs.radius + 1.0 + (k % 2) * .8, -10 - k * 4);other.add_child(hill)
-	var cam := Camera3D.new();cam.fov = 60;cam.far = 800;scene.add_child(cam);nodes.cam = cam
+		var beam := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(.9 - k * .1, .02, 7);beam.mesh = bm
+		beam.material_override = flat(Color(1, 1, 1, .06), 1.0, true);beam.position = door.position + Vector3(-.5, .3 + k * .4, 3.4);scene.add_child(beam);nodes["beam%d" % k] = beam
+	nodes.door_light = omni(door.position + Vector3(-.5, 1.0, .6), Color(1, 1, 1), 0.0, 9.0)
+	for k in range(40):
+		var g := label(["0", "1", "{", "}"][k % 4], Vector3(sin(k * 2.4) * 6, fmod(k * .7, 5.0), -3 - fmod(k * 1.3, 10.0)), 40, Color(.3, 1, .6, .4), .01)
+		g.billboard = BaseMaterial3D.BILLBOARD_ENABLED;nodes["void%d" % k] = g
+	var rings: Array = []
+	for k in range(14):
+		var r := MeshInstance3D.new();var tm := TorusMesh.new();tm.inner_radius = 6.5;tm.outer_radius = 7;r.mesh = tm;r.rotation.x = PI / 2
+		r.material_override = flat(Color(.3, 1, .7), 3.0);r.position = Vector3(0, 2, -20 - k * 22);scene.add_child(r);rings.append(r)
+	nodes.rings = rings
+	var worlds: Array = []
+	var marks: Array = logos()
+	for i in range(12):
+		var side: float = -1.0 if i % 2 == 0 else 1.0
+		var at := Vector3(side * (16 + (i % 3) * 7), (i % 3 - 1) * 7.0 + 2, -70 - i * 42)
+		var d := diorama(i % 6, at, 1.0 + (i % 2) * .4)
+		d.rotation.y = -side * .6;worlds.append(d)
+		if not marks.is_empty():
+			var logo := Sprite3D.new();logo.texture = marks[i % marks.size()];logo.pixel_size = 9.0 / maxf(1, logo.texture.get_width());logo.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+			logo.position = at + Vector3(0, 9, 0);scene.add_child(logo);worlds.append(logo)
+	nodes.worlds = worlds
+	var portal := MeshInstance3D.new();var pm := SphereMesh.new();pm.radius = 6;pm.height = 12;portal.mesh = pm;portal.material_override = flat(Color(1, .95, .85), 8.0)
+	portal.position = Vector3(0, 2, -620);scene.add_child(portal);nodes.portal = portal
+	build_other()
+	var cam := Camera3D.new();cam.far = 900;scene.add_child(cam);nodes.cam = cam
+
+## The world Steve lands in: warm light, a dusty canyon, wooden buildings,
+## no blocks anywhere.
+func build_other():
+	var other := Node3D.new();other.position = Vector3(0, 0, -1500);scene.add_child(other);nodes.other = other;other.visible = false
+	var ground := MeshInstance3D.new();var gm := PlaneMesh.new();gm.size = Vector2(120, 120);gm.subdivide_width = 24;gm.subdivide_depth = 24;ground.mesh = gm
+	var gmat := StandardMaterial3D.new();gmat.albedo_color = Color(.55, .38, .22);gmat.roughness = 1.0;ground.material_override = gmat;other.add_child(ground)
+	for k in range(9):
+		var cliff := MeshInstance3D.new();var cm := BoxMesh.new();cm.size = Vector3(12 + k % 3 * 6, 14 + k % 4 * 5, 10);cliff.mesh = cm
+		var mat := StandardMaterial3D.new();mat.albedo_color = Color(.62, .38, .22).lerp(Color(.8, .55, .35), (k % 3) / 3.0);mat.roughness = 1.0;cliff.material_override = mat
+		var side: float = -1.0 if k % 2 == 0 else 1.0
+		cliff.position = Vector3(side * (20 + k * 2), cm.size.y / 2 - 2, -10 - k * 9);cliff.rotation.y = k * .3;other.add_child(cliff)
+	for k in range(2):
+		var base := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(10, 7, 8);base.mesh = bm;base.position = Vector3(-7 + k * 18, 3.5, -22 - k * 6)
+		var mat := StandardMaterial3D.new();mat.albedo_color = Color(.65, .18, .14) if k == 0 else Color(.2, .3, .6);mat.roughness = .9;base.material_override = mat;other.add_child(base)
+		var roof := MeshInstance3D.new();var rm := PrismMesh.new();rm.size = Vector3(11, 3, 8.4);roof.mesh = rm;roof.position = base.position + Vector3(0, 5, 0)
+		var rmat := StandardMaterial3D.new();rmat.albedo_color = Color(.35, .25, .18);roof.material_override = rmat;other.add_child(roof)
+	var bridge := MeshInstance3D.new();var brm := BoxMesh.new();brm.size = Vector3(3, .3, 16);bridge.mesh = brm;bridge.position = Vector3(0, .15, -6)
+	var bmat := StandardMaterial3D.new();bmat.albedo_color = Color(.5, .35, .2);bridge.material_override = bmat;other.add_child(bridge)
 
 func sync_flight(f, clock: float):
 	var a: float = f.age
-	var s: Dictionary = rigs.steve;var cam: Camera3D = nodes.cam
-	var env: Environment = (scene.get_child(0) as WorldEnvironment).environment
+	var s: Dictionary = rigs.steve;var cam: Camera3D = nodes.cam;var env: Environment = nodes.env
 	var shown: Array = []
+	var other: bool = a >= f.FLIGHT_OTHER
+	nodes.other.visible = other
+	for w in nodes.worlds:w.visible = not other
+	for r in nodes.rings:r.visible = not other and a >= 5.0
+	nodes.portal.visible = not other and a >= 5.0
+	for k in range(40):nodes["void%d" % k].visible = a < 5.0
 	if a < 5.0:
-		var walk: float = clampf(a / 3.0, 0, 1)
-		s.root.position = Vector3(1.0 - .5, 0, -1.0 - walk * 4.2);s.root.rotation = Vector3(0, PI, 0)
+		var walk: float = clampf(a / 3.2, 0, 1)
+		s.root.position = Vector3(.5, 0, -.8 - walk * 4.4);s.root.rotation = Vector3(0, PI, 0)
 		var sw: float = sin(a * 7) * .7 if walk < 1 else 0.0
-		pose(s, {"rl":Vector3(sw, 0, 0), "ll":Vector3(-sw, 0, 0), "ra":Vector3(-sw * .6 - (1.2 if a > 3.0 else 0.0), 0, 0), "la":Vector3(sw * .6, 0, 0)})
-		nodes.door.rotation = Vector3(0, -clampf((a - 3.2) / .8, 0, 1) * 1.6, 0)
-		nodes.door.visible = true;nodes.light.visible = a > 3.2
-		cam.position = Vector3(2.4, 1.8, 2.5);cam.look_at(Vector3(.5, 1.2, -5.5))
+		pose(s, {"rl":Vector3(sw, 0, 0), "ll":Vector3(-sw, 0, 0), "ra":Vector3(-sw * .6 - (1.3 if a > 3.2 else 0.0), 0, 0), "la":Vector3(sw * .6, 0, 0)})
+		var open: float = clampf((a - 3.3) / .9, 0, 1)
+		nodes.door.rotation = Vector3(0, -open * 1.7, 0);nodes.door.visible = true;nodes.frame.visible = true
+		nodes.opening.visible = open > 0;nodes.door_light.light_energy = open * 6.0
+		for k in range(5):nodes["beam%d" % k].visible = open > 0
 		env.background_color = Color(0, 0, 0)
-	else:
-		nodes.door.visible = false;nodes.light.visible = false
+		for k in range(40):
+			var g: Label3D = nodes["void%d" % k];g.position.y = fmod(k * .7 + clock * .3, 5.0)
+		if a < 3.0:shot(cam, Vector3(1.8, .35, 1.6), Vector3(.3, 1.4, -5.5), 52, 0.0, clock)
+		else:shot(cam, Vector3(-.6, 1.2, -1.6), Vector3(.5, 1.0, -6), 50, 0.0, clock)
+	elif not other:
+		nodes.door.visible = false;nodes.frame.visible = false;nodes.opening.visible = false;nodes.door_light.light_energy = 0
+		for k in range(5):nodes["beam%d" % k].visible = false
 		var t: float = a - 5.0
-		var z: float = -t * 26.0
+		var z: float = -t * 26.0 - pow(maxf(0, t - 17.0), 2) * 6.0
 		var bob: float = sin(clock * 1.7) * .3
-		s.root.position = Vector3(0, 2.0 + bob, z);s.root.rotation = Vector3(-1.3, PI, 0)
-		pose(s, {"ra":Vector3(.2, 0, -.15), "la":Vector3(.2, 0, .15), "rl":Vector3(.1, 0, 0), "ll":Vector3(-.1, 0, 0), "head":Vector3(-1.0, 0, 0)})
-		cam.position = Vector3(1.8 + sin(clock * .3) * .5, 3.0, z + 5.0);cam.look_at(Vector3(0, 2.2, z - 6))
-		env.background_color = Color(.02, .01, .05).lerp(Color(.08, .03, .14), .5 + .5 * sin(t * .4))
-		for k in range(60):
+		s.root.position = Vector3(0, 2.0 + bob, z);s.root.rotation = Vector3(-1.3, PI, sin(clock * .8) * .1)
+		pose(s, {"ra":Vector3(.25, 0, -.2), "la":Vector3(.25, 0, .2), "rl":Vector3(.15 + sin(clock * 2) * .1, 0, 0), "ll":Vector3(-.1, 0, 0), "head":Vector3(-1.1, sin(clock * .5) * .4, 0)})
+		env.background_color = Color(.01, .005, .03).lerp(Color(.07, .02, .12), .5 + .5 * sin(t * .4))
+		for k in range(70):
 			var st: Node3D = take("star", "")
-			var seed_x: float = fmod(k * 37.7, 40.0) - 20.0;var seed_y: float = fmod(k * 23.3, 24.0) - 10.0
-			st.position = Vector3(seed_x, seed_y, z - fmod(k * 13.0 - t * 40.0, 120.0) - 4.0);shown.append(st)
-		for m in nodes.worlds:m.rotation.y = clock * .2 + m.position.z
-		if a >= f.FLIGHT_OTHER:
-			# Somewhere else: a soft, smooth world that is not made of blocks.
-			nodes.other.visible = true
-			s.root.position = Vector3(0, 0, -6.0 + 4.0);s.root.rotation = Vector3(0, PI * .85, 0)
-			nodes.other.position = Vector3(0, 0, -6.0)
-			pose(s, {"head":Vector3(-.1, .3, 0)})
-			cam.position = Vector3(2.6, 1.6, 2.8);cam.look_at(Vector3(-1.0, 1.0, -6))
-			env.background_color = Color(.3, .55, .95)
-			env.ambient_light_color = Color(.7, .75, .9);env.ambient_light_energy = .45
+			var sx: float = fmod(k * 37.7, 44.0) - 22.0;var sy: float = fmod(k * 23.3, 28.0) - 12.0
+			st.position = Vector3(sx, sy, z - fmod(k * 13.0 - t * 60.0, 140.0) - 4.0);st.scale = Vector3(1, 1, 1.0 + clampf(t - 15.0, 0, 6.0));shown.append(st)
+		for w in nodes.worlds:
+			if w is Sprite3D:continue
+			w.rotation.y += .002
+			for c in w.get_children():
+				if String(c.name).begins_with("car"):
+					var k: int = int(String(c.name).substr(3));var ang: float = clock * 1.2 + k * 1.57
+					c.position = Vector3(sin(ang) * 7, .4, cos(ang) * 7);c.rotation.y = ang + PI / 2
+		if t < 6.0:shot(cam, Vector3(1.6, 3.0, z + 6.0), Vector3(0, 2.2, z - 8), 62, 0.0, clock)
+		elif t < 11.0:shot(cam, Vector3(1.1, 2.3, z - 1.2), Vector3(0, 2.4, z - .3), 40, .01, clock)
+		elif t < 17.0:shot(cam, Vector3(-6.0, -1.0, z - 14.0), Vector3(0, 2.0, z), 70, 0.0, clock)
+		else:shot(cam, Vector3(.8, 2.6, z + 4.0), Vector3(0, 2.0, z - 30), 58 + (t - 17.0) * 3.0, .02 * (t - 17.0) / 5.0, clock)
+	else:
+		var t: float = a - f.FLIGHT_OTHER
+		var base: Vector3 = nodes.other.position
+		var land: float = clampf(t / .8, 0, 1)
+		s.root.position = base + Vector3(0, .3 + (1 - land) * 3.0, -2.0);s.root.rotation = Vector3(0, PI * .9 + clampf(t - 1.2, 0, 1.2) * .6, 0)
+		pose(s, {"drop":-.12 * (1 - clampf(t - .8, 0, .4) / .4), "head":Vector3(-.1, clampf(t - 1.5, 0, 1.0) * .5, 0), "ra":Vector3(.1, 0, -.15), "la":Vector3(.1, 0, .15)})
+		env.background_color = Color(.85, .5, .28).lerp(Color(.4, .55, .85), clampf(t / 3.0, 0, 1) * .5)
+		env.ambient_light_color = Color(.8, .65, .55);env.ambient_light_energy = .3
+		env.glow_enabled = false
+		nodes.sun.light_color = Color(1, .82, .6);nodes.sun.light_energy = 1.05;nodes.sun.rotation = Vector3(-.3, -.9, 0);nodes.sun.shadow_enabled = true
+		for k in range(16):
+			var dust: Node3D = take("spark", "");var dt2: float = fmod(clock * .3 + k * .11, 1.0)
+			dust.position = base + Vector3(-6 + fmod(k * 3.7, 12.0) + dt2 * 6, .4 + fmod(k * .9, 2.5), -4 - fmod(k * 2.3, 8.0));dust.scale = Vector3.ONE * .25;shown.append(dust)
+		shot(cam, base + Vector3(3.2 - t * .2, 1.4, 3.6 - t * .3), base + Vector3(-1.0, 1.4, -8.0), 46, 0.0, clock)
 	hide_rest(shown)
+
+## Credits: a slow drift past the other worlds.
+func sync_credits(f, clock: float):
+	var t: float = f.age
+	var s: Dictionary = rigs.steve;s.root.visible = false
+	nodes.other.visible = false;nodes.door.visible = false;nodes.frame.visible = false;nodes.opening.visible = false
+	for k in range(5):nodes["beam%d" % k].visible = false
+	for k in range(40):nodes["void%d" % k].visible = false
+	for w in nodes.worlds:w.visible = true
+	for r in nodes.rings:r.visible = false
+	nodes.portal.visible = false
+	nodes.env.background_color = Color(.005, .003, .015);nodes.sun.light_energy = .8;nodes.sun.light_color = Color(.8, .85, 1)
+	var z: float = -60.0 - t * 9.0
+	var shown: Array = []
+	for k in range(50):
+		var st: Node3D = take("star", "")
+		st.position = Vector3(fmod(k * 37.7, 60.0) - 30.0, fmod(k * 23.3, 34.0) - 14.0, z - fmod(k * 17.0 - t * 6.0, 160.0) - 10.0);st.scale = Vector3.ONE;shown.append(st)
+	hide_rest(shown)
+	shot(nodes.cam, Vector3(sin(t * .07) * 4.0, 3.0 + sin(t * .11) * 1.5, z), Vector3(sin(t * .05) * 10.0, 1.0, z - 60), 58, 0.0, clock)

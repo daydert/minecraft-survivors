@@ -109,6 +109,7 @@ func skip():
 	if phase == "intro" and age > 1.0:age = INTRO_LENGTH - .1
 	elif phase in ["to_ut", "to_lanes", "lanes_won", "to_quake", "quake_won", "to_code"] and age > .8:age = 99.0
 	elif phase == "chair":finale.skip_line()
+	elif phase == "credits" and finale.age > 2.0:finale.age = finale.CREDITS_LENGTH
 
 func step(w, dt: float, movement: Vector2):
 	age += dt;pose_age += dt
@@ -154,12 +155,15 @@ func step(w, dt: float, movement: Vector2):
 		"code":code(w, dt)
 		"erase":
 			finale_sounds(w, finale.step(dt))
-			if finale.phase == "erase" and finale.thrown >= 3.2:start_fists(w)
+			if finale.phase == "erase" and finale.thrown >= 3.6:start_fists(w)
 		"fists":fists(w, dt, movement)
 		"chair":
 			var r: String = finale.step(dt);finale_sounds(w, r)
 			if r == "done":finale.change("flight");change("flight")
 		"flight":
+			var r: String = finale.step(dt);finale_sounds(w, r)
+			if r == "done":finale.change("credits");change("credits")
+		"credits":
 			var r: String = finale.step(dt);finale_sounds(w, r)
 			if r == "done":finish(w)
 		"retry":
@@ -621,6 +625,7 @@ func finale_sounds(w, _r: String):
 			"fade":w.sound("ch5_ending_fade", .1)
 			"arrive":w.sound("ch4_hb_teleport", .1)
 			"sting":w.sound("ch5_ending_sting", .1)
+			"credits":w.sound("ch5_credits", .1)
 	finale.sounds.clear()
 	if not finale.line.is_empty() and finale.line != line:say(finale.line, finale.line_length)
 

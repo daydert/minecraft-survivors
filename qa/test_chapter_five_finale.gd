@@ -55,11 +55,12 @@ func run():
 	# erasure
 	f.begin_erase();n.change("erase")
 	advance(3.0);await render("f_erase")
+	advance(5.0);await render("f_erase_late")
 	check(f.erase>0,"He starts deleting Steve")
 	for i in range(14):n.press(w,"accept")
 	advance(.5);await render("f_throw")
 	advance(.6);await render("f_console")
-	advance(2.5);check(n.phase=="fists","The sword goes into the console and the brawl starts")
+	advance(3.0);check(n.phase=="fists","The sword goes into the console and the brawl starts")
 	var fi=n.fighter
 	check(fi.mode=="fists" and fi.items.size()==4,"Lines of code lie on the floor")
 	advance(2.4);fi.ai=false;var s=fi.steve();s.x=fi.items[1].x;n.press(w,"kick");advance(.05)
@@ -86,13 +87,16 @@ func run():
 		w.sounds.clear()
 		if n.finale.age>=f.FLIGHT_OTHER+1.0:break
 	check(themed,"The TF2 theme starts near the end of the flight")
-	await render("f_other")
+	advance(1.5);await render("f_other")
 	var stung: bool=false
 	for i in range(int(7*60)):
-		if w.state!="RUNNING":break
+		if n.phase=="credits":break
 		w.step(1.0/60)
 		if w.sounds.has("ch5_ending_sting"):stung=true
 		w.sounds.clear()
-	check(stung and w.state=="RESULT" and w.victory,"A sharp sting, black screen, the chapter is over")
+	check(stung and n.phase=="credits","A sharp sting, black screen, then the credits")
+	advance(12.0);await render("f_credits")
+	n.skip();advance(.2)
+	check(w.state=="RESULT" and w.victory,"Credits can be skipped and the chapter ends")
 	print("CHAPTER_FIVE_FINALE_RESULT %d checks; %d failures" % [checks,failures.size()])
 	quit(1 if failures.size() else 0)

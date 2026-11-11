@@ -24,7 +24,10 @@ const FLIGHT_THEME := 13.0
 const FLIGHT_FADE := 23.5
 const FLIGHT_OTHER := 27.0
 const FLIGHT_STING := 30.6
-const FLIGHT_LENGTH := 34.0
+const FLIGHT_LENGTH := 32.0
+const CREDITS := [[1.0, "MINECRAFT SURVIVORS", ""], [6.0, "Создатель", "Daydert"], [11.0, "Композитор", "Kibi"], [16.0, "Музыка · тестирование", "RodinCity"],
+	[21.0, "Тестирование", "SET553355"], [26.5, "Спасибо, что дошёл до конца.", ""], [31.5, "", "…а Стив где-то там."]]
+const CREDITS_LENGTH := 37.0
 
 var phase := ""
 var age := 0.0
@@ -194,8 +197,8 @@ func erase_step(dt: float) -> String:
 		if presses >= 14 or age > 22.0:thrown = 0.0;sounds.append("throw")
 	else:
 		thrown += dt
-		if thrown >= .7 and not (cues & 2):cues |= 2;sounds.append("console");say("Ты… что ты сделал?!", 2.2)
-		if thrown >= 3.2:return "done"
+		if thrown >= .6 and not (cues & 2):cues |= 2;sounds.append("console");say("Ты… что ты сделал?!", 2.2)
+		if thrown >= 3.6:return "done"
 	return ""
 
 # ------------------------------------------------------------------ the chair
@@ -229,6 +232,11 @@ func flight_step(dt: float) -> String:
 	if age >= FLIGHT_LENGTH:return "done"
 	return ""
 
+func credits_step(dt: float) -> String:
+	if cue(0, .3):sounds.append("credits")
+	if age >= CREDITS_LENGTH:return "done"
+	return ""
+
 func step(dt: float) -> String:
 	age += dt
 	if line_length > 0:
@@ -239,4 +247,5 @@ func step(dt: float) -> String:
 		"erase":return erase_step(dt)
 		"chair":return chair_step(dt)
 		"flight":return flight_step(dt)
+		"credits":return credits_step(dt)
 	return ""

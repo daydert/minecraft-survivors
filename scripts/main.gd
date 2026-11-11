@@ -187,7 +187,7 @@ func _process(delta):
 	sync_network_fields()
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
-	var theme="silence" if is_five() and world.stage=="notch" and world.notch.phase in ["chair","flight","done","erase"] else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
+	var theme="silence" if is_five() and world.stage=="notch" and world.notch.phase in ["chair","flight","credits","done","erase"] else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
 	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four")
 	audio.set_music_context(four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
@@ -256,7 +256,7 @@ func _input(event):
 			elif code==KEY_7:notch_action="7"
 			elif code==KEY_8:notch_action="8"
 			elif code==KEY_9:notch_action="9"
-			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won","to_quake","quake_won","to_code","chair"]:world.notch.skip();return
+			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won","to_quake","quake_won","to_code","chair","credits"]:world.notch.skip();return
 			if world.notch.phase in ["code","erase","fists"] and not notch_action.is_empty():world.notch.press(world,notch_action);return
 			if world.notch.phase=="fighter" and notch_action in ["accept","kick","special"]:world.notch.press(world,notch_action);return
 			if world.notch.phase=="quake":return
@@ -410,6 +410,7 @@ func action(id: String):
 			unload_end_assets()
 			unload_four_assets()
 			ChapterOneView.unload(self)
+			audio.stop_extras()
 			world.finale.reset()
 			audio.set_finale_music(false)
 			world.state = "MENU"
@@ -494,6 +495,7 @@ func start_chapter(chapter: int, intro: bool=true):
 	world.reset()
 	if chapter==1 and intro:world.begin_intro()
 	audio.reset_run_music()
+	audio.stop_extras()
 	cam_lead=Vector2.ZERO;lead_clock=0.0
 	screen=""
 	selected=0

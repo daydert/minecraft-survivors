@@ -47,8 +47,10 @@ func world(g):
 			NotchView.fists(g);return
 		if ph == "chair":
 			NotchView.chair(g);return
-		if ph in ["flight", "done"]:
+		if ph == "flight":
 			NotchView.flight(g);return
+		if ph in ["credits", "done"]:
+			NotchView.credits(g);return
 	NotchView.release(g)
 	var offset: Vector2 = Vector2(320, 180) - w.camera().floor()
 	if g.settings.get("camera_lead", false):offset -= g.cam_lead.round()
