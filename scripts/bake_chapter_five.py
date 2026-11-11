@@ -1,0 +1,164 @@
+"""Chapter V bakes.
+
+- data/chapter_five_code.json: real lines of this game's own source for the
+  floor of the code space (exported builds do not ship readable .gd files).
+- Equipment icons: the game's hidden vanilla items. Items keep their vanilla
+  sprites; blocks are cubes of their vanilla faces; evolutions carry the
+  vanilla enchantment glint (one static frame) or a second vanilla layer.
+"""
+import json
+from pathlib import Path
+from PIL import Image
+from import_minecraft_assets import ROOT, Importer, bake, box, find_client
+
+## Original lines in the style of the game's Java code (not copied source).
+JAVA = """public class Player extends LivingEntity {
+private static final int MAX_HEALTH = 20;
+protected boolean onGround = true;
+public void tick() {
+super.tick();
+if (this.isRemoved()) return;
+this.level.addFreshEntity(entity);
+for (int i = 0; i < this.inventory.size(); ++i) {
+ItemStack stack = this.inventory.getItem(i);
+if (stack.isEmpty()) continue;
+this.hurt(this.damageSources().generic(), 4.0F);
+BlockPos pos = this.blockPosition().below();
+BlockState state = this.level.getBlockState(pos);
+if (!state.isAir() && state.canOcclude()) {
+float speed = this.getSpeed() * 0.98F;
+Vec3 motion = this.getDeltaMovement().scale(0.91D);
+this.setDeltaMovement(motion.x, motion.y - 0.08D, motion.z);
+return this.random.nextInt(4) == 0;
+public boolean isAlive() { return !this.dead; }
+private void spawnMobs(ServerLevel level, ChunkPos chunk) {
+int count = Mth.floor(this.random.nextFloat() * 4.0F);
+Zombie zombie = EntityType.ZOMBIE.create(level);
+zombie.moveTo(x + 0.5D, y, z + 0.5D, yaw, 0.0F);
+level.playSound(null, pos, SoundEvents.GENERIC_HURT, SoundSource.PLAYERS);
+while (this.ticks-- > 0) this.step();
+@Override
+public InteractionResult use(Level level, Player player) {
+if (level.isClientSide) return InteractionResult.SUCCESS;
+throw new IllegalStateException("Missing chunk: " + pos);
+try { this.save(tag); } catch (IOException e) { LOGGER.error("Failed", e); }
+final long seed = level.getSeed();
+long time = level.getDayTime() % 24000L;
+if (time > 13000L && time < 23000L) this.spawnMonsters();
+public static final Block STONE = register("stone", new Block(PROPERTIES));
+private final Map<UUID, Entity> entities = new HashMap<>();
+this.entities.remove(entity.getUUID());
+CompoundTag tag = new CompoundTag();
+tag.putInt("Health", (int) this.getHealth());
+tag.putString("id", "minecraft:player");
+double distance = this.distanceToSqr(target);
+if (distance < 64.0D) this.attack(target);
+this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
+this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+public void die(DamageSource source) {
+this.dropAllDeathLoot(source);
+this.level.broadcastEntityEvent(this, (byte) 3);
+int x = SectionPos.blockToSectionCoord(pos.getX());
+LevelChunk chunk = this.getChunk(x, z);
+chunk.setBlockState(pos, Blocks.AIR.defaultBlockState(), false);
+if (++this.tickCount % 20 == 0) this.heal(1.0F);
+return Optional.ofNullable(this.target);
+public enum Difficulty { PEACEFUL, EASY, NORMAL, HARD }
+switch (difficulty) { case HARD: return 3; default: return 1; }
+for (Entity e : level.getEntities(this, box)) e.push(this);
+AABB box = this.getBoundingBox().inflate(3.0D);
+Objects.requireNonNull(server, "server");
+this.server.getPlayerList().broadcastSystemMessage(text, false);
+Component text = Component.literal(name + " joined the game");
+String name = this.getGameProfile().getName();
+private static final Logger LOGGER = LogUtils.getLogger();
+LOGGER.info("Preparing spawn area: {}%", progress);
+LOGGER.warn("Can't keep up! Is the server overloaded?");
+LOGGER.warn("Running {}ms behind, skipping {} tick(s)", ms, ticks);
+public void setRemoved(RemovalReason reason) {
+if (reason.shouldDestroy()) this.stopRiding();
+int light = level.getMaxLocalRawBrightness(pos);
+if (light > this.random.nextInt(8)) return false;
+public float getDestroySpeed(BlockState state) { return 1.0F; }
+this.xRot = Mth.clamp(this.xRot, -90.0F, 90.0F);
+this.yHeadRot = this.yRot;
+boolean flag = this.isSprinting() && !this.isUsingItem();
+if (flag) this.causeFoodExhaustion(0.1F);
+this.foodData.tick(this);
+ItemEntity drop = new ItemEntity(level, x, y, z, stack);
+drop.setPickUpDelay(40);
+new Thread(() -> this.run(), "Server thread").start();
+synchronized (this.lock) { this.running = false; }
+System.exit(0);
+// TODO: remove before release
+// he should not be here
+int[] seeds = new int[] { 0, 1, 1, 2, 3, 5, 8 };
+String[] lines = message.split("\\n");
+this.connection.disconnect(Component.translatable("disconnect.timeout"));
+if (entity instanceof Player p && p.isCreative()) return;
+public record ChunkPos(int x, int z) {}
+return (seed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1);
+Entity copy = EntityType.PLAYER.create(level);
+copy.load(this.saveWithoutId(new CompoundTag()));""".splitlines()
+
+def code_lines():
+    (ROOT / "data/chapter_five_code.json").write_text(json.dumps({"lines": JAVA}, ensure_ascii=False, indent=1) + "\n")
+    return len(JAVA)
+
+def frame0(tex):
+    return tex.crop((0, 0, 16, 16)) if tex.height > 16 else tex
+
+def cube(front, side, top, size=16):
+    faces = {"north": (front, (0, 0, 16, 16)), "east": (side, (0, 0, 16, 16)), "up": (top, (0, 0, 16, 16)),
+             "south": (side, (0, 0, 16, 16)), "west": (side, (0, 0, 16, 16)), "down": (side, (0, 0, 16, 16))}
+    mesh = box(front, (-8, 0, -8), (16, 16, 16), faces=faces)
+    return bake(mesh, (size, size), 0.56, (8, 13), yaw=-45 + 180, elevation=30)
+
+def glint(im, glint_tex, strength=1.0, phase=0, colour=(105, 45, 165)):
+    im = im.copy()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, a = im.getpixel((x, y))
+            if a:
+                v = glint_tex.getpixel(((x * 3 + y + phase * 4) % 128, (y * 3 - x + phase * 2) % 128))[0] / 255 * strength
+                im.putpixel((x, y), (min(255, r + int(v * colour[0])), min(255, g + int(v * colour[1])), min(255, b + int(v * colour[2])), a))
+    return im
+
+def icons():
+    version, client, _ = find_client(Path.home() / ".local/share/PrismLauncher")
+    imp = Importer(client)
+    t = lambda name: frame0(imp.tex(name))
+    gl = imp.tex("misc/enchanted_glint_item")
+    out = {}
+    out["debug_stick"] = glint(t("item/stick"), gl, 1.0, 3)
+    out["debug_stick_evo"] = glint(t("item/stick"), gl, 1.6, 9, (170, 20, 60))
+    out["command_block"] = cube(t("block/command_block_front"), t("block/command_block_side"), t("block/command_block_back"))
+    out["command_block_evo"] = cube(t("block/repeating_command_block_front"), t("block/repeating_command_block_side"), t("block/repeating_command_block_back"))
+    out["chain_block"] = cube(t("block/chain_command_block_front"), t("block/chain_command_block_side"), t("block/chain_command_block_back"))
+    out["barrier"] = t("item/barrier")
+    light = t("item/light")
+    evo = t("item/barrier").copy();evo.alpha_composite(light.resize((10, 10), Image.NEAREST), (6, 0))
+    out["barrier_evo"] = evo
+    out["light_block"] = light
+    out["structure_block"] = cube(t("block/structure_block_save"), t("block/structure_block"), t("block/structure_block"))
+    out["structure_block_evo"] = cube(t("block/structure_block_load"), t("block/structure_block_corner"), t("block/structure_block_data"))
+    out["structure_void"] = t("item/structure_void")
+    out["spawn_egg"] = t("item/zombie_spawn_egg")
+    egg = t("item/zombie_spawn_egg").copy();egg.alpha_composite(t("item/name_tag").resize((9, 9), Image.NEAREST), (7, 7))
+    out["spawn_egg_evo"] = egg
+    out["name_tag"] = t("item/name_tag")
+    out["knowledge_book"] = t("item/knowledge_book")
+    out["recovery_compass"] = t("item/recovery_compass_16")
+    sprites = []
+    for name, im in out.items():
+        imp.save(im, "icon_" + name, ["Minecraft Java " + version + " vanilla textures"])
+        sprites.append("icon_" + name)
+    (ROOT / "data/chapter_five_assets.json").write_text(json.dumps({"sprites": sprites}, indent=1) + "\n")
+    (ROOT / "docs/CHAPTER_FIVE_MANIFEST.json").write_text(json.dumps({"version": version, "raw_files": imp.files, "derived": imp.derived}, indent=1) + "\n")
+    sheet = Image.new("RGBA", (len(out) * 40, 40), (40, 40, 40, 255))
+    for i, im in enumerate(out.values()):sheet.alpha_composite(im.resize((32, 32), Image.NEAREST), (i * 40 + 4, 4))
+    sheet.save(ROOT / "qa/chapter_five_icons.png")
+    return len(sprites)
+
+if __name__ == "__main__":
+    print("CH5_CODE", code_lines(), "CH5_ICONS", icons())

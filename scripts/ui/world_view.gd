@@ -6,6 +6,7 @@ const ChapterOne = preload("res://scripts/chapter_one_view.gd")
 
 static func draw_world(g):
 	if g.is_four():g.four_renderer.world(g);return
+	if g.is_five():g.five_renderer.world(g);return
 	if g.is_end():g.end_renderer.world(g);return
 	var saved_actor = 0
 	if g.coop.active and g.coop.running:

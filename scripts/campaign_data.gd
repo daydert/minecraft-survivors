@@ -15,6 +15,20 @@ func configure(chapter: int):
 	data.events = extra.events
 	data.rules = extra.rules
 	data.bastion = extra.bastion
+	if chapter==5:
+		var five: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_balance.json"))
+		data.mobs.merge(five.mobs,true)
+		data.waves=five.waves
+		data.events=five.events
+		data.duration=five.duration
+		data.mob_cap=five.mob_cap
+		data.chapter_five=five
+		var arsenal: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_arsenal.json"))
+		data.five_arsenal=arsenal
+		for group in ["weapons","upgrades","passives","recipes"]:data[group].merge(arsenal[group],true)
+		for id in arsenal.exclude_weapons:weapons.erase(id);recipes.erase(id)
+		for id in arsenal.exclude_passives:passives.erase(id)
+		return
 	if chapter==4:
 		# IV extends the solo arsenal with its own equipment, recipes and rules.
 		var four: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_balance.json"))
@@ -84,6 +98,19 @@ func four_passive(id: String, level: int) -> String:
 	return ""
 
 func description(id: String, level: int) -> String:
+	if data.has("five_arsenal"):
+		var five: Dictionary=data.five_arsenal
+		if five.passives.has(id):
+			if id=="recovery_compass" and level>0:return "Перезарядка отката %d → %d с"%[int(five.rules.compass_cooldown[mini(level,5)-1]),int(five.rules.compass_cooldown[mini(level,4)])]
+			return five.passives[id].effect
+		if five.descriptions.has(id):
+			if level==0:return five.descriptions[id]
+			var a: Dictionary=stats(id,level);var b: Dictionary=stats(id,mini(8,level+1))
+			var labels: Dictionary={"damage":"Урон","interval":"Интервал","radius":"Радиус","count":"Количество","duration":"Длительность","speed":"Скорость"}
+			labels.merge(five.labels.get(id,{}),true)
+			for key in ["damage","interval","radius","count","duration","speed"]:
+				if a.get(key,0)!=b.get(key,0):return "%s %s → %s%s"%[labels[key],number(a.get(key,0)),number(b.get(key,0))," с" if key in ["interval","duration"] else ""]
+			return five.descriptions[id]
 	if data.has("four_arsenal") and level>0 and level<5 and (data.four_arsenal.passives.has(id) or id=="end_eye"):
 		var text: String=four_passive(id,level)
 		if not text.is_empty():return text
@@ -134,6 +161,7 @@ func stats_standard(id: String, level: int, evolution: bool = false, items: Dict
 			"dragon_breath":s.damage+=8;s.duration+=2;s.count=2
 			"shield":s.count+=3
 	if id=="spear":s.damage*=1+.08*items.get("sugar",0)
+	if data.has("five_arsenal"):s.interval*=1.0-.05*items.get("chain_block",0)
 	if data.has("chapter_four"):
 		s.damage*=float(data.aura_damage)
 		s.interval*=float(data.aura_interval)

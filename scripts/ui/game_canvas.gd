@@ -14,7 +14,9 @@ const OW = preload("res://scripts/overworld_world.gd")
 const NW = preload("res://scripts/nether_world.gd")
 const EW = preload("res://scripts/end_world.gd")
 const FW = preload("res://scripts/chapter_four_world.gd")
+const VW = preload("res://scripts/chapter_five_world.gd")
 var four_renderer = preload("res://scripts/chapter_four_renderer.gd").new()
+var five_renderer = preload("res://scripts/chapter_five_renderer.gd").new()
 var four_assets: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_assets.json"))
 var four_assets_loaded := false
 var four_mobs: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_mobs.json"))
@@ -263,6 +265,9 @@ func is_nether() -> bool:
 
 func is_four() -> bool:
 	return not coop.active and world is FW
+
+func is_five() -> bool:
+	return not coop.active and world is VW
 
 func is_end() -> bool:
 	return not coop.active and world is EW

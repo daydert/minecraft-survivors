@@ -20,6 +20,7 @@ func _ready():
 	var v2_assets: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/v2_assets.json"))
 	for name in v2_assets.clips:minecraft_assets.clips[name]=v2_assets.clips[name]
 	for name in v2_assets.sprites:load_texture(name)
+	for name in JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_assets.json")).sprites:load_texture(name)
 	for name in ["ground","heart","heart_half","heart_empty","rock","pumpkin","stump","flowers","tree_0","tree_1","tree_2","experience_orb","icon_arrow","icon_splash_potion","flamebow_draw"]:
 		load_texture(name)
 	for name in minecraft_assets.clips:
@@ -308,6 +309,7 @@ func action(id: String):
 		"chapter_2":start_chapter(2)
 		"chapter_3":start_chapter(3)
 		"chapter_4":start_chapter(4)
+		"chapter_5":start_chapter(5)
 		"ch4_note_close":close_four_note()
 		"end_reroll":
 			if is_end() or is_four():world.reroll_choices()
@@ -434,7 +436,7 @@ func start_chapter(chapter: int, intro: bool=true):
 	if chapter==4:ensure_four_assets()
 	else:unload_four_assets()
 	if chapter!=1:ChapterOneView.unload(self)
-	world=FW.new() if chapter==4 else EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
+	world=VW.new() if chapter==5 else FW.new() if chapter==4 else EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
 	world.reset()
 	if chapter==1 and intro:world.begin_intro()
 	audio.reset_run_music()

@@ -27,7 +27,7 @@ func until(phase: String, limit: float=60.0, movement: Vector2=Vector2.ZERO):
 func run():
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(out))
 	game=load("res://scenes/main.tscn").instantiate();root.add_child(game)
-	game.set_process(false);game.set_physics_process(false);game.set_process_input(false);game.settings.shake=false;game.settings.numbers=false
+	game.set_process(false);game.set_physics_process(false);game.set_process_input(false);game.qa_mode="review";game.settings.shake=false;game.settings.numbers=false
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360)
 	game.action("chapter_1");var w=game.world
 	check(w.state=="INTRO" and w.player.y>2048,"Chapter I opens outside the fence on the path")

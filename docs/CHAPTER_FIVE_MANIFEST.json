@@ -1,0 +1,299 @@
+{
+ "version": "1.21.11",
+ "raw_files": {
+  "textures/misc/enchanted_glint_item.png": {
+   "sha256": "23831803126a3b75e74deeb5a5e39df9a26c94872d20533f444eb5072b417fb5",
+   "bytes": 12310
+  },
+  "textures/misc/enchanted_glint_item.png.mcmeta": {
+   "sha256": "a4f5e3c3235dd128ee6d2ce397217e8c77037dbcf641aaa5bef65824e3b4b168",
+   "bytes": 40
+  },
+  "textures/item/stick.png": {
+   "sha256": "da5ede0e54715247de78567df5212a114d0b8a1af183e286fa69cc6af5993711",
+   "bytes": 105
+  },
+  "textures/block/command_block_front.png": {
+   "sha256": "cb1594f5b62e212cea5dc0b703e527343c1a8607e4ada7a277342552c6bed299",
+   "bytes": 336
+  },
+  "textures/block/command_block_front.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/command_block_side.png": {
+   "sha256": "fb934bc12b090ecf0a61c932342e5d5d72c26cf85f0d15499ff899e22c24dc5f",
+   "bytes": 363
+  },
+  "textures/block/command_block_side.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/command_block_back.png": {
+   "sha256": "e738f92f408595bc6b62d1575db88e3c007f8fcdc96ebca23140867490457018",
+   "bytes": 371
+  },
+  "textures/block/command_block_back.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/repeating_command_block_front.png": {
+   "sha256": "b03032b359a99404e89a7516d5ad2a85e0e47985a27b3ae8552ccd2c867f5a78",
+   "bytes": 340
+  },
+  "textures/block/repeating_command_block_front.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/repeating_command_block_side.png": {
+   "sha256": "ac7f2e54f705cfc8e6d007302c3c9b64ede1eb826836647d9500cc192a08509f",
+   "bytes": 359
+  },
+  "textures/block/repeating_command_block_side.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/repeating_command_block_back.png": {
+   "sha256": "3bcbc08cc9f4c8684ee947d2ad1c7d2c8fd4f4b6a845408ec9df5a5721afdbad",
+   "bytes": 375
+  },
+  "textures/block/repeating_command_block_back.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/chain_command_block_front.png": {
+   "sha256": "bfcfe90ec9b7062930f0319cd1b5b377767383106b5c500767e0b3c0ebd622d8",
+   "bytes": 346
+  },
+  "textures/block/chain_command_block_front.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/chain_command_block_side.png": {
+   "sha256": "506681489e5d74694ec004ebcf6827f7b3b2c4b20b1ed1862730ab1c126bb2e4",
+   "bytes": 378
+  },
+  "textures/block/chain_command_block_side.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/chain_command_block_back.png": {
+   "sha256": "ad51226233f957f66db0cf02976c8fbc4db10f328eb74e7f35b61e6900fba070",
+   "bytes": 378
+  },
+  "textures/block/chain_command_block_back.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/item/barrier.png": {
+   "sha256": "8bb6746dd101a2707889dfbb7eec835b5db85620ef09d860129f2a9be18bd686",
+   "bytes": 149
+  },
+  "textures/item/light.png": {
+   "sha256": "a3a2b2bc7d9763629c5145c7557b7f9a2d8dd2b5fe69b18c1031df2aefc6bde8",
+   "bytes": 125
+  },
+  "textures/block/structure_block_save.png": {
+   "sha256": "14baed624b4920e072800c2d27bf8f5f1b81f08a65dab13d9f8f0d382232bf82",
+   "bytes": 195
+  },
+  "textures/block/structure_block.png": {
+   "sha256": "04feab78c625f0edb46e0ee4ac4919bb1a8cdab7e680a5dd439f0ba9625a7a7d",
+   "bytes": 197
+  },
+  "textures/block/structure_block_load.png": {
+   "sha256": "30a65ca75a8064e88f6a476aba320b525d94374eeef63fd301a41fcdd510640d",
+   "bytes": 195
+  },
+  "textures/block/structure_block_corner.png": {
+   "sha256": "1be1e91be76879677f2fc0311c4aa67224af3cdb9cacc077e29b77e61132d69e",
+   "bytes": 227
+  },
+  "textures/block/structure_block_data.png": {
+   "sha256": "97cb2013f2c608230b260730674483464da6d5a58633ba278e19b2e7149dbd10",
+   "bytes": 192
+  },
+  "textures/item/structure_void.png": {
+   "sha256": "aea08f14c16e0c35382eab5b660c51e6cac42a38d62aaa0a6754103d0c131550",
+   "bytes": 180
+  },
+  "textures/item/zombie_spawn_egg.png": {
+   "sha256": "3dc67c80c9d13874d9863b7249af585829cc9610bd6c377704ab97e643da34eb",
+   "bytes": 235
+  },
+  "textures/item/name_tag.png": {
+   "sha256": "27d4af791458a11eb1777e2f77273659769fc3c26c200790f437e0424afee2b7",
+   "bytes": 201
+  },
+  "textures/item/knowledge_book.png": {
+   "sha256": "3af4beb1037dfbbf3719b0d6a3f9e6d5b154bd790a1e0e1e01b44948a63931ea",
+   "bytes": 199
+  },
+  "textures/item/recovery_compass_16.png": {
+   "sha256": "21a2e477bfa1174d64365b9027caf85fa55473a9b68951af5397bd99280ab35d",
+   "bytes": 238
+  }
+ },
+ "derived": {
+  "icon_debug_stick": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "0fef04371e179232d0dd4e99b7e149faacccde134db1f2a5386db3f21ea48f1a"
+  },
+  "icon_debug_stick_evo": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "cc0fd9530bab03e29f3b100a8d501cf0b4c682250e041ba8e5ba02630e5a0797"
+  },
+  "icon_command_block": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "d472d94431d9e9a97105146a1a33599410f3dc6126d95946ee8a13e1a3b8f0f0"
+  },
+  "icon_command_block_evo": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "ece32eb7fe286856f09b35f10d9e211be2280522cc025bab3b0b99e2641367aa"
+  },
+  "icon_chain_block": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "bce731067712c3cef36ef8681ab6cd9b85bee2d107402815d50351f25ba7d36c"
+  },
+  "icon_barrier": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "5754ad4475e91b9494c3ec68bd32cf577937c3d15c3b01476d23e60db021ab9e"
+  },
+  "icon_barrier_evo": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "9065dfdc2a4fba4ec0d32097e5415160c36c6bb52611a0b8995edba2b6429d9a"
+  },
+  "icon_light_block": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "a1680c37b02842090b54cd6a8454c6a697992fd9f851c17ca3266bc23fd7310d"
+  },
+  "icon_structure_block": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "dabc4f9f69702324781d4d3cb3fff321f5789c791c6920629b7e3cc5957f11d7"
+  },
+  "icon_structure_block_evo": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "eff07913d1f26151bae6eaa4dadc4373bd9c5cac207a97a35863c85dfe9c35ce"
+  },
+  "icon_structure_void": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "46677110e54d614ed08f9a4e72cd7c37f960d1b5d897471646badc0e358bfbb0"
+  },
+  "icon_spawn_egg": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "f3dba77afaac661e4a80599aca5c850b5748b2d1b069448380bffbfc90bd46a1"
+  },
+  "icon_spawn_egg_evo": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "9f0f93989ec9d8b26d330ef9bc7f154c1d2c39072426b4caea7125d14b55382b"
+  },
+  "icon_name_tag": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "38ed5f951edd8afd4694902f414186a7f5d6c800e04fd69ff6ce69f6726ea0be"
+  },
+  "icon_knowledge_book": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "59d929c165360e1f724de401f87074e4a8367ec305933ef1bd9383b4ec47a023"
+  },
+  "icon_recovery_compass": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "f3a8787524b06dcdc99dabe1dac8c8ffcc19298d2ba1cb38bcd2dd3a5b781f87"
+  }
+ }
+}

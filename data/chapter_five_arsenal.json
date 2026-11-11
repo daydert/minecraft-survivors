@@ -1,0 +1,42 @@
+{
+  "weapons": {
+    "debug_stick": {"name": "Отладочная палка", "damage": 10, "interval": 1.2, "radius": 0, "speed": 0, "range": 160, "count": 1, "duration": 2.0},
+    "command_block": {"name": "Командный блок", "damage": 22, "interval": 4.2, "radius": 38, "speed": 0, "range": 230, "count": 1},
+    "barrier": {"name": "Барьер", "damage": 6, "interval": 0.5, "radius": 34, "speed": 2.2, "range": 0, "count": 2},
+    "structure_block": {"name": "Структурный блок", "damage": 14, "interval": 6.0, "radius": 40, "speed": 0, "range": 210, "count": 1},
+    "spawn_egg": {"name": "Яйцо призыва", "damage": 7, "interval": 8.0, "radius": 0, "speed": 74, "range": 0, "count": 1, "duration": 11.0}
+  },
+  "upgrades": {
+    "debug_stick": [{"damage": 3}, {"count": 1}, {"interval": -0.15}, {"damage": 4}, {"duration": 0.6}, {"count": 1}, {"damage": 5}],
+    "command_block": [{"damage": 6}, {"radius": 6}, {"interval": -0.4}, {"damage": 8}, {"radius": 6}, {"interval": -0.4}, {"damage": 10}],
+    "barrier": [{"count": 1}, {"damage": 2}, {"radius": 6}, {"count": 1}, {"damage": 3}, {"speed": 0.6}, {"count": 1}],
+    "structure_block": [{"damage": 4}, {"radius": 8}, {"interval": -0.6}, {"damage": 5}, {"radius": 8}, {"interval": -0.6}, {"damage": 7}],
+    "spawn_egg": [{"count": 1}, {"damage": 2}, {"duration": 3}, {"count": 1}, {"damage": 3}, {"interval": -1.5}, {"count": 1}]
+  },
+  "passives": {
+    "knowledge_book": {"name": "Книга знаний", "effect": "Опыт +10% за уровень."},
+    "chain_block": {"name": "Цепной командный блок", "effect": "Перезарядка оружия −5% за уровень."},
+    "light_block": {"name": "Блок света", "effect": "Тьма отступает дальше. null виден вблизи."},
+    "structure_void": {"name": "Структурная пустота", "effect": "Удалённый пол и снаряды бьют на 15% слабее за уровень."},
+    "name_tag": {"name": "Бирка", "effect": "Союзники бьют на 15% сильнее и живут дольше."},
+    "recovery_compass": {"name": "Компас восстановления", "effect": "Ctrl+Z: смертельный удар откатывает на 3 с назад."}
+  },
+  "recipes": {
+    "debug_stick": {"passive": "knowledge_book", "name": "Состояние: мёртв", "icon": "debug_stick_evo", "effect": "Цепь на 3 цели · добивает врагов слабее 20%"},
+    "command_block": {"passive": "chain_block", "name": "Цепочка команд", "icon": "command_block_evo", "effect": "Команда повторяется ещё в двух скоплениях"},
+    "barrier": {"passive": "light_block", "name": "Режущий свет", "icon": "barrier_evo", "effect": "Блоки выпускают лучи света наружу"},
+    "structure_block": {"passive": "structure_void", "name": "Вставка структуры", "icon": "structure_block_evo", "effect": "Две вставки · оглушение"},
+    "spawn_egg": {"passive": "name_tag", "name": "Старые знакомые", "icon": "spawn_egg_evo", "effect": "Союзники не исчезают · урон +60%"}
+  },
+  "descriptions": {
+    "debug_stick": "Луч в ближайшего врага. Через раз замедляет или отбрасывает.",
+    "command_block": "/kill @e[r=…] по самому плотному скоплению.",
+    "barrier": "Невидимые блоки вокруг героя гасят снаряды и бьют врагов.",
+    "structure_block": "Копирует участок с врагами и обрушивает его. Чем больше внутри, тем больнее.",
+    "spawn_egg": "Призывает мобов из прошлых глав на твою сторону."
+  },
+  "labels": {"debug_stick": {"count": "Цели", "duration": "Состояние"}, "barrier": {"count": "Блоки", "speed": "Вращение"}, "structure_block": {"radius": "Участок"}, "spawn_egg": {"count": "Союзники", "duration": "Жизнь"}},
+  "exclude_weapons": ["trident", "fire", "potion", "fangs", "hoe", "bed", "tnt", "fishing"],
+  "exclude_passives": ["fire_resist", "gold_boots"],
+  "rules": {"stick_slow": 0.4, "stick_shove": 170, "stick_execute": 0.2, "command_delay": 0.5, "chain_delay": 0.3, "paste_delay": 0.9, "paste_bonus": 0.25, "paste_cap": 3.0, "beam_every": 1.2, "beam_length": 140, "ally_bite": 0.6, "compass_cooldown": [120, 105, 90, 75, 60], "compass_back": 3.0, "compass_hp": 6}
+}

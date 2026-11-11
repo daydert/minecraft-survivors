@@ -1,0 +1,20 @@
+{
+ "sprites": [
+  "icon_debug_stick",
+  "icon_debug_stick_evo",
+  "icon_command_block",
+  "icon_command_block_evo",
+  "icon_chain_block",
+  "icon_barrier",
+  "icon_barrier_evo",
+  "icon_light_block",
+  "icon_structure_block",
+  "icon_structure_block_evo",
+  "icon_structure_void",
+  "icon_spawn_egg",
+  "icon_spawn_egg_evo",
+  "icon_name_tag",
+  "icon_knowledge_book",
+  "icon_recovery_compass"
+ ]
+}
