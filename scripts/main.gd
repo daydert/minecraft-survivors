@@ -116,6 +116,7 @@ func _focus_lost():
 		selected = 0
 
 var quake_look := Vector2.ZERO
+var quake_weapon := ""
 
 ## Arena controls: WASD walk, arrows or mouse look, left button or J fires.
 func feed_quake_input():
@@ -135,7 +136,8 @@ func feed_quake_input():
 	if Input.is_physical_key_pressed(KEY_RIGHT):turn.x+=.045
 	if Input.is_physical_key_pressed(KEY_UP):turn.y-=.03
 	if Input.is_physical_key_pressed(KEY_DOWN):turn.y+=.03
-	world.notch.quake_input={"wish":wish,"turn":world.notch.quake_input.turn+turn,"fire":Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_physical_key_pressed(KEY_J) or Input.is_physical_key_pressed(KEY_CTRL),"jump":Input.is_physical_key_pressed(KEY_SPACE)}
+	var slot=quake_weapon;quake_weapon=""
+	world.notch.quake_input={"weapon":slot if not slot.is_empty() else world.notch.quake_input.get("weapon",""),"wish":wish,"turn":world.notch.quake_input.turn+turn,"fire":Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) or Input.is_physical_key_pressed(KEY_J) or Input.is_physical_key_pressed(KEY_CTRL),"jump":Input.is_physical_key_pressed(KEY_SPACE)}
 
 func _physics_process(delta):
 	if quitting:return
@@ -259,12 +261,17 @@ func _input(event):
 			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won","to_quake","quake_won","to_code","chair","credits"]:world.notch.skip();return
 			if world.notch.phase in ["code","erase","fists"] and not notch_action.is_empty():world.notch.press(world,notch_action);return
 			if world.notch.phase=="fighter" and notch_action in ["accept","kick","special","grab","super"]:world.notch.press(world,notch_action);return
-			if world.notch.phase=="quake":return
+			if world.notch.phase=="quake":
+				var slot={KEY_1:"pickaxe",KEY_2:"charges",KEY_3:"rockets",KEY_4:"crossbow",KEY_Q:"prev",KEY_E:"next"}.get(code,"")
+				if not slot.is_empty():quake_weapon=slot
+				return
 			if not notch_action.is_empty() and world.notch.phase in ["ut","lanes"]:
 				if world.notch.phase=="ut" and world.notch.ut_state=="wave" and notch_action in ["left","right","up","down"]:pass
 				else:world.notch.press(world,notch_action);return
 		elif event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:
 			if world.notch.click(world,get_global_mouse_position()):return
+		elif event is InputEventMouseButton and event.pressed and world.notch.phase=="quake" and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+			quake_weapon="next" if event.button_index==MOUSE_BUTTON_WHEEL_DOWN else "prev";return
 		elif event is InputEventMouseMotion and world.notch.phase=="quake" and Input.mouse_mode==Input.MOUSE_MODE_CAPTURED:
 			quake_look+=event.relative*.0028;return
 	if world.state=="INTRO" and screen.is_empty() and ((event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_ESCAPE]) or (event is InputEventMouseButton and event.pressed)):

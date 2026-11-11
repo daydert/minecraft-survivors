@@ -33,10 +33,18 @@
   "ch5p_item_minecart",
   "ch5p_item_arrow",
   "ch5p_item_redstone",
+  "ch5q_dispenser_front",
+  "ch5q_furnace_side",
   "ch5q_tnt",
   "ch5q_item_golden_apple",
   "ch5q_item_iron_chestplate",
   "ch5q_item_firework_rocket",
-  "ch5q_item_iron_sword"
+  "ch5q_item_iron_sword",
+  "ch5q_item_crossbow_standby",
+  "ch5q_item_fire_charge",
+  "ch5q_item_diamond_pickaxe",
+  "ch5q_item_blaze_rod",
+  "ch5q_item_arrow",
+  "ch5q_item_tnt_minecart"
  ]
 }

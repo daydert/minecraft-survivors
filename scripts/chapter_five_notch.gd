@@ -724,11 +724,16 @@ func start_quake(w):
 
 func deathmatch(w, dt: float):
 	var input: Dictionary = quake_input
-	quake.step(dt, input.wish, input.turn, input.fire, input.jump)
-	quake_input.turn = Vector2.ZERO
+	quake.step(dt, input.wish, input.turn, input.fire, input.jump, input.get("weapon", ""))
+	quake_input.turn = Vector2.ZERO;quake_input.weapon = ""
 	for id in quake.sounds:
 		match id:
 			"rocket":w.sound("rocket_launch", .05)
+			"switch":w.sound("ch4_reload", .05)
+			"swing", "nswing":w.sound("swing", .05)
+			"charge", "ncharge":w.sound("fire", .04)
+			"bolt":w.sound("arrow", .05);w.sound("ch4_hb_beam", .05)
+			"hitmark":w.sound("ch4_hb_tick", .04)
 			"boom":w.sound("explosion", .03)
 			"gib":w.sound("ch4_flesh_hit", .05)
 			"pad":w.sound("wind_burst", .1)

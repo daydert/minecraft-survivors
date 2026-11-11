@@ -291,6 +291,12 @@ func take(kind: String, variant: String) -> Node3D:
 			var b := BoxMesh.new();b.size = Vector3(.12, .12, .12);n.mesh = b;n.material_override = flat(Color(.6, .6, .6, .5), 0.0, true)
 		"blast":
 			var s := SphereMesh.new();s.radius = 1.0;s.height = 2.0;n.mesh = s;n.material_override = flat(Color(1, .55, .15, .6), 5.0, true)
+		"fireball":
+			var sm := SphereMesh.new();sm.radius = .14;sm.height = .28;n.mesh = sm;n.material_override = flat(Color(1, .5, .1), 5.0)
+		"beam":
+			var b := BoxMesh.new();b.size = Vector3(.05, .05, 1.0);n.mesh = b;n.material_override = flat(Color(.6, .9, 1, .8), 6.0, true)
+		"gib":
+			var b := BoxMesh.new();b.size = Vector3(.14, .14, .14);n.mesh = b;n.material_override = flat(Color(.65, .05, .05) if variant == "red" else Color(.75, .55, .45))
 		"pixel":
 			var b := BoxMesh.new();b.size = Vector3(.07, .07, .07);n.mesh = b;n.material_override = flat(Color(.97, 0, .86) if variant == "0" else Color(.2, 1, 1), 3.0)
 		"wire":
@@ -311,11 +317,41 @@ func hide_rest(_shown: Array):
 
 # ------------------------------------------------------------------ quake
 
+## A held item: its sprite pushed out into a block of voxels, one per pixel.
+func extrude(name: String, depth := 1.0) -> ArrayMesh:
+	var im: Image = tex(name).get_image()
+	im.convert(Image.FORMAT_RGBA8)
+	var w: int = im.get_width();var h: int = im.get_height()
+	var st := SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var px: float = 1.0 / 16.0;var dz: float = depth * px * .5
+	var solid = func(x: int, y: int) -> bool:return x >= 0 and y >= 0 and x < w and y < h and im.get_pixel(x, y).a > .5
+	for y in range(h):
+		for x in range(w):
+			if not solid.call(x, y):continue
+			var c: Color = im.get_pixel(x, y)
+			var x0: float = (x - w / 2.0) * px;var x1: float = x0 + px;var y0: float = (h / 2.0 - y - 1) * px;var y1: float = y0 + px
+			var quads := [[Vector3(x0, y1, dz), Vector3(x1, y1, dz), Vector3(x1, y0, dz), Vector3(x0, y0, dz), 1.0],
+				[Vector3(x1, y1, -dz), Vector3(x0, y1, -dz), Vector3(x0, y0, -dz), Vector3(x1, y0, -dz), .7]]
+			if not solid.call(x - 1, y):quads.append([Vector3(x0, y1, -dz), Vector3(x0, y1, dz), Vector3(x0, y0, dz), Vector3(x0, y0, -dz), .6])
+			if not solid.call(x + 1, y):quads.append([Vector3(x1, y1, dz), Vector3(x1, y1, -dz), Vector3(x1, y0, -dz), Vector3(x1, y0, dz), .8])
+			if not solid.call(x, y - 1):quads.append([Vector3(x0, y1, -dz), Vector3(x1, y1, -dz), Vector3(x1, y1, dz), Vector3(x0, y1, dz), .9])
+			if not solid.call(x, y + 1):quads.append([Vector3(x0, y0, dz), Vector3(x1, y0, dz), Vector3(x1, y0, -dz), Vector3(x0, y0, -dz), .5])
+			for q in quads:
+				var shade: Color = Color(c.r * q[4], c.g * q[4], c.b * q[4])
+				for i in [0, 1, 2, 0, 2, 3]:st.set_color(shade);st.add_vertex(q[i])
+	var mesh := st.commit()
+	return mesh
+
+func voxel(name: String, scale: float, depth := 1.0) -> MeshInstance3D:
+	var m := MeshInstance3D.new();m.mesh = extrude(name, depth);m.scale = Vector3.ONE * scale
+	var mat := StandardMaterial3D.new();mat.vertex_color_use_as_albedo = true;mat.cull_mode = BaseMaterial3D.CULL_DISABLED;m.material_override = mat
+	return m
+
 func build_quake():
 	var env := WorldEnvironment.new();var e := Environment.new();env.environment = e
 	e.background_mode = Environment.BG_COLOR;e.background_color = Color(.05, .03, .02)
-	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;e.ambient_light_color = Color(.55, .42, .3);e.ambient_light_energy = .55
-	e.fog_enabled = true;e.fog_light_color = Color(.22, .12, .06);e.fog_density = .035
+	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;e.ambient_light_color = Color(.55, .42, .3);e.ambient_light_energy = .6
+	e.fog_enabled = true;e.fog_light_color = Color(.22, .12, .06);e.fog_density = .03
 	scene.add_child(env)
 	var q = load("res://scripts/chapter_five_quake.gd").new();q.reset()
 	for b in q.boxes:
@@ -324,43 +360,71 @@ func build_quake():
 	for lv in q.lava:
 		var m := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(lv[1].x - lv[0].x, .1, lv[1].z - lv[0].z);m.mesh = bm
 		m.position = Vector3((lv[0].x + lv[1].x) / 2, .02, (lv[0].z + lv[1].z) / 2);m.material_override = material("ch5q_lava_still", true, 2.5);scene.add_child(m)
-		var l := OmniLight3D.new();l.position = m.position + Vector3(0, 1, 0);l.light_color = Color(1, .45, .1);l.omni_range = 7;l.light_energy = 2.0;scene.add_child(l)
+		omni(m.position + Vector3(0, 1, 0), Color(1, .45, .1), 2.0, 7.0)
 	for pad in q.pads:
 		var m := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(1.6, .12, 1.6);m.mesh = bm
 		m.position = pad.p + Vector3(0, .06, 0);m.material_override = material("ch5q_redstone_block", true, 2.0);scene.add_child(m)
-	for c in [Vector3(-9, 4.2, -7.7), Vector3(9, 4.2, -7.7), Vector3(-9, 4.2, 10.3), Vector3(9, 4.2, 10.3), Vector3(0, 4.5, 0)]:
-		var l := OmniLight3D.new();l.position = c;l.light_color = Color(1, .7, .4);l.omni_range = 11;l.light_energy = 1.6;scene.add_child(l)
-		var lamp := MeshInstance3D.new();var lb := BoxMesh.new();lb.size = Vector3(.5, .5, .5);lamp.mesh = lb;lamp.position = c + Vector3(0, .6, 0)
-		lamp.material_override = material("ch5q_glowstone", true, 3.0);scene.add_child(lamp);nodes["lamp%d" % nodes.size()] = l
+	var lamp_spots := [Vector3(-9, 5.6, -6), Vector3(9, 5.6, -6), Vector3(-9, 5.6, 6), Vector3(9, 5.6, 6), Vector3(0, 5.0, 0), Vector3(0, 6.0, -16), Vector3(0, 6.0, 16)]
+	for i in range(lamp_spots.size()):
+		var c: Vector3 = lamp_spots[i]
+		var l := omni(c, Color(1, .7, .4), 1.6, 11.0)
+		var lamp := MeshInstance3D.new();var lb := BoxMesh.new();lb.size = Vector3(.5, .5, .5);lamp.mesh = lb;lamp.position = c + Vector3(0, .5, 0)
+		lamp.material_override = material("ch5q_glowstone", true, 3.0);scene.add_child(lamp);nodes["lamp%d" % i] = l
 	var cam := Camera3D.new();cam.fov = 88;cam.near = .05;scene.add_child(cam);nodes.cam = cam
-	var gun := Node3D.new();cam.add_child(gun);gun.position = Vector3(.32, -.3, -.55);nodes.gun = gun
-	var body := MeshInstance3D.new();var gb := BoxMesh.new();gb.size = Vector3(.16, .16, .7);body.mesh = gb;body.material_override = material("ch5q_iron_block", true);gun.add_child(body)
-	var barrel := MeshInstance3D.new();var bb := BoxMesh.new();bb.size = Vector3(.1, .1, .3);barrel.mesh = bb;barrel.position = Vector3(0, .04, -.45);barrel.material_override = material("ch5q_polished_blackstone_bricks", true);gun.add_child(barrel)
-	var flash := OmniLight3D.new();flash.position = Vector3(0, 0, -.8);flash.light_color = Color(1, .7, .3);flash.omni_range = 5;flash.light_energy = 0;gun.add_child(flash);nodes.flash = flash
+	var guns := {}
+	var holder := Node3D.new();cam.add_child(holder);holder.position = Vector3(.3, -.28, -.5);nodes.gun = holder
+	var pick := voxel("ch5q_item_diamond_pickaxe", .55);pick.rotation = Vector3(0, PI / 2 - .2, .3);holder.add_child(pick);guns.pickaxe = pick
+	var charges := Node3D.new();holder.add_child(charges);guns.charges = charges
+	var rod := voxel("ch5q_item_blaze_rod", .55);rod.rotation = Vector3(-1.2, 0, -.6);rod.position = Vector3(.02, -.02, .05);charges.add_child(rod)
+	var ball := voxel("ch5q_item_fire_charge", .32, 3.0);ball.position = Vector3(-.02, .13, -.14);charges.add_child(ball);nodes.ball = ball
+	var launcher := Node3D.new();holder.add_child(launcher);guns.rockets = launcher
+	var body := MeshInstance3D.new();var bb := BoxMesh.new();bb.size = Vector3(.2, .2, .2);body.mesh = bb;body.material_override = material("ch5q_furnace_side", true);launcher.add_child(body)
+	var face := MeshInstance3D.new();var fb := QuadMesh.new();fb.size = Vector2(.2, .2);face.mesh = fb;face.position = Vector3(0, 0, -.101);face.rotation.y = PI
+	var fmat := StandardMaterial3D.new();fmat.albedo_texture = tex("ch5q_dispenser_front");fmat.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;face.material_override = fmat;launcher.add_child(face)
+	var barrel := MeshInstance3D.new();var brm := BoxMesh.new();brm.size = Vector3(.11, .11, .5);barrel.mesh = brm;barrel.position = Vector3(0, .02, -.3);barrel.material_override = material("ch5q_iron_block", true);launcher.add_child(barrel)
+	var tnt := MeshInstance3D.new();var tm := BoxMesh.new();tm.size = Vector3(.1, .1, .1);tnt.mesh = tm;tnt.position = Vector3(0, .15, .02);tnt.material_override = material("ch5q_tnt", true);launcher.add_child(tnt)
+	var bow := voxel("ch5q_item_crossbow_standby", .6);bow.rotation = Vector3(0, PI / 2 + .3, PI / 4 + .2);guns.crossbow = bow;holder.add_child(bow)
+	nodes.guns = guns
+	var flash := OmniLight3D.new();flash.position = Vector3(0, 0, -.8);flash.light_color = Color(1, .7, .3);flash.omni_range = 5;flash.light_energy = 0;holder.add_child(flash);nodes.flash = flash
 	rigs.notch = make_rig("ch5_skin_notch")
-	var launcher := MeshInstance3D.new();var lm := BoxMesh.new();lm.size = Vector3(.14, .14, .6);launcher.mesh = lm;launcher.material_override = material("ch5q_iron_block", true)
-	launcher.position = Vector3(-1 * PX, -10 * PX, .2);rigs.notch.ra.add_child(launcher)
+	var held := Node3D.new();rigs.notch.ra.add_child(held);held.position = Vector3(-1 * PX, -10 * PX, .15);nodes.notch_hand = held
+	var item_tex := {"health":"ch5q_item_golden_apple", "mega":"ch5q_item_golden_apple", "armor":"ch5q_item_iron_chestplate", "charges":"ch5q_item_fire_charge", "rockets":"ch5q_item_tnt_minecart", "crossbow":"ch5q_item_crossbow_standby", "quad":"icon_command_block"}
 	for i in range(q.items.size()):
-		var s := Sprite3D.new();s.pixel_size = .05;s.billboard = BaseMaterial3D.BILLBOARD_ENABLED;s.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-		s.texture = tex({"health":"ch5q_item_golden_apple", "armor":"ch5q_item_iron_chestplate", "ammo":"ch5q_item_firework_rocket", "quad":"icon_command_block"}[q.items[i].kind])
-		scene.add_child(s);nodes["item%d" % i] = s
+		var it: Dictionary = q.items[i]
+		var s := voxel(item_tex[it.kind], 1.0 if it.kind != "mega" else 1.4, 2.0) if it.kind != "quad" else null
+		var n: Node3D
+		if s != null:n = s
+		else:
+			var sp := Sprite3D.new();sp.pixel_size = .05;sp.billboard = BaseMaterial3D.BILLBOARD_ENABLED;sp.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;sp.texture = tex(item_tex[it.kind]);n = sp
+		scene.add_child(n);nodes["item%d" % i] = n
+		if it.kind in ["mega", "quad"]:
+			var gl := omni(it.p + Vector3(0, .8, 0), Color(1, .85, .3) if it.kind == "mega" else Color(.4, .5, 1), 1.5, 4.0);nodes["itemlight%d" % i] = gl
 
 func sync_quake(qk):
 	var s: Dictionary = qk.steve();var n: Dictionary = qk.notch()
 	var cam: Camera3D = nodes.cam
-	cam.position = qk.eye(s) + Vector3(0, sin(s.walk * 2.2) * .04 if s.grounded else 0.0, 0)
-	cam.rotation = Vector3(s.pitch, s.yaw, 0)
+	cam.position = qk.eye(s) + Vector3(0, sin(s.walk * 2.2) * .035 if s.grounded else 0.0, 0)
+	cam.rotation = Vector3(s.pitch + s.fired * .25, s.yaw, 0)
 	if s.dead > 0:cam.position.y = s.p.y + .3;cam.rotation.z = .4
 	var gun: Node3D = nodes.gun
-	gun.position = Vector3(.32 + sin(s.walk * 1.1) * .015, -.3 - s.fired * .6 + absf(cos(s.walk * 1.1)) * .01, -.55 + s.fired * .8)
+	gun.position = Vector3(.3 + sin(s.walk * 1.1) * .015, -.28 - s.fired * .3 + absf(cos(s.walk * 1.1)) * .01, -.5 + s.fired * .5)
+	gun.rotation = Vector3(s.swing * 3.0, 0, -s.swing * 1.5)
 	gun.visible = s.dead <= 0
-	nodes.flash.light_energy = 4.0 if s.fired > .06 else 0.0
+	for k in nodes.guns:(nodes.guns[k] as Node3D).visible = k == s.weapon
+	(nodes.ball as Node3D).rotation.y = qk.age * 6.0
+	nodes.flash.light_energy = 4.0 if s.fired > .06 and s.weapon != "pickaxe" else 0.0
 	var r: Dictionary = rigs.notch
-	r.root.visible = n.dead <= 0 or n.dead > 1.4
+	r.root.visible = n.dead <= 0 or n.dead > 1.6
 	r.root.position = n.p
 	r.root.rotation = Vector3(0, n.yaw + PI, 0)
 	var swing: float = sin(n.walk * 2.5)
-	pose(r, {"rl":Vector3(swing * .7, 0, 0), "ll":Vector3(-swing * .7, 0, 0), "ra":Vector3(-1.4 - n.pitch, 0, 0), "la":Vector3(-1.2 - n.pitch, 0, .5), "head":Vector3(-n.pitch * .5, 0, 0)})
+	pose(r, {"rl":Vector3(swing * .7, 0, 0), "ll":Vector3(-swing * .7, 0, 0), "ra":Vector3(-1.4 - n.pitch - n.swing * 3.0, 0, 0), "la":Vector3(-1.2 - n.pitch, 0, .5), "head":Vector3(-n.pitch * .5, 0, 0)})
+	var hand: Node3D = nodes.notch_hand
+	if hand.get_meta("weapon", "") != n.weapon:
+		for c in hand.get_children():c.queue_free()
+		var model: Node3D = {"pickaxe":func():return voxel("ch5q_item_diamond_pickaxe", .9), "charges":func():return voxel("ch5q_item_blaze_rod", .9), "rockets":func():
+			var b := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(.25, .25, .7);b.mesh = bm;b.material_override = material("ch5q_furnace_side", true);return b, "crossbow":func():return voxel("ch5q_item_crossbow_standby", 1.0)}[n.weapon].call()
+		model.rotation = Vector3(-PI / 2, 0, 0);hand.add_child(model);hand.set_meta("weapon", n.weapon)
 	if n.dead > 0:r.root.rotation.x = -1.4
 	var shown: Array = []
 	for rk in qk.rockets:
@@ -368,14 +432,22 @@ func sync_quake(qk):
 		m.position = rk.p;m.look_at(rk.p + rk.v, Vector3.UP);shown.append(m)
 		for k in range(4):
 			var t: Node3D = take("trail", "");t.position = rk.p - rk.v.normalized() * (k + 1) * .35;t.scale = Vector3.ONE * (1 + k * .4);shown.append(t)
+	for sh in qk.shots:
+		var m: Node3D = take("fireball", "");m.position = sh.p;shown.append(m)
+	for bm in qk.beams:
+		var m: Node3D = take("beam", "");m.position = (bm.a + bm.b) / 2.0;m.look_at(bm.b, Vector3.UP);m.scale = Vector3(1.0 - bm.age / .45, 1.0 - bm.age / .45, bm.a.distance_to(bm.b));shown.append(m)
 	for b in qk.blasts:
 		var m: Node3D = take("blast", "");m.position = b.p;m.scale = Vector3.ONE * (.4 + b.age * 5.0)
 		(m.material_override as StandardMaterial3D).albedo_color.a = .7 * (1 - b.age / .5);shown.append(m)
+	for g in qk.gibs:
+		var m: Node3D = take("gib", "red" if g.red else "skin");m.position = g.p;m.rotation = Vector3(g.age * 7, g.age * 5, 0);shown.append(m)
 	hide_rest(shown)
 	for i in range(qk.items.size()):
-		var it: Dictionary = qk.items[i];var sp: Sprite3D = nodes["item%d" % i]
+		var it: Dictionary = qk.items[i];var sp: Node3D = nodes["item%d" % i]
 		sp.visible = it.left <= 0
-		sp.position = it.p + Vector3(0, .5 + sin(qk.age * 2.5 + i) * .12, 0)
+		sp.position = it.p + Vector3(0, .6 + sin(qk.age * 2.5 + i) * .12, 0)
+		if not (sp is Sprite3D):sp.rotation.y = qk.age * 1.8 + i
+		if nodes.has("itemlight%d" % i):nodes["itemlight%d" % i].visible = it.left <= 0
 	for k in nodes:
 		if String(k).begins_with("lamp"):nodes[k].light_energy = 1.4 + sin(qk.age * 9.0 + k.length()) * .15 + (0.6 if int(qk.age * 13 + k.length()) % 17 == 0 else 0.0)
 

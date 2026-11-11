@@ -237,9 +237,11 @@ def textures3d():
         imp.save(frame0(imp.tex("block/" + n)), "ch5p_" + n, ["block/" + n]);names.append("ch5p_" + n)
     for n in ["minecart", "arrow", "redstone"]:
         imp.save(imp.tex("item/" + n), "ch5p_item_" + n, ["item/" + n]);names.append("ch5p_item_" + n)
+    imp.save(frame0(imp.tex("block/dispenser_front")), "ch5q_dispenser_front", ["block/dispenser_front"]);names.append("ch5q_dispenser_front")
+    imp.save(frame0(imp.tex("block/furnace_side")), "ch5q_furnace_side", ["block/furnace_side"]);names.append("ch5q_furnace_side")
     tnt = Image.new("RGBA", (16, 16));tnt.paste(frame0(imp.tex("block/tnt_side")))
     imp.save(tnt, "ch5q_tnt", ["block/tnt_side"]);names.append("ch5q_tnt")
-    for n in ["golden_apple", "iron_chestplate", "firework_rocket", "iron_sword"]:
+    for n in ["golden_apple", "iron_chestplate", "firework_rocket", "iron_sword", "crossbow_standby", "fire_charge", "diamond_pickaxe", "blaze_rod", "arrow", "tnt_minecart"]:
         imp.save(imp.tex("item/" + n), "ch5q_item_" + n, ["item/" + n]);names.append("ch5q_item_" + n)
     (ROOT / "data/chapter_five_3d.json").write_text(json.dumps({"textures": names}, indent=1) + "\n")
     return len(names)

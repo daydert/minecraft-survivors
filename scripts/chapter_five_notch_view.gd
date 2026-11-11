@@ -430,27 +430,48 @@ static func quake(g):
 	var s: Dictionary = qk.steve()
 	if s.flash > 0:g.draw_rect(Rect2(0, 0, 640, 360), Color(.8, 0, 0, s.flash * 1.5))
 	if s.quad > 0:g.draw_rect(Rect2(0, 0, 640, 360), Color(.2, .3, 1, .12))
-	g.draw_line(Vector2(316, 180), Vector2(324, 180), Color.WHITE, 1);g.draw_line(Vector2(320, 176), Vector2(320, 184), Color.WHITE, 1)
-	var bar := Rect2(0, 316, 640, 44)
-	if g.textures.has("ch5q_dark_oak_planks"):pass
-	g.draw_rect(bar, Color(.16, .1, .06))
+	var cc := Vector2(320, 180)
+	var spread: float = 3.0 + s.fired * 20.0
+	for d in [Vector2.LEFT, Vector2.RIGHT, Vector2.UP, Vector2.DOWN]:g.draw_line(cc + d * spread, cc + d * (spread + 5), Color.WHITE, 1)
+	if s.hitmark > 0:
+		var a: float = s.hitmark / .25
+		for d in [Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)]:g.draw_line(cc + d * 5, cc + d * 10, Color(1, .3, .3, a), 2)
+	var cam: Camera3D = v.nodes.cam
+	for nm in qk.numbers:
+		if cam.is_position_behind(nm.p):continue
+		var sp: Vector2 = cam.unproject_position(nm.p) * 2.0
+		g.draw_string(g.bold, sp + Vector2(1, 1), str(nm.value), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0, 0, 0, 1 - nm.age / .8))
+		g.draw_string(g.bold, sp, str(nm.value), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(1, .85, .3, 1 - nm.age / .8))
+	g.draw_rect(Rect2(0, 316, 640, 44), Color(.16, .1, .06))
 	for x in range(0, 640, 32):g.draw_rect(Rect2(x, 316, 31, 43), Color(.2, .13, .08))
 	g.draw_line(Vector2(0, 316), Vector2(640, 316), Color(.45, .3, .15), 2)
 	var skin: Texture2D = v.tex("ch5_skin_steve")
-	var face_tint := Color(1, .6 + .4 * s.hp / 100.0, .6 + .4 * s.hp / 100.0)
-	g.draw_texture_rect_region(skin, Rect2(282, 320, 36, 36), Rect2(8, 8, 8, 8), face_tint)
-	big(g, str(int(s.armor)), Vector2(70, 352), Color(.8, .8, .8))
-	g.draw_texture_rect(v.tex("ch5q_item_iron_chestplate"), Rect2(20, 324, 32, 32), false)
-	big(g, str(int(s.hp)), Vector2(400, 352), Color(1, .35, .3) if s.hp < 25 else YELLOW)
-	big(g, str(s.ammo), Vector2(560, 352), YELLOW)
-	g.draw_texture_rect(v.tex("ch5q_item_firework_rocket"), Rect2(512, 324, 32, 32), false)
+	g.draw_texture_rect_region(skin, Rect2(222, 320, 36, 36), Rect2(8, 8, 8, 8), Color(1, .6 + .4 * minf(1.0, s.hp / 100.0), .6 + .4 * minf(1.0, s.hp / 100.0)))
+	big(g, str(int(s.armor)), Vector2(56, 352), Color(.8, .8, .8))
+	g.draw_texture_rect(v.tex("ch5q_item_iron_chestplate"), Rect2(14, 324, 32, 32), false)
+	big(g, str(int(s.hp)), Vector2(270, 352), Color(1, .35, .3) if s.hp < 25 else YELLOW)
+	var icons := {"pickaxe":"ch5q_item_diamond_pickaxe", "charges":"ch5q_item_fire_charge", "rockets":"ch5q_item_tnt_minecart", "crossbow":"ch5q_item_crossbow_standby"}
+	for i in range(qk.ORDER.size()):
+		var wpn: String = qk.ORDER[i]
+		var r := Rect2(372 + i * 46, 320, 40, 36)
+		var owned: bool = s.owned.get(wpn, false)
+		var on: bool = s.weapon == wpn
+		g.draw_rect(r, Color(.3, .2, .1) if on else Color(.12, .08, .05))
+		g.draw_rect(r, YELLOW if on else Color(.45, .3, .15), false, 2 if on else 1)
+		g.draw_texture_rect(v.tex(icons[wpn]), Rect2(r.position + Vector2(4, 2), Vector2(22, 22)), false, Color.WHITE if owned else Color(.25, .25, .25))
+		g.draw_string(g.font, r.position + Vector2(30, 11), str(i + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, 1, 1, .6))
+		var ammo: int = qk.ammo_of(s, wpn)
+		g.draw_string(g.bold, r.position + Vector2(4, 33), "∞" if wpn == "pickaxe" else str(ammo), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, YELLOW if owned and ammo > 0 else Color(.6, .4, .3))
+	g.text_at(qk.WEAPONS[s.weapon].name, Vector2(372, 312), 8, Color(1, .9, .6), true)
 	var nt: Dictionary = qk.notch()
-	g.text_at("Стив %d : %d Нотч · до %d" % [s.frags, nt.frags, qk.FRAGS], Vector2(470, 18), 8, Color.WHITE, true)
+	g.draw_rect(Rect2(460, 6, 174, 18), Color(0, 0, 0, .55))
+	g.text_at("Стив %d : %d Нотч · до %d" % [s.frags, nt.frags, qk.FRAGS], Vector2(468, 19), 8, Color.WHITE, true)
 	for i in range(qk.feed.size()):g.text_at(qk.feed[i].text, Vector2(10, 18 + i * 12), 8, Color(1, .9, .6, 1 - qk.feed[i].age / 5.0))
 	if s.quad > 0:g.text_at("QUAD %d" % int(ceil(s.quad)), Vector2(10, 300), 16, Color(.5, .6, 1), true)
+	if s.hp > 100:g.text_at("МЕГА", Vector2(222, 312), 8, Color(1, .85, .3), true)
 	if s.dead > 0:g.centered("Ты убит. Возрождение…", 150, 16, Color(1, .3, .3), true)
 	if qk.state == "intro":g.centered("ДЕЗМАТЧ · ДО 3 ФРАГОВ", 120, 16, Color(1, .8, .3), true)
-	if qk.age < 6.0:g.text_at("WASD — ходьба · мышь — обзор · ЛКМ — ракета · Пробел — прыжок · стрелки — обзор", Vector2(120, 306), 8, Color(1, 1, 1, .5 * (1 - qk.age / 6.0)))
+	if qk.age < 7.0:g.text_at("WASD · мышь — обзор · ЛКМ огонь · Пробел прыжок · 1–4 или колесо — оружие · стрейф в прыжке разгоняет", Vector2(14, 300), 8, Color(1, 1, 1, .55 * (1 - qk.age / 7.0)))
 	subtitles(g, n, 280.0)
 	retry(g, n)
 
