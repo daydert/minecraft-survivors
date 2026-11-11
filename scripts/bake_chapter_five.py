@@ -160,5 +160,55 @@ def icons():
     sheet.save(ROOT / "qa/chapter_five_icons.png")
     return len(sprites)
 
+def notch_skin(imp):
+    """A digital Notch: the player model with darker hair, a beard, green
+    eyes and a white shirt that comes apart into lines of cyan code."""
+    tex = imp.tex("entity/player/wide/steve").copy()
+    px = tex.load()
+    for y in range(64):
+        for x in range(64):
+            r, g, b, a = px[x, y]
+            if not a:continue
+            if g > r + 25 and b > r + 25:
+                lum = (r + g + b) // 3
+                v = min(255, 120 + lum)
+                px[x, y] = (40, 230, 220, a) if (x * 7 + y * 3) % 11 == 0 else (v, v, min(255, v + 6), a)
+            elif r > g and g > b and r < 120 and (y < 16):
+                px[x, y] = (int(r * .7), int(g * .62), int(b * .55), a)
+    for x in range(8, 16):
+        for y in (13, 14, 15):
+            if not (y == 13 and 10 <= x <= 13):px[x, y] = (58, 38, 22, 255)
+    for x, y in [(9, 12), (14, 12)]:px[x, y] = (255, 255, 255, 255)
+    for x, y in [(10, 12), (13, 12)]:px[x, y] = (40, 170, 70, 255)
+    return tex
+
+def notch():
+    import bake_chapter_four_finale as four
+    version, client, _ = find_client(Path.home() / ".local/share/PrismLauncher")
+    imp = Importer(client)
+    names = ["idle", "walk", "cast", "invite", "look_hand", "float", "slam", "point", "snap", "aura", "stagger", "knocked", "lunge", "throw", "exhausted", "fall", "lying"]
+    image, layout = four.atlas(notch_skin(imp), names)
+    imp.save(image, "ch5_notch", ["entity/player/wide/steve (digital Notch recolour)"])
+    t = lambda name: frame0(imp.tex(name))
+    plants = {"dispenser": cube(t("block/dispenser_front"), t("block/furnace_side"), t("block/furnace_top")),
+              "redstone_ore": cube(t("block/redstone_ore"), t("block/redstone_ore"), t("block/redstone_ore")),
+              "obsidian": cube(t("block/obsidian"), t("block/obsidian"), t("block/obsidian")),
+              "tnt": cube(t("block/tnt_side"), t("block/tnt_side"), t("block/tnt_top"))}
+    sprites = ["ch5_notch"]
+    for name, im in plants.items():
+        imp.save(im, "icon_pvz_" + name, ["block/" + name]);sprites.append("icon_pvz_" + name)
+    imp.save(t("item/redstone"), "icon_pvz_redstone", ["item/redstone"]);sprites.append("icon_pvz_redstone")
+    data = json.loads((ROOT / "data/chapter_five_assets.json").read_text())
+    data["sprites"] = [s for s in data["sprites"] if not s.startswith("icon_pvz_")] + [s for s in sprites if s.startswith("icon_pvz_")]
+    data["notch"] = {"sheet": "ch5_notch", "frame": list(four.FRAME), "anchor": list(four.CENTER), "layout": layout}
+    (ROOT / "data/chapter_five_assets.json").write_text(json.dumps(data, indent=1) + "\n")
+    w, h = four.FRAME
+    sheet = Image.new("RGBA", (6 * w * 2, h * 2), (40, 40, 40, 255))
+    for i, n in enumerate(["idle", "cast", "point", "snap", "invite", "lunge"]):
+        c = layout[n]["start"] + layout[n]["count"] // 2
+        sheet.alpha_composite(image.crop((c * w, 0, c * w + w, h)).resize((w * 2, h * 2), Image.NEAREST), (i * w * 2, 0))
+    sheet.save(ROOT / "qa/chapter_five_notch.png")
+    return sum(v["count"] for v in layout.values())
+
 if __name__ == "__main__":
-    print("CH5_CODE", code_lines(), "CH5_ICONS", icons())
+    print("CH5_CODE", code_lines(), "CH5_ICONS", icons(), "CH5_NOTCH", notch())

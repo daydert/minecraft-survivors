@@ -15,6 +15,92 @@
   "icon_spawn_egg_evo",
   "icon_name_tag",
   "icon_knowledge_book",
-  "icon_recovery_compass"
- ]
+  "icon_recovery_compass",
+  "icon_pvz_dispenser",
+  "icon_pvz_redstone_ore",
+  "icon_pvz_obsidian",
+  "icon_pvz_tnt",
+  "icon_pvz_redstone"
+ ],
+ "notch": {
+  "sheet": "ch5_notch",
+  "frame": [
+   48,
+   56
+  ],
+  "anchor": [
+   24,
+   50
+  ],
+  "layout": {
+   "idle": {
+    "start": 0,
+    "count": 4
+   },
+   "walk": {
+    "start": 4,
+    "count": 8
+   },
+   "cast": {
+    "start": 12,
+    "count": 4
+   },
+   "invite": {
+    "start": 16,
+    "count": 2
+   },
+   "look_hand": {
+    "start": 18,
+    "count": 2
+   },
+   "float": {
+    "start": 20,
+    "count": 4
+   },
+   "slam": {
+    "start": 24,
+    "count": 3
+   },
+   "point": {
+    "start": 27,
+    "count": 2
+   },
+   "snap": {
+    "start": 29,
+    "count": 3
+   },
+   "aura": {
+    "start": 32,
+    "count": 2
+   },
+   "stagger": {
+    "start": 34,
+    "count": 2
+   },
+   "knocked": {
+    "start": 36,
+    "count": 2
+   },
+   "lunge": {
+    "start": 38,
+    "count": 2
+   },
+   "throw": {
+    "start": 40,
+    "count": 3
+   },
+   "exhausted": {
+    "start": 43,
+    "count": 2
+   },
+   "fall": {
+    "start": 45,
+    "count": 4
+   },
+   "lying": {
+    "start": 49,
+    "count": 2
+   }
+  }
+ }
 }

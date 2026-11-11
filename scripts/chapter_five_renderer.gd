@@ -7,6 +7,7 @@ const FLOW := Color(.78, .5, .95)
 const NUM := Color(.55, .85, .55)
 const TEXT := Color(.82, .84, .9)
 const CARD := Color(.075, .08, .11)
+const NotchView = preload("res://scripts/chapter_five_notch_view.gd")
 var code: Array = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_code.json")).lines
 var widths: Dictionary = {}
 var vignette: GradientTexture2D
@@ -28,6 +29,12 @@ func width(g, text: String) -> float:
 
 func world(g):
 	var w = g.world
+	if w.stage == "notch":
+		var ph: String = w.notch.phase if w.notch.phase != "retry" else w.notch.retry_of
+		if ph in ["ut", "to_lanes"] or (ph == "ut"):
+			NotchView.battle(g);return
+		if ph in ["lanes", "lanes_won"]:
+			NotchView.lanes(g);return
 	var offset: Vector2 = Vector2(320, 180) - w.camera().floor()
 	if g.settings.get("camera_lead", false):offset -= g.cam_lead.round()
 	if w.shake > 0 and g.settings.shake and w.state == "RUNNING":offset += Vector2(sin(w.clock * 75), cos(w.clock * 87)).round()
@@ -58,9 +65,11 @@ func world(g):
 		if Rect2(-40, -40, 720, 440).has_point(gh.p + offset):actors.append({"sort":gh.p.y,"kind":"ghost","obj":gh})
 	for a in w.arsenal.allies:
 		if Rect2(-40, -40, 720, 440).has_point(a.p + offset):actors.append({"sort":a.p.y,"kind":"ally","obj":a})
+	if w.stage == "notch":actors.append({"sort":w.notch.p.y,"kind":"notch"})
 	actors.sort_custom(func(a, b):return a.sort < b.sort)
 	for actor in actors:
 		match actor.kind:
+			"notch":NotchView.actor(g, offset)
 			"prop":crate(g, actor.obj.p + offset, actor.obj.id, ink, actor.obj.get("has_heal", false))
 			"loot":
 				var o = actor.obj
@@ -78,7 +87,8 @@ func world(g):
 			"ghost":ghost(g, actor.obj, offset)
 			"mob":
 				var m = actor.obj
-				if m.get("code", false):entity(g, m, offset, tone)
+				if m.kind == "notch":pass
+				elif m.get("code", false):entity(g, m, offset, tone)
 				else:glitched(g, m, offset)
 	for o in w.orbs:
 		var p: Vector2 = (o.p + offset).floor()
@@ -86,6 +96,7 @@ func world(g):
 	for b in w.projectiles:g.draw_projectile(b, offset)
 	shots(g, offset, tone)
 	equipment(g, offset, tone)
+	NotchView.air(g, offset)
 	for e in w.effects:
 		if not effect(g, e, offset):g.draw_effect(e, offset)
 	for s in w.shards:shard(g, s, offset, ink)
@@ -103,7 +114,8 @@ func world(g):
 			g.draw_rect(Rect2(0, 358 - i * 3, 640, 3), Color(0, 0, 0, strip * k * k))
 	if w.bosses.rewind_flash > 0:rewind(g, w.bosses.rewind_flash)
 	boss_bar(g)
-	debug(g, offset)
+	if w.stage == "notch":NotchView.overlay(g)
+	else:debug(g, offset)
 
 # ------------------------------------------------------------------ the plane
 

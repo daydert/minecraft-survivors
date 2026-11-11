@@ -213,6 +213,17 @@ func _input(event):
 		mouse = get_global_mouse_position()
 		for i in range(buttons.size()):
 			if buttons[i].rect.has_point(mouse): selected = i
+	if is_five() and world.stage=="notch" and world.state=="RUNNING" and screen.is_empty():
+		var notch_action := ""
+		if event is InputEventKey and event.pressed and not event.echo:
+			var code: int=event.physical_keycode if event.physical_keycode!=0 else event.keycode
+			notch_action={KEY_A:"left",KEY_LEFT:"left",KEY_D:"right",KEY_RIGHT:"right",KEY_W:"up",KEY_UP:"up",KEY_S:"down",KEY_DOWN:"down",KEY_SPACE:"accept",KEY_ENTER:"accept",KEY_Z:"accept",KEY_1:"1",KEY_2:"2",KEY_3:"3",KEY_4:"4"}.get(code,"")
+			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won"]:world.notch.skip();return
+			if not notch_action.is_empty() and world.notch.phase in ["ut","lanes"]:
+				if world.notch.phase=="ut" and world.notch.ut_state=="wave" and notch_action in ["left","right","up","down"]:pass
+				else:world.notch.press(world,notch_action);return
+		elif event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:
+			if world.notch.click(world,get_global_mouse_position()):return
 	if world.state=="INTRO" and screen.is_empty() and ((event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_SPACE,KEY_ENTER,KEY_ESCAPE]) or (event is InputEventMouseButton and event.pressed)):
 		world.skip_intro();input_lock=.2;return
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -545,7 +556,7 @@ func draw_scene():
 		finale_renderer.ending(self)
 		return
 	WorldView.draw_world(self)
-	if (not is_four() or (world.stage != "arrival" and not world.ending.locked())) and world.state != "MENU" and world.state!="INTRO" and (not world.finale.active or world.finale.phase in ["storm","inferno","tease"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]):Hud.draw_hud(self)
+	if (not is_four() or (world.stage != "arrival" and not world.ending.locked())) and world.state != "MENU" and world.state!="INTRO" and (not world.finale.active or world.finale.phase in ["storm","inferno","tease"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]) and (not is_five() or world.stage!="notch" or world.notch.phase=="fight"):Hud.draw_hud(self)
 	if screen=="chapters":MenuScreens.draw_chapters(self)
 	elif screen == "multiplayer": MenuScreens.draw_multiplayer(self)
 	elif not screen.is_empty(): MenuScreens.draw_settings(self)

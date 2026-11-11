@@ -1,4 +1,4 @@
-"""Encode the Chapter V stage C film with its music cues and sound events."""
+"""Encode the Chapter V stage D film with its music cues and sound events."""
 from pathlib import Path
 import json, shutil, subprocess, sys
 ROOT=Path(__file__).resolve().parent.parent
@@ -27,7 +27,7 @@ for cue in data['sound_events']:
     graph+=f'[{n}:a]volume={spec["gain"]*.6*var.get("volume",1)},adelay={d}|{d}[s{n}];';labels.append(f'[s{n}]');n+=1
     if n>480:break
 graph+=''.join(labels)+f'amix=inputs={len(labels)}:normalize=0,alimiter=limit=0.95,atrim=0:{seconds},apad=whole_dur={seconds}[a]'
-target=OUT/'chapter_five_c.mp4'
+target=OUT/'chapter_five_d.mp4'
 args+=['-filter_complex',graph,'-map','[v]','-map','[a]','-c:v','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-t',str(seconds),'-movflags','+faststart',str(target)]
 subprocess.run(args,check=True);print(target,seconds)
 if '--clean' in sys.argv:shutil.rmtree(OUT/'chapter_five_frames')

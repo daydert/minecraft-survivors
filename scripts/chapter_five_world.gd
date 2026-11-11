@@ -2,8 +2,8 @@ extends "res://scripts/arsenal_world.gd"
 ## Chapter V: the game's own code space. White, then dark, then flickering.
 ## Enemies are pieces of code with the behaviour of what they are; the world
 ## itself lags, deletes its floor, throws items and steals the controls.
-const CODE_KINDS := ["token","for_loop","while_loop","condition","if_else","function","arg","recursion","try_catch","null_ref","array","hijack","terminal","clone","loop_boss"]
-const BOSS_KINDS := ["terminal","clone","loop_boss"]
+const CODE_KINDS := ["token","for_loop","while_loop","condition","if_else","function","arg","recursion","try_catch","null_ref","array","hijack","terminal","clone","loop_boss","notch"]
+const BOSS_KINDS := ["terminal","clone","loop_boss","notch"]
 const TOKENS := ["int","void","float","final","static","return;","break;","new","this",";","==","!=","&&","{ }","i++","0x1F","NaN","true","long","char"]
 var five: Dictionary = {}
 ## Enemy projectiles (glyphs and living items) and delayed ground strikes.
@@ -25,6 +25,7 @@ var double_pending := false
 var crate_timer := 75.0
 var arsenal = preload("res://scripts/chapter_five_arsenal.gd").new()
 var bosses = preload("res://scripts/chapter_five_bosses.gd").new()
+var notch = preload("res://scripts/chapter_five_notch.gd").new()
 
 func chapter_number() -> int:
 	return 5
@@ -34,6 +35,7 @@ func reset(seed_value: int = 0):
 	void_tick = 0.0;lag = 0.0;lag_count = 0;hint = {};invert = 0.0;hijack = {};double_pending = false;crate_timer = 75.0
 	arsenal.reset()
 	bosses.reset()
+	notch.reset()
 	super.reset(seed_value)
 	five = db.data.chapter_five
 	for id in arsenal.OWN:animation.data.weapons[id] = {"windup":.2,"attack":.12,"recover":.36}
@@ -116,6 +118,8 @@ func mob_by_id(id: int):
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if m.hp <= 0:return
+	if m.kind == "notch":
+		notch.hurt(self, m, amount);return
 	if m.kind in BOSS_KINDS:
 		if bosses.intercept(self, m, amount):return
 		if m.kind != "clone":push = Vector2.ZERO
@@ -252,8 +256,8 @@ func move_mobs(dt: float):
 					m.index = (m.index + 1) % 5
 					var cell: Vector2 = m.p + Vector2((m.index - 2) * 14.0, -10)
 					shoot(cell, cell.direction_to(player) * 120.0, 2.0, str(m.index))
-			"terminal","loop_boss","clone":
-				m.dir = Vector2.DOWN if m.kind != "clone" else m.dir
+			"terminal","loop_boss","clone","notch":
+				m.dir = Vector2.DOWN if m.kind not in ["clone","notch"] else m.dir
 				continue
 			"hijack":
 				contact = false
@@ -447,11 +451,22 @@ func discard(id: String) -> bool:
 
 # ------------------------------------------------------------------ step
 
+func camera() -> Vector2:
+	if stage == "notch":
+		var mid: Vector2 = player.lerp(notch.p, .4)
+		return mid.clamp(VIEW / 2.0, Vector2.ONE * SIZE - VIEW / 2.0)
+	return super.camera()
+
 func movement_speed() -> float:
 	return float(db.data.player_speed) * (1 + 0.08 * items.get("sugar", 0))
 
 func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	if state != "RUNNING":return
+	if stage == "notch":
+		clock += dt
+		track_progress(dt)
+		notch.step(self, dt, movement)
+		return
 	if lag > 0:
 		lag -= dt
 		if lag <= 0:rubber_band()
@@ -510,8 +525,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		sound("death")
 		return
 	if time >= float(db.data.duration):
-		# Notch is the next stage of the chapter plan.
-		stage = "end";state = "RESULT";victory = true
+		notch.begin(self)
 		return
 	if xp >= db.required_xp(level):next_level()
 	elif not pending_chest.is_empty():open_chest(pending_chest)
