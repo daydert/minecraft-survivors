@@ -90,6 +90,27 @@
       "damage": 0,
       "xp": 15,
       "radius": 8
+    },
+    "terminal": {
+      "hp": 360,
+      "speed": 0,
+      "damage": 0,
+      "xp": 60,
+      "radius": 20
+    },
+    "clone": {
+      "hp": 80,
+      "speed": 70,
+      "damage": 0,
+      "xp": 0,
+      "radius": 8
+    },
+    "loop_boss": {
+      "hp": 900,
+      "speed": 0,
+      "damage": 0,
+      "xp": 80,
+      "radius": 22
     }
   },
   "glitch": {
@@ -252,5 +273,28 @@
       "after": 3.0
     },
     "hint": 2.0
+  },
+  "bosses": {
+    "terminal": {
+      "at": 240.0,
+      "boot": 2.6,
+      "command_every": 7.0,
+      "respawn": 16.0,
+      "respawn_hp": 0.6,
+      "clone_hp_per_level": 7,
+      "learn_after": 25.0,
+      "evade": 0.35,
+      "keep": 90.0
+    },
+    "loop": {
+      "at": 480.0,
+      "iteration": 10.0,
+      "break_share": 0.2,
+      "ghosts": 3,
+      "ring_every": 3.3,
+      "ring": 12,
+      "ghost_damage": 3.0
+    },
+    "spawn_scale": 0.35
   }
 }

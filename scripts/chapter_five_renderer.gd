@@ -54,6 +54,8 @@ func world(g):
 	for o in w.loot:
 		if Rect2(-24, -24, 688, 408).has_point(o.p + offset):actors.append({"sort":o.p.y,"kind":"loot","obj":o})
 	actors.append({"sort":w.player.y,"kind":"player"})
+	for gh in w.bosses.ghosts:
+		if Rect2(-40, -40, 720, 440).has_point(gh.p + offset):actors.append({"sort":gh.p.y,"kind":"ghost","obj":gh})
 	for a in w.arsenal.allies:
 		if Rect2(-40, -40, 720, 440).has_point(a.p + offset):actors.append({"sort":a.p.y,"kind":"ally","obj":a})
 	actors.sort_custom(func(a, b):return a.sort < b.sort)
@@ -73,6 +75,7 @@ func world(g):
 				g.draw_actor("steve", p, w.facing, w.clock, w.player_moving, g.invulnerable_tint(), "walk", 1.0, w.player_visual)
 				g.draw_held_weapons(p)
 			"ally":ally(g, actor.obj, offset)
+			"ghost":ghost(g, actor.obj, offset)
 			"mob":
 				var m = actor.obj
 				if m.get("code", false):entity(g, m, offset, tone)
@@ -98,6 +101,8 @@ func world(g):
 			var k: float = 1 - i / 26.0
 			g.draw_rect(Rect2(0, i * 2, 640, 2), Color(0, 0, 0, strip * k * k))
 			g.draw_rect(Rect2(0, 358 - i * 3, 640, 3), Color(0, 0, 0, strip * k * k))
+	if w.bosses.rewind_flash > 0:rewind(g, w.bosses.rewind_flash)
+	boss_bar(g)
 	debug(g, offset)
 
 # ------------------------------------------------------------------ the plane
@@ -199,6 +204,12 @@ func entity(g, m: Dictionary, offset: Vector2, tone: float):
 	var p: Vector2 = m.p + offset
 	if m.kind == "hijack":
 		double(g, m, p);return
+	if m.kind == "terminal":
+		terminal(g, m, p, tone);return
+	if m.kind == "clone":
+		clone(g, m, p);return
+	if m.kind == "loop_boss":
+		loop_card(g, m, p, tone);return
 	var alpha: float = 1.0
 	if m.kind == "null_ref":alpha = clampf(.07 + m.reveal * 3.0, 0, 1)
 	var lines: Array = lines_of(w, m)
@@ -332,7 +343,7 @@ func debug(g, offset: Vector2):
 	g.text_at("tps: %d  ent: %d  phase: %s" % [20 if w.lag <= 0 else 0, w.mobs.size(), w.phase_name()], Vector2(12, 62), 8, Color(.4, 1, .5, .55))
 	if w.invert > 0:g.text_at("input: INVERTED %.1f" % w.invert, Vector2(12, 86), 8, Color(1, .3, .35, .9))
 	if not w.hijack.is_empty():g.text_at("double: %.1f" % w.hijack.left, Vector2(12, 86), 8, Color(.3, 1, .9, .9))
-	if w.hint.is_empty():return
+	if w.hint.is_empty() or w.bosses.active():return
 	var left: float = maxf(0, w.hint.left)
 	var blink: bool = int(w.clock * 8) % 2 == 0
 	g.text_at("next: %s in %.1f" % [names.get(w.hint.id, w.hint.id), left], Vector2(12, 74), 8, Color(1, .85, .3, 1.0 if blink else .6))
@@ -421,3 +432,100 @@ func effect(g, e: Dictionary, offset: Vector2) -> bool:
 				g.draw_rect(Rect2((p.lerp(to, t) - Vector2(1, 14 + sin(t * PI) * 10)).floor(), Vector2(2, 2)), Color(.3, .9, 1, (1 - k) * (.4 + .6 * t)))
 		_:return false
 	return true
+
+# ------------------------------------------------------------------ mini-bosses
+
+func terminal(g, m: Dictionary, p: Vector2, tone: float):
+	var w = g.world
+	var screen := Rect2((p - Vector2(66, 66)).floor(), Vector2(132, 54))
+	g.oval(p, Vector2(30, 6), Color(0, 0, 0, .3))
+	g.draw_rect(Rect2(p - Vector2(6, 12), Vector2(12, 12)), Color(.22, .22, .25))
+	g.draw_rect(Rect2(p - Vector2(18, 4), Vector2(36, 5)), Color(.28, .28, .32))
+	g.draw_rect(screen.grow(4), Color(.75, .74, .7) if m.flash <= 0 else Color.WHITE)
+	g.draw_rect(screen.grow(4), Color(.3, .3, .3), false, 1)
+	g.draw_rect(screen, Color(.01, .04, .02))
+	var lines: Array = w.bosses.screen
+	for i in range(lines.size()):
+		var l: Dictionary = lines[i]
+		var shown: int = mini(l.text.length(), int(l.age * 30))
+		g.draw_string(g.font, screen.position + Vector2(3, 10 + i * 9), l.text.substr(0, shown), HORIZONTAL_ALIGNMENT_LEFT, screen.size.x - 6, 8, Color(.35, 1, .45, .95))
+	if int(w.clock * 2) % 2 == 0:g.draw_rect(Rect2(screen.position + Vector2(3, 3 + lines.size() * 9), Vector2(5, 7)), Color(.35, 1, .45))
+	for y in range(int(screen.position.y), int(screen.end.y), 2):g.draw_line(Vector2(screen.position.x, y), Vector2(screen.end.x, y), Color(0, 0, 0, .25))
+	var locked: bool = m.get("locked", false)
+	g.draw_rect(screen.grow(6), Color(.35, 1, .45, .6) if locked else Color(1, .3, .3, .5 + .4 * sin(w.clock * 8)), false, 1)
+	g.draw_string(g.font, screen.position + Vector2(0, -9), "[locked]" if locked else "[open]", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.35, 1, .45) if locked else Color(1, .35, .35))
+
+func clone(g, m: Dictionary, p: Vector2):
+	var w = g.world
+	var j: Vector2 = Vector2(round((h(int(w.clock * 14) + m.id, 70) - .5) * 3), 0)
+	g.oval(p, Vector2(8, 3), Color(0, 0, 0, .3))
+	if m.get("build", {}).has("barrier"):
+		for k in range(mini(4, int(m.build.barrier / 2) + 1)):
+			var q: Vector2 = p + Vector2.from_angle(m.orbit + k * TAU / 3) * 30.0
+			g.draw_texture_rect(g.textures.icon_barrier, Rect2((q - Vector2(5, 14)).floor(), Vector2(10, 10)), false, Color(1, 1, 1, .6))
+	g.draw_actor("steve", p + j + Vector2(1, 0), m.dir, w.clock, m.moving, Color(.1, 1, 1, .5), "walk", 1.0, m.visual)
+	g.draw_actor("steve", p + j - Vector2(1, 0), m.dir, w.clock, m.moving, Color(1, .1, .4, .5), "walk", 1.0, m.visual)
+	g.draw_actor("steve", p + j, m.dir, w.clock, m.moving, Color(1.7, 1.7, 1.7) if m.flash > 0 else Color(.78, .88, 1), "walk", 1.0, m.visual)
+	var name: String = "Steve (1)"
+	var wd: float = width(g, name)
+	g.draw_rect(Rect2((p + Vector2(-wd / 2 - 2, -44)).floor(), Vector2(wd + 4, 10)), Color(0, 0, 0, .45))
+	g.draw_string(g.font, (p + Vector2(-wd / 2, -36)).floor(), name, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, 1, 1, .9))
+	g.draw_rect(Rect2(p + Vector2(-14, -32), Vector2(28 * clampf(m.hp / m.max_hp, 0, 1), 2)), Color(.95, .3, .25))
+	if m.get("haste", 0.0) > 0:
+		for k in range(4):g.draw_rect(Rect2((p + Vector2(-8 + k * 5, -4 - fposmod(w.clock * 30 + k * 5, 14))).floor(), Vector2(1, 3)), Color(.5, .8, 1, .7))
+
+func loop_card(g, m: Dictionary, p: Vector2, tone: float):
+	var w = g.world
+	var lp: Dictionary = w.bosses.loop
+	var i: int = lp.get("i", 0)
+	var k: float = clampf(float(lp.get("age", 0.0)) / float(w.five.bosses.loop.iteration), 0, 1)
+	var lines: Array = [[["while ", FLOW], ["(", TEXT], ["true", NUM], [") {", TEXT]], [["  i = ", TEXT], [str(i), NUM], [";", TEXT]], [["  world.rollback(", TEXT], ["10", NUM], [");", TEXT]], [["}", TEXT]]]
+	var wd := 0.0
+	for line in lines:
+		var t := 0.0
+		for part in line:t += width(g, part[0])
+		wd = maxf(wd, t)
+	var size := Vector2(wd + 16, lines.size() * 11 + 10)
+	var origin: Vector2 = (p - Vector2(size.x / 2, size.y + 14 + round(sin(w.clock * 2) * 2))).floor()
+	g.oval(p, Vector2(30, 6), Color(0, 0, 0, .3))
+	g.draw_arc(p - Vector2(0, size.y / 2 + 14), size.x * .7, -PI / 2, -PI / 2 + TAU * k, 40, Color(.95, .7, .3, .8), 2)
+	g.draw_arc(p - Vector2(0, size.y / 2 + 14), size.x * .7, 0, TAU, 40, Color(.95, .7, .3, .15), 1)
+	g.draw_rect(Rect2(origin, size), Color(1, 1, 1) if m.flash > 0 and g.settings.flashes else CARD)
+	g.draw_rect(Rect2(origin, size), Color(.95, .7, .3), false, 1)
+	g.draw_rect(Rect2(origin, Vector2(3, size.y)), Color(.95, .7, .3))
+	for li in range(lines.size()):
+		var x: float = origin.x + 8
+		for part in lines[li]:
+			g.draw_string(g.font, Vector2(x, origin.y + 13 + li * 11), part[0], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, part[1])
+			x += width(g, part[0])
+	var need: float = m.max_hp * float(w.five.bosses.loop.break_share)
+	var done: float = clampf(float(lp.get("dealt", 0.0)) / need, 0, 1)
+	g.draw_rect(Rect2(origin + Vector2(0, size.y + 3), Vector2(size.x, 3)), Color(0, 0, 0, .5))
+	g.draw_rect(Rect2(origin + Vector2(0, size.y + 3), Vector2(size.x * done, 3)), Color(.35, 1, .45) if done >= 1 else Color(.95, .7, .3))
+
+func ghost(g, gh: Dictionary, offset: Vector2):
+	var w = g.world
+	var p: Vector2 = gh.p + offset
+	g.draw_actor("steve", p, gh.dir, w.clock, true, Color(.6, .8, 1, .38), "walk", 1.0, gh.visual)
+	g.draw_string(g.font, (p + Vector2(-8, -34)).floor(), "i-" + str(w.bosses.loop.get("i", 0) - gh.n + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.6, .8, 1, .7))
+
+func rewind(g, k: float):
+	for i in range(9):
+		var y: float = h(i + int(g.world.clock * 20), 80) * 360
+		g.draw_rect(Rect2(0, y, 640, 2 + h(i, 81) * 6), Color(.95, .7, .3, .35 * k / .5))
+	g.centered("<<", 170, 32, Color(1, 1, 1, k / .5), true)
+
+func boss_bar(g):
+	var w = g.world
+	var target = null
+	var title := ""
+	if not w.bosses.terminal.is_empty():
+		target = w.mob_by_id(w.bosses.terminal.id);title = "Терминал"
+		var c = w.mob_by_id(w.bosses.terminal.clone) if w.bosses.terminal.clone >= 0 else null
+		if c != null:target = c;title = "Steve (1)"
+	elif not w.bosses.loop.is_empty():
+		target = w.mob_by_id(w.bosses.loop.id);title = "Бесконечный цикл"
+	if target == null:return
+	g.centered(title, 41, 8, Color.WHITE, true)
+	g.draw_rect(Rect2(211, 46, 218, 5), Color(.15, .15, .2))
+	g.draw_rect(Rect2(212, 47, 216 * clampf(target.hp / target.max_hp, 0, 1), 3), Color(.35, 1, .45) if title == "Бесконечный цикл" else Color(.95, .35, .3))

@@ -2,7 +2,8 @@ extends "res://scripts/arsenal_world.gd"
 ## Chapter V: the game's own code space. White, then dark, then flickering.
 ## Enemies are pieces of code with the behaviour of what they are; the world
 ## itself lags, deletes its floor, throws items and steals the controls.
-const CODE_KINDS := ["token","for_loop","while_loop","condition","if_else","function","arg","recursion","try_catch","null_ref","array","hijack"]
+const CODE_KINDS := ["token","for_loop","while_loop","condition","if_else","function","arg","recursion","try_catch","null_ref","array","hijack","terminal","clone","loop_boss"]
+const BOSS_KINDS := ["terminal","clone","loop_boss"]
 const TOKENS := ["int","void","float","final","static","return;","break;","new","this",";","==","!=","&&","{ }","i++","0x1F","NaN","true","long","char"]
 var five: Dictionary = {}
 ## Enemy projectiles (glyphs and living items) and delayed ground strikes.
@@ -23,6 +24,7 @@ var hijack: Dictionary = {}
 var double_pending := false
 var crate_timer := 75.0
 var arsenal = preload("res://scripts/chapter_five_arsenal.gd").new()
+var bosses = preload("res://scripts/chapter_five_bosses.gd").new()
 
 func chapter_number() -> int:
 	return 5
@@ -31,6 +33,7 @@ func reset(seed_value: int = 0):
 	shots.clear();zones.clear();deleted.clear();shards.clear();pending.clear()
 	void_tick = 0.0;lag = 0.0;lag_count = 0;hint = {};invert = 0.0;hijack = {};double_pending = false;crate_timer = 75.0
 	arsenal.reset()
+	bosses.reset()
 	super.reset(seed_value)
 	five = db.data.chapter_five
 	for id in arsenal.OWN:animation.data.weapons[id] = {"windup":.2,"attack":.12,"recover":.36}
@@ -94,6 +97,16 @@ func spawn(kind: String, at = null) -> bool:
 		"array":m.timer = 1.0
 	return true
 
+## Plain spawn for the bosses module (no chapter V extras).
+func super_spawn(kind: String, at) -> bool:
+	return super.spawn(kind, at)
+
+func notes_add(p: Vector2, text: String):
+	arsenal.notes.append({"p":p,"text":text,"age":0.0})
+
+func spawn_wave(dt: float):
+	super.spawn_wave(dt * (float(five.bosses.spawn_scale) if bosses.active() else 1.0))
+
 func mob_by_id(id: int):
 	for m in mobs:
 		if m.id == id and m.hp > 0:return m
@@ -103,6 +116,9 @@ func mob_by_id(id: int):
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if m.hp <= 0:return
+	if m.kind in BOSS_KINDS:
+		if bosses.intercept(self, m, amount):return
+		if m.kind != "clone":push = Vector2.ZERO
 	if m.kind == "while_loop" and not m.broken:
 		m.flash = 0.05
 		return
@@ -143,6 +159,7 @@ func resolve_deaths():
 			"recursion":
 				if m.depth > 0:
 					for side in [-1, 1]:born.append({"p":m.p + Vector2(side * 9, 0),"depth":m.depth - 1})
+			"terminal","loop_boss":bosses.boss_died(self, m)
 			"hijack":
 				if not hijack.is_empty():
 					hijack = {};invert = 0.0
@@ -235,6 +252,9 @@ func move_mobs(dt: float):
 					m.index = (m.index + 1) % 5
 					var cell: Vector2 = m.p + Vector2((m.index - 2) * 14.0, -10)
 					shoot(cell, cell.direction_to(player) * 120.0, 2.0, str(m.index))
+			"terminal","loop_boss","clone":
+				m.dir = Vector2.DOWN if m.kind != "clone" else m.dir
+				continue
 			"hijack":
 				contact = false
 				m.p = (hijack.anchor * 2.0 - player).clamp(Vector2(40, 40), Vector2(SIZE - 40, SIZE - 40))
@@ -307,6 +327,8 @@ func schedule(id: String, at: Vector2):
 
 func update_world(dt: float):
 	for id in ["lag","items","delete","hijack"]:
+		if bosses.active():
+			next_event[id] = maxf(float(next_event[id]), time + 4.0);continue
 		if time < float(next_event[id]) or not pending.is_empty():continue
 		if id == "hijack" and (not hijack.is_empty() or invert > 0):
 			next_event[id] = time + 5.0;continue
@@ -334,7 +356,7 @@ func update_world(dt: float):
 			if d.age < float(five.world.delete.warn):continue
 			if d.rect.has_point(player):damage_player(float(five.world.delete.damage) * void_factor())
 			for m in mobs:
-				if m.hp > 0 and m.kind not in ["hijack","condition"] and not (m.kind == "while_loop" and not m.broken) and d.rect.has_point(m.p):
+				if m.hp > 0 and m.kind not in ["hijack","condition","terminal","loop_boss","clone"] and not (m.kind == "while_loop" and not m.broken) and d.rect.has_point(m.p):
 					m.hp -= float(five.world.delete.mob_damage);m.flash = 0.08
 	if invert > 0 and hijack.is_empty():
 		invert -= dt
@@ -389,7 +411,7 @@ func begin_double():
 func rubber_band():
 	var skip: float = five.world.lag.skip
 	for m in mobs:
-		if m.hp <= 0 or m.kind in ["condition","hijack","array"]:continue
+		if m.hp <= 0 or m.kind in ["condition","hijack","array","terminal","loop_boss","clone"]:continue
 		m.p = move_actor(m.p, m.p.direction_to(player) * minf(m.speed * skip, maxf(0, m.p.distance_to(player) - 26)), m.radius)
 	for s in shots:
 		if s.delay <= 0:s.p += s.v * skip * 0.35
@@ -457,8 +479,9 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	var before_move: Dictionary = {}
 	for m in mobs:before_move[m.id] = m.p
 	move_mobs(dt)
+	bosses.step(self, dt)
 	for m in mobs:
-		if m.get("slow", 0.0) > 0 and before_move.has(m.id) and m.kind not in ["condition","hijack"]:
+		if m.get("slow", 0.0) > 0 and before_move.has(m.id) and m.kind not in ["condition","hijack","terminal","loop_boss"]:
 			m.p = before_move[m.id].lerp(m.p, float(arsenal.rules(self).stick_slow))
 			m.slow = maxf(0, m.slow - dt)
 	update_shots(dt)
