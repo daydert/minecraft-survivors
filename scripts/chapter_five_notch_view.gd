@@ -235,23 +235,51 @@ static func fighter(g):
 	var v = view(g);v.ensure(g, "fighter", Vector2i(640, 360));v.sync_fighter(fi)
 	var shake: Vector2 = Vector2(round(sin(w.clock * 70) * 3), round(cos(w.clock * 61) * 2)) * (n.shake3d / .4) if g.settings.shake else Vector2.ZERO
 	g.draw_texture_rect(v.viewport.get_texture(), Rect2(shake, Vector2(640, 360)), false)
-	var s: Dictionary = fi.steve();var nt: Dictionary = fi.notch()
-	bar(g, Rect2(24, 22, 260, 12), s.hp / s.max, false)
-	bar(g, Rect2(356, 22, 260, 12), nt.hp / nt.max, true)
-	g.text_at("STEVE", Vector2(24, 50), 16, Color.WHITE, true)
-	g.text_at("NOTCH", Vector2(616 - g.bold.get_string_size("NOTCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x, 50), 16, Color.WHITE, true)
-	g.centered("99", 34, 16, YELLOW, true)
-	g.draw_rect(Rect2(24, 62, 60, 3), Color(0, 0, 0, .6))
-	g.draw_rect(Rect2(24, 62, 60 * (1 - s.cool / 2.4), 3), Color(1, .3, .2))
-	g.text_at("Q", Vector2(88, 67), 8, Color(1, .5, .4))
-	match fi.state:
-		"intro":
-			g.centered("РАУНД 1" if fi.age < 1.3 else "В БОЙ!", 170, 32, Color(1, .9, .3, 1.0), true)
-		"ko","done":
-			if fi.age > .3:g.centered("K.O.", 170, 32, Color(1, .25, .2), true)
-	g.text_at("A/D — ходьба · W — прыжок · S — блок · Пробел — удар · E — пинок · Q — снаряд", Vector2(30, 350), 8, Color(1, 1, 1, .45))
+	fight_hud(g, fi, v)
+	g.text_at("←/→ ход · ↑ прыжок · назад — блок · Пробел удар (+↑/↓) · E пинок · Q+направление — приём · F бросок · R супер", Vector2(14, 352), 8, Color(1, 1, 1, .4))
 	subtitles(g, n, 300.0)
 	retry(g, n)
+
+static func fight_hud(g, fi, v):
+	var s: Dictionary = fi.steve();var nt: Dictionary = fi.notch()
+	var skins := ["ch5_skin_steve", "ch5_skin_notch"]
+	for i in range(2):
+		var f: Dictionary = fi.fighters[i]
+		var right: bool = i == 1
+		var face := Rect2(8 if not right else 596, 10, 36, 36)
+		g.draw_rect(face.grow(2), Color(0, 0, 0, .8));g.draw_texture_rect_region(v.tex(skins[i]), face, Rect2(8, 8, 8, 8), Color(1, .6, .6) if f.flash > 0 else Color.WHITE)
+		g.draw_rect(face.grow(2), YELLOW, false, 1)
+		bar(g, Rect2(52 if not right else 356, 16, 232, 14), f.hp / f.max, right)
+		var name: String = "STEVE" if not right else "NOTCH"
+		var nx: float = 52.0 if not right else 588.0 - g.bold.get_string_size(name, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+		g.text_at(name, Vector2(nx, 50), 16, Color.WHITE, true)
+		if fi.mode == "fight":
+			for k in range(2):
+				var mx: float = (238 + k * 14) if not right else (390 - k * 14)
+				var won: bool = fi.wins[i] > k
+				g.draw_colored_polygon(PackedVector2Array([Vector2(mx, 38), Vector2(mx + 5, 43), Vector2(mx, 48), Vector2(mx - 5, 43)]), Color(.4, 1, .9) if won else Color(.15, .15, .2))
+			var m := Rect2(52 if not right else 444, 332, 144, 6)
+			g.draw_rect(m.grow(1), Color(0, 0, 0, .8));g.draw_rect(Rect2(m.position + Vector2(m.size.x * (1 - f.meter / 100.0) if right else 0.0, 0), Vector2(m.size.x * f.meter / 100.0, m.size.y)), Color(.3, .7, 1) if f.meter < 100 else Color(1, .9, .3, .6 + .4 * sin(fi.age * 10)))
+			g.text_at("СУПЕР" if f.meter >= 100 else "", Vector2(m.position.x, m.position.y - 3), 8, YELLOW, true)
+		if f.combo >= 2 and f.combo_t > 0:
+			var cx: float = 60.0 if not right else 500.0
+			g.draw_string(g.bold, Vector2(cx + 2, 112), "%d УДАРА" % f.combo if f.combo < 5 else "%d УДАРОВ" % f.combo, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0, 0, 0, .8))
+			g.draw_string(g.bold, Vector2(cx, 110), "%d УДАРА" % f.combo if f.combo < 5 else "%d УДАРОВ" % f.combo, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(1, .8, .2) if not right else Color(.4, 1, .9))
+	if fi.mode == "fight":
+		g.draw_rect(Rect2(298, 12, 44, 26), Color(0, 0, 0, .7))
+		g.centered(str(int(ceil(fi.clock))), 32, 16, Color(1, .3, .3) if fi.clock < 10 else Color.WHITE, true)
+	if s.cool > 0 and fi.mode == "fight":
+		g.draw_rect(Rect2(52, 62, 60, 3), Color(0, 0, 0, .6));g.draw_rect(Rect2(52, 62, 60 * (1 - minf(1.0, s.cool / 4.0)), 3), Color(1, .4, .3))
+	if fi.announce_age < 2.2 and not fi.announce.is_empty():
+		var k: float = clampf(fi.announce_age / .15, 0, 1) * clampf((2.2 - fi.announce_age) / .4, 0, 1)
+		var size: int = 32
+		var col: Color = Color(1, .25, .2, k) if fi.announce in ["K.O.", "ДОБЕЙ ЕГО!", "ФАТАЛИТИ"] else Color(1, .88, .3, k)
+		var wd: float = g.bold.get_string_size(fi.announce, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+		var pos := Vector2((640 - wd) / 2, 176 + (1 - clampf(fi.announce_age / .15, 0, 1)) * 20)
+		for o in [Vector2(-2, 0), Vector2(2, 0), Vector2(0, -2), Vector2(0, 2), Vector2(3, 3)]:
+			g.draw_string(g.bold, pos + o, fi.announce, HORIZONTAL_ALIGNMENT_LEFT, -1, size, Color(0, 0, 0, k))
+		g.draw_string(g.bold, pos, fi.announce, HORIZONTAL_ALIGNMENT_LEFT, -1, size, col)
+	if fi.hitstop > .08 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, .08))
 
 static func bar(g, r: Rect2, k: float, mirror: bool):
 	g.draw_rect(r.grow(2), Color(0, 0, 0, .8))
@@ -416,14 +444,9 @@ static func fists(g):
 	var v = view(g);v.ensure(g, "fists", Vector2i(640, 360));v.sync_fighter(fi)
 	var shake: Vector2 = Vector2(round(sin(w.clock * 70) * 3), round(cos(w.clock * 61) * 2)) * (n.shake3d / .4) if g.settings.shake else Vector2.ZERO
 	g.draw_texture_rect(v.viewport.get_texture(), Rect2(shake, Vector2(640, 360)), false)
-	var s: Dictionary = fi.steve();var nt: Dictionary = fi.notch()
-	bar(g, Rect2(24, 22, 260, 12), s.hp / s.max, false)
-	bar(g, Rect2(356, 22, 260, 12), nt.hp / nt.max, true)
-	g.text_at("STEVE", Vector2(24, 50), 16, Color.WHITE, true)
-	g.text_at("NOTCH", Vector2(616 - g.bold.get_string_size("NOTCH", HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x, 50), 16, Color.WHITE, true)
-	if fi.state == "intro":g.centered("БЕЗ ПРАВИЛ", 170, 32, Color(1, .4, .3), true)
-	if fi.state == "finisher" and fi.age > .6:g.centered("Пробел — провод", 170, 16, Color(1, 1, 1, .6 + .4 * sin(w.clock * 8)), true)
-	if fi.state == "fight":g.text_at("E — подобрать строку кода · с ней удар сильнее", Vector2(30, 350), 8, Color(1, 1, 1, .45))
+	fight_hud(g, fi, v)
+	if fi.state == "finisher" and fi.age > .6:g.centered("Пробел — провод", 214, 16, Color(1, 1, 1, .6 + .4 * sin(w.clock * 8)), true)
+	if fi.state == "fight":g.text_at("F — подобрать строку кода · с ней удар сильнее", Vector2(30, 350), 8, Color(1, 1, 1, .45))
 	if fi.state in ["wire", "done"] and fi.age > 1.6:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((fi.age - 1.6) / 1.0, 0, 1)))
 	subtitles(g, n, 300.0)
 	retry(g, n)

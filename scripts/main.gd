@@ -250,7 +250,7 @@ func _input(event):
 		var notch_action := ""
 		if event is InputEventKey and event.pressed and not event.echo:
 			var code: int=event.physical_keycode if event.physical_keycode!=0 else event.keycode
-			notch_action={KEY_A:"left",KEY_LEFT:"left",KEY_D:"right",KEY_RIGHT:"right",KEY_W:"up",KEY_UP:"up",KEY_S:"down",KEY_DOWN:"down",KEY_SPACE:"accept",KEY_ENTER:"accept",KEY_Z:"accept",KEY_J:"accept",KEY_E:"kick",KEY_K:"kick",KEY_Q:"special",KEY_L:"special",KEY_1:"1",KEY_2:"2",KEY_3:"3",KEY_4:"4"}.get(code,"")
+			notch_action={KEY_A:"left",KEY_LEFT:"left",KEY_D:"right",KEY_RIGHT:"right",KEY_W:"up",KEY_UP:"up",KEY_S:"down",KEY_DOWN:"down",KEY_SPACE:"accept",KEY_ENTER:"accept",KEY_Z:"accept",KEY_J:"accept",KEY_E:"kick",KEY_K:"kick",KEY_Q:"special",KEY_L:"special",KEY_F:"grab",KEY_R:"super",KEY_1:"1",KEY_2:"2",KEY_3:"3",KEY_4:"4"}.get(code,"")
 			if code==KEY_5:notch_action="5"
 			elif code==KEY_6:notch_action="6"
 			elif code==KEY_7:notch_action="7"
@@ -258,7 +258,7 @@ func _input(event):
 			elif code==KEY_9:notch_action="9"
 			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won","to_quake","quake_won","to_code","chair","credits"]:world.notch.skip();return
 			if world.notch.phase in ["code","erase","fists"] and not notch_action.is_empty():world.notch.press(world,notch_action);return
-			if world.notch.phase=="fighter" and notch_action in ["accept","kick","special"]:world.notch.press(world,notch_action);return
+			if world.notch.phase=="fighter" and notch_action in ["accept","kick","special","grab","super"]:world.notch.press(world,notch_action);return
 			if world.notch.phase=="quake":return
 			if not notch_action.is_empty() and world.notch.phase in ["ut","lanes"]:
 				if world.notch.phase=="ut" and world.notch.ut_state=="wave" and notch_action in ["left","right","up","down"]:pass

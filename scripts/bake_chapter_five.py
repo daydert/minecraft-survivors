@@ -214,7 +214,7 @@ def notch():
 
 QUAKE = ["polished_deepslate", "deepslate_tiles", "cracked_deepslate_tiles", "cut_copper", "exposed_cut_copper", "copper_grate",
          "iron_block", "polished_blackstone_bricks", "gilded_blackstone", "lava_still", "magma", "redstone_block", "chiseled_copper",
-         "dark_oak_planks", "glowstone", "crying_obsidian"]
+         "dark_oak_planks", "glowstone", "crying_obsidian", "cobblestone"]
 
 def textures3d():
     """Skins and block faces for the 3D fights: Steve, digital Notch, and a
@@ -226,6 +226,8 @@ def textures3d():
     names = ["ch5_skin_steve", "ch5_skin_notch"]
     for n in QUAKE:
         imp.save(frame0(imp.tex("block/" + n)), "ch5q_" + n, ["block/" + n]);names.append("ch5q_" + n)
+    tnt = Image.new("RGBA", (16, 16));tnt.paste(frame0(imp.tex("block/tnt_side")))
+    imp.save(tnt, "ch5q_tnt", ["block/tnt_side"]);names.append("ch5q_tnt")
     for n in ["golden_apple", "iron_chestplate", "firework_rocket", "iron_sword"]:
         imp.save(imp.tex("item/" + n), "ch5q_item_" + n, ["item/" + n]);names.append("ch5q_item_" + n)
     (ROOT / "data/chapter_five_3d.json").write_text(json.dumps({"textures": names}, indent=1) + "\n")

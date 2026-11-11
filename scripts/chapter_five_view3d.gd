@@ -122,46 +122,70 @@ func pose(r: Dictionary, p: Dictionary):
 # ------------------------------------------------------------------ fighter
 
 func build_fighter():
-	var env := WorldEnvironment.new();env.environment = Environment.new()
-	env.environment.background_mode = Environment.BG_COLOR;env.environment.background_color = Color(.02, .025, .05)
-	env.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;env.environment.ambient_light_color = Color(.5, .55, .7);env.environment.ambient_light_energy = .9
-	scene.add_child(env)
-	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.7, .5, 0);sun.light_energy = 1.1;scene.add_child(sun)
-	var rim := OmniLight3D.new();rim.position = Vector3(0, 3, -2);rim.omni_range = 14;rim.light_color = Color(.3, 1, .9);rim.light_energy = 1.4;scene.add_child(rim)
-	var floor := MeshInstance3D.new();var fb := BoxMesh.new();fb.size = Vector3(30, 1, 8);floor.mesh = fb;floor.position = Vector3(0, -.5, 0)
+	var env := WorldEnvironment.new();env.environment = Environment.new();var e: Environment = env.environment
+	e.background_mode = Environment.BG_COLOR;e.background_color = Color(.015, .02, .04)
+	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;e.ambient_light_color = Color(.45, .5, .65);e.ambient_light_energy = .7
+	e.fog_enabled = true;e.fog_light_color = Color(.03, .08, .1);e.fog_density = .02
+	scene.add_child(env);nodes.env = e
+	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.75, .45, 0);sun.light_energy = 1.0;sun.shadow_enabled = true;scene.add_child(sun)
+	var rim := OmniLight3D.new();rim.position = Vector3(0, 3.5, -2.5);rim.omni_range = 16;rim.light_color = Color(.3, 1, .85);rim.light_energy = 1.6;scene.add_child(rim);nodes.rim = rim
+	var floor := MeshInstance3D.new();var fb := BoxMesh.new();fb.size = Vector3(30, 1, 9);floor.mesh = fb;floor.position = Vector3(0, -.5, 0)
 	floor.material_override = material("ch5q_polished_deepslate", true);scene.add_child(floor)
-	for i in range(13):
-		var line := MeshInstance3D.new();var lb := BoxMesh.new();lb.size = Vector3(.04, .02, 8);line.mesh = lb
-		line.position = Vector3(-6 + i, .01, 0);line.material_override = flat(Color(.3, 1, .9), 1.5);scene.add_child(line)
+	var trim := MeshInstance3D.new();var tb := BoxMesh.new();tb.size = Vector3(30, .3, .6);trim.mesh = tb;trim.position = Vector3(0, .05, 2.2);trim.material_override = material("ch5q_gilded_blackstone", true);scene.add_child(trim)
+	for i in range(14):
+		var line := MeshInstance3D.new();var lb := BoxMesh.new();lb.size = Vector3(.04, .02, 4);line.mesh = lb
+		line.position = Vector3(-6.5 + i, .01, 0);line.material_override = flat(Color(.3, 1, .9), 1.5);scene.add_child(line)
+	for k in [-1, 1]:
+		for j in range(3):
+			var pillar := MeshInstance3D.new();var pb := BoxMesh.new();pb.size = Vector3(1, 6, 1);pillar.mesh = pb
+			pillar.position = Vector3(k * (8.5 + j * 3.5), 3, -2 - j * 1.6);pillar.material_override = material("ch5q_polished_blackstone_bricks", true);scene.add_child(pillar)
+			var rune := MeshInstance3D.new();var rb := BoxMesh.new();rb.size = Vector3(1.02, .2, 1.02);rune.mesh = rb;rune.position = pillar.position + Vector3(0, 1.6, 0)
+			rune.material_override = flat(Color(.3, 1, .8), 3.0);scene.add_child(rune)
+	var wall := MeshInstance3D.new();var wb := BoxMesh.new();wb.size = Vector3(26, 9, .5);wall.mesh = wb;wall.position = Vector3(0, 4.5, -7);wall.material_override = material("ch5q_deepslate_tiles", true);scene.add_child(wall)
+	for k in range(5):
+		var screen := MeshInstance3D.new();var sb := BoxMesh.new();sb.size = Vector3(3.2, 1.9, .1);screen.mesh = sb
+		screen.position = Vector3(-8 + k * 4, 4.6 + (k % 2) * .6, -6.7);screen.material_override = flat(Color(.02, .22, .1), 1.4);scene.add_child(screen)
 	var code: Array = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_code.json")).lines
 	for i in range(16):
 		var l := Label3D.new();l.text = code[(i * 5) % code.size()];l.font_size = 40;l.pixel_size = .009;l.outline_size = 0
-		l.modulate = Color(.3, 1, .6, .35 + (i % 3) * .1);l.position = Vector3(-9 + (i % 2) * 3.5, .4 + i * .42, -4 - (i % 3));l.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		l.modulate = Color(.3, 1, .6, .16 + (i % 3) * .06);l.position = Vector3(-9 + (i % 2) * 3.5, 1.2 + (i % 8) * .42, -6.3);l.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 		l.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;scene.add_child(l);nodes["code%d" % i] = l
 	var cam := Camera3D.new();cam.fov = 40;scene.add_child(cam);nodes.cam = cam
 	rigs.steve = make_rig("ch5_skin_steve");rigs.notch = make_rig("ch5_skin_notch")
+	nodes.super_sword = sword_in(rigs.steve.ra, .03)
 
 func fighter_pose(f: Dictionary, fi) -> Dictionary:
 	var p: Dictionary = {}
 	var swing: float = sin(f.walk * 3.2)
-	var guard := {"ra":Vector3(-.9, 0, -.2), "la":Vector3(-.9, 0, .2)}
-	if absf(f.vx) > .3 and f.y <= 0:
-		p = {"rl":Vector3(swing * .8, 0, 0), "ll":Vector3(-swing * .8, 0, 0), "ra":Vector3(-.7 - swing * .3, 0, -.2), "la":Vector3(-.7 + swing * .3, 0, .2)}
+	if absf(f.vx) > .3 and f.y <= 0 and f.move.is_empty():
+		p = {"rl":Vector3(swing * .8, 0, 0), "ll":Vector3(-swing * .8, 0, 0), "ra":Vector3(-.8 - swing * .3, 0, -.25), "la":Vector3(-.8 + swing * .3, 0, .25), "torso":Vector3(.12, 0, 0)}
 	else:
-		p = guard.duplicate();p.torso = Vector3(.05, 0, 0)
-		p.head = Vector3(sin(fi.age * 2.0) * .03, 0, 0)
-	if f.y > 0:p.rl = Vector3(-.9, 0, 0);p.ll = Vector3(-.4, 0, 0)
+		var breathe: float = sin(fi.age * 3.0 + (0.0 if f.who == "steve" else 1.5)) * .04
+		p = {"ra":Vector3(-1.1, .2, -.35), "la":Vector3(-.8, -.2, .3), "torso":Vector3(.12 + breathe, .25, 0), "head":Vector3(-.05, -.2, 0), "rl":Vector3(-.25, 0, .05), "ll":Vector3(.2, 0, -.05), "drop":-.04 + breathe * .5}
+	if f.y > 0 and f.move.is_empty():p.rl = Vector3(-1.0, 0, 0);p.ll = Vector3(-.5, 0, 0);p.ra = Vector3(-2.2, 0, -.3);p.la = Vector3(-.6, 0, .3)
+	if f.get("crouch", false):p.drop = -.35;p.rl = Vector3(-1.2, 0, 0);p.ll = Vector3(-1.2, 0, 0);p.torso = Vector3(.4, 0, 0)
 	var ph: String = fi.phase_of(f)
-	var k: float = 1.0 if ph == "active" else (.5 if ph == "start" else .3)
+	var k: float = 1.0 if ph == "active" else (.45 if ph == "start" else .25)
 	match f.move:
-		"punch":p.ra = Vector3(-1.57 * k, 0, 0);p.torso = Vector3(0, -.35 * k, 0)
-		"punch3":p.la = Vector3(-1.57 * k, 0, 0);p.torso = Vector3(0, .4 * k, 0)
-		"kick":p.rl = Vector3(-1.5 * k, 0, 0);p.torso = Vector3(.25 * k, 0, 0);p.ra = Vector3(.3, 0, -.6);p.la = Vector3(.3, 0, .6)
-		"dive":p.rl = Vector3(-1.2, 0, 0);p.ll = Vector3(.3, 0, 0);p.torso = Vector3(.4, 0, 0)
-		"uppercut":p.ra = Vector3(-2.9 * k, 0, 0);p.torso = Vector3(-.3 * k, 0, 0)
-		"cast":p.ra = Vector3(-1.5, 0, -.3);p.la = Vector3(-1.5, 0, .3)
-	if f.block:p.ra = Vector3(-1.9, 0, .5);p.la = Vector3(-1.9, 0, -.5);p.drop = -.08
-	if f.stun > 0:p.torso = Vector3(-.4, 0, 0);p.head = Vector3(-.4, 0, 0)
+		"jab":p.ra = Vector3(-1.57 * k - .2, 0, 0);p.torso = Vector3(.1, -.3 * k, 0)
+		"jab2":p.la = Vector3(-1.57 * k - .2, 0, 0);p.torso = Vector3(.1, .3 * k, 0)
+		"hook":p.ra = Vector3(-1.3, .9 * k, -.9 * k);p.torso = Vector3(.15, -.7 * k, 0)
+		"kick":p.rl = Vector3(-1.65 * k, 0, 0);p.torso = Vector3(.35 * k, 0, 0);p.ra = Vector3(.4, 0, -.7);p.la = Vector3(.4, 0, .7)
+		"sweep":p.drop = -.5;p.rl = Vector3(-1.5, 0, -.3 * k);p.ll = Vector3(-1.6, 0, 0);p.torso = Vector3(.5, -.8 * k, 0)
+		"launcher", "uppercut":p.ra = Vector3(-3.0 * k, 0, -.2);p.torso = Vector3(-.35 * k, 0, 0);p.rl = Vector3(-.4, 0, 0)
+		"air":p.rl = Vector3(-1.3, 0, 0);p.ll = Vector3(.3, 0, 0);p.torso = Vector3(.45, 0, 0)
+		"spin":p.rl = Vector3(-1.6, 0, 0);p.torso = Vector3(.2, f.t * 20.0, 0)
+		"tnt", "code":p.ra = Vector3(-2.6 + 1.8 * k, 0, -.2);p.torso = Vector3(.2 * k, -.3, 0)
+		"wall":p.ra = Vector3(-1.4, 0, -.3);p.la = Vector3(-1.4, 0, .3);p.drop = -.15
+		"pearl":p.ra = Vector3(-2.4, 0, 0)
+		"beam":p.ra = Vector3(-1.0, 0, -.2);p.la = Vector3(-1.0, 0, .2);p.torso = Vector3(.6 * k, 0, 0)
+		"throw":p.ra = Vector3(-1.5, 0, -.1);p.la = Vector3(-1.5, 0, .1);p.torso = Vector3(-.3 * k, PI * .5 * k, 0)
+		"swing":p.ra = Vector3(-2.6 + 2.0 * k, 0, -.4);p.torso = Vector3(.3 * k, -.4, 0)
+		"super":
+			if f.who == "steve":p.ra = Vector3(-1.57 + sin(f.t * 30.0) * 1.2, 0, -.3);p.torso = Vector3(.25, sin(f.t * 30.0) * .4, 0)
+			else:p.ra = Vector3(-3.0, 0, -.4);p.la = Vector3(-3.0, 0, .4);p.head = Vector3(-.5, 0, 0)
+	if f.block:p.ra = Vector3(-1.9, 0, .55);p.la = Vector3(-1.9, 0, -.55);p.drop = -.1;p.head = Vector3(.3, 0, 0)
+	if f.stun > 0 and f.move.is_empty():p.torso = Vector3(-.5, 0, .1);p.head = Vector3(-.5, 0, 0);p.ra = Vector3(.3, 0, -.9);p.la = Vector3(.3, 0, .9)
 	return p
 
 func sync_fighter(fi):
@@ -169,7 +193,9 @@ func sync_fighter(fi):
 		var r: Dictionary = rigs[f.who]
 		r.root.position = Vector3(f.x, f.y, 0)
 		r.root.rotation = Vector3(0, PI / 2 * f.face, 0)
-		if f.ko:r.root.rotation.x = -minf(1.0, fi.age * 3.0) * 1.45;r.root.position.y = f.y + .15
+		if f.ko or f.down > 0:
+			r.root.rotation.x = -1.45 * (minf(1.0, fi.age * 3.0) if f.ko else 1.0);r.root.position.y = f.y + .15
+		elif f.stun > 0 and f.y > .3:r.root.rotation.x = -.6
 		else:r.root.rotation.x = 0.0
 		var fp: Dictionary = fighter_pose(f, fi)
 		if fi.mode == "fists" and f.who == "notch" and fi.state in ["finisher", "wire", "done"]:
@@ -179,19 +205,40 @@ func sync_fighter(fi):
 		if fi.held(fi.fighters.find(f)) != null and f.move.is_empty():fp.ra = Vector3(-.4, 0, -.2)
 		pose(r, fp)
 		r.root.visible = f.glitch <= 0 or int(fi.age * 30) % 2 == 0
-		r.root.scale = Vector3.ONE * (1.0 if f.who == "steve" else 1.12)
+		var flash: bool = f.flash > 0
+		for part in ["torso", "head", "ra", "la", "rl", "ll"]:
+			for c in r[part].get_children():
+				if c is MeshInstance3D:c.transparency = 0.0
+		r.root.scale = Vector3.ONE * (1.0 if f.who == "steve" else 1.08) * (1.06 if flash else 1.0)
+	(nodes.super_sword as Node3D).visible = fi.steve().move == "super"
 	var mid: float = (fi.fighters[0].x + fi.fighters[1].x) / 2.0
 	var spread: float = absf(fi.fighters[0].x - fi.fighters[1].x)
 	var cam: Camera3D = nodes.cam
-	cam.position = Vector3(mid, 1.9, 7.5 + spread * .35)
-	cam.look_at(Vector3(mid, 1.1, 0))
+	var z: float = 7.6 + spread * .35 - fi.zoom * 2.2
+	var top: float = maxf(fi.fighters[0].y, fi.fighters[1].y)
+	cam.position = Vector3(mid, 1.9 + top * .4 - fi.zoom * .3, z)
+	if fi.hitstop > 0:cam.position += Vector3(sin(fi.age * 90) * .06, cos(fi.age * 77) * .05, 0)
+	cam.look_at(Vector3(mid, 1.1 + top * .35, 0))
+	cam.fov = 40 - fi.zoom * 6
 	var shown: Array = []
 	for bo in fi.bolts:
-		var n: Node3D = take("bolt", bo.owner)
-		n.position = Vector3(bo.x, bo.y, 0);n.rotation = Vector3(fi.age * 8, fi.age * 5, 0);shown.append(n)
+		var n: Node3D = take("bolt", bo.kind)
+		n.position = Vector3(bo.x, bo.y, 0);n.rotation = Vector3(fi.age * 8, fi.age * 5, 0) if bo.kind != "beam" else Vector3.ZERO;shown.append(n)
+	for wl in fi.walls:
+		var n: Node3D = take("cobble", "");n.position = Vector3(wl.x, .75, 0);n.scale = Vector3(1, minf(1.0, (3.0 - wl.life) * 6.0 + .05), 1);shown.append(n)
+	for fl in fi.falls:
+		var n: Node3D = take("cobble", "");n.position = Vector3(fl.x, fl.y + .5, 0);n.scale = Vector3(.7, .7, .7);shown.append(n)
 	for sp in fi.sparks:
-		var n: Node3D = take("spark", "")
-		n.position = Vector3(sp.x, sp.y, .3);n.scale = Vector3.ONE * (1.0 + sp.age * 6);shown.append(n)
+		var big: bool = sp.get("boom", false)
+		var n: Node3D = take("blast" if big else "spark", "")
+		n.position = Vector3(sp.x, sp.y, .3)
+		n.scale = Vector3.ONE * ((.6 + sp.age * 5.0) if big else ((.6 + sp.age * (3.5 if sp.get("heavy", false) else 2.5)) * (1.0 - sp.age / .45)))
+		if big:((n as MeshInstance3D).material_override as StandardMaterial3D).albedo_color.a = .7 * (1 - sp.age / .45)
+		shown.append(n)
+		if sp.get("heavy", false):
+			for j in range(6):
+				var px: Node3D = take("pixel", str(j % 2));var ang: float = j * 1.05 + sp.x
+				px.position = Vector3(sp.x + cos(ang) * sp.age * 3.0, sp.y + sin(ang) * sp.age * 3.0 - sp.age * sp.age * 4.0, .35);px.scale = Vector3.ONE * 1.4;shown.append(px)
 	for i in range(fi.items.size()):
 		var it: Dictionary = fi.items[i]
 		var key: String = "item%d" % i
@@ -215,6 +262,7 @@ func sync_fighter(fi):
 		for j in range(3):
 			var sp: Node3D = take("spark", "");sp.position = Vector3(n.x, 1.05 + sin(fi.age * 30 + j) * .2, .2);sp.scale = Vector3.ONE * (.6 + fmod(fi.age * 7 + j, 1.0));shown.append(sp)
 	hide_rest(shown)
+	nodes.rim.light_energy = 1.6 + fi.zoom * 2.0
 	for i in range(16):
 		var l: Label3D = nodes["code%d" % i]
 		l.position.x = fmod(-9 + (i % 2) * 3.5 + fi.age * (.2 + i % 4 * .1), 22.0) - 4
@@ -227,10 +275,16 @@ func take(kind: String, variant: String) -> Node3D:
 	var n := MeshInstance3D.new()
 	match kind:
 		"bolt":
-			var b := BoxMesh.new();b.size = Vector3(.35, .35, .35);n.mesh = b
-			n.material_override = flat(Color(1, .15, .1) if variant == "steve" else Color(.3, 1, .9), 3.0)
+			var b := BoxMesh.new()
+			match variant:
+				"tnt":b.size = Vector3(.45, .45, .45);n.material_override = material("ch5q_tnt", true)
+				"beam":b.size = Vector3(1.4, .12, .5);n.material_override = flat(Color(.97, 0, .86), 4.0)
+				_:b.size = Vector3(.4, .4, .4);n.material_override = flat(Color(.3, 1, .9), 3.0)
+			n.mesh = b
+		"cobble":
+			var b := BoxMesh.new();b.size = Vector3(.8, 1.5, .8);n.mesh = b;n.material_override = material("ch5q_cobblestone", true)
 		"spark":
-			var s := SphereMesh.new();s.radius = .12;s.height = .24;n.mesh = s;n.material_override = flat(Color(1, .95, .6, .8), 4.0, true)
+			var s := SphereMesh.new();s.radius = .12;s.height = .24;n.mesh = s;n.material_override = flat(Color(1, .85, .3, .9), 6.0, true)
 		"rocket":
 			var b := BoxMesh.new();b.size = Vector3(.16, .16, .5);n.mesh = b;n.material_override = flat(Color(.85, .3, .1), 2.0)
 		"trail":

@@ -316,10 +316,10 @@ func press(w, action: String):
 	if phase in ["code", "erase"]:finale.press(action);return
 	if phase == "fists":
 		if fighter.state == "finisher" and action == "accept":fighter.finish_blow();return
-		fighter.press({"accept":"punch", "kick":"grab"}.get(action, ""));return
+		fighter.press({"accept":"punch", "kick":"kick", "grab":"grab"}.get(action, ""));return
 	if phase == "lanes":lane_press(w, action);return
 	if phase == "fighter":
-		fighter.press({"accept":"punch", "kick":"kick", "special":"special"}.get(action, ""));return
+		fighter.press({"accept":"punch", "kick":"kick", "special":"special", "grab":"grab", "super":"super"}.get(action, ""));return
 	if phase != "ut":return
 	var options: Array = menu_options()
 	match ut_state:
@@ -551,8 +551,25 @@ func start_fighter(w):
 	fighter.reset();change("fighter")
 	say("Раунд один. Ну, давай.", 2.0)
 
+func fight_sounds(w, events: Array):
+	for e in events:
+		match e:
+			"jump":w.sound("ch4_punch_miss", .1)
+			"throw_tnt":w.sound("ch1_whoosh", .05)
+			"boom":w.sound("explosion", .03);shake3d = .35
+			"wall":w.sound("ch4_stone_rise", .1)
+			"pearl":w.sound("pearl_throw", .1);w.sound("end_teleport", .1)
+			"beam":w.sound("ch4_hb_beam", .1)
+			"throw":w.sound("ch4_body_fall", .05);shake3d = .25
+			"super_steve":w.sound("ch4_heavy", .05);w.sound("level", .05)
+			"super_notch":w.sound("ch4_hb_roar", .05)
+			"undo":w.sound("ch4_hb_teleport", .05)
+			"combo":w.sound("ch4_hb_tick", .1)
+			"getup":w.sound("ch4_punch_miss", .1)
+
 func fight3d(w, dt: float, movement: Vector2):
 	var events: Array = fighter.step(dt, movement)
+	fight_sounds(w, events)
 	for e in events:
 		match e:
 			"hit":w.sound("ch4_punch", .03);shake3d = .1
@@ -636,6 +653,8 @@ func start_fists(w):
 
 func fists(w, dt: float, movement: Vector2):
 	var events: Array = fighter.step(dt, movement)
+	fight_sounds(w, events)
+	if "wire" in events:fighter.say("ФАТАЛИТИ")
 	for e in events:
 		match e:
 			"hit":w.sound("ch4_punch", .03);shake3d = .1

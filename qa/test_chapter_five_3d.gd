@@ -30,18 +30,25 @@ func run():
 	var hp: float=nt.hp;n.press(w,"accept");advance(.2)
 	check(nt.hp<hp or nt.block,"A punch lands or is blocked")
 	advance(.3);await render("e_fight")
-	nt.block=true;nt.move="";hp=nt.hp;s.move="";s.stun=0;fi.start(s,"kick");s.x=nt.x-1.2;s.face=1.0;nt.face=-1.0
+	nt.block=true;nt.move="";nt.stun=0;nt.down=0;hp=nt.hp;s.move="";s.stun=0;fi.start(s,"kick");s.x=nt.x-1.2;s.face=1.0;nt.face=-1.0
 	for i in range(30):
 		nt.block=true;fi.step(1.0/60,Vector2.ZERO)
 	check(hp-nt.hp<3.0,"Blocking soaks most of a kick")
-	s.cool=0;s.move="";s.stun=0;n.press(w,"special");advance(.5)
-	check(fi.bolts.size()>0 or nt.hp<hp,"Q throws a projectile")
-	s.hp=100;nt.hp=1;s.x=nt.x-1.0;nt.block=false;nt.move="";nt.stun=0;s.move="";s.stun=0;fi.start(s,"punch");advance(.3)
-	check(fi.state=="ko" and fi.winner==0,"K.O.")
+	s.cool=0;s.move="";s.stun=0;nt.x=s.x+4.0;hp=nt.hp;n.press(w,"special");advance(.3)
+	check(fi.bolts.size()>0 and fi.bolts[0].kind=="tnt","Q throws TNT")
+	advance(1.0);check(nt.hp<hp,"…which explodes on him")
+	s.cool=0;s.move="";s.stun=0;nt.x=s.x+1.0;nt.move="";nt.stun=0;nt.down=0;nt.block=false;fi.input_dir=Vector2(0,-1);fi.press("special")
+	check(s.move=="uppercut","Q+up is the pickaxe uppercut")
+	advance(.4);check(nt.y>.5 or nt.vy>0,"…which launches")
+	advance(2.0);s.cool=0;s.move="";s.stun=0;s.meter=100.0;nt.x=s.x+1.2;nt.y=0;nt.vy=0;nt.down=0;nt.stun=0;nt.move="";nt.block=false;hp=nt.hp;fi.press("super");advance(2.2)
+	check(nt.hp<hp-15,"The super is a long flurry")
+	await render("e_super")
+	fi.wins[0]=1;s.hp=100;nt.hp=1;s.x=nt.x-1.0;nt.block=false;nt.move="";nt.stun=0;nt.down=0;s.move="";s.stun=0;fi.start(s,"jab");advance(.3)
+	check(fi.state=="ko" and fi.winner==0 and fi.wins[0]==2,"K.O. — second round won")
 	advance(.5);await render("e_ko")
 	advance(3.0);check(n.phase=="to_quake","Winning the fight leads to his favourite game")
 	fi.ai=true
-	n.start_fighter(w);fi=n.fighter;advance(2.4);fi.steve().hp=0;advance(4.0)
+	n.start_fighter(w);fi=n.fighter;advance(2.4);fi.wins[1]=1;fi.steve().hp=0;advance(4.0)
 	check(n.phase=="retry" and n.retry_of=="fighter","Losing the fight returns to its checkpoint")
 	# arena
 	n.start_quake(w);var qk=n.quake
