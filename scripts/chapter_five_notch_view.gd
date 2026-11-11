@@ -101,51 +101,130 @@ static func retry(g, n):
 
 # ------------------------------------------------------------------ the battle box
 
+## Notch drawn the way Undertale draws its monsters: white, grey and black.
+static func bw(g) -> Texture2D:
+	if g.has_meta("ch5_notch_bw"):return g.get_meta("ch5_notch_bw")
+	var d: Dictionary = data(g)
+	var im: Image = g.textures[d.sheet].get_image()
+	im.convert(Image.FORMAT_RGBA8)
+	for y in range(im.get_height()):
+		for x in range(im.get_width()):
+			var c: Color = im.get_pixel(x, y)
+			if c.a < .1:continue
+			var l: float = c.get_luminance()
+			im.set_pixel(x, y, Color(1, 1, 1, 1) if l > .42 else (Color(.55, .55, .55, 1) if l > .2 else Color(0, 0, 0, 1)))
+	var t := ImageTexture.create_from_image(im)
+	g.set_meta("ch5_notch_bw", t)
+	return t
+
+static func bw_figure(g, pose: String, t: float, p: Vector2, scale: float, clock: float):
+	var d: Dictionary = data(g)
+	var layout: Dictionary = d.layout
+	var clip: Dictionary = layout.get(pose, layout.idle)
+	var index: int = int(t * 6.0) % int(clip.count)
+	var size := Vector2(d.frame[0], d.frame[1]);var anchor := Vector2(d.anchor[0], d.anchor[1])
+	var tex: Texture2D = bw(g)
+	var col: int = int(clip.start) + index
+	# Slices sway separately, the way Undertale monsters breathe.
+	for y in range(0, int(size.y), 4):
+		var sway: float = round(sin(clock * 2.2 + y * .09) * (1.5 if y < 30 else .5))
+		g.draw_texture_rect_region(tex, Rect2((p - anchor * scale + Vector2(sway, y * scale)).floor(), Vector2(size.x, 4) * scale), Rect2(Vector2(col * size.x, y), Vector2(size.x, 4)))
+
+static func ut_icon(g, kind: String, at: Vector2, c: Color):
+	match kind:
+		"fight":
+			g.draw_line(at + Vector2(-5, 5), at + Vector2(5, -5), c, 2);g.draw_line(at + Vector2(-6, 2), at + Vector2(-2, 6), c, 2)
+		"act":
+			g.draw_rect(Rect2(at - Vector2(6, 5), Vector2(12, 8)), c, false, 2);g.draw_line(at + Vector2(-3, 3), at + Vector2(-5, 7), c, 2)
+		"item":
+			g.draw_rect(Rect2(at - Vector2(5, 3), Vector2(10, 9)), c, false, 2);g.draw_arc(at - Vector2(0, 3), 3, PI, TAU, 8, c, 2)
+		"mercy":
+			g.draw_line(at - Vector2(5, 5), at + Vector2(5, 5), c, 2);g.draw_line(at + Vector2(-5, 5), at + Vector2(5, -5), c, 2)
+
 static func battle(g):
 	var w = g.world;var n = w.notch
 	g.draw_rect(Rect2(0, 0, 640, 360), Color.BLACK)
-	var shake: Vector2 = Vector2(round(sin(w.clock * 60) * 2), 0) if n.ut_flash > 0 else Vector2.ZERO
-	figure(g, "exhausted" if n.ut_state == "end" else ("stagger" if n.ut_flash > 0 else "idle"), n.age, Vector2(320, 140) + shake, Vector2.DOWN, 2.0)
-	glow(g, Vector2(320, 140), 2.0, w.clock)
-	var box: Rect2 = n.UT_BOX
-	if n.ut_state != "wave":box = Rect2(60, 160, 520, 110)
+	var shake: Vector2 = Vector2(round(sin(w.clock * 60) * 3), 0) if n.ut_flash > 0 else Vector2.ZERO
+	var np := Vector2(320, 156) + shake
+	bw_figure(g, "exhausted" if n.ut_state == "end" else ("stagger" if n.ut_flash > 0 else "idle"), n.age, np, 3.0, w.clock)
+	if n.ut_slash >= 0 and n.ut_slash < .45:
+		var k: float = n.ut_slash / .45
+		for i in range(3):g.draw_line(np + Vector2(-34 + i * 10, -130), (np + Vector2(-34 + i * 10, -130)).lerp(np + Vector2(40 + i * 10, -40), k), Color(1, .1, .1), 3)
+	if n.ut_number_age < 1.2:
+		var bounce: float = -absf(sin(n.ut_number_age * 9.0)) * 10.0 * (1 - n.ut_number_age)
+		var txt: String = "ПРОМАХ" if n.ut_number < 0 else str(n.ut_number)
+		g.draw_string(g.bold, Vector2(320 - g.bold.get_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x / 2, 64 + bounce), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 32, Color(1, .15, .15) if n.ut_number >= 0 else Color(.7, .7, .7))
+		if n.ut_number >= 0:
+			g.draw_rect(Rect2(260, 74, 120, 8), Color(.3, .3, .3));g.draw_rect(Rect2(260, 74, 120 * clampf(n.ut_hp / n.UT_HP, 0, 1), 8), Color(.1, .9, .2))
+	var box: Rect2 = n.UT_BOX if n.ut_state == "wave" else Rect2(40, 168, 560, 104)
 	g.draw_rect(box, Color.BLACK)
-	g.draw_rect(box, WHITE, false, 2)
+	g.draw_rect(box.grow(1), Color.WHITE, false, 3)
 	match n.ut_state:
 		"wave":
+			for bl in n.ut_blasters:
+				var dir := Vector2.from_angle(bl.angle)
+				if bl.age < .75:
+					g.draw_line(bl.p, bl.p + dir * 400, Color(1, 1, 1, .25 + .2 * sin(bl.age * 40)), 1)
+				elif bl.age < 1.15:
+					var o: Vector2 = dir.orthogonal() * 9
+					g.draw_colored_polygon(PackedVector2Array([bl.p + o, bl.p + o + dir * 420, bl.p - o + dir * 420, bl.p - o]), Color(1, 1, 1, 1.0 - (bl.age - .75) * 1.5))
+				g.draw_set_transform(bl.p, bl.angle + PI / 2, Vector2.ONE)
+				g.draw_texture_rect(view(g).tex("icon_command_block") if g.textures.has("icon_command_block") == false else g.textures.icon_command_block, Rect2(-11, -11 - (4 if bl.age > .75 else 0), 22, 22), false)
+				g.draw_set_transform(Vector2.ZERO)
 			for b in n.ut_bullets:
-				if not box.grow(-2).has_point(b.p):continue
-				g.draw_string(g.bold, (b.p + Vector2(-3, 4)).floor(), b.glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8 if b.glyph != "■" else 16, WHITE)
-			heart(g, n.soul, Color(1, .1, .1) if w.invulnerable <= 0 or int(w.clock * 20) % 2 == 0 else Color(.5, .1, .1))
-		"bar":
-			var r := Rect2(box.position + Vector2(20, 30), Vector2(box.size.x - 40, 50))
-			g.draw_rect(r, Color(.08, .08, .08));g.draw_rect(r, WHITE, false, 1)
-			for k in range(9):
-				var x: float = r.position.x + r.size.x * (k / 8.0)
-				g.draw_line(Vector2(x, r.position.y + 6), Vector2(x, r.end.y - 6), Color(.3, 1, .9, .25 + .5 * (1 - absf(k - 4) / 4.0)), 2)
-			var cx: float = r.position.x + r.size.x * n.bar
-			g.draw_rect(Rect2(cx - 3, r.position.y - 4, 6, r.size.y + 8), WHITE)
+				if not box.grow(-2).has_point(b.p) and not b.get("ring", false):continue
+				match b.get("shape", "dot"):
+					"block":
+						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color.WHITE);g.draw_rect(Rect2(b.p - b.size / 2 + Vector2(2, 2), b.size - Vector2(4, 4)), Color.BLACK)
+					"line":g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color(.3, .7, 1) if n.ut_mode == "blue" else Color.WHITE)
+					"cursor":
+						var d: Vector2 = b.v.normalized() if b.v.length() > .1 else Vector2.RIGHT
+						var o2: Vector2 = d.orthogonal()
+						g.draw_colored_polygon(PackedVector2Array([b.p + d * 6, b.p - d * 5 + o2 * 4, b.p - d * 2, b.p - d * 5 - o2 * 4]), Color.WHITE)
+					"ring":g.draw_arc(b.p, b.r, 0, TAU, 24, Color(1, 1, 1, clampf(1 - b.r / 60.0, 0, 1)), 2)
+					"key":
+						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color.WHITE)
+						g.draw_string(g.bold, b.p + Vector2(-3, 4), b.glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color.BLACK)
+					_:g.draw_circle(b.p, 3.5, Color(1, .6, .2) if b.get("reversed", false) else Color.WHITE)
+			heart(g, n.soul, (Color(.25, .45, 1) if n.ut_mode == "blue" else Color(1, .1, .1)) if w.invulnerable <= 0 or int(w.clock * 20) % 2 == 0 else Color(.4, .1, .1))
+			if 6.5 - n.ut_timer < 2.8 and not n.ut_bubble.is_empty():
+				var bt: String = n.ut_bubble
+				var bwid: float = minf(220.0, g.font.get_string_size(bt, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x + 16)
+				var r := Rect2(392, 40, bwid, 34)
+				g.draw_rect(r, Color.WHITE);g.draw_colored_polygon(PackedVector2Array([r.position + Vector2(0, 12), r.position + Vector2(-10, 18), r.position + Vector2(0, 22)]), Color.WHITE)
+				g.draw_string(g.font, r.position + Vector2(8, 14), bt, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 12, 8, Color.BLACK)
+		"bar", "slash", "miss":
+			var r := Rect2(box.position + Vector2(18, 14), Vector2(box.size.x - 36, box.size.y - 28))
+			g.draw_rect(r, Color(.05, .05, .05))
+			var c: Vector2 = r.get_center()
+			for i in range(1, 6):
+				var wd: float = r.size.x * i / 6.0
+				g.draw_rect(Rect2(c - Vector2(wd / 2, r.size.y / 2 - i * 3), Vector2(wd, r.size.y - i * 6)), Color(.2 + i * .1, .7, .3 + i * .05) if i % 2 else Color(.05, .05, .05), false, 2)
+			g.draw_rect(Rect2(c - Vector2(2, r.size.y / 2), Vector2(4, r.size.y)), Color(1, 1, 1, .5))
+			var cx: float = r.position.x + r.size.x * clampf(n.bar, 0, 1)
+			var bar_col: Color = Color.WHITE if n.ut_state == "bar" or int(w.clock * 16) % 2 == 0 else Color.BLACK
+			g.draw_rect(Rect2(cx - 3, r.position.y - 4, 6, r.size.y + 8), bar_col);g.draw_rect(Rect2(cx - 3, r.position.y - 4, 6, r.size.y + 8), Color.BLACK, false, 1)
 		_:
-			var lines: PackedStringArray = n.ut_text.split("\n")
-			for i in range(lines.size()):g.draw_string(g.bold, box.position + Vector2(18, 30 + i * 22), lines[i], HORIZONTAL_ALIGNMENT_LEFT, box.size.x - 30, 16, WHITE)
-	g.text_at("STEVE   LV 19", Vector2(60, 290), 8, WHITE, true)
-	g.text_at("HP", Vector2(220, 290), 8, WHITE, true)
-	g.draw_rect(Rect2(240, 282, 60, 10), Color(.7, 0, 0));g.draw_rect(Rect2(240, 282, 60 * clampf(w.hp / 20.0, 0, 1), 10), YELLOW)
-	g.text_at("%d / 20" % int(maxf(0, w.hp)), Vector2(308, 290), 8, WHITE, true)
-	var labels := {"fight":"БИТЬ", "act":"ДЕЙСТВ.", "item":"ПРЕДМЕТ", "mercy":"ПОЩАДА"}
+			var shown: String = n.ut_text.substr(0, int(n.ut_type))
+			var lines: PackedStringArray = shown.split("\n")
+			for i in range(lines.size()):g.draw_string(g.bold, box.position + Vector2(20, 34 + i * 26), lines[i], HORIZONTAL_ALIGNMENT_LEFT, box.size.x - 30, 16, Color.WHITE)
+	g.draw_string(g.bold, Vector2(40, 292), "STEVE   LV 19", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+	g.draw_string(g.bold, Vector2(250, 292), "HP", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color.WHITE)
+	g.draw_rect(Rect2(272, 281, 50, 12), Color(.8, 0, 0));g.draw_rect(Rect2(272, 281, 50 * clampf(w.hp / 20.0, 0, 1), 12), YELLOW)
+	g.draw_string(g.bold, Vector2(334, 292), "%d / 20" % int(maxf(0, w.hp)), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+	var labels := {"fight":"БИТЬ", "act":"ДЕЙСТВ", "item":"ВЕЩИ", "mercy":"ПОЩАДА"}
 	var options: Array = n.menu_options()
-	for i in range(options.size()):
+	for i in range(4):
 		var r: Rect2 = n.menu_rect(i)
+		if i >= options.size():
+			if n.mercy_gone and int(w.clock * 3) % 4 == 0:g.draw_string(g.font, r.position + Vector2(16, 17), "null", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.97, 0, .86, .6))
+			continue
 		var on: bool = n.ut_state == "menu" and n.ut_choice == i
 		var c: Color = YELLOW if on else ORANGE
 		g.draw_rect(r, c, false, 2)
-		if on:heart(g, r.position + Vector2(12, 12), Color(1, .1, .1))
-		g.draw_string(g.bold, r.position + Vector2(24 if on else 14, 16), labels[options[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, c)
-	if n.mercy_gone and int(w.clock * 3) % 5 == 0:
-		g.draw_string(g.font, n.menu_rect(3).position + Vector2(10, 16), "null", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.97, 0, .86, .5))
-	for pu in n.popups:
-		if pu.get("screen", false):g.centered(pu.text, 70 - pu.age * 10, 16, Color(1, .2, .2, 1 - pu.age / 1.8), true)
-	subtitles(g, n, 334.0)
+		if on:heart(g, r.position + Vector2(13, 12), Color(1, .1, .1))
+		else:ut_icon(g, options[i], r.position + Vector2(13, 12), c)
+		g.draw_string(g.bold, r.position + Vector2(26, 17), labels[options[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, c)
 	retry(g, n)
 
 static func heart(g, c: Vector2, col: Color):

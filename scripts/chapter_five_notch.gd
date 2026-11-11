@@ -307,10 +307,22 @@ func attack(w):
 
 func start_ut(w):
 	clear_arena(w)
-	change("ut");ut_hp = UT_HP;ut_state = "menu";ut_choice = 0;ut_wave = 0;ut_bullets.clear();ut_hits = 0
-	ut_text = "* Нотч загораживает путь."
-	soul = UT_BOX.get_center()
+	change("ut");ut_hp = UT_HP;ut_wave = 0;ut_bullets.clear();ut_hits = 0;ut_blasters.clear();ut_choice = 0
+	ut_state = "menu";ut_text = "* Нотч загораживает путь.";ut_type = 0.0
+	soul = UT_BOX.get_center();ut_mode = "red"
 	w.sound("ch4_hb_glitch", .1)
+
+const BUBBLES := ["Ctrl+C. Ctrl+V. Скучно, да?", "Гравитацию тоже я написал.", "Кликни, если сможешь.", "Эти штуки — мои любимые.", "W, A, S, D. Это всё, что ты умеешь?", "Ctrl+Z. Ничего не было."]
+const FLAVOR := ["* Нотч смеётся.", "* Нотч что-то дописывает в воздухе.", "* Пахнет горелым кодом.", "* «Ты меня ещё удивишь?»", "* Строки вокруг дрожат."]
+var ut_mode := "red"
+var ut_vy := 0.0
+var ut_jump_held := false
+var ut_blasters: Array = []
+var ut_bubble := ""
+var ut_type := 0.0
+var ut_slash := -1.0
+var ut_number := 0
+var ut_number_age := 9.0
 
 func press(w, action: String):
 	if phase in ["code", "erase"]:finale.press(action);return
@@ -321,6 +333,9 @@ func press(w, action: String):
 	if phase == "fighter":
 		fighter.press({"accept":"punch", "kick":"kick", "special":"special", "grab":"grab", "super":"super"}.get(action, ""));return
 	if phase != "ut":return
+	ut_press(w, action)
+
+func ut_press(w, action: String):
 	var options: Array = menu_options()
 	match ut_state:
 		"menu":
@@ -330,19 +345,24 @@ func press(w, action: String):
 		"bar":
 			if action == "accept":strike(w)
 		"text":
-			if action == "accept" and ut_timer <= 0:begin_wave(w)
+			if action == "accept":
+				if ut_type < ut_text.length():ut_type = ut_text.length()
+				elif ut_timer <= 0:begin_wave(w)
+		"end":
+			if action == "accept" and ut_type < ut_text.length():ut_type = ut_text.length()
 
 func menu_options() -> Array:
 	return ["fight", "act", "item"] if mercy_gone else ["fight", "act", "item", "mercy"]
 
 func choose(w, option: String):
+	w.sound("select", .02)
 	match option:
 		"fight":ut_state = "bar";bar = 0.0
 		"act":show_text("* НОТЧ — АТК 99, ЗАЩ 99.\n* Говорит, что написал тебя за выходные.")
 		"item":
 			if ut_items > 0:
-				ut_items -= 1;w.hp = minf(20.0, w.hp + 8.0);w.sound("pickup", .1)
-				show_text("* Ты съел яблоко. +8 HP.")
+				ut_items -= 1;w.hp = minf(20.0, w.hp + 10.0);w.sound("pickup", .1)
+				show_text("* Ты съел золотое яблоко.\n* Восстановлено 10 HP.")
 			else:show_text("* В инвентаре пусто.")
 		"mercy":
 			mercy_gone = true;ut_choice = 0
@@ -350,67 +370,133 @@ func choose(w, option: String):
 			w.sound("ch4_hb_shatter", .1);w.shake = .2
 
 func show_text(text: String):
-	ut_state = "text";ut_text = text;ut_timer = .3
+	ut_state = "text";ut_text = text;ut_timer = .25;ut_type = 0.0
 
 func strike(w):
-	var accuracy: float = 1.0 - absf(bar - .5) * 2.0
-	var damage: float = 12.0 + 22.0 * clampf(accuracy, 0, 1)
-	ut_hp -= damage;ut_hits += 1;ut_flash = .4
-	popups.append({"p":Vector2(320, 70), "text":str(int(damage)), "age":0.0, "screen":true})
+	var accuracy: float = clampf(1.0 - absf(bar - .5) * 2.0, 0, 1)
+	var damage: float = 8.0 + 26.0 * accuracy
+	ut_hp -= damage;ut_hits += 1;ut_flash = .5;ut_slash = 0.0;ut_number = int(damage * 9.7);ut_number_age = 0.0
 	w.sound("ch4_punch_heavy", .1)
-	if ut_hp <= 0:
-		ut_state = "end";ut_bullets.clear();ut_timer = 2.2
-		ut_text = "* …Ладно. Это было в моём вкусе."
-		return
-	show_text(["* Нотч смеётся.", "* Нотч поправляет код.", "* «Ты меня ещё удивишь?»", "* Строки вокруг дрожат."][ut_hits % 4])
+	ut_state = "slash";ut_timer = 1.1
 
 func begin_wave(w):
-	ut_state = "wave";ut_timer = 6.0;ut_wave += 1;ut_bullets.clear();soul = UT_BOX.get_center()
-	serial = 0
+	ut_state = "wave";ut_timer = 6.5;ut_wave += 1;ut_bullets.clear();ut_blasters.clear();soul = UT_BOX.get_center() + Vector2(0, 20)
+	serial = 0;ut_vy = 0.0
+	ut_mode = "blue" if (ut_wave - 1) % 6 == 1 else "red"
+	ut_bubble = BUBBLES[(ut_wave - 1) % BUBBLES.size()]
+	if ut_mode == "blue":w.sound("ch4_hb_freeze", .1)
 
 func battle(w, dt: float, movement: Vector2):
-	ut_flash = maxf(0, ut_flash - dt)
+	ut_flash = maxf(0, ut_flash - dt);ut_number_age += dt
+	if ut_slash >= 0:ut_slash += dt
 	ut_timer -= dt
+	if ut_state in ["text", "end", "menu"]:
+		var before: int = int(ut_type)
+		ut_type = minf(ut_text.length(), ut_type + dt * 32.0)
+		if int(ut_type) != before and int(ut_type) % 2 == 0 and ut_text[int(ut_type) - 1] != " ":w.sound("ch4_hb_tick", .03)
 	match ut_state:
 		"bar":
-			bar += dt / 1.3
-			if bar > 1.0:strike(w);ut_hp += 0.0
+			bar += dt / 1.2
+			if bar > 1.05:
+				ut_state = "miss";ut_timer = .8;ut_number_age = 0.0;ut_number = -1
+		"slash", "miss":
+			if ut_timer <= 0:
+				if ut_hp <= 0:
+					ut_state = "end";ut_bullets.clear();ut_timer = 2.6;ut_text = "* …Ладно. Это было в моём вкусе.";ut_type = 0.0
+				else:show_text(FLAVOR[ut_hits % FLAVOR.size()])
 		"wave":
-			soul = (soul + movement.limit_length() * 95.0 * dt).clamp(UT_BOX.position + Vector2(5, 5), UT_BOX.end - Vector2(5, 5))
+			soul_move(movement, dt)
 			wave_bullets(w, dt)
 			for b in ut_bullets:
+				b.age = float(b.get("age", 0.0)) + dt
+				if b.get("reverse_at", -1.0) > 0 and b.age >= b.reverse_at and not b.get("reversed", false):b.reversed = true;b.v = -b.v
+				if b.get("gravity", false):
+					b.v.y += 300.0 * dt
+					if b.p.y > UT_BOX.end.y - 6 and b.v.y > 0:b.v.y = -b.v.y * .7
+				if b.get("home", false) and b.age < 1.0:b.v = b.v.lerp(b.p.direction_to(soul) * b.v.length(), dt * 1.4)
 				b.p += b.v * dt
-				if b.get("home", false):b.v = b.v.lerp(b.p.direction_to(soul) * 55.0, dt * 1.5)
-				if b.p.distance_to(soul) < b.get("r", 4.0) and w.invulnerable <= 0:
-					w.hp -= 2.0;w.invulnerable = .8;w.sound("hurt", .1);w.shake = .1
-			ut_bullets = ut_bullets.filter(func(b):return Rect2(UT_BOX.position - Vector2(60, 60), UT_BOX.size + Vector2(120, 120)).has_point(b.p))
-			if ut_timer <= 0:ut_state = "menu";ut_bullets.clear();ut_text = "* Нотч ждёт."
+				var hit: bool
+				if b.get("ring", false):
+					b.r += dt * 60.0
+					hit = absf(b.p.distance_to(soul) - b.r) < 3.0 and b.r < 60.0
+				elif b.has("size"):
+					hit = Rect2(b.p - b.size / 2.0, b.size).grow(2).has_point(soul)
+				else:
+					hit = b.p.distance_to(soul) < float(b.get("r", 4.0))
+				if hit:hurt_soul(w)
+			for bl in ut_blasters:
+				bl.age += dt
+				if bl.age > .75 and bl.age < 1.15:
+					var d: Vector2 = Vector2.from_angle(bl.angle)
+					var rel: Vector2 = soul - bl.p
+					if rel.dot(d) > 0 and absf(rel.cross(d)) < 10.0:hurt_soul(w)
+				if bl.age > .74 and bl.age - dt <= .74:w.sound("ch4_hb_beam", .05)
+			ut_blasters = ut_blasters.filter(func(bl):return bl.age < 1.3)
+			ut_bullets = ut_bullets.filter(func(b):return Rect2(UT_BOX.position - Vector2(70, 70), UT_BOX.size + Vector2(140, 140)).has_point(b.p) and (not b.get("ring", false) or b.r < 60.0))
+			if ut_timer <= 0:
+				ut_state = "menu";ut_bullets.clear();ut_blasters.clear();ut_text = FLAVOR[ut_wave % FLAVOR.size()];ut_type = 0.0;ut_mode = "red"
 		"end":
 			if ut_timer <= 0:change("to_lanes")
 	if w.hp <= 0:lose(w, "ut")
 
+func hurt_soul(w):
+	if w.invulnerable > 0:return
+	w.hp -= 2.0;w.invulnerable = .9;w.sound("hurt", .1);w.shake = .12
+
+func soul_move(movement: Vector2, dt: float):
+	var lo: Vector2 = UT_BOX.position + Vector2(5, 5);var hi: Vector2 = UT_BOX.end - Vector2(5, 5)
+	if ut_mode == "red":
+		soul = (soul + movement.limit_length() * 95.0 * dt).clamp(lo, hi)
+		return
+	soul.x = clampf(soul.x + movement.x * 95.0 * dt, lo.x, hi.x)
+	var grounded: bool = soul.y >= hi.y - .5
+	if movement.y < -.5 and grounded and not ut_jump_held:ut_vy = -215.0
+	if movement.y >= -.5 and ut_vy < -60.0:ut_vy = -60.0
+	ut_jump_held = movement.y < -.5
+	ut_vy += 520.0 * dt
+	soul.y = clampf(soul.y + ut_vy * dt, lo.y, hi.y)
+	if soul.y >= hi.y:ut_vy = 0.0
+
 func wave_bullets(w, dt: float):
-	var t: float = 6.0 - ut_timer
-	var pattern: int = (ut_wave - 1) % 4
-	var due: int = int(t / [0.55, 0.22, 1.2, 1.6][pattern])
+	var t: float = 6.5 - ut_timer
+	var pattern: int = (ut_wave - 1) % 6
+	var box: Rect2 = UT_BOX
+	var every: float = [0.7, 0.85, 0.75, 1.0, 0.35, 0.18][pattern]
+	var due: int = int(t / every)
 	while serial < due:
 		serial += 1
 		match pattern:
 			0:
-				var gap: float = UT_BOX.position.y + 18 + fposmod(serial * 37.0, UT_BOX.size.y - 36)
-				for y in range(int(UT_BOX.position.y) + 4, int(UT_BOX.end.y), 8):
-					if absf(y - gap) > 14:ut_bullets.append({"p":Vector2(UT_BOX.end.x + 8, y), "v":Vector2(-110, 0), "glyph":"="})
+				var gap: float = box.position.y + 20 + fposmod(serial * 29.0 + sin(serial) * 20.0, box.size.y - 40)
+				for y in range(int(box.position.y) + 6, int(box.end.y), 11):
+					if absf(y - gap) > 16:ut_bullets.append({"p":Vector2(box.end.x + 8, y), "v":Vector2(-118, 0), "size":Vector2(9, 9), "shape":"block"})
 			1:
-				ut_bullets.append({"p":Vector2(UT_BOX.position.x + fposmod(serial * 53.0, UT_BOX.size.x), UT_BOX.position.y - 6), "v":Vector2(0, 90 + serial % 3 * 20), "glyph":"■", "r":5.0})
+				var tall: float = 14.0 + (serial % 3) * 9.0
+				var from_right: bool = serial % 2 == 0
+				ut_bullets.append({"p":Vector2(box.end.x + 6 if from_right else box.position.x - 6, box.end.y - tall / 2.0), "v":Vector2(-135 if from_right else 135, 0), "size":Vector2(7, tall), "shape":"line"})
+				if serial % 3 == 0:ut_bullets.append({"p":Vector2(box.end.x + 6, box.position.y + 22), "v":Vector2(-150, 0), "size":Vector2(7, 40), "shape":"line"})
 			2:
-				var gap_angle: float = serial * 1.3
-				for k in range(18):
-					var a: float = k * TAU / 18
-					if absf(angle_difference(a, gap_angle)) < .45:continue
-					ut_bullets.append({"p":soul + Vector2.from_angle(a) * 70, "v":-Vector2.from_angle(a) * 45, "glyph":"·"})
+				var corner: Vector2 = [box.position, Vector2(box.end.x, box.position.y), box.end, Vector2(box.position.x, box.end.y)][serial % 4]
+				ut_bullets.append({"p":corner, "v":corner.direction_to(soul) * 95.0, "shape":"cursor", "r":5.0, "home":true})
+				if serial % 2 == 0:ut_bullets.append({"p":soul + Vector2.from_angle(serial) * 4.0, "v":Vector2.ZERO, "ring":true, "r":2.0, "shape":"ring"})
 			3:
-				for k in range(2):
-					ut_bullets.append({"p":Vector2(UT_BOX.position.x if k == 0 else UT_BOX.end.x, UT_BOX.position.y + fposmod(serial * 41.0, UT_BOX.size.y)), "v":Vector2(40 if k == 0 else -40, 0), "glyph":"?", "home":true, "r":5.0})
+				var side: int = serial % 4
+				var at: Vector2
+				var ang: float
+				match side:
+					0:at = Vector2(box.position.x - 22, box.position.y + 15 + fposmod(serial * 37.0, box.size.y - 30));ang = 0.0
+					1:at = Vector2(box.end.x + 22, box.position.y + 15 + fposmod(serial * 23.0, box.size.y - 30));ang = PI
+					2:at = Vector2(box.position.x + 15 + fposmod(serial * 41.0, box.size.x - 30), box.position.y - 22);ang = PI / 2
+					_:at = Vector2(soul.x, box.end.y + 22);ang = -PI / 2
+				ut_blasters.append({"p":at, "angle":ang, "age":0.0})
+				w.sound("ch4_hb_charge", .1)
+			4:
+				var key: String = ["W", "A", "S", "D"][serial % 4]
+				ut_bullets.append({"p":Vector2(box.position.x + 8 + fposmod(serial * 47.0, box.size.x - 16), box.position.y - 4), "v":Vector2(sin(serial) * 30.0, 40.0), "gravity":true, "size":Vector2(10, 10), "shape":"key", "glyph":key})
+			5:
+				var y: float = box.position.y + 6 + fposmod(serial * 17.0, box.size.y - 12)
+				var left: bool = serial % 2 == 0
+				ut_bullets.append({"p":Vector2(box.position.x - 6 if left else box.end.x + 6, y), "v":Vector2(110 if left else -110, 0), "r":4.0, "shape":"dot", "reverse_at":1.1})
 
 # ------------------------------------------------------------------ the lanes
 
