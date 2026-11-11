@@ -226,6 +226,17 @@ def textures3d():
     names = ["ch5_skin_steve", "ch5_skin_notch"]
     for n in QUAKE:
         imp.save(frame0(imp.tex("block/" + n)), "ch5q_" + n, ["block/" + n]);names.append("ch5q_" + n)
+    grass = frame0(imp.tex("block/grass_block_top")).convert("RGBA")
+    px = grass.load()
+    for y in range(16):
+        for x in range(16):
+            r, g, b, a = px[x, y]
+            px[x, y] = (int(r * .48), int(g * .78), int(b * .32), a)
+    imp.save(grass, "ch5p_grass", ["block/grass_block_top (plains tint)"]);names.append("ch5p_grass")
+    for n in ["dirt", "oak_planks", "oak_log", "glass", "stripped_oak_log", "cobblestone", "bricks", "oak_door_bottom", "oak_door_top", "rail"]:
+        imp.save(frame0(imp.tex("block/" + n)), "ch5p_" + n, ["block/" + n]);names.append("ch5p_" + n)
+    for n in ["minecart", "arrow", "redstone"]:
+        imp.save(imp.tex("item/" + n), "ch5p_item_" + n, ["item/" + n]);names.append("ch5p_item_" + n)
     tnt = Image.new("RGBA", (16, 16));tnt.paste(frame0(imp.tex("block/tnt_side")))
     imp.save(tnt, "ch5q_tnt", ["block/tnt_side"]);names.append("ch5q_tnt")
     for n in ["golden_apple", "iron_chestplate", "firework_rocket", "iron_sword"]:

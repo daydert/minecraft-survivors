@@ -234,65 +234,121 @@ static func heart(g, c: Vector2, col: Color):
 # ------------------------------------------------------------------ the lanes
 
 static func lanes(g):
-	var w = g.world;var n = w.notch
-	g.draw_rect(Rect2(0, 0, 640, 360), Color(.05, .06, .08))
-	for r in range(n.ROWS):
-		for c in range(n.COLS):
-			var rect: Rect2 = n.cell_rect(Vector2i(c, r))
-			g.draw_rect(rect, Color(.1, .13, .1) if (r + c) % 2 == 0 else Color(.08, .11, .09))
-			g.draw_rect(rect, Color(.3, 1, .45, .08), false, 1)
+	var w = g.world;var n = w.notch;var v = view(g)
+	var T = func(name: String) -> Texture2D:return v.tex(name)
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(.42, .62, .9))
+	for i in range(6):
+		var cx: float = fposmod(i * 131.0 + w.clock * 6.0, 760.0) - 60
+		g.draw_rect(Rect2(cx, 64 + (i % 3) * 6, 48, 10), Color(1, 1, 1, .85));g.draw_rect(Rect2(cx + 10, 58 + (i % 3) * 6, 26, 8), Color(1, 1, 1, .85))
+	var top: float = n.LANE_ORIGIN.y;var bottom: float = n.LANE_ORIGIN.y + n.ROWS * n.CELL.y
 	var right: float = n.LANE_ORIGIN.x + n.COLS * n.CELL.x
-	g.draw_rect(Rect2(right, n.LANE_ORIGIN.y, 640 - right, n.ROWS * n.CELL.y), Color(.07, .05, .08))
+	g.draw_texture_rect(T.call("ch5p_cobblestone"), Rect2(right, top - 12, 640 - right, bottom - top + 24), true, Color(.75, .75, .8))
+	g.draw_texture_rect(T.call("ch5p_dirt"), Rect2(0, bottom, 640, 360 - bottom), true, Color(.8, .7, .6))
+	for c in range(n.COLS):
+		for r in range(n.ROWS):
+			var rect: Rect2 = n.cell_rect(Vector2i(c, r))
+			g.draw_texture_rect(T.call("ch5p_grass"), rect, true, Color(1.08, 1.08, 1.0) if (r + c) % 2 == 0 else Color(.86, .9, .82))
+	g.draw_rect(Rect2(n.LANE_ORIGIN.x, top - 3, right - n.LANE_ORIGIN.x, 3), Color(0, 0, 0, .25))
+	for x in range(int(n.LANE_ORIGIN.x), int(right), 18):
+		g.draw_texture_rect_region(T.call("ch5p_oak_planks"), Rect2(x, top - 18, 4, 16), Rect2(6, 0, 4, 16))
+	g.draw_texture_rect_region(T.call("ch5p_oak_planks"), Rect2(n.LANE_ORIGIN.x, top - 14, right - n.LANE_ORIGIN.x, 3), Rect2(0, 6, 16, 3))
+	# The house: planks, logs, a window and the door the zombies want.
+	var house := Rect2(0, top - 34, 66, bottom - top + 44)
+	g.draw_texture_rect(T.call("ch5p_oak_planks"), house, true)
+	g.draw_texture_rect(T.call("ch5p_oak_log"), Rect2(56, house.position.y, 12, house.size.y), true)
+	g.draw_texture_rect(T.call("ch5p_glass"), Rect2(14, top + 10, 32, 32), true)
+	g.draw_texture_rect(T.call("ch5p_oak_door_top"), Rect2(18, top + 120, 24, 24), false);g.draw_texture_rect(T.call("ch5p_oak_door_bottom"), Rect2(18, top + 144, 24, 24), false)
+	g.draw_texture_rect(T.call("ch5p_bricks"), Rect2(0, top - 50, 70, 18), true)
+	g.draw_actor("steve", Vector2(40, top + 96), Vector2.RIGHT, w.clock, false, Color.WHITE, "idle", 1.0, {"state":"idle", "time":w.clock})
 	for r in range(n.ROWS):
 		var y: float = n.row_y(r)
-		g.draw_actor("steve", Vector2(70, y + 12), Vector2.RIGHT, 0.0, false, Color.WHITE, "idle", 1.0, {"state":"idle", "time":w.clock + r})
-	figure(g, n.pose, n.pose_age, Vector2(600, 250), Vector2.LEFT, 1.6)
-	glow(g, Vector2(600, 250), 1.6, w.clock)
-	for c in n.plants:
-		var pl: Dictionary = n.plants[c]
-		var rect: Rect2 = n.cell_rect(c)
-		var icon: String = "icon_pvz_" + pl.kind
-		var bob: float = round(sin(pl.age * 3) * 1) if pl.kind == "redstone_ore" else 0.0
-		var tint := Color(1.6, 1.6, 1.6) if pl.kind == "tnt" and int(pl.timer * 10) % 2 == 0 else Color.WHITE
-		if g.textures.has(icon):g.draw_texture_rect(g.textures[icon], Rect2(rect.get_center() - Vector2(14, 16 + bob), Vector2(28, 28)), false, tint)
-		if pl.hp < n.PLANT_HP[pl.kind] and pl.kind != "tnt":
-			g.draw_rect(Rect2(rect.position + Vector2(8, rect.size.y - 5), Vector2((rect.size.x - 16) * pl.hp / n.PLANT_HP[pl.kind], 2)), Color(.95, .3, .25))
+		g.draw_texture_rect(T.call("ch5p_rail"), Rect2(70, y - 4, 42, 16), true, Color(.9, .9, .9))
+		var cart: Dictionary = n.carts[r]
+		if cart.state != "used":
+			g.oval(Vector2(cart.x + 12, y + 12), Vector2(12, 3), Color(0, 0, 0, .3))
+			g.draw_texture_rect(T.call("ch5p_item_minecart"), Rect2(cart.x, y - 10, 24, 24), false)
+	# Notch on a stack of command blocks, throwing the next one.
+	for k in range(3):g.draw_texture_rect(g.textures.icon_command_block, Rect2(590, 210 + k * 30, 30, 30), false)
+	figure(g, n.pose, n.pose_age, Vector2(605, 212), Vector2.LEFT, 1.5)
+	glow(g, Vector2(605, 212), 1.5, w.clock)
+	var items: Array = []
+	for c in n.plants:items.append({"y":n.row_y(c.y), "kind":"plant", "c":c})
+	for z in n.zombies:items.append({"y":n.row_y(z.row) + .5, "kind":"zombie", "z":z})
+	for cp in n.corpses:items.append({"y":n.row_y(cp.row) + .4, "kind":"corpse", "z":cp})
+	items.sort_custom(func(a2, b2):return a2.y < b2.y)
 	var cr: Rect2 = n.cell_rect(n.cursor)
-	g.draw_rect(cr.grow(-1), Color(1, 1, 1, .5 + .4 * sin(w.clock * 6)), false, 2)
-	var sorted: Array = n.zombies.duplicate()
-	sorted.sort_custom(func(a, b):return a.row < b.row)
-	for z in sorted:
-		var q := Vector2(z.x, n.row_y(z.row) + 12)
-		var kind: String = {"zombie":"zombie", "elite":"elite", "glitch":"zombie", "creeper":"creeper"}[z.kind]
-		var tint := Color(1.8, 1.8, 1.8) if z.flash > 0 else (Color(.6, 1, 1) if z.kind == "glitch" else Color.WHITE)
-		g.oval(q, Vector2(9, 3), Color(0, 0, 0, .35))
-		g.draw_actor(kind, q, Vector2.LEFT, z.age, z.moving, tint, "walk", 1.2, z.visual)
-		if z.kind == "glitch" and int(w.clock * 12) % 3 == 0:g.draw_rect(Rect2(q + Vector2(-6, -30), Vector2(8, 8)), Color(.97, 0, .86))
-	for a in n.arrows:
-		var y: float = n.row_y(a.row) - 6
-		g.draw_line(Vector2(a.x - 8, y), Vector2(a.x, y), Color(.85, .8, .7), 2)
-		g.draw_rect(Rect2(a.x - 1, y - 2, 3, 4), Color(.6, .6, .65))
-	for b in n.blasts:
-		var k: float = b.age / .5
-		g.draw_circle(b.p, 20 + k * 50, Color(1, .6, .2, .5 * (1 - k)))
+	g.draw_rect(cr.grow(-1), Color(1, 1, 1, .18 + .1 * sin(w.clock * 6)))
+	for it in items:
+		match it.kind:
+			"plant":
+				var c: Vector2i = it.c;var pl: Dictionary = n.plants[c];var rect: Rect2 = n.cell_rect(c);var base := rect.get_center() + Vector2(0, 12)
+				var kick: float = clampf(pl.timer - 1.3, 0, .2) * 20.0 if pl.kind == "dispenser" else 0.0
+				var pulse: float = float(pl.get("pulse", 0.0));pl.pulse = maxf(0, pulse - 1.0 / 60.0)
+				g.oval(base, Vector2(14, 4), Color(0, 0, 0, .35))
+				var tint := Color(1.7, 1.7, 1.7) if pl.kind == "tnt" and int(pl.timer * 12) % 2 == 0 else Color(1 + pulse, 1, 1)
+				g.draw_texture_rect(g.textures["icon_pvz_" + pl.kind], Rect2(base - Vector2(16 + kick, 30), Vector2(32, 32)), false, tint)
+				if pl.kind == "redstone_ore":
+					for k in range(3):
+						var t: float = fposmod(w.clock * .8 + k * .33, 1.0)
+						g.draw_rect(Rect2(base + Vector2(-10 + k * 9, -30 - t * 14), Vector2(2, 2)), Color(1, .15, .1, 1 - t))
+				if pl.kind == "obsidian" and pl.hp < n.PLANT_HP.obsidian:
+					var dmg: float = 1.0 - pl.hp / n.PLANT_HP.obsidian
+					for k in range(int(dmg * 5)):g.draw_line(base + Vector2(-8 + k * 4, -26), base + Vector2(-4 + k * 3, -12 - k * 2), Color(.6, .5, .8), 1)
+				elif pl.hp < n.PLANT_HP[pl.kind] and pl.kind != "tnt":
+					g.draw_rect(Rect2(rect.position + Vector2(10, rect.size.y - 4), Vector2((rect.size.x - 20) * pl.hp / n.PLANT_HP[pl.kind], 2)), Color(.95, .3, .25))
+			"zombie", "corpse":
+				var z: Dictionary = it.z
+				var q := Vector2(z.x, n.row_y(z.row) + 14)
+				var kind: String = {"zombie":"zombie", "elite":"elite", "glitch":"zombie", "creeper":"creeper"}[z.kind]
+				if it.kind == "corpse":
+					var k: float = minf(1.0, z.age / .4)
+					g.draw_set_transform(q, -k * PI / 2, Vector2.ONE)
+					g.draw_actor(kind, Vector2.ZERO, Vector2.LEFT, 0.0, false, Color(1, 1, 1, 1 - clampf((z.age - .6) / .6, 0, 1)), "hurt", 1.2, {"state":"hurt", "time":.1})
+					g.draw_set_transform(Vector2.ZERO)
+					continue
+				var tint := Color(1.8, 1.8, 1.8) if z.flash > 0 else (Color(.6, 1, 1) if z.kind == "glitch" else Color.WHITE)
+				g.oval(q, Vector2(10, 3), Color(0, 0, 0, .35))
+				g.draw_actor(kind, q, Vector2.LEFT, z.age, z.moving, tint, "walk", 1.2, z.visual)
+				if z.kind == "glitch" and int(w.clock * 12) % 3 == 0:g.draw_rect(Rect2(q + Vector2(-6, -32), Vector2(8, 8)), Color(.97, 0, .86))
+				if z.hp < z.max:g.draw_rect(Rect2(q + Vector2(-10, -40), Vector2(20 * z.hp / z.max, 2)), Color(.95, .3, .25))
+	g.draw_rect(cr.grow(-1), Color(1, 1, .6, .6 + .3 * sin(w.clock * 6)), false, 2)
+	for a2 in n.arrows:
+		var y: float = n.row_y(a2.row) - 4
+		g.draw_set_transform(Vector2(a2.x, y), -PI / 4, Vector2.ONE)
+		g.draw_texture_rect(v.tex("ch5p_item_arrow"), Rect2(-8, -8, 16, 16), false)
+		g.draw_set_transform(Vector2.ZERO)
+	for bl in n.blasts:
+		var k: float = bl.age / .5
+		g.draw_circle(bl.p, 16 + k * 46, Color(1, .65, .2, .55 * (1 - k)))
+		g.draw_circle(bl.p, 8 + k * 26, Color(1, 1, .8, .7 * (1 - k)))
+	for d in n.drops:
+		var p: Vector2 = d.p + Vector2(0, sin(w.clock * 4 + d.p.x) * 1.5 if not d.taken else 0.0)
+		g.draw_circle(p, 9, Color(1, .1, .05, .25))
+		g.draw_texture_rect(v.tex("ch5p_item_redstone"), Rect2(p - Vector2(8, 8), Vector2(16, 16)), false, Color(1, 1, 1, 1 - d.age * 2.0 if d.taken else 1.0))
+	# Seed packets.
+	g.draw_rect(Rect2(8, 4, 92, 52), Color(.32, .2, .1));g.draw_rect(Rect2(8, 4, 92, 52), Color(.15, .08, .03), false, 2)
+	g.draw_texture_rect(v.tex("ch5p_item_redstone"), Rect2(14, 10, 32, 32), false)
+	g.draw_string(g.bold, Vector2(50, 36), str(n.redstone), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, YELLOW)
 	for i in range(n.CARDS.size()):
 		var r: Rect2 = n.card_rect(i)
 		var spec: Array = n.CARDS[i]
 		var ready: bool = n.card_ready[i] <= 0 and n.redstone >= int(spec[1])
-		g.draw_rect(r, Color(.12, .12, .14))
-		g.draw_rect(r, YELLOW if n.card == i else Color(.5, .5, .55), false, 2 if n.card == i else 1)
-		if g.textures.has("icon_pvz_" + spec[0]):g.draw_texture_rect(g.textures["icon_pvz_" + spec[0]], Rect2(r.position + Vector2(13, 4), Vector2(24, 24)), false, Color.WHITE if ready else Color(.4, .4, .4))
-		g.draw_string(g.font, r.position + Vector2(4, 40), str(spec[1]), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .3, .3))
-		g.draw_string(g.font, r.position + Vector2(40, 12), str(i + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, 1, 1, .5))
-		if n.card_ready[i] > 0:g.draw_rect(Rect2(r.position, Vector2(r.size.x, r.size.y * n.card_ready[i] / float(spec[2]))), Color(0, 0, 0, .55))
-	if g.textures.has("icon_pvz_redstone"):g.draw_texture_rect(g.textures.icon_pvz_redstone, Rect2(46, 50, 24, 24), false)
-	g.text_at(str(n.redstone), Vector2(48, 86), 8, Color(1, .35, .3), true)
+		var on: bool = n.card == i
+		if on:r.position.y -= 3
+		g.draw_rect(r, Color(.88, .8, .58) if ready else Color(.55, .5, .4))
+		g.draw_rect(Rect2(r.position + Vector2(3, 3), Vector2(r.size.x - 6, r.size.y - 16)), Color(.62, .78, .52) if ready else Color(.4, .45, .38))
+		g.draw_texture_rect(g.textures["icon_pvz_" + spec[0]], Rect2(r.position + Vector2(12, 5), Vector2(26, 26)), false, Color.WHITE if ready else Color(.5, .5, .5))
+		g.draw_string(g.bold, r.position + Vector2(r.size.x / 2 - 9, r.size.y - 4), str(spec[1]), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.2, .1, .05))
+		g.draw_rect(r, YELLOW if on else Color(.35, .22, .1), false, 2)
+		g.draw_string(g.font, r.position + Vector2(3, 10), str(i + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.2, .1, .05, .7))
+		if n.card_ready[i] > 0:g.draw_rect(Rect2(r.position, Vector2(r.size.x, r.size.y * n.card_ready[i] / float(spec[2]))), Color(0, 0, 0, .45))
 	var left: int = n.schedule.size() + n.zombies.size()
-	g.text_at("Осталось: %d" % left, Vector2(352, 60), 8, Color(1, 1, 1, .7))
-	g.text_at("1–4 — блок · стрелки/мышь — клетка · пробел — поставить", Vector2(112, 336), 8, Color(1, 1, 1, .4))
-	for pu in n.popups:
-		if pu.get("screen", false):g.draw_string(g.font, (pu.p - Vector2(8, 20 + pu.age * 14)).floor(), pu.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .35, .3, 1 - pu.age / 1.8))
-	subtitles(g, n, 316.0)
+	g.draw_rect(Rect2(470, 14, 150, 14), Color(0, 0, 0, .5))
+	var total: float = 42.0
+	g.draw_rect(Rect2(472, 16, 146 * clampf(1.0 - left / total, 0, 1), 10), Color(.4, .85, .3))
+	g.text_at("Волна", Vector2(472, 42), 8, Color(1, 1, 1, .8), true)
+	g.text_at("1–4 блок · стрелки/мышь клетка · Пробел поставить · наведи на редстоун — собрать", Vector2(112, 352), 8, Color(1, 1, 1, .7))
+	subtitles(g, n, 300.0)
 	retry(g, n)
 
 # ------------------------------------------------------------------ 3D phases

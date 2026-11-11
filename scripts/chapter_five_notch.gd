@@ -61,6 +61,11 @@ var card := 0
 var cursor := Vector2i(2, 2)
 var card_ready: Array = [0.0, 0.0, 0.0, 0.0]
 var trickle := 6.0
+## Lane defence extras: falling redstone to pick up, a minecart per row
+## that saves it once (the lawnmower), and bodies that fade out.
+var drops: Array = []
+var carts: Array = []
+var corpses: Array = []
 var schedule: Array = []
 var lane_age := 0.0
 var cursor_wait := 0.0
@@ -503,7 +508,9 @@ func wave_bullets(w, dt: float):
 func start_lanes(w):
 	clear_arena(w)
 	change("lanes");plants.clear();zombies.clear();arrows.clear();blasts.clear()
-	redstone = 150;card = 0;cursor = Vector2i(2, 2);card_ready = [0.0, 0.0, 0.0, 0.0];trickle = 6.0;lane_age = 0.0;serial = 0
+	redstone = 150;card = 0;cursor = Vector2i(2, 2);card_ready = [0.0, 0.0, 0.0, 0.0];trickle = 4.0;lane_age = 0.0;serial = 0
+	drops.clear();corpses.clear();carts.clear()
+	for r in range(ROWS):carts.append({"state":"ready", "x":LANE_ORIGIN.x - 22})
 	schedule = []
 	var t := 8.0
 	for k in range(34):
@@ -547,6 +554,8 @@ func click(w, at: Vector2) -> bool:
 	if phase != "lanes":return false
 	for i in range(CARDS.size()):
 		if card_rect(i).has_point(at):card = i;return true
+	for d in drops:
+		if d.p.distance_to(at) < 14 and not d.taken:collect(w, d);return true
 	var rel: Vector2 = (at - LANE_ORIGIN) / CELL
 	if rel.x >= 0 and rel.y >= 0 and rel.x < COLS and rel.y < ROWS:
 		cursor = Vector2i(int(rel.x), int(rel.y));place(w);return true
@@ -554,6 +563,13 @@ func click(w, at: Vector2) -> bool:
 
 static func menu_rect(i: int) -> Rect2:return Rect2(120 + i * 104, 300, 92, 24)
 static func card_rect(i: int) -> Rect2:return Rect2(112 + i * 56, 40, 50, 46)
+
+func collect(w, d: Dictionary):
+	d.taken = true;d.age = 0.0;redstone += int(d.value)
+	w.sound("pickup", .03)
+
+func drop_at(from: Vector2, land_y: float, value := 25):
+	drops.append({"p":from, "land":land_y, "vy":0.0 if from.y < land_y - 20 else -60.0, "life":0.0, "value":value, "taken":false, "age":0.0, "fall":from.y < land_y - 20})
 
 func place(w):
 	var spec: Array = CARDS[card]
@@ -573,7 +589,20 @@ func lanes(w, dt: float, movement: Vector2):
 	elif movement.length_squared() <= .2:cursor_wait = 0.0
 	for i in range(4):card_ready[i] = maxf(0, card_ready[i] - dt)
 	trickle -= dt
-	if trickle <= 0:trickle = 6.0;redstone += 25
+	if trickle <= 0:
+		trickle = 7.0
+		var lane: int = (serial * 3 + int(lane_age)) % ROWS;serial += 1
+		drop_at(Vector2(LANE_ORIGIN.x + 26 + fposmod(lane_age * 53.0, COLS * CELL.x - 52), 20), row_y(lane) + 6)
+	for d in drops:
+		if d.taken:
+			d.age += dt;d.p = d.p.lerp(Vector2(58, 62), minf(1.0, dt * 8.0));continue
+		d.life += dt
+		if d.fall:
+			d.p.y = minf(d.land, d.p.y + 55.0 * dt)
+		else:
+			d.vy += 200.0 * dt;d.p.y = minf(d.land, d.p.y + d.vy * dt);d.p.x += 14.0 * dt * (1.0 if d.vy < 0 else 0.0)
+		if cell_rect(cursor).has_point(d.p) or d.life > 9.0:collect(w, d)
+	drops = drops.filter(func(d):return not d.taken or d.age < .5)
 	while not schedule.is_empty() and lane_age >= schedule[0].at:
 		var s: Dictionary = schedule.pop_front()
 		var spec: Array = ZOMBIES[s.kind]
@@ -589,7 +618,9 @@ func lanes(w, dt: float, movement: Vector2):
 					arrows.append({"row":c.y, "x":cell_rect(c).get_center().x})
 					w.sound("arrow", .05)
 			"redstone_ore":
-				if pl.timer <= 0:pl.timer = 8.0;redstone += 25;popups.append({"p":cell_rect(c).get_center(), "text":"+25", "age":0.0, "screen":true})
+				if pl.timer <= 0:
+					pl.timer = 8.0;var at: Vector2 = cell_rect(c).get_center()
+					drop_at(at - Vector2(0, 6), at.y + 10);pl.pulse = 0.4
 			"tnt":
 				if pl.timer <= 0:
 					blasts.append({"p":cell_rect(c).get_center(), "age":0.0})
@@ -608,7 +639,7 @@ func lanes(w, dt: float, movement: Vector2):
 		var z: Dictionary = zombies[i]
 		z.age += dt;z.flash = maxf(0, z.flash - dt);z.bite = maxf(0, z.bite - dt)
 		if z.hp <= 0:
-			w.emit_pixels("smoke", Vector2(z.x, row_y(z.row)), 6, Vector2.UP);zombies.remove_at(i);continue
+			corpses.append({"kind":z.kind, "row":z.row, "x":z.x, "age":0.0});zombies.remove_at(i);continue
 		var col: int = int((z.x - 10 - LANE_ORIGIN.x) / CELL.x)
 		var target := Vector2i(col, z.row)
 		if col >= 0 and col < COLS and plants.has(target) and z.x - cell_rect(target).get_center().x < 22:
@@ -622,8 +653,21 @@ func lanes(w, dt: float, movement: Vector2):
 			z.moving = true;z.x -= z.speed * dt
 		z.visual.gait += z.speed * dt / 30.0
 		w.animation.set_pose(z.visual, "walk" if z.moving else "attack", z.visual.gait if z.moving else fposmod(z.age, .3))
-		if z.x < LANE_ORIGIN.x - 14:
-			say("Мозги.", 1.6);lose(w, "lanes");return
+		if z.x < LANE_ORIGIN.x - 6:
+			var cart: Dictionary = carts[z.row]
+			if cart.state == "ready":
+				cart.state = "run";w.sound("ch4_heavy", .1)
+			elif cart.state == "used" and z.x < LANE_ORIGIN.x - 40:
+				say("Мозги.", 1.6);lose(w, "lanes");return
+	for r in range(carts.size()):
+		var cart: Dictionary = carts[r]
+		if cart.state != "run":continue
+		cart.x += 260.0 * dt
+		for z in zombies:
+			if z.row == r and absf(z.x - cart.x) < 18 and z.hp > 0:z.hp = 0.0;z.flash = .2
+		if cart.x > 660:cart.state = "used"
+	for cp in corpses:cp.age += dt
+	corpses = corpses.filter(func(cp):return cp.age < 1.2)
 	for b in blasts:b.age += dt
 	blasts = blasts.filter(func(b):return b.age < .5)
 	if schedule.is_empty() and zombies.is_empty():change("lanes_won")
