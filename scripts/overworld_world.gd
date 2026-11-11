@@ -281,6 +281,8 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	if state == "INTRO":
 		intro_step(dt)
 		return
+	if sword_step(dt, movement):
+		return
 	super.step(dt, movement)
 	for m in mobs:
 		if m.kind == "witch":

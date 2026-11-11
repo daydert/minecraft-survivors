@@ -172,7 +172,69 @@ func foreground(g, offset: Vector2):
 	if w.stage=="departure":g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(.3,1.55,w.stage_age)))
 	elif w.stage=="arrival":g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,1-smoothstep(0,1,w.stage_age)))
 	elif w.stage=="jump":g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(2,3,w.stage_age)))
+	if w.stage=="defeat":meltdown(g,offset)
 	if w.stage=="arrival":intro.title(g)
+
+## The Wither's last blast, then everything Steve carries melting in its slots.
+func meltdown(g, offset: Vector2):
+	var w=g.world;var a: float=w.stage_age
+	var blast: float=a-w.MELT_BLAST
+	if blast>=0 and blast<2.4 and not w.defeated_boss.is_empty():
+		# His last blast is his own colour: soul fire, wither-blue light, black smoke.
+		var p: Vector2=w.defeated_boss.p+offset-Vector2(0,30)
+		var k: float=blast/2.4
+		if blast<.3:g.draw_rect(Rect2(0,0,640,360),Color(.75,.92,1,(.85 if g.settings.flashes else .25)*(1-blast/.3)))
+		g.draw_circle(p,26+k*90,Color(.85,.97,1,.7*(1-smoothstep(0,.6,blast))))
+		g.draw_circle(p,40+k*360,Color(.2,.55,.95,.35*(1-k)))
+		for r in range(3):g.draw_arc(p,18+blast*(240+r*80),0,TAU,64,Color(.45,.85,1,.8*(1-k)),4-r)
+		var ring: float=20+blast*220
+		var count: int=28
+		for i in range(count):
+			var q: Vector2=p+Vector2.from_angle(i*TAU/count+blast*.3)*ring*Vector2(1,.62)
+			g.draw_clip("soul_fire_animation",(q-Vector2(6,18)).floor(),Vector2(12,22),w.clock+i*.07,Color(1,1,1,1-k))
+		for i in range(18):
+			var dir: Vector2=Vector2.from_angle(i*2.39996)
+			var q: Vector2=p+dir*blast*(120+i%5*40)+Vector2(0,blast*blast*40)
+			g.draw_set_transform(q.floor(),blast*(i%5-2)*3,Vector2.ONE*(1-k*.6))
+			if i%3==0:g.sprite("wither_skull",Vector2(-6,-6),Vector2(12,12),Color(.8,1,1.2,1-k))
+			else:g.draw_rect(Rect2(-3,-2,5+i%3,3),Color(.1,.1,.14,1-k))
+			g.draw_set_transform(Vector2.ZERO)
+		for i in range(16):
+			var t: float=fposmod(i*.13+blast*.4,1.0)
+			var q: Vector2=p+Vector2.from_angle(i*.39)*(30+blast*90)-Vector2(0,t*60)
+			g.draw_circle(q,6+t*10,Color(.05,.06,.1,.45*(1-k)*(1-t)))
+		g.draw_rect(Rect2(0,0,640,360),Color(.1,.35,.75,.22*(1-k)))
+	if w.molten.is_empty() or a<w.MELT_START-.6:return
+	var fade: float=smoothstep(w.MELT_START-.6,w.MELT_START-.2,a)*(1-smoothstep(w.melt_done()+.3,w.melt_done()+.9,a))
+	if fade<=0:return
+	var n: int=w.molten.size()
+	var slot:=36.0
+	var x0: float=320-n*slot/2
+	var y0:=270.0
+	g.draw_rect(Rect2(x0-6,y0-6,n*slot+12,slot+12),Color(0,0,0,.6*fade))
+	for i in range(n):
+		var it: Dictionary=w.molten[i]
+		var q:=Vector2(x0+i*slot,y0)
+		g.draw_rect(Rect2(q,Vector2(slot-4,slot-4)),Color(.2,.2,.2,.9*fade))
+		g.draw_rect(Rect2(q,Vector2(slot-4,slot-4)),Color(.55,.55,.55,fade),false,1)
+		var start: float=w.MELT_START+i*w.MELT_STEP
+		var heat: float=clampf((a-start)/.6,0,1)
+		var melt: float=clampf((a-start-.6)/.7,0,1)
+		var c: Vector2=q+Vector2(slot/2-2,slot/2-2)
+		if melt<1.0:
+			# Sagging into its slot while it glows.
+			g.draw_set_transform(c+Vector2(0,12*melt),0,Vector2(1+melt*.3,1-melt*.85))
+			g.item_icon(it.id,Vector2(-16,-16-0*melt),2.0,it.evolved)
+			g.draw_set_transform(Vector2.ZERO)
+			if heat>0:g.draw_rect(Rect2(c-Vector2(14,14-24*melt),Vector2(28,28*(1-melt*.85))),Color(.35+.5*heat,.85,1,.55*heat*fade))
+		var pool: float=smoothstep(.2,1.0,melt)
+		if pool>0:
+			var cool: float=clampf((a-start-1.3)/1.2,0,1)
+			g.oval(c+Vector2(0,13),Vector2(12,3)*pool,Color(.55,.9,1).lerp(Color(.18,.2,.25),cool)*Color(1,1,1,fade))
+		if melt>0 and melt<1:
+			for j in range(3):
+				var t: float=fposmod(w.clock*1.8+j*.33+i*.2,1.0)
+				g.draw_rect(Rect2(c+Vector2(-6+j*6,10+t*10),Vector2(2,3)),Color(.6,.9,1,(1-t)*fade))
 
 func projectile(g, b: Dictionary, offset: Vector2) -> bool:
 	if b.kind not in ["hoe","hook","rocket","bolt","enemy_flame","wither_skull"]:return false

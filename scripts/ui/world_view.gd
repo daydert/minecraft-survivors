@@ -1,4 +1,5 @@
 extends RefCounted
+const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## World layer of chapter I / II and coop: terrain, actors, projectiles and effects.
 const Lighting = preload("res://scripts/ui/lighting.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
@@ -36,6 +37,7 @@ static func draw_world(g):
 				if Rect2(-40,-60,720,480).has_point(s):g.sprite("nether_pillar_"+str(j%3),s-Vector2(32,50))
 	else:ChapterOne.border(g,offset)
 	if g.is_nether():g.nether_renderer.floor_effects(g,offset)
+	SwordView.draw(g,offset)
 	for o in g.world.orbs:
 		var p: Vector2 = o.p+offset
 		if not Rect2(-8,-8,656,376).has_point(p): continue

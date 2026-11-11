@@ -54,7 +54,7 @@ func run():
 			elif w.stage=="last_duel":
 				var m=w.mobs[0];target=m.p+Vector2.from_angle(elapsed*.65)*(65 if w.build.has("bow") else 38)
 				if w.items.has("elytra") and w.flight_cooldown<=0 and w.projectiles.size()>25:w.active_item("elytra")
-			elif w.stage in ["yield","approach"]:final_win=true;target=w.npc.p if not w.npc.is_empty() else w.portal_position
+			elif w.stage in ["yield","approach","clash","down"]:final_win=true;target=w.npc.p if not w.npc.is_empty() else w.portal_position
 			elif w.stage in ["portal_ready"]:target=w.portal_position
 			if w.state=="LEVEL_UP":w.choose(0);w.tick_choices(1.0/60)
 			elif w.state=="CHEST":w.chest_delay=0;w.close_chest()

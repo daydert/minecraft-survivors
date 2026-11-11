@@ -1,0 +1,56 @@
+{
+  "sprites": [
+    "ch3_brawl_steve",
+    "ch3_brawl_ender"
+  ],
+  "frame": [
+    56,
+    56
+  ],
+  "anchor": [
+    28,
+    50
+  ],
+  "poses": {
+    "guard": {
+      "start": 0,
+      "count": 2
+    },
+    "windup": {
+      "start": 2,
+      "count": 3
+    },
+    "strike": {
+      "start": 5,
+      "count": 3
+    },
+    "clang": {
+      "start": 8,
+      "count": 2
+    },
+    "thrown": {
+      "start": 10,
+      "count": 3
+    },
+    "fall": {
+      "start": 13,
+      "count": 6
+    },
+    "lying": {
+      "start": 19,
+      "count": 2
+    },
+    "lying_talk": {
+      "start": 21,
+      "count": 2
+    },
+    "getup": {
+      "start": 23,
+      "count": 16
+    },
+    "spent": {
+      "start": 39,
+      "count": 2
+    }
+  }
+}

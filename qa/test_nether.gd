@@ -113,7 +113,8 @@ func run():
 		check(w.clock==clock and w.player==p,"Boss and transition clocks freeze in "+pause)
 	w.state="RUNNING";boss.hp=1;w.hurt(boss,10);w.resolve_deaths()
 	check(w.stage=="defeat" and w.victory and w.mobs.is_empty() and not w.defeated_boss.is_empty(),"Boss death enters the collapse cinematic")
-	advance(w,2.9)
+	advance(w,w.melt_done()+1.1)
+	check(w.build.is_empty() and w.items.is_empty(),"The blast melts everything Steve carried")
 	check(w.stage=="portal" and w.loot.any(func(o):return o.kind=="ender_eye"),"Collapse leaves a pearl and inactive portal")
 	for o in w.loot:
 		if o.kind=="ender_eye":w.player=o.p

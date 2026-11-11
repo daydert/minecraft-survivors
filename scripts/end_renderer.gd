@@ -1,4 +1,5 @@
 extends RefCounted
+const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## Chapter III draws vanilla sampled parts, paused simulation effects and restrained UI.
 const PURPLE=Color("bf82e6")
 const Lighting=preload("res://scripts/ui/lighting.gd")
@@ -49,6 +50,7 @@ func world(g):
 		var pulse=.78+.22*sin(w.clock*5+o.p.x)
 		g.oval(p,Vector2(4,2),Color(.3,.8,.2,.12*pulse))
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2((p-Vector2(4,5)).floor(),Vector2(8,8)),Rect2((frame%4)*16,(frame/4)*16,16,16),Color(.45+.25*pulse,1,.2,1))
+	SwordView.draw(g,offset)
 	var actors=[]
 	for p in w.props:
 		if p.type=="pumpkin" and p.hp<=0:continue
@@ -250,6 +252,8 @@ func player(g, offset: Vector2):
 		pose(g,"end_player_pickup",p,w.facing,clampf(w.stage_age/.6,0,1));return
 	if w.stage=="sit" or (w.stage=="to_edge" and w.player==w.seats()[1]) or (w.stage=="restore" and w.stage_age<1.0):
 		seated(g,"steve",p,w.clock);return
+	if w.stage in ["clash","down"] and not w.npc.is_empty():
+		brawler(g,"steve",p,w.facing,w.npc.get("side",Vector2.RIGHT).x,0.0);return
 	if w.stage=="exit_jump":
 		var a: float=w.stage_age;var progress=smoothstep(.18,1.15,a);var fall=smoothstep(1.1,2.4,a)
 		p=w.jump_start.lerp(w.portal_position,progress)+offset-Vector2(0,sin(progress*PI)*34)
@@ -310,7 +314,7 @@ func portal(g, offset: Vector2):
 	var w=g.world
 	if w.stage in ["dragon_arrival","dragon","departure"]:return
 	var p: Vector2=w.portal_position+offset
-	var broken=w.stage in ["last_arrival","last_duel","endsteve_death","yield","approach","to_edge","sit"] or (w.stage=="betrayal" and w.stage_age>=w.end_boss.BETRAYAL_IMPACT) or (w.stage=="restore" and w.stage_age<3.6)
+	var broken=w.stage in ["last_arrival","last_duel","endsteve_death","yield","approach","clash","down","to_edge","sit"] or (w.stage=="betrayal" and w.stage_age>=w.end_boss.BETRAYAL_IMPACT) or (w.stage=="restore" and w.stage_age<3.6)
 	for y in range(-2,3):
 		for x in range(-2,3):
 			if x*x+y*y>6:continue
@@ -448,10 +452,11 @@ func cinematic(g, offset: Vector2):
 			g.draw_colored_polygon(PackedVector2Array([p,p+dir*r+dir.orthogonal()*5,p+dir*r-dir.orthogonal()*5]),Color(.8,.45,1,sin(clampf(a/4.5,0,1)*PI)*.35))
 	if w.stage=="betrayal":betrayal(g,offset,a)
 	if w.stage=="sit":closeup(g,a)
+	if w.stage in ["clash","down"] and not w.npc.is_empty():brawl_close(g,a)
 	if w.stage=="dragon_arrival":title_card(g,a,"ЭНДЕР-ДРАКОН","хозяин этого острова")
-	var close_shot: bool=w.stage=="sit" and a>=.6 and a<=w.end_boss.SIT_LENGTH-.6
+	var close_shot: bool=(w.stage=="sit" and a>=.6 and a<=w.end_boss.SIT_LENGTH-.6) or w.stage in ["clash","down"]
 	if not w.npc.is_empty() and not close_shot:ender_npc(g,offset)
-	if w.stage in ["end_arrival","departure","dragon_arrival","dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump","yield","to_edge","sit","restore"]:
+	if w.stage in ["end_arrival","departure","dragon_arrival","dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump","yield","clash","down","to_edge","sit","restore"]:
 		var bars=18.0
 		if w.stage in ["dragon_arrival","last_arrival","end_arrival"]:bars*=1-smoothstep(1,3.9 if w.stage=="dragon_arrival" else 2.2,a)
 		if w.stage=="endsteve_death":bars*=1-smoothstep(6.6,7.6,a)
@@ -534,10 +539,154 @@ func death_frame(g, p: Vector2, direction: Vector2, frame: int, tint: Color=Colo
 
 const DISSOLVE_AT:=6.4
 
+## The last exchange and lying side by side. `away` is the side each one falls to.
+func brawler(g, kind: String, p: Vector2, dir: Vector2, away: float, phase_shift: float, S: float=1.0):
+	var w=g.world;var a: float=w.stage_age;var e=w.end_boss
+	var fall: float=0.0
+	if w.stage=="clash":fall=smoothstep(e.CLASH_BREAK+.25,e.CLASH_BREAK+.8,a)
+	else:fall=1.0-smoothstep(e.DOWN_RISE,e.DOWN_LENGTH-.2,a)
+	var shadow: float=1.0+fall*.8
+	g.oval(p+Vector2(away*fall*8,1)*S,Vector2(7*shadow,2+fall)*S,Color(0,0,0,.3))
+	if fall<=0.0:
+		var state:="idle";var t:=0.0
+		for hit in e.CLASH_HITS:
+			var d: float=a-hit+(.22 if phase_shift>0 else 0.0)
+			if d>=-.18 and d<.25:state="attack" if d>=0 else "windup";t=maxf(0,d)
+		if a>=e.CLASH_BREAK-.2:state="attack";t=a-e.CLASH_BREAK+.2
+		var st: String="slash" if kind!="steve" and state=="attack" else state
+		g.draw_actor(kind,p,dir,w.clock,false,Color.WHITE,st,S,{"state":st,"time":t})
+		if kind=="steve" and S==1.0:g.draw_held_weapons(p)
+		return
+	# Down on the side, a breath that lifts the chest; rising with a wobble.
+	var angle: float=away*PI/2*fall+(sin(w.clock*7)*.08*(1-fall) if w.stage=="down" and fall<1 else 0.0)
+	var breath: float=round(sin(w.clock*1.8+phase_shift*3))*.5*fall*S
+	g.draw_set_transform(p+Vector2(0,-breath),angle,Vector2.ONE)
+	g.draw_actor(kind,Vector2.ZERO,Vector2.DOWN,0,false,Color(1,.95,.95) if kind=="steve" else Color.WHITE,"hurt",S,{"state":"hurt","time":.05,"airborne":true})
+	g.draw_set_transform(Vector2.ZERO)
+	if kind!="steve":end_particles(g,p-Vector2(0,4*S),w.clock,4,int(6*S),10*S)
+	# The broken blade beside each of them.
+	if not g.textures.has("icon_sword_iron"):g.load_texture("icon_sword_iron")
+	if true:
+		var q: Vector2=p+Vector2(-away*14,4)*S
+		g.draw_set_transform(q,away*.9+phase_shift,Vector2.ONE*S)
+		var tex=g.textures.get("icon_sword_iron")
+		if tex:g.draw_texture_rect_region(tex,Rect2(-6,-6,10,10),Rect2(0,6,10,10),Color(.85,.85,.85))
+		g.draw_set_transform(Vector2.ZERO)
+
+## Close on the two of them for the exchange and while they lie there.
+const BRAWL_CLOSE:=3.0
+static var brawl_data: Dictionary={}
+
+func brawl_assets(g) -> Dictionary:
+	if brawl_data.is_empty():brawl_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_three_brawl.json"))
+	for name in brawl_data.sprites:
+		if not g.textures.has(name):g.load_texture(name)
+	return brawl_data
+
+## Which baked pose each of them is in at this moment of the scene.
+func brawl_pose(w, ender: bool) -> Array:
+	var e=w.end_boss;var a: float=w.stage_age
+	if w.stage=="clash":
+		var hits: Array=e.CLASH_HITS+[e.CLASH_BREAK]
+		if a<hits[0]-.25:return ["guard",a,true]
+		if a<e.CLASH_BREAK+.12:
+			for h in hits:
+				if a<h-.25:return ["clang",a,true]
+				if a<h:return ["windup",(a-(h-.25))*1.2,false]
+				if a<h+.18:return ["strike",(a-h)*1.6,false]
+			return ["clang",a,true]
+		if a<e.CLASH_BREAK+.55:return ["thrown",(a-e.CLASH_BREAK-.12)*1.4,false]
+		var f: float=a-e.CLASH_BREAK-.55
+		return ["fall",f*1.2,false] if f<.55 else ["lying",a,true]
+	var rise: float=a-e.DOWN_RISE-(.45 if ender else 0.0)
+	if rise<0:
+		for l in e.DOWN_LINES:
+			var mine: bool=(l[3]=="ender")==ender
+			if mine and a>=l[0] and a<l[0]+l[2]:return ["lying_talk",a,true]
+		return ["lying",a,true]
+	if rise<1.9:return ["getup",rise*.85,false]
+	return ["spent",a,true]
+
+func brawl_fig(g, sheet: String, pose: Array, p: Vector2, flip: bool, S: float):
+	var d: Dictionary=brawl_assets(g)
+	var clip: Dictionary=d.poses[pose[0]]
+	var fps: float=4.0 if pose[0] in ["lying","lying_talk","spent","guard","clang"] else 10.0
+	var index: int=int(pose[1]*fps)
+	index=index%int(clip.count) if pose[2] else clampi(index,0,int(clip.count)-1)
+	var size:=Vector2(d.frame[0],d.frame[1]);var anchor:=Vector2(d.anchor[0],d.anchor[1])
+	if not g.textures.has(sheet):return
+	g.draw_set_transform(p.floor(),0,Vector2(-S if flip else S,S))
+	g.draw_texture_rect_region(g.textures[sheet],Rect2(-anchor,size),Rect2((int(clip.start)+index)*size.x,0,size.x,size.y))
+	g.draw_set_transform(Vector2.ZERO)
+
+func brawl_close(g, a: float):
+	var w=g.world;var e=w.end_boss;var S:=BRAWL_CLOSE
+	var mid: Vector2=(w.player+w.npc.p)/2
+	var c:=Vector2(320,250)
+	var tile: Texture2D=g.textures.get("end_stone_tile")
+	var origin: Vector2=c-mid*S
+	if tile:
+		var step: float=16*S
+		var y: float=fposmod(origin.y,step)-step
+		while y<360:
+			var x: float=fposmod(origin.x,step)-step
+			while x<640:
+				g.draw_texture_rect(tile,Rect2(x,y,step,step),false,Color(.92,.9,.86))
+				x+=step
+			y+=step
+	else:g.draw_rect(Rect2(0,0,640,360),Color(.86,.85,.62))
+	g.draw_rect(Rect2(0,0,640,360),Color(.05,0,.08,.25))
+	var side: float=w.npc.get("side",Vector2.RIGHT).x
+	var steve: Vector2=c+(w.player-mid)*S;var ender: Vector2=c+(w.npc.p-mid)*S
+	var sp: Array=brawl_pose(w,false);var ep: Array=brawl_pose(w,true)
+	for who in [[steve,sp,side,"ch3_brawl_steve"],[ender,ep,-side,"ch3_brawl_ender"]]:
+		var lying: bool=who[1][0] in ["lying","lying_talk","fall","getup"]
+		g.oval(who[0]+Vector2(-who[2]*(14 if lying else 0),2)*S/3,Vector2(26 if lying else 16,5)*S/3,Color(0,0,0,.3))
+	# The broken blades, where they landed.
+	if w.stage=="down" or a>e.CLASH_BREAK+.6:
+		if not g.textures.has("icon_sword_iron"):g.load_texture("icon_sword_iron")
+		var tex=g.textures.get("icon_sword_iron")
+		if tex:
+			for k in [-1.0,1.0]:
+				g.draw_set_transform((c+Vector2(k*20,10)*S/3*2.2).floor(),k*.7+.3,Vector2.ONE*S*.8)
+				g.draw_texture_rect_region(tex,Rect2(-5,-5,9,9),Rect2(0,7,9,9),Color(.85,.85,.85))
+				g.draw_set_transform(Vector2.ZERO)
+	brawl_fig(g,"ch3_brawl_ender",ep,ender,side<0,S)
+	brawl_fig(g,"ch3_brawl_steve",sp,steve,side>0,S)
+	if not ep[0] in ["clang","guard","windup","strike"]:end_particles(g,ender-Vector2(0,30),w.clock,4,10,30)
+	if w.stage=="clash":clash_sparks(g,(steve+ender)/2-Vector2(0,30*S/3*1.6),S/1.5)
+	var black: float=0.0
+	if w.stage=="clash":black=1-smoothstep(0,.3,a)
+	else:black=smoothstep(e.DOWN_LENGTH-.5,e.DOWN_LENGTH-.05,a)
+	if black>0:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,black))
+
+## Sparks where the blades meet, then the iron flying apart.
+func clash_sparks(g, mid: Vector2, S: float=1.0):
+	var w=g.world;var a: float=w.stage_age;var e=w.end_boss
+	for hit in e.CLASH_HITS:
+		var d: float=a-hit
+		if d<0 or d>.25:continue
+		for i in range(10):
+			var q: Vector2=mid+Vector2.from_angle(i*.63+hit)*d*90*S
+			g.draw_rect(Rect2(q.floor(),Vector2(2,1)*S),Color(1,.9,.55,1-d/.25))
+	var b: float=a-e.CLASH_BREAK
+	if b>=0 and b<1.0:
+		if b<.08:g.draw_rect(Rect2(0,0,640,360),Color(1,1,1,.5 if g.settings.flashes else .15))
+		for i in range(22):
+			var dir: Vector2=Vector2.from_angle(i*2.4)
+			var q: Vector2=mid+(dir*b*(60+i%5*14)+Vector2(0,b*b*60))*S
+			g.draw_set_transform(q.floor(),b*(i%5-2)*4,Vector2.ONE*S)
+			g.draw_rect(Rect2(-2,-1,4+i%3,2),Color(.78,.78,.8,1-b))
+			g.draw_rect(Rect2(-2,-1,4+i%3,1),Color(.95,.95,.97,1-b))
+			g.draw_set_transform(Vector2.ZERO)
+
 ## EnderSteve after the duel, by stage: on his knees, walking, sitting, at the portal.
 func ender_npc(g, offset: Vector2):
 	var w=g.world;var n: Dictionary=w.npc;var a: float=w.stage_age;var p: Vector2=n.p+offset
 	match w.stage:
+		"clash","down":
+			brawler(g,"endersteve_final",p,n.dir,-n.get("side",Vector2.RIGHT).x,.5)
+			if w.stage=="clash":clash_sparks(g,(w.player+n.p)/2+offset-Vector2(0,14))
 		"yield","approach":
 			var k: float=clampf(a/1.4,0,1) if w.stage=="yield" else 1.0
 			g.oval(p,Vector2(8,3),Color(0,0,0,.35))
@@ -634,7 +783,8 @@ func subtitles(g):
 	# Above the hearts and hotbar while the HUD is up.
 	var y: float=276.0 if w.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"] else 316.0
 	g.draw_rect(Rect2(320-width/2-10,y,width+20,18),Color(0,0,0,.55*alpha))
-	g.text_at(l.text.substr(0,shown),Vector2(320-width/2,y+13),8,Color(.88,.78,1,alpha))
+	var ink: Color=Color(.95,.95,.95,alpha) if l.get("who","ender")=="steve" else Color(.88,.78,1,alpha)
+	g.text_at(l.text.substr(0,shown),Vector2(320-width/2,y+13),8,ink)
 
 
 ## His presence: a purple glow around the silhouette and flames rising off it,
@@ -775,6 +925,14 @@ func closeup(g, a: float):
 		for j in range(14):
 			var t: float=fposmod(w.clock*.25+j*.071,1.0)
 			g.draw_rect(Rect2((ender+Vector2(-14+sin(j*2.4)*16,-60-t*90)).floor(),Vector2(2,2)),Color(.75,.45,1,(1-t)*.7))
+		# The sword goes over to Steve after the eye.
+		if a>=31.4 and a<33.6:
+			var ks: float=smoothstep(31.4,32.4,a)
+			var sat: Vector2=Vector2(300,top-44).lerp(Vector2(342,top-38),ks)-Vector2(0,sin(ks*PI)*16)
+			if not g.textures.has("icon_sword_iron"):g.load_texture("icon_sword_iron")
+			g.draw_set_transform(sat,-.4+ks*.6,Vector2.ONE*1.6)
+			if g.textures.has("icon_sword_iron"):g.draw_texture_rect(g.textures.icon_sword_iron,Rect2(-8,-8,16,16),false,Color(1,1,1,1-smoothstep(33.0,33.6,a)))
+			g.draw_set_transform(Vector2.ZERO)
 		if a>=30.4 and a<32.6:
 			var k: float=smoothstep(30.4,31.4,a)
 			var at: Vector2=Vector2(300,top-50).lerp(Vector2(340,top-50),k)-Vector2(0,sin(k*PI)*14)

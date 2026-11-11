@@ -242,6 +242,7 @@ func closeup(g, f):
 	for p in w.particles:
 		var q: Vector2=c+(p.p-w.player)*CLOSE
 		g.draw_rect(Rect2(q.floor(),Vector2.ONE*ceilf(p.get("size",2.0)*2)),Color(p.color,clampf(p.life/.1,0,1)))
+	lost_items(g,f,c-w.player*CLOSE,CLOSE*.7,w.player)
 	for s in f.sparks:
 		var q: Vector2=c+(s.p-w.player)*CLOSE
 		g.draw_rect(Rect2(q.floor(),Vector2(5,2)),Color(1,.92,.6,1-s.age/.5))
@@ -249,6 +250,19 @@ func closeup(g, f):
 	if f.phase=="descend" and a>=f.DESCEND_PARRY and a<f.DESCEND_PARRY+.1:g.draw_rect(Rect2(0,0,640,360),Color(1,1,.9,.4 if g.settings.flashes else .12))
 	var black: float=1-k
 	if black>0:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,black))
+
+## Items flying out of Steve, bouncing once and fading away.
+func lost_items(g, f, offset: Vector2, scale: float, around: Vector2):
+	for o in f.lost:
+		var alpha: float=1-smoothstep(2.2,3.2,o.age)
+		if alpha<=0:continue
+		var p: Vector2=o.p+offset if scale==1.0 else offset+o.p*CLOSE
+		var size: float=16.0*(1.0 if scale==1.0 else 2.0)
+		g.oval(p,Vector2(size*.3,size*.1),Color(0,0,0,.3*alpha))
+		var turn: float=cos(o.age*5+o.p.x)
+		g.draw_set_transform((p-Vector2(0,o.h*(1.0 if scale==1.0 else CLOSE)+size*.5)).floor(),0,Vector2(signf(turn)*maxf(.2,absf(turn)),1)*(size/16.0))
+		g.item_icon(o.id,Vector2(-8,-8),1.0,o.evolved)
+		g.draw_set_transform(Vector2.ZERO)
 
 func subtitles(g, f):
 	if f.line.is_empty():return
@@ -336,6 +350,7 @@ func foreground(g, offset: Vector2):
 			var radius=(1-t)*82*progress
 			var q=p+Vector2(cos(angle)*radius,sin(angle)*radius*.55)
 			g.draw_rect(Rect2(q.floor(),Vector2(1+i%3,1+i%2)),Color(.35+i%4*.08,.005,.025,(1-t)*progress))
+	if close_weight(f)<=0:lost_items(g,f,offset,1.0,Vector2.ZERO)
 	closeup(g,f)
 	whisper_text(g,f)
 	if f.cinematic_player() or f.phase=="arrival":

@@ -1,4 +1,5 @@
 extends RefCounted
+const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## Chapter V presentation: the white/dark code plane, code enemies drawn as
 ## editor cards, glitched vanilla mobs, deleted floor and the debug overlay.
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
@@ -70,6 +71,7 @@ func world(g):
 			g.draw_arc(p, z.r * k, 0, TAU, 28, Color(.95, .3, .25, .45), 1)
 			g.text_at("else", p - Vector2(10, -3), 8, Color(.95, .3, .25, .8))
 		else:g.draw_circle(p, z.r, Color(.95, .3, .25, .5 * (1 - (z.age - z.delay) / .3)))
+	SwordView.draw(g, offset)
 	var actors: Array = []
 	for obj in w.props:
 		if obj.hp > 0 and Rect2(-30, -30, 700, 420).has_point(obj.p + offset):actors.append({"sort":obj.p.y,"kind":"prop","obj":obj})

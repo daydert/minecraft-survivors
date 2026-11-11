@@ -12,7 +12,15 @@ const BETRAYAL_LINES=[[2.2,"Стой.",1.6],[6.0,"Туда нельзя.",2.2],[
 ## On the edge of the island. Plain speech; Steve does not answer.
 const SIT_LINES=[[1.2,"Ну вот.",2.4],[4.4,"Я ведь тоже когда-то до него дошёл.",3.4],[8.6,"Думал, справлюсь. Не справился.",3.2],
 	[12.6,"Очнулся здесь. И с тех пор одно и то же: дракон, портал, ты.",4.2],[17.8,"Каждый раз ты приходишь. И каждый раз я тебя не пускаю.",4.2],
-	[23.0,"А в этот раз ты меня победил.",3.0],[26.8,"Значит, может, у тебя и получится.",3.4],[30.4,"Держи. Пригодится.",2.8]]
+	[23.0,"А в этот раз ты меня победил.",3.0],[26.8,"Значит, может, у тебя и получится.",3.4],[30.4,"Держи. И меч возьми, пригодится.",3.2]]
+## After the duel: a last exchange of blows breaks both swords and drops them both.
+const CLASH_HITS=[.55,1.05,1.55]
+const CLASH_BREAK=2.25
+const CLASH_LENGTH=3.4
+const DOWN_LENGTH=11.4
+const DOWN_RISE=8.6
+## Lying on the end stone. The only time Steve says anything.
+const DOWN_LINES=[[1.6,"Всё. Ни у тебя меча, ни у меня.",3.0,"ender"],[5.0,"Квиты.",1.8,"steve"],[7.0,"Вставай. Пойдём, кое-что покажу.",2.8,"ender"]]
 const RESTORE_LINES=[[2.4,"Иди. И не останавливайся.",3.0]]
 
 func cue(w, dt: float, at: float) -> bool:
@@ -20,7 +28,7 @@ func cue(w, dt: float, at: float) -> bool:
 
 func lines(w, dt: float, table: Array):
 	for l in table:
-		if cue(w,dt,l[0]):w.say(l[1],l[2])
+		if cue(w,dt,l[0]):w.say(l[1],l[2],l[3] if l.size()>3 else "ender")
 
 func story(w, dt: float):
 	for l in w.lines:l.age+=dt
@@ -62,6 +70,30 @@ func story(w, dt: float):
 				w.stage="last_arrival";w.stage_age=0;w.spawn("endersteve_final",w.betrayer_position());w.hp=minf(20,w.hp+6);w.invulnerable=3.5
 		"last_arrival":
 			if w.stage_age>=2.2:w.stage="last_duel";w.stage_age=0;w.sound("warning")
+		"clash":
+			var foe: Vector2=w.npc.from
+			var side: Vector2=Vector2.RIGHT if absf(w.player.x-foe.x)<1 else Vector2(signf(w.player.x-foe.x),0)
+			w.npc.side=side
+			if w.stage_age<CLASH_BREAK:
+				w.player=w.player.move_toward(foe+side*20,dt*110)
+				w.npc.p=foe
+			else:
+				# Both thrown back by the last blow.
+				var k: float=smoothstep(CLASH_BREAK,CLASH_BREAK+.7,w.stage_age)
+				w.player=w.player.move_toward(foe+side*(20+16*k),dt*60)
+				w.npc.p=foe-side*10*k
+			w.facing=Vector2(-side.x,0);w.npc.dir=side
+			for t in CLASH_HITS:
+				if cue(w,dt,t):w.sound("ch1_parry",.02);w.sound("swing",.02);w.shake=.12
+			if cue(w,dt,CLASH_BREAK):
+				for id in ["break","break","ch4_punch_heavy","shield_break"]:w.sound(id,.01)
+				w.hitstop=.22;w.shake=.5
+			if cue(w,dt,CLASH_BREAK+.75):w.sound("ch4_body_fall",.02);w.sound("ch4_body_fall",.02)
+			if w.stage_age>=CLASH_LENGTH:w.stage="down";w.stage_age=0;w.sound("ch4_breath")
+		"down":
+			lines(w,dt,DOWN_LINES)
+			if cue(w,dt,DOWN_RISE):w.sound("ch4_breath")
+			if w.stage_age>=DOWN_LENGTH:w.stage="to_edge";w.stage_age=0
 		"yield":
 			if cue(w,dt,1.8):w.say("Хватит.",2.0)
 			if w.stage_age>=YIELD_TIME:w.stage="approach";w.stage_age=0
@@ -79,6 +111,7 @@ func story(w, dt: float):
 		"sit":
 			lines(w,dt,SIT_LINES)
 			if cue(w,dt,31.0):w.keepsake=true;w.sound("pickup")
+			if cue(w,dt,32.4):w.sound("pickup")
 			if w.stage_age>=SIT_LENGTH:w.stage="restore";w.stage_age=0;w.npc.from=w.npc.p
 		"restore":
 			var stand: Vector2=w.portal_position+Vector2(0,30)

@@ -375,6 +375,7 @@ func update_hand(dt: float):
 		blood_hand.clear();hand_cooldown = float(rules.cooldown)
 
 func step(dt: float, movement: Vector2 = Vector2.ZERO):
+	if sword_step(dt, movement):return
 	if state != "RUNNING":return
 	if hitstop > 0:
 		hitstop = maxf(0.0, hitstop - dt);return

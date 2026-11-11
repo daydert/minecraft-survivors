@@ -461,6 +461,7 @@ func movement_speed() -> float:
 	return float(db.data.player_speed) * (1 + 0.08 * items.get("sugar", 0))
 
 func step(dt: float, movement: Vector2 = Vector2.ZERO):
+	if sword_step(dt, movement):return
 	if state != "RUNNING":return
 	if stage == "notch":
 		clock += dt

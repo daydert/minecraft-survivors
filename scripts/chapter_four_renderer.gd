@@ -1,4 +1,5 @@
 extends RefCounted
+const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## A single world offset for ground, blood, silhouettes and actors. Visual
 ## hashes and the simulation clock keep pause/camera movement deterministic.
 const EnemyView=preload("res://scripts/chapter_four_enemy_view.gd")
@@ -25,6 +26,7 @@ func world(g):
 	EnemyView.floor_layer(g,offset)
 	var gearless: bool = w.ending.phase in ["erase","three","death","retry","coords","road","door"]
 	if not gearless:ArsenalView.floor_layer(g,offset)
+	SwordView.draw(g,offset)
 	EncounterView.floor_layer(g,offset)
 	FinaleView.floor_layer(g,offset)
 	for mark in w.landmarks:

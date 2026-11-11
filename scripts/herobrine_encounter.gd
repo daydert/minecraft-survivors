@@ -63,6 +63,8 @@ var villager_count=0
 var cues=0
 var freeze=0.0
 var sparks: Array=[]
+## Steve's gear spilling out when he dies, as on any death in the game.
+var lost: Array=[]
 
 func reset():
 	active=false;complete=false;elapsed=0;phase="";phase_age=0;fight_age=0;ritual_elapsed=0
@@ -71,7 +73,7 @@ func reset():
 	teleported=false;destroyed=false;first_stage_won=false
 	hb_p=GREET_AT;hb_dir=Vector2.DOWN;hb_pose="idle";hb_pose_age=0;hb_face="smile";hb_visible=false;on_throne=false
 	dodges=0;dodge_age=-1;ghosts.clear();line="";line_age=0;line_length=0
-	villager={};next_villager=VILLAGER_FIRST;villager_count=0;;cues=0;freeze=0;sparks.clear()
+	villager={};next_villager=VILLAGER_FIRST;villager_count=0;;cues=0;freeze=0;sparks.clear();lost.clear()
 
 func duel_phase() -> bool:return true
 
@@ -314,6 +316,21 @@ func burst(w, at: Vector2, toward: Vector2, count: int, colour: Color):
 		var spread: Vector2=Vector2.from_angle(toward.angle()+rng.randf_range(-.9,.9))
 		w.particles.append({"p":at,"v":spread*rng.randf_range(40,130)+Vector2(0,-rng.randf_range(10,60)),"life":rng.randf_range(.4,.9),"color":colour,"size":rng.randf_range(1.5,3.0)})
 
+func drop_gear(w, at: Vector2):
+	var ids: Array=[]
+	for id in w.build:ids.append([id,w.evolved.has(id)])
+	for id in w.items:ids.append([id,false])
+	for i in range(ids.size()):
+		var a: float=-PI/2+(i-(ids.size()-1)/2.0)*.55+rng.randf_range(-.15,.15)
+		lost.append({"id":ids[i][0],"evolved":ids[i][1],"p":at,"v":Vector2(cos(a),.35)*rng.randf_range(38,70),"h":14.0,"vh":rng.randf_range(70,110),"age":0.0})
+	w.sound("ch4_body_fall",.05)
+
+func step_lost(dt: float):
+	for o in lost:
+		o.age+=dt;o.p+=o.v*dt;o.h+=o.vh*dt;o.vh-=260*dt
+		if o.h<0:o.h=0;o.vh=-o.vh*.3;o.v*=.55
+	lost=lost.filter(func(o):return o.age<3.2)
+
 func showtime(w):
 	var a: float=phase_age
 	var behind: Vector2=w.player+Vector2(6,-6)
@@ -331,6 +348,7 @@ func showtime(w):
 		w.sound("ch4_flesh_hit",.02);w.sound("ch4_bone_crack",.02)
 		freeze=.16;w.shake=.4;w.hp=0;w.player_visual.hurt=.2
 		burst(w,w.player+Vector2(0,-12),Vector2.DOWN,26,Color(.55,.02,.04))
+		drop_gear(w,w.player)
 	if cue(5,5.0,"ch4_heartbeat",w):say("Ха.",1.0)
 	if cue(6,6.3,"ch4_flesh_hit",w):burst(w,w.player+Vector2(0,-12),Vector2.UP,10,Color(.45,.02,.03))
 	if a>=SHOW_LENGTH:
@@ -373,6 +391,7 @@ func step(w, dt: float, movement: Vector2):
 	ghosts=ghosts.filter(func(g):return g.age<.35)
 	for s in sparks:s.age+=dt;s.p+=s.v*dt;s.v*=.9
 	sparks=sparks.filter(func(s):return s.age<.5)
+	step_lost(dt)
 	if not boss.is_empty():boss.flash=maxf(0,boss.flash-dt)
 	w.invulnerable=maxf(0,w.invulnerable-dt) if phase not in ["showtime"] else w.invulnerable
 	w.shake=maxf(0,w.shake-dt)
@@ -404,7 +423,7 @@ func step(w, dt: float, movement: Vector2):
 					if phase_age>=1.2:change("rift");w.sound("blood_rift")
 				"rift":
 					if phase_age>=1.4 and not destroyed:
-						w.hp=0;w.invulnerable=0;destroyed=true;w.sound("death");w.shake=.3
+						w.hp=0;w.invulnerable=0;destroyed=true;w.sound("death");w.shake=.3;drop_gear(w,w.player)
 					if phase_age>=5.2:change("vanish")
 				"vanish":
 					if phase_age>=3:change("portal");w.sound("portal_open")

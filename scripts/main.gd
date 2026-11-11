@@ -189,7 +189,7 @@ func _process(delta):
 	sync_network_fields()
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
-	var theme="silence" if is_five() and world.stage=="notch" and world.notch.phase in ["chair","flight","credits","done","erase"] else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
+	var theme="silence" if is_five() and world.stage=="notch" and world.notch.phase in ["chair","flight","credits","done","erase"] else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach","clash","down"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
 	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four")
 	audio.set_music_context(four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
@@ -506,6 +506,8 @@ func start_chapter(chapter: int, intro: bool=true):
 	world=VW.new() if chapter==5 else FW.new() if chapter==4 else EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
 	world.reset()
 	if chapter==1 and intro:world.begin_intro()
+	# Tests drive worlds directly; only the real game starts unarmed.
+	if is_processing_input():world.begin_sword_drop()
 	audio.reset_run_music()
 	audio.stop_extras()
 	cam_lead=Vector2.ZERO;lead_clock=0.0

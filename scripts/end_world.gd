@@ -74,8 +74,8 @@ var falls=0
 
 func chapter_number() -> int:return 3
 
-func say(text: String, life: float=3.0):
-	lines.append({"text":text,"age":0.0,"life":life})
+func say(text: String, life: float=3.0, who: String="ender"):
+	lines.append({"text":text,"age":0.0,"life":life,"who":who})
 
 ## Where he stands between the hero and the portal.
 func betrayer_position() -> Vector2:
@@ -302,6 +302,7 @@ func teleport_to(p: Vector2):
 	add_effect("end_teleport",player,.55);invulnerable=maxf(invulnerable,.3);sound("end_teleport")
 
 func step(dt: float, movement: Vector2=Vector2.ZERO):
+	if sword_step(dt, movement):return
 	if state!="RUNNING":return
 	if hitstop>0:hitstop=maxf(0,hitstop-dt);return
 	track_progress(dt)
@@ -370,7 +371,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 			target=target.clamp(player-Vector2(260,120),player+Vector2(260,100))
 		if stage in ["dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump"]:target=player.lerp(portal_position,.5)+Vector2(0,-25)
 		if stage=="endsteve_death":target=player.lerp(endsteve_corpse.p,.6)-Vector2(0,30)
-		if stage in ["yield","approach"] and not npc.is_empty():target=player.lerp(npc.p,.5)-Vector2(0,24)
+		if stage in ["yield","approach","clash","down"] and not npc.is_empty():target=player.lerp(npc.p,.5)-Vector2(0,24)
 		if stage in ["to_edge","sit"]:target=(seats()[0]+seats()[1])/2-Vector2(0,34)
 		if stage=="restore":target=player.lerp(portal_position,.6)-Vector2(0,24)
 		scene_camera=scene_camera.lerp(target,1-exp(-dt*2.5))
@@ -795,7 +796,7 @@ func resolve_deaths():
 		for pool in [mobs,projectiles,hazards,explosives,tnt_groups,effects,tasks,orbs,loot]:pool.clear()
 		rebuild_hit_grid();invulnerable=2;player_push=Vector2.ZERO;dash_left=0;rocket=false;jump_age=-1;jump_height=0
 		slow_time=0;poison_time=0;player_burn=0;player_wither=0;flight=0;levitation=0;levitation_height=0;levitation_velocity=0
-		stage="dragon_death" if dragon_dead else "yield";stage_age=0
+		stage="dragon_death" if dragon_dead else "clash";stage_age=0
 		if dragon_dead:
 			sound("dragon_death");fx.quake(self,defeated_boss.p,3.0);fx.flash(defeated_boss.p,320.0,Color(.9,.6,1),.9);fx.ring(defeated_boss.p,200.0,1.2,"evolve")
 		else:

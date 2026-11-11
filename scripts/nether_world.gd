@@ -98,6 +98,7 @@ func move_actor(p: Vector2, velocity: Vector2, radius: float) -> Vector2:
 	return q
 
 func step(dt: float, movement: Vector2 = Vector2.ZERO):
+	if sword_step(dt, movement):return
 	if state!="RUNNING":return
 	track_progress(dt)
 	clock+=dt
@@ -150,7 +151,17 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 				stage_age=0
 				invulnerable=.4
 		"defeat":
-			if stage_age>=2.8:
+			# The Wither goes up in a blast hot enough to melt the gear on Steve.
+			if stage_age>=MELT_BLAST and stage_age-dt<MELT_BLAST:
+				for id in ["explosion","wither_death","ghast_intro_burst"]:sound(id,.01)
+				shake=.8
+			for i in range(molten.size()):
+				var at: float=MELT_START+i*MELT_STEP
+				if stage_age>=at and stage_age-dt<at:sound("fire",.05)
+				if stage_age>=at+.7 and stage_age-dt<at+.7:sound("ch4_poison" if i%2 else "potion_splash",.05)
+			if stage_age>=melt_done() and stage_age-dt<melt_done():
+				build={};items={};evolved={};weapon_visuals.clear();attack_visuals.clear()
+			if stage_age>=melt_done()+1.0:
 				stage="portal"
 				stage_age=0
 				loot.append({"kind":"ender_eye","p":defeated_boss.p.clamp(ARENA.position+Vector2(40,40),ARENA.end-Vector2(40,40))})
@@ -371,6 +382,7 @@ func update_arena_camera(dt: float):
 
 func reset(seed_value: int = 0):
 	portal_camera_focus=false
+	molten.clear()
 	boss_hits=0
 	transition_camera=Vector2.ZERO
 	ghast.reset()
@@ -426,6 +438,9 @@ func resolve_deaths():
 		if m.kind=="wither":boss_dead=true;corpse=m.duplicate(true)
 	super.resolve_deaths()
 	if boss_dead:
+		molten.clear()
+		for id in build:molten.append({"id":id,"evolved":evolved.has(id)})
+		for id in items:molten.append({"id":id,"evolved":false})
 		stage="defeat"
 		stage_age=0
 		defeated_boss=corpse
@@ -437,6 +452,13 @@ func resolve_deaths():
 		message=""
 		message_timer=0
 		sound("wither_death")
+
+const MELT_BLAST:=1.4
+const MELT_START:=2.3
+const MELT_STEP:=.32
+## What Steve carried when the Wither blew: drawn melting in the inventory.
+var molten: Array=[]
+func melt_done() -> float:return MELT_START+maxi(0,molten.size()-1)*MELT_STEP+1.3
 
 func apply_upgrade(id: String):
 	if id=="ender_eye":pearl=true;portal_camera_focus=true;sound("pickup")
