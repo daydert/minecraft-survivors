@@ -143,10 +143,25 @@ static func ut_icon(g, kind: String, at: Vector2, c: Color):
 
 static func battle(g):
 	var w = g.world;var n = w.notch
-	g.draw_rect(Rect2(0, 0, 640, 360), Color.BLACK)
+	var v = view(g)
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(.01, .02, .03))
+	# His dimension behind the box: falling columns of code and a slow grid.
+	for c in range(32):
+		var x: float = 10 + c * 20
+		var speed: float = 18.0 + fmod(c * 7.3, 22.0)
+		for r in range(7):
+			var y: float = fposmod(w.clock * speed + r * 54 + c * 31, 380.0) - 10
+			var a: float = (.05 + .07 * float(r == 6)) * (1.0 - absf(x - 320) / 400.0)
+			g.draw_string(g.font, Vector2(x, y), ["0", "1", "{", "}", ";", "=", "<", ">"][(c * 3 + r + int(w.clock * 2)) % 8], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.3, 1, .6, a))
+	for k in range(9):
+		var gy: float = 300 - pow(k / 8.0, 1.6) * 140
+		g.draw_line(Vector2(0, gy), Vector2(640, gy), Color(.2, .9, .8, .05), 1)
 	var shake: Vector2 = Vector2(round(sin(w.clock * 60) * 3), 0) if n.ut_flash > 0 else Vector2.ZERO
-	var np := Vector2(320, 156) + shake
-	bw_figure(g, "exhausted" if n.ut_state == "end" else ("stagger" if n.ut_flash > 0 else "idle"), n.age, np, 3.0, w.clock)
+	var np := Vector2(320, 150 + sin(w.clock * 1.6) * 3) + shake
+	glow(g, np, 3.6, w.clock)
+	var pose: String = "exhausted" if n.ut_state == "end" else ("stagger" if n.ut_flash > 0 else ("cast" if n.ut_state == "wave" else "idle"))
+	if int(w.clock * 7) % 23 == 0:figure(g, pose, n.age, np + Vector2(5, 0), Vector2.DOWN, 3.8, Color(.97, 0, .86, .5))
+	figure(g, pose, n.age, np, Vector2.DOWN, 3.8, Color(1.6, 1.6, 1.6) if n.ut_flash > 0 and int(w.clock * 30) % 2 == 0 else Color.WHITE)
 	if n.ut_slash >= 0 and n.ut_slash < .45:
 		var k: float = n.ut_slash / .45
 		for i in range(3):g.draw_line(np + Vector2(-34 + i * 10, -130), (np + Vector2(-34 + i * 10, -130)).lerp(np + Vector2(40 + i * 10, -40), k), Color(1, .1, .1), 3)
@@ -157,8 +172,11 @@ static func battle(g):
 		if n.ut_number >= 0:
 			g.draw_rect(Rect2(260, 74, 120, 8), Color(.3, .3, .3));g.draw_rect(Rect2(260, 74, 120 * clampf(n.ut_hp / n.UT_HP, 0, 1), 8), Color(.1, .9, .2))
 	var box: Rect2 = n.UT_BOX if n.ut_state == "wave" else Rect2(40, 168, 560, 104)
-	g.draw_rect(box, Color.BLACK)
-	g.draw_rect(box.grow(1), Color.WHITE, false, 3)
+	g.draw_rect(box, Color(0, 0, 0, .92))
+	g.draw_rect(box.grow(4), Color(.3, 1, .85, .12 + .06 * sin(w.clock * 3)), false, 3)
+	g.draw_rect(box.grow(1), Color(.92, 1, .97), false, 3)
+	for cpt in [box.position, Vector2(box.end.x, box.position.y), box.end, Vector2(box.position.x, box.end.y)]:
+		g.draw_rect(Rect2(cpt - Vector2(4, 4), Vector2(8, 8)), Color(.3, 1, .85))
 	match n.ut_state:
 		"wave":
 			for bl in n.ut_blasters:
@@ -185,8 +203,26 @@ static func battle(g):
 					"key":
 						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color.WHITE)
 						g.draw_string(g.bold, b.p + Vector2(-3, 4), b.glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color.BLACK)
+					"anvil":
+						if b.has("delay"):
+							var warn: float = .25 + .25 * sin(b.age * 40)
+							g.draw_rect(Rect2(b.p.x - 8, box.position.y, 16, box.size.y), Color(1, .2, .1, warn * .5))
+							continue
+						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color(.3, .3, .33))
+						g.draw_rect(Rect2(b.p + Vector2(-8, -7), Vector2(16, 4)), Color(.45, .45, .5))
+						g.draw_rect(Rect2(b.p + Vector2(-4, -3), Vector2(8, 6)), Color(.25, .25, .28))
+					"tnt":
+						var blink: bool = int(b.age * (6 + b.age * 14)) % 2 == 0
+						g.draw_texture_rect(v.tex("ch5q_tnt"), Rect2(b.p - b.size / 2, b.size), false, Color(2, 2, 2) if blink else Color.WHITE)
+						g.draw_line(Vector2(box.position.x, b.p.y), Vector2(box.end.x, b.p.y), Color(1, .4, .1, .12 + .1 * float(blink)), 1)
+						g.draw_line(Vector2(b.p.x, box.position.y), Vector2(b.p.x, box.end.y), Color(1, .4, .1, .12 + .1 * float(blink)), 1)
+					"fire":
+						var k2: float = 1.0 - b.age / b.life
+						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color(1, .55, .1, k2))
+						g.draw_rect(Rect2(b.p - b.size / 2 + Vector2(0, b.size.y * .3) * float(b.size.x > b.size.y) + Vector2(b.size.x * .3, 0) * float(b.size.x <= b.size.y), b.size * Vector2(1, .4) if b.size.x > b.size.y else b.size * Vector2(.4, 1)), Color(1, .95, .6, k2))
 					_:g.draw_circle(b.p, 3.5, Color(1, .6, .2) if b.get("reversed", false) else Color.WHITE)
-			heart(g, n.soul, (Color(.25, .45, 1) if n.ut_mode == "blue" else Color(1, .1, .1)) if w.invulnerable <= 0 or int(w.clock * 20) % 2 == 0 else Color(.4, .1, .1))
+			var ht: Color = (Color(.5, .7, 1.6) if n.ut_mode == "blue" else Color.WHITE) if w.invulnerable <= 0 or int(w.clock * 20) % 2 == 0 else Color(1, 1, 1, .25)
+			g.draw_texture_rect(g.textures.heart if g.textures.has("heart") else v.tex("heart"), Rect2(n.soul - Vector2(6, 6), Vector2(12, 12)), false, ht)
 			if 6.5 - n.ut_timer < 2.8 and not n.ut_bubble.is_empty():
 				var bt: String = n.ut_bubble
 				var bwid: float = minf(220.0, g.font.get_string_size(bt, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x + 16)
@@ -208,10 +244,16 @@ static func battle(g):
 			var shown: String = n.ut_text.substr(0, int(n.ut_type))
 			var lines: PackedStringArray = shown.split("\n")
 			for i in range(lines.size()):g.draw_string(g.bold, box.position + Vector2(20, 34 + i * 26), lines[i], HORIZONTAL_ALIGNMENT_LEFT, box.size.x - 30, 16, Color.WHITE)
-	g.draw_string(g.bold, Vector2(40, 292), "STEVE   LV 19", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
-	g.draw_string(g.bold, Vector2(250, 292), "HP", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color.WHITE)
-	g.draw_rect(Rect2(272, 281, 50, 12), Color(.8, 0, 0));g.draw_rect(Rect2(272, 281, 50 * clampf(w.hp / 20.0, 0, 1), 12), YELLOW)
-	g.draw_string(g.bold, Vector2(334, 292), "%d / 20" % int(maxf(0, w.hp)), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+	var hp: float = maxf(0, w.hp)
+	for k in range(10):
+		var hx := Vector2(232 + k * 18, 280)
+		g.draw_texture_rect(v.tex("heart_empty") if g.textures.has("heart_empty") == false else g.textures.heart_empty, Rect2(hx, Vector2(16, 16)), false)
+		var fill: float = hp - k * 2
+		if fill >= 2:g.draw_texture_rect(g.textures.heart, Rect2(hx, Vector2(16, 16)), false)
+		elif fill >= 1:g.draw_texture_rect(g.textures.heart_half, Rect2(hx, Vector2(16, 16)), false)
+	g.draw_string(g.bold, Vector2(40, 294), "STEVE", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+	g.draw_rect(Rect2(110, 288, 100, 4), Color(0, 0, 0));g.draw_rect(Rect2(110, 288, 64, 4), Color(.5, 1, .2))
+	g.draw_string(g.bold, Vector2(150, 286), "19", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.5, 1, .2))
 	var labels := {"fight":"БИТЬ", "act":"ДЕЙСТВ", "item":"ВЕЩИ", "mercy":"ПОЩАДА"}
 	var options: Array = n.menu_options()
 	for i in range(4):
@@ -220,11 +262,13 @@ static func battle(g):
 			if n.mercy_gone and int(w.clock * 3) % 4 == 0:g.draw_string(g.font, r.position + Vector2(16, 17), "null", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.97, 0, .86, .6))
 			continue
 		var on: bool = n.ut_state == "menu" and n.ut_choice == i
-		var c: Color = YELLOW if on else ORANGE
-		g.draw_rect(r, c, false, 2)
-		if on:heart(g, r.position + Vector2(13, 12), Color(1, .1, .1))
-		else:ut_icon(g, options[i], r.position + Vector2(13, 12), c)
-		g.draw_string(g.bold, r.position + Vector2(26, 17), labels[options[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, c)
+		# Hotbar slots with the item that does the job.
+		g.draw_rect(r, Color(.18, .18, .2, .95));g.draw_rect(r, Color(.05, .05, .06), false, 2)
+		g.draw_line(r.position + Vector2(2, 2), Vector2(r.end.x - 2, r.position.y + 2), Color(.45, .45, .5), 1)
+		if on:g.draw_rect(r.grow(2), Color(1, 1, 1), false, 2)
+		var icon: String = {"fight":"ch5q_item_iron_sword", "act":"ch5q_item_book", "item":"ch5q_item_golden_apple", "mercy":"ch5q_item_paper"}[options[i]]
+		g.draw_texture_rect(v.tex(icon), Rect2(r.position + Vector2(4, 2 - (2 if on else 0)), Vector2(20, 20)), false)
+		g.draw_string(g.bold, r.position + Vector2(30, 16), labels[options[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, 1, .6) if on else Color(.85, .85, .85))
 	retry(g, n)
 
 static func heart(g, c: Vector2, col: Color):
@@ -232,6 +276,31 @@ static func heart(g, c: Vector2, col: Color):
 	g.draw_colored_polygon(pts, col)
 
 # ------------------------------------------------------------------ the lanes
+
+static func mcfx(g, v, kind: String, at: Vector2, t: float, size: float, tint := Color.WHITE):
+	var d: Dictionary = v.fx_data[kind]
+	var frame: int = mini(int(d.count) - 1, int(t * d.count))
+	g.draw_texture_rect_region(v.tex(d.sprite), Rect2(at - Vector2(size, size) / 2, Vector2(size, size)), Rect2(frame * d.frame[0], 0, d.frame[0], d.frame[1]), tint)
+
+## The Minecraft explosion in 2D: puffs running their frames, then smoke.
+static func mc_boom(g, v, at: Vector2, age: float, scale: float):
+	if age < .18:
+		var fl: float = 1.0 - age / .18
+		g.draw_circle(at, (30 + age * 260) * scale, Color(1, .75, .3, .55 * fl));g.draw_circle(at, (16 + age * 120) * scale, Color(1, .97, .8, .9 * fl))
+	for k in range(10):
+		var t: float = age / .9
+		if t >= 1:break
+		var ang: float = k * 2.39996;var dist: float = (10 + t * 70 + (k % 3) * 8) * scale
+		var p: Vector2 = at + Vector2(cos(ang), sin(ang) * .7) * dist + Vector2(0, t * t * 60 * scale)
+		g.draw_rect(Rect2(p - Vector2(2, 2) * scale, Vector2(4, 4) * scale), [Color(.45, .3, .2), Color(.6, .1, .08), Color(.3, .3, .3)][k % 3] * Color(1, 1, 1, 1 - t))
+	for k in range(5):
+		var t: float = (age - .3 - k * .05) / .9
+		if t >= 0 and t < 1:mcfx(g, v, "smoke", at + Vector2(sin(k * 1.9) * 18, -t * 26) * scale, t, 26 * scale, Color(.55, .55, .55, 1 - t))
+	for k in range(8):
+		var t: float = (age - k * .04) / .5
+		if t < 0 or t >= 1:continue
+		var warm: Color = Color(1, .78, .42).lerp(Color(.72, .7, .68), clampf(t * 1.6, 0, 1))
+		mcfx(g, v, "explosion", at + Vector2(sin(k * 2.39996), cos(k * 2.39996) * .6) * (8 + (k % 3) * 14) * scale, t, (34 + (k % 2) * 14) * scale, warm)
 
 static func lanes(g):
 	var w = g.world;var n = w.notch;var v = view(g)
@@ -260,13 +329,14 @@ static func lanes(g):
 	g.draw_texture_rect(T.call("ch5p_oak_door_top"), Rect2(18, top + 120, 24, 24), false);g.draw_texture_rect(T.call("ch5p_oak_door_bottom"), Rect2(18, top + 144, 24, 24), false)
 	g.draw_texture_rect(T.call("ch5p_bricks"), Rect2(0, top - 50, 70, 18), true)
 	g.draw_actor("steve", Vector2(40, top + 96), Vector2.RIGHT, w.clock, false, Color.WHITE, "idle", 1.0, {"state":"idle", "time":w.clock})
+	g.draw_texture_rect(T.call("ch5p_dirt"), Rect2(66, top - 18, n.LANE_ORIGIN.x - 66, bottom - top + 18), true, Color(.85, .75, .62))
 	for r in range(n.ROWS):
 		var y: float = n.row_y(r)
-		g.draw_texture_rect(T.call("ch5p_rail"), Rect2(70, y - 4, 42, 16), true, Color(.9, .9, .9))
+		g.draw_texture_rect(T.call("ch5p_rail"), Rect2(66, y + 2, 46, 16), true, Color(.95, .95, .95))
 		var cart: Dictionary = n.carts[r]
 		if cart.state != "used":
-			g.oval(Vector2(cart.x + 12, y + 12), Vector2(12, 3), Color(0, 0, 0, .3))
-			g.draw_texture_rect(T.call("ch5p_item_minecart"), Rect2(cart.x, y - 10, 24, 24), false)
+			g.oval(Vector2(cart.x + 12, y + 16), Vector2(12, 3), Color(0, 0, 0, .3))
+			g.draw_texture_rect(T.call("ch5p_item_minecart"), Rect2(cart.x, y - 6, 24, 24), false)
 	# Notch on a stack of command blocks, throwing the next one.
 	for k in range(3):g.draw_texture_rect(g.textures.icon_command_block, Rect2(590, 210 + k * 30, 30, 30), false)
 	figure(g, n.pose, n.pose_age, Vector2(605, 212), Vector2.LEFT, 1.5)
@@ -286,7 +356,29 @@ static func lanes(g):
 				var pulse: float = float(pl.get("pulse", 0.0));pl.pulse = maxf(0, pulse - 1.0 / 60.0)
 				g.oval(base, Vector2(14, 4), Color(0, 0, 0, .35))
 				var tint := Color(1.7, 1.7, 1.7) if pl.kind == "tnt" and int(pl.timer * 12) % 2 == 0 else Color(1 + pulse, 1, 1)
-				g.draw_texture_rect(g.textures["icon_pvz_" + pl.kind], Rect2(base - Vector2(16 + kick, 30), Vector2(32, 32)), false, tint)
+				match pl.kind:
+					"magma":
+						var heat: float = .55 + .25 * sin(w.clock * 3 + c.x)
+						g.draw_texture_rect(v.tex("ch5p_magma"), rect.grow(-4), true, Color(1, 1, 1))
+						g.draw_rect(rect.grow(-4), Color(1, .45, .1, heat * .35))
+						for k in range(4):
+							var t: float = fposmod(w.clock * .7 + k * .25, 1.0)
+							g.draw_rect(Rect2(rect.position + Vector2(10 + k * 9, rect.size.y - 8 - t * 26), Vector2(2, 2)), Color(.3, .3, .3, .6 * (1 - t)))
+					"snow_golem":
+						g.draw_texture_rect(g.textures.icon_pvz_snow, Rect2(base - Vector2(13 + kick, 24), Vector2(26, 26)), false, tint)
+						g.draw_texture_rect(g.textures.icon_pvz_snow_golem, Rect2(base - Vector2(11 + kick, 42), Vector2(22, 22)), false, tint)
+						for k in [-1, 1]:g.draw_line(base + Vector2(k * 10, -16), base + Vector2(k * 18, -24), Color(.35, .22, .1), 2)
+					"piston":
+						var ext: float = clampf(pl.push / .3, 0, 1) * 16.0
+						if ext > 0:
+							g.draw_rect(Rect2(base + Vector2(8, -20), Vector2(ext, 4)), Color(.55, .45, .3))
+							g.draw_texture_rect(v.tex("ch5p_piston_top"), Rect2(base + Vector2(6 + ext, -30), Vector2(6, 24)), false)
+						g.draw_texture_rect(g.textures.icon_pvz_piston, Rect2(base - Vector2(16, 30), Vector2(32, 32)), false, tint)
+					"cactus":
+						g.draw_texture_rect(g.textures.icon_pvz_cactus, Rect2(base - Vector2(14, 44), Vector2(28, 28)), false, tint)
+						g.draw_texture_rect(g.textures.icon_pvz_cactus, Rect2(base - Vector2(14, 26), Vector2(28, 28)), false, tint)
+					_:
+						g.draw_texture_rect(g.textures["icon_pvz_" + pl.kind], Rect2(base - Vector2(16 + kick, 30), Vector2(32, 32)), false, tint)
 				if pl.kind == "redstone_ore":
 					for k in range(3):
 						var t: float = fposmod(w.clock * .8 + k * .33, 1.0)
@@ -294,33 +386,42 @@ static func lanes(g):
 				if pl.kind == "obsidian" and pl.hp < n.PLANT_HP.obsidian:
 					var dmg: float = 1.0 - pl.hp / n.PLANT_HP.obsidian
 					for k in range(int(dmg * 5)):g.draw_line(base + Vector2(-8 + k * 4, -26), base + Vector2(-4 + k * 3, -12 - k * 2), Color(.6, .5, .8), 1)
-				elif pl.hp < n.PLANT_HP[pl.kind] and pl.kind != "tnt":
+				elif pl.hp < n.PLANT_HP[pl.kind] and pl.kind not in ["tnt", "magma"]:
 					g.draw_rect(Rect2(rect.position + Vector2(10, rect.size.y - 4), Vector2((rect.size.x - 20) * pl.hp / n.PLANT_HP[pl.kind], 2)), Color(.95, .3, .25))
 			"zombie", "corpse":
 				var z: Dictionary = it.z
 				var q := Vector2(z.x, n.row_y(z.row) + 14)
-				var kind: String = {"zombie":"zombie", "elite":"elite", "glitch":"zombie", "creeper":"creeper"}[z.kind]
+				var kind: String = {"zombie":"zombie", "elite":"elite", "glitch":"zombie", "creeper":"creeper", "baby":"zombie", "spider":"spider", "slime":"slime", "small_slime":"small_slime", "vindicator":"vindicator", "skeleton":"skeleton", "ravager":"ravager"}.get(z.kind, "zombie")
+				var size_k: float = {"baby":.8, "ravager":.85, "spider":1.0, "slime":1.3, "small_slime":1.6}.get(z.kind, 1.2)
+				if z.get("air", false):q.y -= sin(clampf(z.jump / .55, 0, 1) * PI) * 30
 				if it.kind == "corpse":
 					var k: float = minf(1.0, z.age / .4)
 					g.draw_set_transform(q, -k * PI / 2, Vector2.ONE)
-					g.draw_actor(kind, Vector2.ZERO, Vector2.LEFT, 0.0, false, Color(1, 1, 1, 1 - clampf((z.age - .6) / .6, 0, 1)), "hurt", 1.2, {"state":"hurt", "time":.1})
+					g.draw_actor(kind, Vector2.ZERO, Vector2.LEFT, 0.0, false, Color(1, 1, 1, 1 - clampf((z.age - .6) / .6, 0, 1)), "hurt", size_k, {"state":"hurt", "time":.1})
 					g.draw_set_transform(Vector2.ZERO)
 					continue
 				var tint := Color(1.8, 1.8, 1.8) if z.flash > 0 else (Color(.6, 1, 1) if z.kind == "glitch" else Color.WHITE)
-				g.oval(q, Vector2(10, 3), Color(0, 0, 0, .35))
-				g.draw_actor(kind, q, Vector2.LEFT, z.age, z.moving, tint, "walk", 1.2, z.visual)
+				if z.get("slow", 0.0) > 0 and z.flash <= 0:tint = Color(.6, .8, 1.3)
+				if z.get("burn", 0.0) > 0 and z.flash <= 0:tint = Color(1.4, .8, .5)
+				g.oval(Vector2(q.x, n.row_y(z.row) + 14), Vector2(10, 3), Color(0, 0, 0, .35))
+				g.draw_actor(kind, q, Vector2.LEFT, z.age, z.get("moving", true), tint, "walk", size_k, z.visual)
+				if z.get("slow", 0.0) > 0:
+					for k in range(3):g.draw_rect(Rect2(q + Vector2(-8 + k * 7, -30 + sin(w.clock * 5 + k) * 3), Vector2(2, 2)), Color(.85, .95, 1, .8))
 				if z.kind == "glitch" and int(w.clock * 12) % 3 == 0:g.draw_rect(Rect2(q + Vector2(-6, -32), Vector2(8, 8)), Color(.97, 0, .86))
 				if z.hp < z.max:g.draw_rect(Rect2(q + Vector2(-10, -40), Vector2(20 * z.hp / z.max, 2)), Color(.95, .3, .25))
 	g.draw_rect(cr.grow(-1), Color(1, 1, .6, .6 + .3 * sin(w.clock * 6)), false, 2)
 	for a2 in n.arrows:
 		var y: float = n.row_y(a2.row) - 4
-		g.draw_set_transform(Vector2(a2.x, y), -PI / 4, Vector2.ONE)
+		if a2.get("snow", false):
+			g.draw_texture_rect(v.tex("ch5p_item_snowball"), Rect2(a2.x - 6, y - 6, 12, 12), false);continue
+		g.draw_set_transform(Vector2(a2.x, y), PI / 4, Vector2.ONE)
 		g.draw_texture_rect(v.tex("ch5p_item_arrow"), Rect2(-8, -8, 16, 16), false)
 		g.draw_set_transform(Vector2.ZERO)
-	for bl in n.blasts:
-		var k: float = bl.age / .5
-		g.draw_circle(bl.p, 16 + k * 46, Color(1, .65, .2, .55 * (1 - k)))
-		g.draw_circle(bl.p, 8 + k * 26, Color(1, 1, .8, .7 * (1 - k)))
+	for b2 in n.bone_arrows:
+		g.draw_set_transform(Vector2(b2.x, n.row_y(b2.row) - 6), PI / 4 + PI, Vector2.ONE)
+		g.draw_texture_rect(v.tex("ch5p_item_arrow"), Rect2(-8, -8, 16, 16), false)
+		g.draw_set_transform(Vector2.ZERO)
+	for bl in n.blasts:mc_boom(g, v, bl.p, bl.age, 1.0)
 	for d in n.drops:
 		var p: Vector2 = d.p + Vector2(0, sin(w.clock * 4 + d.p.x) * 1.5 if not d.taken else 0.0)
 		g.draw_circle(p, 9, Color(1, .1, .05, .25))
@@ -337,17 +438,18 @@ static func lanes(g):
 		if on:r.position.y -= 3
 		g.draw_rect(r, Color(.88, .8, .58) if ready else Color(.55, .5, .4))
 		g.draw_rect(Rect2(r.position + Vector2(3, 3), Vector2(r.size.x - 6, r.size.y - 16)), Color(.62, .78, .52) if ready else Color(.4, .45, .38))
-		g.draw_texture_rect(g.textures["icon_pvz_" + spec[0]], Rect2(r.position + Vector2(12, 5), Vector2(26, 26)), false, Color.WHITE if ready else Color(.5, .5, .5))
-		g.draw_string(g.bold, r.position + Vector2(r.size.x / 2 - 9, r.size.y - 4), str(spec[1]), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.2, .1, .05))
+		g.draw_texture_rect(g.textures["icon_pvz_" + spec[0]], Rect2(r.position + Vector2(r.size.x / 2 - 12, 6), Vector2(24, 24)), false, Color.WHITE if ready else Color(.5, .5, .5))
+		var cost: String = str(spec[1])
+		g.draw_string(g.bold, r.position + Vector2(r.size.x / 2 - g.bold.get_string_size(cost, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x / 2, r.size.y - 4), cost, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.2, .1, .05))
 		g.draw_rect(r, YELLOW if on else Color(.35, .22, .1), false, 2)
 		g.draw_string(g.font, r.position + Vector2(3, 10), str(i + 1), HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.2, .1, .05, .7))
 		if n.card_ready[i] > 0:g.draw_rect(Rect2(r.position, Vector2(r.size.x, r.size.y * n.card_ready[i] / float(spec[2]))), Color(0, 0, 0, .45))
 	var left: int = n.schedule.size() + n.zombies.size()
-	g.draw_rect(Rect2(470, 14, 150, 14), Color(0, 0, 0, .5))
-	var total: float = 42.0
-	g.draw_rect(Rect2(472, 16, 146 * clampf(1.0 - left / total, 0, 1), 10), Color(.4, .85, .3))
-	g.text_at("Волна", Vector2(472, 42), 8, Color(1, 1, 1, .8), true)
-	g.text_at("1–4 блок · стрелки/мышь клетка · Пробел поставить · наведи на редстоун — собрать", Vector2(112, 352), 8, Color(1, 1, 1, .7))
+	g.draw_rect(Rect2(488, 14, 140, 14), Color(0, 0, 0, .5))
+	var total: float = maxf(1.0, float(n.lane_total))
+	g.draw_rect(Rect2(490, 16, 136 * clampf(1.0 - left / total, 0, 1), 10), Color(.4, .85, .3))
+	g.text_at("Волна", Vector2(490, 42), 8, Color(1, 1, 1, .8), true)
+	g.text_at("1–8 блок · стрелки/мышь клетка · Пробел поставить · наведи на редстоун — собрать", Vector2(112, 352), 8, Color(1, 1, 1, .7))
 	subtitles(g, n, 300.0)
 	retry(g, n)
 
@@ -371,11 +473,13 @@ static func fighter(g):
 	var shake: Vector2 = Vector2(round(sin(w.clock * 70) * 3), round(cos(w.clock * 61) * 2)) * (n.shake3d / .4) if g.settings.shake else Vector2.ZERO
 	g.draw_texture_rect(v.viewport.get_texture(), Rect2(shake, Vector2(640, 360)), false)
 	fight_hud(g, fi, v)
-	g.text_at("←/→ ход · ↑ прыжок · назад — блок · Пробел удар (+↑/↓) · E пинок · Q+направление — приём · F бросок · R супер", Vector2(14, 352), 8, Color(1, 1, 1, .4))
+	if fi.state != "fatality":g.text_at("←/→ ход · ↑ прыжок · назад — блок · Пробел/E удары · Q(+стрелка) приём · F бросок · R супер · Esc — приёмы", Vector2(14, 352), 8, Color(1, 1, 1, .4))
 	subtitles(g, n, 300.0)
 	retry(g, n)
 
 static func fight_hud(g, fi, v):
+	if fi.state == "fatality":
+		fight_banner(g, fi);return
 	var s: Dictionary = fi.steve();var nt: Dictionary = fi.notch()
 	var skins := ["ch5_skin_steve", "ch5_skin_notch"]
 	for i in range(2):
@@ -405,16 +509,55 @@ static func fight_hud(g, fi, v):
 		g.centered(str(int(ceil(fi.clock))), 32, 16, Color(1, .3, .3) if fi.clock < 10 else Color.WHITE, true)
 	if s.cool > 0 and fi.mode == "fight":
 		g.draw_rect(Rect2(52, 62, 60, 3), Color(0, 0, 0, .6));g.draw_rect(Rect2(52, 62, 60 * (1 - minf(1.0, s.cool / 4.0)), 3), Color(1, .4, .3))
+	fight_banner(g, fi)
+
+static func fight_banner(g, fi):
 	if fi.announce_age < 2.2 and not fi.announce.is_empty():
 		var k: float = clampf(fi.announce_age / .15, 0, 1) * clampf((2.2 - fi.announce_age) / .4, 0, 1)
-		var size: int = 32
-		var col: Color = Color(1, .25, .2, k) if fi.announce in ["K.O.", "ДОБЕЙ ЕГО!", "ФАТАЛИТИ"] else Color(1, .88, .3, k)
+		var size: int = 48 if fi.announce == "FATALITY" else 32
+		var col: Color = Color(1, .25, .2, k) if fi.announce in ["K.O.", "ДОБЕЙ ЕГО!", "FATALITY"] else Color(1, .88, .3, k)
 		var wd: float = g.bold.get_string_size(fi.announce, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
 		var pos := Vector2((640 - wd) / 2, 176 + (1 - clampf(fi.announce_age / .15, 0, 1)) * 20)
 		for o in [Vector2(-2, 0), Vector2(2, 0), Vector2(0, -2), Vector2(0, 2), Vector2(3, 3)]:
 			g.draw_string(g.bold, pos + o, fi.announce, HORIZONTAL_ALIGNMENT_LEFT, -1, size, Color(0, 0, 0, k))
 		g.draw_string(g.bold, pos, fi.announce, HORIZONTAL_ALIGNMENT_LEFT, -1, size, col)
 	if fi.hitstop > .08 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, .08))
+	if fi.state == "fatality" and fi.age > 1.3 and fi.age < 1.45 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(.85, .9, 1, .7))
+	if fi.state in ["finish", "fatality"]:
+		var bars: float = 26.0 * clampf(fi.age / .4, 0, 1)
+		g.draw_rect(Rect2(0, 0, 640, bars), Color.BLACK);g.draw_rect(Rect2(0, 360 - bars, 640, bars), Color.BLACK)
+	if fi.state == "finish":
+		var left: float = fi.FINISH_TIME - fi.age
+		g.centered("%.1f" % maxf(0, left), 64, 16, Color(1, .3, .25), true)
+	if fi.paused:move_menu(g, fi)
+	elif fi.mode == "fight" and fi.state in ["intro", "fight"]:
+		g.text_at("Esc — приёмы и комбо", Vector2(520, 70), 8, Color(1, 1, 1, .45))
+
+## The MK-style pause menu: move list, combos and the fatality.
+static func move_menu(g, fi):
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, .72))
+	var panel := Rect2(40, 24, 560, 312)
+	g.draw_rect(panel, Color(.06, .03, .02, .96))
+	g.draw_rect(panel, Color(.75, .55, .2), false, 2);g.draw_rect(panel.grow(-4), Color(.35, .2, .08), false, 1)
+	var title := "СПИСОК ПРИЁМОВ — STEVE"
+	g.draw_string(g.bold, Vector2(320 - g.bold.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x / 2, 50), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(1, .82, .3))
+	g.draw_line(Vector2(60, 58), Vector2(580, 58), Color(.75, .55, .2, .6), 1)
+	var y := 72.0
+	for m in fi.MOVE_LIST:
+		g.draw_string(g.font, Vector2(60, y), m[0], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .95, .85))
+		g.draw_string(g.bold, Vector2(208, y), m[1], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .75, .25))
+		g.draw_string(g.font, Vector2(340, y), m[2], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.75, .7, .62))
+		y += 11.0
+	y += 4.0
+	g.draw_string(g.bold, Vector2(60, y), "КОМБО", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .82, .3));y += 11.0
+	for c in fi.COMBOS:
+		g.draw_string(g.font, Vector2(60, y), c[0], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .95, .85))
+		g.draw_string(g.bold, Vector2(160, y), c[1], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.5, .95, 1))
+		y += 11.0
+	y += 4.0
+	g.draw_string(g.bold, Vector2(60, y), "ФАТАЛИТИ", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .25, .2))
+	g.draw_string(g.bold, Vector2(160, y), fi.FATALITY_TEXT, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .45, .35))
+	g.draw_string(g.font, Vector2(60, 326), "Esc — продолжить бой   ·   Backspace — меню паузы", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, 1, 1, .6))
 
 static func bar(g, r: Rect2, k: float, mirror: bool):
 	g.draw_rect(r.grow(2), Color(0, 0, 0, .8))
@@ -634,8 +777,8 @@ static func credits(g):
 			g.centered(c[1], 168 + rise, 32, Color(1, 1, 1, k), true)
 			g.centered("глава V · Исходный код", 196 + rise, 8, Color(.6, 1, .9, k * .8))
 			continue
-		if not c[1].is_empty():g.centered(c[1], 160 + rise, 8 if not c[2].is_empty() else 16, Color(.6, 1, .9, k * .85), c[2].is_empty())
-		if not c[2].is_empty():g.centered(c[2], 186 + rise, 32 if c[1] != "" else 16, Color(1, 1, 1, k), true)
+		if not c[1].is_empty():g.centered(c[1], (148 if not c[2].is_empty() else 176) + rise, 8 if not c[2].is_empty() else 16, Color(.6, 1, .9, k * .85), c[2].is_empty())
+		if not c[2].is_empty():g.centered(c[2], 196 + rise, 32 if c[1] != "" else 16, Color(1, 1, 1, k), true)
 	for i in range(18):
 		var y: float = fmod(i * 61.0 + w.clock * (8 + i % 4 * 3), 300.0) + 30
 		g.draw_string(g.font, Vector2(fmod(i * 97.0, 620.0) + 10, y), "01{};"[i % 5], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.3, 1, .7, .12))

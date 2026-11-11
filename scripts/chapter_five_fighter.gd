@@ -20,13 +20,42 @@ const MOVES := {
 	"spin": {"start":.08, "active":.2, "recover":.15, "damage":9.0, "reach":1.5, "knock":4.0, "launch":4.0, "stun":.4, "stop":.08},
 	"uppercut": {"start":.05, "active":.18, "recover":.45, "damage":14.0, "reach":1.35, "knock":1.5, "launch":13.0, "stun":.7, "stop":.14, "armor":true},
 	"tnt": {"start":.22, "active":.05, "recover":.32},
-	"wall": {"start":.2, "active":.05, "recover":.3},
+	"shield": {"start":.03, "active":.42, "recover":.22},
+	"dash": {"start":.07, "active":.24, "recover":.24, "damage":11.0, "reach":1.5, "knock":6.5, "launch":3.5, "stun":.65, "stop":.13},
+	"dive": {"start":.1, "active":.7, "recover":.18, "damage":12.0, "reach":1.35, "knock":1.5, "launch":8.5, "stun":.6, "stop":.13},
 	"pearl": {"start":.18, "active":.05, "recover":.2},
 	"throw": {"start":.1, "active":.08, "recover":.4, "damage":12.0, "reach":1.0, "knock":5.0, "launch":6.0, "stun":.8, "stop":.12, "grab":true},
 	"swing": {"start":.12, "active":.1, "recover":.26, "damage":13.0, "reach":1.95, "knock":5.0, "stun":.45, "stop":.1},
 	"code": {"start":.3, "active":.05, "recover":.35},
 	"beam": {"start":.45, "active":.4, "recover":.4},
 	"super": {"start":.6, "active":1.6, "recover":.5}}
+## The MK-style move list for the pause menu: name, input, note.
+const MOVE_LIST := [
+	["Двойка", "Пробел, Пробел", "быстрые удары, начало связки"],
+	["Хук", "Пробел ×3", "подбрасывает"],
+	["Пинок", "E", "далеко отбрасывает"],
+	["Подсечка", "↓ + Пробел", "низ — блок только сидя"],
+	["Апперкот-подброс", "↑ + Пробел", "после попадания — ↑ прыжок вдогонку"],
+	["Удар в воздухе / вертушка", "в прыжке Пробел / E", "жонглирование"],
+	["Бросок", "F", "сквозь блок"],
+	["ТНТ", "Q", "летит дугой, взрыв"],
+	["Рывок с мечом", "Q + →", "через полэкрана, отбрасывает"],
+	["Апперкот киркой", "Q + ↑", "броня, высокий подброс"],
+	["Щит", "Q + ↓", "парирует удар и отражает снаряды"],
+	["Эндер-жемчуг", "Q + ←", "телепорт за спину"],
+	["Пике", "в прыжке Q", "удар сверху, отскок"],
+	["Супер: алмазный шквал", "R при полной шкале", ""]]
+const COMBOS := [
+	["Базовая", "Пробел, Пробел, Пробел → Q"],
+	["Подброс", "Пробел, Пробел, ↑+Пробел → ↑ → Пробел, E → Q"],
+	["Рывок", "Пробел, Пробел, E → Q+→"],
+	["Щит-наказание", "Q+↓ (парирование) → Пробел ×3 → Q+↑"],
+	["Пике-луп", "↑+Пробел → ↑ → Пробел → Q (в воздухе) → Q+↑"]]
+const FATALITY_INPUT := ["down", "forward", "down", "punch"]
+const FATALITY_TEXT := "↓ → ↓ + Пробел, вплотную, когда «ДОБЕЙ ЕГО!»"
+const FINISH_TIME := 8.0
+const FATALITY_LENGTH := 7.0
+const SPECIAL := ["tnt", "dash", "uppercut", "shield", "pearl", "dive"]
 const LINES := ["System.exit(0);", "return null;", "int hp = 0;", "while (true)", "steve.kill();", "throw new Error();"]
 var state := "intro"
 var age := 0.0
@@ -55,6 +84,10 @@ var items: Array = []
 var grabbed: Array = []
 var wired := false
 var events: Array = []
+var paused := false
+var seq: Array = []
+var last_dir := ""
+var fatality := false
 
 func reset(which := "fight"):
 	mode = which;items.clear();wins = [0, 0];round = 1;undo_used = false
@@ -63,7 +96,7 @@ func reset(which := "fight"):
 	start_round()
 
 func start_round():
-	state = "intro";age = 0.0;clock = ROUND_TIME;bolts.clear();sparks.clear();walls.clear();falls.clear()
+	state = "intro";age = 0.0;clock = ROUND_TIME;bolts.clear();sparks.clear();walls.clear();falls.clear();seq.clear();fatality = false
 	hitstop = 0.0;slow = 0.0;zoom = 0.0;winner = -1;jump_held = false;ai_timer = 1.2;teleport_timer = 7.0
 	fighters = [make(-2.5, 1.0, 100.0, "steve"), make(2.5, -1.0, 100.0, "notch")]
 	say("РАУНД %d" % round if mode == "fight" else "БЕЗ ПРАВИЛ")
@@ -89,8 +122,12 @@ func phase_of(f: Dictionary) -> String:
 func start(f: Dictionary, move: String) -> bool:
 	if f.ko or f.stun > 0 or f.down > 0:return false
 	if not f.move.is_empty():
-		var chain_ok: bool = phase_of(f) == "recover" and ((f.move == "jab" and move == "jab2") or (f.move == "jab2" and move == "hook") or (f.move in ["jab2", "hook"] and move in ["kick", "launcher", "uppercut", "tnt"]))
-		if not chain_ok:return false
+		var ph: String = phase_of(f)
+		var chain_ok: bool = ph == "recover" and ((f.move == "jab" and move == "jab2") or (f.move == "jab2" and move == "hook") or (f.move in ["jab2", "hook"] and move in ["kick", "launcher", "sweep"]))
+		# Any normal that connects can be cancelled into a special or the super.
+		var cancel: bool = f.hit and ph != "start" and f.move not in SPECIAL and f.move not in ["super", "throw"] and (move in SPECIAL or move == "super")
+		var air_chain: bool = f.hit and ph != "start" and ((f.move == "air" and move in ["spin", "dive"]) or (f.move == "spin" and move == "dive"))
+		if not (chain_ok or cancel or air_chain):return false
 	f.move = move;f.t = 0.0;f.hit = false;f.block = false
 	f.armor = MOVES[move].get("armor", false)
 	return true
@@ -105,9 +142,12 @@ func dir_of(f: Dictionary) -> String:
 ## Player buttons: "punch" (Space), "kick" (E), "special" (Q + direction),
 ## "grab" (F: throw, or pick up a line in the brawl), "super" (R).
 func press(action: String):
-	if state != "fight":return
+	if paused:return
+	if state == "finish" and action in ["punch", "kick"]:remember(action)
+	if state not in ["fight", "finish"]:return
 	var s: Dictionary = steve()
 	var d: String = dir_of(s)
+	if state == "finish" and try_fatality():return
 	match action:
 		"punch":
 			if s.y > .01:start(s, "air");return
@@ -125,8 +165,9 @@ func press(action: String):
 			else:start(s, "kick")
 		"special":
 			if mode != "fight" or s.cool > 0:return
-			var move: String = {"up":"uppercut", "down":"wall", "back":"pearl"}.get(d, "tnt")
-			if start(s, move):s.cool = {"uppercut":.9, "wall":4.0, "pearl":3.0, "tnt":1.6}[move]
+			var move: String = {"up":"uppercut", "down":"shield", "back":"pearl", "forward":"dash"}.get(d, "tnt")
+			if s.y > .01:move = "dive"
+			if start(s, move):s.cool = {"uppercut":.8, "shield":1.2, "pearl":2.5, "tnt":1.3, "dash":1.0, "dive":.9}[move]
 		"grab":
 			if mode == "fists":grab(0)
 			else:start(s, "throw")
@@ -152,7 +193,11 @@ func finish_blow():
 
 func step(dt: float, movement: Vector2) -> Array:
 	events = []
+	if paused:return events
 	input_dir = movement
+	var dnow: String = dir_of(steve()) if not fighters.is_empty() else ""
+	if dnow != last_dir and not dnow.is_empty():remember(dnow)
+	last_dir = dnow
 	for g in grabbed:events.append("grab")
 	grabbed.clear()
 	if wired:wired = false;events.append("wire")
@@ -168,6 +213,15 @@ func step(dt: float, movement: Vector2) -> Array:
 			if age >= 2.2:state = "fight";age = 0.0
 		"finisher":
 			for f in fighters:body(f, dt)
+		"finish":
+			control(steve(), movement, dt)
+			for f in fighters:body(f, dt)
+			var nt: Dictionary = notch();nt.stun = 99.0;nt.vx = 0.0
+			resolve(steve(), nt)
+			if nt.hp < -.01 or age >= FINISH_TIME:
+				nt.ko = true;nt.stun = 0.0;state = "ko";age = 0.0;slow = .6;say("K.O.");events.append("ko")
+		"fatality":
+			fatality_step(dt)
 		"wire":
 			for f in fighters:body(f, dt)
 			if age >= 2.8:state = "done"
@@ -187,7 +241,7 @@ func step(dt: float, movement: Vector2) -> Array:
 			if state == "fight":check_end()
 			elif age >= 3.0:next_round()
 	for sp in sparks:sp.age += dt
-	sparks = sparks.filter(func(sp):return sp.age < .45)
+	sparks = sparks.filter(func(sp):return sp.age < (1.2 if sp.get("boom", false) else .45))
 	for wl in walls:wl.life -= dt
 	walls = walls.filter(func(wl):return wl.life > 0)
 	return events
@@ -202,6 +256,11 @@ func check_end():
 		var n: Dictionary = notch();n.hp = 0.0;n.move = "";n.stun = 99.0;n.vx = 0.0
 		steve().move = "";steve().vx = 0.0
 		winner = 0;state = "finisher";age = 0.0;say("ДОБЕЙ ЕГО!");events.append("finisher");return
+	if mode == "fight" and loser == 1 and wins[0] >= 1:
+		# Final round: Notch stays up, dazed, for a finishing move.
+		var n: Dictionary = notch();n.hp = 0.0;n.move = "";n.stun = 99.0;n.vx = 0.0;n.vy = 0.0;n.y = 0.0;n.down = 0.0;n.block = false
+		winner = 0;wins[0] += 1;state = "finish";age = 0.0;slow = .5;zoom = 1.0;seq.clear()
+		say("ДОБЕЙ ЕГО!");events.append("finish_him");return
 	fighters[loser].ko = true;fighters[loser].move = "";winner = 1 - loser;wins[winner] += 1;state = "ko";age = 0.0;slow = .9;zoom = 1.0
 	var w: Dictionary = fighters[winner]
 	say("K.O." if clock > 0 else "ВРЕМЯ!")
@@ -218,6 +277,9 @@ func next_round():
 
 func control(s: Dictionary, movement: Vector2, dt: float):
 	var grounded: bool = s.y <= 0.0
+	# Jump-cancel a connected launcher to chase into the air.
+	if s.move in ["launcher", "uppercut"] and s.hit and phase_of(s) != "start" and movement.y < -.5 and not jump_held:
+		s.move = "";s.armor = false;s.vy = JUMP * 1.08;s.vx = s.face * WALK * 1.1;s.y = maxf(s.y, .02);jump_held = true;events.append("jump");return
 	var free: bool = s.move.is_empty() and s.stun <= 0 and s.down <= 0
 	s.block = grounded and free and movement.x * s.face < -.5
 	var crouch: bool = grounded and free and movement.y > .5
@@ -249,6 +311,7 @@ func think(n: Dictionary, s: Dictionary, dt: float):
 		start(n, "launcher");return
 	for b in bolts:
 		if b.owner == "steve" and absf(b.x - n.x) < 2.0 and n.y <= 0:
+			if int(age * 3) % 2 == 0:start(n, "shield");return
 			n.vy = JUMP;n.vx = signf(s.x - n.x) * 3.0;return
 	teleport_timer -= dt
 	if mode == "fight" and teleport_timer <= 0 and n.y <= 0:
@@ -292,14 +355,18 @@ func body(f: Dictionary, dt: float):
 		var ph: String = phase_of(f)
 		if f.move == "air" and ph == "active":f.vx = f.face * 6.5;f.vy = minf(f.vy, -8.0)
 		if f.move == "uppercut" and ph == "active" and not f.hit:f.vy = maxf(f.vy, 8.0);f.vx = f.face * 1.5
+		if f.move == "dash" and ph != "recover":f.vx = f.face * (16.0 if ph == "active" else 2.0);f.vy = maxf(f.vy, 0.0) if f.y > 0 else f.vy
+		if f.move == "dash" and ph == "recover":f.vx = move_toward(f.vx, 0, dt * 60)
+		if f.move == "dive" and ph == "active":f.vx = f.face * 5.0;f.vy = -18.0
+		if f.move == "dive" and f.hit and ph == "active":f.vy = 7.0;f.t = m.start + m.active
 		if not f.hit and ph == "active":
 			match f.move:
 				"tnt":
 					f.hit = true;bolts.append({"owner":f.who, "kind":"tnt", "x":f.x + f.face * .6, "y":1.3, "vx":f.face * 5.5, "vy":5.5, "damage":12.0, "age":0.0});events.append("throw_tnt")
 				"code":
 					f.hit = true;bolts.append({"owner":f.who, "kind":"code", "x":f.x + f.face * .8, "y":.9, "vx":f.face * 7.5, "vy":0.0, "damage":9.0, "age":0.0});events.append("cast_notch")
-				"wall":
-					f.hit = true;walls.append({"owner":f.who, "x":f.x + f.face * 1.1, "life":3.0, "hp":2});events.append("wall")
+				"shield":
+					if f.t - m.start < dt * 1.5:events.append("shield")
 				"pearl":
 					f.hit = true;var o: Dictionary = other(f);f.glitch = .25
 					f.x = clampf(o.x - o.face * 1.0, -STAGE, STAGE);f.face = -o.face if o.face != 0 else f.face;events.append("pearl")
@@ -316,6 +383,8 @@ func body(f: Dictionary, dt: float):
 			if hits > f.air_hits and absf(o.x - f.x) < 2.2:
 				f.air_hits = hits;land(o, 5.0, f.face, {"stun":.5, "knock":.4, "launch":3.0 if hits < 7 else 9.0, "stop":.06}, true, f)
 				f.x = clampf(f.x + f.face * .2, -STAGE, STAGE)
+		if f.move == "dive" and f.y <= 0 and f.t > m.start and ph == "active":
+			f.t = m.start + m.active;events.append("thud");sparks.append({"x":f.x + f.face * .5, "y":.2, "age":0.0, "blocked":false, "heavy":true, "dust":true})
 		if f.t >= m.start + m.active + m.recover or (f.move == "air" and f.y <= 0 and f.t > .1):
 			f.move = "";f.air_hits = 0;f.armor = false
 	if f.y <= 0 and (f.stun > 0 or f.ko or f.down > 0 or (f.who == "notch" and not ai)):f.vx = move_toward(f.vx, 0, dt * 16)
@@ -349,6 +418,13 @@ func resolve(a: Dictionary, b: Dictionary):
 	land(b, m.damage, a.face, m, a.move in ["hook", "kick", "launcher", "uppercut", "swing", "sweep"], a)
 
 func land(b: Dictionary, damage: float, from_face: float, m: Dictionary, heavy: bool, by = null):
+	if b.move == "shield" and phase_of(b) == "active" and b.face != from_face and not m.get("grab", false):
+		# Parry: no damage, the attacker reels.
+		b.t = MOVES.shield.start + MOVES.shield.active;b.meter = minf(100.0, b.meter + 12.0)
+		if by != null and absf(by.x - b.x) < 2.6:by.move = "";by.stun = .75;by.vx = from_face * -3.0;by.flash = .1
+		hitstop = .16;zoom = maxf(zoom, .7);events.append("parry")
+		sparks.append({"x":b.x + b.face * .45, "y":b.y + 1.1, "age":0.0, "blocked":true, "heavy":true, "parry":true})
+		return
 	var low: bool = m.get("low", false)
 	var blocked: bool = b.block and b.face != from_face and not m.get("grab", false) and not (low and not b.get("crouch", false))
 	if b.armor and not blocked and not heavy:damage *= .5;blocked = false
@@ -370,6 +446,31 @@ func land(b: Dictionary, damage: float, from_face: float, m: Dictionary, heavy: 
 	hitstop = float(m.get("stop", .06)) * (.6 if blocked else 1.0)
 	sparks.append({"x":b.x - from_face * .2, "y":b.y + 1.1, "age":0.0, "blocked":blocked, "heavy":heavy})
 
+func remember(token: String):
+	seq.append({"k":token, "t":age})
+	while seq.size() > 6:seq.pop_front()
+
+func try_fatality() -> bool:
+	var n: int = FATALITY_INPUT.size()
+	if seq.size() < n:return false
+	var tail: Array = seq.slice(seq.size() - n)
+	for i in range(n):
+		if tail[i].k != FATALITY_INPUT[i]:return false
+	if age - tail[0].t > 2.5 or absf(steve().x - notch().x) > 3.2:return false
+	state = "fatality";age = 0.0;fatality = true;seq.clear()
+	var s: Dictionary = steve();s.move = "";s.vx = 0.0;s.face = 1.0 if notch().x > s.x else -1.0
+	announce = "";events.append("fatality_start");zoom = 1.0
+	return true
+
+func fatality_step(dt: float):
+	var n: Dictionary = notch()
+	n.stun = 99.0;n.vx = 0.0
+	if age >= 1.3 and age - dt < 1.3:events.append("lightning");hitstop = .12;n.flash = .5
+	if age >= 2.5 and age - dt < 2.5:events.append("fatality_boom");n.glitch = 99.0
+	if age >= 3.3 and age - dt < 3.3:say("FATALITY");events.append("fatality")
+	if age >= 5.2 and age - dt < 5.2:say("STEVE ПОБЕЖДАЕТ")
+	if age >= FATALITY_LENGTH:state = "done";winner = 0
+
 func push_apart():
 	var a: Dictionary = fighters[0];var b: Dictionary = fighters[1]
 	var d: float = b.x - a.x
@@ -388,6 +489,10 @@ func update_bolts(dt: float):
 		for wl in walls:
 			if wl.owner != bo.owner and absf(wl.x - bo.x) < .4:wall_hit = true;wl.hp -= 1;wl.life = wl.life if wl.hp > 0 else 0.0
 		var hit: bool = absf(target.x - bo.x) < .55 and target.y < bo.y + .2 and target.y + 1.8 > bo.y - .3 and not target.ko and target.down <= 0
+		if hit and target.move == "shield" and phase_of(target) == "active" and target.face != signf(bo.vx) and not bo.get("reflected", false):
+			bo.owner = target.who;bo.vx = -bo.vx * 1.25;bo.reflected = true;bo.x += bo.vx * .03
+			if bo.kind == "tnt":bo.vy = 4.0
+			hitstop = .1;events.append("parry");sparks.append({"x":bo.x, "y":bo.y, "age":0.0, "blocked":true, "heavy":true, "parry":true});continue
 		if bo.kind == "tnt" and (hit or bo.y <= 0 or wall_hit):
 			explode(bo);bolts.remove_at(i);continue
 		if wall_hit:

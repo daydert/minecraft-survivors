@@ -284,7 +284,7 @@ func update_projectiles(dt: float):
 		else:s.p = next
 	for list in [blasts, beams]:
 		for b in list:b.age += dt
-	blasts = blasts.filter(func(b):return b.age < .5)
+	blasts = blasts.filter(func(b):return b.age < 1.2)
 	beams = beams.filter(func(b):return b.age < .45)
 	for g in gibs:
 		g.age += dt;g.v.y -= GRAVITY * dt;g.p += g.v * dt

@@ -1,0 +1,82 @@
+{
+ "explosion": {
+  "sprite": "ch5x_explosion",
+  "frame": [
+   32,
+   32
+  ],
+  "count": 16
+ },
+ "smoke": {
+  "sprite": "ch5x_smoke",
+  "frame": [
+   16,
+   16
+  ],
+  "count": 12
+ },
+ "sweep": {
+  "sprite": "ch5x_sweep",
+  "frame": [
+   32,
+   32
+  ],
+  "count": 8
+ },
+ "spark": {
+  "sprite": "ch5x_spark",
+  "frame": [
+   8,
+   8
+  ],
+  "count": 8
+ },
+ "generic": {
+  "sprite": "ch5x_generic",
+  "frame": [
+   8,
+   8
+  ],
+  "count": 8
+ },
+ "crit": {
+  "sprite": "ch5x_crit",
+  "frame": [
+   8,
+   8
+  ],
+  "count": 1
+ },
+ "magic": {
+  "sprite": "ch5x_magic",
+  "frame": [
+   8,
+   8
+  ],
+  "count": 1
+ },
+ "damage": {
+  "sprite": "ch5x_damage",
+  "frame": [
+   8,
+   8
+  ],
+  "count": 1
+ },
+ "flame": {
+  "sprite": "ch5x_flame",
+  "frame": [
+   8,
+   8
+  ],
+  "count": 1
+ },
+ "splash": {
+  "sprite": "ch5x_splash",
+  "frame": [
+   8,
+   8
+  ],
+  "count": 4
+ }
+}

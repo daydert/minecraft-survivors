@@ -125,5 +125,12 @@
     "description": "Пережить пять порывов бездны, ни разу не упав.",
     "tier": "hard",
     "icon": "windswept"
+  },
+  {
+    "id": "fatality",
+    "name": "FATALITY",
+    "description": "Добить Нотча фаталити в файтинге главы V.",
+    "tier": "hard",
+    "icon": "fatality"
   }
 ]

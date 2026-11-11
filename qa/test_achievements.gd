@@ -99,7 +99,7 @@ func run():
 	check(w.rng.state==rng,"Achievement tracking never consumes combat RNG")
 	w.reset(724);check(not w.run_progress.completed and not w.run_progress.healing_used and w.run_progress.damage_taken==0,"A new run clears all attempt-specific restrictions")
 	var store=Store.new();var file="user://qa_achievements_%d.json" % OS.get_process_id();store.load_profile(file)
-	check(store.catalog.size()==18 and store.catalog.filter(func(e):return e.tier=="easy").size()==5 and store.catalog.filter(func(e):return e.tier=="medium").size()==8 and store.catalog.filter(func(e):return e.tier=="hard").size()==4,"Catalog contains the twelve original and six version 2 achievements in their difficulty groups")
+	check(store.catalog.size()==19 and store.catalog.filter(func(e):return e.tier=="easy").size()==5 and store.catalog.filter(func(e):return e.tier=="medium").size()==8 and store.catalog.filter(func(e):return e.tier=="hard").size()==5,"Catalog contains the twelve original and six version 2 achievements plus the chapter V fatality in their difficulty groups")
 	check(store.unlock("chapter_one") and not store.unlock("chapter_one") and not store.unlock("unknown_id"),"Profile accepts known awards exactly once")
 	store.unlock("herobrine");var loaded=Store.new();loaded.load_profile(file)
 	check(loaded.unlocked.has("chapter_one") and loaded.unlocked.has("herobrine") and loaded.pending.is_empty(),"Earned achievements survive loading without repeating old notifications")

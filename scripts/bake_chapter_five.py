@@ -1,3 +1,4 @@
+import sys
 """Chapter V bakes.
 
 - data/chapter_five_code.json: real lines of this game's own source for the
@@ -195,7 +196,12 @@ def notch():
     plants = {"dispenser": cube(t("block/dispenser_front"), t("block/furnace_side"), t("block/furnace_top")),
               "redstone_ore": cube(t("block/redstone_ore"), t("block/redstone_ore"), t("block/redstone_ore")),
               "obsidian": cube(t("block/obsidian"), t("block/obsidian"), t("block/obsidian")),
-              "tnt": cube(t("block/tnt_side"), t("block/tnt_side"), t("block/tnt_top"))}
+              "tnt": cube(t("block/tnt_side"), t("block/tnt_side"), t("block/tnt_top")),
+              "snow_golem": cube(t("block/carved_pumpkin"), t("block/pumpkin_side"), t("block/pumpkin_top")),
+              "snow": cube(t("block/snow"), t("block/snow"), t("block/snow")),
+              "cactus": cube(t("block/cactus_side"), t("block/cactus_side"), t("block/cactus_top")),
+              "piston": cube(t("block/piston_top"), t("block/piston_side"), t("block/piston_side")),
+              "magma": cube(t("block/magma"), t("block/magma"), t("block/magma"))}
     sprites = ["ch5_notch"]
     for name, im in plants.items():
         imp.save(im, "icon_pvz_" + name, ["block/" + name]);sprites.append("icon_pvz_" + name)
@@ -233,19 +239,53 @@ def textures3d():
             r, g, b, a = px[x, y]
             px[x, y] = (int(r * .48), int(g * .78), int(b * .32), a)
     imp.save(grass, "ch5p_grass", ["block/grass_block_top (plains tint)"]);names.append("ch5p_grass")
-    for n in ["dirt", "oak_planks", "oak_log", "glass", "stripped_oak_log", "cobblestone", "bricks", "oak_door_bottom", "oak_door_top", "rail"]:
+    for n in ["dirt", "oak_planks", "oak_log", "glass", "stripped_oak_log", "cobblestone", "bricks", "oak_door_bottom", "oak_door_top", "rail", "magma", "piston_top", "cactus_side", "snow"]:
         imp.save(frame0(imp.tex("block/" + n)), "ch5p_" + n, ["block/" + n]);names.append("ch5p_" + n)
-    for n in ["minecart", "arrow", "redstone"]:
+    for n in ["minecart", "arrow", "redstone", "snowball", "slime_ball"]:
         imp.save(imp.tex("item/" + n), "ch5p_item_" + n, ["item/" + n]);names.append("ch5p_item_" + n)
     imp.save(frame0(imp.tex("block/dispenser_front")), "ch5q_dispenser_front", ["block/dispenser_front"]);names.append("ch5q_dispenser_front")
     imp.save(frame0(imp.tex("block/furnace_side")), "ch5q_furnace_side", ["block/furnace_side"]);names.append("ch5q_furnace_side")
     tnt = Image.new("RGBA", (16, 16));tnt.paste(frame0(imp.tex("block/tnt_side")))
     imp.save(tnt, "ch5q_tnt", ["block/tnt_side"]);names.append("ch5q_tnt")
-    for n in ["golden_apple", "iron_chestplate", "firework_rocket", "iron_sword", "crossbow_standby", "fire_charge", "diamond_pickaxe", "blaze_rod", "arrow", "tnt_minecart"]:
+    for n in ["golden_apple", "iron_chestplate", "firework_rocket", "iron_sword", "crossbow_standby", "fire_charge", "diamond_pickaxe", "blaze_rod", "arrow", "tnt_minecart", "diamond_sword", "book", "paper"]:
         imp.save(imp.tex("item/" + n), "ch5q_item_" + n, ["item/" + n]);names.append("ch5q_item_" + n)
+    sh = imp.tex("entity/shield_base_nopattern").convert("RGBA")
+    k = sh.width // 64
+    imp.save(sh.crop((1 * k, 1 * k, 13 * k, 23 * k)), "ch5q_shield", ["entity/shield_base_nopattern (front plate)"]);names.append("ch5q_shield")
+    for n in ["anvil", "lightning_rod"]:
+        imp.save(frame0(imp.tex("block/" + n)), "ch5q_" + n, ["block/" + n]);names.append("ch5q_" + n)
     (ROOT / "data/chapter_five_3d.json").write_text(json.dumps({"textures": names}, indent=1) + "\n")
     return len(names)
 
+def badges():
+    from bake_v2_assets import badge
+    version, client, _ = find_client(Path.home() / ".local/share/PrismLauncher")
+    imp = Importer(client)
+    return [badge(imp, "fatality", "redstone_block", "item/diamond_sword", None, 1.5)]
+
+def particles():
+    """Vanilla particle sheets for chapter V effects: the real explosion,
+    smoke, sweep, crit, sparks and flame, as horizontal strips."""
+    version, client, _ = find_client(Path.home() / ".local/share/PrismLauncher")
+    imp = Importer(client)
+    specs = {"explosion": [f"explosion_{i}" for i in range(16)], "smoke": [f"big_smoke_{i}" for i in range(12)],
+             "sweep": [f"sweep_{i}" for i in range(8)], "spark": [f"spark_{i}" for i in range(8)], "generic": [f"generic_{i}" for i in range(8)],
+             "crit": ["critical_hit"], "magic": ["enchanted_hit"], "damage": ["damage"], "flame": ["flame"], "splash": [f"splash_{i}" for i in range(4)]}
+    out = {}
+    for name, frames in specs.items():
+        ims = [imp.tex("particle/" + f) for f in frames]
+        w, h = ims[0].size
+        strip = Image.new("RGBA", (w * len(ims), h))
+        for i, im in enumerate(ims):strip.paste(im.resize((w, h), Image.NEAREST), (i * w, 0))
+        imp.save(strip, "ch5x_" + name, ["particle/" + f for f in frames])
+        out[name] = {"sprite": "ch5x_" + name, "frame": [w, h], "count": len(ims)}
+    (ROOT / "data/chapter_five_fx.json").write_text(json.dumps(out, indent=1) + "\n")
+    return len(out)
+
 if __name__ == "__main__":
-    print("CH5_3D", textures3d())
-    print("CH5_CODE", code_lines(), "CH5_ICONS", icons(), "CH5_NOTCH", notch())
+    only = sys.argv[1:] if len(sys.argv) > 1 else ["fx", "3d", "code"]
+    if "fx" in only:print("CH5_FX", particles())
+    if "3d" in only:print("CH5_3D", textures3d())
+    if "notch" in only:print("CH5_NOTCH", notch())
+    if "badges" in only:print("CH5_BADGES", badges())
+    if "code" in only:print("CH5_CODE", code_lines(), "CH5_ICONS", icons(), "CH5_NOTCH", notch())

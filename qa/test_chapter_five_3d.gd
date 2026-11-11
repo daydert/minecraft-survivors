@@ -44,9 +44,30 @@ func run():
 	check(nt.hp<hp-15,"The super is a long flurry")
 	await render("e_super")
 	fi.wins[0]=1;s.hp=100;nt.hp=1;s.x=nt.x-1.0;nt.block=false;nt.move="";nt.stun=0;nt.down=0;s.move="";s.stun=0;fi.start(s,"jab");advance(.3)
-	check(fi.state=="ko" and fi.winner==0 and fi.wins[0]==2,"K.O. — second round won")
-	advance(.5);await render("e_ko")
-	advance(3.0);check(n.phase=="to_quake","Winning the fight leads to his favourite game")
+	check(fi.state=="finish" and fi.winner==0 and fi.wins[0]==2,"Second round won: Notch stays up for a finishing move")
+	advance(.8);await render("e_finish")
+	fi.paused=true;await render("e_menu")
+	check(fi.MOVE_LIST.size()>=12 and fi.COMBOS.size()>=4,"Esc opens a move list with combos and the fatality")
+	fi.paused=false
+	s.x=nt.x-1.5;s.face=1.0;s.move="";s.stun=0
+	for d in [Vector2(0,1),Vector2.ZERO,Vector2(1,0),Vector2.ZERO,Vector2(0,1)]:
+		fi.step(1.0/60,d);fi.step(1.0/60,d)
+	fi.input_dir=Vector2(0,1);fi.press("punch")
+	check(fi.state=="fatality","Down, forward, down + punch is the fatality")
+	advance(1.5);await render("e_fatality_bolt")
+	advance(1.4);await render("e_fatality_boom")
+	advance(1.0);await render("e_fatality_text")
+	check(fi.fatality and w.run_progress.awarded.has("fatality"),"The fatality earns its achievement")
+	advance(4.0);check(n.phase=="to_quake","Winning the fight leads to his favourite game")
+	# Parry and cancels.
+	n.start_fighter(w);fi=n.fighter;advance(2.4);fi.ai=false;s=fi.steve();nt=fi.notch()
+	s.x=0.0;nt.x=1.0;s.face=1.0;nt.face=-1.0;fi.input_dir=Vector2(0,1);fi.press("special");fi.input_dir=Vector2.ZERO;advance(.06)
+	fi.start(nt,"kick");hp=s.hp;advance(.4)
+	check(s.hp==hp and nt.stun>0,"The shield parries a kick and staggers Notch")
+	s.move="";s.cool=0;nt.stun=0;nt.move="";nt.down=0;nt.block=false;nt.x=s.x+1.0;fi.start(s,"jab");advance(.1)
+	fi.input_dir=Vector2(1,0);fi.press("special");fi.input_dir=Vector2.ZERO
+	check(s.move=="dash","A landed jab cancels into the sword dash")
+	advance(.5);fi.ai=true
 	fi.ai=true
 	n.start_fighter(w);fi=n.fighter;advance(2.4);fi.wins[1]=1;fi.steve().hp=0;advance(4.0)
 	check(n.phase=="retry" and n.retry_of=="fighter","Losing the fight returns to its checkpoint")

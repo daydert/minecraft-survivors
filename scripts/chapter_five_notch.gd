@@ -15,9 +15,11 @@ const LANE_ORIGIN := Vector2(112, 96)
 const CELL := Vector2(52, 46)
 const COLS := 9
 const ROWS := 5
-const CARDS := [["dispenser", 100, 4.0], ["redstone_ore", 50, 4.0], ["obsidian", 50, 12.0], ["tnt", 150, 20.0]]
-const PLANT_HP := {"dispenser": 6.0, "redstone_ore": 6.0, "obsidian": 40.0, "tnt": 99.0}
-const ZOMBIES := {"zombie": [10.0, 9.0], "elite": [26.0, 8.0], "glitch": [7.0, 18.0], "creeper": [10.0, 10.0]}
+const CARDS := [["dispenser", 100, 4.0], ["redstone_ore", 50, 4.0], ["obsidian", 50, 12.0], ["tnt", 150, 20.0], ["snow_golem", 125, 6.0], ["cactus", 100, 8.0], ["piston", 75, 10.0], ["magma", 75, 10.0]]
+const PLANT_HP := {"dispenser": 6.0, "redstone_ore": 6.0, "obsidian": 40.0, "tnt": 99.0, "snow_golem": 6.0, "cactus": 10.0, "piston": 12.0, "magma": 99.0}
+const ZOMBIES := {"zombie": [10.0, 9.0], "elite": [26.0, 8.0], "glitch": [7.0, 18.0], "creeper": [10.0, 10.0], "baby": [6.0, 21.0], "spider": [12.0, 14.0], "slime": [16.0, 7.0], "small_slime": [5.0, 11.0], "vindicator": [20.0, 12.0], "skeleton": [10.0, 8.0], "ravager": [150.0, 5.0]}
+## Floor blocks the walkers step over instead of biting.
+const FLAT := ["magma"]
 var phase := ""
 var age := 0.0
 var line := ""
@@ -55,6 +57,8 @@ var ut_flash := 0.0
 var plants: Dictionary = {}
 var zombies: Array = []
 var arrows: Array = []
+var bone_arrows: Array = []
+var lane_total := 1
 var blasts: Array = []
 var redstone := 150
 var card := 0
@@ -412,8 +416,21 @@ func battle(w, dt: float, movement: Vector2):
 		"wave":
 			soul_move(movement, dt)
 			wave_bullets(w, dt)
+			var spawned: Array = []
 			for b in ut_bullets:
 				b.age = float(b.get("age", 0.0)) + dt
+				if b.has("delay"):
+					if b.age < b.delay:continue
+					b.v = Vector2(0, b.drop);b.erase("delay")
+				if b.has("fuse") and b.age >= b.fuse and not b.get("done", false):
+					b.done = true;b.p.y = -999.0;w.sound("explosion", .05);w.shake = .1
+				if b.get("shape", "") == "tnt" and not b.has("at_y"):b.at_y = b.p.y;b.at_x = b.p.x
+				if b.get("done", false) and b.get("shape", "") == "tnt" and not b.get("cross", false):
+					b.cross = true
+					spawned.append({"p":Vector2(UT_BOX.get_center().x, b.at_y), "v":Vector2.ZERO, "size":Vector2(UT_BOX.size.x, 10), "shape":"fire", "life":.35})
+					spawned.append({"p":Vector2(b.at_x, UT_BOX.get_center().y), "v":Vector2.ZERO, "size":Vector2(10, UT_BOX.size.y), "shape":"fire", "life":.35})
+					continue
+				if b.has("life") and b.age > b.life:b.p.y = -999.0;continue
 				if b.get("reverse_at", -1.0) > 0 and b.age >= b.reverse_at and not b.get("reversed", false):b.reversed = true;b.v = -b.v
 				if b.get("gravity", false):
 					b.v.y += 300.0 * dt
@@ -428,7 +445,8 @@ func battle(w, dt: float, movement: Vector2):
 					hit = Rect2(b.p - b.size / 2.0, b.size).grow(2).has_point(soul)
 				else:
 					hit = b.p.distance_to(soul) < float(b.get("r", 4.0))
-				if hit:hurt_soul(w)
+				if hit and not b.get("safe", false):hurt_soul(w)
+			ut_bullets.append_array(spawned)
 			for bl in ut_blasters:
 				bl.age += dt
 				if bl.age > .75 and bl.age < 1.15:
@@ -464,9 +482,9 @@ func soul_move(movement: Vector2, dt: float):
 
 func wave_bullets(w, dt: float):
 	var t: float = 6.5 - ut_timer
-	var pattern: int = (ut_wave - 1) % 6
+	var pattern: int = (ut_wave - 1) % 8
 	var box: Rect2 = UT_BOX
-	var every: float = [0.7, 0.85, 0.75, 1.0, 0.35, 0.18][pattern]
+	var every: float = [0.7, 0.85, 0.75, 1.0, 0.35, 0.18, 0.55, 1.1][pattern]
 	var due: int = int(t / every)
 	while serial < due:
 		serial += 1
@@ -502,27 +520,45 @@ func wave_bullets(w, dt: float):
 				var y: float = box.position.y + 6 + fposmod(serial * 17.0, box.size.y - 12)
 				var left: bool = serial % 2 == 0
 				ut_bullets.append({"p":Vector2(box.position.x - 6 if left else box.end.x + 6, y), "v":Vector2(110 if left else -110, 0), "r":4.0, "shape":"dot", "reverse_at":1.1})
+			6:
+				# Anvils: a warning column, then a fast drop.
+				var ax: float = box.position.x + 12 + fposmod(serial * 53.0 + soul.x * .5, box.size.x - 24)
+				if serial % 3 == 0:ax = clampf(soul.x, box.position.x + 12, box.end.x - 12)
+				ut_bullets.append({"p":Vector2(ax, box.position.y - 14), "v":Vector2.ZERO, "size":Vector2(16, 14), "shape":"anvil", "delay":.6, "drop":340.0})
+			7:
+				# TNT: lit on a grid point, then a cross of fire through the box.
+				var at := Vector2(box.position.x + 20 + fposmod(serial * 61.0, box.size.x - 40), box.position.y + 18 + fposmod(serial * 37.0, box.size.y - 36))
+				ut_bullets.append({"p":at, "v":Vector2.ZERO, "size":Vector2(12, 12), "shape":"tnt", "fuse":1.0, "safe":true})
 
 # ------------------------------------------------------------------ the lanes
 
 func start_lanes(w):
 	clear_arena(w)
-	change("lanes");plants.clear();zombies.clear();arrows.clear();blasts.clear()
-	redstone = 150;card = 0;cursor = Vector2i(2, 2);card_ready = [0.0, 0.0, 0.0, 0.0];trickle = 4.0;lane_age = 0.0;serial = 0
+	change("lanes");plants.clear();zombies.clear();arrows.clear();blasts.clear();bone_arrows.clear()
+	redstone = 150;card = 0;cursor = Vector2i(2, 2);card_ready = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];trickle = 4.0;lane_age = 0.0;serial = 0
 	drops.clear();corpses.clear();carts.clear()
 	for r in range(ROWS):carts.append({"state":"ready", "x":LANE_ORIGIN.x - 22})
 	schedule = []
 	var t := 8.0
-	for k in range(34):
+	for k in range(36):
 		var kind: String = "zombie"
-		if k > 6 and k % 4 == 0:kind = "elite"
-		if k > 10 and k % 5 == 2:kind = "glitch"
-		if k > 14 and k % 7 == 3:kind = "creeper"
+		if k > 3 and k % 5 == 4:kind = "baby"
+		if k > 6 and k % 6 == 1:kind = "elite"
+		if k > 8 and k % 7 == 2:kind = "spider"
+		if k > 10 and k % 6 == 3:kind = "glitch"
+		if k > 12 and k % 8 == 5:kind = "slime"
+		if k > 14 and k % 7 == 6:kind = "creeper"
+		if k > 16 and k % 9 == 0:kind = "skeleton"
+		if k > 19 and k % 8 == 7:kind = "vindicator"
 		schedule.append({"at":t, "row":(k * 3 + k / 5) % ROWS, "kind":kind})
 		t += maxf(1.4, 5.5 - k * .14)
 		if k in [16, 28]:
-			for extra in range(4):schedule.append({"at":t + extra * .5, "row":(extra * 2 + k) % ROWS, "kind":"zombie" if extra % 2 else "glitch"})
+			for extra in range(5):schedule.append({"at":t + extra * .5, "row":(extra * 2 + k) % ROWS, "kind":["zombie", "glitch", "baby", "spider", "vindicator"][extra]})
 			t += 6.0
+	# The last wave brings the ravager down the middle.
+	schedule.append({"at":t + 2.0, "row":2, "kind":"ravager"})
+	for extra in range(4):schedule.append({"at":t + 3.0 + extra * .6, "row":[0, 4, 1, 3][extra], "kind":["elite", "skeleton", "slime", "baby"][extra]})
+	lane_total = schedule.size()
 	say("Ладно. Тогда так: я за зомби, ты за грядку.", 2.0)
 
 func cell_rect(c: Vector2i) -> Rect2:
@@ -535,7 +571,7 @@ func lane_press(w, action: String):
 		"up":cursor.y = maxi(0, cursor.y - 1)
 		"down":cursor.y = mini(ROWS - 1, cursor.y + 1)
 		"accept":place(w)
-		"1", "2", "3", "4":card = int(action) - 1
+		"1", "2", "3", "4", "5", "6", "7", "8":card = int(action) - 1
 
 func click(w, at: Vector2) -> bool:
 	if phase == "fighter":fighter.press("punch");return true
@@ -562,7 +598,7 @@ func click(w, at: Vector2) -> bool:
 	return false
 
 static func menu_rect(i: int) -> Rect2:return Rect2(120 + i * 104, 300, 92, 24)
-static func card_rect(i: int) -> Rect2:return Rect2(112 + i * 56, 40, 50, 46)
+static func card_rect(i: int) -> Rect2:return Rect2(108 + i * 46, 40, 42, 46)
 
 func collect(w, d: Dictionary):
 	d.taken = true;d.age = 0.0;redstone += int(d.value)
@@ -576,7 +612,7 @@ func place(w):
 	if plants.has(cursor) or redstone < int(spec[1]) or card_ready[card] > 0:
 		w.sound("ch4_punch_miss", .05);return
 	redstone -= int(spec[1]);card_ready[card] = float(spec[2])
-	plants[cursor] = {"kind":spec[0], "hp":PLANT_HP[spec[0]], "timer":1.0 if spec[0] == "tnt" else 1.5, "age":0.0}
+	plants[cursor] = {"kind":spec[0], "hp":PLANT_HP[spec[0]], "timer":1.0 if spec[0] == "tnt" else (.6 if spec[0] == "piston" else 1.5), "age":0.0, "push":0.0}
 	w.sound("ch1_wood_place", .05)
 
 func lanes(w, dt: float, movement: Vector2):
@@ -587,7 +623,7 @@ func lanes(w, dt: float, movement: Vector2):
 		if absf(movement.x) > absf(movement.y):lane_press(w, "right" if movement.x > 0 else "left")
 		else:lane_press(w, "down" if movement.y > 0 else "up")
 	elif movement.length_squared() <= .2:cursor_wait = 0.0
-	for i in range(4):card_ready[i] = maxf(0, card_ready[i] - dt)
+	for i in range(card_ready.size()):card_ready[i] = maxf(0, card_ready[i] - dt)
 	trickle -= dt
 	if trickle <= 0:
 		trickle = 7.0
@@ -606,52 +642,104 @@ func lanes(w, dt: float, movement: Vector2):
 	while not schedule.is_empty() and lane_age >= schedule[0].at:
 		var s: Dictionary = schedule.pop_front()
 		var spec: Array = ZOMBIES[s.kind]
-		zombies.append({"kind":s.kind, "row":s.row, "x":LANE_ORIGIN.x + COLS * CELL.x + 20, "hp":spec[0], "max":spec[0], "speed":spec[1], "bite":0.0, "flash":0.0, "visual":w.animation.actor(), "age":0.0})
+		spawn_walker(w, s.kind, s.row, LANE_ORIGIN.x + COLS * CELL.x + 20)
 		set_pose("throw")
+		if s.kind == "ravager":say("А вот и тяжёлая артиллерия.", 2.0);w.sound("ch4_heavy", .05)
 	for c in plants.keys():
 		var pl: Dictionary = plants[c]
-		pl.age += dt;pl.timer -= dt
+		pl.age += dt;pl.timer -= dt;pl.push = maxf(0, float(pl.get("push", 0.0)) - dt)
+		var center: Vector2 = cell_rect(c).get_center()
 		match pl.kind:
-			"dispenser":
+			"dispenser", "snow_golem":
 				if pl.timer <= 0 and zombies.any(func(z):return z.row == c.y and z.x > cell_rect(c).position.x):
-					pl.timer = 1.5
-					arrows.append({"row":c.y, "x":cell_rect(c).get_center().x})
-					w.sound("arrow", .05)
+					pl.timer = 1.5 if pl.kind == "dispenser" else 1.8
+					arrows.append({"row":c.y, "x":center.x, "snow":pl.kind == "snow_golem"})
+					w.sound("arrow" if pl.kind == "dispenser" else "ch1_whoosh", .05)
 			"redstone_ore":
 				if pl.timer <= 0:
-					pl.timer = 8.0;var at: Vector2 = cell_rect(c).get_center()
-					drop_at(at - Vector2(0, 6), at.y + 10);pl.pulse = 0.4
+					pl.timer = 8.0
+					drop_at(center - Vector2(0, 6), center.y + 10);pl.pulse = 0.4
 			"tnt":
 				if pl.timer <= 0:
-					blasts.append({"p":cell_rect(c).get_center(), "age":0.0})
+					blasts.append({"p":center, "age":0.0})
 					for z in zombies:
-						if absi(z.row - c.y) <= 1 and absf(z.x - cell_rect(c).get_center().x) < CELL.x * 1.6:z.hp -= 30.0
+						if absi(z.row - c.y) <= 1 and absf(z.x - center.x) < CELL.x * 1.6:z.hp -= 30.0
 					plants.erase(c);w.sound("explosion", .05);w.shake = .2
+			"piston":
+				if pl.timer <= 0:
+					for z in zombies:
+						var dx: float = z.x - center.x
+						if z.row == c.y and dx > -6 and dx < CELL.x * 1.3 and z.hp > 0 and not z.get("air", false):
+							z.x += CELL.x * (1.6 if z.kind != "ravager" else .4);z.hp -= 2.0;z.flash = .1
+							pl.timer = 3.0;pl.push = .3;w.sound("ch4_stone_rise", .08)
+			"magma":
+				for z in zombies:
+					if z.row == c.y and absf(z.x - center.x) < CELL.x * .5 and not z.get("air", false):
+						z.hp -= 4.0 * dt;z.burn = .3
 	for i in range(arrows.size() - 1, -1, -1):
 		var a: Dictionary = arrows[i]
 		a.x += 170.0 * dt
 		var hit := false
 		for z in zombies:
-			if z.row == a.row and absf(z.x - a.x) < 8 and z.hp > 0:
-				z.hp -= 2.0;z.flash = .08;hit = true;break
+			if z.row == a.row and absf(z.x - a.x) < 8 and z.hp > 0 and not z.get("air", false):
+				z.hp -= 2.0 if not a.get("snow", false) else 1.5;z.flash = .08;hit = true
+				if a.get("snow", false):z.slow = 3.0
+				break
 		if hit or a.x > 640:arrows.remove_at(i)
+	for i in range(bone_arrows.size() - 1, -1, -1):
+		var b: Dictionary = bone_arrows[i]
+		b.x -= 150.0 * dt
+		var col: int = int((b.x - LANE_ORIGIN.x) / CELL.x)
+		var cell := Vector2i(col, b.row)
+		if plants.has(cell) and plants[cell].kind not in FLAT:
+			plants[cell].hp -= 1.0;w.sound("ch4_flesh_hit", .1)
+			if plants[cell].hp <= 0:plants.erase(cell)
+			bone_arrows.remove_at(i)
+		elif b.x < LANE_ORIGIN.x:bone_arrows.remove_at(i)
 	for i in range(zombies.size() - 1, -1, -1):
 		var z: Dictionary = zombies[i]
-		z.age += dt;z.flash = maxf(0, z.flash - dt);z.bite = maxf(0, z.bite - dt)
+		z.age += dt;z.flash = maxf(0, z.flash - dt);z.bite = maxf(0, z.bite - dt);z.slow = maxf(0, float(z.get("slow", 0.0)) - dt);z.burn = maxf(0, float(z.get("burn", 0.0)) - dt)
 		if z.hp <= 0:
-			corpses.append({"kind":z.kind, "row":z.row, "x":z.x, "age":0.0});zombies.remove_at(i);continue
+			corpses.append({"kind":z.kind, "row":z.row, "x":z.x, "age":0.0});zombies.remove_at(i)
+			if z.kind == "slime":
+				for k in [-10, 10]:spawn_walker(w, "small_slime", z.row, z.x + k)
+			if z.kind == "ravager":blasts.append({"p":Vector2(z.x, row_y(z.row)), "age":0.0});w.sound("explosion", .05);w.shake = .3
+			continue
+		var speed: float = z.speed * (.5 if z.slow > 0 else 1.0)
+		# The spider leaps over the first block in its way.
+		if z.get("air", false):
+			z.jump += dt
+			z.x -= CELL.x * 1.4 * dt / .55
+			if z.jump >= .55:z.air = false
+			z.visual.gait += speed * dt / 30.0
+			w.animation.set_pose(z.visual, "walk", z.visual.gait)
+			continue
 		var col: int = int((z.x - 10 - LANE_ORIGIN.x) / CELL.x)
 		var target := Vector2i(col, z.row)
-		if col >= 0 and col < COLS and plants.has(target) and z.x - cell_rect(target).get_center().x < 22:
+		var blocked: bool = col >= 0 and col < COLS and plants.has(target) and plants[target].kind not in FLAT and z.x - cell_rect(target).get_center().x < 22
+		if z.kind == "skeleton" and col < COLS - 2 and not blocked:
+			z.moving = false;z.shot = float(z.get("shot", 1.0)) - dt
+			if z.shot <= 0 and plants.keys().any(func(pc):return pc.y == z.row and pc.x < col + 1 and plants[pc].kind not in FLAT):
+				z.shot = 2.4;bone_arrows.append({"row":z.row, "x":z.x - 8});w.sound("arrow", .05)
+			elif not plants.keys().any(func(pc):return pc.y == z.row and pc.x <= col):
+				z.moving = true;z.x -= speed * dt
+		elif blocked:
 			z.moving = false
-			if z.kind == "creeper":
+			if z.kind == "spider" and not z.get("leapt", false):
+				z.leapt = true;z.air = true;z.jump = 0.0;w.sound("ch1_whoosh", .05)
+			elif z.kind == "creeper":
 				plants.erase(target);blasts.append({"p":Vector2(z.x, row_y(z.row)), "age":0.0});z.hp = 0;w.sound("explosion", .05)
+			elif z.kind == "ravager":
+				plants.erase(target);z.flash = .1;w.sound("ch4_heavy", .05);w.shake = .2
 			elif z.bite <= 0:
-				z.bite = .5;plants[target].hp -= 1.0;w.sound("ch4_flesh_hit", .1)
-				if plants[target].hp <= 0:plants.erase(target)
+				z.bite = .7 if z.kind == "vindicator" else .5
+				var pl: Dictionary = plants[target]
+				pl.hp -= 3.0 if z.kind == "vindicator" else 1.0;w.sound("ch4_flesh_hit", .1)
+				if pl.kind == "cactus":z.hp -= 1.5;z.flash = .08
+				if pl.hp <= 0:plants.erase(target)
 		else:
-			z.moving = true;z.x -= z.speed * dt
-		z.visual.gait += z.speed * dt / 30.0
+			z.moving = true;z.x -= speed * dt
+		z.visual.gait += speed * dt / 30.0
 		w.animation.set_pose(z.visual, "walk" if z.moving else "attack", z.visual.gait if z.moving else fposmod(z.age, .3))
 		if z.x < LANE_ORIGIN.x - 6:
 			var cart: Dictionary = carts[z.row]
@@ -669,10 +757,14 @@ func lanes(w, dt: float, movement: Vector2):
 	for cp in corpses:cp.age += dt
 	corpses = corpses.filter(func(cp):return cp.age < 1.2)
 	for b in blasts:b.age += dt
-	blasts = blasts.filter(func(b):return b.age < .5)
+	blasts = blasts.filter(func(b):return b.age < 1.3)
 	if schedule.is_empty() and zombies.is_empty():change("lanes_won")
 
 func row_y(row: int) -> float:return LANE_ORIGIN.y + (row + .5) * CELL.y
+
+func spawn_walker(w, kind: String, row: int, x: float):
+	var spec: Array = ZOMBIES[kind]
+	zombies.append({"kind":kind, "row":row, "x":x, "hp":spec[0], "max":spec[0], "speed":spec[1], "bite":0.0, "flash":0.0, "visual":w.animation.actor(), "age":0.0, "slow":0.0, "burn":0.0})
 
 # ------------------------------------------------------------------ 3D: the fighting game
 
@@ -687,7 +779,13 @@ func fight_sounds(w, events: Array):
 			"jump":w.sound("ch4_punch_miss", .1)
 			"throw_tnt":w.sound("ch1_whoosh", .05)
 			"boom":w.sound("explosion", .03);shake3d = .35
-			"wall":w.sound("ch4_stone_rise", .1)
+			"shield":w.sound("shield_block", .1)
+			"parry":w.sound("shield_block", .02);w.sound("ch4_bell", .05);shake3d = .3
+			"finish_him":w.sound("ch4_bell_warn", .02)
+			"fatality_start":w.sound("ch4_hb_tick", .02)
+			"lightning":w.sound("ch4_hb_lightning", .02);w.sound("lightning", .02);shake3d = .5
+			"fatality_boom":w.sound("explosion", .02);w.sound("ch4_hb_shatter", .02);shake3d = .6
+			"fatality":w.sound("ch4_totem", .02);w.run_progress.award("fatality")
 			"pearl":w.sound("pearl_throw", .1);w.sound("end_teleport", .1)
 			"beam":w.sound("ch4_hb_beam", .1)
 			"throw":w.sound("ch4_body_fall", .05);shake3d = .25

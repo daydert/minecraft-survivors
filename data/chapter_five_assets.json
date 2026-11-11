@@ -20,6 +20,11 @@
   "icon_pvz_redstone_ore",
   "icon_pvz_obsidian",
   "icon_pvz_tnt",
+  "icon_pvz_snow_golem",
+  "icon_pvz_snow",
+  "icon_pvz_cactus",
+  "icon_pvz_piston",
+  "icon_pvz_magma",
   "icon_pvz_redstone"
  ],
  "notch": {

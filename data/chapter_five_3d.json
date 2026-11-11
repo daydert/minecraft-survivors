@@ -30,9 +30,15 @@
   "ch5p_oak_door_bottom",
   "ch5p_oak_door_top",
   "ch5p_rail",
+  "ch5p_magma",
+  "ch5p_piston_top",
+  "ch5p_cactus_side",
+  "ch5p_snow",
   "ch5p_item_minecart",
   "ch5p_item_arrow",
   "ch5p_item_redstone",
+  "ch5p_item_snowball",
+  "ch5p_item_slime_ball",
   "ch5q_dispenser_front",
   "ch5q_furnace_side",
   "ch5q_tnt",
@@ -45,6 +51,12 @@
   "ch5q_item_diamond_pickaxe",
   "ch5q_item_blaze_rod",
   "ch5q_item_arrow",
-  "ch5q_item_tnt_minecart"
+  "ch5q_item_tnt_minecart",
+  "ch5q_item_diamond_sword",
+  "ch5q_item_book",
+  "ch5q_item_paper",
+  "ch5q_shield",
+  "ch5q_anvil",
+  "ch5q_lightning_rod"
  ]
 }

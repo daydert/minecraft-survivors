@@ -72,7 +72,7 @@ func run():
 	check(n.phase=="lanes" and n.redstone==150,"Then the lanes")
 	n.card=1;n.cursor=Vector2i(0,0);n.press(w,"accept");n.card=0;n.cursor=Vector2i(1,2);n.press(w,"accept")
 	check(n.plants.size()==2 and n.redstone==0,"Blocks cost redstone")
-	n.redstone=999;n.card_ready=[0.0,0.0,0.0,0.0]
+	n.redstone=999;n.card_ready=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 	for r in range(5):
 		n.card=0;n.card_ready[0]=0;n.cursor=Vector2i(1,r);n.press(w,"accept")
 		n.card=2;n.card_ready[2]=0;n.cursor=Vector2i(4,r);n.press(w,"accept")

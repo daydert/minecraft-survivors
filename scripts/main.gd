@@ -298,6 +298,9 @@ func _input(event):
 		if event.keycode == KEY_F11:
 			action("fullscreen")
 			return
+		if event.keycode == KEY_BACKSPACE and is_five() and world.stage=="notch" and world.state=="RUNNING" and world.notch.phase=="fighter" and world.notch.fighter.paused:
+			world.notch.fighter.paused = false;pause_from = world.state;world.state = "PAUSED";selected = 0
+			return
 		if event.keycode == KEY_ESCAPE:
 			if screen=="ch4_note":close_four_note()
 			elif screen=="achievements":close_achievements()
@@ -309,6 +312,8 @@ func _input(event):
 			elif not screen.is_empty():
 				screen = ""
 				selected = 0
+			elif is_five() and world.stage=="notch" and world.state=="RUNNING" and world.notch.phase=="fighter" and world.notch.fighter.mode=="fight":
+				world.notch.fighter.paused = not world.notch.fighter.paused
 			elif coop.active and coop.running:
 				coop.command("pause",0 if world.players[world.local_id].paused else 1)
 			elif world.state == "PAUSED": action("resume")
