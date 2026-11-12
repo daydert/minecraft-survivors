@@ -39,7 +39,7 @@ func run():
 	advance(1);var knees=await render("clash");advance(w.end_boss.CLASH_LENGTH+.3)
 	await render("down");advance(w.end_boss.DOWN_LENGTH);await render("to_edge");advance(7.5);var sitting=await render("sit")
 	check(w.stage=="sit" and knees.get_data()!=sitting.get_data(),"The last exchange and the fall lead to the two of them sitting on the rim")
-	advance(13);await render("sit_talk");advance(22);await render("restore_walk");advance(3);await render("restore_cast");advance(4);var p=w.player;await render("dissolve");advance(3.5);await render("ready")
+	advance(13);await render("sit_talk");advance(w.end_boss.SIT_LENGTH-w.stage_age+1.0);await render("restore_walk");advance(3.5);await render("restore_cast");advance(4.3);var p=w.player;await render("dissolve");advance(w.end_boss.RESTORE_END-w.stage_age+.3);await render("ready")
 	check(w.stage=="portal_ready" and w.portal_lit,"Portal reconstruction ends with player still outside")
 	for i in range(420):
 		if w.stage=="exit_jump":break

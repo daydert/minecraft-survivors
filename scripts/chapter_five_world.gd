@@ -22,6 +22,7 @@ var hint: Dictionary = {}
 var invert := 0.0
 var hijack: Dictionary = {}
 var double_pending := false
+var cache_ready := 0.0
 var crate_timer := 75.0
 var arsenal = preload("res://scripts/chapter_five_arsenal.gd").new()
 var bosses = preload("res://scripts/chapter_five_bosses.gd").new()
@@ -36,6 +37,7 @@ func reset(seed_value: int = 0):
 	arsenal.reset()
 	bosses.reset()
 	notch.reset()
+	cache_ready=0.0
 	super.reset(seed_value)
 	five = db.data.chapter_five
 	for id in arsenal.OWN:animation.data.weapons[id] = {"windup":.2,"attack":.12,"recover":.36}
@@ -54,23 +56,19 @@ func phase_name() -> String:
 	if time < float(five.phases.dark_at):return "white"
 	return "dark" if time < float(five.phases.flicker_at) else "flicker"
 
-## 0 is the white space, 1 the dark one. Switches stutter before they settle.
+## Presentation only: one gradual dusk, then a deliberate inversion once a
+## minute. No strobing at phase boundaries; combat clocks/RNG are unchanged.
 func tone() -> float:
 	var dark_at: float = five.phases.dark_at
 	var flicker_at: float = five.phases.flicker_at
-	if time < dark_at - 3.0:return 0.0
-	if time < dark_at:return stutter(time - (dark_at - 3.0), 3.0, 0.0)
+	if time < dark_at:return smoothstep(dark_at-6.0,dark_at,time)
 	if time < flicker_at:return 1.0
 	var period: float = five.phases.flicker_period
-	var k: float = (time - flicker_at) / period
-	var from: float = 1.0 if int(k) % 2 == 0 else 0.0
-	var left: float = (1.0 - fposmod(k, 1.0)) * period
-	if left < 0.7:return stutter(0.7 - left, 0.7, from)
-	return from
-
-func stutter(t: float, length: float, from: float) -> float:
-	var steps: int = int(t / length * 9.0)
-	return (1.0 - from) if steps % 2 == 1 or t > length * 0.9 else from
+	var age: float = time-flicker_at
+	var cycle: int = int(age/period)
+	var from: float = 1.0 if cycle%2==0 else 0.0
+	var fade: float = smoothstep(period-5.0,period,fposmod(age,period))
+	return lerpf(from,1.0-from,fade)
 
 # ------------------------------------------------------------------ spawning
 
@@ -170,7 +168,10 @@ func resolve_deaths():
 					message = "Управление возвращено";message_timer = 2.0
 					sound("ch4_mirror", 0.1)
 	for m in mobs:
-		if m.hp <= 0 and m.kind in ["while_loop","array"]:loot.append({"kind":"chest","p":m.p,"born":time})
+		if m.hp<=0 and m.kind in ["while_loop","array"] and time>=cache_ready:
+			cache_ready=time+80.0
+			loot.append({"kind":"chest","p":m.p,"born":time,"data_cache":true})
+			add_effect("ch5_spawn",m.p,.8)
 	super.resolve_deaths()
 	for b in born:
 		if super.spawn("recursion", b.p):
@@ -434,6 +435,12 @@ func update_attacks(dt: float):
 
 func damage_player(amount: float):
 	if invulnerable > 0 or hp <= 0:return
+	if items.has("breakpoint") and arsenal.breakpoint_ready<=0:
+		arsenal.breakpoint_ready=20.0-items.breakpoint*2.0;invulnerable=.45
+		for m in in_radius(player,90):
+			if not m.get("boss",false) and m.kind not in BOSS_KINDS:m.stun=maxf(m.stun,.45)
+		add_effect("ch5_breakpoint",player,.5);sound("shield_block",.1)
+		return
 	var before: float = hp
 	super.damage_player(amount)
 	if hp <= 0 and before > 0:arsenal.rewind(self)
@@ -448,6 +455,15 @@ func void_factor() -> float:
 func discard(id: String) -> bool:
 	if id == "spawn_egg":arsenal.allies.clear()
 	return super.discard(id)
+
+func break_pumpkin(p: Dictionary):
+	if p.get("has_heal",false):loot.append({"kind":"healing_v","p":p.p})
+	else:drop_xp(p.p,4)
+	add_effect("break",p.p,.3);sound("break")
+
+func apply_upgrade(id: String):
+	if id=="healing_v":super.apply_upgrade("apple")
+	else:super.apply_upgrade(id)
 
 # ------------------------------------------------------------------ step
 

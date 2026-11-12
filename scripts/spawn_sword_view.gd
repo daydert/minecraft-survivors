@@ -1,7 +1,7 @@
 extends RefCounted
 ## The iron sword at the spawn of every chapter: stuck in the grass (I),
-## rising out of lava (II), falling from the sky (III), made of the purple
-## motes Ender Steve left (IV), assembled out of the void (V).
+## rising out of lava (II), falling from the sky (III), or assembled out of
+## the void (V). IV already carries EnderSteve's gift and has no pickup scene.
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const SCALE := 1.0
 

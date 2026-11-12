@@ -1,0 +1,24 @@
+{
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "page": "https://kenney.nl/assets/sci-fi-sounds",
+  "mirror": "https://opengameart.org/content/sci-fi-sounds",
+  "download": "https://opengameart.org/sites/default/files/sci-fi_sounds.zip",
+  "files": {
+    "portal_open.ogg": {
+      "source": "Audio/forceField_000.ogg",
+      "sha256": "c2916f2a062c8ddd1aca2826d134fe90847037db31342726ffb0f9097afe339c",
+      "processing": "none (original OGG bytes)"
+    },
+    "portal_pass.ogg": {
+      "source": "Audio/forceField_001.ogg",
+      "sha256": "5574e69dd04e5f59322c5ddffde5978f077b09170ae5e29cec0bd9901828cd90",
+      "processing": "none (original OGG bytes)"
+    },
+    "ut_charge.ogg": {
+      "source": "Audio/laserLarge_000.ogg",
+      "sha256": "a56d95794cd732d6c2d66ce488c14cf557fe526c282897c9a77675c2bd9b77e6",
+      "processing": "none (original OGG bytes)"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "stance_windows": 22,
+  "max_held_foot_drift_m": 4.915124923727108e-07,
+  "sole_reference_height_m": 0.004,
+  "two_hand_support_frames": [
+    697,
+    721,
+    745,
+    793,
+    865
+  ],
+  "max_support_error_m": 0.0,
+  "note": "During the controlled lay-down, the right arm releases first and the left arm guides the back. This is separate from the two-hand support interval.",
+  "visual_reviews": "All 12 cameras at start/mid/end, strike preparation/contact/reaction, catch, final path. These measurements do not replace images."
+}

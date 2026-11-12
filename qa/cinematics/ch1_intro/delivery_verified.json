@@ -1,0 +1,121 @@
+{
+  "qa/recordings/chapter_one_prologue.mp4": {
+    "sha256": "698aa6aa4aa7892d4bbdec740e87a8b8c7ffc900692e5f3d5c339767c32fb858",
+    "bytes": 9888663,
+    "frames": 1200,
+    "fps": "24/1",
+    "duration": 50.0,
+    "width": 960,
+    "height": 540,
+    "video": "h264",
+    "audio": "aac",
+    "full_decode": "pass"
+  },
+  "assets/cinematics/ch1_intro.ogv": {
+    "sha256": "64b2be2f392c039010197e406038f7d8420028fc377d22bc95cc17d21f51d64d",
+    "bytes": 63510618,
+    "frames": 1200,
+    "fps": "24/1",
+    "duration": 50.0,
+    "width": 960,
+    "height": 540,
+    "video": "theora",
+    "audio": "separate OGG",
+    "full_decode": "pass"
+  },
+  "qa/recordings/chapter_one_cinematic.mp4": {
+    "sha256": "a9f424b266f86696e2ffbbb186aec0aa5338a2602abe7cd913a046678731c668",
+    "bytes": 83970996,
+    "frames": 1786,
+    "fps": "24/1",
+    "duration": 74.416667,
+    "width": 1280,
+    "height": 720,
+    "video": "h264",
+    "audio": "aac",
+    "full_decode": "pass"
+  },
+  "assets/art_source/ch1_intro/ch1_intro.blend": {
+    "sha256": "8e70632597e60f952ca7282f6f07f86131a244860e3ac95e10a196a7f666f242",
+    "bytes": 1742234
+  },
+  "assets/cinematics/ch1_intro_poster.png": {
+    "sha256": "8c776561563b654047f883d314f5c65faaed2b72b96a4354d5e45525f02e2edf",
+    "bytes": 744339
+  },
+  "assets/cinematics/ch1_intro_sfx.ogg": {
+    "sha256": "d4a1cb47780ffd12ece247c95d8d2f0fd32e5e26c53f77295187b3acf5c00d60",
+    "bytes": 211402
+  },
+  "builds/linux/MinecraftSurvivors.x86_64": {
+    "sha256": "b9af4155786ea5ba720161942500a37d13c6e9f6d14e089584bfe2c57d070d81",
+    "bytes": 253500920
+  },
+  "builds/windows/MinecraftSurvivors.exe": {
+    "sha256": "d5262e6a347ce5d1faac5212b6ff70a0e73a7c807c570e71192ced0bd2977773",
+    "bytes": 289110216
+  },
+  "source": {
+    "frames": 1200,
+    "fps": 24,
+    "duration": 50,
+    "resolution": [
+      960,
+      540
+    ],
+    "engine": "BLENDER_EEVEE",
+    "samples": 24,
+    "reopened_source": "/home/daydert/MinecraftSurvivors2/assets/art_source/ch1_intro/ch1_intro.blend",
+    "packed_images": true
+  },
+  "game_checks": {
+    "checks": 18,
+    "status": "pass"
+  },
+  "full_game_checks": {
+    "checks": 28,
+    "failures": [],
+    "status": "pass"
+  },
+  "mechanics": {
+    "stance_windows": 22,
+    "max_held_foot_drift_m": 4.915124923727108e-07,
+    "sole_reference_height_m": 0.004,
+    "two_hand_support_frames": [
+      697,
+      721,
+      745,
+      793,
+      865
+    ],
+    "max_support_error_m": 0.0,
+    "note": "During the controlled lay-down, the right arm releases first and the left arm guides the back. This is separate from the two-hand support interval.",
+    "visual_reviews": "All 12 cameras at start/mid/end, strike preparation/contact/reaction, catch, final path. These measurements do not replace images."
+  },
+  "runtime": {
+    "duration": 73.6666666666663,
+    "last_video_position": 49.9999999999993,
+    "prologue_display_frames": 1201,
+    "run_time": 12.0333333333335,
+    "state": "RUNNING",
+    "sword": 1
+  },
+  "export_checks": {
+    "linux": {
+      "status": "pass",
+      "video_sha256": "64b2be2f392c039010197e406038f7d8420028fc377d22bc95cc17d21f51d64d"
+    },
+    "windows_pack_on_linux": {
+      "status": "pass",
+      "video_sha256": "64b2be2f392c039010197e406038f7d8420028fc377d22bc95cc17d21f51d64d"
+    }
+  },
+  "native_linux": {
+    "status": "pass",
+    "recorded_frames": 1750,
+    "fps": 24,
+    "source_clock_on_handoff": 0,
+    "sword_on_handoff": 1
+  },
+  "native_windows": "not tested; Windows embedded PCK tested with Linux Godot"
+}

@@ -1,6 +1,7 @@
 extends RefCounted
 ## Notch on screen: his figure, the fight's attacks, the battle box and the
 ## lanes. Reads the notch state only.
+const FourPrompt = preload("res://scripts/chapter_four_finale_view.gd")
 const ROWS := {"down": 0, "up": 1, "side": 2}
 const WHITE := Color(1, 1, 1)
 const ORANGE := Color(1, .62, .15)
@@ -190,7 +191,7 @@ static func battle(g):
 				g.draw_texture_rect(view(g).tex("icon_command_block") if g.textures.has("icon_command_block") == false else g.textures.icon_command_block, Rect2(-11, -11 - (4 if bl.age > .75 else 0), 22, 22), false)
 				g.draw_set_transform(Vector2.ZERO)
 			for b in n.ut_bullets:
-				if not box.grow(-2).has_point(b.p) and not b.get("ring", false):continue
+				if not box.grow(-2).has_point(b.p) and not b.get("ring", false) and not b.has("delay"):continue
 				match b.get("shape", "dot"):
 					"block":
 						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color.WHITE);g.draw_rect(Rect2(b.p - b.size / 2 + Vector2(2, 2), b.size - Vector2(4, 4)), Color.BLACK)
@@ -328,8 +329,9 @@ static func lanes(g):
 	g.draw_texture_rect(T.call("ch5p_glass"), Rect2(14, top + 10, 32, 32), true)
 	g.draw_texture_rect(T.call("ch5p_oak_door_top"), Rect2(18, top + 120, 24, 24), false);g.draw_texture_rect(T.call("ch5p_oak_door_bottom"), Rect2(18, top + 144, 24, 24), false)
 	g.draw_texture_rect(T.call("ch5p_bricks"), Rect2(0, top - 50, 70, 18), true)
-	g.draw_actor("steve", Vector2(40, top + 96), Vector2.RIGHT, w.clock, false, Color.WHITE, "idle", 1.0, {"state":"idle", "time":w.clock})
 	g.draw_texture_rect(T.call("ch5p_dirt"), Rect2(66, top - 18, n.LANE_ORIGIN.x - 66, bottom - top + 18), true, Color(.85, .75, .62))
+	# Steve watches from the ground path below the minecart track.
+	g.draw_actor("steve", Vector2(84, bottom + 22), Vector2.RIGHT, w.clock, false, Color.WHITE, "idle", 1.0, {"state":"idle", "time":w.clock})
 	for r in range(n.ROWS):
 		var y: float = n.row_y(r)
 		g.draw_texture_rect(T.call("ch5p_rail"), Rect2(66, y + 2, 46, 16), true, Color(.95, .95, .95))
@@ -365,9 +367,8 @@ static func lanes(g):
 							var t: float = fposmod(w.clock * .7 + k * .25, 1.0)
 							g.draw_rect(Rect2(rect.position + Vector2(10 + k * 9, rect.size.y - 8 - t * 26), Vector2(2, 2)), Color(.3, .3, .3, .6 * (1 - t)))
 					"snow_golem":
-						g.draw_texture_rect(g.textures.icon_pvz_snow, Rect2(base - Vector2(13 + kick, 24), Vector2(26, 26)), false, tint)
-						g.draw_texture_rect(g.textures.icon_pvz_snow_golem, Rect2(base - Vector2(11 + kick, 42), Vector2(22, 22)), false, tint)
-						for k in [-1, 1]:g.draw_line(base + Vector2(k * 10, -16), base + Vector2(k * 18, -24), Color(.35, .22, .1), 2)
+						var bob: float = -absf(sin(w.clock * 2.0 + c.y)) * 1.5
+						g.draw_texture_rect(g.textures.icon_pvz_snow_golem, Rect2(base - Vector2(20 + kick, 46 - bob), Vector2(40, 48)), false, tint)
 					"piston":
 						var ext: float = clampf(pl.push / .3, 0, 1) * 16.0
 						if ext > 0:
@@ -438,7 +439,8 @@ static func lanes(g):
 		if on:r.position.y -= 3
 		g.draw_rect(r, Color(.88, .8, .58) if ready else Color(.55, .5, .4))
 		g.draw_rect(Rect2(r.position + Vector2(3, 3), Vector2(r.size.x - 6, r.size.y - 16)), Color(.62, .78, .52) if ready else Color(.4, .45, .38))
-		g.draw_texture_rect(g.textures["icon_pvz_" + spec[0]], Rect2(r.position + Vector2(r.size.x / 2 - 12, 6), Vector2(24, 24)), false, Color.WHITE if ready else Color(.5, .5, .5))
+		var isz: Vector2 = Vector2(20, 24) if spec[0] == "snow_golem" else Vector2(24, 24)
+		g.draw_texture_rect(g.textures["icon_pvz_" + spec[0]], Rect2(r.position + Vector2(r.size.x / 2 - isz.x / 2, 6), isz), false, Color.WHITE if ready else Color(.5, .5, .5))
 		var cost: String = str(spec[1])
 		g.draw_string(g.bold, r.position + Vector2(r.size.x / 2 - g.bold.get_string_size(cost, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x / 2, r.size.y - 4), cost, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.2, .1, .05))
 		g.draw_rect(r, YELLOW if on else Color(.35, .22, .1), false, 2)
@@ -785,6 +787,30 @@ static func credits(g):
 	if f.age > 3.0:g.text_at("Пробел — пропустить", Vector2(530, 348), 8, Color(1, 1, 1, .25))
 	if f.age > f.CREDITS_LENGTH - 1.5:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((f.age - (f.CREDITS_LENGTH - 1.5)) / 1.5, 0, 1)))
 
+static func portal(g):
+	var w = g.world;var n = w.notch
+	var v = view(g);v.ensure(g, "portal", Vector2i(640, 360));v.sync_portal(n.phase, n.age, w.clock)
+	var shake: Vector2 = Vector2(round(sin(w.clock * 70) * 6), round(cos(w.clock * 61) * 4)) * (n.shake3d / .8) if g.settings.shake else Vector2.ZERO
+	var a: float = n.age
+	# Camera punch-in on contact: the picture jumps a little closer, then eases back.
+	var punch: float = 0.0
+	for h in n.PORTAL_HITS:
+		var d: float = a - float(h)
+		if d >= 0 and d < .6:punch = maxf(punch, (1.0 - smoothstep(n.PORTAL_HOLD, .6, d)) * (.06 if h < 1.0 else .1))
+	var size := Vector2(640, 360) * (1.0 + punch)
+	g.draw_texture_rect(v.viewport.get_texture(), Rect2(shake - (size - Vector2(640, 360)) / 2, size), false)
+	var spec: Array = v.PORTALS.get(n.phase, v.PORTALS.to_ut)
+	# One white frame, then a red bruise of the screen that fades with the hit-stop.
+	for h in n.PORTAL_HITS:
+		var d: float = a - float(h)
+		if d >= 0 and d < .035 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, .55))
+		elif d >= .035 and d < .45:g.draw_rect(Rect2(0, 0, 640, 360), Color(.55, 0, .02, .28 * (1.0 - d / .45)))
+	if a < .5:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1.0 - a / .5))
+	if a > 3.7:
+		var k: float = clampf((a - 3.7) / .5, 0, 1)
+		g.draw_rect(Rect2(0, 0, 640, 360), (spec[1] as Color).lerp(Color.WHITE, .5) * Color(1, 1, 1, k))
+	subtitles(g, n, 300.0)
+
 static func flight(g):
 	var w = g.world;var n = w.notch;var f = n.finale
 	var v = view(g);v.ensure(g, "flight", Vector2i(640, 360));v.sync_flight(f, w.clock)
@@ -795,3 +821,34 @@ static func flight(g):
 	if a > f.FLIGHT_OTHER - .8 and a < f.FLIGHT_OTHER + .8:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, 1 - absf(a - f.FLIGHT_OTHER) / .8))
 	if a >= f.FLIGHT_STING:g.draw_rect(Rect2(0, 0, 640, 360), Color.BLACK)
 	if a >= f.FLIGHT_STING + 1.0:g.centered("…", 176, 16, Color(1, 1, 1, clampf(a - f.FLIGHT_STING - 1.0, 0, 1)), true)
+
+static func qte(g):
+	var w=g.world;var n=w.notch;var v=view(g)
+	v.ensure(g,"bad_end" if n.phase=="bad_end" else "qte",Vector2i(640,360))
+	if n.phase=="bad_end":v.sync_bad_end(n)
+	else:v.sync_qte(n.qte)
+	g.draw_texture_rect(v.viewport.get_texture(),Rect2(0,0,640,360),false)
+	g.draw_rect(Rect2(0,0,640,24),Color.BLACK);g.draw_rect(Rect2(0,330,640,30),Color.BLACK)
+	if n.phase=="bad_end":
+		var ending_age: float=n.age-(4.2 if n.bad_from_qte else 0.0)
+		if not n.bad_from_qte and n.age<.25:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,1-n.age/.25))
+		if ending_age>17.0:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(17.0,18.2,ending_age)))
+		subtitles(g,n,310.0)
+		return
+	var q=n.qte
+	if q.finishing:return
+	var feedback: float=maxf(0,q.age-q.resolved_age)
+	if not q.resolved or feedback<.28:
+		var at := Vector2(320,74)
+		var left: float=clampf((.90-q.age)/.65,0,1)
+		var state: String="ok" if q.resolved and q.success else "fail" if q.resolved else ""
+		var scale_key: float=1.25+(.13*sin(feedback*PI/.28) if q.resolved else 0)
+		if state=="fail":at.x+=sin(feedback*70)*3*(1-feedback/.28)
+		FourPrompt.key_glyph(g,at,"attack" if q.expected()=="accept" else q.expected(),left,state,scale_key)
+		if state.is_empty():
+			g.draw_arc(at,25+19*left,-PI/2,-PI/2+TAU*left,40,Color(1,1,1,.8),2)
+			if q.expected()!="accept":g.text_at({"left":"A","right":"D","up":"W","down":"S"}[q.expected()],Vector2(264,78),8,Color(.8,.82,.85))
+		elif state=="ok":g.draw_arc(at,25+feedback*85,0,TAU,40,Color(1,1,1,maxf(0,1-feedback/.28)),2)
+	for i in range(8):
+		g.draw_rect(Rect2(285+i*9,344,5,3),Color(.85,.85,.8) if i<q.beat else Color(.27,.29,.31))
+	for i in range(3):g.draw_rect(Rect2(589+i*10,344,5,3),Color(.8,.12,.10) if i<q.mistakes else Color(.22,.23,.25))

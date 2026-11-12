@@ -1,0 +1,56 @@
+{
+  "local_client": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "assets": [
+    {
+      "path": "assets/sprites/cloud_shadow.png",
+      "source": "Minecraft 1.21.11 textures/environment/clouds.png; original alpha × 0.10",
+      "sha256": "5f853de02e01fb11a5a690cf487bc1188b555e013bcfeb399f17933cb2194605"
+    },
+    {
+      "path": "assets/sprites/witch_puddle.png",
+      "source": "Original connected pixel mask; native textures/block/purple_concrete.png colour grain",
+      "sha256": "24c25db195c17d1cde9ebfd49c8a2d13abbfb47b605e0fc2aa2cdd04661c3526"
+    },
+    {
+      "path": "assets/art_source/ch4_combat/hb_skin.png",
+      "source": "Existing local Minecraft Steve skin; original IV white-eye texels.",
+      "sha256": "407f4fd1de582321a50e389466f2726b0f7fae972711d2f815009cf43416c3aa"
+    },
+    {
+      "path": "assets/art_source/ch4_combat/stone.png",
+      "source": "Existing local Minecraft textures/block/polished_andesite.png",
+      "sha256": "4dcd10ce6315edad1507f2e4b8064463780c2eb0bfe84e47f20e83b356484479"
+    },
+    {
+      "path": "assets/art_source/ch4_combat/ch4_combat.blend",
+      "source": "Project-owned Blender rig, keyframes and geometry; packed native textures; user scenes preserved.",
+      "sha256": "d8c834de222ad974c5c8d34032675d5cffbc7dd57d3989725dc477fcde7e3a42"
+    },
+    {
+      "path": "data/chapter_four_combat_animations.json",
+      "source": "Evaluated Blender motion baked with the existing Minecraft UV z-buffer.",
+      "sha256": "75baa083d12c81a168654dd17e344baa2623f3565c25f8d7d91a4bb99e4d550c"
+    },
+    {
+      "path": "assets/sprites/ch4p_cast_step.png",
+      "source": "Original Blender poses/geometry; scripts/cinematics/render_ch4_combat.py",
+      "sha256": "801e1a4290d776d5cc8c0766d65b5e1928aa054c7d68a5e05d2058bcd750c49f"
+    },
+    {
+      "path": "assets/sprites/ch4p_ground_smash.png",
+      "source": "Original Blender poses/geometry; scripts/cinematics/render_ch4_combat.py",
+      "sha256": "67f6cd4066aed77405961ca57e7f93ae3204d2360f09ce09e3737ee35a677c51"
+    },
+    {
+      "path": "assets/sprites/ch4p_spiral_raise.png",
+      "source": "Original Blender poses/geometry; scripts/cinematics/render_ch4_combat.py",
+      "sha256": "c2e21269fca3269150037e1686a0bcf31962b031d263f0c2a0a475fdf0e3debe"
+    },
+    {
+      "path": "assets/sprites/ch4_spiral_spike.png",
+      "source": "Original Blender poses/geometry; scripts/cinematics/render_ch4_combat.py",
+      "sha256": "7e014d10dea13fbba98f0401b24aedd3bcac41cdd4f2f94b0db3860658d23cac"
+    }
+  ],
+  "terms": "Existing local Minecraft assets, same provenance and user-authorized project use as licenses/PROJECT_NOTICE.md; no downloads."
+}

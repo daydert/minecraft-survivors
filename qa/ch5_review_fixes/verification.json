@@ -1,0 +1,13 @@
+{
+  "targeted_checks": 29,
+  "notch_checks": 22,
+  "fighter_transition_checks": 26,
+  "failures": 0,
+  "video": "qa/recordings/chapter_five_review_fixes.mp4",
+  "fps": 30,
+  "frames": 1692,
+  "duration": 56.4,
+  "video_true_peak_dbfs": -4.2,
+  "renderer": "Compatibility",
+  "montage": true
+}

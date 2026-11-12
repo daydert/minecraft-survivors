@@ -1,0 +1,18 @@
+[
+  {
+    "pack": "builds/linux/MinecraftSurvivors.x86_64",
+    "exit": 0,
+    "summary": [
+      "PACKED_CINEMA_SHA256 5c677e06485252be19b5b2de3ec1ad3a087aa69d44f18bc1a996225b3b6d4941",
+      "CH5_EXPORT_SMOKE PASS: packed motion, rig, 11 logos, 2Fort, QTE, new equipment, Compatibility render"
+    ]
+  },
+  {
+    "pack": "builds/windows/MinecraftSurvivors.exe",
+    "exit": 0,
+    "summary": [
+      "PACKED_CINEMA_SHA256 5c677e06485252be19b5b2de3ec1ad3a087aa69d44f18bc1a996225b3b6d4941",
+      "CH5_EXPORT_SMOKE PASS: packed motion, rig, 11 logos, 2Fort, QTE, new equipment, Compatibility render"
+    ]
+  }
+]

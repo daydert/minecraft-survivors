@@ -1,6 +1,6 @@
 extends RefCounted
 ## Chapter V equipment: the game's hidden vanilla items, used as weapons.
-const OWN := ["debug_stick","command_block","barrier","structure_block","spawn_egg"]
+const OWN := ["debug_stick","command_block","barrier","structure_block","spawn_egg","repeating_block"]
 const ALLY_KINDS := ["zombie","zombified_piglin","skeleton"]
 var stick_flip := false
 ## Pending /kill pulses and structure pastes: {p, wait, ...}.
@@ -17,12 +17,13 @@ var ally_serial := 0
 var history: Array = []
 var history_tick := 0.0
 var compass_ready := 0.0
+var breakpoint_ready := 0.0
 var rewinds := 0
 
 func reset():
 	stick_flip = false;commands.clear();pastes.clear();beams.clear();notes.clear()
 	orbit = 0.0;barrier_hits.clear();light_tick = 0.0;allies.clear();ally_serial = 0
-	history.clear();history_tick = 0.0;compass_ready = 0.0;rewinds = 0
+	history.clear();history_tick = 0.0;compass_ready = 0.0;rewinds = 0;breakpoint_ready=0
 
 func rules(w) -> Dictionary:return w.db.data.five_arsenal.rules
 
@@ -55,6 +56,11 @@ func update_attacks(w, dt: float):
 				var target = w.nearest(w.player, s.range)
 				if target == null:continue
 				stick(w, target, s, evo)
+			"repeating_block":
+				var c = cluster(w,s.radius,s.range)
+				if c==null:continue
+				for k in range(int(s.count)+(2 if evo else 0)):
+					commands.append({"p":c.p,"wait":.5+k*.24,"radius":s.radius,"damage":s.damage,"chain":0,"done":[],"owner":"repeating_block","stun":evo})
 			"command_block":
 				var c = cluster(w, s.radius, s.range)
 				if c == null:continue
@@ -110,6 +116,7 @@ func stick(w, first: Dictionary, s: Dictionary, evo: bool):
 	w.sound("ch4_hb_twitch", .08)
 
 func step(w, dt: float):
+	breakpoint_ready=maxf(0,breakpoint_ready-dt)
 	var r: Dictionary = rules(w)
 	for list in [beams, notes]:
 		for i in range(list.size() - 1, -1, -1):
@@ -120,8 +127,10 @@ func step(w, dt: float):
 		c.wait -= dt
 		if c.wait > 0:continue
 		commands.remove_at(i)
-		w.damage_owner = "command_block"
-		for m in w.in_radius(c.p, c.radius):w.hurt(m, c.damage, c.p.direction_to(m.p))
+		w.damage_owner = c.get("owner","command_block")
+		for m in w.in_radius(c.p, c.radius):
+			w.hurt(m, c.damage, c.p.direction_to(m.p))
+			if c.get("stun",false) and not m.get("boss",false):m.stun=maxf(m.stun,.22)
 		w.break_props(c.p, c.radius, c.damage)
 		notes.append({"p":c.p,"text":"/kill @e[r=%d]" % int(c.radius / 8),"age":0.0,"radius":c.radius})
 		w.add_effect("ch5_kill", c.p, .45, {"radius":c.radius})

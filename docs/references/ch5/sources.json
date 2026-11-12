@@ -1,0 +1,83 @@
+{
+  "2fort": {
+    "url": "https://github.com/noodlecollie/tf2maps/blob/master/sdk_ctf_2fort.vmf",
+    "sha256": "d4139b7bd61b82b1f802b7f20b8a6c178287ab47538aaef8726a2119d7ff3ab3",
+    "rights": "Valve Source SDK map; proprietary Valve artwork, not covered by project code license. Local fan project use requested by user; no redistribution license claimed."
+  },
+  "screenshots": [
+    {
+      "app": "236850",
+      "url": "https://store.steampowered.com/app/236850/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "2229870",
+      "url": "https://store.steampowered.com/app/2229870/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "220",
+      "url": "https://store.steampowered.com/app/220/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "3330",
+      "url": "https://store.steampowered.com/app/3330/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "213330",
+      "url": "https://store.steampowered.com/app/213330/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "271590",
+      "url": "https://store.steampowered.com/app/271590/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "570",
+      "url": "https://store.steampowered.com/app/570/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "17390",
+      "url": "https://store.steampowered.com/app/17390/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "1222670",
+      "url": "https://store.steampowered.com/app/1222670/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    },
+    {
+      "app": "1002300",
+      "url": "https://store.steampowered.com/app/1002300/",
+      "purpose": "visual reference only; screenshots not redistributed"
+    }
+  ],
+  "native_assets": {
+    "BLACK SOULS": {
+      "source": "/home/daydert/.steam/steam/steamapps/common/BLACK SOULS/Graphics",
+      "files": [
+        "Characters/$主人公.png",
+        "Tilesets/treesrestaffmar11_soruve.png",
+        "Tilesets/Hanzo_C.png"
+      ],
+      "rights": "Original game artwork, including credited RPG Maker/community tiles. Local fan-scene use; not relicensed."
+    },
+    "Dota 2 Axe": {
+      "url": "https://media.steampowered.com/apps/dota2/workshop/axe.zip",
+      "page": "https://www.dota2.com/workshop/requirements/axe",
+      "rights": "Valve proprietary Workshop reference assets; not a general-purpose open asset license."
+    },
+    "fear_reference.jpg": {
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1002300/ss_0566ab26ad33199d08582348f71dd28e7829a4d2.1920x1080.jpg?t=1621853752",
+      "rights": "Publisher promotional screenshot; cropped/layered for this local fan scene, no independent redistribution license claimed."
+    },
+    "eu4_reference.jpg": {
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/236850/ss_505866198168d5ebaf3b4b76caeca2ee55883786.1920x1080.jpg?t=1790873960",
+      "rights": "Publisher promotional screenshot; cropped/layered for this local fan scene, no independent redistribution license claimed."
+    }
+  }
+}

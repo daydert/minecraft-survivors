@@ -133,10 +133,11 @@ static func ground_ring(g, r: Dictionary, offset: Vector2, clock: float):
 				g.draw_rect(Rect2((q - Vector2(0, sin(k * PI) * (5 + j % 4 * 2))).floor(), Vector2(2, 2)), Color(0.4, 0.33, 0.28, 1.0 - k))
 		"slash":
 			var dir: Vector2 = r.dir
-			var sweep: float = lerpf(-1.15, 1.15, minf(1.0, k * 2.2))
+			var half_arc: float=float(r.get("half_arc",1.15))
+			var sweep: float = lerpf(-half_arc, half_arc, minf(1.0, k * 2.2))
 			var last := Vector2.ZERO
 			for j in range(15):
-				var a: float = dir.angle() + lerpf(-1.15, sweep, j / 14.0)
+				var a: float = dir.angle() + lerpf(-half_arc, sweep, j / 14.0)
 				var taper: float = sin(j / 14.0 * PI)
 				var q: Vector2 = p + Vector2(cos(a), sin(a) * 0.72) * (r.r - 5.0 * taper) - Vector2(0, 9)
 				if j > 0:
@@ -304,7 +305,7 @@ static func dread_floor(g, offset: Vector2):
 		g.draw_polyline(points, Color(0.015, 0.0, 0.01, 0.95), 3)
 
 ## Light leaks from below through the fissures; drawn over the darkness.
-static func dread_glow(g, offset: Vector2):
+static func dread_glow(g, offset: Vector2, ground := false):
 	var w = g.world
 	var u := urgency(w)
 	if u <= 0.0:return
@@ -312,12 +313,15 @@ static func dread_glow(g, offset: Vector2):
 	var shake: float = clampf(w.fx.tremor, 0.0, 1.0)
 	for f in visible_fissures(g, offset):
 		var points := crack_points(f[0] + offset, f[1] + offset, int(f[2]), 5.0)
-		g.draw_polyline(points, Color(1.0, 0.93, 0.9, (0.3 + 0.45 * u) * beat + 0.25 * shake), 1)
+		if ground:
+			g.draw_polyline(points, Color(1.0, 0.93, 0.9, (0.3 + 0.45 * u) * beat + 0.25 * shake), 1)
+			continue
 		var seed: int = int(f[2])
 		for j in range(2):
 			var t: float = fposmod(w.clock * (0.35 + hh(j, seed) * 0.3) + hh(j, seed + 1), 1.0)
 			var q: Vector2 = points[int(hh(j, seed + 2) * (points.size() - 1))] - Vector2(0, t * (14 + 22 * u))
 			g.draw_rect(Rect2(q.floor(), Vector2(1, 2)), Color(1, 0.96, 0.92, (1.0 - t) * (0.35 + 0.5 * u)))
+	if ground:return
 	if u > 0.0:Atmosphere.draw_edges(g, Color(0.42, 0.0, 0.03, 0.26 * u + 0.12 * shake))
 	if shake > 0.0:
 		for j in range(18):

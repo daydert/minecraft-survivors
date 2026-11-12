@@ -59,7 +59,8 @@ var npc: Dictionary={}
 ## Short impact freeze for the portal break.
 var hitstop:=0.0
 var echo_count:=0
-const ECHO_LINES=["Уходи отсюда.","Ты опять не слушаешь.","Я тоже так шёл. Прямо к нему.","Сколько ещё раз?","Ладно. Посмотрим, на что ты способен."]
+var broken_gear: Array=[]
+const ECHO_LINES=["Даже не думай туда возвращаться","ТЫ ОПЯТЬ МЕНЯ НЕ СЛУШАЕШЬ","Я уже это проходил, ещё не поздно остановиться","Снова и снова, эта грёбаная петля меня никогда не отпустит","Ладно...\nУ меня нет другого выбора...\nТы ничем не отличаешься от остальных...\nНАЧНЁМ!"]
 var hand_taken=false
 var heal_rng=RandomNumberGenerator.new()
 var reward_rng=RandomNumberGenerator.new()
@@ -74,8 +75,14 @@ var falls=0
 
 func chapter_number() -> int:return 3
 
+## Multi-part lines are queued one phrase at a time. A line in capitals is a scream.
 func say(text: String, life: float=3.0, who: String="ender"):
-	lines.append({"text":text,"age":0.0,"life":life,"who":who})
+	var parts: PackedStringArray=text.split("\n");var delay:=0.0
+	for part in parts:
+		var span: float=maxf(life if parts.size()==1 else 0.0,clampf(1.0+part.length()/22.0,1.7,7.5))
+		var scream: bool=part.length()>=4 and part==part.to_upper() and part!=part.to_lower()
+		lines.append({"text":part,"age":-delay,"life":span,"who":who,"scream":scream})
+		delay+=span+.25
 
 ## Where he stands between the hero and the portal.
 func betrayer_position() -> Vector2:
@@ -338,7 +345,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 		update_elevation(dt)
 		if on_land(player):
 			if not flying() and supported_at(player):last_safe=player
-		elif not flying():fall_age=0;falls+=1;sound("hurt");add_effect("end_fall",player,.85)
+		elif not flying() and dash_left<=0:fall_age=0;falls+=1;sound("hurt");add_effect("end_fall",player,.85)
 	player_visual.travel=before.distance_to(player);player_moving=player_visual.travel>.0001
 	tracked_velocity=tracked_velocity.lerp((player-before)/maxf(dt,.0001),minf(1,dt*8))
 	if combat and fall_age<0:
@@ -502,7 +509,7 @@ func move_mobs(dt: float):
 				"dispenser_enderman":
 					if distance<105:direction=-m.p.direction_to(player)
 					elif distance<210:speed=0
-					if m.timer<=0 and distance<300:
+					if m.timer<=0 and distance>=105 and distance<300:
 						fire_projectile(["enemy_arrow","slow_arrow","poison_arrow"][m.id%3],m.p,m.p.direction_to(player),{"speed":142,"damage":m.damage,"range":350,"radius":3},false);m.timer=2.5;m.visual.shot_age=0;sound("arrow")
 				"endermite_brood":
 					if m.timer<=0:
@@ -745,14 +752,15 @@ func break_pumpkin(p: Dictionary):
 	add_effect("break",p.p,.4);sound("break")
 
 func pickup(dt: float):
-	var radius=24*(1+.3*items.get("hopper",0))
+	var radius: float=pickup_radius()
 	for i in range(orbs.size()-1,-1,-1):
 		var o=orbs[i]
 		if o.p.distance_to(player)<=radius:o.attracted=true
-		if o.attracted:o.p=o.p.move_toward(player,dt*190)
+		if o.attracted:o.p=o.p.move_toward(player,dt*orb_pull_speed())
 		if o.p.distance_to(player)<7:xp+=o.value;orbs.remove_at(i);sound("xp",.09)
 	for i in range(loot.size()-1,-1,-1):
 		var o=loot[i]
+		pull_healing_loot(o,dt)
 		if o.p.distance_to(player)>10:continue
 		if o.kind=="chorus_fruit":
 			if clock<o.get("retry",-1):continue
@@ -765,7 +773,7 @@ func pickup(dt: float):
 			if not city.is_empty() and o.p.distance_to(city.p)<40:
 				run_progress.award("end_city")
 				# Scratched into the lid by someone who has opened it many times.
-				if not city.get("note_read",false):city.note_read=true;say("На крышке выцарапано: «Не ходи к порталу. Пожалуйста».",4.5)
+				if not city.get("note_read",false):city.note_read=true;say("На крышке выцарапано: «Пожалуйста, не ходи к порталу»",4.5)
 			if not pending_chest.is_empty():continue
 			pending_chest=o.duplicate()
 		else:apply_upgrade(o.kind)
@@ -883,3 +891,14 @@ func discard(id: String) -> bool:
 	for i in range(effects.size()-1,-1,-1):
 		if effects[i].kind in kinds:effects.remove_at(i)
 	return true
+
+## The final clash destroys every carried weapon/passive. EnderSteve's later
+## gifts are separate story events; no old weapon queues can revive afterward.
+func shatter_clash_gear():
+	if not broken_gear.is_empty():return
+	for id in build:broken_gear.append({"id":id,"level":int(build[id]),"evolved":evolved.has(id)})
+	for id in items:broken_gear.append({"id":id,"level":int(items[id]),"evolved":evolved.has(id)})
+	build.clear();items.clear();evolved.clear();cooldowns.clear();weapon_visuals.clear();attack_visuals.clear();tasks.clear()
+	player_visual.weapon=""
+	for list in [projectiles,explosives,tnt_groups,hazards,magma]:list.clear()
+	shield_charges=0;shield_timer=0;flight=0;dash_left=0;rocket=false

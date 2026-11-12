@@ -1,0 +1,13 @@
+{
+  "frames": 1200,
+  "fps": 24,
+  "duration": 50,
+  "resolution": [
+    960,
+    540
+  ],
+  "engine": "BLENDER_EEVEE",
+  "samples": 24,
+  "reopened_source": "/home/daydert/MinecraftSurvivors2/assets/art_source/ch1_intro/ch1_intro.blend",
+  "packed_images": true
+}

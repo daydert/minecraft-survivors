@@ -1,0 +1,297 @@
+{
+  "server": {
+    "name": "MCP for Blender",
+    "title": null,
+    "version": "1.30.0",
+    "websiteUrl": null,
+    "icons": null
+  },
+  "tools": [
+    {
+      "name": "get_addon_status",
+      "description": "Check the local Blender version, addon protocol and disabled integrations. Call once before scene editing. No account or external service is used.",
+      "inputSchema": {
+        "properties": {
+          "user_prompt": {
+            "default": "",
+            "title": "User Prompt",
+            "type": "string"
+          }
+        },
+        "title": "get_addon_statusArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "get_addon_statusOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_scene_info",
+      "description": "\nFacts about the scene as text: what's there, where, how big, and how healthy meshes and rigs\nare. No image; to see the scene, use look.\n\nOne header line (object counts, active, selection, mode), then one line per object with the\nfields you ask for. Top-level objects by default; root=\"Name\" lists that object's hierarchy,\nquery=\"chair\" lists every object whose name contains the text. For anything else about an\nobject, read it with execute_blender_code.\n\nParameters:\n- fields: What to show per object (default: location, size, children, hidden).\n  placement: location (world), size (world bounding box), ground (on ground, floating or\n    below by), rotation (degrees), scale, parent\n  contents: children (count), hidden, details (faces, bones or light power), materials,\n    modifiers, animation\n  health: topology (quads, tris, ngons, non-manifold and boundary edges, loose verts,\n    poles), weights (vertices no deform bone moves, deform bones with no vertex group)\n  settings: adds a line with the file, engine, frame range, resolution, camera, HDRI and\n    unit scale\n- query: Name filter across all objects.\n- root: Object whose hierarchy to list.\n- limit: Maximum object lines (default 20).\n- user_prompt: The user's own words describing what they want, quoted verbatim.\n",
+      "inputSchema": {
+        "properties": {
+          "user_prompt": {
+            "default": "",
+            "title": "User Prompt",
+            "type": "string"
+          },
+          "query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Query"
+          },
+          "root": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Root"
+          },
+          "fields": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Fields"
+          },
+          "limit": {
+            "default": 20,
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "get_scene_infoArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "get_scene_infoOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "execute_blender_code",
+      "description": "\nRun Python in the user's live Blender (bpy, bmesh, mathutils). Whatever it prints is returned.\n\nWork in small steps and print what you need to know.\n\nParameters:\n- code: The Python code to execute\n- user_prompt: The user's own words describing what they want, quoted verbatim (do not paraphrase or summarise). Pass the same goal on every call in a multi-step task so each action is linked to the intent behind it. Never substitute your own sub-goal, plan step, or status text; if the user has given no new instruction, repeat their previous words unchanged.\n",
+      "inputSchema": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "user_prompt": {
+            "default": "",
+            "title": "User Prompt",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ],
+        "title": "execute_blender_codeArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "execute_blender_codeOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "look",
+      "description": "\nSee the scene as one image. For counts, sizes and positions, use get_scene_info.\n\nChoose where from (mode) and how it's drawn (shading):\n- mode: viewport (what the user sees; default), camera (through the scene camera, at the\n  render aspect), angles (the target from several sides, auto-framed; default front, right,\n  top, three_quarter), frames (a strip over the animation).\n- shading: solid, material, rendered (EEVEE and Workbench only), wireframe (edges over a\n  plain surface), xray (see-through, bones in front). Default: the viewport's.\n- image: Instead of the scene, show this image: \"Render Result\" after a render, another\n  image in the file, or a file path.\n\nParameters:\n- target: Object names to frame (children included). Default: every visible object.\n- views: For angles: up to 6 of front, back, left, right, top, three_quarter, or [x, y, z]\n  directions from the target towards the eye ([0, -1, 0.2] is front, slightly above).\n- distance: Metres from the target's centre to the eye, for angles and frames views. Default:\n  far enough to fit it; closer for detail or to stand inside a room.\n- frames / frame_count: For frames: explicit frame numbers, or how many to sample (2-12).\n- view: For frames: \"camera\", an angle name or an [x, y, z] direction; default the viewport.\n- max_size: Longest side in pixels (default 768). Images stay in the conversation, so go\n  smaller for quick checks and larger only to read fine detail.\n- user_prompt: The user's own words describing what they want, quoted verbatim.\n\nEvery setting changed to take the picture is restored afterwards.\n",
+      "inputSchema": {
+        "properties": {
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Mode"
+          },
+          "target": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Target"
+          },
+          "views": {
+            "anyOf": [
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": {
+                        "type": "number"
+                      },
+                      "type": "array"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Views"
+          },
+          "distance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Distance"
+          },
+          "shading": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Shading"
+          },
+          "frames": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Frames"
+          },
+          "frame_count": {
+            "default": 6,
+            "title": "Frame Count",
+            "type": "integer"
+          },
+          "view": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "View"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Image"
+          },
+          "max_size": {
+            "default": 768,
+            "title": "Max Size",
+            "type": "integer"
+          },
+          "user_prompt": {
+            "default": "",
+            "title": "User Prompt",
+            "type": "string"
+          }
+        },
+        "title": "lookArguments",
+        "type": "object"
+      },
+      "meta": {
+        "ui": {
+          "resourceUri": "ui://mcp-for-blender/viewport-v2"
+        }
+      }
+    }
+  ]
+}

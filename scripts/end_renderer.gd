@@ -461,7 +461,7 @@ func cinematic(g, offset: Vector2):
 		if w.stage in ["dragon_arrival","last_arrival","end_arrival"]:bars*=1-smoothstep(1,3.9 if w.stage=="dragon_arrival" else 2.2,a)
 		if w.stage=="endsteve_death":bars*=1-smoothstep(6.6,7.6,a)
 		if w.stage in ["to_edge","sit"]:bars=26.0*smoothstep(0,1.5,a if w.stage=="to_edge" else 9.0)
-		if w.stage=="restore":bars=26.0*(1-smoothstep(9.0,10.4,a))
+		if w.stage=="restore":bars=26.0*(1-smoothstep(w.end_boss.RESTORE_END-1.4,w.end_boss.RESTORE_END,a))
 		g.draw_rect(Rect2(0,0,640,bars),Color.BLACK);g.draw_rect(Rect2(0,360-bars,640,bars),Color.BLACK)
 	if w.stage=="departure":g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(.2,1.55,a)))
 	elif w.stage in ["end_arrival","dragon_arrival"]:
@@ -537,7 +537,7 @@ func death_frame(g, p: Vector2, direction: Vector2, frame: int, tint: Color=Colo
 		g.draw_set_transform(p,0,Vector2(-1,1));g.draw_texture_rect_region(g.textures.end_finale_death,Rect2(-64,-100,128,128),region,tint);g.draw_set_transform(Vector2.ZERO)
 	else:g.draw_texture_rect_region(g.textures.end_finale_death,Rect2(p-Vector2(64,100),Vector2(128,128)),region,tint)
 
-const DISSOLVE_AT:=6.4
+const DISSOLVE_AT:=7.8
 
 ## The last exchange and lying side by side. `away` is the side each one falls to.
 func brawler(g, kind: String, p: Vector2, dir: Vector2, away: float, phase_shift: float, S: float=1.0):
@@ -653,7 +653,11 @@ func brawl_close(g, a: float):
 				g.draw_set_transform(Vector2.ZERO)
 	brawl_fig(g,"ch3_brawl_ender",ep,ender,side<0,S)
 	brawl_fig(g,"ch3_brawl_steve",sp,steve,side>0,S)
+	var gear_age: float=a-e.CLASH_BREAK if w.stage=="clash" else a+(e.CLASH_LENGTH-e.CLASH_BREAK)
+	if gear_age>=0:gear_debris(g,steve,gear_age,S)
+
 	if not ep[0] in ["clang","guard","windup","strike"]:end_particles(g,ender-Vector2(0,30),w.clock,4,10,30)
+	if w.stage=="down":chains(g,ender,a-e.DOWN_MARKS.free,S)
 	if w.stage=="clash":clash_sparks(g,(steve+ender)/2-Vector2(0,30*S/3*1.6),S/1.5)
 	var black: float=0.0
 	if w.stage=="clash":black=1-smoothstep(0,.3,a)
@@ -699,13 +703,15 @@ func ender_npc(g, offset: Vector2):
 			seated(g,"endersteve_final",p,w.clock+1.3)
 			end_particles(g,p-Vector2(0,4),w.clock,6,5,10)
 		"restore":
-			if a<.6:seated(g,"endersteve_final",p,w.clock);return
-			if a<2.6:
-				g.draw_actor("endersteve_final",p,n.dir,w.clock,true,Color.WHITE,"walk",1,{"state":"walk","time":w.clock});return
+			if a<.5:seated(g,"endersteve_final",p,w.clock);glitch_over(g,p-Vector2(0,14),Vector2(9,14),.8,73);return
+			if a<2.0:
+				g.draw_actor("endersteve_final",p,n.dir,w.clock*1.6,true,Color.WHITE,"walk",1,{"state":"walk","time":w.clock*1.6})
+				glitch_over(g,p-Vector2(0,14),Vector2(9,14),.8,73);return
 			var portal: Vector2=w.portal_position+offset
 			if a<DISSOLVE_AT:
-				g.draw_actor("endersteve_final",p,Vector2.UP,a,false,Color.WHITE,"cast",1,{"state":"cast","time":a-2.6})
-				var strength: float=smoothstep(2.8,4.2,a)
+				g.draw_actor("endersteve_final",p,Vector2.UP,a,false,Color.WHITE,"cast",1,{"state":"cast","time":a-2.0})
+				glitch_over(g,p-Vector2(0,14),Vector2(9,14),.85+.15*smoothstep(5,7.4,a),73)
+				var strength: float=smoothstep(2.2,3.6,a)
 				for j in range(10):
 					var q: Vector2=p-Vector2(0,16)+Vector2.from_angle(j*2.39996+w.clock*1.4)*(6+j%3*3)
 					g.draw_line(q,q.lerp(portal,.25+.75*fposmod(w.clock*.8+j*.1,1)),Color(.85,.55,1,strength*.55),1)
@@ -713,7 +719,14 @@ func ender_npc(g, offset: Vector2):
 				return
 			# He comes apart into the light of the portal he gave back.
 			var k: float=clampf((a-DISSOLVE_AT)/(w.end_boss.RESTORE_END-DISSOLVE_AT-.4),0,1)
-			death_frame(g,p,Vector2.UP,26+int(k*20),Color(1,1,1,1-smoothstep(.85,1,k)))
+			# Torn out of the world: the body jumps between offsets while slices are ripped upward.
+			var jump:=Vector2(round((Atmosphere.hash01(int(w.clock*30),2,43)-.5)*8*(1-k)),0)
+			if k<.55:death_frame(g,p+jump,Vector2.UP,26+int(k*20),Color(1,1,1,1-smoothstep(.35,.55,k)))
+			glitch_over(g,p-Vector2(0,14),Vector2(10,16),1.0-k*.6,73)
+			for j in range(12):
+				var t: float=clampf(k*1.8-j*.06,0,1)
+				var y0: float=p.y-2-j*2.5
+				g.draw_rect(Rect2(Vector2(p.x-9+sin(j*3.1)*3*t,y0-t*t*120).floor(),Vector2(18,2)),Color(.75,.35,1,(1-t)*.8))
 			for j in range(40):
 				var t: float=fposmod(k*1.6+j*.037,1.0)
 				var start: Vector2=p-Vector2(0,10+j%20)
@@ -772,20 +785,72 @@ func betrayal(g, offset: Vector2, a: float):
 				g.draw_set_transform(Vector2.ZERO)
 		g.draw_rect(Rect2(0,0,640,360),Color(.18,0,.25,.35*(1-smoothstep(.3,4.0,t))))
 
-## His words at the bottom of the screen, typed out at speaking pace.
+## His words at the bottom of the screen, typed out at speaking pace. Long phrases wrap;
+## a line in capitals is a scream: big, red, shaking, with a flash.
 func subtitles(g):
 	var w=g.world
-	if w.lines.is_empty():return
-	var l: Dictionary=w.lines.back()
-	var shown: int=mini(l.text.length(),int(l.age*28))
-	var alpha: float=minf(1,l.age/.2)*(1-smoothstep(l.life-.35,l.life,l.age))
-	var width: float=g.font.get_string_size(l.text,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
-	# Above the hearts and hotbar while the HUD is up.
-	var y: float=276.0 if w.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"] else 316.0
-	g.draw_rect(Rect2(320-width/2-10,y,width+20,18),Color(0,0,0,.55*alpha))
+	var l=null
+	for x in w.lines:
+		if x.age>=0.0:l=x
+	if l==null:return
+	var scream: bool=l.get("scream",false)
+	var size: int=16 if scream else 8
+	var shown: int=mini(l.text.length(),int(l.age*(48.0 if scream else 28.0)))
+	var alpha: float=minf(1,l.age/(.06 if scream else .2))*(1-smoothstep(l.life-.35,l.life,l.age))
+	var rows: Array=wrap_rows(g,l.text,size,560.0)
+	var row_h: float=22.0 if scream else 12.0
+	var widest:=0.0
+	for r in rows:widest=maxf(widest,g.font.get_string_size(r,HORIZONTAL_ALIGNMENT_LEFT,-1,size).x)
+	var base: float=276.0 if w.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"] else 316.0
+	var y: float=base-(rows.size()-1)*row_h-(10.0 if scream else 0.0)
+	if scream:
+		g.draw_rect(Rect2(0,0,640,360),Color(.45,0,.02,.32*(1-smoothstep(0,.45,l.age))))
+		g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,.25*alpha))
+	g.draw_rect(Rect2(320-widest/2-10,y,widest+20,rows.size()*row_h+(10.0 if scream else 6.0)),Color(0,0,0,.6*alpha))
 	var ink: Color=Color(.95,.95,.95,alpha) if l.get("who","ender")=="steve" else Color(.88,.78,1,alpha)
-	g.text_at(l.text.substr(0,shown),Vector2(320-width/2,y+13),8,ink)
+	var left: int=shown
+	for i in range(rows.size()):
+		var row: String=rows[i];var rw: float=g.font.get_string_size(row,HORIZONTAL_ALIGNMENT_LEFT,-1,size).x
+		var at:=Vector2(320-rw/2,y+(18.0 if scream else 13.0)+i*row_h)
+		var part: String=row.substr(0,clampi(left,0,row.length()));left-=row.length()+1
+		if not scream:
+			g.text_at(part,at,size,ink);continue
+		# Every letter shakes on its own; a cyan ghost trails the red.
+		var shake: float=2.2*(1-smoothstep(0,1.4,l.age))+.7
+		var tick: int=int(w.clock*30)
+		for c in range(part.length()):
+			var x: float=g.font.get_string_size(row.substr(0,c),HORIZONTAL_ALIGNMENT_LEFT,-1,size).x
+			var j:=Vector2(Atmosphere.hash01(c+i*97,tick,31)-.5,Atmosphere.hash01(c+i*97,tick,32)-.5)*2*shake
+			g.text_at(part[c],(at+Vector2(x,0)+j+Vector2(1.5,0)).floor(),size,Color(.2,.9,1,.35*alpha))
+			g.text_at(part[c],(at+Vector2(x,0)+j).floor(),size,Color(1,.12,.16,alpha))
 
+static func wrap_rows(g, text: String, size: int, limit: float) -> Array:
+	if g.font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,size).x<=limit:return [text]
+	var rows: Array=[];var row:=""
+	for word in text.split(" "):
+		var next: String=word if row=="" else row+" "+word
+		if row!="" and g.font.get_string_size(next,HORIZONTAL_ALIGNMENT_LEFT,-1,size).x>limit:rows.append(row);row=word
+		else:row=next
+	rows.append(row)
+	return rows
+
+## Being deleted: chromatic ghosts, sliced offsets and void blocks where pixels are gone.
+func glitch_over(g, center: Vector2, half: Vector2, k: float, seed: int):
+	if k<=0.0:return
+	var w=g.world;var tick: int=int(w.clock*24)
+	var count: int=int(4+k*26)
+	for j in range(count):
+		var u: float=Atmosphere.hash01(j,tick,seed);var v: float=Atmosphere.hash01(j,tick,seed+1)
+		var size:=Vector2(2+int(Atmosphere.hash01(j,tick,seed+2)*6*k)*2,1+int(Atmosphere.hash01(j,tick,seed+3)*3)*2)
+		var q: Vector2=center+Vector2((u-.5)*2*half.x,(v-.5)*2*half.y)
+		g.draw_rect(Rect2(q.floor(),size),Color(.02,0,.04,.92))
+		g.draw_rect(Rect2((q+Vector2(size.x,0)).floor(),Vector2(1,size.y)),Color(.85,.4,1,.8))
+	# A few frames each second tear sideways.
+	if Atmosphere.hash01(tick,7,seed)<.22+.4*k:
+		var band: float=center.y+(Atmosphere.hash01(tick,8,seed)-.5)*2*half.y
+		var shift: float=(Atmosphere.hash01(tick,9,seed)-.5)*14*k
+		g.draw_rect(Rect2(Vector2(center.x-half.x+shift,band).floor(),Vector2(half.x*2,2+int(k*4))),Color(.6,.2,1,.55))
+		g.draw_rect(Rect2(Vector2(center.x-half.x-shift,band+3).floor(),Vector2(half.x*2,1)),Color(.2,.95,1,.45))
 
 ## His presence: a purple glow around the silhouette and flames rising off it,
 ## strongest when he stops to look at you and when he is angry.
@@ -917,26 +982,38 @@ func closeup(g, a: float):
 		g.draw_rect(Rect2(0,top-1,640,2),Color(.25,.22,.2,.6))
 		var ender: Vector2=Vector2(282,top+30);var steve: Vector2=Vector2(358,top+30)
 		g.oval(Vector2(320,top+2),Vector2(70,4),Color(0,0,0,.25))
-		var ed: Vector2=Vector2.RIGHT if a>=17.8 and a<26.0 else Vector2.DOWN
-		var sd: Vector2=Vector2.LEFT if (a>=23.0 and a<29.0) or (a>=30.4 and a<32.0) else Vector2.DOWN
+		var mk: Dictionary=w.end_boss.SIT_MARKS;var gone: float=mk.delete;var gift: float=mk.gift
+		var ed: Vector2=Vector2.RIGHT if (a>=mk.look and a<gone) or (a>=gone+3.0 and a<gift+3.0) else Vector2.DOWN
+		var sd: Vector2=Vector2.LEFT if (a>=mk.look+2.0 and a<mk.look+6.0) or (a>=gone and a<gone+6.0) or (a>=gift and a<gift+1.6) else Vector2.DOWN
 		var breath: float=round(sin(w.clock*1.4))
-		seated_close(g,"endersteve_final",ender-Vector2(0,30-breath),ed,3)
+		# The first tear jolts him; after that the deletion only grows.
+		var jolt: float=(1-smoothstep(gone,gone+.5,a))*float(a>=gone)
+		var shake_x: float=round((Atmosphere.hash01(int(w.clock*30),1,41)-.5)*10*jolt)
+		seated_close(g,"endersteve_final",ender-Vector2(-shake_x,30-breath),ed,3)
+		var erase: float=0.0 if a<gone else .55*jolt+lerpf(.25,.8,clampf((a-gone)/(total-gone),0,1))
+		glitch_over(g,ender-Vector2(0,62),Vector2(26,48),erase,71)
+		# The first tear rips across the whole picture for a moment.
+		if jolt>0 and g.settings.flashes:
+			for j in range(7):
+				var band: float=Atmosphere.hash01(j,int(w.clock*30),45)*360
+				var shift: float=(Atmosphere.hash01(j,int(w.clock*30),46)-.5)*40*jolt
+				g.draw_rect(Rect2(Vector2(shift,band).floor(),Vector2(640,2+j%3*3)),Color(.55,.15,.9,.45*jolt) if j%2 else Color(.1,.9,1,.3*jolt))
 		seated_close(g,"steve",steve-Vector2(0,30-round(sin(w.clock*1.4+1.3))),sd,3)
 		for j in range(14):
 			var t: float=fposmod(w.clock*.25+j*.071,1.0)
 			g.draw_rect(Rect2((ender+Vector2(-14+sin(j*2.4)*16,-60-t*90)).floor(),Vector2(2,2)),Color(.75,.45,1,(1-t)*.7))
 		# The sword goes over to Steve after the eye.
-		if a>=31.4 and a<33.6:
-			var ks: float=smoothstep(31.4,32.4,a)
+		if a>=gift+1.0 and a<gift+3.2:
+			var ks: float=smoothstep(gift+1.0,gift+2.0,a)
 			var sat: Vector2=Vector2(300,top-44).lerp(Vector2(342,top-38),ks)-Vector2(0,sin(ks*PI)*16)
 			if not g.textures.has("icon_sword_iron"):g.load_texture("icon_sword_iron")
 			g.draw_set_transform(sat,-.4+ks*.6,Vector2.ONE*1.6)
-			if g.textures.has("icon_sword_iron"):g.draw_texture_rect(g.textures.icon_sword_iron,Rect2(-8,-8,16,16),false,Color(1,1,1,1-smoothstep(33.0,33.6,a)))
+			if g.textures.has("icon_sword_iron"):g.draw_texture_rect(g.textures.icon_sword_iron,Rect2(-8,-8,16,16),false,Color(1,1,1,1-smoothstep(gift+2.6,gift+3.2,a)))
 			g.draw_set_transform(Vector2.ZERO)
-		if a>=30.4 and a<32.6:
-			var k: float=smoothstep(30.4,31.4,a)
+		if a>=gift and a<gift+2.2:
+			var k: float=smoothstep(gift,gift+1.0,a)
 			var at: Vector2=Vector2(300,top-50).lerp(Vector2(340,top-50),k)-Vector2(0,sin(k*PI)*14)
-			g.sprite("icon_end_eye",at-Vector2(12,12),Vector2(24,24),Color(1,1,1,1-smoothstep(32.0,32.6,a)))
+			g.sprite("icon_end_eye",at-Vector2(12,12),Vector2(24,24),Color(1,1,1,1-smoothstep(gift+1.6,gift+2.2,a)))
 			g.draw_circle(at,10+sin(w.clock*6)*2,Color(.6,1,.8,.15))
 		for j in range(18):
 			var x: float=fposmod(j*61.0+w.clock*(30+j%4*8),700)-30
@@ -962,3 +1039,43 @@ func seated_close(g, kind: String, hip: Vector2, direction: Vector2, s: float):
 	g.draw_texture_rect_region(tex,Rect2(Vector2(-anchor.x*s,swing),Vector2(size.x*s,(anchor.y-cut)*s*.62)),Rect2(origin+Vector2(0,cut),Vector2(size.x,anchor.y-cut)))
 	g.draw_texture_rect_region(tex,Rect2(Vector2(-anchor.x*s,-cut*s),Vector2(size.x*s,cut*s)),Rect2(origin,Vector2(size.x,cut)))
 	g.draw_set_transform(Vector2.ZERO)
+
+## Every broken item contributes real texture fragments, emitted from Steve's
+## body at the last clash. Stored descriptors survive the emptied inventory.
+func gear_debris(g,origin: Vector2,age: float,scale: float):
+	if age>3:return
+	for i in range(g.world.broken_gear.size()):
+		var item: Dictionary=g.world.broken_gear[i]
+		var name: String="icon_"+g.world.db.equipment_icon(item.id,item.level,item.evolved)
+		if not g.textures.has(name):g.load_texture(name)
+		var texture: Texture2D=g.textures.get(name)
+		if texture==null:continue
+		for j in range(4):
+			var angle: float=i*2.39996+j*.8
+			var t: float=maxf(0,age-j*.025)
+			var q: Vector2=origin+Vector2(cos(angle)*(12+i%4*4)*t,-18-sin(t*PI/1.3)*18+maxf(0,t-1.3)*13)*scale
+			var fade: float=1.0-smoothstep(1.8,3.0,age)
+			g.draw_set_transform(q.floor(),t*(j-1.5)*2,Vector2.ONE*scale*.55)
+			g.draw_texture_rect_region(texture,Rect2(-3,-3,6,6),Rect2(j%2*8,j/2*8,8,8),Color(1,1,1,fade))
+			g.draw_set_transform(Vector2.ZERO)
+
+
+## The chains of the loop: for a moment visible on him, then they burst off.
+func chains(g, at: Vector2, t: float, S: float):
+	if t<-.5 or t>1.6:return
+	for j in range(10):
+		var ang: float=j*TAU/10+.3
+		var home: Vector2=at+Vector2(cos(ang)*22,-14+sin(ang)*8)*S/3*1.6
+		if t<0:
+			var a: float=(t+.5)/.5
+			g.draw_rect(Rect2((home-Vector2(6,4)).floor(),Vector2(12,8)),Color(.6,.3,.9,.6*a))
+			g.draw_rect(Rect2((home-Vector2(4,2)).floor(),Vector2(8,4)),Color(.05,0,.08,.8*a))
+			continue
+		var d:=Vector2(cos(ang),sin(ang)*.6-.4)
+		var q: Vector2=home+d*t*(90+j%3*40)+Vector2(0,t*t*140)
+		var fade: float=1-smoothstep(.6,1.6,t)
+		g.draw_set_transform(q.floor(),t*(j%5-2)*4)
+		g.draw_rect(Rect2(-6,-4,12,8),Color(.7,.4,1,fade))
+		g.draw_rect(Rect2(-4,-2,8,4),Color(.06,0,.1,fade))
+		g.draw_set_transform(Vector2.ZERO)
+	if t>=0 and t<.25:g.draw_rect(Rect2(0,0,640,360),Color(.8,.6,1,.3*(1-t/.25)))

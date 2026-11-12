@@ -1,0 +1,113 @@
+{
+  "title": "Chapter I garden prologue",
+  "fps": 24,
+  "duration": 50,
+  "frames": 1200,
+  "resolution": [
+    960,
+    540
+  ],
+  "source": "assets/art_source/ch1_intro/ch1_intro.blend",
+  "texture_ledger": {
+    "version": "1.21.11",
+    "local_client": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+    "raw": {
+      "textures/entity/player/slim/alex.png": {
+        "sha256": "99391ed9dff9581ec88daf23b9b028adc9ac91f52889edcff1c982d0923c0cff",
+        "bytes": 958
+      },
+      "textures/entity/player/wide/steve.png": {
+        "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+        "bytes": 848
+      },
+      "textures/block/farmland_moist.png": {
+        "sha256": "28d754ebc6e3aa0c7c8680dc8f3ce18304152cd2d2374a574a66237f4b5b9ecf",
+        "bytes": 185
+      },
+      "textures/block/wheat_stage7.png": {
+        "sha256": "4227ffd999af30ace7264ae92e50e396a4ecac5479d3c62b5647213acf9c9de6",
+        "bytes": 202
+      },
+      "textures/block/oak_log.png": {
+        "sha256": "61735859c9c9ea82601191a77c6f256d93619cbaf7cad998a3ed5762877a34e6",
+        "bytes": 191
+      },
+      "textures/block/oak_log_top.png": {
+        "sha256": "a520800a833ea0c6214481245ab40397aa0c08b4ffc909046dac266386f9fc01",
+        "bytes": 206
+      },
+      "textures/block/oak_planks.png": {
+        "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+        "bytes": 195
+      },
+      "textures/block/cobblestone.png": {
+        "sha256": "bcda95fdf5afa91747657aa198fc0b69ebf44141de30a718075f74045e9a5def",
+        "bytes": 200
+      },
+      "textures/block/grass_block_top.png": {
+        "sha256": "52f44b64ce884a13dfe35e4b4da2e35898b790dd4d7a5ea536f1b0c0d56d29b4",
+        "bytes": 298
+      },
+      "textures/block/grass_block_side.png": {
+        "sha256": "76a677640eb91d6a9aed844bc66e329b1894f89e241a0071333b6678c0854580",
+        "bytes": 329
+      },
+      "textures/block/dirt.png": {
+        "sha256": "67197d5371efc3ca1638217c38349665dbd5a977b47bfb20075c858dff87d510",
+        "bytes": 197
+      },
+      "textures/block/dirt_path_top.png": {
+        "sha256": "653ab9be45372827da221f787435e2ad5adddc6257c29d45fe56947963784ac3",
+        "bytes": 170
+      },
+      "textures/block/oak_leaves.png": {
+        "sha256": "69c9c7048695e014aee6b8a2c4cb080607bd7a2a5291c06218b8134cbfcdc04f",
+        "bytes": 202
+      },
+      "textures/block/oak_leaves.png.mcmeta": {
+        "sha256": "dcb7170e9e198519bfd6865e85cfe17b2fb29e8a0ad2c57c69bde2f513da7c43",
+        "bytes": 62
+      },
+      "textures/item/iron_sword.png": {
+        "sha256": "455f2c306a9ddc1da19b04603ae0047211e2f4e4817b105573fcdc29b3c6945f",
+        "bytes": 194
+      },
+      "textures/entity/chest/normal.png": {
+        "sha256": "ab478534503430192b224ea4d5e1e87b6820198925bb7a7b4bd32f2a8a55c801",
+        "bytes": 811
+      }
+    },
+    "derived": [
+      "grass/leaf biome tint",
+      "Herobrine white eye pixels; otherwise Steve UV"
+    ],
+    "prepared": {
+      "steve.png": {
+        "sha256": "aa6294cf6d5e0f79097a7aa941a4bcfc0b76020008312b7a845610c89c7c63b3",
+        "bytes": 2052
+      },
+      "alex.png": {
+        "sha256": "391687eece94863afefd94b17dfc80f4132da11cad50209057aa2e46bde8925e",
+        "bytes": 2370
+      },
+      "herobrine.png": {
+        "sha256": "0969b47a24ce1dd82a0348e9c63761208a64543d63d6dcf6b030e78ea1ca1989",
+        "bytes": 2790
+      },
+      "iron_sword.png": {
+        "sha256": "718e4509708a10230af03d347e07bd11a8cce701598f1999e31a75c12b6c81dc",
+        "bytes": 282
+      }
+    }
+  },
+  "video": "assets/cinematics/ch1_intro.ogv",
+  "sfx": "assets/cinematics/ch1_intro_sfx.ogg",
+  "music": "assets/audio/music.ogg",
+  "subtitle": "Присоединишься к вечеринке после рассвета?",
+  "dialogue_voice": null,
+  "external_services": false,
+  "source_sha256": "8e70632597e60f952ca7282f6f07f86131a244860e3ac95e10a196a7f666f242",
+  "video_sha256": "64b2be2f392c039010197e406038f7d8420028fc377d22bc95cc17d21f51d64d",
+  "sfx_sha256": "d4a1cb47780ffd12ece247c95d8d2f0fd32e5e26c53f77295187b3acf5c00d60",
+  "music_sha256": "bde8705349fcd4a2fb9ae5a11ca3a3ac06e5bba101469a087e08b2ecd1bc9287"
+}

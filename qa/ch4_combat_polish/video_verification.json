@@ -1,0 +1,105 @@
+{
+  "status": "pass",
+  "video": "qa/recordings/chapter_four_combat_polish.mp4",
+  "frames": 2251,
+  "duration": 75.03333333333333,
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "30/1",
+        "duration": "75.033333",
+        "nb_read_frames": "2251"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0",
+        "duration": "75.033000",
+        "nb_read_frames": "3518"
+      }
+    ]
+  },
+  "sha256": "95e0b8ee47d32d1eef7fe6aa83eb7d65fa86ded655ed8f9b33580902587cf3db",
+  "segments": [
+    {
+      "name": "cloud_shadows_lighting_disabled",
+      "time": 0.0
+    },
+    {
+      "name": "skeleton_retreat_no_fire",
+      "time": 4.0
+    },
+    {
+      "name": "skeleton_fires_after_retreat",
+      "time": 7.0
+    },
+    {
+      "name": "witch_potion_and_floor_puddle",
+      "time": 9.5
+    },
+    {
+      "name": "hopper_v",
+      "time": 13.5
+    },
+    {
+      "name": "spear_crosses_real_gap",
+      "time": 15.5
+    },
+    {
+      "name": "endersteve_breaks_all_gear",
+      "time": 17.5
+    },
+    {
+      "name": "chapter_iv_starts_with_sword",
+      "time": 24.1
+    },
+    {
+      "name": "bedrock_sword_auto_aim_movement",
+      "time": 28.6
+    },
+    {
+      "name": "walk_on_floor_cracks",
+      "time": 33.6
+    },
+    {
+      "name": "spiral_spikes_full",
+      "time": 37.6
+    },
+    {
+      "name": "ground_punch_six_faults_full",
+      "time": 42.2
+    },
+    {
+      "name": "ground_punch_new_pattern",
+      "time": 46.1666666666667
+    },
+    {
+      "name": "moving_cast_hole",
+      "time": 50.1333333333333
+    },
+    {
+      "name": "moving_cast_rain",
+      "time": 54.9333333333333
+    },
+    {
+      "name": "moving_cast_rift",
+      "time": 60.6333333333333
+    },
+    {
+      "name": "moving_cast_tear",
+      "time": 65.4333333333333
+    },
+    {
+      "name": "moving_cast_day",
+      "time": 70.2333333333333
+    }
+  ],
+  "sound_events": 95,
+  "diagnostic": "staged mechanics/attack setups; invulnerable pilot; real simulation and renderer"
+}

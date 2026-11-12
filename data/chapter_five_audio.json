@@ -1,4 +1,52 @@
 {
-  "ch5_ending_theme": {"gain": 1.0, "variants": [{"path": "res://assets/audio/chapter_five/ending_theme.ogg", "volume": 1, "pitch": 1}]},
-  "ch5_ending_sting": {"gain": 1.0, "variants": [{"path": "res://assets/audio/chapter_five/ending_sting.ogg", "volume": 1, "pitch": 1}]}
+  "ch5_ending_theme": {
+    "gain": 1.0,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_five/ending_theme.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch5_ending_sting": {
+    "gain": 1.0,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_five/ending_sting.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch5_portal_open": {
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/ch5_sfx/portal_open.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch5_portal_pass": {
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/ch5_sfx/portal_pass.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch5_ut_charge": {
+    "gain": 0.4,
+    "variants": [
+      {
+        "path": "res://assets/audio/ch5_sfx/ut_charge.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  }
 }

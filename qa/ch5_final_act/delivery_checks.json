@@ -1,0 +1,22 @@
+{
+  "tests": {
+    "test_ch5_final_act": 34,
+    "test_ch5_brutal": 31,
+    "test_ch5_cinema": 54,
+    "test_chapter_five_finale": 23,
+    "test_chapter_five_notch": 22,
+    "test_chapter_five_3d": 26,
+    "test_ch5_review_fixes": 29,
+    "test_chapter_five": 33,
+    "test_chapter_five_arsenal": 28,
+    "test_chapter_five_bosses": 17
+  },
+  "total": 297,
+  "failures": 0,
+  "exports": {
+    "builds/linux/MinecraftSurvivors.x86_64": "5aa54c7d5feb0224606e0dd4de358b11239d465e9261221c7c3ce105c9f8db8b",
+    "builds/windows/MinecraftSurvivors.exe": "b706ad8cfb41f71cddb10607d884deb4b17e17a10bd9a426dbf2881c356ddb93"
+  },
+  "packed_cinema_sha256": "44676116eb261957fc6aeb3a0daca5532c46564633df65022e405449c1916fdc",
+  "accepted_chair_renderer_preserved": true
+}

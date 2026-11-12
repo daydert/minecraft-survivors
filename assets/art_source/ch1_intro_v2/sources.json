@@ -1,0 +1,85 @@
+{
+  "version": "1.21.11",
+  "local_client": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw": {
+    "textures/item/wheat.png": {
+      "sha256": "4bede9ae2a07763c8c0bbd8f80008fc2fa8908b1fe703cb912782a91656fffdd",
+      "bytes": 191
+    },
+    "textures/block/short_grass.png": {
+      "sha256": "40e2ad5d034d0ffc58b4c496c0badfa2104e0fc1888fc92c5f9bd79dcd84cb20",
+      "bytes": 201
+    },
+    "textures/block/poppy.png": {
+      "sha256": "9678d89814d640f88305add21ee6d157f52007aac60bbc363b30054bb3388561",
+      "bytes": 143
+    },
+    "textures/block/poppy.png.mcmeta": {
+      "sha256": "afca6a34e44b86e6a02b7acf062960ed0ebc3f2dab815d86b831dc9e251ad6f4",
+      "bytes": 70
+    },
+    "textures/block/dandelion.png": {
+      "sha256": "eb0cdf11d96f9b0aef8201c05c51f2c6cf1fc00d8a09d26c50530aff2b05ae33",
+      "bytes": 138
+    },
+    "textures/block/dandelion.png.mcmeta": {
+      "sha256": "afca6a34e44b86e6a02b7acf062960ed0ebc3f2dab815d86b831dc9e251ad6f4",
+      "bytes": 70
+    },
+    "textures/block/hay_block_side.png": {
+      "sha256": "02ee6ed996363e25cf2ae47043f3af8b775ff788099ff00ebcde7c9ca9fa6cd5",
+      "bytes": 196
+    },
+    "textures/block/hay_block_top.png": {
+      "sha256": "99b8063611a6816b67c652f2f847048cd798a9b8858c84b9f597363007153693",
+      "bytes": 189
+    },
+    "textures/entity/enderman/enderman_eyes.png": {
+      "sha256": "f6fc9f458102d8cbe33e2895a725e4348026b02dde9deff460fe657ef79f9674",
+      "bytes": 106
+    },
+    "textures/block/spruce_log.png": {
+      "sha256": "a87a55ec454cb682934666bdf864dbd7fab4a561415f76834f3c53bb75bf0ba9",
+      "bytes": 191
+    },
+    "textures/block/dark_oak_leaves.png": {
+      "sha256": "7de885f23039edae5cebc02bc208a65d840394448ecac6faa6999f1c558f98c2",
+      "bytes": 201
+    },
+    "textures/block/dark_oak_leaves.png.mcmeta": {
+      "sha256": "dcb7170e9e198519bfd6865e85cfe17b2fb29e8a0ad2c57c69bde2f513da7c43",
+      "bytes": 62
+    },
+    "textures/block/composter_side.png": {
+      "sha256": "de177e06f262bc3d1d2b506ec276ccf33459153ab868d55f0758736f7378038e",
+      "bytes": 206
+    },
+    "textures/block/stone.png": {
+      "sha256": "b5e10adc72442bfb257ce7ba0b9bbe36475a0c8cdfec89b80dc9517203ff3e9f",
+      "bytes": 151
+    },
+    "textures/block/coarse_dirt.png": {
+      "sha256": "6889a193decb2c38cd8559456693c15192917c7b917d6ef9c3c2e142f7819ad4",
+      "bytes": 495
+    },
+    "textures/block/podzol_top.png": {
+      "sha256": "598072d5a4db38ec4ea081a584a2de6b5960785bc2287e18e93427c7433c5d56",
+      "bytes": 196
+    }
+  },
+  "extra": [
+    "item/wheat",
+    "block/short_grass",
+    "block/poppy",
+    "block/dandelion",
+    "block/hay_block_side",
+    "block/hay_block_top",
+    "entity/enderman/enderman_eyes",
+    "block/spruce_log",
+    "block/dark_oak_leaves",
+    "block/composter_side",
+    "block/stone",
+    "block/coarse_dirt",
+    "block/podzol_top"
+  ]
+}

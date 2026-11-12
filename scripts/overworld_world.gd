@@ -24,12 +24,14 @@ var intro_age := -1.0
 var gate_grow := 1.0
 var intro_step_timer := 0.0
 var intro_cues := 0
+var intro_from_prologue := false
 
 func chapter_number() -> int:
 	return 1
 
-func begin_intro():
+func begin_intro(from_prologue: bool = false):
 	state = "INTRO"
+	intro_from_prologue = from_prologue
 	intro_age = 0.0
 	gate_grow = 0.0
 	intro_cues = 0
@@ -113,6 +115,7 @@ func reset(seed_value: int = 0):
 	slain.clear()
 	intro_age = -1.0
 	gate_grow = 1.0
+	intro_from_prologue = false
 	super.reset(seed_value)
 	night = db.data.night
 	var extra: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/v2_assets.json"))
@@ -333,7 +336,7 @@ func move_witch(m: Dictionary, dt: float):
 		direction = -p.direction_to(player)
 	elif distance < float(night.witch_keep[1]):
 		speed = 0
-	if m.timer <= 0 and distance < 260 and visible(p, -8):
+	if m.timer <= 0 and distance >= float(night.witch_keep[0]) and distance < 260 and visible(p, -8):
 		m.timer = float(night.witch_throw_every)
 		var target: Vector2 = player + facing * (18.0 if player_moving else 0.0)
 		add_effect("witch_potion", p, float(night.witch_throw_flight), {"start": p, "end": target, "radius": float(night.witch_splash_radius), "damage": m.damage, "owner": m.id})

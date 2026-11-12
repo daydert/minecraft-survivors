@@ -1,0 +1,15 @@
+{
+  "tests": {
+    "cinema": 54,
+    "review_fixes": 29,
+    "notch": 22,
+    "3d": 26,
+    "finale": 22
+  },
+  "failures": 0,
+  "packed_render": "PASS",
+  "exports": {
+    "builds/linux/MinecraftSurvivors.x86_64": "84906bcb277c59e4c042231dfe03cb427627380b57c66633a5c45450b28a42a8",
+    "builds/windows/MinecraftSurvivors.exe": "ee171c0d3255a80a1f58ac4253b7b6cb7c4207d9ae7ef421b9176f9c640233db"
+  }
+}

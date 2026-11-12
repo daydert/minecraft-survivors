@@ -219,8 +219,8 @@ func toll(w, p: Vector2, radius: float, ghost: bool = false):
 	flash(p - Vector2(0, 14), 80.0, Color(1.0, 0.85, 0.5), 0.14, 0.6)
 	shove(w, Vector2(0, 1), 2.5, 0.08)
 
-func slash(w, p: Vector2, direction: Vector2, radius: float):
-	ring(p, radius, 0.38, "slash", {"dir": direction})
+func slash(w, p: Vector2, direction: Vector2, radius: float, half_arc: float=1.15):
+	ring(p, radius, 0.38, "slash", {"dir": direction,"half_arc":half_arc})
 	var end: Vector2 = p + direction * radius
 	stain(p + direction * radius * 0.55, radius * 0.5, "crack", w.clock, {"end": end, "dir": direction})
 	dust(end, 5, 12)

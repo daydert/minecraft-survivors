@@ -135,7 +135,7 @@ func update_attacks(w,dt: float):
 		var dir: Vector2=w.player.direction_to(target.p) if target!=null else w.facing
 		var wind: float=.3 if id=="sword" else .65 if id=="sky_tnt" else .18
 		var duration: float=maxf(.075,minf(s.interval*.85,(float(s.get("duration",.85)) if id=="bone_saw" else wind+.5)/float(w.db.data.four_buffs.speed)))
-		actions[id]={"age":0.0,"duration":duration,"wind":duration*.35,"stats":s,"dir":w.facing if id=="sword" else dir,"hit":false,"contacts":{},"returned":false,"cut":false}
+		actions[id]={"age":0.0,"duration":duration,"wind":duration*.35,"stats":s,"dir":dir,"hit":false,"contacts":{},"returned":false,"cut":false}
 		w.cooldowns[id]=s.interval;w.animation.strike(w,id,dir)
 
 func hit(w,m: Dictionary,amount: float,owner: String,push:=Vector2.ZERO,extra:=false,ignore_guard:=false):
@@ -145,7 +145,7 @@ func hit(w,m: Dictionary,amount: float,owner: String,push:=Vector2.ZERO,extra:=f
 
 func sweep(w,p: Vector2,dir: Vector2,radius: float,damage: float,owner: String,extra:=false,shape: String=""):
 	for m in w.in_radius(p,radius):
-		if owner=="axe" or shape=="axe" or dir.dot(p.direction_to(m.p))>.35:hit(w,m,damage,owner,p.direction_to(m.p),extra,owner=="sword" and w.evolved.has("sword"))
+		if owner=="axe" or shape=="axe" or dir.dot(p.direction_to(m.p))>(-.15 if owner=="sword" and w.evolved.has("sword") else .35):hit(w,m,damage,owner,p.direction_to(m.p),extra,owner=="sword" and w.evolved.has("sword"))
 	w.break_props(p,radius,damage)
 
 func release(w,id: String,a: Dictionary):
@@ -154,9 +154,9 @@ func release(w,id: String,a: Dictionary):
 		"sword":
 			sweep(w,w.player,a.dir,s.radius,s.damage,id)
 			for m in w.in_radius(w.player,s.radius):
-				if a.dir.dot(w.player.direction_to(m.p))>.35 and m.get("control_resist",0.0)<=0 and m.get("phase","") in ["windup","smash_wait"]:
+				if a.dir.dot(w.player.direction_to(m.p))>-.15 and m.get("control_resist",0.0)<=0 and m.get("phase","") in ["windup","smash_wait"]:
 					m.stun=.22 if m.get("boss",false) else .4;m.control_resist=1.8 if m.get("boss",false) else .8;w.Enemies.cancel(m,.8)
-			w.add_effect("ch4_bedrock_cut",w.player,.35,{"end":w.player+a.dir*s.radius,"dir":a.dir});w.sound("ch4_heavy");w.fx.slash(w,w.player,a.dir,s.radius)
+			w.add_effect("ch4_bedrock_cut",w.player,.35,{"end":w.player+a.dir*s.radius,"dir":a.dir});w.sound("ch4_heavy");w.fx.slash(w,w.player,a.dir,s.radius,1.72)
 		"shotgun":
 			pellets(w,a)
 			if evo:events.append({"kind":"shotgun","wait":.14,"a":a.duplicate(true)})

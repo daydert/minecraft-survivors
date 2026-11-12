@@ -174,7 +174,7 @@ func boss_died(w, m: Dictionary):
 
 func begin_loop(w):
 	var m = place(w, "loop_boss", w.player + Vector2(0, -50))
-	loop = {"id":m.id,"age":0.0,"i":0,"start_hp":m.hp,"dealt":0.0,"snap":{},"path":[],"tick":0.0,"ring":float(data(w).loop.ring_every)}
+	loop = {"id":m.id,"age":0.0,"intro_age":0.0,"i":0,"start_hp":m.hp,"dealt":0.0,"snap":{},"path":[],"tick":0.0,"ring":float(data(w).loop.ring_every)}
 	snapshot(w)
 	w.message = "while (true)";w.message_timer = 3.0
 	w.sound("ch4_hb_glitch", .1)
@@ -191,7 +191,7 @@ func loop_step(w, dt: float):
 	var d: Dictionary = data(w).loop
 	var b = mob(w, loop.id)
 	if b == null:return
-	loop.age += dt;loop.tick -= dt
+	loop.age += dt;loop.intro_age=float(loop.get("intro_age",0))+dt;loop.tick -= dt
 	if loop.tick <= 0:
 		loop.tick = .1;loop.path.append(w.player)
 	loop.ring -= dt

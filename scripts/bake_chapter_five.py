@@ -109,11 +109,31 @@ def code_lines():
 def frame0(tex):
     return tex.crop((0, 0, 16, 16)) if tex.height > 16 else tex
 
+def snow_golem(t, skin):
+    """Vanilla entity UVs on one depth-tested mesh, including the stick arms.
+    Body sizes/UVs agree with Mojang's snow_golem geometry (0,36 / 0,16).
+    The pumpkin is the equipped carved-pumpkin block, not a second snow cube.
+    """
+    from bake_minecraft_characters import part
+    mesh = box(skin, (-6, 0, -6), (12, 12, 12), (0, 36))
+    mesh += box(skin, (-5, 11, -5), (10, 10, 10), (0, 16))
+    for side in (-1, 1):
+        origin = (5, 18, -1) if side > 0 else (-17, 18, -1)
+        mesh += part(skin, origin, (12, 2, 2), (32, 0),
+                     pivot=(side * 5, 18, 0), angles=(0, side * .35, side * .18))
+    front, side, top = t("block/carved_pumpkin"), t("block/pumpkin_side"), t("block/pumpkin_top")
+    faces = {"north": (front, (0, 0, 16, 16)), "south": (side, (0, 0, 16, 16)),
+             "east": (side, (0, 0, 16, 16)), "west": (side, (0, 0, 16, 16)),
+             "up": (top, (0, 0, 16, 16)), "down": (top, (0, 0, 16, 16))}
+    mesh += box(front, (-5, 20, -5), (10, 10, 10), faces=faces)
+    return bake(mesh, (40, 48), 1.15, (20, 43), yaw=-55, elevation=20)
+
 def cube(front, side, top, size=16):
     faces = {"north": (front, (0, 0, 16, 16)), "east": (side, (0, 0, 16, 16)), "up": (top, (0, 0, 16, 16)),
              "south": (side, (0, 0, 16, 16)), "west": (side, (0, 0, 16, 16)), "down": (side, (0, 0, 16, 16))}
     mesh = box(front, (-8, 0, -8), (16, 16, 16), faces=faces)
-    return bake(mesh, (size, size), 0.56, (8, 13), yaw=-45 + 180, elevation=30)
+    k = size / 16
+    return bake(mesh, (size, size), 0.56 * k, (8 * k, 13 * k), yaw=-45 + 180, elevation=30)
 
 def glint(im, glint_tex, strength=1.0, phase=0, colour=(105, 45, 165)):
     im = im.copy()
@@ -193,18 +213,19 @@ def notch():
     image, layout = four.atlas(notch_skin(imp), names)
     imp.save(image, "ch5_notch", ["assets/skins/notch.png (canonical Notch skin)"])
     t = lambda name: frame0(imp.tex(name))
-    plants = {"dispenser": cube(t("block/dispenser_front"), t("block/furnace_side"), t("block/furnace_top")),
-              "redstone_ore": cube(t("block/redstone_ore"), t("block/redstone_ore"), t("block/redstone_ore")),
-              "obsidian": cube(t("block/obsidian"), t("block/obsidian"), t("block/obsidian")),
-              "tnt": cube(t("block/tnt_side"), t("block/tnt_side"), t("block/tnt_top")),
-              "snow_golem": cube(t("block/carved_pumpkin"), t("block/pumpkin_side"), t("block/pumpkin_top")),
-              "snow": cube(t("block/snow"), t("block/snow"), t("block/snow")),
-              "cactus": cube(t("block/cactus_side"), t("block/cactus_side"), t("block/cactus_top")),
-              "piston": cube(t("block/piston_top"), t("block/piston_side"), t("block/piston_side")),
-              "magma": cube(t("block/magma"), t("block/magma"), t("block/magma"))}
+    S = 32
+    plants = {"dispenser": cube(t("block/dispenser_front"), t("block/furnace_side"), t("block/furnace_top"), S),
+              "redstone_ore": cube(t("block/redstone_ore"), t("block/redstone_ore"), t("block/redstone_ore"), S),
+              "obsidian": cube(t("block/obsidian"), t("block/obsidian"), t("block/obsidian"), S),
+              "tnt": cube(t("block/tnt_side"), t("block/tnt_side"), t("block/tnt_top"), S),
+              "snow_golem": snow_golem(t, imp.tex("entity/snow_golem")),
+              "snow": cube(t("block/snow"), t("block/snow"), t("block/snow"), S),
+              "cactus": cube(t("block/cactus_side"), t("block/cactus_side"), t("block/cactus_top"), S),
+              "piston": cube(t("block/piston_top"), t("block/piston_side"), t("block/piston_side"), S),
+              "magma": cube(t("block/magma"), t("block/magma"), t("block/magma"), S)}
     sprites = ["ch5_notch"]
     for name, im in plants.items():
-        imp.save(im, "icon_pvz_" + name, ["block/" + name]);sprites.append("icon_pvz_" + name)
+        imp.save(im, "icon_pvz_" + name, ["entity/snow_golem", "block/carved_pumpkin", "block/pumpkin_side", "block/pumpkin_top"] if name == "snow_golem" else ["block/" + name]);sprites.append("icon_pvz_" + name)
     imp.save(t("item/redstone"), "icon_pvz_redstone", ["item/redstone"]);sprites.append("icon_pvz_redstone")
     data = json.loads((ROOT / "data/chapter_five_assets.json").read_text())
     data["sprites"] = [s for s in data["sprites"] if not s.startswith("icon_pvz_")] + [s for s in sprites if s.startswith("icon_pvz_")]

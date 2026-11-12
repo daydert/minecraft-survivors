@@ -10,7 +10,10 @@ var four_music: AudioStreamPlayer
 var end_music: AudioStreamPlayer
 var end_track := ""
 var end_mix := 0.0
-const END_TRACKS := {"boss_one": ["chapter_four/boss_one", "chapter_four/precipice"], "boss_two": ["chapter_four/boss_two", "chapter_four/creator"], "boss_fade": ["chapter_four/boss_two", "chapter_four/creator"], "coords": ["chapter_four/coords", "chapter_four/relic"]}
+const END_TRACKS := {"boss_one": ["chapter_four/boss_one", "chapter_four/precipice"], "boss_two": ["chapter_four/boss_two", "chapter_four/creator"], "boss_fade": ["chapter_four/boss_two", "chapter_four/creator"], "coords": ["chapter_four/coords", "chapter_four/relic"],
+	# Chapter V, Notch's dimension (CC0 tracks, see assets/audio/ch5_music/SOURCES.md).
+	"ch5_ambient": ["ch5_music/wastes_ambient"], "ch5_talk": ["ch5_music/wastes_ambient"], "ch5_notch": ["ch5_music/battle_theme"], "ch5_fighter": ["ch5_music/fight_phase2"],
+	"ch5_quake": ["ch5_music/fight_phase1"], "ch5_brawl": ["ch5_music/fight_final"], "ch5_chair": ["ch5_music/chair_tension"], "ch5_flight": ["ch5_music/flight_space"]}
 var four_mix := 0.0
 var pyramid_music: AudioStreamPlayer
 var pyramid_mix:=0.0
@@ -47,6 +50,7 @@ func _ready():
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_one_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_external_audio.json")),true)
+	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_audio.json")),true)
 	sound_map.merge(JSON.parse_string(FileAccess.get_file_as_string("res://data/end_external_audio.json")),true)
 	for path in ["music","music_2","music_3"]:
 		playlist.append(load("res://assets/audio/"+path+".ogg"))
@@ -218,7 +222,7 @@ func play(id: String):
 		return
 	if id=="ch5_credits":
 		var credits=AudioStreamPlayer.new();add_child(credits)
-		credits.stream=load("res://assets/audio/music_3.ogg");credits.volume_db=-40.0
+		credits.stream=load("res://assets/audio/ch5_music/flight_space.ogg");credits.volume_db=-40.0
 		credits.play();create_tween().tween_property(credits,"volume_db",linear_to_db(maxf(.001,music_volume)),3.0)
 		credits.set_meta("credits",true);return
 	if id=="ch5_ending_sting":

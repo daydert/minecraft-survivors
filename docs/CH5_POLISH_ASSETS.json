@@ -1,0 +1,73 @@
+{
+ "version": "1.21.11",
+ "raw_files": {
+  "textures/block/repeating_command_block_front.png": {
+   "sha256": "b03032b359a99404e89a7516d5ad2a85e0e47985a27b3ae8552ccd2c867f5a78",
+   "bytes": 340
+  },
+  "textures/block/repeating_command_block_front.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/repeating_command_block_side.png": {
+   "sha256": "ac7f2e54f705cfc8e6d007302c3c9b64ede1eb826836647d9500cc192a08509f",
+   "bytes": 359
+  },
+  "textures/block/repeating_command_block_side.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/repeating_command_block_back.png": {
+   "sha256": "3bcbc08cc9f4c8684ee947d2ad1c7d2c8fd4f4b6a845408ec9df5a5721afdbad",
+   "bytes": 375
+  },
+  "textures/block/repeating_command_block_back.png.mcmeta": {
+   "sha256": "a1d4171d971c3a7b3202d9aa67062f643f579443a71cc92efe38f1acd8990f03",
+   "bytes": 70
+  },
+  "textures/block/redstone_torch.png": {
+   "sha256": "160caba109123055dc002a7471439cb32502cbcb07074524be564782586872a6",
+   "bytes": 150
+  },
+  "textures/item/potion.png": {
+   "sha256": "6a09a39bb6c41bc92bd5eca1f51caf5b582a85f68206b164476c8e14a4669416",
+   "bytes": 165
+  },
+  "textures/item/potion_overlay.png": {
+   "sha256": "606f372ad8b832a8659c54adb5da0ace0bcc74b471b84211076197cb3c557043",
+   "bytes": 124
+  }
+ },
+ "derived": {
+  "icon_repeating_block": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures; healing potion tint"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "ece32eb7fe286856f09b35f10d9e211be2280522cc025bab3b0b99e2641367aa"
+  },
+  "icon_breakpoint": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures; healing potion tint"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "a2010b128543f08d6667625dd3c0f69387ef22c4d21c493cd971eb2638d95573"
+  },
+  "icon_healing_v": {
+   "sources": [
+    "Minecraft Java 1.21.11 vanilla textures; healing potion tint"
+   ],
+   "size": [
+    16,
+    16
+   ],
+   "sha256": "f6542954d5019ed08a80ac16cc94ab44f242d5a99a75643dc42acae51afb255e"
+  }
+ }
+}

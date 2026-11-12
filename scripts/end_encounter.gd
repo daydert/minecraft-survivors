@@ -4,24 +4,57 @@ const BETRAYAL_IMPACT=3.4
 const BETRAYAL_END=10.2
 const DEATH_DURATION=7.6
 const YIELD_TIME=3.0
-const SIT_LENGTH=34.0
-const RESTORE_LIT=6.2
-const RESTORE_END=10.4
+const RESTORE_LIT=7.4
+const RESTORE_END=11.6
 ## He breaks the way out the moment it looks like the chapter is won.
-const BETRAYAL_LINES=[[2.2,"Стой.",1.6],[6.0,"Туда нельзя.",2.2],[8.1,"Не заставляй меня.",2.0]]
-## On the edge of the island. Plain speech; Steve does not answer.
-const SIT_LINES=[[1.2,"Ну вот.",2.4],[4.4,"Я ведь тоже когда-то до него дошёл.",3.4],[8.6,"Думал, справлюсь. Не справился.",3.2],
-	[12.6,"Очнулся здесь. И с тех пор одно и то же: дракон, портал, ты.",4.2],[17.8,"Каждый раз ты приходишь. И каждый раз я тебя не пускаю.",4.2],
-	[23.0,"А в этот раз ты меня победил.",3.0],[26.8,"Значит, может, у тебя и получится.",3.4],[30.4,"Держи. И меч возьми, пригодится.",3.2]]
+const BETRAYAL_LINES=[[2.2,"Стой",1.6],[6.0,"Туда нельзя",2.2],[8.1,"Не заставляй меня",2.0]]
+## On the edge of the island. [text, who, tag, pause before]. Multi-part lines are
+## spoken one phrase at a time; timings follow reading speed (see timeline()).
+## "delete": his maker starts erasing him; "gift": the eye and the sword.
+const SIT_SCRIPT=[
+	["Вот и всё","ender","",0.0],
+	["Я ведь тоже когда-то до него дошёл...\nОн отнял у меня нечто дорогое моему сердцу","ender","",.6],
+	["Я думал, что справлюсь с ним, долго оттачивал свои навыки и копил ярость, однако меня ждал полный провал","ender","",.5],
+	["Грёбаный ублюдок, стоящий за ним, выдал мне одну задачу и заточил меня здесь\nСудя по всему, в его алгоритме случился сбой после того, как ты смог меня одолеть\nДо этого всё, что я мог, — временами пытаться завести с тобой разговор. Каждый раз, когда ты появлялся, моя свобода воли переставала существовать","ender","look",.7],
+	["Я впервые проиграл после того, как $%@!^ заточил меня здесь","ender","",.5],
+	["Что произошло???\nТвою ж мать, эта мразь начала меня удалять!?","ender","delete",1.0],
+	["Слушай, у нас мало времени. Раз он начал это делать, что-то явно пошло не по его плану","ender","",.3],
+	["Держи меч и Око Края, они тебе пригодятся","ender","gift",.3]]
+var SIT_LINES: Array=[]
+var SIT_MARKS: Dictionary={}
+var SIT_LENGTH:=0.0
 ## After the duel: a last exchange of blows breaks both swords and drops them both.
 const CLASH_HITS=[.55,1.05,1.55]
 const CLASH_BREAK=2.25
 const CLASH_LENGTH=3.4
-const DOWN_LENGTH=11.4
-const DOWN_RISE=8.6
+var DOWN_LENGTH:=11.4
+var DOWN_RISE:=8.6
 ## Lying on the end stone. The only time Steve says anything.
-const DOWN_LINES=[[1.6,"Всё. Ни у тебя меча, ни у меня.",3.0,"ender"],[5.0,"Квиты.",1.8,"steve"],[7.0,"Вставай. Пойдём, кое-что покажу.",2.8,"ender"]]
-const RESTORE_LINES=[[2.4,"Иди. И не останавливайся.",3.0]]
+## "free": the chains he wore through every loop shatter off him.
+const DOWN_SCRIPT=[["Не может быть, я больше не чувствую оков. Неужели ты что-то ему сломал?","ender","free",1.6],["Квиты","steve","",.6],["Вставай, мне нужно срочно тебе кое-что рассказать","ender","",.7]]
+var DOWN_LINES: Array=[]
+var DOWN_MARKS: Dictionary={}
+
+## Reading pace for the typed subtitles: a short beat stays a moment, a long one is fully readable.
+static func part_life(text: String) -> float:return clampf(1.0+text.length()/22.0,1.7,7.5)
+
+## Lays phrases end to end: [at, phrase, life, who] plus the start of each tagged line.
+static func timeline(script: Array, start: float) -> Dictionary:
+	var t: float=start;var out: Array=[];var marks: Dictionary={}
+	for row in script:
+		t+=row[3]
+		if row[2]!="":marks[row[2]]=t
+		for part in String(row[0]).split("\n"):
+			var life: float=part_life(part)
+			out.append([t,part,life,row[1]]);t+=life+.25
+	return {"lines":out,"marks":marks,"end":t}
+
+func _init():
+	var sit: Dictionary=timeline(SIT_SCRIPT,1.2)
+	SIT_LINES=sit.lines;SIT_MARKS=sit.marks;SIT_LENGTH=sit.end+1.4
+	var down: Dictionary=timeline(DOWN_SCRIPT,0.0)
+	DOWN_LINES=down.lines;DOWN_MARKS=down.marks;DOWN_RISE=down.end+.2;DOWN_LENGTH=DOWN_RISE+2.8
+const RESTORE_LINES=[[1.0,"Иди и не останавливайся",2.2],[3.4,"Обо мне не беспокойся, мне уже ничего не поможет",3.4]]
 
 func cue(w, dt: float, at: float) -> bool:
 	return w.stage_age>=at and w.stage_age-dt<at
@@ -31,7 +64,12 @@ func lines(w, dt: float, table: Array):
 		if cue(w,dt,l[0]):w.say(l[1],l[2],l[3] if l.size()>3 else "ender")
 
 func story(w, dt: float):
-	for l in w.lines:l.age+=dt
+	for l in w.lines:
+		l.age+=dt
+		# Black Souls style: the scream hits the whole screen when it lands.
+		if l.get("scream",false) and l.age>=0 and not l.get("fired",false):
+			l.fired=true;w.shake=maxf(w.shake,.75);w.hitstop=maxf(w.hitstop,.14)
+			w.sound("ch4_hb_glitch");w.sound("explosion",.1)
 	w.lines=w.lines.filter(func(l):return l.age<l.life)
 	match w.stage:
 		"end_arrival":
@@ -86,16 +124,20 @@ func story(w, dt: float):
 			for t in CLASH_HITS:
 				if cue(w,dt,t):w.sound("ch1_parry",.02);w.sound("swing",.02);w.shake=.12
 			if cue(w,dt,CLASH_BREAK):
+				w.shatter_clash_gear()
 				for id in ["break","break","ch4_punch_heavy","shield_break"]:w.sound(id,.01)
 				w.hitstop=.22;w.shake=.5
 			if cue(w,dt,CLASH_BREAK+.75):w.sound("ch4_body_fall",.02);w.sound("ch4_body_fall",.02)
 			if w.stage_age>=CLASH_LENGTH:w.stage="down";w.stage_age=0;w.sound("ch4_breath")
 		"down":
 			lines(w,dt,DOWN_LINES)
+			if cue(w,dt,DOWN_MARKS.free):
+				w.shake=.35;w.hitstop=.12
+				for id in ["break","ch4_hb_shatter"]:w.sound(id,.02)
 			if cue(w,dt,DOWN_RISE):w.sound("ch4_breath")
 			if w.stage_age>=DOWN_LENGTH:w.stage="to_edge";w.stage_age=0
 		"yield":
-			if cue(w,dt,1.8):w.say("Хватит.",2.0)
+			if cue(w,dt,1.8):w.say("Хватит!",2.0)
 			if w.stage_age>=YIELD_TIME:w.stage="approach";w.stage_age=0
 		"approach":
 			if w.player.distance_to(w.npc.p)<34:
@@ -110,14 +152,23 @@ func story(w, dt: float):
 				w.stage="sit";w.stage_age=0;w.sound("ch4_breath");w.sound("end_wind")
 		"sit":
 			lines(w,dt,SIT_LINES)
-			if cue(w,dt,31.0):w.keepsake=true;w.sound("pickup")
-			if cue(w,dt,32.4):w.sound("pickup")
+			var gone: float=SIT_MARKS.delete
+			# His maker starts erasing him mid-sentence; the tears come back faster and faster.
+			if cue(w,dt,gone):w.shake=.55;w.hitstop=.18;w.sound("ch4_hb_glitch");w.sound("ch4_hb_shatter",.05)
+			if w.stage_age>gone+1.0:
+				var period: float=lerpf(2.4,.9,clampf((w.stage_age-gone)/(SIT_LENGTH-gone),0,1))
+				if fposmod(w.stage_age-gone,period)<dt:w.sound("ch4_hb_glitch",.15);w.shake=maxf(w.shake,.12)
+			if cue(w,dt,SIT_MARKS.gift+.6):w.keepsake=true;w.sound("pickup")
+			if cue(w,dt,SIT_MARKS.gift+2.0):w.build["sword"]=1;w.cooldowns["sword"]=.35;w.sound("pickup")
 			if w.stage_age>=SIT_LENGTH:w.stage="restore";w.stage_age=0;w.npc.from=w.npc.p
 		"restore":
 			var stand: Vector2=w.portal_position+Vector2(0,30)
-			w.npc.p=w.npc.from.lerp(stand,smoothstep(.6,2.6,w.stage_age));w.npc.dir=Vector2.UP if w.stage_age>.6 else Vector2.DOWN
+			# No time left: he hurries to the portal, glitching all the way.
+			w.npc.p=w.npc.from.lerp(stand,smoothstep(.5,2.0,w.stage_age));w.npc.dir=Vector2.UP if w.stage_age>.5 else Vector2.DOWN
+			if fposmod(w.stage_age,1.1)<dt and w.stage_age<RESTORE_LIT:w.sound("ch4_hb_glitch",.15)
 			lines(w,dt,RESTORE_LINES)
-			if cue(w,dt,3.6):w.sound("portal_ignite")
+			if cue(w,dt,4.8):w.sound("portal_ignite")
+			if cue(w,dt,RESTORE_LIT+.4):w.shake=.6;w.hitstop=.1;w.sound("ch4_hb_shatter");w.sound("end_music_cut",.05)
 			if w.stage_age>=RESTORE_LIT and not w.portal_lit:w.portal_lit=true;w.sound("portal_open");w.shake=.2;w.sound("ch4_hb_glitch")
 			if w.stage_age>=RESTORE_END:w.stage="portal_ready";w.stage_age=0;w.npc={}
 		"portal_ready":
@@ -133,7 +184,7 @@ func step(w, m: Dictionary, dt: float):
 ## Echoes of himself from other loops run their old lines at the hero, one after another.
 func echoes(w, m: Dictionary):
 	var count: int=5 if m.rage else 3
-	if not m.get("echoes_spoken",false):m.echoes_spoken=true;w.say("Нас тут было много.",2.2)
+	if not m.get("echoes_spoken",false):m.echoes_spoken=true;w.say("Этому нет числа",2.2)
 	for j in range(count):
 		var a: float=m.attack_serial*.9+j*TAU/count
 		var from: Vector2=w.player+Vector2.from_angle(a)*135
@@ -254,7 +305,7 @@ func recover(m, seconds: float=1.0):
 ## His order of moves: the plain ones, and every few a big one he has done a thousand times.
 const SEQUENCE=[0,1,2,9,3,4,10,5,6,11]
 const RAGE_SEQUENCE=[0,7,9,1,3,8,10,2,4,11,5,6]
-const TAUNTS=["Медленно.","Я это уже видел.","Ещё раз.","Не так."]
+const TAUNTS=["Слишком медленно","Грёбаный придурок, я это уже видел","Ещё раз","Не так"]
 
 func taunt(w, m: Dictionary):
 	m.taunt=true
@@ -263,7 +314,7 @@ func taunt(w, m: Dictionary):
 func endersteve(w, m: Dictionary, dt: float):
 	if m.hp<m.max_hp*.5 and not m.rage:
 		m.rage=true;m.phase="rage";m.timer=1.6;m.altitude=0;w.sound("dragon_growl");w.add_effect("ender_rage",m.p,1.6,{"radius":95.0})
-		w.fx.quake(w,m.p,1.8);w.fx.ring(m.p,140.0,1.0,"evolve");w.fx.flash(m.p,200.0,Color(.75,.35,1),.6);w.say("Ну давай.",1.8)
+		w.fx.quake(w,m.p,1.8);w.fx.ring(m.p,140.0,1.0,"evolve");w.fx.flash(m.p,200.0,Color(.75,.35,1),.6);w.say("Ну давай",1.8)
 	m.burst_tick-=dt
 	match m.phase:
 		"walk","recover":

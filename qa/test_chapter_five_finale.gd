@@ -24,7 +24,7 @@ func run():
 	game.action("chapter_5");var w=game.world;var n=w.notch;var f=n.finale
 	n.begin(w);n.change("quake_won");advance(3.3)
 	check(n.phase=="to_code","After the arena he calls the last game")
-	advance(3.0);check(n.phase=="code" and f.phase=="pick","The code duel opens on the language choice")
+	advance(4.5);check(n.phase=="code" and f.phase=="pick","The code duel opens on the language choice")
 	await render("f_pick")
 	f.press("right");f.press("accept")
 	check(f.lang()=="python" and f.phase=="duel" and not f.advanced,"Python, beginner mode")
@@ -60,7 +60,12 @@ func run():
 	for i in range(14):n.press(w,"accept")
 	advance(.5);await render("f_throw")
 	advance(.6);await render("f_console")
-	advance(3.0);check(n.phase=="fists","The sword goes into the console and the brawl starts")
+	advance(3.0);check(n.phase=="qte","The sword breaks the console and starts the cinematic QTE")
+	for beat in range(n.qte.ACTIONS.size()):
+		advance(.4);n.press(w,n.qte.expected());advance(2.01)
+	advance(3.7);check(n.phase=="chair","The completed QTE and table knockout lead to the chair")
+	# The old fists mechanics remain available to isolate their earlier tests.
+	n.start_fists(w)
 	var fi=n.fighter
 	check(fi.mode=="fists" and fi.items.size()==4,"Lines of code lie on the floor")
 	advance(2.4);fi.ai=false;var s=fi.steve();s.x=fi.items[1].x;n.press(w,"grab");advance(.05)

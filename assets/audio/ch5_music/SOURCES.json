@@ -1,0 +1,65 @@
+[
+  {
+    "file": "fight_phase1.ogg",
+    "author": "Centurion_of_war",
+    "page": "https://opengameart.org/content/final-stand-0",
+    "download": "https://opengameart.org/sites/default/files/final_stand_phase_1.3_0.ogg",
+    "license": "CC0-1.0",
+    "license_verified_in_page": true,
+    "sha256": "c387bbb45cc2551a900b0ed3c851fd48130e209929aed76c5d8b0f5b00ddab70"
+  },
+  {
+    "file": "fight_phase2.ogg",
+    "author": "Centurion_of_war",
+    "page": "https://opengameart.org/content/final-stand-0",
+    "download": "https://opengameart.org/sites/default/files/final_stand_phase_2.2.heavy_drums_0.ogg",
+    "license": "CC0-1.0",
+    "license_verified_in_page": true,
+    "sha256": "27d800abc02d233f4683c403a22765060ddf6d2d33130ff6644f4cfe2247b12e"
+  },
+  {
+    "file": "fight_final.ogg",
+    "author": "Centurion_of_war",
+    "page": "https://opengameart.org/content/final-stand-0",
+    "download": "https://opengameart.org/sites/default/files/final_stand_phase_4.1final_0.ogg",
+    "license": "CC0-1.0",
+    "license_verified_in_page": true,
+    "sha256": "8e29aa44410e79a06b07972df2ef9c291793ed0580338a8ea38e0f29e66332f4"
+  },
+  {
+    "file": "battle_theme.ogg",
+    "author": "CleytonKauffman",
+    "page": "https://opengameart.org/node/49859",
+    "download": "https://opengameart.org/sites/default/files/CleytonRX%20-%20Battle%20RPG%20Theme%20Var_0.ogg",
+    "license": "CC0-1.0",
+    "license_verified_in_page": true,
+    "sha256": "9a63f74305f5cbce8374a72a027a645c07c97663255aba0b817bc1f70c432ed5"
+  },
+  {
+    "file": "chair_tension.ogg",
+    "author": "yd",
+    "page": "https://opengameart.org/content/insistent-background-loop",
+    "download": "https://opengameart.org/sites/default/files/Insistent.ogg",
+    "license": "CC0-1.0",
+    "license_verified_in_page": true,
+    "sha256": "c5e0eccb09379301c56e95c6b6586e842be0ef363938b8d1062518280da99cfb"
+  },
+  {
+    "file": "flight_space.ogg",
+    "author": "yd",
+    "page": "https://opengameart.org/content/galactic-temple",
+    "download": "https://opengameart.org/sites/default/files/GalacticTemple.zip",
+    "license": "CC0-1.0",
+    "license_verified_in_page": true,
+    "sha256": "0bc6439621a1ff871f39cb3a670df4f483e4d23427b09bd024571f53ff1c38cb"
+  },
+  {
+    "file": "wastes_ambient.ogg",
+    "author": "Juhani Junkala (SubspaceAudio)",
+    "page": "https://opengameart.org/node/79273",
+    "download": "https://opengameart.org/sites/default/files/Juhani%20Junkala%20-%20Post%20Apocalyptic%20Wastelands%20%5BLoop%20Ready%5D.ogg",
+    "license": "CC0-1.0",
+    "license_verified_in_page": true,
+    "sha256": "4145080f1a0ba45c3d1b6988c1d26ec3529ee8d8196eb3fa0045b49c86dd20ad"
+  }
+]

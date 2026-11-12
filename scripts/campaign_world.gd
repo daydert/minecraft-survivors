@@ -1,4 +1,5 @@
 extends "res://scripts/world.gd"
+const EVOLUTION_REVEAL := 1.7
 ## Changes to solo campaign rules are isolated from coop_world.gd.
 
 var win_music=false
@@ -12,16 +13,18 @@ const OWNERS={"arrow":"bow","trident":"trident","fire":"fire","hoe":"hoe","hoe_s
 func chapter_number() -> int:
 	return 1
 
-## Every chapter after the first starts with nothing: the last one ended with the gear lost,
-## melted or broken. An iron sword turns up at the spawn, its own way in each
-## world, and the run (clock and spawns) waits until Steve picks it up.
-const SWORD_STYLES := {2:"lava",3:"sky",4:"ender",5:"void"}
+## II, III and V recover a sword at spawn after losing their old equipment.
+## IV keeps the new sword EnderSteve gave on the rim, without another pickup.
+const SWORD_STYLES := {2:"lava",3:"sky",5:"void"}
 const SWORD_LAND := {"ground":.9,"lava":2.4,"sky":1.25,"ender":1.9,"void":2.2}
 const SWORD_REACH := 14.0
 var sword_drop: Dictionary = {}
 
 func begin_sword_drop():
 	# In chapter I Steve walks in with his sword already.
+	if chapter_number()==4:
+		# EnderSteve has already given this sword back on the island's rim.
+		sword_drop={};return
 	if not SWORD_STYLES.has(chapter_number()):return
 	sword_drop = {"style":SWORD_STYLES.get(chapter_number(),"ground"),"age":0.0,"taken":false,"take_age":0.0,"cues":0}
 	build = {}
@@ -168,7 +171,9 @@ func break_pumpkin(p: Dictionary):
 func open_chest(chest: Dictionary):
 	run_progress.observe(self)
 	super.open_chest(chest)
-	if chest_reward.get("evolution",false):run_progress.evolution(chest_reward.id)
+	if chest_reward.get("evolution",false):
+		run_progress.evolution(chest_reward.id)
+		chest_delay=EVOLUTION_REVEAL
 	run_progress.observe(self)
 	if chest_reward.get("text","")=="Восстановлено 4 HP · +25 очков":chest_reward.text="Восстановлено 4 HP · +8 опыта"
 
@@ -220,3 +225,11 @@ func resolve_deaths():
 
 func sound(id: String, gap: float=.04):
 	super.sound("hurt" if id=="hurt_herobrine" else id,gap)
+
+## The hopper now reaches beyond a single melee sweep. Chests stay manual;
+## chorus fruit stays manual too, so attraction never teleports the player.
+func pickup_radius() -> float:return 24.0*(1.0+.85*items.get("hopper",0))
+func orb_pull_speed() -> float:return 190.0*(1.0+.15*items.get("hopper",0))
+func pull_healing_loot(o: Dictionary,dt: float):
+	if items.get("hopper",0)<=0 or o.kind not in ["apple","golden_carrot"]:return
+	if o.p.distance_to(player)<=pickup_radius()*.65:o.p=o.p.move_toward(player,orb_pull_speed()*dt)

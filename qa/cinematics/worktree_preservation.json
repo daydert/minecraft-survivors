@@ -1,0 +1,669 @@
+{
+  "setup_edited_existing_files": [
+    "AGENTS.md"
+  ],
+  "setup_gameplay_edits": [],
+  "scope": "Current worktree inventory. No before-install file hash baseline was captured; this is not a byte-for-byte before/after claim.",
+  "entries": [
+    {
+      "status": " M",
+      "path": "AGENTS.md",
+      "sha256_now": "7d2a4a121d23fa2cf5b6baef48811ac7b46045541ab1deeca4f39d743849c6d2"
+    },
+    {
+      "status": " M",
+      "path": "assets/models/ch5_mill_yard.glb",
+      "sha256_now": "9a4b72af2e8df64ed29c30eeb00734f4a6b45766a90e6539e66dd57b9bad8893"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_cactus.png",
+      "sha256_now": "91c9a6179fed623befa16dd8ba8d2a08b0aaf56f0c07ca857f61544b116fbea0"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_dispenser.png",
+      "sha256_now": "8f927373e799e48047366a57c019d3fe2abb081d37580aff428c8041d355b9a7"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_magma.png",
+      "sha256_now": "91d36d01f3fd218898a2d5340d6999e8939105b63f0a3c7cfeab96aaafc0667f"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_obsidian.png",
+      "sha256_now": "86ed221cfb96b2dd04ee8d5cdc3fb6d3930c45b61e791e8607cebb06021179c4"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_piston.png",
+      "sha256_now": "0f3679fa06e9d3640879b33135b92cedccc6e3c3a7dcb5eac95775e9f8570ada"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_redstone_ore.png",
+      "sha256_now": "c11e7d2c7a86da4bd68bb90b576285f0c73abc0081041b1cab5d513a722703c7"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_snow.png",
+      "sha256_now": "c59da4187cf5b201efadd284e583cb8d8cc99f7acf443b4fd1122850282b02c8"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_snow_golem.png",
+      "sha256_now": "e1f84546d4bc16ccfbf15066c0ec6b4429eac6d535d701d2d9a67cb6337fc9c9"
+    },
+    {
+      "status": " M",
+      "path": "assets/sprites/icon_pvz_tnt.png",
+      "sha256_now": "a76ff2fde732d5b975a8de812afb46d03df2667e4e1a132fad97a0774439aafe"
+    },
+    {
+      "status": " M",
+      "path": "export_presets.cfg",
+      "sha256_now": "1b7ca60b6f3d7cea2d9eb920c72f86309c7a9340f750be4435e2afa2dd719a2c"
+    },
+    {
+      "status": " M",
+      "path": "project.godot",
+      "sha256_now": "f6a406a2f60e039ecc6e979832bdf2c8a0ce0f7723ec47f84077687d1f7685a8"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_back.png",
+      "sha256_now": "eb1221ebe6f8b2fe5ca99970fecda0573d5ccba9dc9dc1e5c05123ac4d83a944"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_before.png",
+      "sha256_now": "90a46667101ad521984a370189336a0cdcf8664eb67d34ff11123d392e5a6c5f"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_credits.png",
+      "sha256_now": "f9e74f68f5f9986739bb6b2f55431681aacf2e80c7a2d2389fb8349660806ab5"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_door.png",
+      "sha256_now": "780554e80935d8aaa159f5a1db538b1157acd962ba65f33e1d40465b19ca9d31"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_door_open.png",
+      "sha256_now": "8a9c2a887fca00b708f841127a295f943f5fabad84cf5da34c2f02e5519ee658"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_face.png",
+      "sha256_now": "1063f68550d86273eaa81f04cf6dfeb166d29cfc19192547f36e1c877302c41e"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_lanes.png",
+      "sha256_now": "357a322e192bb5ee89b1e0725a5121881acd1d200564e05f5b92c1999746b963"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_lanes2.png",
+      "sha256_now": "98bf5f958e1d7b45918e4dfbad55a003559c1a04e4ed72a5ca19fcb3f58035ea"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_pull.png",
+      "sha256_now": "a9d9ff3132267837eec0e24d69f2bb3913368e4bf5130fa8268ba84f9caa6d59"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_stab.png",
+      "sha256_now": "b86b5be4453e8a10e207cfca905ce63bd3161352fb9bdae76ad77aea1f9a647c"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/s_wide.png",
+      "sha256_now": "587f144f78b3e4ea43489f9be173fdfcb3dd195f13a4f259652752a3be3cb714"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/w_other.png",
+      "sha256_now": "0862b1a1133f67d9f4ee78993466e8c67c0a3c22fdc77a4ef2e490222bfbc125"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/w_other2.png",
+      "sha256_now": "66240436dc2ea222a6aa8463cef6393d060c9f1538cd6ff3f0e9c23510f21d4b"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five/w_start.png",
+      "sha256_now": "b99ce763a7fa745ce7536ae47cbdcaa8a04ff9d668c6553b74eb17a461ef6a05"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_five_rework_record.gd",
+      "sha256_now": "7105b576d8c6cb8c05d8ec24c8775bdd1f47154868ae6c01b4eef1146d887a2c"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/crawler.png",
+      "sha256_now": "6e94a859d45dc285f137f9d6a1fe4c747263b0e0d3ad2bc65f19ebdcaad6ee0a"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/hb_appear.png",
+      "sha256_now": "d576236f977b8ea89be6d354edb9702d4487c2cc5efad5e695b1a57a4bd29442"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/hb_dodge.png",
+      "sha256_now": "6ed16b1a01e0486f4c4076dd83b1223c76ca11694571f5d5d5382e4e013f33d8"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/hb_wave.png",
+      "sha256_now": "c8fd059179b4bbd681989de7feba8a2529e0133f6f9804713db184685c784c6d"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/intro_closed.png",
+      "sha256_now": "d65d0d41fe193f81e2d887830370d502c5ff7f2e91cd3dcd36a774585c4560d9"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/intro_grow.png",
+      "sha256_now": "9fd2f959d08f1a39366e3af6e0be9138b14de153bc1e688304f0edcc70598e02"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/run_start.png",
+      "sha256_now": "a67607235247981fbd11c7f6348e46c0bff1d0d6e148350370cdbe5c73a1e0b7"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/secret_parry.png",
+      "sha256_now": "39ab9304108869174e745f5307d040f094c9d837bb2105f2dcc654cff78af3d7"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/secret_rift.png",
+      "sha256_now": "4ba8ce7a18baf422150f4ab8fb69db00a59dcb7a889fd634a36e9bdcfea0f3c8"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/secret_whisper.png",
+      "sha256_now": "df8e3fce067bf6afcdd8af546c63cc6e4a58943e9afffcd1efe0fb88c6bf7892"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/show_donut.png",
+      "sha256_now": "49a30984788fcac7bab3e098f98556e62633a7671b09f883f435634551011bb2"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/show_fallen.png",
+      "sha256_now": "a4042c88b468bd47eb11850f2a1c7dfc625e6d5e186de758d7f9285f71fc2573"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/show_hole.png",
+      "sha256_now": "e83a281baf44b5fa8a4e4030100ebb7bc3f4f0a5c10a79407972af67aae370ba"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/show_nether.png",
+      "sha256_now": "a5673de6a85c71c626d46266a5323c1699a723eabd5f0bf02a7dc066f5c1573a"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/throne_build.png",
+      "sha256_now": "c6f095412ef4e09709d55ee2fccd36aadf416db6b013f745f98b74d5297139de"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/throne_seat.png",
+      "sha256_now": "2af1abe019ad8b5d65f2bddb3be9e9a0ece3640d63cec086ec20c2c13232d248"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/villager_legs.png",
+      "sha256_now": "48ad3e6a4066b9015ab1f6e2028ae8c15daa87937f21b9caa9f39f25570cc1ef"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/villager_lift.png",
+      "sha256_now": "32b2db81d24eb7c5cac0b28f15a2b216017ccd4eb5180887950e3011f9c24b05"
+    },
+    {
+      "status": " M",
+      "path": "qa/chapter_one/villager_twist.png",
+      "sha256_now": "90363232a17afd3ced341dfddf8eade6a581d786abd25fc07381e0e02658ca99"
+    },
+    {
+      "status": " M",
+      "path": "scripts/bake_chapter_five.py",
+      "sha256_now": "bf5259230bd2a01f1036efd6c396c3ceb9bbfd59a2c52ea2f33430a16e45e441"
+    },
+    {
+      "status": " M",
+      "path": "scripts/blender_mill_yard.py",
+      "sha256_now": "b977198f4fa7f814326e9f76ba650d929d462f5ed66861a56aefbe1eab21a2a9"
+    },
+    {
+      "status": " M",
+      "path": "scripts/chapter_five_fighter.gd",
+      "sha256_now": "c24e101ac701265a83f7e494498b8cbe361166b06dbdb1cf65927959859ee108"
+    },
+    {
+      "status": " M",
+      "path": "scripts/chapter_five_notch.gd",
+      "sha256_now": "b10f2d3514bdb11cedb695f3fb6111234470ea7ecee100e512f4fec65b233b84"
+    },
+    {
+      "status": " M",
+      "path": "scripts/chapter_five_notch_view.gd",
+      "sha256_now": "aae020835c4051106ce60d12374778271f975c0b9ffa8491b1463ca0eae1e173"
+    },
+    {
+      "status": " M",
+      "path": "scripts/chapter_five_renderer.gd",
+      "sha256_now": "a363c0f2d9b48586d7c4cb713509bfe189be24ff5052784b9e3ffa845fa7b4f0"
+    },
+    {
+      "status": " M",
+      "path": "scripts/chapter_five_view3d.gd",
+      "sha256_now": "8826f70f2eef6d2a97b6660ccb0e628b245a22100f593e33e8bfd321c2476a31"
+    },
+    {
+      "status": " M",
+      "path": "scripts/encode_chapter_five.py",
+      "sha256_now": "210da1c50b9731552bc7c81eabb640e25221744d5a69d09dbbf9eab4acf3c945"
+    },
+    {
+      "status": " M",
+      "path": "scripts/main.gd",
+      "sha256_now": "3cd5feee435a38420243c5dcb9ff6af29eba8e016164c38dca34adffaa099184"
+    },
+    {
+      "status": " M",
+      "path": "scripts/sound.gd",
+      "sha256_now": "6724037c2b27041729a5a2e49630f9e0f5483efb2202ef5d8131db80ae82ee54"
+    },
+    {
+      "status": "??",
+      "path": ".codex/",
+      "sha256_now": null
+    },
+    {
+      "status": "??",
+      "path": "assets/art_source/ch5_finale/",
+      "sha256_now": null
+    },
+    {
+      "status": "??",
+      "path": "assets/audio/ch5_music/",
+      "sha256_now": null
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_0_ch5d_palm.png",
+      "sha256_now": "daf94717c9b433dd54bbacd468cab95cbef9158214748f6a74708a31ee159061"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_0_ch5d_palm.png.import",
+      "sha256_now": "ab98488524884598288c7291ede8abbe76e66babb9dcfbf0d6c4c1799c76ada2"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_0_ch5w_tf2_bridge.png",
+      "sha256_now": "92f421cd8ae93d31573ab7278155e72bb2495dcf2a44b66be5348f2c80674e02"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_0_ch5w_tf2_bridge.png.import",
+      "sha256_now": "f296573d09a4ae9882d9e83d37112edc4c0cfb4188630d35ae002851132f3b34"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_10_ch5d_eu4_chart.png",
+      "sha256_now": "a4006937c83eca71b7f4946c8e52ed7e5db87af75c797db6431a2a327c357672"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_10_ch5d_eu4_chart.png.import",
+      "sha256_now": "d5d8fdef41f8f23a18114f6678980496efb4dc5c6fc8a817ac1f2b72c783742e"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_armor_color.png",
+      "sha256_now": "9d6a7c0ecf5129bd8ff4c4c88aaae97956141a6dc0d4bea7a84e99d0cae0cccf"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_armor_color.png.import",
+      "sha256_now": "805bdea7c44987405317a7abb0c57bd48b59962a7f4640eb67c5cbca8b7e58bd"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_belt_color.png",
+      "sha256_now": "536d22fa7abb864f70301b17c603767f3c5cf3d874f729459ca6167bf46fdcfe"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_belt_color.png.import",
+      "sha256_now": "aca3bff54b69cef00c621da249e4b380d4e2d50f4c11ca834f5fd16f122fc028"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_color.png",
+      "sha256_now": "710dc44dc303bc9fc2491f76fdb0db5c8b7da0e17b2bf27c1a89dee0e1f8f52f"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_color.png.import",
+      "sha256_now": "048607a89ffbe015b381b6e59072db288e762bcaa92f2059fc99a8720e38c0c3"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_hair_color.png",
+      "sha256_now": "57db62a22f794237e4af6df8566a923ce27d098ad8eced4db0e71afb1d72a6b5"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_hair_color.png.import",
+      "sha256_now": "87a9a158da1a603066a2b945285f5e9c657db664853351346ca9084c6a9e439d"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_weapon_color.png",
+      "sha256_now": "caa3c45084e0fab002f71f0205df7d00a855ceccce81571d673ceca0d1d7a528"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_axe_weapon_color.png.import",
+      "sha256_now": "efa13ea9a579d2cac9cf2be1651ccd5e0593fd83d38b52253b60440709253f52"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_ch5d_dota_stone.png",
+      "sha256_now": "4e21543bf24ada15f926675f1c96279c85a91295a063703039f6235d7ce001f3"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_2_ch5d_dota_stone.png.import",
+      "sha256_now": "b67dac18965ccd2a9537a3c83640764cda1b636d0b4e2bb1f4b9271205fa21dd"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_crypt.png",
+      "sha256_now": "30e9184ed220d3fb1dba24d7499deb96065ca246593e5ec9a7a058528227f539"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_crypt.png.import",
+      "sha256_now": "1412d3251ec5eda1bdddff02ec0db1146fd0f841995549f4e5bc48dc4a6250fb"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_grimm.png",
+      "sha256_now": "7f4d94170bd92bde9330323ed2a30a4f4d5f372219131e4d6835018608b3d813"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_grimm.png.import",
+      "sha256_now": "53acfb80d410f6ba86b73cb433830780711adb27dbd4ef98291319c64c9f0e02"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_rock.png",
+      "sha256_now": "82db1c72c7cac4e55708c6ab607fd04dd546e4a5963eb9a548e81983cbf39497"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_rock.png.import",
+      "sha256_now": "7ce7732ab6b9b8655dbce0e39a7fd5959b5c3dc32125dba60067d00925c79545"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_stone.png",
+      "sha256_now": "a639860e1380a363989e9eca08bb246a07702b907487c03610834909d7835913"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_stone.png.import",
+      "sha256_now": "2d99d7c904e5c5f6a16592be6e0249760700bd6fc431a24f6e85aa76a6c1d4a9"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_tree.png",
+      "sha256_now": "ff893db0e0837b005f6997239ed6e2112bd50c9e3c2ff98eb362670551316aaa"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_3_ch5d_tree.png.import",
+      "sha256_now": "ee6fdb1fa02228d818860bb3f75988749fb7caa846d232d7f03b897600ff0aef"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_4_ch5d_enki.png",
+      "sha256_now": "4a0e942be220d3a52031c1c6a053848b169603d1d528a74dc8bbac4e04259ffc"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_4_ch5d_enki.png.import",
+      "sha256_now": "16dc068c5b86d665a2df00c64c5cd0eb9fa8bb46a2827566789ca05da440b93c"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_4_ch5d_fear_room.png",
+      "sha256_now": "46b5faf79a085b2b550b92926b7b3f2e65de4aaed01f8b8d1ed7519194fbe351"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_4_ch5d_fear_room.png.import",
+      "sha256_now": "64c4e2865dc92c5ab88c5bbdc571c5f025090216c2350f2a63c10c27f330d275"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_4_ch5d_sandstone.png",
+      "sha256_now": "31ab163b3fd6fb6072183224564f4bae6be05b4b651260c5624b63c338cd5330"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_4_ch5d_sandstone.png.import",
+      "sha256_now": "6b62bad3d3a38eeaf75eac9a71e6307214719e235b3ce9d1a79b10340a896211"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_6_ch5d_windows.png",
+      "sha256_now": "5e7f4ac76c59d59c761459de8dcc16fb72e1f8dc81402969b7d0213172ef0ec8"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_6_ch5d_windows.png.import",
+      "sha256_now": "22813e3a05feb702dbc5894ff357101eb18dfee021f8acaf8c3232e43e9df830"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_7_ch5d_palm.png",
+      "sha256_now": "daf94717c9b433dd54bbacd468cab95cbef9158214748f6a74708a31ee159061"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_7_ch5d_palm.png.import",
+      "sha256_now": "c8c37afa44469bd2edd3086ff9297abfafab79b45bc13c6e3eda0e76a4a05bba"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_7_ch5d_sandstone.png",
+      "sha256_now": "31ab163b3fd6fb6072183224564f4bae6be05b4b651260c5624b63c338cd5330"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_7_ch5d_sandstone.png.import",
+      "sha256_now": "ad4e117ba857518880e3c0e378a37b24bd7b774d8938427e011b74ac539a1dbf"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_8_ch5d_plaster.png",
+      "sha256_now": "98ed432dd757368872645bddf6ba7d818e493a4074bfeabedeee977bf1dc2932"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_8_ch5d_plaster.png.import",
+      "sha256_now": "5728178822bf3c2902212f479266839e47a189b3ea90ccd9c7ee8edb2d6ce288"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_8_ch5d_windows.png",
+      "sha256_now": "5e7f4ac76c59d59c761459de8dcc16fb72e1f8dc81402969b7d0213172ef0ec8"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_8_ch5d_windows.png.import",
+      "sha256_now": "5516a38aa97c8d0a065418e79e08b859cf28c0afb86633a2f0cd863b886a21f2"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_9_ch5d_sandstone.png",
+      "sha256_now": "31ab163b3fd6fb6072183224564f4bae6be05b4b651260c5624b63c338cd5330"
+    },
+    {
+      "status": "??",
+      "path": "assets/models/ch5_game_9_ch5d_sandstone.png.import",
+      "sha256_now": "6a61f314eead362f0f7defd097030b09ecd48eaf071c3ab8c449a93f87f79b24"
+    },
+    {
+      "status": "??",
+      "path": "docs/CHAPTER_FIVE_VISUAL_SOURCES.md",
+      "sha256_now": "4cfc4a0c23f62abf4cb4367cc113509aa57f10c79f0de6341f7b326265da4fa1"
+    },
+    {
+      "status": "??",
+      "path": "docs/CINEMATICS_SETUP.md",
+      "sha256_now": "d1ba5a675559595fba1a36c7d74bcb5e82bc9b91b4c00258eb04cd5ee81bc3b5"
+    },
+    {
+      "status": "??",
+      "path": "docs/references/ch5/",
+      "sha256_now": null
+    },
+    {
+      "status": "??",
+      "path": "qa/_shots.gd",
+      "sha256_now": "539cef090a7a4fdbf3265d216346f377b7c7714c2e2f80bbdf002f1de50b4a75"
+    },
+    {
+      "status": "??",
+      "path": "qa/_shots_worlds.gd",
+      "sha256_now": "ab092ab242e3598c05e349f29974340555a89171a8d815fff4bc5e83b00dc98a"
+    },
+    {
+      "status": "??",
+      "path": "qa/ch5_worlds_review/",
+      "sha256_now": null
+    },
+    {
+      "status": "??",
+      "path": "qa/chapter_five_ending_record.gd",
+      "sha256_now": "8bca9ec954e5e5076444db381807105771476e89379f39d85acf3f4bec085d50"
+    },
+    {
+      "status": "??",
+      "path": "qa/chapter_five_ending_record.gd.uid",
+      "sha256_now": "803e8cd50e2096e0d1c3ce3550e51e1b570ace4ea5b808eb5374bb421ed21feb"
+    },
+    {
+      "status": "??",
+      "path": "qa/chapter_five_worlds_preview.gd",
+      "sha256_now": "413e016ac534f101e935a08e7ff0e7fa26ce74f5efe533b8e0c9609986078a6d"
+    },
+    {
+      "status": "??",
+      "path": "qa/chapter_five_worlds_preview.gd.uid",
+      "sha256_now": "3a110c4708a014b9ae6cf5c20d50e78054c75357b8d2b54e39681de80967d208"
+    },
+    {
+      "status": "??",
+      "path": "qa/cinematics/",
+      "sha256_now": null
+    },
+    {
+      "status": "??",
+      "path": "qa/start_gear/clash_guard.png.import",
+      "sha256_now": "4324e85085239e7be00220ce4737d56c6a8e68694875e9aafeb810e62d0460ab"
+    },
+    {
+      "status": "??",
+      "path": "qa/start_gear/clash_thrown.png.import",
+      "sha256_now": "de90440871d138fa36fbf83d912e0e290480495791c04c8d731de9591d784ee6"
+    },
+    {
+      "status": "??",
+      "path": "qa/start_gear/clash_windup.png.import",
+      "sha256_now": "0f35ba10f12f1c6260b264236e1ede594793cb45c5365aef7f5acfb99718bd6d"
+    },
+    {
+      "status": "??",
+      "path": "qa/start_gear/down_rise2.png.import",
+      "sha256_now": "c237cc65667fffc9477025c7704b1037c4925681e65ac03274209280206b8fff"
+    },
+    {
+      "status": "??",
+      "path": "qa/start_gear/down_spent.png.import",
+      "sha256_now": "332391d5b2ac92bdf7a07c0762a3990622fcd215897e130cc490bda743d51723"
+    },
+    {
+      "status": "??",
+      "path": "qa/start_gear_record.gd.uid",
+      "sha256_now": "10958329aeff382343634db48cc572d25b73ae590e5c1516e9cb269538c28392"
+    },
+    {
+      "status": "??",
+      "path": "scripts/blender_import_tf2_props.py",
+      "sha256_now": "ccaffeae64cf1bc6ae56c8ec4ff77c48d52a6813053e6ad28fb0807aea6eabfb"
+    },
+    {
+      "status": "??",
+      "path": "scripts/cinematics/",
+      "sha256_now": null
+    },
+    {
+      "status": "??",
+      "path": "scripts/import_tf2_finale.py",
+      "sha256_now": "ab2e65969401ce553cb049a84e98571943d2a531dd874d0b425aa0d65ae248b3"
+    },
+    {
+      "status": "??",
+      "path": "shaders/ch5_portal.gdshader",
+      "sha256_now": "68e6d985e5e11e58f22689599b7f15788fa51489be317c0420e176b76f28dd71"
+    },
+    {
+      "status": "??",
+      "path": "shaders/ch5_portal.gdshader.uid",
+      "sha256_now": "4efc262baaa4a661c67db6748e95aab03d3dca05db6cd59224bdbc775f9d7ebb"
+    },
+    {
+      "status": "??",
+      "path": "shaders/ch5_tf2_sky.gdshader",
+      "sha256_now": "5ef69a73b07c85e0706a46f1f5195aca96386df1cc833322d627ddadfdd6066c"
+    },
+    {
+      "status": "??",
+      "path": "shaders/ch5_tf2_sky.gdshader.uid",
+      "sha256_now": "52cde4c3302f3cb50413c2d5bbeb7808361c6c2557a8f7a1b72bf6a1806bec25"
+    },
+    {
+      "status": "??",
+      "path": "shaders/ch5_water.gdshader",
+      "sha256_now": "bff55a26efc6672e0b69174f065e48a2720e000ab64c4b2bb585d34abf5ec29a"
+    },
+    {
+      "status": "??",
+      "path": "shaders/ch5_water.gdshader.uid",
+      "sha256_now": "4c381f7cdc0dc00a125a7c4b99d01a59fb5f6c1b540550c4ff58067d12e15b0e"
+    }
+  ]
+}

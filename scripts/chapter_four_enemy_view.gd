@@ -17,7 +17,7 @@ static func floor_layer(g,offset: Vector2):
 			g.oval(p,Vector2(f.radius,f.radius*.6),Color(.34,.025,.04,.4*fade))
 			for j in range(4):g.draw_rect(Rect2((p+Vector2(sin(j*2.4)*8,cos(j*2.4)*4)).floor(),Vector2(2,1)),Color(.8,.15,.13,.35*fade))
 		else:
-			g.oval(p,Vector2(f.radius,f.radius*.6),Color(.2,.04,.25,.22*fade))
+			preload("res://scripts/ui/witch_puddle_view.gd").draw(g,p,f.radius,.85*fade)
 			for j in range(8):
 				var phase=fposmod(w.clock*.6+j*.127,1)
 				g.oval(p+Vector2(sin(j*2.4)*f.radius*.7,-phase*16+cos(j*2.4)*6),Vector2(4,2),Color(.6,.3,.68,(1-phase)*.2*fade))

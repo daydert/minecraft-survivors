@@ -3,6 +3,7 @@ const FourEquipment=preload("res://scripts/chapter_four_equipment.gd")
 ## Solo equipment presentation. Network data and balance remain untouched.
 
 func configure(chapter: int):
+	data.passives.hopper.effect="Притяжение опыта +85% за уровень. Быстрее собирает опыт и подтягивает лечение."
 	if chapter < 2:
 		var overworld: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/overworld_balance.json"))
 		data.mobs.merge(overworld.mobs,true)
@@ -80,6 +81,7 @@ func equipment_icon(id: String, level: int, evolution: bool = false) -> String:
 	return icon(id,evolution)
 
 func title(id: String, evolution: bool = false) -> String:
+	if data.has("five_arsenal") and id=="healing_v":return "Зелье лечения"
 	return {"golden_carrot":"Золотая морковь","experience":"Опыт","ender_eye":"Око Эндера"}.get(id,super.title(id,evolution))
 
 ## What the next level of a chapter IV passive changes, in its own numbers.
@@ -98,6 +100,7 @@ func four_passive(id: String, level: int) -> String:
 	return ""
 
 func description(id: String, level: int) -> String:
+	if id=="healing_v":return "Восстанавливает 4 HP"
 	if data.has("five_arsenal"):
 		var five: Dictionary=data.five_arsenal
 		if five.passives.has(id):

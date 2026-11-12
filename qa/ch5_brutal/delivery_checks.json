@@ -1,0 +1,20 @@
+{
+  "tests": {
+    "new": 31,
+    "world": 33,
+    "arsenal": 28,
+    "bosses": 17,
+    "notch": 22,
+    "3d": 26,
+    "finale": 23,
+    "cinema": 54,
+    "review_fixes": 29
+  },
+  "total": 263,
+  "failures": 0,
+  "exports": {
+    "builds/linux/MinecraftSurvivors.x86_64": "7897d80ad5ef8b5a967fbc491c0917c587af6d1fbb4d05ade9e3ae765879f48e",
+    "builds/windows/MinecraftSurvivors.exe": "9e785e10a991e392a6fdf71445dc0a3ecc07881a90e97ce1bd2b89800ace0402"
+  },
+  "final_film_sha256": "b75df8a71cb26b82813802c08c976c3159030188cd89816d1816093f7ed2dffa"
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "pack": "builds/linux/MinecraftSurvivors.x86_64",
+    "exit": 0,
+    "summary": [
+      "PACKED_COMBAT_ANIMATIONS_SHA256 75baa083d12c81a168654dd17e344baa2623f3565c25f8d7d91a4bb99e4d550c",
+      "COMBAT_EXPORT_SMOKE PASS: cloud texture, sword continuity, spiral, ground slam/6 faults, atlas frames, improved sword, cleanup, Compatibility"
+    ]
+  },
+  {
+    "pack": "builds/windows/MinecraftSurvivors.exe",
+    "exit": 0,
+    "summary": [
+      "PACKED_COMBAT_ANIMATIONS_SHA256 75baa083d12c81a168654dd17e344baa2623f3565c25f8d7d91a4bb99e4d550c",
+      "COMBAT_EXPORT_SMOKE PASS: cloud texture, sword continuity, spiral, ground slam/6 faults, atlas frames, improved sword, cleanup, Compatibility"
+    ]
+  }
+]

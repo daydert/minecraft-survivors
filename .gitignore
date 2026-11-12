@@ -14,3 +14,8 @@ qa/before/
 qa/chapter_four/regression/
 qa/chapter_four_e/
 .~lock.*#
+
+# Blender backups and large derived captures
+*.blend1
+qa/cinematics/**/*.wav
+qa/cinematics/**/*.avi

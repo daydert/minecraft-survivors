@@ -9,6 +9,7 @@ extends RefCounted
 ## to a man's size: the fistfight happens on what is left.
 var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_finale.json"))
 var rng := RandomNumberGenerator.new()
+var terrain_attack=preload("res://scripts/chapter_four_terrain_attacks.gd").new()
 var phase := ""            # summit intro tower vortex one kneel two last erase three death coords road door done retry
 var age := 0.0
 var started := false
@@ -62,6 +63,9 @@ var text_events: Array = []
 var silence := false
 var music := ""
 var camera_at := Vector2.ZERO
+var camera_sample_clock := -INF
+var camera_sample_phase := ""
+var camera_sample_value := Vector2.ZERO
 var retry_from := ""
 var flash := 0.0
 var glitch := 0.0
@@ -76,6 +80,8 @@ var head_at := -1.0
 var punch_at := -10.0
 
 func reset(w):
+	camera_sample_clock=-INF;camera_sample_phase=""
+	terrain_attack.reset()
 	rng.seed = int(w.rng.seed) ^ 0x4e7b19
 	phase = ""; age = 0.0; started = false; hb = {}; move = ""; queue.clear(); shots.clear(); marks.clear(); rings.clear()
 	lanes.clear(); hole = {}; path.clear(); strips.clear(); seam = {}; drops.clear(); beams.clear(); sky = 0.0; sun = 0.0; split = 0.0
@@ -192,7 +198,15 @@ func hurt(w, m: Dictionary, amount: float, push: Vector2):
 func hooked(_w, _m: Dictionary):
 	pass
 
+## Sampling the camera from visibility/render helpers used to advance its
+## smoothing on pause. Cache one result per simulation tick and phase.
 func camera(w) -> Vector2:
+	if camera_sample_clock==w.clock and camera_sample_phase==phase:return camera_sample_value
+	camera_sample_clock=w.clock;camera_sample_phase=phase
+	camera_sample_value=sample_camera(w)
+	return camera_sample_value
+
+func sample_camera(w) -> Vector2:
 	match phase:
 		"intro":
 			var focus: Vector2 = hb.p + Vector2(0, 10)
@@ -284,7 +298,7 @@ func step_intro(w):
 	else:
 		hb.visual_dir = Vector2.DOWN
 	if age >= float(data.intro.line_at) and not spoken.has("intro"):
-		spoken["intro"] = true; say("Ты опять здесь.", "calm", 2.6)
+		spoken["intro"] = true; say("Хо...\nТы опять здесь!\nЯ уж думал, ты досюда не дойдёшь", "calm", 2.6)
 	if age >= float(data.intro.rise_at):
 		set_pose("invite"); face = "smile"
 		if not spoken.has("rise"):
@@ -333,8 +347,10 @@ func step_tower(w, dt: float):
 	w.player.y = minf(w.player.y, tower_base().y + float(t.reach) + 140.0)
 	hb.visual_dir = Vector2.DOWN if absf(hb.p.direction_to(w.player).x) < 0.7 else hb.p.direction_to(w.player)
 	move_age += dt
+	if move in ["spiral","fault_smash"]:terrain_attack.step(self,w,dt)
 	if move in ["storm", "inferno"]:step_storm(w)
 	if move in ["waves", "inferno"]:step_waves(w, dt)
+	if move == "spiral":return
 	if move == "rest":set_pose("aura")
 	elif move_age > 0.5 and pose in ["point", "snap"]:set_pose("aura")
 	if move_age >= move_time:
@@ -346,6 +362,7 @@ func step_tower(w, dt: float):
 			start_tower(w, tower_queue.pop_front())
 
 func start_tower(w, name: String):
+	if name=="spiral":marks.clear();waves.clear();terrain_attack.start(self,w,name);return
 	var t: Dictionary = data.tower
 	var duration := 0.0
 	cast_fx(w, name == "inferno"); set_pose("point" if name == "storm" else ("snap" if name == "waves" else "cast"))
@@ -442,7 +459,7 @@ func step_kneel(w):
 	if age >= float(k.rise_at) + 1.0 and not spoken.has("kneel_burst"):
 		spoken["kneel_burst"] = true; cast_fx(w, true); w.shake = .45; flash = .14; w.sound("ch4_hb_roar", .1)
 	if age >= float(k.line_at) and not spoken.has("kneel"):
-		spoken["kneel"] = true; say("Хорошо. Давай всерьёз.", "calm", 2.4)
+		spoken["kneel"] = true; say("Хорошо...\nДавай всерьёз!", "calm", 2.4)
 	if age >= float(k.duration):
 		phase = "two"; age = 0.0; silence = false; music = "boss_two"; text_events.clear()
 		hb.hp = float(data.two.hp); hb.max_hp = hb.hp; face = "smile"
@@ -459,7 +476,7 @@ func begin_last(w):
 	phase = "last"; age = 0.0; clear_hazards(); face = "rage"; music = "boss_two"; text_events.clear()
 	set_pose("cast"); flash = .3; w.shake = .6; glitch = .4
 	w.sound("ch4_hb_roar"); w.sound("ch4_impact", .1)
-	say("ХВАТИТ.", "roar", 2.4)
+	say("ХВАТИТ", "roar", 2.4)
 	save_checkpoint(w, "last")
 	stored = {"build": w.build.duplicate(), "items": w.items.duplicate(), "evolved": w.evolved.duplicate()}
 	strip_index = 0; beam_turn = rng.randf() * TAU; void_r = float(data.last.void_from); hb.pulse_n = 0
@@ -585,6 +602,7 @@ func step_fight(w, dt: float):
 		"ring":
 			step_ring(w, dt)
 			if move_age > 0.5:set_pose("aura")
+		"spiral","fault_smash":terrain_attack.step(self,w,dt)
 		"strike":step_strike(w)
 		"hole":step_hole(w, dt)
 		"blitz_mark", "blitz_dash", "landed":step_blitz(w, dt)
@@ -596,14 +614,15 @@ func step_fight(w, dt: float):
 			set_pose("kneel" if move_age < move_time - .8 else "rise")
 			if move_age >= move_time:begin_move(w, "rest", .8)
 	if move_age > 0 and speed > 1.0 and move in ["rest"]:move_age += dt * (speed - 1.0)
+	terrain_attack.step_motion(self,w,dt)
 	hb.p = hb.p.clamp(arena.position + Vector2(24, 34), arena.end - Vector2(24, 20))
 
 func next_attack(w):
 	if queue.is_empty():
 		if phase == "one":
-			queue = ["lightning", "ring", "strike", "lightning", "strike", "ring"]
+			queue = ["lightning", "spiral", "ring", "strike", "lightning", "strike", "ring"]
 		else:
-			queue = ["hole", "blitz", "rain", "rift", "tear", "blitz", "hole", "rain"]
+			queue = ["hole", "blitz", "fault_smash", "rain", "rift", "tear", "blitz", "hole", "rain"]
 	if phase == "two":
 		for i in range(data.two.day.at.size()):
 			if not day_done.has(i) and hb.hp < hb.max_hp * float(data.two.day.at[i]):
@@ -615,6 +634,7 @@ func rest(w, extra: float = 0.0):
 	begin_move(w, "rest", rng.randf_range(float(r[0]), float(r[1])) + extra)
 
 func start(w, name: String):
+	if name in ["spiral","fault_smash"]:terrain_attack.start(self,w,name);return
 	match name:
 		"lightning":
 			var l: Dictionary = data.one.lightning
@@ -960,6 +980,7 @@ func update_shots(w, dt: float):
 		if dead:shots.remove_at(i)
 
 func clear_hazards():
+	terrain_attack.reset()
 	shots.clear(); marks.clear(); rings.clear(); lanes.clear(); hole = {}; path.clear(); seam = {}; drops.clear(); beams.clear(); waves.clear()
 	move = ""; sky = 0.0; split = 0.0; shadow_on = false; knife_gaps.clear()
 

@@ -1,0 +1,743 @@
+{
+  "concrete/computerwall003": {
+    "basetexture": "concrete/computerwall003",
+    "alpha": false
+  },
+  "concrete/computerwall003a": {
+    "basetexture": "concrete/computerwall003a",
+    "alpha": false
+  },
+  "concrete/computerwall003b": {
+    "basetexture": "concrete/computerwall003b",
+    "alpha": false
+  },
+  "concrete/computerwall003c": {
+    "basetexture": "concrete/computerwall003c",
+    "alpha": false
+  },
+  "concrete/computerwall004": {
+    "basetexture": "concrete/computerwall004",
+    "alpha": false
+  },
+  "concrete/computerwall005": {
+    "basetexture": "concrete/computerwall005",
+    "alpha": false
+  },
+  "concrete/computerwall005a": {
+    "basetexture": "concrete/computerwall005a",
+    "alpha": false
+  },
+  "concrete/computerwall005b": {
+    "basetexture": "concrete/computerwall005b",
+    "alpha": false
+  },
+  "concrete/computerwall005c": {
+    "basetexture": "concrete/computerwall005c",
+    "alpha": false
+  },
+  "concrete/computerwall005d": {
+    "basetexture": "concrete/computerwall005d",
+    "alpha": false
+  },
+  "concrete/computerwall006": {
+    "basetexture": "concrete/computerwall006",
+    "alpha": false
+  },
+  "concrete/computerwall007": {
+    "basetexture": "concrete/computerwall007",
+    "alpha": false
+  },
+  "concrete/computerwall011": {
+    "basetexture": "concrete/computerwall011",
+    "alpha": false
+  },
+  "concrete/concretefloor002": {
+    "basetexture": "concrete/concretefloor002",
+    "alpha": false
+  },
+  "concrete/concretefloor003": {
+    "basetexture": "concrete/concretefloor003",
+    "alpha": false
+  },
+  "concrete/concretefloor005": {
+    "basetexture": "concrete/concretefloor005",
+    "alpha": false
+  },
+  "concrete/concretewall001b": {
+    "basetexture": "concrete/concretewall001b",
+    "alpha": false
+  },
+  "concrete/concretewall001c": {
+    "basetexture": "concrete/concretewall001c",
+    "alpha": false
+  },
+  "concrete/concretewall001d": {
+    "basetexture": "concrete/concretewall001d",
+    "alpha": false
+  },
+  "concrete/concretewall002": {
+    "basetexture": "concrete/concretewall002",
+    "alpha": false
+  },
+  "concrete/concretewall002b": {
+    "basetexture": "concrete/concretewall002b",
+    "alpha": false
+  },
+  "concrete/concretewall002c": {
+    "basetexture": "concrete/concretewall002c",
+    "alpha": false
+  },
+  "concrete/concretewall002d": {
+    "basetexture": "concrete/concretewall002d",
+    "alpha": false
+  },
+  "concrete/concretewall003": {
+    "basetexture": "concrete/concretewall003",
+    "alpha": false
+  },
+  "concrete/concretewall003b": {
+    "basetexture": "concrete/concretewall003b",
+    "alpha": false
+  },
+  "concrete/concretewall005": {
+    "basetexture": "concrete/concretewall005",
+    "alpha": false
+  },
+  "concrete/concretewall006": {
+    "basetexture": "concrete/concretewall006",
+    "alpha": false
+  },
+  "concrete/concretewall008": {
+    "basetexture": "concrete/concretewall008",
+    "alpha": false
+  },
+  "concrete/concretewall008b": {
+    "basetexture": "concrete/concretewall008b",
+    "alpha": false
+  },
+  "concrete/wall022": {
+    "basetexture": "concrete/wall022",
+    "alpha": false
+  },
+  "dev/dev_measuregeneric01b": {},
+  "dev/reflectivity_10b": {},
+  "dev/reflectivity_30b": {},
+  "dev/reflectivity_70b": {},
+  "dev/reflectivity_80b": {},
+  "glass/glasswindow001a": {
+    "basetexture": "glass/glasswindow001a",
+    "alpha": true
+  },
+  "glass/glasswindow002a": {
+    "basetexture": "glass/glasswindow002a",
+    "alpha": true
+  },
+  "glass/glasswindow002c": {
+    "basetexture": "glass/glasswindow002c",
+    "alpha": true
+  },
+  "lights/white001": {
+    "basetexture": "lights/white001",
+    "alpha": false
+  },
+  "lights/white002": {
+    "basetexture": "lights/white002",
+    "alpha": false
+  },
+  "metal/chicken_wire001": {
+    "basetexture": "metal/chicken_wire001",
+    "alpha": true
+  },
+  "metal/floorplate01": {
+    "basetexture": "metal/floorplate01",
+    "alpha": false
+  },
+  "metal/ibeam002": {
+    "basetexture": "metal/ibeam002",
+    "alpha": false
+  },
+  "metal/imetal001": {
+    "basetexture": "metal/imetal001",
+    "alpha": false
+  },
+  "metal/imetal002": {
+    "basetexture": "metal/imetal002",
+    "alpha": false
+  },
+  "metal/metalchrome001": {
+    "basetexture": "metal/metalchrome001",
+    "alpha": false
+  },
+  "metal/metaldoor046a": {},
+  "metal/metalgrate011a": {
+    "basetexture": "metal/metalgrate011a",
+    "alpha": true
+  },
+  "metal/metalgrate013a2": {
+    "basetexture": "metal/metalgrate013a",
+    "alpha": true
+  },
+  "metal/metalrail003a": {
+    "basetexture": "metal/metalrail003a",
+    "alpha": true
+  },
+  "metal/metalstair001a": {
+    "basetexture": "metal/metalstair001a",
+    "alpha": false
+  },
+  "metal/metalwall003a": {},
+  "metal/steeldoor001": {
+    "basetexture": "metal/steeldoor001",
+    "alpha": false
+  },
+  "metal/wall014": {
+    "basetexture": "metal/wall014",
+    "alpha": false
+  },
+  "metal/wall014b": {
+    "basetexture": "metal/wall014b",
+    "alpha": false
+  },
+  "metal/wall014d": {
+    "basetexture": "metal/wall014d",
+    "alpha": false
+  },
+  "metal/wall016": {
+    "basetexture": "metal/wall016",
+    "alpha": false
+  },
+  "metal/wall016a": {
+    "basetexture": "metal/wall016a",
+    "alpha": false
+  },
+  "metal/wall016b": {
+    "basetexture": "metal/wall016b",
+    "alpha": false
+  },
+  "metal/wall016d": {
+    "basetexture": "metal/wall016d",
+    "alpha": false
+  },
+  "metal/wall021": {
+    "basetexture": "metal/wall021",
+    "alpha": false
+  },
+  "metal/wall026": {
+    "basetexture": "metal/wall026",
+    "alpha": false
+  },
+  "metal/wall027": {
+    "basetexture": "metal/wall027",
+    "alpha": false
+  },
+  "metal/wall028": {
+    "basetexture": "metal/wall028",
+    "alpha": false
+  },
+  "models/props_2fort/bridgesupport01": {
+    "basetexture": "models/props_2fort/bridgesupport01",
+    "alpha": false
+  },
+  "models/props_2fort/grainconveyor001": {
+    "basetexture": "models/props_2fort/grainconveyor001",
+    "alpha": false
+  },
+  "models/props_2fort/roof_metal_bridge001": {
+    "basetexture": "models/props_2fort/roof_metal001",
+    "alpha": false
+  },
+  "models/props_2fort/silo_cluster01a": {
+    "basetexture": "models/props_2fort/silo_cluster01a",
+    "alpha": false
+  },
+  "models/props_2fort/wood_bridge001": {
+    "basetexture": "wood/wood_bridge001",
+    "alpha": false
+  },
+  "models/props_2fort/wood_wall001": {
+    "basetexture": "wood/wood_wall001",
+    "alpha": false
+  },
+  "models/props_farm/air_intake": {
+    "basetexture": "models/props_farm/air_intake",
+    "alpha": false
+  },
+  "models/props_farm/awning01_red": {
+    "basetexture": "models/props_farm/awning01_red",
+    "alpha": false
+  },
+  "models/props_farm/building001": {
+    "basetexture": "models/props_farm/building001_dirtmap",
+    "alpha": false
+  },
+  "models/props_farm/building001_metal": {
+    "basetexture": "models/props_farm/building001_dirtmap",
+    "alpha": false
+  },
+  "models/props_farm/building001_woodtrim": {
+    "basetexture": "models/props_farm/building001_dirtmap",
+    "alpha": false
+  },
+  "models/props_farm/concrete_pipe001": {
+    "basetexture": "models/props_farm/concrete_pipe001",
+    "alpha": false
+  },
+  "models/props_farm/conduit": {
+    "basetexture": "models/props_farm/conduit",
+    "alpha": false
+  },
+  "models/props_farm/drain_pipe001": {
+    "basetexture": "models/props_farm/drain_pipe001",
+    "alpha": false
+  },
+  "models/props_farm/grain_elevator01": {
+    "basetexture": "models/props_farm/grain_elevator01",
+    "alpha": false
+  },
+  "models/props_farm/grain_elevator02": {
+    "basetexture": "models/props_farm/grain_elevator02",
+    "alpha": false
+  },
+  "models/props_farm/grain_elevator04": {
+    "basetexture": "models/props_farm/grain_elevator04",
+    "alpha": false
+  },
+  "models/props_farm/grain_elevator_facade_14b": {
+    "basetexture": "wood/grain_elevator_facade_14b",
+    "alpha": false
+  },
+  "models/props_farm/gutters001": {
+    "basetexture": "models/props_farm/gutters001",
+    "alpha": false
+  },
+  "models/props_farm/gutters001a": {
+    "basetexture": "models/props_farm/gutters001a",
+    "alpha": false
+  },
+  "models/props_farm/haypile001": {
+    "basetexture": "models/props_farm/haypile001_card",
+    "alpha": false
+  },
+  "models/props_farm/haypile001_card": {
+    "basetexture": "models/props_farm/haypile001_card",
+    "alpha": true
+  },
+  "models/props_farm/junction_box": {
+    "basetexture": "models/props_farm/junction_box",
+    "alpha": false
+  },
+  "models/props_farm/lamp002": {
+    "basetexture": "models/props_farm/lamp002",
+    "alpha": false
+  },
+  "models/props_farm/lamp002_skin1": {
+    "basetexture": "models/props_farm/lamp002_skin1",
+    "alpha": false
+  },
+  "models/props_farm/metal_fence01": {
+    "basetexture": "models/props_farm/metal_fence01",
+    "alpha": false
+  },
+  "models/props_farm/metal_fence02": {
+    "basetexture": "models/props_farm/metal_fence02",
+    "alpha": false
+  },
+  "models/props_farm/metal_pile": {
+    "basetexture": "models/props_farm/metal_pile",
+    "alpha": false
+  },
+  "models/props_farm/rafter_01a": {
+    "basetexture": "models/props_farm/rafter_01a",
+    "alpha": false
+  },
+  "models/props_farm/rafters001": {
+    "basetexture": "models/props_farm/rafters001",
+    "alpha": false
+  },
+  "models/props_farm/roof_vent001": {
+    "basetexture": "models/props_farm/roof_vent001",
+    "alpha": false
+  },
+  "models/props_farm/sewer_cap001": {
+    "basetexture": "models/props_farm/sewer_cap001",
+    "alpha": false
+  },
+  "models/props_farm/shelf_props01": {
+    "basetexture": "models/props_farm/shelf_props01",
+    "alpha": false
+  },
+  "models/props_farm/shelf_props01_skin2": {
+    "basetexture": "models/props_farm/shelf_props01_skin2",
+    "alpha": false
+  },
+  "models/props_farm/shelf_props02": {
+    "basetexture": "models/props_farm/shelf_props02",
+    "alpha": false
+  },
+  "models/props_farm/silo001": {
+    "basetexture": "models/props_farm/silo001",
+    "alpha": false
+  },
+  "models/props_farm/silo002": {
+    "basetexture": "models/props_farm/silo002",
+    "alpha": false
+  },
+  "models/props_farm/silo_skybox004": {
+    "basetexture": "models/props_farm/silo_skybox004",
+    "alpha": false
+  },
+  "models/props_farm/spawnroom_door": {
+    "basetexture": "models/props_farm/spawnroom_door",
+    "alpha": false
+  },
+  "models/props_farm/spool_rope": {
+    "basetexture": "models/props_farm/spool_rope",
+    "alpha": false
+  },
+  "models/props_farm/spool_wire": {
+    "basetexture": "models/props_farm/spool_wire",
+    "alpha": false
+  },
+  "models/props_farm/steeldoor001": {
+    "basetexture": "metal/steeldoor001",
+    "alpha": false
+  },
+  "models/props_farm/tools": {
+    "basetexture": "models/props_farm/tools",
+    "alpha": false
+  },
+  "models/props_farm/tractor_tire001": {
+    "basetexture": "models/props_farm/tractor_tire001",
+    "alpha": false
+  },
+  "models/props_farm/tree001": {
+    "basetexture": "models/props_farm/tree001",
+    "alpha": true
+  },
+  "models/props_farm/tree001_card": {
+    "basetexture": "models/props_farm/tree001_card",
+    "alpha": true
+  },
+  "models/props_farm/tree001_card_skin2": {
+    "basetexture": "models/props_farm/tree001_card_skin2",
+    "alpha": true
+  },
+  "models/props_farm/vent001": {
+    "basetexture": "models/props_farm/vent001",
+    "alpha": false
+  },
+  "models/props_farm/wall026": {
+    "basetexture": "metal/wall026",
+    "alpha": false
+  },
+  "models/props_farm/wall027": {
+    "basetexture": "metal/wall027",
+    "alpha": false
+  },
+  "models/props_farm/water_spigot": {
+    "basetexture": "models/props_farm/water_spigot",
+    "alpha": false
+  },
+  "models/props_farm/welding_machine01": {
+    "basetexture": "models/props_farm/welding_machine01",
+    "alpha": false
+  },
+  "models/props_farm/welding_machine01_skin2": {
+    "basetexture": "models/props_farm/welding_machine01_skin2",
+    "alpha": false
+  },
+  "models/props_farm/window002": {
+    "basetexture": "models/props_2fort/window002",
+    "alpha": false
+  },
+  "models/props_farm/wood_beam01": {
+    "basetexture": "wood/wood_beam01",
+    "alpha": false
+  },
+  "models/props_farm/wood_beam02": {
+    "basetexture": "wood/wood_beam02",
+    "alpha": false
+  },
+  "models/props_farm/wood_beam03": {
+    "basetexture": "wood/wood_bridge001",
+    "alpha": false
+  },
+  "models/props_farm/wood_bridge001": {
+    "basetexture": "wood/wood_bridge001",
+    "alpha": false
+  },
+  "models/props_farm/wood_bridge002": {
+    "basetexture": "wood/wood_bridge002",
+    "alpha": false
+  },
+  "models/props_farm/wood_floor001": {
+    "basetexture": "wood/wood_floor001",
+    "alpha": false
+  },
+  "models/props_farm/wood_pile": {
+    "basetexture": "models/props_farm/wood_pile",
+    "alpha": false
+  },
+  "models/props_farm/wood_wall002": {
+    "basetexture": "wood/wood_wall002",
+    "alpha": false
+  },
+  "models/props_farm/wood_wall005a": {
+    "basetexture": "wood/wood_wall005a",
+    "alpha": false
+  },
+  "models/props_farm/wooden_barrel": {
+    "basetexture": "models/props_farm/wooden_barrel",
+    "alpha": false
+  },
+  "nature/blendgroundtograss001": {
+    "basetexture": "nature/dirtground001",
+    "basetexture2": "nature/grass_02",
+    "alpha": false
+  },
+  "nature/blendgroundtograss003": {
+    "basetexture": "nature/dirtground003",
+    "basetexture2": "nature/dirtground004",
+    "alpha": false
+  },
+  "nature/blendgroundtograss003_nodetail": {
+    "basetexture": "nature/dirtground003",
+    "basetexture2": "nature/dirtground004",
+    "alpha": false
+  },
+  "nature/blendgroundtogravel001": {
+    "basetexture": "nature/dirtground001",
+    "basetexture2": "nature/dirtground002",
+    "alpha": false
+  },
+  "nature/dirtground001": {
+    "basetexture": "nature/dirtground001",
+    "alpha": false
+  },
+  "nature/dirtground002": {
+    "basetexture": "nature/dirtground002",
+    "alpha": false
+  },
+  "nature/dirtground003": {
+    "basetexture": "nature/dirtground003",
+    "alpha": false
+  },
+  "nature/ground_04": {
+    "basetexture": "nature/ground_04",
+    "alpha": false
+  },
+  "nature/rockwall003": {
+    "basetexture": "nature/rockwall003",
+    "alpha": false
+  },
+  "overlays/no_entry": {
+    "basetexture": "overlays/no_entry",
+    "alpha": true
+  },
+  "props/cobweb001": {
+    "basetexture": "props/cobweb001",
+    "alpha": true
+  },
+  "props/monitor_world_blue": {
+    "basetexture": "props/monitor_world_blue",
+    "alpha": false
+  },
+  "props/monitor_world_red": {
+    "basetexture": "props/monitor_world_red",
+    "alpha": false
+  },
+  "props/plasticwall001a": {
+    "basetexture": "props/plasticwall001a",
+    "alpha": false
+  },
+  "signs/world_map001a": {
+    "basetexture": "signs/world_map001",
+    "alpha": false
+  },
+  "signs/world_map002a": {
+    "basetexture": "signs/world_map002",
+    "alpha": false
+  },
+  "skybox/cloud001a": {
+    "basetexture": "skybox/cloud001a",
+    "alpha": true
+  },
+  "skybox/cloud001b": {
+    "basetexture": "skybox/cloud001b",
+    "alpha": true
+  },
+  "skybox/cloud001c": {
+    "basetexture": "skybox/cloud001c",
+    "alpha": true
+  },
+  "skybox/cloud001d": {
+    "basetexture": "skybox/cloud001d",
+    "alpha": true
+  },
+  "skybox/farm_fields001": {
+    "basetexture": "skybox/farm_fields001",
+    "alpha": false
+  },
+  "tile/floor_tile_001a": {
+    "basetexture": "tile/floor_tile_001a",
+    "alpha": false
+  },
+  "tile/floor_tile_002a": {
+    "basetexture": "tile/floor_tile_002a",
+    "alpha": false
+  },
+  "tile/floor_tile_004a": {
+    "basetexture": "tile/floor_tile_004a",
+    "alpha": false
+  },
+  "tile/floor_tile_004b": {
+    "basetexture": "tile/floor_tile_004b",
+    "alpha": false
+  },
+  "tile/floor_tile_004c": {
+    "basetexture": "tile/floor_tile_004c",
+    "alpha": false
+  },
+  "tile/floor_tile_005a": {
+    "basetexture": "tile/floor_tile_005a",
+    "alpha": false
+  },
+  "tile/floor_tile_005b": {
+    "basetexture": "tile/floor_tile_005b",
+    "alpha": false
+  },
+  "tile/floor_tile_005c": {
+    "basetexture": "tile/floor_tile_005c",
+    "alpha": false
+  },
+  "tile/floor_tile_006a": {
+    "basetexture": "tile/floor_tile_006a",
+    "alpha": false
+  },
+  "tile/floor_tile_007a": {
+    "basetexture": "tile/floor_tile_007a",
+    "alpha": false
+  },
+  "tile/tile_ceiling_001a": {
+    "basetexture": "tile/tile_ceiling_001a",
+    "alpha": false
+  },
+  "water/water_2fort": {
+    "alpha": false
+  },
+  "water/water_2fort_skybox": {
+    "alpha": false
+  },
+  "wood/grain_elevator_facade_13": {
+    "basetexture": "wood/grain_elevator_facade_13",
+    "alpha": false
+  },
+  "wood/grain_elevator_facade_14a": {
+    "basetexture": "wood/grain_elevator_facade_14a",
+    "alpha": false
+  },
+  "wood/grain_elevator_facade_14b": {
+    "basetexture": "wood/grain_elevator_facade_14b",
+    "alpha": false
+  },
+  "wood/grain_elevator_facade_14c": {
+    "basetexture": "wood/grain_elevator_facade_14c",
+    "alpha": false
+  },
+  "wood/grain_elevator_silo_06": {
+    "basetexture": "wood/grain_elevator_silo_06",
+    "alpha": false
+  },
+  "wood/grain_elevator_silo_10b": {
+    "basetexture": "wood/grain_elevator_silo_10b",
+    "alpha": false
+  },
+  "wood/grain_elevator_silo_10c": {
+    "basetexture": "wood/grain_elevator_silo_10c",
+    "alpha": false
+  },
+  "wood/wall015": {
+    "basetexture": "wood/wall015",
+    "alpha": false
+  },
+  "wood/wall015b": {
+    "basetexture": "wood/wall015b",
+    "alpha": false
+  },
+  "wood/wood_beam01": {
+    "basetexture": "wood/wood_beam01",
+    "alpha": false
+  },
+  "wood/wood_beam02": {
+    "basetexture": "wood/wood_beam02",
+    "alpha": false
+  },
+  "wood/wood_beam03": {
+    "basetexture": "wood/wood_beam03",
+    "alpha": false
+  },
+  "wood/wood_bridge001": {
+    "basetexture": "wood/wood_bridge001",
+    "alpha": false
+  },
+  "wood/wood_bridge002": {
+    "basetexture": "wood/wood_bridge002",
+    "alpha": false
+  },
+  "wood/wood_floor001": {
+    "basetexture": "wood/wood_floor001",
+    "alpha": false
+  },
+  "wood/wood_wall001": {
+    "basetexture": "wood/wood_wall001",
+    "alpha": false
+  },
+  "wood/wood_wall002": {
+    "basetexture": "wood/wood_wall002",
+    "alpha": false
+  },
+  "wood/wood_wall002b": {
+    "basetexture": "wood/wood_wall002b",
+    "alpha": false
+  },
+  "wood/wood_wall003": {
+    "basetexture": "wood/wood_wall003",
+    "alpha": false
+  },
+  "wood/wood_wall005a": {
+    "basetexture": "wood/wood_wall005a",
+    "alpha": false
+  },
+  "wood/wood_wall005b": {
+    "basetexture": "wood/wood_wall005b",
+    "alpha": false
+  },
+  "wood/wood_wall005c": {
+    "basetexture": "wood/wood_wall005c",
+    "alpha": false
+  },
+  "skybox/sky_tf2_04ft": {
+    "basetexture": "skybox/sky_tf2_04side",
+    "alpha": false
+  },
+  "skybox/sky_tf2_04bk": {
+    "basetexture": "skybox/sky_tf2_04side",
+    "alpha": false
+  },
+  "skybox/sky_tf2_04lf": {
+    "basetexture": "skybox/sky_tf2_04side",
+    "alpha": false
+  },
+  "skybox/sky_tf2_04rt": {
+    "basetexture": "skybox/sky_tf2_04side",
+    "alpha": false
+  },
+  "skybox/sky_tf2_04up": {
+    "basetexture": "skybox/sky_tf2_04up",
+    "alpha": false
+  },
+  "skybox/sky_tf2_04dn": {
+    "basetexture": "skybox/sky_tf2_04dn",
+    "alpha": false
+  }
+}

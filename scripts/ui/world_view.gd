@@ -24,6 +24,7 @@ static func draw_world(g):
 		g.draw_texture_rect_region(g.textures.ground,Rect2(Vector2.ZERO,Vector2(640,360)),Rect2(-offset,Vector2(640,360)))
 	else: g.draw_rect(Rect2(0,0,640,360),Color("40563a"))
 	if not g.is_nether():ChapterOne.ground(g,offset)
+	preload("res://scripts/ui/cloud_shadows.gd").draw(g,offset)
 	if g.world.finale.active:
 		g.draw_texture_rect_region(g.textures.ground_scorched,Rect2(0,0,640,360),Rect2(-offset,Vector2(640,360)),Color(1,1,1,g.world.finale.scorch()))
 	if not g.is_nether():Atmosphere.overworld_grass(g,offset)
@@ -46,7 +47,10 @@ static func draw_world(g):
 		g.oval(p,Vector2(4,2),Color(0.3,0.8,0.2,0.12*pulse))
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2((p-Vector2(4,5)).floor(),Vector2(8,8)),Rect2((frame%4)*16,(frame/4)*16,16,16),Color(0.45+0.25*pulse,1,0.2,1))
 	for e in g.world.effects:
-		if e.kind in ["cloud","fangs","player_hit"]: draw_effect(g,e,offset)
+		if e.kind in ["cloud","fangs","player_hit","potion_splash"]: draw_effect(g,e,offset)
+		if e.kind=="witch_potion":
+			var k: float=clampf(e.age/e.total,0,1)
+			preload("res://scripts/ui/witch_puddle_view.gd").draw(g,e.end+offset,e.radius,.12+k*.22)
 	if g.world.finale.active:g.finale_renderer.floor_effects(g,offset)
 	for m in g.world.mobs:
 		var p: Vector2 = m.p+offset
@@ -168,7 +172,7 @@ static func draw_world(g):
 			g.draw_set_transform(Vector2.ZERO)
 	for b in g.world.projectiles: draw_projectile(g,b,offset)
 	for e in g.world.effects:
-		if e.kind not in ["cloud","fangs","player_hit"]: draw_effect(g,e,offset)
+		if e.kind not in ["cloud","fangs","player_hit","potion_splash"]: draw_effect(g,e,offset)
 	for pool in [g.world.particles,g.world.pixels]:
 		for particle in pool:
 			var size: float = particle.get("size",2.0)*clampf(particle.life/0.1,0.3,1)
@@ -406,8 +410,6 @@ static func draw_effect(g, e: Dictionary, offset: Vector2):
 		"witch_potion":
 			var k: float=clampf(e.age/e.total,0,1)
 			var target: Vector2=e.end+offset
-			g.oval(target,Vector2(e.radius,e.radius*0.4),Color(0.45,0.15,0.45,0.1+k*0.12))
-			g.draw_arc(target,e.radius,0,TAU,24,Color(0.75,0.4,0.85,0.25+k*0.35),1)
 			var start: Vector2=e.start+offset
 			var q: Vector2=start.lerp(target,k)-Vector2(0,sin(k*PI)*34+10*(1-k))
 			g.draw_set_transform(q,k*TAU*1.5)
@@ -418,7 +420,7 @@ static func draw_effect(g, e: Dictionary, offset: Vector2):
 			for j in range(10):
 				var dir=Vector2.from_angle(j*TAU/10+0.2)
 				g.draw_rect(Rect2((p+dir*Vector2(1,0.5)*e.radius*k-Vector2(0,4)).floor(),Vector2(2,2)),Color(0.75,0.35,0.85,1-k))
-			g.oval(p,Vector2(e.radius,e.radius*0.4)*k,Color(0.55,0.2,0.6,0.25*(1-k)))
+			preload("res://scripts/ui/witch_puddle_view.gd").draw(g,p,e.radius*(.8+.2*k),.7*(1-k))
 		"witch_heal":
 			var k: float=clampf(e.age/e.total,0,1)
 			for j in range(12):

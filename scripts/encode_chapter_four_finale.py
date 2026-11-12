@@ -32,7 +32,7 @@ def encode(clean=False, name="finale"):
         labels.append(f"[m{n}]")
         n += 1
     events = {}
-    for manifest in ["minecraft_audio", "nether_audio", "v2_audio", "chapter_four_audio", "chapter_four_external_audio"]:
+    for manifest in ["minecraft_audio", "nether_audio", "end_audio", "v2_audio", "chapter_one_audio", "end_external_audio", "chapter_four_audio", "chapter_four_external_audio"]:
         path = ROOT / f"data/{manifest}.json"
         if path.exists():
             events.update(json.loads(path.read_text()))
@@ -53,7 +53,7 @@ def encode(clean=False, name="finale"):
         n += 1
     graph += "".join(labels) + f"amix=inputs={len(labels)}:normalize=0,alimiter=limit=0.95,atrim=0:{seconds:.3f},apad=whole_dur={seconds:.3f}[a]"
     target = OUT / f"chapter_four_{name}.mp4"
-    args += ["-filter_complex", graph, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+    args += ["-filter_complex_threads", "1", "-filter_complex", graph, "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-threads", "4", "-preset", "medium", "-crf", "18",
              "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-t", f"{seconds:.3f}", "-movflags", "+faststart", str(target)]
     subprocess.run(args, check=True)
     print(target, round(seconds, 1), "seconds;", len(cues), "sound cues;", data["diagnostic"])

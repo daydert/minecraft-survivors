@@ -1,0 +1,192 @@
+[
+  {
+    "time": 2.0,
+    "source": "assets/audio/minecraft/step_grass2.ogg",
+    "gain": 0.08
+  },
+  {
+    "time": 31.6,
+    "source": "assets/audio/chapter_four/random_breath.ogg",
+    "gain": 0.15
+  },
+  {
+    "time": 10.35,
+    "source": "assets/audio/minecraft/ambient_weather_thunder1.ogg",
+    "gain": 0.47
+  },
+  {
+    "time": 12.6,
+    "source": "assets/audio/minecraft/mob_endermen_portal2.ogg",
+    "gain": 0.32
+  },
+  {
+    "time": 16.94,
+    "source": "assets/audio/minecraft/entity_player_attack_sweep2.ogg",
+    "gain": 0.48
+  },
+  {
+    "time": 17.13,
+    "source": "assets/audio/minecraft/entity_player_attack_strong5.ogg",
+    "gain": 0.62
+  },
+  {
+    "time": 17.16,
+    "source": "assets/audio/minecraft/damage_hit2.ogg",
+    "gain": 0.26
+  },
+  {
+    "time": 26.23,
+    "source": "assets/audio/minecraft/entity_player_attack_sweep1.ogg",
+    "gain": 0.18
+  },
+  {
+    "time": 26.76,
+    "source": "assets/audio/minecraft/mob_endermen_portal.ogg",
+    "gain": 0.28
+  },
+  {
+    "time": 29.52,
+    "source": "assets/audio/minecraft/step_grass3.ogg",
+    "gain": 0.28
+  },
+  {
+    "time": 31.35,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.23
+  },
+  {
+    "time": 42.66,
+    "source": "assets/audio/minecraft/block_chest_open.ogg",
+    "gain": 0.48
+  },
+  {
+    "time": 43.8,
+    "source": "assets/audio/minecraft/entity_player_attack_sweep1.ogg",
+    "gain": 0.12
+  },
+  {
+    "time": 19.1,
+    "source": "assets/audio/minecraft/step_grass2.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 19.325000000000003,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 19.550000000000004,
+    "source": "assets/audio/minecraft/step_grass2.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 19.775000000000006,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 20.000000000000007,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 20.22500000000001,
+    "source": "assets/audio/minecraft/step_grass3.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 20.45000000000001,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 41,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 41.325,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 41.650000000000006,
+    "source": "assets/audio/minecraft/step_grass3.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 41.97500000000001,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 42.30000000000001,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 46,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 46.325,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 46.650000000000006,
+    "source": "assets/audio/minecraft/step_grass3.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 46.97500000000001,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 47.30000000000001,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 47.625000000000014,
+    "source": "assets/audio/minecraft/step_grass2.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 47.95000000000002,
+    "source": "assets/audio/minecraft/step_grass1.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 48.27500000000002,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 48.60000000000002,
+    "source": "assets/audio/minecraft/step_grass2.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 48.925000000000026,
+    "source": "assets/audio/minecraft/step_grass5.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 49.25000000000003,
+    "source": "assets/audio/minecraft/step_grass4.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 49.57500000000003,
+    "source": "assets/audio/minecraft/step_grass2.ogg",
+    "gain": 0.27
+  },
+  {
+    "time": 49.900000000000034,
+    "source": "assets/audio/minecraft/step_grass5.ogg",
+    "gain": 0.27
+  }
+]

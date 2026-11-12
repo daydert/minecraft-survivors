@@ -11,7 +11,7 @@ Minecraft, Steve и существа Minecraft относятся к Mojang/Micr
 Godot Engine: MIT, полный текст GODOT_LICENSE.txt.
 Игровой шрифт — оригинальные bitmap-глифы Minecraft (ascii, nonlatin_european, accented), включая кириллицу. Извлечены из того же локального клиента Mojang/Microsoft; для Godot подготовлены BMFont-описания с исходными масками и метриками. Полужирное начертание повторяет однопиксельное смещение Minecraft. Происхождение: docs/MINECRAFT_PRESENTATION_MANIFEST.json.
 
-DejaVu Sans / DejaVu Sans Bold используется только инструментами подготовки старых контактных листов и исключён из исполняемых сборок. Лицензия: DEJAVU_LICENSE.txt.
+DejaVu Sans / DejaVu Sans Bold используется инструментами подготовки контактных листов и надписи на собственной UV-этикетке банки в V главе. Файлы TTF исключены из исполняемых сборок; в этикетку входят растровые глифы. Лицензия: DEJAVU_LICENSE.txt.
 
 Все звуковые эффекты — оригинальные OGG из ресурсов Minecraft Java 1.21.11, скопированные без изменений из Prism Launcher (asset index 29). Принадлежат Mojang/Microsoft. В версии 0.5 используются 73 файла и 31 событие, включая поборника, появление босса и портал. В проекте больше нет синтезированных WAV. Таблица событий: data/minecraft_audio.json; источники и SHA-1/SHA-256: docs/MINECRAFT_PRESENTATION_MANIFEST.json.
 
@@ -120,3 +120,20 @@ Minecraft Java 1.21.11. Компоновка мира, модели, позы и
 - Херобрин, стадия II — «Colossal Boss Battle Theme» (Blackmoor Colossus Loop), Matthew Pablo, www.matthewpablo.com, CC-BY 3.0.
 - Выстрел дробовика — «Gunshot Sounds» (shotty.wav), Vincent Sevedge, CC-BY 3.0.
 - Перезарядка дробовика — «Gun reload sounds» (shotguncock.wav), SpringySpringo, CC0.
+
+## Глава V: музыка и эффекты
+
+Музыка: Centurion_of_war (Final Stand), CleytonKauffman (Boss Battle Theme Var),
+yd (Insistent, Galactic Temple), Juhani Junkala / SubspaceAudio (Post Apocalyptic
+Wastelands). Опубликованы на OpenGameArt под CC0; страницы, загрузки и SHA-256 —
+`assets/audio/ch5_music/SOURCES.json`.
+Эффекты порталов и заряда: Kenney, Sci-Fi Sounds 1.0, CC0-1.0. Исходные OGG
+сохранены без перекодирования. Источники, SHA и текст лицензии:
+`assets/audio/ch5_sfx/SOURCES.json`, `assets/audio/ch5_sfx/LICENSE.txt`.
+Предоставленные пользователем ending_theme.ogg и ending_sting.ogg сохранены.
+
+V, последующая полировка: icon_repeating_block, icon_breakpoint и icon_healing_v
+производятся из локальных оригинальных Minecraft Java 1.21.11 repeating command
+block / redstone torch / potion / potion overlay. Зелье имеет собственную окраску
+лечения. Это ресурсы Mojang, не CC0; происхождение и SHA — docs/CH5_POLISH_ASSETS.json.
+Базовые скины не заменены: кровь и распад — собственные эффекты материалов игры.

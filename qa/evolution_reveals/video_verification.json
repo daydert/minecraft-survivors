@@ -1,0 +1,198 @@
+{
+  "status": "pass",
+  "recipe_checks": 385,
+  "recipe_chapter_pairs": 55,
+  "distinct_reveals": 39,
+  "duration": 105.3,
+  "frames": 3159,
+  "sound_cues": 39,
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "30/1",
+        "duration": "105.300000",
+        "nb_read_frames": "3159"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0",
+        "duration": "105.303000",
+        "nb_read_frames": "4937"
+      },
+      {
+        "codec_name": "bin_data",
+        "codec_type": "data",
+        "r_frame_rate": "0/0",
+        "duration": "105.300000"
+      }
+    ],
+    "chapters": [
+      {
+        "start_time": "0.000000",
+        "end_time": "2.700000"
+      },
+      {
+        "start_time": "2.700000",
+        "end_time": "5.400000"
+      },
+      {
+        "start_time": "5.400000",
+        "end_time": "8.100000"
+      },
+      {
+        "start_time": "8.100000",
+        "end_time": "10.800000"
+      },
+      {
+        "start_time": "10.800000",
+        "end_time": "13.500000"
+      },
+      {
+        "start_time": "13.500000",
+        "end_time": "16.200000"
+      },
+      {
+        "start_time": "16.200000",
+        "end_time": "18.900000"
+      },
+      {
+        "start_time": "18.900000",
+        "end_time": "21.600000"
+      },
+      {
+        "start_time": "21.600000",
+        "end_time": "24.300000"
+      },
+      {
+        "start_time": "24.300000",
+        "end_time": "27.000000"
+      },
+      {
+        "start_time": "27.000000",
+        "end_time": "29.700000"
+      },
+      {
+        "start_time": "29.700000",
+        "end_time": "32.400000"
+      },
+      {
+        "start_time": "32.400000",
+        "end_time": "35.100000"
+      },
+      {
+        "start_time": "35.100000",
+        "end_time": "37.800000"
+      },
+      {
+        "start_time": "37.800000",
+        "end_time": "40.500000"
+      },
+      {
+        "start_time": "40.500000",
+        "end_time": "43.200000"
+      },
+      {
+        "start_time": "43.200000",
+        "end_time": "45.900000"
+      },
+      {
+        "start_time": "45.900000",
+        "end_time": "48.600000"
+      },
+      {
+        "start_time": "48.600000",
+        "end_time": "51.300000"
+      },
+      {
+        "start_time": "51.300000",
+        "end_time": "54.000000"
+      },
+      {
+        "start_time": "54.000000",
+        "end_time": "56.700000"
+      },
+      {
+        "start_time": "56.700000",
+        "end_time": "59.400000"
+      },
+      {
+        "start_time": "59.400000",
+        "end_time": "62.100000"
+      },
+      {
+        "start_time": "62.100000",
+        "end_time": "64.800000"
+      },
+      {
+        "start_time": "64.800000",
+        "end_time": "67.500000"
+      },
+      {
+        "start_time": "67.500000",
+        "end_time": "70.200000"
+      },
+      {
+        "start_time": "70.200000",
+        "end_time": "72.900000"
+      },
+      {
+        "start_time": "72.900000",
+        "end_time": "75.600000"
+      },
+      {
+        "start_time": "75.600000",
+        "end_time": "78.300000"
+      },
+      {
+        "start_time": "78.300000",
+        "end_time": "81.000000"
+      },
+      {
+        "start_time": "81.000000",
+        "end_time": "83.700000"
+      },
+      {
+        "start_time": "83.700000",
+        "end_time": "86.400000"
+      },
+      {
+        "start_time": "86.400000",
+        "end_time": "89.100000"
+      },
+      {
+        "start_time": "89.100000",
+        "end_time": "91.800000"
+      },
+      {
+        "start_time": "91.800000",
+        "end_time": "94.500000"
+      },
+      {
+        "start_time": "94.500000",
+        "end_time": "97.200000"
+      },
+      {
+        "start_time": "97.200000",
+        "end_time": "99.900000"
+      },
+      {
+        "start_time": "99.900000",
+        "end_time": "102.600000"
+      },
+      {
+        "start_time": "102.600000",
+        "end_time": "105.300000"
+      }
+    ]
+  },
+  "sha256": "73f4cb1c3169e2d143d605558bc6e43c396aacdf099ab6ff641bbc5900ef243d",
+  "renderer": "actual Godot Compatibility, native 640x360, nearest 1280x720 export",
+  "video": "qa/recordings/evolution_reveals.mp4"
+}

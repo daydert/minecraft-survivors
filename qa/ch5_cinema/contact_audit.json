@@ -1,0 +1,34 @@
+{
+  "scope": "sampled endpoint, linear velocity and labelled contact checks only",
+  "space": "world",
+  "height": 2.0,
+  "sample_count": 176,
+  "loop": {},
+  "contacts": [
+    {
+      "point": "rk",
+      "start": 32.63333333333333,
+      "end": 38.46666666666667,
+      "samples": 176,
+      "max_drift_H": 9.274278294704268e-05,
+      "path_length_H": 9.298056701913212e-05
+    },
+    {
+      "point": "lk",
+      "start": 32.63333333333333,
+      "end": 38.46666666666667,
+      "samples": 176,
+      "max_drift_H": 5.106950347383154e-05,
+      "path_length_H": 5.1319482458862135e-05
+    }
+  ],
+  "issues": [],
+  "unverified": [],
+  "status": "pass",
+  "thresholds": {
+    "position_H": 0.002,
+    "contact_H": 0.005,
+    "angle_degrees": 0.5,
+    "velocity_H_per_s": 0.05
+  }
+}

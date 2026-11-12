@@ -1,6 +1,7 @@
 extends Node
 ## The two 3D fights of chapter V, built in code inside a SubViewport and
 ## drawn onto the 2D canvas. Reads the fighter / quake state only.
+const Cinema = preload("res://scripts/chapter_five_cinema_view.gd")
 const PX := 1.0 / 16.0
 var viewport: SubViewport
 var scene: Node3D
@@ -52,8 +53,11 @@ func ensure(g, which: String, size: Vector2i):
 	match which:
 		"fighter", "fists":build_fighter()
 		"erase":build_erase()
+		"bad_end":build_bad_end()
+		"qte":build_qte()
 		"chair":build_chair()
 		"flight":build_flight()
+		"portal":build_portal()
 		_:build_quake()
 
 func release():
@@ -159,15 +163,7 @@ func build_fighter():
 	var shm: StandardMaterial3D = material("ch5q_shield", false).duplicate();shm.uv1_scale = Vector3(1, 1, 1);sh.material_override = shm
 	sh.position = Vector3(3 * PX, -7 * PX, 0);rigs.steve.la.add_child(sh);nodes.shield_s = sh
 	var sh2: MeshInstance3D = sh.duplicate();rigs.notch.la.add_child(sh2);nodes.shield_n = sh2
-	for who in ["steve", "notch"]:
-		var ghosts: Array = []
-		for k in range(4):
-			var gr: Dictionary = make_rig("ch5_skin_" + who)
-			for part in ["torso", "head", "ra", "la", "rl", "ll"]:
-				for c in gr[part].get_children():
-					if c is MeshInstance3D:c.transparency = .55 + k * .1;c.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			gr.root.visible = false;ghosts.append(gr)
-		nodes["ghosts_" + who] = ghosts;nodes["hist_" + who] = []
+	# Speed uses the sweep/dust below. Whole-rig afterimages read as extra fighters.
 	var bolt := Node3D.new();scene.add_child(bolt);nodes.lightning = bolt;bolt.visible = false
 	for k in range(9):
 		var seg := MeshInstance3D.new();var sb := BoxMesh.new();sb.size = Vector3(.16, 1.5, .16);seg.mesh = sb;seg.material_override = flat(Color(.8, .85, 1), 9.0)
@@ -259,6 +255,10 @@ func sync_fighter(fi):
 				var fry: float = sin(fi.age * 60.0) * .25
 				fp.ra = Vector3(-2.6 + fry, 0, -.9);fp.la = Vector3(-2.6 - fry, 0, .9);fp.head = Vector3(-.6, fry, 0);fp.torso = Vector3(-.3, 0, fry * .3)
 				r.root.position += Vector3(sin(fi.age * 47.0) * .04, minf(.5, (fi.age - 1.3) * .5), 0)
+		if f.who == "steve" and fi.state in ["fatality", "ko", "done"] and fi.winner == 0:
+			fp.rl = Vector3(-.15, 0, .06);fp.ll = Vector3(.12, 0, -.06);fp.drop = 0.0
+		if f.who == "steve" and fi.state in ["ko", "done"] and fi.winner == 0:
+			fp.ra = Vector3(-2.9, 0, -.35);fp.la = Vector3(.15, 0, .25);fp.torso = Vector3(-.08, -.3, 0);fp.head = Vector3(-.25, .25, 0)
 		if f.who == "steve" and fi.state == "fatality":
 			var a: float = fi.age
 			if a < 1.3:fp.ra = Vector3(-3.1 * clampf(a / .5, 0, 1), 0, -.15);fp.torso = Vector3(-.15, 0, 0);fp.head = Vector3(-.5, 0, 0)
@@ -270,18 +270,6 @@ func sync_fighter(fi):
 		r.root.visible = not gone and (f.glitch <= 0 or int(fi.age * 30) % 2 == 0 or (f.who == "notch" and fi.state == "fatality"))
 		r.root.scale = Vector3.ONE * (1.0 if f.who == "steve" else 1.08) * (1.06 if f.flash > 0 else 1.0)
 		(nodes["shield_s" if f.who == "steve" else "shield_n"] as Node3D).visible = f.move == "shield"
-		# Afterimages for the fast, heavy moves.
-		var hist: Array = nodes["hist_" + f.who]
-		hist.push_front({"pos":r.root.position, "rot":r.root.rotation, "pose":r.cur.duplicate(), "scale":r.root.scale})
-		while hist.size() > 13:hist.pop_back()
-		var trail: bool = f.move in ["dash", "uppercut", "dive", "super", "pearl"] or (f.stun > 0 and absf(f.vx) > 5.0) or (fi.state == "fatality" and f.who == "steve" and fi.age < 1.3)
-		var ghosts: Array = nodes["ghosts_" + f.who]
-		for k in range(ghosts.size()):
-			var gr: Dictionary = ghosts[k];var idx: int = (k + 1) * 3
-			gr.root.visible = trail and r.root.visible and hist.size() > idx
-			if gr.root.visible:
-				var hp: Dictionary = hist[idx]
-				gr.root.position = hp.pos;gr.root.rotation = hp.rot;gr.root.scale = hp.scale;pose(gr, hp.pose)
 	(nodes.super_sword as Node3D).visible = fi.steve().move == "super" or fi.state == "fatality"
 	var mid: float = (fi.fighters[0].x + fi.fighters[1].x) / 2.0
 	var spread: float = absf(fi.fighters[0].x - fi.fighters[1].x)
@@ -386,14 +374,7 @@ func sync_fighter(fi):
 			label.rotation = Vector3(0, 0, PI / 2 * fi.fighters[it.holder].face)
 		else:
 			label.position = Vector3(it.x, .12 + sin(fi.age * 2 + i) * .05, .6);label.rotation = Vector3(-PI / 2.4, 0, 0)
-	if fi.mode == "fists" and fi.state in ["wire", "done"]:
-		var w: Node3D = take("wire", "")
-		var s: Dictionary = fi.steve();var n: Dictionary = fi.notch()
-		var k: float = clampf(fi.age / .25, 0, 1)
-		var from := Vector3(s.x + s.face * .4, 1.1, 0);var to := Vector3(n.x + s.face * 1.2 * k, 1.05, 0)
-		w.position = (from + to) / 2.0;w.scale = Vector3(maxf(.01, from.distance_to(to)), 1, 1);shown.append(w)
-		for j in range(3):
-			var sp: Node3D = take("spark", "");sp.position = Vector3(n.x, 1.05 + sin(fi.age * 30 + j) * .2, .2);sp.scale = Vector3.ONE * (.6 + fmod(fi.age * 7 + j, 1.0));shown.append(sp)
+	Cinema.wire(self,fi,shown)
 	hide_rest(shown)
 	nodes.rim.light_energy = 1.6 + fi.zoom * 2.0
 	for i in range(16):
@@ -453,6 +434,10 @@ func take(kind: String, variant: String) -> Node3D:
 			var b := BoxMesh.new();b.size = Vector3(.12, .12, .12);n.mesh = b;n.material_override = flat(Color(.6, .6, .6, .5), 0.0, true)
 		"blast":
 			var s := SphereMesh.new();s.radius = 1.0;s.height = 2.0;n.mesh = s;n.material_override = flat(Color(1, .55, .15, .6), 5.0, true)
+		"skin_shard":
+			var b := BoxMesh.new();b.size=Vector3(.065,.065,.065);n.mesh=b;n.material_override=flat([Color(.15,.6,.65),Color(.22,.19,.5),Color(.57,.36,.25)][int(variant)])
+		"tooth":
+			var b := BoxMesh.new();b.size=Vector3(.045,.065,.035);n.mesh=b;n.material_override=flat(Color(.9,.84,.65))
 		"blood":
 			var b := BoxMesh.new();b.size = Vector3(.075, .075, .075);n.mesh = b;n.material_override = flat(Color(.7, .03, .04) if variant == "0" else Color(.5, .02, .03), .6)
 		"fireball":
@@ -470,6 +455,7 @@ func take(kind: String, variant: String) -> Node3D:
 		"star":
 			var b := BoxMesh.new();b.size = Vector3(.06, .06, .6);n.mesh = b;n.material_override = flat(Color(.9, .95, 1), 3.0)
 		"glyph":
+			n.free() # The glyph pool owns a Label3D, not the provisional mesh.
 			var l := Label3D.new();l.text = "01";l.font_size = 32;l.pixel_size = .01;l.modulate = Color(.3, 1, .7)
 			l.billboard = BaseMaterial3D.BILLBOARD_ENABLED;l.set_meta("used", true);scene.add_child(l);pool[key].append(l);return l
 	n.set_meta("used", true);scene.add_child(n);pool[key].append(n)
@@ -679,23 +665,16 @@ func burst(at: Vector3, count: int, clock: float, spread: float, rise: float, li
 # ------------------------------------------------------------------ the erasure
 
 func build_erase():
-	room(Color(.01, .012, .02), Color(.3, .4, .5), .5)
-	block(Vector3(0, -.5, 0), Vector3(20, 1, 14), "ch5q_polished_deepslate")
-	block(Vector3(0, 2.2, -3.2), Vector3(5.2, 3.2, .4), "ch5q_polished_blackstone_bricks")
-	var screen := glow_box(Vector3(0, 2.3, -2.98), Vector3(4.4, 2.4, .05), Color(.02, .2, .08), 1.0);nodes.screen = screen
-	for k in [-1, 1]:
-		block(Vector3(k * 4.2, 1.6, -2.6), Vector3(2.2, 1.6, .3), "ch5q_polished_blackstone_bricks").rotation.y = -k * .35
-		var side := glow_box(Vector3(k * 4.15, 1.6, -2.42), Vector3(1.9, 1.3, .04), Color(.02, .2, .08), 1.0);side.rotation.y = -k * .35;nodes["side%d" % k] = side
+	build_final_room()
 	for k in range(9):
 		var l := label("", Vector3(-2.05, 3.35 - k * .25, -2.94), 30, Color(.35, 1, .5));nodes["line%d" % k] = l
 	for k in range(6):glow_box(Vector3(-3 + k * 1.2, .02, -1.5 + k * .3), Vector3(.06, .04, 3.0), Color(.05, .05, .06), 0.0)
 	nodes.light = omni(Vector3(0, 2.4, -1.6), Color(.3, 1, .6), 2.5, 9.0)
 	nodes.key = omni(Vector3(-3, 3.5, 3), Color(.7, .75, 1.0), 1.4, 12.0)
-	rigs.notch = make_rig("ch5_skin_notch");rigs.steve = make_rig("ch5_skin_steve")
-	nodes.sword = sword_in(rigs.steve.ra)
+	rigs.notch = Cinema.rig(self,"ch5_skin_notch");rigs.steve = Cinema.rig(self,"ch5_skin_steve")
+	nodes.sword = voxel_sword(rigs.steve.grip,.85)
 	var flying := Node3D.new();scene.add_child(flying);nodes.flying = flying
-	var mid := Node3D.new();mid.rotation = Vector3(-PI / 2, 0, 0);flying.add_child(mid)
-	var blade := voxel("ch5q_item_iron_sword", 1.1, 1.4);blade.rotation = Vector3(0, 0, deg_to_rad(-45));mid.add_child(blade);nodes.flying_blade = blade
+	voxel_sword(flying,.85)
 	var cracks := label("", Vector3(0, 2.4, -2.9), 90, Color(1, 1, 1, .9), .004);cracks.text = "╳";nodes.cracks = cracks
 	var cam := Camera3D.new();scene.add_child(cam);nodes.cam = cam
 
@@ -717,13 +696,9 @@ func sync_erase(f, clock: float):
 	var sp := {"rl":Vector3(-.2, 0, 0), "ll":Vector3(.2, 0, 0), "torso":Vector3(.35 * (1 - resist), 0, 0), "head":Vector3(.3, 0, 0), "ra":Vector3(-.4, 0, 0), "la":Vector3(-.2, 0, 0), "drop":-.15 * (1 - resist)}
 	if f.thrown >= 0 and f.thrown < .6:sp.ra = Vector3(-3.0 + f.thrown * 5.0, 0, 0);sp.torso = Vector3(-.2, .5, 0)
 	pose(s, sp)
-	var order := ["ll", "rl", "la", "ra", "torso", "head"]
-	for i in range(order.size()):
-		var gone: bool = f.erase * 6.4 > i + 1
-		var flick: bool = f.erase * 6.4 > i + .6 and not gone and int(clock * 24) % 2 == 0
-		for c in s[order[i]].get_children():
-			if c is MeshInstance3D:
-				c.visible = not gone and not flick
+	# Keep the arm/body connected until the final failed attack. Whole-part
+	# deletion here used to force a visible restoration at the next shot.
+	s.material.set_shader_parameter("erase_amount",.28*f.erase*(1.0-smoothstep(0,.6,f.thrown)))
 	(nodes.sword as Node3D).visible = f.thrown < 0
 	var fl: Node3D = nodes.flying
 	var target := Vector3(.3, 2.5, -2.7)
@@ -751,7 +726,6 @@ func sync_erase(f, clock: float):
 		var dead: float = clampf((f.thrown - 1.2) / .8, 0, 1)
 		scr.emission = Color(1, .1, .05).lerp(Color(0, 0, 0), dead) if int(clock * 20) % 3 != 0 or dead > .9 else Color(1, 1, 1)
 		nodes.light.light_color = Color(1, .2, .1);nodes.light.light_energy = (3.0 + sin(clock * 40) * 2.0) * (1 - dead) + .2
-		for k in [-1, 1]:((nodes["side%d" % k] as MeshInstance3D).material_override as StandardMaterial3D).emission = Color(.6, 0, 0) * (1 - dead)
 	else:
 		scr.emission = Color(.02, .25, .1);nodes.light.light_energy = 2.2 + sin(clock * 3) * .2
 	var shown: Array = []
@@ -766,6 +740,8 @@ func sync_erase(f, clock: float):
 	elif f.thrown < .6:shot(cam, Vector3(1.9, 1.7, 2.6), Vector3(-.4, 1.9, -1.0), 50, 0.0, clock)
 	elif f.thrown < 1.4:shot(cam, Vector3(.6, 2.2, -.4), Vector3(0, 2.3, -3.0), 60, .06 * (1.4 - f.thrown), clock)
 	else:shot(cam, Vector3(-2.2, 1.6, 3.2), Vector3(1.6, .8, -1.0), 48, 0.0, clock)
+
+	Cinema.erase_throw(self,f)
 
 # ------------------------------------------------------------------ the chair
 
@@ -783,97 +759,30 @@ func build_chair():
 		for z in [-.35, .35]:block(Vector3(x, .25, z), Vector3(.12, .5, .12), "ch5q_dark_oak_planks")
 	block(Vector3(0, .55, 0), Vector3(.9, .1, .9), "ch5q_dark_oak_planks")
 	block(Vector3(0, 1.15, -.42), Vector3(.9, 1.1, .1), "ch5q_dark_oak_planks")
+	for y in [.9,1.17]:
+		for turn in [-.045,.045]:
+			var strap := MeshInstance3D.new();var rope := TorusMesh.new();rope.inner_radius=.365;rope.outer_radius=.41;rope.rings=24;rope.ring_segments=6;strap.mesh=rope;strap.position=Vector3(0,y+turn,-.04);strap.scale=Vector3(1,.6,.87);strap.material_override=flat(Color(.62,.45,.26));scene.add_child(strap)
+	for x in [-.12,.12]:
+		glow_box(Vector3(x,.16,.33),Vector3(.27,.10,.30),Color(.48,.34,.18),0.0)
 	block(Vector3(2.3, .9, -1.2), Vector3(1.4, 1.1, .3), "ch5q_polished_blackstone_bricks")
 	nodes.screen = label("scan: 0%", Vector3(1.7, 1.25, -1.03), 28, Color(.3, 1, .6))
-	rigs.notch = make_rig("ch5_skin_notch");rigs.steve = make_rig("ch5_skin_steve")
-	var grip := Node3D.new();grip.position = Vector3(-1 * PX, -10 * PX, 0);rigs.steve.ra.add_child(grip)
-	nodes.sword = voxel_sword(grip, .85)
+	rigs.notch = Cinema.rig(self,"ch5_skin_notch");rigs.steve = Cinema.rig(self,"ch5_skin_steve")
+	nodes.sword = voxel_sword(rigs.steve.grip, .85)
 	var pool_mesh := MeshInstance3D.new();var pm := CylinderMesh.new();pm.top_radius = 1.0;pm.bottom_radius = 1.0;pm.height = .01;pool_mesh.mesh = pm
 	pool_mesh.material_override = flat(Color(.38, .02, .03));pool_mesh.position = Vector3(0, .012, .25);scene.add_child(pool_mesh);nodes.pool = pool_mesh
 	var cable := MeshInstance3D.new();var cb := BoxMesh.new();cb.size = Vector3(1, .03, .03);cable.mesh = cb;cable.material_override = flat(Color(.08, .08, .1));scene.add_child(cable);nodes.cable = cable
 	for k in range(3):
 		var chain := MeshInstance3D.new();var ch := BoxMesh.new();ch.size = Vector3(.6, .07, .36);chain.mesh = ch;chain.material_override = material("ch5q_iron_block", true)
 		scene.add_child(chain);nodes["chain%d" % k] = chain
+	for side in ["r","l"]:
+		var cuff := MeshInstance3D.new();var cm := BoxMesh.new();cm.size=Vector3(.31,.07,.31);cuff.mesh=cm;cuff.material_override=flat(Color(.5,.46,.38));scene.add_child(cuff);nodes["cuff_"+side]=cuff
+		var tie := glow_box(Vector3.ZERO,Vector3(1,.025,.025),Color(.60,.43,.24),0.0);nodes["tie_"+side]=tie
+		block(Vector3(-.48 if side=="r" else .48,.71,.0),Vector3(.12,.08,.65),"ch5q_dark_oak_planks")
+	omni(Vector3(1.5,2.5,3),Color(.85,.9,1),.9,7)
 	var cam := Camera3D.new();scene.add_child(cam);nodes.cam = cam
 
 func sync_chair(f, clock: float):
-	var a: float = f.age
-	var n: Dictionary = rigs.notch;var s: Dictionary = rigs.steve;var cam: Camera3D = nodes.cam
-	var swing: float = sin(clock * .9) * .12
-	nodes.lamp.rotation = Vector3(-PI / 2 + swing, 0, swing * .5);nodes.bulb.position = Vector3(sin(swing) * .8, 3.55, .2);nodes.wire.position = Vector3(sin(swing) * .4, 4.2, .2)
-	nodes.lamp.light_energy = 5.5 - (2.0 if int(clock * 17) % 23 == 0 else 0.0)
-	var stab: float = f.CHAIR_STAB
-	n.root.position = Vector3(0, .6 - 12 * PX + .02, .05);n.root.rotation = Vector3.ZERO
-	var struggle: float = sin(clock * 9) * .09 if a > 20.8 and a < 30 else 0.0
-	var np := {"rl":Vector3(-1.57, 0, .05), "ll":Vector3(-1.57, 0, -.05), "ra":Vector3(.55, 0, -.2), "la":Vector3(.55, 0, .2), "head":Vector3(-.05 + struggle, struggle * 2, 0), "torso":Vector3(struggle * .5, 0, 0)}
-	if a < 1.4:np.head = Vector3(.6 - a * .45, 0, 0)
-	if a > 12.6 and a < 21.0:np.head = Vector3(.1, -.25, 0)
-	# After the blade: he slumps and stays in the chair.
-	var after: float = clampf((a - stab) / .6, 0, 1)
-	var limp: float = clampf((a - (stab + 2.4)) / 2.5, 0, 1)
-	if a > stab:
-		np.torso = Vector3(-.3 * after * (1 - limp) + .45 * limp, 0, .05 * limp)
-		np.head = Vector3(-.55 * after * (1 - limp) + .95 * limp, 0, .2 * limp)
-		np.ra = Vector3(.55 + .25 * limp, 0, -.2 - .25 * limp);np.la = Vector3(.55 + .25 * limp, 0, .2 + .25 * limp)
-		if a < stab + 1.2:np.head += Vector3(sin(clock * 40) * .03, 0, 0)
-	pose(n, np)
-	n.root.visible = true
-	for part in ["ll", "rl", "la", "ra", "torso", "head"]:
-		for c in n[part].get_children():
-			if c is MeshInstance3D:c.visible = true
-	for k in range(3):
-		var c: MeshInstance3D = nodes["chain%d" % k]
-		c.position = Vector3(0, .82 + k * .22, .05 - after * .03);c.rotation = Vector3.ZERO
-	var pool_k: float = clampf((a - stab - .8) / 6.0, 0, 1)
-	(nodes.pool as MeshInstance3D).visible = pool_k > 0
-	(nodes.pool as MeshInstance3D).scale = Vector3(.1 + pool_k * .55, 1, .1 + pool_k * .45)
-	# Steve: waits by the console, then the sword and the walk.
-	var walk: float = clampf((a - (f.CHAIR_SWORD + .8)) / 1.6, 0, 1)
-	var from := Vector3(-1.6, 0, .4);var to := Vector3(0, 0, 1.05)
-	s.root.position = from.lerp(to, walk)
-	s.root.rotation = Vector3(0, lerpf(PI / 2, PI, walk), 0)
-	var gait: float = sin(a * 7) * .6 if walk > 0 and walk < 1 else 0.0
-	var sp := {"ra":Vector3(-.5, 0, -.1), "la":Vector3(.05, 0, .1), "rl":Vector3(gait, 0, 0), "ll":Vector3(-gait, 0, 0)}
-	if a > f.CHAIR_SWORD:sp.ra = Vector3(-.3, 0, -.15)
-	if a > stab - .45:
-		var k: float = clampf((a - (stab - .45)) / .45, 0, 1)
-		sp.ra = Vector3(-.3 - 1.25 * k, 0, 0);sp.torso = Vector3(.15 * k, 0, 0);sp.rl = Vector3(-.4 * k, 0, 0);sp.ll = Vector3(.3 * k, 0, 0)
-		s.root.position = to + Vector3(0, 0, -.22 * k)
-	if a > stab + 2.6:sp.head = Vector3(.35, 0, 0)
-	if a > stab + 5.5:
-		var pull: float = clampf((a - (stab + 5.5)) / .6, 0, 1)
-		sp.ra = Vector3(-1.55 + 1.2 * pull, 0, -.1 * pull);s.root.position = to + Vector3(0, 0, -.22 + .5 * pull);sp.torso = Vector3(.1 - .2 * pull, 0, 0)
-	pose(s, sp)
-	(nodes.sword as Node3D).visible = a > f.CHAIR_SWORD
-	var scanning: bool = a > f.CHAIR_SCAN[0] and a < f.CHAIR_SWORD
-	var cable: MeshInstance3D = nodes.cable
-	cable.visible = scanning
-	if scanning:
-		var c_from: Vector3 = Vector3(2.0, 1.0, -1.0);var c_to: Vector3 = n.head.global_position + Vector3(0, .3, 0)
-		cable.position = (c_from + c_to) / 2.0;cable.scale = Vector3(c_from.distance_to(c_to), 1, 1);cable.look_at(c_to, Vector3.UP);cable.rotate_object_local(Vector3.UP, PI / 2)
-	(nodes.screen as Label3D).text = "scan: %d%%\n%s" % [int(f.scan() * 100), "exit() found" if f.scan() >= 1.0 else "reading…"]
-	nodes.glow.light_energy = (1.0 + sin(clock * 12) * .4) if scanning else (.25 if a < f.CHAIR_SCAN[0] else 0.0)
-	var shown: Array = []
-	if scanning:
-		for k in range(10):
-			var g: Node3D = take("glyph", "");var t: float = fmod(clock * .6 + k * .1, 1.0)
-			g.position = (n.head.global_position + Vector3(0, .4, 0)).lerp(Vector3(2.3, 1.3, -1.0), t) + Vector3(0, sin(t * PI) * .5, 0)
-			(g as Label3D).text = ["0", "1", "{", "}", ";", "()"][k % 6];(g as Label3D).modulate.a = 1.0;shown.append(g)
-	if a > stab and a < stab + 2.2:shown += blood_spray(Vector3(0, 1.05, -.05), a - stab, clock)
-	if a > stab + .3 and a < stab + 12.0:shown += blood_drips(Vector3(0, .95, .12), a - stab, clock)
-	if a > stab + 5.5 and a < stab + 7.0:shown += blood_spray(Vector3(0, 1.05, .25), (a - stab - 5.5) * 1.6, clock)
-	hide_rest(shown)
-	var h: float = clock
-	if a < 4.0:shot(cam, Vector3(3.4 - a * .25, 2.6, 4.4 - a * .3), Vector3(0, 1.0, 0), 40, 0.0, h)
-	elif a < 12.6:shot(cam, Vector3(-2.2, 1.65, 1.6), Vector3(0, 1.25, 0), 36, .005, h)
-	elif a < 21.4:shot(cam, Vector3(.35, 1.45, 1.35), Vector3(0, 1.32, 0), 34, .008, h)
-	elif a < f.CHAIR_SWORD:shot(cam, Vector3(.6, .55, 1.7), Vector3(0, 1.3, 0), 44, .012, h)
-	elif a < stab - .5:shot(cam, Vector3(-3.8, 1.7, 3.2), Vector3(-.5, 1.0, .5), 40, 0.0, h)
-	elif a < stab + 1.8:shot(cam, Vector3(3.6, 1.3, .25), Vector3(0, 1.05, .3), 34 - clampf(a - stab, 0, 1) * 6, .035 * clampf(1.0 - absf(a - stab) * 2, 0, 1), h)
-	elif a < stab + 3.4:shot(cam, Vector3(-2.6, .75, 2.3), Vector3(0, 1.0, .35), 38, 0.0, h)
-	elif a < stab + 5.5:shot(cam, Vector3(-2.3, 2.0, 2.7), Vector3(0, 1.0, .15), 36, 0.0, h)
-	elif a < stab + 7.5:shot(cam, Vector3(3.3, 1.35, .9), Vector3(0, 1.05, .45), 36, 0.0, h)
-	else:shot(cam, Vector3(2.8, 2.4, 4.0), Vector3(0, .9, 0), 44, 0.0, h)
+	Cinema.chair(self,f,clock)
 
 func blood_spray(at: Vector3, t: float, clock: float) -> Array:
 	var out: Array = []
@@ -975,7 +884,9 @@ func diorama(kind: int, at: Vector3, scale: float) -> Node3D:
 					var m: Material = mi.mesh.surface_get_material(i)
 					if m is BaseMaterial3D:
 						var bm: BaseMaterial3D = m
-						if not bm.resource_name.begins_with("screen"):bm.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+						if bm.resource_name.begins_with("pixel_"):bm.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;bm.cull_mode = BaseMaterial3D.CULL_DISABLED
+						elif bm.resource_name == "palm_cutout":bm.cull_mode = BaseMaterial3D.CULL_DISABLED
+						elif not bm.resource_name.begins_with("screen"):bm.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 						if String(mi.name).begins_with("beam"):
 							bm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA;bm.albedo_color.a = .18;bm.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED;bm.cull_mode = BaseMaterial3D.CULL_DISABLED
 		root.set_meta("anims", anims);root.set_meta("top", top)
@@ -1182,14 +1093,22 @@ func logos() -> Array:
 		out.append(load(path) if ResourceLoader.exists(path) else null)
 	return out
 
+func flight_world_position(index: int) -> Vector3:
+	var t: float = 1.5 + index * 1.8
+	var z: float = -t * 26.0 - pow(maxf(0, t - 17.0), 2) * 6.0
+	return Vector3((-1.0 if index % 2 == 0 else 1.0) * 17.0, -4.0, z - 12.0)
+
 func build_flight():
-	var e := room(Color(0, 0, 0), Color(.6, .6, .7), .7)
+	var e := room(Color(0, 0, 0), Color(.55, .6, .7), .45)
 	e.glow_enabled = true;e.glow_intensity = .6;e.glow_bloom = 0.0;e.glow_hdr_threshold = 1.2
-	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.5, .4, 0);sun.light_energy = 1.0;scene.add_child(sun);nodes.sun = sun
-	rigs.steve = make_rig("ch5_skin_steve")
+	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.85, -.5, 0);sun.light_energy = .85;sun.shadow_enabled = true;sun.directional_shadow_max_distance = 110.0;scene.add_child(sun);nodes.sun = sun
+	rigs.steve = Cinema.rig(self,"ch5_skin_steve")
+	nodes.flight_fill = omni(Vector3.ZERO, Color(.7, .82, 1.0), 1.8, 6.0)
 	var door := Node3D.new();door.position = Vector3(1.0, 0, -6);scene.add_child(door);nodes.door = door
 	var leaf := MeshInstance3D.new();var lb := BoxMesh.new();lb.size = Vector3(1.0, 2.0, .12);leaf.mesh = lb;leaf.position = Vector3(-.5, 1.0, 0)
 	leaf.material_override = material("ch5q_iron_block", true);door.add_child(leaf)
+	var handle := glow_box(Vector3(.2,1.15,-5.89),Vector3(.12,.08,.14),Color(.22,.23,.25),0.0);handle.reparent(door)
+	nodes.door_floor = block(Vector3(.5,-.1,-3.0),Vector3(12,.2,8),"ch5q_polished_deepslate")
 	var opening := glow_box(door.position + Vector3(-.5, 1.0, -.3), Vector3(1.0, 2.0, .05), Color(1, 1, 1), 8.0);nodes.opening = opening
 	var frame := Node3D.new();scene.add_child(frame);nodes.frame = frame
 	for bar in [[Vector3(-1.075, 1.1, -.05), Vector3(.15, 2.2, .3)], [Vector3(.075, 1.1, -.05), Vector3(.15, 2.2, .3)], [Vector3(-.5, 2.125, -.05), Vector3(1.3, .15, .3)]]:
@@ -1197,7 +1116,7 @@ func build_flight():
 	# The door stands in a wall of code-dark stone with a real hole: nothing behind shows until it opens.
 	var wall := Node3D.new();scene.add_child(wall);nodes.door_wall = wall
 	var cx: float = door.position.x - .5
-	for part in [[Vector3(cx - 8.0, 3.0, -6.2), Vector3(15.0, 9, .4)], [Vector3(cx + 8.0, 3.0, -6.2), Vector3(15.0, 9, .4)], [Vector3(cx, 5.1, -6.2), Vector3(1.0, 4.8, .4)]]:
+	for part in [[Vector3(cx - 8.0, 3.0, -6.2), Vector3(15.0, 9, .4)], [Vector3(cx + 8.0, 3.0, -6.2), Vector3(15.0, 9, .4)], [Vector3(cx, 4.75, -6.2), Vector3(1.3, 5.5, .4)], [Vector3(cx, -.75, -6.2), Vector3(1.3, 1.5, .4)]]:
 		var b := block(part[0], part[1], "ch5q_deepslate_tiles");b.material_override = material("ch5q_deepslate_tiles", true);b.reparent(wall)
 	var hole_mask := glow_box(door.position + Vector3(-.5, 1.0, -.36), Vector3(1.0, 2.0, .04), Color(0, 0, 0), 0.0);nodes.door_hole = hole_mask
 	for k in range(5):
@@ -1209,34 +1128,35 @@ func build_flight():
 		g.billboard = BaseMaterial3D.BILLBOARD_ENABLED;nodes["void%d" % k] = g
 	var rings: Array = []
 	for k in range(14):
-		var r := MeshInstance3D.new();var tm := TorusMesh.new();tm.inner_radius = 6.5;tm.outer_radius = 7;r.mesh = tm;r.rotation.x = PI / 2
-		r.material_override = flat(Color(.3, 1, .7), 3.0);r.position = Vector3(0, 2, -20 - k * 22);scene.add_child(r);rings.append(r)
+		var r := MeshInstance3D.new();var tm := TorusMesh.new();tm.inner_radius = 6.92;tm.outer_radius = 7;r.mesh = tm;r.rotation.x = PI / 2
+		r.material_override = flat(Color(.12, .5, .34), .6);r.position = Vector3(0, 2, -20 - k * 22);scene.add_child(r);rings.append(r)
 	nodes.rings = rings
 	var worlds: Array = []
 	var marks: Array = logos()
+	# User revision 2026-11-11: the universes are represented by logos only.
+	# Do not instantiate ch5_game_*.glb here; the detailed world is 2Fort.
 	for i in range(LOGOS.size()):
-		var side: float = -1.0 if i % 2 == 0 else 1.0
-		var at := Vector3(side * (14 + (i % 3) * 2.5), (i % 3 - 1) * 4.0 - 5.0, -60 - i * 48)
-		var d := diorama(i, at, 1.5)
-		d.rotation.y = -side * .55;worlds.append(d)
-		if marks[i] != null:
-			var logo := Sprite3D.new();logo.texture = marks[i];logo.pixel_size = 11.0 / maxf(1, logo.texture.get_width());logo.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-			logo.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS;logo.shaded = false;logo.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
-			logo.pixel_size = 14.0 / maxf(1, logo.texture.get_width())
-			var logo_h: float = logo.texture.get_height() * logo.pixel_size
-			logo.position = at + Vector3(0, minf(float(d.get_meta("top", 10.0)), 9.5 if i == 8 else 16.0) * 1.5 + 2.5 + logo_h / 2.0, 9.0 if i == 8 else 0.0);scene.add_child(logo);worlds.append(logo)
-		omni(at + Vector3(-side * 6, 8, 8), Color(1, .95, .9), 1.6, 30.0)
+		if marks[i] == null:continue
+		var logo := Sprite3D.new();logo.texture = marks[i]
+		logo.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		logo.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		logo.shaded = false;logo.alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED
+		logo.pixel_size = 12.0 / maxf(1, logo.texture.get_width())
+		logo.position = flight_world_position(i) + Vector3(0, 7.0, 0)
+		logo.name = "Universe_%02d" % i
+		scene.add_child(logo);worlds.append(logo)
 	nodes.worlds = worlds
 	var portal := MeshInstance3D.new();var pm := SphereMesh.new();pm.radius = 6;pm.height = 12;portal.mesh = pm;portal.material_override = flat(Color(1, .95, .85), 8.0)
 	portal.position = Vector3(0, 2, -620);scene.add_child(portal);nodes.portal = portal
 	build_other()
 	var cam := Camera3D.new();cam.far = 900;scene.add_child(cam);nodes.cam = cam
 
-## The world Steve lands in: warm light, a dusty canyon, wooden buildings,
-## no blocks anywhere.
+## Valve SDK 2Fort exterior with native props. Sources and local-use decision:
+## docs/CHAPTER_FIVE_VISUAL_SOURCES.md. The flight loads only logos plus this map.
 func build_other():
 	var o := Node3D.new();o.position = Vector3(0, 0, -1500);scene.add_child(o);nodes.other = o;o.visible = false
-	# The mill yard is modelled in Blender (scripts/blender_mill_yard.py) and exported as glTF.
+	# The historical filename is kept; this is now the actual SDK 2Fort geometry.
+	nodes.tf2_waters = []
 	var fort: Node3D = (load("res://assets/models/ch5_mill_yard.glb") as PackedScene).instantiate();o.add_child(fort)
 	var stack: Array = [fort]
 	while not stack.is_empty():
@@ -1244,9 +1164,16 @@ func build_other():
 		stack.append_array(n.get_children())
 		if n is MeshInstance3D:
 			var mi: MeshInstance3D = n
-			if mi.name.begins_with("water"):nodes.tf2_water = mi
+			var untextured: bool = mi.mesh.get_surface_count() > 0 and mi.mesh.surface_get_material(0) == null
+			if untextured and mi.get_aabb().size.length() > 40.0:mi.visible = false;continue
+			if untextured:
+				var neutral := StandardMaterial3D.new();neutral.albedo_color = Color(.78, .74, .66);neutral.roughness = .9
+				for i in range(mi.mesh.get_surface_count()):mi.set_surface_override_material(i, neutral)
+				continue
 			for i in range(mi.mesh.get_surface_count()):
 				var m: Material = mi.mesh.surface_get_material(i)
+				if m != null and m.resource_name.begins_with("water"):
+					var wm := ShaderMaterial.new();wm.shader = load("res://shaders/ch5_water.gdshader");mi.set_surface_override_material(i, wm);nodes.tf2_waters.append(wm);continue
 				if m is BaseMaterial3D:
 					var bm: BaseMaterial3D = m
 					bm.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -1254,7 +1181,7 @@ func build_other():
 						bm.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR;bm.alpha_scissor_threshold = .5;bm.cull_mode = BaseMaterial3D.CULL_DISABLED
 					if bm.resource_name.begins_with("sign") or bm.resource_name.begins_with("window") or bm.resource_name.begins_with("watch") or bm.resource_name.begins_with("blu_logo"):
 						bm.cull_mode = BaseMaterial3D.CULL_DISABLED
-	var sky := Sky.new();var pano := PanoramaSkyMaterial.new();pano.panorama = tex("ch5w_tf2_sky");sky.sky_material = pano;nodes.tf2_sky = sky
+	var sky := Sky.new();var sm := ShaderMaterial.new();sm.shader = load("res://shaders/ch5_tf2_sky.gdshader");sky.sky_material = sm;nodes.tf2_sky = sky
 	# Warm lamps inside the halls and the culverts so the openings read as rooms.
 	for side in [-1.0, 1.0]:
 		for x in [-9.5, 0.0, 9.5]:
@@ -1267,6 +1194,7 @@ func sync_flight(f, clock: float):
 	var shown: Array = []
 	var other: bool = a >= f.FLIGHT_OTHER
 	nodes.other.visible = other
+	nodes.flight_fill.visible = not other and a >= 5.0
 	for w in nodes.worlds:w.visible = not other and a >= 5.0
 	for r in nodes.rings:r.visible = not other and a >= 5.0
 	nodes.portal.visible = not other and a >= 5.0
@@ -1294,16 +1222,21 @@ func sync_flight(f, clock: float):
 		s.root.position = Vector3(0, 2.0 + bob, z);s.root.rotation = Vector3(-1.3, PI, sin(clock * .8) * .1)
 		pose(s, {"ra":Vector3(.25, 0, -.2), "la":Vector3(.25, 0, .2), "rl":Vector3(.15 + sin(clock * 2) * .1, 0, 0), "ll":Vector3(-.1, 0, 0), "head":Vector3(-1.1, sin(clock * .5) * .4, 0)})
 		env.background_mode = Environment.BG_COLOR;env.fog_enabled = false
-		env.background_color = Color(.01, .005, .03).lerp(Color(.07, .02, .12), .5 + .5 * sin(t * .4))
+		env.background_color = Color(.001, .001, .004).lerp(Color(.006, .002, .012), .5 + .5 * sin(t * .4))
 		for k in range(70):
 			var st: Node3D = take("star", "")
 			var sx: float = fmod(k * 37.7, 44.0) - 22.0;var sy: float = fmod(k * 23.3, 28.0) - 12.0
 			st.position = Vector3(sx, sy, z - fmod(k * 13.0 - t * 60.0, 140.0) - 4.0);st.scale = Vector3(1, 1, 1.0 + clampf(t - 15.0, 0, 6.0));shown.append(st)
+		nodes.flight_fill.position = s.root.position + Vector3(1.5, 2.0, 3.0)
 		animate_worlds(clock)
-		if t < 6.0:shot(cam, Vector3(1.6, 3.0, z + 6.0), Vector3(0, 2.2, z - 8), 62, 0.0, clock)
-		elif t < 11.0:shot(cam, Vector3(1.1, 2.3, z - 1.2), Vector3(0, 2.4, z - .3), 40, .01, clock)
-		elif t < 17.0:shot(cam, Vector3(-6.0, -1.0, z - 14.0), Vector3(0, 2.0, z), 70, 0.0, clock)
-		else:shot(cam, Vector3(.8, 2.6, z + 4.0), Vector3(0, 2.0, z - 30), 58 + (t - 17.0) * 3.0, .02 * (t - 17.0) / 5.0, clock)
+		# Keep Steve's flight and all event times intact. A forward tracking shot
+		# lets every logo read while preserving the order of all eleven universes.
+		var focus: float = clampf((t - 1.5) / 1.8, 0.0, 10.0)
+		var first: int = int(floor(focus));var second: int = mini(10, first + 1)
+		var blend: float = smoothstep(.3, .7, fposmod(focus, 1.0))
+		var aim_x: float = lerpf(flight_world_position(first).x, flight_world_position(second).x, blend) * .65
+		var exit_blend: float = smoothstep(19.7, 21.5, t)
+		shot(cam, Vector3(0, 3.3, z + 7), Vector3(aim_x * .75 * (1.0 - exit_blend), 2.6, z - 15), 62 + exit_blend * 9, 0.0, clock)
 		if nodes.has("cam_override"):
 			for wd in nodes.worlds:wd.visible = true
 			shot(cam, nodes.cam_override[0], nodes.cam_override[1], 50, 0.0, clock)
@@ -1311,22 +1244,37 @@ func sync_flight(f, clock: float):
 		var t: float = a - f.FLIGHT_OTHER
 		var base: Vector3 = nodes.other.position
 		var land: float = clampf(t / .8, 0, 1)
-		s.root.position = base + Vector3(9.0, (1 - land) * 3.0, 8.0);s.root.rotation = Vector3(0, PI * .95 + clampf(t - 1.2, 0, 1.2) * .5, 0)
+		s.root.position = base + Vector3(9.0, (1 - land) * 3.0, -16.0);s.root.rotation = Vector3(0, PI * .95 + clampf(t - 1.2, 0, 1.2) * .5, 0)
 		pose(s, {"drop":-.12 * (1 - clampf(t - .8, 0, .4) / .4), "head":Vector3(-.15 - clampf(t - 1.5, 0, 1.0) * .2, clampf(t - 1.5, 0, 1.0) * .5, 0), "ra":Vector3(.1, 0, -.15), "la":Vector3(.1, 0, .15)})
 		env.background_mode = Environment.BG_SKY;env.sky = nodes.tf2_sky
-		env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR;env.ambient_light_color = Color(.55, .64, .8);env.ambient_light_energy = .32
-		env.glow_enabled = false;env.tonemap_mode = Environment.TONE_MAPPER_FILMIC;env.tonemap_exposure = .95;env.tonemap_white = 2.2;env.background_energy_multiplier = 1.0
-		env.adjustment_enabled = true;env.adjustment_saturation = 1.18;env.adjustment_contrast = 1.05
-		env.fog_enabled = true;env.fog_light_color = Color(.72, .8, .9);env.fog_density = .004
-		nodes.sun.light_color = Color(1, .9, .76);nodes.sun.light_energy = 1.05;nodes.sun.rotation = Vector3(-.75, .5, 0);nodes.sun.shadow_enabled = true
-		nodes.sun.directional_shadow_max_distance = 80.0
-		if nodes.has("tf2_water"):(nodes.tf2_water as MeshInstance3D).position.x = sin(clock * .3) * .5
+		# Sunny afternoon: warm key light, sky-coloured fill, long soft shadows, a little haze.
+		env.ambient_light_source = Environment.AMBIENT_SOURCE_SKY;env.ambient_light_energy = .7;env.ambient_light_sky_contribution = .85
+		env.glow_enabled = true;env.glow_intensity = .25;env.glow_bloom = .05;env.glow_hdr_threshold = 1.3
+		env.tonemap_mode = Environment.TONE_MAPPER_FILMIC;env.tonemap_exposure = 1.0;env.tonemap_white = 3.0;env.background_energy_multiplier = 1.0
+		env.adjustment_enabled = true;env.adjustment_saturation = 1.12;env.adjustment_contrast = 1.06
+		env.fog_enabled = true;env.fog_light_color = Color(.74, .82, .92);env.fog_density = .0025;env.fog_sky_affect = .0
+		nodes.sun.light_color = Color(1, .92, .78);nodes.sun.light_energy = 1.35;nodes.sun.rotation = Vector3(-.62, 2.55, 0);nodes.sun.shadow_enabled = true
+		nodes.sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS;nodes.sun.directional_shadow_max_distance = 140.0;nodes.sun.shadow_blur = 1.5
 		for k in range(10):
 			var dust: Node3D = mcfx("generic", base + Vector3(-6 + fmod(k * 3.7 + clock * .6, 14.0), .4 + fmod(k * .9, 2.5), -2 - fmod(k * 2.3, 8.0)), fmod(clock * .2 + k * .1, 1.0), .15, Color(1, .95, .85, .5))
 			shown.append(dust)
-		if t < 1.6:shot(cam, base + Vector3(12.0, 2.4, 13.5), base + Vector3(9.0, 1.0, 8.0), 50, .03 * (1 - land), clock)
-		else:shot(cam, base + Vector3(13.5 - t * .4, 1.6 + t * .15, 14.5 - t * .3), base + Vector3(-1.0, 5.5, -16.0), 66, 0.0, clock)
+		if t < 1.6:shot(cam, base + Vector3(12.0, 2.4, -18.0), base + Vector3(9.0, 1.0, -16.0), 50, .03 * (1 - land), clock)
+		else:shot(cam, base + Vector3(12.0 - t * .3, 2.4 + t * .15, -18.5 + t * .15), base + Vector3(0.0, 9.0, 22.0), 66, 0.0, clock)
 		if nodes.has("cam_override"):shot(cam, nodes.cam_override[0], nodes.cam_override[1], 55, 0.0, clock)
+	rigs.steve.material.set_shader_parameter("blood_amount",.72*(1.0-smoothstep(6.0,23.5,a)))
+	if a>6 and a<23.5:
+		for k in range(10):
+			var drift: float=fposmod(a*.7+k*.1,1)
+			var blood: Node3D=take("blood","1");blood.position=s.root.position+Vector3(sin(k*2.4)*.25,-drift*.4,1+drift*5);blood.scale=Vector3.ONE*(1-drift);shown.append(blood)
+	nodes.door_floor.visible = a < 5.0
+	if a < 5.0:Cinema.apply(self,"door",a)
+	elif other:
+		Cinema.apply(self,"arrival",a-f.FLIGHT_OTHER)
+		s.root.position += nodes.other.position;cam.position += nodes.other.position
+	else:
+		for joint in ["re","le","rk","lk","grip"]:rigs.steve[joint].quaternion=Quaternion.IDENTITY
+	for wm in nodes.tf2_waters:wm.set_shader_parameter("sim_time",clock)
+	(nodes.tf2_sky.sky_material as ShaderMaterial).set_shader_parameter("sim_time",clock)
 	hide_rest(shown)
 
 func animate_worlds(clock: float):
@@ -1336,6 +1284,10 @@ func animate_worlds(clock: float):
 			if not c.has_meta("anim"):continue
 			var sp: float = c.get_meta("speed");var home: Vector3 = c.get_meta("home")
 			match String(c.get_meta("anim")):
+				"wheel":
+					c.rotation.z = clock * sp
+					for gondola in c.get_children():
+						if String(gondola.name).begins_with("gondola"):gondola.rotation.z = -clock * sp
 				"spin":c.rotation.y = clock * sp
 				"stride":c.position = home + Vector3(sin(clock * sp) * 1.5, abs(sin(clock * sp * 2.0)) * .15, 0)
 				"bob":c.position = home + Vector3(0, abs(sin(clock * sp * 2.0)) * .3, 0)
@@ -1344,18 +1296,18 @@ func animate_worlds(clock: float):
 				"fall":c.position = home + Vector3(sin(clock * sp * 2.0) * .6, -fmod(clock * sp * 2.0, 10.0) + 5.0, 0);c.rotation = Vector3(clock * sp * 3, clock * sp * 2, 0)
 				"flicker":c.scale = Vector3(1, 1.5 + sin(clock * 23.0) * .3, 1)
 
-## Credits: a slow drift past the other worlds.
+## Credits: a slow drift past the universe logos.
 func sync_credits(f, clock: float):
 	var t: float = f.age
 	var s: Dictionary = rigs.steve;s.root.visible = false
-	nodes.other.visible = false;nodes.door.visible = false;nodes.frame.visible = false;nodes.opening.visible = false;nodes.door_wall.visible = false;nodes.door_hole.visible = false
+	nodes.door_floor.visible = false;nodes.other.visible = false;nodes.door.visible = false;nodes.frame.visible = false;nodes.opening.visible = false;nodes.door_wall.visible = false;nodes.door_hole.visible = false
 	for k in range(5):nodes["beam%d" % k].visible = false
 	for k in range(40):nodes["void%d" % k].visible = false
 	for w in nodes.worlds:w.visible = true
 	animate_worlds(clock)
 	for r in nodes.rings:r.visible = false
 	nodes.portal.visible = false
-	nodes.env.background_mode = Environment.BG_COLOR;nodes.env.fog_enabled = false;nodes.env.adjustment_enabled = false;nodes.env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+	nodes.env.background_mode = Environment.BG_COLOR;nodes.env.fog_enabled = false;nodes.env.adjustment_enabled = false;nodes.env.tonemap_mode = Environment.TONE_MAPPER_LINEAR;nodes.env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	nodes.env.background_color = Color(.005, .003, .015);nodes.sun.light_energy = .8;nodes.sun.light_color = Color(.8, .85, 1)
 	var z: float = -60.0 - t * 9.0
 	var shown: Array = []
@@ -1364,3 +1316,152 @@ func sync_credits(f, clock: float):
 		st.position = Vector3(fmod(k * 37.7, 60.0) - 30.0, fmod(k * 23.3, 34.0) - 14.0, z - fmod(k * 17.0 - t * 6.0, 160.0) - 10.0);st.scale = Vector3.ONE;shown.append(st)
 	hide_rest(shown)
 	shot(nodes.cam, Vector3(sin(t * .07) * 4.0, 3.0 + sin(t * .11) * 1.5, z), Vector3(sin(t * .05) * 10.0, 1.0, z - 60), 58, 0.0, clock)
+
+# ------------------------------------------------------------------ portals between the games
+
+## Each passage: [colour a, colour b, floor texture, who shoves (0 Steve, 1 Notch)].
+const PORTALS := {
+	"to_ut": [Color(1, .15, .2), Color(1, 1, 1), "ch5q_polished_deepslate", 1],
+	"to_lanes": [Color(.25, .9, .2), Color(.9, 1, .4), "ch5p_grass", 0],
+	"lanes_won": [Color(1, .55, .1), Color(1, .9, .3), "ch5p_grass", 1],
+	"to_quake": [Color(.75, .2, .05), Color(1, .6, .2), "ch5q_polished_deepslate", 0],
+	"to_code": [Color(.1, 1, .6), Color(.2, .5, 1), "ch5q_deepslate_tiles", 1]}
+const PORTAL_LENGTH := 4.4
+
+func portal_mesh(parent: Node3D, size: float) -> MeshInstance3D:
+	var q := QuadMesh.new();q.size = Vector2(size, size)
+	var m := MeshInstance3D.new();m.mesh = q
+	var sm := ShaderMaterial.new();sm.shader = load("res://shaders/ch5_portal.gdshader");m.material_override = sm
+	parent.add_child(m);return m
+
+func build_portal():
+	var e := room(Color(.01, .005, .02), Color(.5, .5, .65), .55)
+	e.glow_enabled = true;e.glow_intensity = .9;e.glow_bloom = .15;e.glow_hdr_threshold = 1.0
+	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.7, .5, 0);sun.light_energy = .8;sun.shadow_enabled = true;scene.add_child(sun)
+	var plat := Node3D.new();scene.add_child(plat);nodes.platform = plat
+	for x in range(-4, 5):
+		for z in range(-3, 4):
+			if absi(x) + absi(z) > 6:continue
+			var b := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(1, 1, 1);b.mesh = bm;b.position = Vector3(x, -.5 - (0.0 if absi(x) + absi(z) < 5 else .25 * (absi(x) + absi(z) - 4)), z)
+			plat.add_child(b)
+	nodes.portal = portal_mesh(scene, 4.2);nodes.portal.position = Vector3(3.6, 1.9, -.6);nodes.portal.rotation.y = -.5
+	var rim := MeshInstance3D.new();var tm := TorusMesh.new();tm.inner_radius = 1.85;tm.outer_radius = 2.05;rim.mesh = tm;rim.rotation = Vector3(PI / 2, -.5, 0);rim.position = nodes.portal.position;scene.add_child(rim);nodes.portal_rim = rim
+	nodes.portal_light = omni(nodes.portal.position + Vector3(-1, 0, 1), Color(1, 1, 1), 0.0, 9.0)
+	rigs.steve = Cinema.rig(self,"ch5_skin_steve");rigs.notch = Cinema.rig(self,"ch5_skin_notch")
+	var cam := Camera3D.new();scene.add_child(cam);nodes.cam = cam
+
+func sync_portal_stage(phase: String, a: float, clock: float):
+	var spec: Array = PORTALS.get(phase, PORTALS.to_ut)
+	var ca: Color = spec[0];var cb: Color = spec[1]
+	if nodes.get("portal_kind", "") != phase:
+		nodes.portal_kind = phase
+		for b in nodes.platform.get_children():(b as MeshInstance3D).material_override = material(spec[2], false)
+		var rm := StandardMaterial3D.new();rm.albedo_color = cb;rm.emission_enabled = true;rm.emission = ca.lerp(cb, .4);rm.emission_energy_multiplier = 3.0
+		(nodes.portal_rim as MeshInstance3D).material_override = rm
+	var mat_p: ShaderMaterial = (nodes.portal as MeshInstance3D).material_override
+	var open: float = smoothstep(0.2, 1.2, a) * (1.0 - smoothstep(3.7, 4.2, a) * .3)
+	mat_p.set_shader_parameter("color_a", ca);mat_p.set_shader_parameter("color_b", cb);mat_p.set_shader_parameter("open", open)
+	mat_p.set_shader_parameter("sim_time", clock)
+	mat_p.set_shader_parameter("spin", 2.5 + smoothstep(2.0, 3.2, a) * 4.0)
+	(nodes.portal_rim as MeshInstance3D).scale = Vector3.ONE * maxf(.01, open)
+	(nodes.portal_rim as MeshInstance3D).rotation = Vector3(PI / 2, -.5, 0)
+	(nodes.portal_rim as MeshInstance3D).rotate_object_local(Vector3.UP, clock * 1.5)
+	(nodes.portal_light as OmniLight3D).light_color = ca.lerp(cb, .5);(nodes.portal_light as OmniLight3D).light_energy = open * 5.0
+	nodes.platform.position.y = 0.0
+	var gate: Vector3 = nodes.portal.position
+	var shown: Array = []
+	for k in range(18):
+		var t: float = fmod(clock * .7 + k / 18.0, 1.0)
+		var ang: float = k * 2.39996 + clock * 2.0
+		var r: float = (1.0 - t) * 3.2
+		var at: Vector3 = gate + Vector3(-cos(.5), 0, -sin(.5)) * 0.0 + Vector3(cos(ang) * r * .5, sin(ang) * r, sin(ang + 1.0) * r * .3)
+		shown.append(mcfx("magic" if k % 2 == 0 else "spark", at, t, .35 * open, ca.lerp(cb, float(k % 3) / 2.0)))
+
+## Hit-stop on each contact, then a short catch-up so the authored track still ends on time.
+static func portal_time(a: float, hits: Array, hold: float) -> float:
+	var out: float=a
+	for h in hits:
+		var d: float=a-float(h)
+		if d<0:continue
+		if d<hold:out-=d
+		elif d<hold+.5:out-=hold*(1-(d-hold)/.5)
+	return out
+
+func sync_portal(phase: String, real: float, clock: float):
+	var a: float=portal_time(real,[.89,1.80],.11)
+	sync_portal_stage(phase,a,clock)
+	var index: int=["to_ut","to_lanes","lanes_won","to_quake","to_code"].find(phase)
+	Cinema.apply(self,"portal_%d"%maxi(0,index),a)
+	var pusher_steve: bool=index in [1,3]
+	rigs.steve.root.visible=a<(3.85 if pusher_steve else 2.88)
+	rigs.notch.root.visible=a<(2.88 if pusher_steve else 3.85)
+	for who in ["steve","notch"]:
+		rigs[who].root.scale=Vector3.ONE
+		rigs[who].material.set_shader_parameter("gate_color",PORTALS.get(phase,PORTALS.to_ut)[0])
+		rigs[who].material.set_shader_parameter("blood_amount",.07+.15*smoothstep(.89,1.0,a)+.2*smoothstep(1.8,1.95,a))
+	var victim: String="notch" if pusher_steve else "steve"
+	var pusher: String="steve" if pusher_steve else "notch"
+	var shown: Array=[]
+	for hit in [[.89,pusher],[1.80,victim]]:
+		var elapsed: float=a-float(hit[0])
+		var origin: Vector3=Vector3(-.18,1.75,.5) if hit[1]==pusher else Vector3(.5,1.75,.4)
+		if elapsed>=0 and elapsed<.65:
+			Cinema.impact(self,origin,elapsed,elapsed>.08)
+			# A second, wider burst from the heavier blow.
+			if hit[0]==1.80:shown+=blood_spray(origin+Vector3(0,-.25,.1),elapsed*.8,clock)
+		if elapsed>=.3 and elapsed<2.4:shown+=blood_drips(origin+Vector3(0,-.15,0),elapsed,clock)
+	hide_rest(shown)
+
+## This exact layout is also built in Blender. Keep a clear 1 m exit and
+## a 0.45 m body clearance along the two-leg route; the table is to its left.
+func build_final_room():
+	room(Color(.012,.015,.02),Color(.48,.54,.65),.65)
+	block(Vector3(0,-.12,0),Vector3(20,.24,14),"ch5q_polished_deepslate")
+	block(Vector3(0,2.2,-3.2),Vector3(5.2,3.2,.4),"ch5q_polished_blackstone_bricks")
+	nodes.screen=glow_box(Vector3(0,2.3,-2.98),Vector3(4.4,2.4,.05),Color(.02,.13,.06),.45)
+	for part in [[Vector3(-1.5,2.5,-4.7),Vector3(9,5,.3)],[Vector3(5,2.5,-4.7),Vector3(2,5,.3)],[Vector3(3.5,3.5,-4.7),Vector3(1,3,.3)]]:
+		block(part[0],part[1],"ch5q_deepslate_tiles")
+	block(Vector3(.65,.86,-2.15),Vector3(.9,.12,.9),"ch5q_dark_oak_planks")
+	for x in [.31,.99]:
+		for z in [-2.49,-1.81]:block(Vector3(x,.40,z),Vector3(.1,.8,.1),"ch5q_dark_oak_planks")
+	var door := Node3D.new();scene.add_child(door);door.position=Vector3(4,0,-4.5);nodes.bad_door=door
+	var leaf := MeshInstance3D.new();var shape := BoxMesh.new();shape.size=Vector3(1,2,.12);leaf.mesh=shape;leaf.position=Vector3(-.5,1,0);leaf.material_override=material("ch5q_iron_block",true);door.add_child(leaf)
+	var handle := glow_box(Vector3(3.2,1.15,-4.38),Vector3(.1,.08,.12),Color(.3,.3,.3),0);handle.reparent(door)
+	glow_box(Vector3(3.5,1,-6.3),Vector3(1,2,.04),Color(.08,.07,.06),0)
+	omni(Vector3(3.5,2,-5.4),Color(1,.85,.65),1.1,4)
+	omni(Vector3(-2,3,2.5),Color(1,.78,.6),2.5,8)
+	omni(Vector3(2,2,-1.5),Color(.25,.7,1),1.4,7)
+	nodes.beer=beer_can();nodes.beer.position=Vector3(.90,1.10,-1.85)
+
+func build_qte():
+	build_final_room()
+	rigs.steve=Cinema.rig(self,"ch5_skin_steve");rigs.notch=Cinema.rig(self,"ch5_skin_notch")
+	var tabletop := block(Vector3(.75,.90,1.45),Vector3(1.1,.12,1.05),"ch5q_dark_oak_planks");nodes.ko_table=tabletop
+	nodes.ko_legs=[]
+	for x in [.32,1.18]:
+		for z in [1.05,1.85]:nodes.ko_legs.append(block(Vector3(x,.42,z),Vector3(.10,.84,.10),"ch5q_dark_oak_planks"))
+	var cam := Camera3D.new();scene.add_child(cam);nodes.cam=cam
+
+func sync_qte(q):Cinema.qte(self,q)
+
+func sync_bad_end(n):Cinema.bad_end(self,n)
+
+func build_bad_end():
+	build_qte()
+	nodes.ko_table.visible=false
+	for leg in nodes.ko_legs:leg.visible=false
+	nodes.bad_sword=voxel_sword(rigs.steve.grip,.85)
+	var dissolve := ShaderMaterial.new();dissolve.shader=load("res://shaders/ch5_erase_item.gdshader");nodes.bad_blade_material=dissolve
+	for mesh in nodes.bad_sword.get_children():
+		if mesh is MeshInstance3D:mesh.material_override=dissolve
+	nodes.bad_shards=[]
+	for i in range(56):
+		var born: float=1.28+i*.019;Cinema.apply(self,"bad_end",born,false)
+		var part: String=["re","ra","torso","head","le","la","rl","ll","rk","lk"][i%10]
+		var at: Vector3=rigs.steve[part].to_global(Vector3(sin(i*2.4)*.14,(-.2 if part!="head" else .2),cos(i*2.4)*.12))
+		nodes.bad_shards.append({"born":born,"p":at,"v":Vector3(sin(i*2.4)*.7,.6+fmod(i*.17,.7),.4+fmod(i*.11,.5)),"variant":str(i%3)})
+
+func beer_can() -> Node3D:
+	var prop: Node3D=load("res://assets/models/ch5_beer_can.glb").instantiate()
+	scene.add_child(prop)
+	return prop

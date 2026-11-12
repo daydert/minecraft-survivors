@@ -1,0 +1,17 @@
+{
+  "reopened_blend": "/home/daydert/MinecraftSurvivors2/assets/art_source/ch5_finale/ch5_cinema.blend",
+  "tracks": 25,
+  "packed_textures": true,
+  "probe_preserved": true,
+  "pickup_error_m": 1.7881393432617188e-07,
+  "mouth_error_m": 2.6656007498500226e-07,
+  "renders": [
+    "qa/ch5_scene_repairs/blender_proof/CH5_bad_qte_0001.png",
+    "qa/ch5_scene_repairs/blender_proof/CH5_bad_qte_0125.png",
+    "qa/ch5_scene_repairs/blender_proof/CH5_bad_qte_0168.png",
+    "qa/ch5_scene_repairs/blender_proof/CH5_bad_end_0154.png",
+    "qa/ch5_scene_repairs/blender_proof/CH5_bad_end_0208.png",
+    "qa/ch5_scene_repairs/blender_proof/CH5_bad_end_0410.png",
+    "qa/ch5_scene_repairs/blender_proof/CH5_bad_end_0480.png"
+  ]
+}

@@ -34,7 +34,7 @@ func run():
 	var w=fresh()
 	check(w.chapter_number()==5 and game.is_five() and w.tone()==0.0 and w.phase_name()=="white","Chapter V starts in the white space")
 	w.time=300;check(w.tone()==1.0 and w.phase_name()=="dark","After 4:00 the space is dark")
-	w.time=481;var a: float=w.tone();w.time=489;check(a!=w.tone() and w.phase_name()=="flicker","After 8:00 it flickers between the two")
+	w.time=481;var a: float=w.tone();w.time=541;check(a!=w.tone() and w.phase_name()=="flicker","After 8:00 inversions are spaced a minute apart")
 	w.time=0
 	# for
 	w.spawn("for_loop",w.player+Vector2(0,-70));var m=last(w);m.timer=0;w.invulnerable=999

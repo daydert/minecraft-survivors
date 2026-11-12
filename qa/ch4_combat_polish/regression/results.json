@@ -1,0 +1,44 @@
+[
+  {
+    "test": "test_end_revision.gd",
+    "exit": 0,
+    "summary": [
+      "END_REVISION_RESULT 29 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_v2_content.gd",
+    "exit": 0,
+    "summary": [
+      "V2_CONTENT_RESULT 30 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_chapter_four_finale_visual.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FOUR_FINALE_VISUAL_RESULT 19 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_start_gear.gd",
+    "exit": 0,
+    "summary": [
+      "START_GEAR_RESULT 20 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_chapter_four_finale.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FOUR_FINALE_RESULT 79 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_chapter_four_arsenal.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FOUR_ARSENAL_RESULT 97 checks; 0 failures"
+    ]
+  }
+]

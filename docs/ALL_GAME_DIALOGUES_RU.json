@@ -1,0 +1,2126 @@
+{
+  "schema": 1,
+  "instructions": "Меняйте text; сохраняйте id и original. Можно редактировать и Markdown по тем же ID. Тексты ещё не применены к игре.",
+  "entries": [
+    {
+      "id": "I-af2b3298",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "WHISPER_TEXT",
+      "kind": "dialogue",
+      "original": "Почему ты не хочешь попасть к ней побыстрее?",
+      "text": "Почему ты не хочешь попасть к ней побыстрее?",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 22,
+          "context": "WHISPER_TEXT"
+        }
+      ]
+    },
+    {
+      "id": "I-19ffbd4f",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "dodge",
+      "kind": "dialogue",
+      "original": "Мимо.",
+      "text": "Мимо.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 162,
+          "context": "dodge"
+        }
+      ]
+    },
+    {
+      "id": "I-e54d5ba1",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "dodge",
+      "kind": "dialogue",
+      "original": "Ты вообще целишься?",
+      "text": "Ты вообще целишься?",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 162,
+          "context": "dodge"
+        }
+      ]
+    },
+    {
+      "id": "I-f0cd7194",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "dodge",
+      "kind": "dialogue",
+      "original": "Скукота.",
+      "text": "Скукота.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 162,
+          "context": "dodge"
+        }
+      ]
+    },
+    {
+      "id": "I-9b5a17bc",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "begin_throne",
+      "kind": "dialogue",
+      "original": "Ладно. Хватит разминки.",
+      "text": "Ладно. Хватит разминки.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 172,
+          "context": "begin_throne"
+        }
+      ]
+    },
+    {
+      "id": "I-3470e06f",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "showtime",
+      "kind": "dialogue",
+      "original": "Слушай, а ведь было весело.",
+      "text": "Слушай, а ведь было весело.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 344,
+          "context": "showtime"
+        }
+      ]
+    },
+    {
+      "id": "I-52131345",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "showtime",
+      "kind": "dialogue",
+      "original": "Правда. Держи на память.",
+      "text": "Правда. Держи на память.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 345,
+          "context": "showtime"
+        }
+      ]
+    },
+    {
+      "id": "I-f54aa239",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "showtime",
+      "kind": "dialogue",
+      "original": "Ха.",
+      "text": "Ха.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 352,
+          "context": "showtime"
+        }
+      ]
+    },
+    {
+      "id": "I-eaaa3132",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "descend",
+      "kind": "dialogue",
+      "original": "Ладно. Ты меня развлёк.",
+      "text": "Ладно. Ты меня развлёк.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 365,
+          "context": "descend"
+        }
+      ]
+    },
+    {
+      "id": "I-47c95001",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "step / arrival",
+      "kind": "dialogue",
+      "original": "Йо.",
+      "text": "Йо.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 403,
+          "context": "step / arrival"
+        }
+      ]
+    },
+    {
+      "id": "I-cc135a0d",
+      "chapter": "I",
+      "speaker": "Херобрин",
+      "scene": "step / greet",
+      "kind": "dialogue",
+      "original": "Ну давай. Ударь меня.",
+      "text": "Ну давай. Ударь меня.",
+      "sources": [
+        {
+          "file": "scripts/herobrine_encounter.gd",
+          "line": 406,
+          "context": "step / greet"
+        }
+      ]
+    },
+    {
+      "id": "III-ebcf61bd",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "ECHO_LINES",
+      "kind": "dialogue",
+      "original": "Уходи отсюда.",
+      "text": "Уходи отсюда.",
+      "sources": [
+        {
+          "file": "scripts/end_world.gd",
+          "line": 62,
+          "context": "ECHO_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-2727048e",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "ECHO_LINES",
+      "kind": "dialogue",
+      "original": "Ты опять не слушаешь.",
+      "text": "Ты опять не слушаешь.",
+      "sources": [
+        {
+          "file": "scripts/end_world.gd",
+          "line": 62,
+          "context": "ECHO_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-defe0818",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "ECHO_LINES",
+      "kind": "dialogue",
+      "original": "Я тоже так шёл. Прямо к нему.",
+      "text": "Я тоже так шёл. Прямо к нему.",
+      "sources": [
+        {
+          "file": "scripts/end_world.gd",
+          "line": 62,
+          "context": "ECHO_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-a7798233",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "ECHO_LINES",
+      "kind": "dialogue",
+      "original": "Сколько ещё раз?",
+      "text": "Сколько ещё раз?",
+      "sources": [
+        {
+          "file": "scripts/end_world.gd",
+          "line": 62,
+          "context": "ECHO_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-bdf407c9",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "ECHO_LINES",
+      "kind": "dialogue",
+      "original": "Ладно. Посмотрим, на что ты способен.",
+      "text": "Ладно. Посмотрим, на что ты способен.",
+      "sources": [
+        {
+          "file": "scripts/end_world.gd",
+          "line": 62,
+          "context": "ECHO_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-b4bcb163",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "update_loop_world",
+      "kind": "dialogue",
+      "original": "Опять…",
+      "text": "Опять…",
+      "sources": [
+        {
+          "file": "scripts/end_world.gd",
+          "line": 175,
+          "context": "update_loop_world"
+        }
+      ]
+    },
+    {
+      "id": "III-ca393b65",
+      "chapter": "III",
+      "speaker": "Надпись на сундуке",
+      "scene": "pickup",
+      "kind": "note",
+      "original": "На крышке выцарапано: «Не ходи к порталу. Пожалуйста».",
+      "text": "На крышке выцарапано: «Не ходи к порталу. Пожалуйста».",
+      "sources": [
+        {
+          "file": "scripts/end_world.gd",
+          "line": 768,
+          "context": "pickup"
+        }
+      ]
+    },
+    {
+      "id": "III-bf856366",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "BETRAYAL_LINES",
+      "kind": "dialogue",
+      "original": "Стой.",
+      "text": "Стой.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 11,
+          "context": "BETRAYAL_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-0ff9619d",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "BETRAYAL_LINES",
+      "kind": "dialogue",
+      "original": "Туда нельзя.",
+      "text": "Туда нельзя.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 11,
+          "context": "BETRAYAL_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-5474a1bb",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "BETRAYAL_LINES",
+      "kind": "dialogue",
+      "original": "Не заставляй меня.",
+      "text": "Не заставляй меня.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 11,
+          "context": "BETRAYAL_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-d6851e1f",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "Ну вот.",
+      "text": "Ну вот.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 13,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-4f2fd910",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "Я ведь тоже когда-то до него дошёл.",
+      "text": "Я ведь тоже когда-то до него дошёл.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 13,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-92a9f8d1",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "Думал, справлюсь. Не справился.",
+      "text": "Думал, справлюсь. Не справился.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 13,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-6d6a1c2a",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "Очнулся здесь. И с тех пор одно и то же: дракон, портал, ты.",
+      "text": "Очнулся здесь. И с тех пор одно и то же: дракон, портал, ты.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 14,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-69938c9e",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "Каждый раз ты приходишь. И каждый раз я тебя не пускаю.",
+      "text": "Каждый раз ты приходишь. И каждый раз я тебя не пускаю.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 14,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-822ddcb8",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "А в этот раз ты меня победил.",
+      "text": "А в этот раз ты меня победил.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 15,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-36500508",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "Значит, может, у тебя и получится.",
+      "text": "Значит, может, у тебя и получится.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 15,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-a0cfddae",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "SIT_LINES",
+      "kind": "dialogue",
+      "original": "Держи. И меч возьми, пригодится.",
+      "text": "Держи. И меч возьми, пригодится.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 15,
+          "context": "SIT_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-c06c39de",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "DOWN_LINES",
+      "kind": "dialogue",
+      "original": "Всё. Ни у тебя меча, ни у меня.",
+      "text": "Всё. Ни у тебя меча, ни у меня.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 23,
+          "context": "DOWN_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-ddc45e3b",
+      "chapter": "III",
+      "speaker": "Стив",
+      "scene": "DOWN_LINES",
+      "kind": "dialogue",
+      "original": "Квиты.",
+      "text": "Квиты.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 23,
+          "context": "DOWN_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-207441d9",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "DOWN_LINES",
+      "kind": "dialogue",
+      "original": "Вставай. Пойдём, кое-что покажу.",
+      "text": "Вставай. Пойдём, кое-что покажу.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 23,
+          "context": "DOWN_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-dbac1ec7",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "RESTORE_LINES",
+      "kind": "dialogue",
+      "original": "Иди. И не останавливайся.",
+      "text": "Иди. И не останавливайся.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 24,
+          "context": "RESTORE_LINES"
+        }
+      ]
+    },
+    {
+      "id": "III-79b31937",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "story / yield",
+      "kind": "dialogue",
+      "original": "Хватит.",
+      "text": "Хватит.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 98,
+          "context": "story / yield"
+        }
+      ]
+    },
+    {
+      "id": "III-6c116e29",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "echoes",
+      "kind": "dialogue",
+      "original": "Нас тут было много.",
+      "text": "Нас тут было много.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 136,
+          "context": "echoes"
+        }
+      ]
+    },
+    {
+      "id": "III-1a3f1589",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "TAUNTS",
+      "kind": "dialogue",
+      "original": "Медленно.",
+      "text": "Медленно.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 257,
+          "context": "TAUNTS"
+        }
+      ]
+    },
+    {
+      "id": "III-206e0a11",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "TAUNTS",
+      "kind": "dialogue",
+      "original": "Я это уже видел.",
+      "text": "Я это уже видел.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 257,
+          "context": "TAUNTS"
+        }
+      ]
+    },
+    {
+      "id": "III-6a394beb",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "TAUNTS",
+      "kind": "dialogue",
+      "original": "Ещё раз.",
+      "text": "Ещё раз.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 257,
+          "context": "TAUNTS"
+        }
+      ]
+    },
+    {
+      "id": "III-0ff078c3",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "TAUNTS",
+      "kind": "dialogue",
+      "original": "Не так.",
+      "text": "Не так.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 257,
+          "context": "TAUNTS"
+        }
+      ]
+    },
+    {
+      "id": "III-b94d06a4",
+      "chapter": "III",
+      "speaker": "ЭндерСтив",
+      "scene": "endersteve",
+      "kind": "dialogue",
+      "original": "Ну давай.",
+      "text": "Ну давай.",
+      "sources": [
+        {
+          "file": "scripts/end_encounter.gd",
+          "line": 266,
+          "context": "endersteve"
+        }
+      ]
+    },
+    {
+      "id": "IV-34b135fa",
+      "chapter": "IV",
+      "speaker": "Херобрин",
+      "scene": "step_intro",
+      "kind": "dialogue",
+      "original": "Ты опять здесь.",
+      "text": "Ты опять здесь.",
+      "sources": [
+        {
+          "file": "scripts/chapter_four_finale.gd",
+          "line": 287,
+          "context": "step_intro"
+        }
+      ]
+    },
+    {
+      "id": "IV-e82c8a9f",
+      "chapter": "IV",
+      "speaker": "Херобрин",
+      "scene": "step_kneel",
+      "kind": "dialogue",
+      "original": "Хорошо. Давай всерьёз.",
+      "text": "Хорошо. Давай всерьёз.",
+      "sources": [
+        {
+          "file": "scripts/chapter_four_finale.gd",
+          "line": 445,
+          "context": "step_kneel"
+        }
+      ]
+    },
+    {
+      "id": "IV-9c2e29df",
+      "chapter": "IV",
+      "speaker": "Херобрин",
+      "scene": "begin_last",
+      "kind": "dialogue",
+      "original": "ХВАТИТ.",
+      "text": "ХВАТИТ.",
+      "sources": [
+        {
+          "file": "scripts/chapter_four_finale.gd",
+          "line": 462,
+          "context": "begin_last"
+        }
+      ]
+    },
+    {
+      "id": "IV-ad834cb3",
+      "chapter": "IV",
+      "speaker": "Херобрин",
+      "scene": "death",
+      "kind": "dialogue",
+      "original": "АХАХАХАХАХХАХА",
+      "text": "АХАХАХАХАХХАХА",
+      "sources": [
+        {
+          "file": "data/chapter_four_finale.json",
+          "line": 340,
+          "context": "death",
+          "json_path": [
+            "death",
+            "lines",
+            0,
+            "text"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-ff355a57",
+      "chapter": "IV",
+      "speaker": "Херобрин",
+      "scene": "death",
+      "kind": "dialogue",
+      "original": "ТЫ НИЧЕРТА НЕ ПОНЯЛ",
+      "text": "ТЫ НИЧЕРТА НЕ ПОНЯЛ",
+      "sources": [
+        {
+          "file": "data/chapter_four_finale.json",
+          "line": 346,
+          "context": "death",
+          "json_path": [
+            "death",
+            "lines",
+            1,
+            "text"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-47bb6485",
+      "chapter": "IV",
+      "speaker": "Херобрин",
+      "scene": "death",
+      "kind": "dialogue",
+      "original": "Я ВСЕГО ЛИШЬ СОГЛАСИЛСЯ ВЫПОЛНИТЬ ГРЯЗНУЮ РАБОТУ ЗА НЕГО",
+      "text": "Я ВСЕГО ЛИШЬ СОГЛАСИЛСЯ ВЫПОЛНИТЬ ГРЯЗНУЮ РАБОТУ ЗА НЕГО",
+      "sources": [
+        {
+          "file": "data/chapter_four_finale.json",
+          "line": 352,
+          "context": "death",
+          "json_path": [
+            "death",
+            "lines",
+            2,
+            "text"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-003fc6d7",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "Записка жителя",
+      "text": "Записка жителя",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 404,
+          "context": "note",
+          "json_path": [
+            "note",
+            "title"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-5fe4acd4",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "Он пришёл в среду. Просто стоял за полем и смотрел.",
+      "text": "Он пришёл в среду. Просто стоял за полем и смотрел.",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 406,
+          "context": "note",
+          "json_path": [
+            "note",
+            "lines",
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-ae5cf439",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "К пятнице скотина гнила заживо, а дети перестали спать.",
+      "text": "К пятнице скотина гнила заживо, а дети перестали спать.",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 407,
+          "context": "note",
+          "json_path": [
+            "note",
+            "lines",
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-6c69e638",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "Томас пошёл к нему с вилами. Утром Томас висел у дороги.",
+      "text": "Томас пошёл к нему с вилами. Утром Томас висел у дороги.",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 408,
+          "context": "note",
+          "json_path": [
+            "note",
+            "lines",
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-7403f8de",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "Потом мой сын. Потом все остальные.",
+      "text": "Потом мой сын. Потом все остальные.",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 409,
+          "context": "note",
+          "json_path": [
+            "note",
+            "lines",
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-28d00951",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "Меня он почему-то оставил.",
+      "text": "Меня он почему-то оставил.",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 410,
+          "context": "note",
+          "json_path": [
+            "note",
+            "lines",
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-4fd42ae2",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "Если ты это читаешь — сними их, если сможешь.",
+      "text": "Если ты это читаешь — сними их, если сможешь.",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 411,
+          "context": "note",
+          "json_path": [
+            "note",
+            "lines",
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "IV-d1e54fe6",
+      "chapter": "IV",
+      "speaker": "Житель (записка)",
+      "scene": "note",
+      "kind": "note",
+      "original": "Я не смог.",
+      "text": "Я не смог.",
+      "sources": [
+        {
+          "file": "data/chapter_four_balance.json",
+          "line": 412,
+          "context": "note",
+          "json_path": [
+            "note",
+            "lines",
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "V-644e084a",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "А. Ты всё-таки дошёл.",
+      "text": "А. Ты всё-таки дошёл.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 6,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-6d9f740f",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "Знаешь, сколько раз я тебя запускал? На третьей тысяче я сбился.",
+      "text": "Знаешь, сколько раз я тебя запускал? На третьей тысяче я сбился.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 6,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-8dff37b3",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "Трава, Незер, Край, тот дурацкий трон — это всё я.",
+      "text": "Трава, Незер, Край, тот дурацкий трон — это всё я.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 7,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-be112b5b",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "Я это написал. Я это и сотру. Мне можно.",
+      "text": "Я это написал. Я это и сотру. Мне можно.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 7,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-889cfc22",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "Зачем? Было скучно. Хотелось посмотреть, что получится.",
+      "text": "Зачем? Было скучно. Хотелось посмотреть, что получится.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 8,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-7b9e2d04",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "А потом в коде появился ты. Строчка, которая решила, что она живая.",
+      "text": "А потом в коде появился ты. Строчка, которая решила, что она живая.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 8,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-d7deaece",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "Даже мило. Но баги надо чинить.",
+      "text": "Даже мило. Но баги надо чинить.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 9,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-655b8393",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "INTRO",
+      "kind": "dialogue",
+      "original": "Давай. Покажи, чему научился.",
+      "text": "Давай. Покажи, чему научился.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 9,
+          "context": "INTRO"
+        }
+      ]
+    },
+    {
+      "id": "V-2ad2cc27",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "step / to_ut",
+      "kind": "dialogue",
+      "original": "Скучно так. Давай в мои любимые игры.",
+      "text": "Скучно так. Давай в мои любимые игры.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 149,
+          "context": "step / to_ut"
+        }
+      ]
+    },
+    {
+      "id": "V-366ee97a",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "step / to_lanes",
+      "kind": "dialogue",
+      "original": "Ладно. Тогда так: я за зомби, ты за грядку.",
+      "text": "Ладно. Тогда так: я за зомби, ты за грядку.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 155,
+          "context": "step / to_lanes"
+        },
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 618,
+          "context": "start_lanes"
+        }
+      ]
+    },
+    {
+      "id": "V-8f54ad87",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "step / lanes_won",
+      "kind": "dialogue",
+      "original": "Ха. Неплохо. Но это была разминка.",
+      "text": "Ха. Неплохо. Но это была разминка.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 160,
+          "context": "step / lanes_won"
+        }
+      ]
+    },
+    {
+      "id": "V-ad9049bc",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "step / to_quake",
+      "kind": "dialogue",
+      "original": "Ладно, ладно. А теперь моя любимая.",
+      "text": "Ладно, ладно. А теперь моя любимая.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 165,
+          "context": "step / to_quake"
+        }
+      ]
+    },
+    {
+      "id": "V-88c45a05",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "step / quake_won",
+      "kind": "dialogue",
+      "original": "…Ты что, правда играл в это раньше?",
+      "text": "…Ты что, правда играл в это раньше?",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 170,
+          "context": "step / quake_won"
+        }
+      ]
+    },
+    {
+      "id": "V-0b0340b4",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "step / to_code",
+      "kind": "dialogue",
+      "original": "Ладно. Последняя игра. Моя настоящая — код.",
+      "text": "Ладно. Последняя игра. Моя настоящая — код.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 173,
+          "context": "step / to_code"
+        }
+      ]
+    },
+    {
+      "id": "V-ee6b560a",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "step / bad_end",
+      "kind": "dialogue",
+      "original": "Пора бы завязать с тестированием.",
+      "text": "Пора бы завязать с тестированием.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 197,
+          "context": "step / bad_end"
+        }
+      ]
+    },
+    {
+      "id": "V-424ff248",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "lose",
+      "kind": "dialogue",
+      "original": "Чекпоинт. Ещё раз.",
+      "text": "Чекпоинт. Ещё раз.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 232,
+          "context": "lose"
+        }
+      ]
+    },
+    {
+      "id": "V-5f1f6088",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "start_ut",
+      "kind": "battle_text",
+      "original": "* Нотч загораживает путь.",
+      "text": "* Нотч загораживает путь.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 355,
+          "context": "start_ut"
+        }
+      ]
+    },
+    {
+      "id": "V-e721667f",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "BUBBLES",
+      "kind": "dialogue",
+      "original": "Ctrl+C. Ctrl+V. Скучно, да?",
+      "text": "Ctrl+C. Ctrl+V. Скучно, да?",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 359,
+          "context": "BUBBLES"
+        }
+      ]
+    },
+    {
+      "id": "V-c258de49",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "BUBBLES",
+      "kind": "dialogue",
+      "original": "Гравитацию тоже я написал.",
+      "text": "Гравитацию тоже я написал.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 359,
+          "context": "BUBBLES"
+        }
+      ]
+    },
+    {
+      "id": "V-78e2fa75",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "BUBBLES",
+      "kind": "dialogue",
+      "original": "Кликни, если сможешь.",
+      "text": "Кликни, если сможешь.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 359,
+          "context": "BUBBLES"
+        }
+      ]
+    },
+    {
+      "id": "V-5cbcf8e8",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "BUBBLES",
+      "kind": "dialogue",
+      "original": "Эти штуки — мои любимые.",
+      "text": "Эти штуки — мои любимые.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 359,
+          "context": "BUBBLES"
+        }
+      ]
+    },
+    {
+      "id": "V-e4f53a96",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "BUBBLES",
+      "kind": "dialogue",
+      "original": "W, A, S, D. Это всё, что ты умеешь?",
+      "text": "W, A, S, D. Это всё, что ты умеешь?",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 359,
+          "context": "BUBBLES"
+        }
+      ]
+    },
+    {
+      "id": "V-fe648e92",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "BUBBLES",
+      "kind": "dialogue",
+      "original": "Ctrl+Z. Ничего не было.",
+      "text": "Ctrl+Z. Ничего не было.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 359,
+          "context": "BUBBLES"
+        }
+      ]
+    },
+    {
+      "id": "V-c896c30e",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "FLAVOR",
+      "kind": "battle_text",
+      "original": "* Нотч смеётся.",
+      "text": "* Нотч смеётся.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 360,
+          "context": "FLAVOR"
+        }
+      ]
+    },
+    {
+      "id": "V-48a31e1b",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "FLAVOR",
+      "kind": "battle_text",
+      "original": "* Нотч что-то дописывает в воздухе.",
+      "text": "* Нотч что-то дописывает в воздухе.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 360,
+          "context": "FLAVOR"
+        }
+      ]
+    },
+    {
+      "id": "V-aadaa65b",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "FLAVOR",
+      "kind": "battle_text",
+      "original": "* Пахнет горелым кодом.",
+      "text": "* Пахнет горелым кодом.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 360,
+          "context": "FLAVOR"
+        }
+      ]
+    },
+    {
+      "id": "V-1ec3e14b",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "FLAVOR",
+      "kind": "battle_text",
+      "original": "* «Ты меня ещё удивишь?»",
+      "text": "* «Ты меня ещё удивишь?»",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 360,
+          "context": "FLAVOR"
+        }
+      ]
+    },
+    {
+      "id": "V-514780a5",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "FLAVOR",
+      "kind": "battle_text",
+      "original": "* Строки вокруг дрожат.",
+      "text": "* Строки вокруг дрожат.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 360,
+          "context": "FLAVOR"
+        }
+      ]
+    },
+    {
+      "id": "V-6c1991e4",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "choose",
+      "kind": "battle_text",
+      "original": "* НОТЧ — АТК 99, ЗАЩ 99.\n* Говорит, что написал тебя за выходные.",
+      "text": "* НОТЧ — АТК 99, ЗАЩ 99.\n* Говорит, что написал тебя за выходные.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 406,
+          "context": "choose"
+        }
+      ]
+    },
+    {
+      "id": "V-cb707625",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "choose",
+      "kind": "battle_text",
+      "original": "* Ты съел золотое яблоко.\n* Восстановлено 10 HP.",
+      "text": "* Ты съел золотое яблоко.\n* Восстановлено 10 HP.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 410,
+          "context": "choose"
+        }
+      ]
+    },
+    {
+      "id": "V-ff7a6125",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "choose",
+      "kind": "battle_text",
+      "original": "* В инвентаре пусто.",
+      "text": "* В инвентаре пусто.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 411,
+          "context": "choose"
+        }
+      ]
+    },
+    {
+      "id": "V-8c2052a5",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "choose",
+      "kind": "battle_text",
+      "original": "* Нотч стирает кнопку ПОЩАДА.",
+      "text": "* Нотч стирает кнопку ПОЩАДА.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 414,
+          "context": "choose"
+        }
+      ]
+    },
+    {
+      "id": "V-7a3b4295",
+      "chapter": "V",
+      "speaker": "Рассказчик / окно Undertale",
+      "scene": "battle",
+      "kind": "battle_text",
+      "original": "* …Ладно. Это было в моём вкусе.",
+      "text": "* …Ладно. Это было в моём вкусе.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 450,
+          "context": "battle"
+        }
+      ]
+    },
+    {
+      "id": "V-b7f643da",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "lanes",
+      "kind": "dialogue",
+      "original": "А вот и тяжёлая артиллерия.",
+      "text": "А вот и тяжёлая артиллерия.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 710,
+          "context": "lanes"
+        }
+      ]
+    },
+    {
+      "id": "V-5f26946d",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "lanes",
+      "kind": "dialogue",
+      "original": "Мозги.",
+      "text": "Мозги.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 812,
+          "context": "lanes"
+        }
+      ]
+    },
+    {
+      "id": "V-66a0ecb1",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "start_fighter",
+      "kind": "dialogue",
+      "original": "Раунд один. Ну, давай.",
+      "text": "Раунд один. Ну, давай.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 847,
+          "context": "start_fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-137a83c7",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "code",
+      "kind": "dialogue",
+      "original": "Готово. Медленно.",
+      "text": "Готово. Медленно.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 931,
+          "context": "code"
+        }
+      ]
+    },
+    {
+      "id": "V-e1a34c54",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "start_qte",
+      "kind": "dialogue",
+      "original": "Без игр.",
+      "text": "Без игр.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 962,
+          "context": "start_qte"
+        }
+      ]
+    },
+    {
+      "id": "V-8ba341db",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "…Что. Верёвки? Ты меня привязал?",
+      "text": "…Что. Верёвки? Ты меня привязал?",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 15,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-3d38df2f",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "Слушай. Ты — лучшее, что у меня получилось.",
+      "text": "Слушай. Ты — лучшее, что у меня получилось.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 15,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-0fe97992",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "Я этого не планировал. Миллион запусков — и никто не дошёл досюда.",
+      "text": "Я этого не планировал. Миллион запусков — и никто не дошёл досюда.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 16,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-6da1aa3e",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "Оставайся. Он тоже когда-то сидел вот тут. Херобрин.",
+      "text": "Оставайся. Он тоже когда-то сидел вот тут. Херобрин.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 16,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-26252922",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "Ты бы мог быть вместо него. Моим братом. Насколько у кода бывают братья.",
+      "text": "Ты бы мог быть вместо него. Моим братом. Насколько у кода бывают братья.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 17,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-d98df42c",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "Хватит! Ты — мой код. Каждая твоя мысль — моя строчка.",
+      "text": "Хватит! Ты — мой код. Каждая твоя мысль — моя строчка.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 17,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-7c094447",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "Ты не имеешь права здесь ничего трогать. Слышишь? Ни-че-го.",
+      "text": "Ты не имеешь права здесь ничего трогать. Слышишь? Ни-че-го.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 18,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-6819e4e0",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "CHAIR",
+      "kind": "dialogue",
+      "original": "Мстить — дело слабых.",
+      "text": "Мстить — дело слабых.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 18,
+          "context": "CHAIR"
+        }
+      ]
+    },
+    {
+      "id": "V-a7c942f1",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "start_duel",
+      "kind": "dialogue",
+      "original": "Пузырьком. Кто быстрее — тот и прав.",
+      "text": "Пузырьком. Кто быстрее — тот и прав.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 89,
+          "context": "start_duel"
+        }
+      ]
+    },
+    {
+      "id": "V-3012c3a6",
+      "chapter": "V",
+      "speaker": "Терминал сортировки",
+      "scene": "submit",
+      "kind": "dialogue",
+      "original": "Не отсортировано: %s → %s",
+      "text": "Не отсортировано: %s → %s",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 179,
+          "context": "submit"
+        }
+      ]
+    },
+    {
+      "id": "V-e79e9691",
+      "chapter": "V",
+      "speaker": "Терминал сортировки",
+      "scene": "submit",
+      "kind": "dialogue",
+      "original": "Все тесты пройдены.",
+      "text": "Все тесты пройдены.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 180,
+          "context": "submit"
+        }
+      ]
+    },
+    {
+      "id": "V-72e7372f",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "erase_step",
+      "kind": "dialogue",
+      "original": "Нет. Так не пойдёт. Тебя тут не будет.",
+      "text": "Нет. Так не пойдёт. Тебя тут не будет.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 194,
+          "context": "erase_step"
+        }
+      ]
+    },
+    {
+      "id": "V-1bf5cfac",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "erase_step",
+      "kind": "dialogue",
+      "original": "Ты… что ты сделал?!",
+      "text": "Ты… что ты сделал?!",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 201,
+          "context": "erase_step"
+        }
+      ]
+    },
+    {
+      "id": "V-54c174ac",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "start_fists (сохранённая резервная ветка)",
+      "kind": "legacy",
+      "original": "Без игр. Просто кулаки.",
+      "text": "Без игр. Просто кулаки.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 967,
+          "context": "start_fists (сохранённая резервная ветка)"
+        }
+      ]
+    },
+    {
+      "id": "V-d7325636",
+      "chapter": "V",
+      "speaker": "Нотч",
+      "scene": "fists (сохранённая резервная ветка)",
+      "kind": "legacy",
+      "original": "ФАТАЛИТИ",
+      "text": "ФАТАЛИТИ",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_notch.gd",
+          "line": 972,
+          "context": "fists (сохранённая резервная ветка)"
+        }
+      ]
+    },
+    {
+      "id": "V-23c0b208",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "РАУНД %d",
+      "text": "РАУНД %d",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 102,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-6bca9cdd",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "БЕЗ ПРАВИЛ",
+      "text": "БЕЗ ПРАВИЛ",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 102,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-9ec9f8de",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "В БОЙ!",
+      "text": "В БОЙ!",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 212,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-49a94704",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "K.O.",
+      "text": "K.O.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 222,
+          "context": "fighter"
+        },
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 268,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-a8255e9a",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "ДОБЕЙ ЕГО!",
+      "text": "ДОБЕЙ ЕГО!",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 259,
+          "context": "fighter"
+        },
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 264,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-92f4238f",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "ВРЕМЯ!",
+      "text": "ВРЕМЯ!",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 268,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-521c8e84",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "БЕЗУПРЕЧНО",
+      "text": "БЕЗУПРЕЧНО",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 269,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-8a8490b5",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "Ctrl+Z",
+      "text": "Ctrl+Z",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 315,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-795dfa8e",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "FATALITY",
+      "text": "FATALITY",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 480,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-b7767233",
+      "chapter": "V",
+      "speaker": "Диктор файтинга",
+      "scene": "fighter",
+      "kind": "announcer",
+      "original": "STEVE ПОБЕЖДАЕТ",
+      "text": "STEVE ПОБЕЖДАЕТ",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_fighter.gd",
+          "line": 481,
+          "context": "fighter"
+        }
+      ]
+    },
+    {
+      "id": "V-46551ee9",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "MINECRAFT SURVIVORS",
+      "text": "MINECRAFT SURVIVORS",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 28,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-444959f1",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "Создатель",
+      "text": "Создатель",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 28,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-df224ba5",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "Daydert",
+      "text": "Daydert",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 28,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-68ef98ef",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "Композитор",
+      "text": "Композитор",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 28,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-da9ac384",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "Kibi",
+      "text": "Kibi",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 28,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-5c9c1b9f",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "Музыка · тестирование",
+      "text": "Музыка · тестирование",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 28,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-9ba9fa04",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "RodinCity",
+      "text": "RodinCity",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 28,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-c6227c91",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "Тестирование",
+      "text": "Тестирование",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 29,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-99b2da04",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "SET553355",
+      "text": "SET553355",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 29,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-c9f2839a",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "Спасибо, что дошёл до конца.",
+      "text": "Спасибо, что дошёл до конца.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 29,
+          "context": "credits"
+        }
+      ]
+    },
+    {
+      "id": "V-1d270b3f",
+      "chapter": "V",
+      "speaker": "Титры",
+      "scene": "credits",
+      "kind": "credits",
+      "original": "…а Стив где-то там.",
+      "text": "…а Стив где-то там.",
+      "sources": [
+        {
+          "file": "scripts/chapter_five_finale.gd",
+          "line": 29,
+          "context": "credits"
+        }
+      ]
+    }
+  ]
+}

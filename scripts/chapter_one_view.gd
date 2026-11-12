@@ -206,7 +206,7 @@ static func intro_overlay(g):
 	var a: float = w.intro_age
 	var bars: float = 22.0 * (1 - smoothstep(w.INTRO_LENGTH - 1.2, w.INTRO_LENGTH, a))
 	g.draw_rect(Rect2(0, 0, 640, bars), Color.BLACK);g.draw_rect(Rect2(0, 360 - bars, 640, bars), Color.BLACK)
-	if a < 1.4:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - smoothstep(0, 1.4, a)))
+	if a < 1.4 and not w.intro_from_prologue:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - smoothstep(0, 1.4, a)))
 	if a > 0.8 and a < 3.6:
 		var k: float = smoothstep(0.8, 1.6, a) * (1 - smoothstep(2.9, 3.6, a))
 		g.centered("Глава I · До рассвета", 60, 16, Color(1, 1, 1, k), true)

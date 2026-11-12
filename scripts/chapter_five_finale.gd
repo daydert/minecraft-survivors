@@ -12,10 +12,10 @@ const SOLUTIONS := {
 	"js":["for (let i = 0; i < a.length - 1; i++) {", "    for (let j = 0; j < a.length - 1 - i; j++) {", "        if (a[j] > a[j + 1]) {", "            let t = a[j];", "            a[j] = a[j + 1];", "            a[j + 1] = t;", "        }", "    }", "}"]}
 const NOTCH_CODE := "void sort(int[] a) {\n  for (int i = 0; i < a.length; i++)\n    for (int j = 0; j + 1 < a.length - i; j++)\n      if (a[j] > a[j + 1]) {\n        int t = a[j]; a[j] = a[j + 1]; a[j + 1] = t;\n      }\n}"
 const TESTS := [[5, 3, 9, 1, 7, 2], [1], [], [4, 4, 1, 0, 8, 2], [9, 8, 7, 6, 5, 4, 3, 2, 1]]
-const CHAIR := [[0.4, "…Что. Верёвки? Ты меня привязал?", 3.0], [4.0, "Слушай. Ты — лучшее, что у меня получилось.", 3.6],
-	[8.0, "Я этого не планировал. Миллион запусков — и никто не дошёл досюда.", 4.2], [12.6, "Оставайся. Он тоже когда-то сидел вот тут. Херобрин.", 3.8],
-	[16.8, "Ты бы мог быть вместо него. Моим братом. Насколько у кода бывают братья.", 4.2], [21.4, "Хватит! Ты — мой код. Каждая твоя мысль — моя строчка.", 3.8],
-	[25.6, "Ты не имеешь права здесь ничего трогать. Слышишь? Ни-че-го.", 4.0], [31.4, "…Положи.", 1.6], [34.6, "Он… тоже так. С ней.", 3.0]]
+const CHAIR := [[0.4, "Серьёзно, верёвка?", 3.0], [4.0, "Слушай, как бы ни было странно, но ты действительно моё лучшее творение", 3.6],
+	[8.0, "Чёрт, миллионы итераций, и никто досюда не доходил. Как это вообще могло произойти?", 4.2], [12.6, "Слушай, давай просто будем жить в гармонии? Я могу заново отстроить для тебя любой мир, вернуть \"её\". Зачем нам вражда?", 3.8],
+	[16.8, "Если тебя так задел мой брат, давай оставим его в прошлом?", 4.2], [21.4, "Хватит сканировать мой грёбаный мозг! Ты мой код, каждая твоя мысль — это моя строчка, как бы они ни мутировали!", 3.8],
+	[25.6, "Ты не имеешь права здесь ничего трогать. Слышишь? Ни-че-го", 4.0], [30.65, "ЭЙ, УБЕРИ ЭТО\nМСТИТЬ — ЭТО ДЕЛО СЛАБЫХ!", 2.25]]
 const CHAIR_SCAN := [3.4, 29.6]
 const CHAIR_SWORD := 30.0
 const CHAIR_STAB := 33.0
@@ -26,7 +26,7 @@ const FLIGHT_OTHER := 27.0
 const FLIGHT_STING := 30.6
 const FLIGHT_LENGTH := 32.0
 const CREDITS := [[1.0, "MINECRAFT SURVIVORS", ""], [6.0, "Создатель", "Daydert"], [11.0, "Композитор", "Kibi"], [16.0, "Музыка · тестирование", "RodinCity"],
-	[21.0, "Тестирование", "SET553355"], [26.5, "Спасибо, что дошёл до конца.", ""], [31.5, "", "…а Стив где-то там."]]
+	[21.0, "Тестирование", "SET553355"], [26.5, "Спасибо, что дошёл до конца", ""], [31.5, "", ""]]
 const CREDITS_LENGTH := 37.0
 
 var phase := ""
@@ -86,7 +86,7 @@ func start_duel():
 		var t = pool[i];pool[i] = pool[j];pool[j] = t
 	pool_choice = 0
 	editor = [""];row = 0;col = 0
-	say("Пузырьком. Кто быстрее — тот и прав.", 2.6)
+	say("Ты хотя бы знаешь, что такое сортировка пузырьком?", 2.6)
 
 func press(action: String) -> bool:
 	match phase:
@@ -177,7 +177,7 @@ func submit(source: String):
 		var want: Array = t.duplicate();want.sort()
 		if r.array != want:
 			result = "Не отсортировано: %s → %s" % [str(t), str(r.array)];result_ok = false;sounds.append("wrong");return
-	result = "Все тесты пройдены.";result_ok = true;sounds.append("win")
+	result = "Все тесты пройдены";result_ok = true;sounds.append("win")
 
 func duel_step(dt: float) -> String:
 	wrong_flash = maxf(0, wrong_flash - dt)
@@ -191,10 +191,11 @@ func duel_step(dt: float) -> String:
 func begin_erase():change("erase");erase = 0.0;presses = 0;thrown = -1.0
 
 func erase_step(dt: float) -> String:
-	if cue(0, .2):say("Нет. Так не пойдёт. Тебя тут не будет.", 2.8);sounds.append("glitch")
+	if cue(0, .2):say("Нет, нет, нет\nТак не пойдёт\nТы больше здесь никогда не появишься!", 2.8);sounds.append("glitch")
 	if thrown < 0:
-		erase = minf(.92, erase + dt * .1)
-		if presses >= 14 or age > 22.0:thrown = 0.0;sounds.append("throw")
+		erase = minf(1.0, erase + dt * .1)
+		if presses >= 14:thrown = 0.0;sounds.append("throw")
+		elif erase>=1.0:change("erase_failed");return "lost"
 	else:
 		thrown += dt
 		if thrown >= .6 and not (cues & 2):cues |= 2;sounds.append("console");say("Ты… что ты сделал?!", 2.2)

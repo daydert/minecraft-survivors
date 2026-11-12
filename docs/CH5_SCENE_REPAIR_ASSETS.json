@@ -1,0 +1,29 @@
+{
+  "new_downloads": false,
+  "assets": [
+    {
+      "path": "assets/models/ch5_beer_can.glb",
+      "source": "Original mesh/UVs by project agent; scripts/cinematics/build_ch5_cinema.py",
+      "terms": "Original project artwork; no third-party model or trademark.",
+      "sha256": "4057f64d55a38a76e4d1edb411b21f1b0ef22c31dc44c43f01636985ccc541cd"
+    },
+    {
+      "path": "assets/art_source/ch5_finale/beer_label.png",
+      "source": "Original label; scripts/cinematics/bake_ch5_beer_label.py",
+      "terms": "Original artwork; rasterized DejaVu Sans glyphs under licenses/DEJAVU_LICENSE.txt.",
+      "sha256": "b3247bc59bedbab32bbc18f569d7221bfce863881ed83c87704ea609caf5fec6"
+    },
+    {
+      "path": "assets/art_source/ch5_finale/ch5_cinema.blend",
+      "source": "Project-owned Blender MCP scenes, native existing Minecraft textures",
+      "terms": "Original animation; existing texture provenance/conditions in licenses/PROJECT_NOTICE.md. User scene MS_Walk_Probe preserved.",
+      "sha256": "de5ed78c0518ffda68bcac5347d28da68dbd9d123ebd812cc585cec6d5adce1a"
+    }
+  ],
+  "unchanged_audio_sources": [
+    "docs/CH5_POLISH_ASSETS.json",
+    "docs/MUSIC_MANIFEST.json",
+    "data/chapter_one_audio.json",
+    "data/chapter_four_audio.json"
+  ]
+}

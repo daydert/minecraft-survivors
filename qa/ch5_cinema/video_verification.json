@@ -1,0 +1,72 @@
+{
+  "status": "pass",
+  "video": "qa/recordings/chapter_five_cinematic_polish.mp4",
+  "sha256": "358f0deaf5f4a8a0dda68460b58be4bafbf8e55c76264ed8a9e0ce3240231d09",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "30/1",
+        "duration": "152.233333",
+        "nb_read_frames": "4567"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0",
+        "duration": "152.232993",
+        "nb_read_frames": "6556"
+      }
+    ],
+    "format": {
+      "duration": "152.233333"
+    }
+  },
+  "ending_cues": {
+    "ch5_ending_theme": 96.1833333333333,
+    "ch5_ending_fade": 106.7,
+    "ch5_ending_sting": 113.8
+  },
+  "audio": {
+    "before_fade": {
+      "window": [
+        105.2,
+        106.5
+      ],
+      "rms": 0.04379154329524227
+    },
+    "fade_tail": {
+      "window": [
+        109.85000000000001,
+        110.10000000000001
+      ],
+      "rms": 0.0002869578812673222
+    },
+    "quiet_before_sting": {
+      "window": [
+        112.8,
+        113.6
+      ],
+      "rms": 0.0
+    },
+    "sting_attack": {
+      "window": [
+        113.8,
+        114.39999999999999
+      ],
+      "rms": 0.1392844128307313
+    }
+  },
+  "decoded_peak": 0.6876834630966187,
+  "source_sha256": {
+    "data/chapter_five_cinema.json": "fa959105b4caa39e568ccbc8595c4e2abc832c417f4d580c38351fd20b301617",
+    "assets/art_source/ch5_finale/ch5_cinema.blend": "a27370eef9cd98e282c9e5f3f23b5ae12abe7210ec9dde4bf5d41091c8010a86",
+    "assets/audio/chapter_five/ending_theme.ogg": "56e9a096f224bd22cda55bcabfe954a9ffac79ab8b7f934338ea08b193521331",
+    "assets/audio/chapter_five/ending_sting.ogg": "e9189c8e94f29262ff821a5a30b08f99a3a9c8dbc2d21356f67b502c5e8728d5"
+  }
+}

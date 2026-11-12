@@ -1,4 +1,5 @@
 extends RefCounted
+const TerrainAttacks=preload("res://scripts/chapter_four_terrain_attack_view.gd")
 const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## A single world offset for ground, blood, silhouettes and actors. Visual
 ## hashes and the simulation clock keep pause/camera movement deterministic.
@@ -23,12 +24,14 @@ func world(g):
 	blood(g, offset)
 	Horror.veins(g, offset)
 	FxView.floor_layer(g,offset)
+	FxView.dread_glow(g,offset,true)
 	EnemyView.floor_layer(g,offset)
 	var gearless: bool = w.ending.phase in ["erase","three","death","retry","coords","road","door"]
 	if not gearless:ArsenalView.floor_layer(g,offset)
 	SwordView.draw(g,offset)
 	EncounterView.floor_layer(g,offset)
 	FinaleView.floor_layer(g,offset)
+	TerrainAttacks.floor_layer(g,offset)
 	for mark in w.landmarks:
 		if mark.kind == "crucifix":pillar_floor(g, mark, offset)
 		if mark.get("attack", "") == "windup" and mark.kind == "torch":
@@ -54,9 +57,12 @@ func world(g):
 	EncounterView.append_actors(g,actors)
 	if w.build.has("embryo"):actors.append({"sort":w.arsenal.pet.p.y,"kind":"pet"})
 	if not w.blood_hand.is_empty():actors.append({"sort":w.blood_hand.p.y+2,"kind":"hand"})
+	for spike in w.ending.terrain_attack.spikes:
+		if w.ending.move_age>=spike.born:actors.append({"sort":spike.p.y,"kind":"spiral_spike","obj":spike})
 	actors.sort_custom(func(a,b):return a.sort < b.sort)
 	for actor in actors:
 		match actor.kind:
+			"spiral_spike":TerrainAttacks.spike(g,actor.obj,offset)
 			"encounter":EncounterView.actor(g,actor.obj,offset)
 			"enc_node":EncounterView.node(g,actor.obj,offset)
 			"enc_block":EncounterView.block_actor(g,actor.obj,offset)
@@ -95,6 +101,7 @@ func world(g):
 	EncounterView.air_layer(g,offset)
 	FxView.air_layer(g,offset)
 	FinaleView.air_layer(g,offset)
+	TerrainAttacks.air_layer(g,offset)
 	for e in w.effects:
 		if FinaleView.effect(g,e,offset):pass
 		elif EncounterView.effect(g,e,offset):pass
@@ -131,6 +138,14 @@ func world(g):
 			if ring.has("r"):g.ambient_lights.append({"p":ring.p,"r":ring.r+40.0,"c":Color(1,.5,.2),"power":.7,"glow":.18})
 	if w.ending.phase == "door" and w.ending.door_state in ["open","look","enter"]:
 		g.ambient_lights.append({"p":Vector2(w.ending.data.door.p[0],w.ending.data.door.p[1])+Vector2(0,14),"r":110.0,"c":Color(.9,.92,1.0),"power":.85,"glow":.2})
+	var attack=w.ending.terrain_attack
+	if attack.kind=="spiral":
+		for spike in attack.spikes:
+			var t: float=w.ending.move_age-spike.born
+			if t>=0 and t<.75 and int(spike.seed)%3==0:g.ambient_lights.append({"p":spike.p,"r":36.0,"c":Color(.78,.84,1),"power":.8,"glow":.06})
+	elif attack.kind=="fault_smash" and attack.emitted:
+		for fault in attack.faults:
+			for j in [2,4,6]:g.ambient_lights.append({"p":fault.points[j],"r":36.0,"c":Color(1,.15,.08),"power":.85,"glow":.06})
 	Lighting.draw(g,offset)
 	Horror.fog(g,offset)
 	Atmosphere.after_lighting(g,offset)

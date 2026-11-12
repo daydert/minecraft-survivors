@@ -1,0 +1,15 @@
+{
+  "checks": 288,
+  "failures": 0,
+  "video": "qa/recordings/chapter_five_scene_repairs.mp4",
+  "duration": 225.6,
+  "frames": 6768,
+  "dialogue_texts": 128,
+  "dialogue_occurrences": 131,
+  "exports": "qa/ch5_scene_repairs/exports.json",
+  "audio_video": "qa/ch5_scene_repairs/video_verification.json",
+  "blender": "qa/ch5_scene_repairs/blender_proof/audit.json",
+  "player_pids": [
+    "43257"
+  ]
+}

@@ -1,9 +1,12 @@
 extends "res://scripts/ui/game_canvas.gd"
 ## Game node: lifecycle, input, actions and screen flow. Drawing lives in scripts/ui/.
 const ChapterOneView=preload("res://scripts/chapter_one_view.gd")
+var chapter_one_prologue = preload("res://scripts/chapter_one_prologue.gd").new()
 
 func _ready():
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	add_child(chapter_one_prologue)
+	chapter_one_prologue.hide()
 	add_child(blood_rift)
 	add_child(end_rift)
 	get_window().title="Minecraft Survivors"
@@ -62,6 +65,9 @@ func _ready():
 		if arg == "--fast-run": fast_run = true
 		if arg == "--stress": stress_mode = true
 		if arg=="--chapter-preview":chapter_preview=true
+		if arg=="--ch1-preview":
+			chapter_one_prologue.completed.connect(func(): print("CH1_NATIVE_COMPLETE position=",chapter_one_prologue.last_position," state=",world.state," time=",world.time," sword=",world.build.get("sword",0)))
+			start_chapter(1)
 		if arg=="--coop-probe":coop_probe=true
 		if arg=="--nether-preview":start_chapter(2)
 		if arg=="--end-preview":start_chapter(3)
@@ -107,6 +113,9 @@ func save_settings(path: String = "user://settings.cfg"):
 	cfg.save(path)
 
 func _focus_lost():
+	if chapter_one_prologue.active:
+		chapter_one_prologue.set_paused(true)
+		return
 	if coop.active:
 		# Switching windows must not repeatedly pause both testers' clients.
 		return
@@ -141,6 +150,7 @@ func feed_quake_input():
 
 func _physics_process(delta):
 	if quitting:return
+	if chapter_one_prologue.active:return
 	feed_quake_input()
 	if is_four():world.ending.hold=Input.is_physical_key_pressed(KEY_SPACE) or Input.is_physical_key_pressed(KEY_J) or Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 	var movement = Vector2.ZERO
@@ -189,9 +199,9 @@ func _process(delta):
 	sync_network_fields()
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
-	var theme="silence" if is_five() and world.stage=="notch" and world.notch.phase in ["chair","flight","credits","done","erase"] else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach","clash","down"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
+	var theme=ch5_music() if is_five() else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach","clash","down"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
 	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four")
-	audio.set_music_context(four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
+	audio.set_music_context("silence" if chapter_one_prologue.active else four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
 	update_camera_lead()
 	ui_time += delta
@@ -225,6 +235,7 @@ func _process(delta):
 		RenderingServer.force_draw(false)
 
 func _input(event):
+	if chapter_one_prologue.handle(event):return
 	if is_four() and world.stage=="finale" and world.ending.phase=="three" and world.state=="RUNNING" and screen.is_empty():
 		var qte_action := ""
 		if event is InputEventKey and event.pressed and not event.echo:
@@ -259,7 +270,7 @@ func _input(event):
 			elif code==KEY_8:notch_action="8"
 			elif code==KEY_9:notch_action="9"
 			if notch_action=="accept" and world.notch.phase in ["intro","to_ut","to_lanes","lanes_won","to_quake","quake_won","to_code","chair","credits"]:world.notch.skip();return
-			if world.notch.phase in ["code","erase","fists"] and not notch_action.is_empty():world.notch.press(world,notch_action);return
+			if world.notch.phase in ["code","erase","fists","qte"] and not notch_action.is_empty():world.notch.press(world,notch_action);return
 			if world.notch.phase=="fighter" and notch_action in ["accept","kick","special","grab","super"]:world.notch.press(world,notch_action);return
 			if world.notch.phase=="quake":
 				var slot={KEY_1:"pickaxe",KEY_2:"charges",KEY_3:"rockets",KEY_4:"crossbow",KEY_Q:"prev",KEY_E:"next"}.get(code,"")
@@ -413,6 +424,7 @@ func action(id: String):
 				return
 			start_chapter(solo_chapter,id=="start")
 		"menu":
+			chapter_one_prologue.stop()
 			collect_achievements()
 			if coop.active:
 				coop.leave()
@@ -496,6 +508,7 @@ func close_recipes():
 
 func start_chapter(chapter: int, intro: bool=true):
 	if coop.active:return
+	chapter_one_prologue.stop()
 	collect_achievements()
 	solo_chapter=chapter
 	if chapter==3:ensure_end_assets()
@@ -505,7 +518,6 @@ func start_chapter(chapter: int, intro: bool=true):
 	if chapter!=1:ChapterOneView.unload(self)
 	world=VW.new() if chapter==5 else FW.new() if chapter==4 else EW.new() if chapter==3 else NW.new() if chapter==2 else OW.new()
 	world.reset()
-	if chapter==1 and intro:world.begin_intro()
 	# Tests drive worlds directly; only the real game starts unarmed.
 	if is_processing_input():world.begin_sword_drop()
 	audio.reset_run_music()
@@ -513,6 +525,13 @@ func start_chapter(chapter: int, intro: bool=true):
 	cam_lead=Vector2.ZERO;lead_clock=0.0
 	screen=""
 	selected=0
+	if chapter==1 and intro:
+		if is_processing_input():
+			chapter_one_prologue.begin(self)
+			audio.set_music_context("silence",true)
+		else:
+			# Automation that drives worlds directly retains the existing intro.
+			world.begin_intro()
 
 func adjust_volume(id: String, delta: float):
 	settings[id]=float(clampi(roundi(settings[id]*10)+roundi(delta*10),0,10))/10
@@ -583,6 +602,9 @@ func _draw():
 
 func draw_scene():
 	buttons.clear()
+	if chapter_one_prologue.active:
+		draw_rect(Rect2(0,0,640,360),Color.BLACK)
+		return
 	if screen=="ch4_note":
 		WorldView.draw_world(self)
 		four_renderer.note(self)
@@ -632,6 +654,7 @@ func draw_scene():
 func quit_game():
 	collect_achievements()
 	if quitting:return
+	chapter_one_prologue.stop()
 	quitting=true
 	coop.leave()
 	if is_instance_valid(audio):audio.shutdown()
@@ -668,3 +691,19 @@ func update_achievements(delta: float):
 	else:
 		achievement_toast_age+=delta
 		if achievement_toast_age>=3.5:achievement_toast="";achievement_toast_age=0
+
+## Chapter V music by phase of Notch's dimension; "silence" leaves room for the ending cues.
+func ch5_music() -> String:
+	if world.stage!="notch":return "chapter_four_end:ch5_ambient"
+	var n=world.notch
+	var f=n.finale
+	var phase: String=n.retry_of if n.phase=="retry" else n.phase
+	match phase:
+		"intro","to_code","code","erase":return "chapter_four_end:ch5_talk"
+		"fight","to_ut","ut","to_lanes","lanes","lanes_won":return "chapter_four_end:ch5_notch"
+		"fighter","to_quake":return "chapter_four_end:ch5_fighter"
+		"quake","quake_won":return "chapter_four_end:ch5_quake"
+		"fists","qte":return "chapter_four_end:ch5_brawl"
+		"chair":return "chapter_four_end:ch5_chair" if f.age<f.CHAIR_STAB-.2 else "silence"
+		"flight":return "chapter_four_end:ch5_flight" if f.age>=4.0 and f.age<f.FLIGHT_THEME else "silence"
+	return "silence"

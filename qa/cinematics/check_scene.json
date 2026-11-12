@@ -1,0 +1,9 @@
+{
+  "isError": false,
+  "content": [
+    {
+      "type": "text",
+      "text": "Code executed successfully: CHECKS_PASSED 48 poses; camera distance 7.749838473574843 to 5.165922836883801\n"
+    }
+  ]
+}

@@ -159,7 +159,7 @@ func dodge(w, m: Dictionary):
 	pose("sway" if dodges%3==0 else ("dodge_l" if side.x<0 else "dodge_r"))
 	w.sound("ch1_whoosh",.05)
 	m.flash=0
-	var taunts={1:["Мимо.",1.4],3:["Ты вообще целишься?",1.8],5:["Скукота.",1.5]}
+	var taunts={1:["Мимо",1.4],3:["Ты вообще целишься?",1.8],5:["Скукотень",1.5]}
 	if taunts.has(dodges):say(taunts[dodges][0],taunts[dodges][1])
 
 ## QA and harness entry: straight to the throne fight, as the old duel began.
@@ -169,7 +169,7 @@ func skip_to_fight(w):
 
 func begin_throne(w):
 	change("throne");pose("shrug")
-	say("Ладно. Хватит разминки.",2.2)
+	say("Что ж, думаю, разминки хватит",2.2)
 	w.projectiles.clear();w.tasks.clear();w.weapon_visuals.clear();w.attack_visuals.clear()
 	boss.dodge_all=false
 
@@ -341,15 +341,15 @@ func showtime(w):
 	elif a<SHOW_PUNCH:pose("donut_wind")
 	elif a<6.3:pose("donut" if a<SHOW_PUNCH+.25 else "donut_hold")
 	else:pose("pull_out")
-	if cue(1,.9,"",w):say("Слушай, а ведь было весело.",2.0)
-	if cue(2,2.9,"",w):say("Правда. Держи на память.",1.6)
+	if cue(1,.9,"",w):say("Хух, это было очень весело",2.0)
+	if cue(2,2.9,"",w):say("Держи на память",1.6)
 	cue(3,SHOW_PUNCH-.55,"ch1_whoosh",w)
 	if cue(4,SHOW_PUNCH,"ch4_punch_heavy",w):
 		w.sound("ch4_flesh_hit",.02);w.sound("ch4_bone_crack",.02)
 		freeze=.16;w.shake=.4;w.hp=0;w.player_visual.hurt=.2
 		burst(w,w.player+Vector2(0,-12),Vector2.DOWN,26,Color(.55,.02,.04))
 		drop_gear(w,w.player)
-	if cue(5,5.0,"ch4_heartbeat",w):say("Ха.",1.0)
+	if cue(5,5.0,"ch4_heartbeat",w):say("Ха",1.0)
 	if cue(6,6.3,"ch4_flesh_hit",w):burst(w,w.player+Vector2(0,-12),Vector2.UP,10,Color(.45,.02,.03))
 	if a>=SHOW_LENGTH:
 		hb_visible=false;begin_fall(w);w.sound("death",1)
@@ -362,7 +362,7 @@ func descend(w):
 	if a<DESCEND_PARRY:
 		hb_p=behind;hb_dir=Vector2.DOWN;hb_face="smile"
 		pose("idle" if a<1.0 else ("shrug" if a<2.6 else "donut_wind"))
-	if cue(1,.8,"",w):say("Ладно. Ты меня развлёк.",1.8)
+	if cue(1,.8,"",w):say("Ладно, ты меня развлёк",1.8)
 	cue(2,DESCEND_PARRY-.5,"ch1_whoosh",w)
 	if a>=DESCEND_PARRY-.35:w.facing=Vector2.UP
 	if cue(3,DESCEND_PARRY,"ch1_parry",w):
@@ -400,10 +400,10 @@ func step(w, dt: float, movement: Vector2):
 		"arrival":
 			if cue(0,1.6,"herobrine_warp",w):hb_visible=true;teleport_from=GREET_AT+Vector2(0,-40)
 			hb_dir=Vector2.DOWN
-			if phase_age>=3.0:change("greet");pose("wave");say("Йо.",1.6)
+			if phase_age>=3.0:change("greet");pose("wave");say("Йо",1.6)
 		"greet":
 			if phase_age>=1.8 and hb_pose=="wave":pose("idle")
-			if cue(0,1.9,"",w):say("Ну давай. Ударь меня.",2.0)
+			if cue(0,1.9,"",w):say("Ну давай, ударь меня",2.0)
 			if phase_age>=4.0:change("tease");pose("idle")
 		"tease":tease(w,dt,movement)
 		"throne":throne_scene(w,dt)

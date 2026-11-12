@@ -14,7 +14,7 @@ static func stats(db,id: String,level: int,evolution: bool,items: Dictionary) ->
 	var s: Dictionary=db.stats_standard(id,level,evolution and id!="sword",items)
 	if evolution:
 		match id:
-			"sword":s.damage+=32*(1+.1*items.get("blaze",0))*float(db.data.aura_damage);s.radius+=14;s.interval*=1.25
+			"sword":s.damage+=36*(1+.1*items.get("blaze",0))*float(db.data.aura_damage);s.radius+=18;s.interval*=.85
 			"shotgun":s.pellets+=3;s.damage*=1.15
 			"blood_pool":s.damage+=5;s.radius+=8
 			"embryo":s.damage*=1.3;s.interval*=.8

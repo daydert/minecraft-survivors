@@ -3,10 +3,10 @@ extends RefCounted
 ## an Undertale-style battle box and a lane defence where he plays the
 ## zombies. Each phase restarts from its own checkpoint.
 const CENTER := Vector2(1024, 1024)
-const INTRO := [[0.6, "А. Ты всё-таки дошёл.", 2.6], [3.4, "Знаешь, сколько раз я тебя запускал? На третьей тысяче я сбился.", 3.6],
-	[7.2, "Трава, Незер, Край, тот дурацкий трон — это всё я.", 3.2], [10.6, "Я это написал. Я это и сотру. Мне можно.", 3.0],
-	[13.8, "Зачем? Было скучно. Хотелось посмотреть, что получится.", 3.4], [17.4, "А потом в коде появился ты. Строчка, которая решила, что она живая.", 3.8],
-	[21.4, "Даже мило. Но баги надо чинить.", 2.6], [24.2, "Давай. Покажи, чему научился.", 2.4]]
+const INTRO := [[0.6, "Ооо, ты всё-таки дошёл?", 2.6], [3.4, "Знаешь, я запускал тебе подобных столько раз, что уже и не знаю, какая это итерация", 3.6],
+	[7.2, "Интересно, понравилось ли оцифрованной душе моего брата впервые так жалко подохнуть?\nЭто ещё глупее, чем упасть в зерно и задохнуться", 3.2], [10.6, "ЗДЕСЬ Я ХОЗЯИН\nЯ ТЕБЯ ПОРОДИЛ, Я ТЕБЯ И УНИЧТОЖУ", 3.0],
+	[13.8, "Спросишь, зачем это всё? Ну, мне было скучно, да и личный уголок для моего брата-садиста сам себя бы не создал", 3.4], [17.4, "Не знаю, что в моём спагетти настолько мутировало, что ты появился на свет", 3.8],
+	[21.4, "Это даже мило, но, боюсь, мне ещё нужно откатить его тело после того, как ты буквально размозжил ему черепушку", 2.6], [24.2, "Покажешь, чему научился?", 2.4]]
 const INTRO_LENGTH := 26.8
 const FIGHT_HP := 1500.0
 const UT_BOX := Rect2(220, 160, 200, 110)
@@ -20,6 +20,9 @@ const PLANT_HP := {"dispenser": 6.0, "redstone_ore": 6.0, "obsidian": 40.0, "tnt
 const ZOMBIES := {"zombie": [10.0, 9.0], "elite": [26.0, 8.0], "glitch": [7.0, 18.0], "creeper": [10.0, 10.0], "baby": [6.0, 21.0], "spider": [12.0, 14.0], "slime": [16.0, 7.0], "small_slime": [5.0, 11.0], "vindicator": [20.0, 12.0], "skeleton": [10.0, 8.0], "ravager": [150.0, 5.0]}
 ## Floor blocks the walkers step over instead of biting.
 const FLAT := ["magma"]
+var bad_from_qte := false
+var bad_entry_track := "miss"
+var bad_blood := 0.0
 var phase := ""
 var age := 0.0
 var line := ""
@@ -46,6 +49,7 @@ var ut_state := "menu"
 var ut_choice := 0
 var ut_text := ""
 var ut_wave := 0
+var ut_serial2 := 0
 var ut_bullets: Array = []
 var ut_timer := 0.0
 var ut_items := 2
@@ -72,6 +76,7 @@ var carts: Array = []
 var corpses: Array = []
 var schedule: Array = []
 var lane_age := 0.0
+var cursor_dir := Vector2i.ZERO
 var cursor_wait := 0.0
 var serial := 0
 var fighter = preload("res://scripts/chapter_five_fighter.gd").new()
@@ -79,9 +84,11 @@ var quake = preload("res://scripts/chapter_five_quake.gd").new()
 ## Quake input from main.gd: wish (strafe, forward), look delta, held buttons.
 var quake_input: Dictionary = {"wish":Vector2.ZERO, "turn":Vector2.ZERO, "fire":false, "jump":false}
 var shake3d := 0.0
+var qte = preload("res://scripts/chapter_five_qte.gd").new()
 var finale = preload("res://scripts/chapter_five_finale.gd").new()
 
 func reset():
+	qte.reset()
 	phase = "";age = 0.0;line = "";id = -1;hp = FIGHT_HP;walls.clear();falls.clear();popups.clear();slow_left = 0.0;retry_of = ""
 	ut_bullets.clear();ut_items = 2;mercy_gone = false;ut_hits = 0;plants.clear();zombies.clear();arrows.clear();blasts.clear()
 
@@ -139,32 +146,60 @@ func step(w, dt: float, movement: Vector2):
 			if age >= INTRO_LENGTH:start_fight(w)
 		"fight":fight(w, dt, movement)
 		"to_ut":
-			if cue(0, .1):say("Скучно так. Давай в мои любимые игры.", 2.6);set_pose("snap")
+			if cue(0, .1):say("Чувак, мне чертовски скучно, пошли туда, где интереснее", 2.6);set_pose("snap")
 			idle_world(w, dt)
-			if age >= 3.0:start_ut(w)
+			portal_sounds(w, dt)
+			if age >= 4.4:start_ut(w)
 		"ut":battle(w, dt, movement)
 		"to_lanes":
-			if cue(0, .1):say("Ладно. Тогда так: я за зомби, ты за грядку.", 2.8)
-			if age >= 3.0:start_lanes(w)
+			if cue(0, .1):say("Всегда любил играть за атаку!", 2.8)
+			portal_sounds(w, dt)
+			if age >= 4.4:start_lanes(w)
 		"lanes":lanes(w, dt, movement)
 		"lanes_won":
-			if cue(0, .1):say("Ха. Неплохо. Но это была разминка.", 2.8)
-			if age >= 3.2:start_fighter(w)
+			if cue(0, .1):say("Неплохо для разминки", 2.8)
+			portal_sounds(w, dt)
+			if age >= 4.4:start_fighter(w)
 		"fighter":fight3d(w, dt, movement)
 		"to_quake":
-			if cue(0, .1):say("Ладно, ладно. А теперь моя любимая.", 2.8)
-			if age >= 3.0:start_quake(w)
+			if cue(0, .1):say("Хах, перейдём к моей любимой", 2.8)
+			portal_sounds(w, dt)
+			if age >= 4.4:start_quake(w)
 		"quake":deathmatch(w, dt)
 		"quake_won":
-			if cue(0, .1):say("…Ты что, правда играл в это раньше?", 2.8)
+			if cue(0, .1):say("...\nНе могу поверить, что проиграл тебе в этом...", 2.8)
 			if age >= 3.2:change("to_code")
 		"to_code":
-			if cue(0, .1):say("Ладно. Последняя игра. Моя настоящая — код.", 2.8)
-			if age >= 3.0:start_code(w)
+			if cue(0, .1):say("Чёрт, мне реально приходится сражаться с тобой здесь?", 2.8)
+			portal_sounds(w, dt)
+			if age >= 4.4:start_code(w)
 		"code":code(w, dt)
 		"erase":
 			finale_sounds(w, finale.step(dt))
-			if finale.phase == "erase" and finale.thrown >= 3.6:start_fists(w)
+			if finale.phase == "erase_failed":begin_bad_end(w)
+			elif finale.thrown >= 3.6:start_qte(w)
+		"qte":
+			qte.step(dt)
+			for event in qte.events:
+				match event:
+					"dodge":w.sound("ch4_punch_miss",.05)
+					"block":w.sound("shield_block",.05)
+					"hit","counter","ko_punch":w.sound("ch4_punch_heavy",.05);w.sound("ch4_flesh_hit",.05)
+					"hurt":w.sound("ch4_punch",.05);w.sound("ch4_flesh_hit",.05)
+					"table_hit":w.sound("ch1_wood_place",.05);w.sound("ch4_bone_crack",.05)
+			if qte.result=="lost":begin_bad_end(w)
+			elif qte.result=="won":finale.change("chair");change("chair")
+		"bad_end":
+			var ending_age: float=age-(4.2 if bad_from_qte else 0.0)
+			var shift: float=4.2 if bad_from_qte else 0.0
+			if cue(0,1.08+shift):w.sound("ch1_whoosh",.1)
+			if cue(1,1.35+shift):w.sound("ch4_hb_strip",.1)
+			if cue(2,3.15+shift):say("Пора бы завязать с тестированием",3.2)
+			if cue(3,6.8+shift):w.sound("ch4_drink",.1)
+			if cue(4,13.40+shift):w.sound("ch4_door_open",.1)
+			for step_index in range(8):
+				if cue(5+step_index,[9.80,10.55,11.45,12.30,13.10,14.45,15.20,15.95][step_index]+shift):w.sound("ch1_step",.05)
+			if ending_age>=18.2:w.state="RESULT";w.victory=false
 		"fists":fists(w, dt, movement)
 		"chair":
 			var r: String = finale.step(dt);finale_sounds(w, r)
@@ -194,7 +229,7 @@ func idle_world(w, dt: float):
 func lose(w, which: String):
 	retry_of = which;change("retry")
 	w.sound("death", .2)
-	say("Чекпоинт. Ещё раз.", 2.0)
+	say("Чекпоинт!\nЕщё раз", 2.0)
 
 func finish(w):
 	# The flight is over: Steve is somewhere else now.
@@ -317,12 +352,12 @@ func attack(w):
 func start_ut(w):
 	clear_arena(w)
 	change("ut");ut_hp = UT_HP;ut_wave = 0;ut_bullets.clear();ut_hits = 0;ut_blasters.clear();ut_choice = 0
-	ut_state = "menu";ut_text = "* Нотч загораживает путь.";ut_type = 0.0
+	ut_state = "menu";ut_text = "* Нотч загораживает путь";ut_type = 0.0
 	soul = UT_BOX.get_center();ut_mode = "red"
 	w.sound("ch4_hb_glitch", .1)
 
-const BUBBLES := ["Ctrl+C. Ctrl+V. Скучно, да?", "Гравитацию тоже я написал.", "Кликни, если сможешь.", "Эти штуки — мои любимые.", "W, A, S, D. Это всё, что ты умеешь?", "Ctrl+Z. Ничего не было."]
-const FLAVOR := ["* Нотч смеётся.", "* Нотч что-то дописывает в воздухе.", "* Пахнет горелым кодом.", "* «Ты меня ещё удивишь?»", "* Строки вокруг дрожат."]
+const BUBBLES := ["Ctrl+C и Ctrl+V — половина моей унылой работы", "Не забывай, что я написал всё, что тут есть", "Кликни, если сможешь!", "Эти штучки я называю своими лапочками", "W\nA\nS\nD\nЭто всё, что ты умеешь?", "Ctrl+Z\nЗапомни, а то забудешь\nНичего не было"]
+const FLAVOR := ["* \"Нотч смеётся\"", "* \"Нотч что-то дописывает в воздухе\"", "* Чувствуется дискомфорт", "* «Ты меня ещё удивишь?»", "* \"Строки вокруг дрожат\""]
 var ut_mode := "red"
 var ut_vy := 0.0
 var ut_jump_held := false
@@ -334,6 +369,7 @@ var ut_number := 0
 var ut_number_age := 9.0
 
 func press(w, action: String):
+	if phase == "qte":qte.press(action);return
 	if phase in ["code", "erase"]:finale.press(action);return
 	if phase == "fists":
 		if fighter.state == "finisher" and action == "accept":fighter.finish_blow();return
@@ -367,15 +403,15 @@ func choose(w, option: String):
 	w.sound("select", .02)
 	match option:
 		"fight":ut_state = "bar";bar = 0.0
-		"act":show_text("* НОТЧ — АТК 99, ЗАЩ 99.\n* Говорит, что написал тебя за выходные.")
+		"act":show_text("* НОТЧ — АТК 99, ЗАЩ 99\n* Говорит, что написал тебя за выходные")
 		"item":
 			if ut_items > 0:
 				ut_items -= 1;w.hp = minf(20.0, w.hp + 10.0);w.sound("pickup", .1)
-				show_text("* Ты съел золотое яблоко.\n* Восстановлено 10 HP.")
-			else:show_text("* В инвентаре пусто.")
+				show_text("* Ты съел золотое яблоко\n* Восстановлено 10 HP")
+			else:show_text("* В инвентаре пусто")
 		"mercy":
 			mercy_gone = true;ut_choice = 0
-			show_text("* Нотч стирает кнопку ПОЩАДА.")
+			show_text("* Нотч стирает кнопку ПОЩАДА")
 			w.sound("ch4_hb_shatter", .1);w.shake = .2
 
 func show_text(text: String):
@@ -389,7 +425,7 @@ func strike(w):
 	ut_state = "slash";ut_timer = 1.1
 
 func begin_wave(w):
-	ut_state = "wave";ut_timer = 6.5;ut_wave += 1;ut_bullets.clear();ut_blasters.clear();soul = UT_BOX.get_center() + Vector2(0, 20)
+	ut_state = "wave";ut_timer = 6.5;ut_wave += 1;ut_serial2 = 0;ut_bullets.clear();ut_blasters.clear();soul = UT_BOX.get_center() + Vector2(0, 20)
 	serial = 0;ut_vy = 0.0
 	ut_mode = "blue" if (ut_wave - 1) % 6 == 1 else "red"
 	ut_bubble = BUBBLES[(ut_wave - 1) % BUBBLES.size()]
@@ -411,7 +447,7 @@ func battle(w, dt: float, movement: Vector2):
 		"slash", "miss":
 			if ut_timer <= 0:
 				if ut_hp <= 0:
-					ut_state = "end";ut_bullets.clear();ut_timer = 2.6;ut_text = "* …Ладно. Это было в моём вкусе.";ut_type = 0.0
+					ut_state = "end";ut_bullets.clear();ut_timer = 2.6;ut_text = "* …Ладно\nВ целом, мне всё понравилось";ut_type = 0.0
 				else:show_text(FLAVOR[ut_hits % FLAVOR.size()])
 		"wave":
 			soul_move(movement, dt)
@@ -445,7 +481,7 @@ func battle(w, dt: float, movement: Vector2):
 					hit = Rect2(b.p - b.size / 2.0, b.size).grow(2).has_point(soul)
 				else:
 					hit = b.p.distance_to(soul) < float(b.get("r", 4.0))
-				if hit and not b.get("safe", false):hurt_soul(w)
+				if hit and not b.get("safe", false) and b.age >= float(b.get("arm_at", 0.0)):hurt_soul(w)
 			ut_bullets.append_array(spawned)
 			for bl in ut_blasters:
 				bl.age += dt
@@ -483,58 +519,78 @@ func soul_move(movement: Vector2, dt: float):
 func wave_bullets(w, dt: float):
 	var t: float = 6.5 - ut_timer
 	var pattern: int = (ut_wave - 1) % 8
-	var box: Rect2 = UT_BOX
-	var every: float = [0.7, 0.85, 0.75, 1.0, 0.35, 0.18, 0.55, 1.1][pattern]
+	# He stops playing around: faster, denser, and from the third turn two patterns overlap.
+	var every: float = [0.7, 0.85, 0.75, 1.0, 0.35, 0.18, 0.55, 1.1][pattern] * .72
 	var due: int = int(t / every)
 	while serial < due:
 		serial += 1
-		match pattern:
-			0:
-				var gap: float = box.position.y + 20 + fposmod(serial * 29.0 + sin(serial) * 20.0, box.size.y - 40)
-				for y in range(int(box.position.y) + 6, int(box.end.y), 11):
-					if absf(y - gap) > 16:ut_bullets.append({"p":Vector2(box.end.x + 8, y), "v":Vector2(-118, 0), "size":Vector2(9, 9), "shape":"block"})
-			1:
-				var tall: float = 14.0 + (serial % 3) * 9.0
-				var from_right: bool = serial % 2 == 0
-				ut_bullets.append({"p":Vector2(box.end.x + 6 if from_right else box.position.x - 6, box.end.y - tall / 2.0), "v":Vector2(-135 if from_right else 135, 0), "size":Vector2(7, tall), "shape":"line"})
-				if serial % 3 == 0:ut_bullets.append({"p":Vector2(box.end.x + 6, box.position.y + 22), "v":Vector2(-150, 0), "size":Vector2(7, 40), "shape":"line"})
-			2:
-				var corner: Vector2 = [box.position, Vector2(box.end.x, box.position.y), box.end, Vector2(box.position.x, box.end.y)][serial % 4]
-				ut_bullets.append({"p":corner, "v":corner.direction_to(soul) * 95.0, "shape":"cursor", "r":5.0, "home":true})
-				if serial % 2 == 0:ut_bullets.append({"p":soul + Vector2.from_angle(serial) * 4.0, "v":Vector2.ZERO, "ring":true, "r":2.0, "shape":"ring"})
-			3:
-				var side: int = serial % 4
-				var at: Vector2
-				var ang: float
-				match side:
-					0:at = Vector2(box.position.x - 22, box.position.y + 15 + fposmod(serial * 37.0, box.size.y - 30));ang = 0.0
-					1:at = Vector2(box.end.x + 22, box.position.y + 15 + fposmod(serial * 23.0, box.size.y - 30));ang = PI
-					2:at = Vector2(box.position.x + 15 + fposmod(serial * 41.0, box.size.x - 30), box.position.y - 22);ang = PI / 2
-					_:at = Vector2(soul.x, box.end.y + 22);ang = -PI / 2
-				ut_blasters.append({"p":at, "angle":ang, "age":0.0})
-				w.sound("ch4_hb_charge", .1)
-			4:
-				var key: String = ["W", "A", "S", "D"][serial % 4]
-				ut_bullets.append({"p":Vector2(box.position.x + 8 + fposmod(serial * 47.0, box.size.x - 16), box.position.y - 4), "v":Vector2(sin(serial) * 30.0, 40.0), "gravity":true, "size":Vector2(10, 10), "shape":"key", "glyph":key})
-			5:
-				var y: float = box.position.y + 6 + fposmod(serial * 17.0, box.size.y - 12)
-				var left: bool = serial % 2 == 0
-				ut_bullets.append({"p":Vector2(box.position.x - 6 if left else box.end.x + 6, y), "v":Vector2(110 if left else -110, 0), "r":4.0, "shape":"dot", "reverse_at":1.1})
-			6:
-				# Anvils: a warning column, then a fast drop.
-				var ax: float = box.position.x + 12 + fposmod(serial * 53.0 + soul.x * .5, box.size.x - 24)
-				if serial % 3 == 0:ax = clampf(soul.x, box.position.x + 12, box.end.x - 12)
-				ut_bullets.append({"p":Vector2(ax, box.position.y - 14), "v":Vector2.ZERO, "size":Vector2(16, 14), "shape":"anvil", "delay":.6, "drop":340.0})
-			7:
-				# TNT: lit on a grid point, then a cross of fire through the box.
-				var at := Vector2(box.position.x + 20 + fposmod(serial * 61.0, box.size.x - 40), box.position.y + 18 + fposmod(serial * 37.0, box.size.y - 36))
-				ut_bullets.append({"p":at, "v":Vector2.ZERO, "size":Vector2(12, 12), "shape":"tnt", "fuse":1.0, "safe":true})
+		spawn_pattern(w, pattern, serial)
+	if ut_wave >= 3:
+		var second: int = (pattern + 3) % 8
+		if second == 1:second = 2
+		var every2: float = [0.7, 0.85, 0.75, 1.0, 0.35, 0.18, 0.55, 1.1][second] * 1.5
+		var due2: int = int(maxf(0.0, t - 1.0) / every2)
+		while ut_serial2 < due2:
+			ut_serial2 += 1
+			spawn_pattern(w, second, ut_serial2 + 100)
+
+func spawn_pattern(w, pattern: int, serial: int):
+	var box: Rect2 = UT_BOX
+	var n0: int = ut_bullets.size()
+	match pattern:
+		0:
+			var gap: float = box.position.y + 20 + fposmod(serial * 29.0 + sin(serial) * 20.0, box.size.y - 40)
+			for y in range(int(box.position.y) + 6, int(box.end.y), 11):
+				if absf(y - gap) > 16:ut_bullets.append({"p":Vector2(box.end.x + 8, y), "v":Vector2(-118, 0), "size":Vector2(9, 9), "shape":"block"})
+		1:
+			var tall: float = 14.0 + (serial % 3) * 9.0
+			var from_right: bool = serial % 2 == 0
+			ut_bullets.append({"p":Vector2(box.end.x + 6 if from_right else box.position.x - 6, box.end.y - tall / 2.0), "v":Vector2(-135 if from_right else 135, 0), "size":Vector2(7, tall), "shape":"line"})
+			if serial % 3 == 0:ut_bullets.append({"p":Vector2(box.end.x + 6, box.position.y + 22), "v":Vector2(-150, 0), "size":Vector2(7, 40), "shape":"line"})
+		2:
+			var corner: Vector2 = [box.position, Vector2(box.end.x, box.position.y), box.end, Vector2(box.position.x, box.end.y)][serial % 4]
+			ut_bullets.append({"p":corner, "v":corner.direction_to(soul) * 95.0, "shape":"cursor", "r":5.0, "home":true})
+			if serial % 2 == 0:ut_bullets.append({"p":soul + Vector2.from_angle(serial) * 4.0, "v":Vector2.ZERO, "ring":true, "r":2.0, "shape":"ring", "arm_at":.4})
+		3:
+			var side: int = serial % 4
+			var at: Vector2
+			var ang: float
+			match side:
+				0:at = Vector2(box.position.x - 22, box.position.y + 15 + fposmod(serial * 37.0, box.size.y - 30));ang = 0.0
+				1:at = Vector2(box.end.x + 22, box.position.y + 15 + fposmod(serial * 23.0, box.size.y - 30));ang = PI
+				2:at = Vector2(box.position.x + 15 + fposmod(serial * 41.0, box.size.x - 30), box.position.y - 22);ang = PI / 2
+				_:at = Vector2(soul.x, box.end.y + 22);ang = -PI / 2
+			ut_blasters.append({"p":at, "angle":ang, "age":0.0})
+			w.sound("ch5_ut_charge", .1)
+		4:
+			var key: String = ["W", "A", "S", "D"][serial % 4]
+			ut_bullets.append({"p":Vector2(box.position.x + 8 + fposmod(serial * 47.0, box.size.x - 16), box.position.y - 4), "v":Vector2(sin(serial) * 30.0, 40.0), "gravity":true, "size":Vector2(10, 10), "shape":"key", "glyph":key})
+		5:
+			var y: float = box.position.y + 6 + fposmod(serial * 17.0, box.size.y - 12)
+			var left: bool = serial % 2 == 0
+			ut_bullets.append({"p":Vector2(box.position.x - 6 if left else box.end.x + 6, y), "v":Vector2(110 if left else -110, 0), "r":4.0, "shape":"dot", "reverse_at":1.1})
+		6:
+			# Anvils: a warning column, then a fast drop.
+			var ax: float = box.position.x + 12 + fposmod(serial * 53.0 + soul.x * .5, box.size.x - 24)
+			if serial % 3 == 0:ax = clampf(soul.x, box.position.x + 12, box.end.x - 12)
+			ut_bullets.append({"p":Vector2(ax, box.position.y - 14), "v":Vector2.ZERO, "size":Vector2(16, 14), "shape":"anvil", "delay":.6, "drop":340.0})
+		7:
+			# TNT: lit on a grid point, then a cross of fire through the box.
+			var at := Vector2(box.position.x + 20 + fposmod(serial * 61.0, box.size.x - 40), box.position.y + 18 + fposmod(serial * 37.0, box.size.y - 36))
+			ut_bullets.append({"p":at, "v":Vector2.ZERO, "size":Vector2(12, 12), "shape":"tnt", "fuse":1.0, "safe":true})
+	for i in range(n0, ut_bullets.size()):
+		var b: Dictionary = ut_bullets[i]
+		b.age = 0.0
+		if b.has("v"):b.v *= 1.3
+		if b.has("drop"):b.drop *= 1.25
+		if b.has("delay"):b.delay *= .8
+		if b.has("fuse"):b.fuse *= .8
 
 # ------------------------------------------------------------------ the lanes
 
 func start_lanes(w):
 	clear_arena(w)
-	change("lanes");plants.clear();zombies.clear();arrows.clear();blasts.clear();bone_arrows.clear()
+	change("lanes");cursor_dir=Vector2i.ZERO;cursor_wait=0;plants.clear();zombies.clear();arrows.clear();blasts.clear();bone_arrows.clear()
 	redstone = 150;card = 0;cursor = Vector2i(2, 2);card_ready = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];trickle = 4.0;lane_age = 0.0;serial = 0
 	drops.clear();corpses.clear();carts.clear()
 	for r in range(ROWS):carts.append({"state":"ready", "x":LANE_ORIGIN.x - 22})
@@ -559,12 +615,13 @@ func start_lanes(w):
 	schedule.append({"at":t + 2.0, "row":2, "kind":"ravager"})
 	for extra in range(4):schedule.append({"at":t + 3.0 + extra * .6, "row":[0, 4, 1, 3][extra], "kind":["elite", "skeleton", "slime", "baby"][extra]})
 	lane_total = schedule.size()
-	say("Ладно. Тогда так: я за зомби, ты за грядку.", 2.0)
+	say("Всегда любил играть за атаку!", 2.0)
 
 func cell_rect(c: Vector2i) -> Rect2:
 	return Rect2(LANE_ORIGIN + Vector2(c.x, c.y) * CELL, CELL)
 
 func lane_press(w, action: String):
+	if action in ["left","right","up","down"]:cursor_wait=.32
 	match action:
 		"left":cursor.x = maxi(0, cursor.x - 1)
 		"right":cursor.x = mini(COLS - 1, cursor.x + 1)
@@ -574,6 +631,7 @@ func lane_press(w, action: String):
 		"1", "2", "3", "4", "5", "6", "7", "8":card = int(action) - 1
 
 func click(w, at: Vector2) -> bool:
+	if phase == "qte":qte.press("accept");return true
 	if phase == "fighter":fighter.press("punch");return true
 	if phase == "fists":
 		if fighter.state == "finisher":fighter.finish_blow()
@@ -617,12 +675,17 @@ func place(w):
 
 func lanes(w, dt: float, movement: Vector2):
 	lane_age += dt
-	cursor_wait -= dt
-	if movement.length_squared() > .2 and cursor_wait <= 0:
-		cursor_wait = .16
-		if absf(movement.x) > absf(movement.y):lane_press(w, "right" if movement.x > 0 else "left")
-		else:lane_press(w, "down" if movement.y > 0 else "up")
-	elif movement.length_squared() <= .2:cursor_wait = 0.0
+	# Keydown owns the first step; held input only repeats after a full delay.
+	var direction := Vector2i.ZERO
+	if movement.length_squared()>.2:
+		direction=Vector2i(signi(int(movement.x)),0) if absf(movement.x)>absf(movement.y) else Vector2i(0,signi(int(movement.y)))
+	if direction==Vector2i.ZERO:cursor_dir=Vector2i.ZERO;cursor_wait=0
+	elif direction!=cursor_dir:
+		if cursor_dir==Vector2i.ZERO and cursor_wait<=0:cursor=(cursor+direction).clamp(Vector2i.ZERO,Vector2i(COLS-1,ROWS-1))
+		cursor_dir=direction;cursor_wait=.32
+	else:
+		cursor_wait-=dt
+		if cursor_wait<=0:cursor=(cursor+direction).clamp(Vector2i.ZERO,Vector2i(COLS-1,ROWS-1));cursor_wait=.16
 	for i in range(card_ready.size()):card_ready[i] = maxf(0, card_ready[i] - dt)
 	trickle -= dt
 	if trickle <= 0:
@@ -644,7 +707,7 @@ func lanes(w, dt: float, movement: Vector2):
 		var spec: Array = ZOMBIES[s.kind]
 		spawn_walker(w, s.kind, s.row, LANE_ORIGIN.x + COLS * CELL.x + 20)
 		set_pose("throw")
-		if s.kind == "ravager":say("А вот и тяжёлая артиллерия.", 2.0);w.sound("ch4_heavy", .05)
+		if s.kind == "ravager":say("А вот и тяжёлая артиллерия!", 2.0);w.sound("ch4_heavy", .05)
 	for c in plants.keys():
 		var pl: Dictionary = plants[c]
 		pl.age += dt;pl.timer -= dt;pl.push = maxf(0, float(pl.get("push", 0.0)) - dt)
@@ -746,7 +809,7 @@ func lanes(w, dt: float, movement: Vector2):
 			if cart.state == "ready":
 				cart.state = "run";w.sound("ch4_heavy", .1)
 			elif cart.state == "used" and z.x < LANE_ORIGIN.x - 40:
-				say("Мозги.", 1.6);lose(w, "lanes");return
+				say("1 мозг тебе или 2 мозга мне?", 1.6);lose(w, "lanes");return
 	for r in range(carts.size()):
 		var cart: Dictionary = carts[r]
 		if cart.state != "run":continue
@@ -760,6 +823,28 @@ func lanes(w, dt: float, movement: Vector2):
 	blasts = blasts.filter(func(b):return b.age < 1.3)
 	if schedule.is_empty() and zombies.is_empty():change("lanes_won")
 
+## Contacts of the portal shoves; the view freezes on each for a hit-stop.
+const PORTAL_HITS := [.89, 1.80]
+const PORTAL_HOLD := .11
+
+## Sounds of a passage between games: the portal opens, a shove, one pulled in, the other jumps.
+## Each contact is layered: wind-up whoosh, the fist, flesh, bone, and a low thump.
+func portal_sounds(w, dt := 1.0 / 60):
+	shake3d = maxf(0, shake3d - dt * 1.4)
+	if cue(8, .72):w.sound("ch1_whoosh", .04)
+	if cue(9, 1.63):w.sound("ch1_whoosh", .04)
+	if cue(6, PORTAL_HITS[0]):
+		for id in ["ch4_punch_heavy", "ch4_flesh_hit", "ch4_bone_crack"]:w.sound(id, .03)
+		shake3d = .55
+	if cue(7, PORTAL_HITS[1]):
+		for id in ["ch4_punch_heavy", "ch4_bone_crack", "ch4_flesh_hit", "ch4_hb_shatter", "explosion"]:w.sound(id, .03)
+		shake3d = .8
+	if cue(1, .2):w.sound("ch5_portal_open", .02)
+	if cue(2, 1.0):w.sound("ch1_whoosh", .05)
+	if cue(3, 2.0):w.sound("ch4_body_fall", .05)
+	if cue(4, 2.4):w.sound("ch5_portal_pass", .02)
+	if cue(5, 3.5):w.sound("ch5_portal_pass", .02);w.sound("wind_burst", .05)
+
 func row_y(row: int) -> float:return LANE_ORIGIN.y + (row + .5) * CELL.y
 
 func spawn_walker(w, kind: String, row: int, x: float):
@@ -771,7 +856,7 @@ func spawn_walker(w, kind: String, row: int, x: float):
 func start_fighter(w):
 	clear_arena(w)
 	fighter.reset();change("fighter")
-	say("Раунд один. Ну, давай.", 2.0)
+	say("Давно мечтал устроить с кем-то мордобой", 2.0)
 
 func fight_sounds(w, events: Array):
 	for e in events:
@@ -855,7 +940,7 @@ func code(w, dt: float):
 	if r == "won":
 		finale.begin_erase();change("erase")
 	elif r == "lost":
-		say("Готово. Медленно.", 2.0);lose(w, "code")
+		say("Я какой-то сонный сегодня, не находишь это странным?", 2.0);lose(w, "code")
 
 func finale_sounds(w, _r: String):
 	for id in finale.sounds:
@@ -879,10 +964,19 @@ func finale_sounds(w, _r: String):
 	finale.sounds.clear()
 	if not finale.line.is_empty() and finale.line != line:say(finale.line, finale.line_length)
 
+func begin_bad_end(w):
+	bad_from_qte=phase=="qte"
+	bad_blood=minf(.65,.15+qte.beat*.055) if bad_from_qte else 0.0
+	bad_entry_track=qte.TRACKS[mini(qte.beat,7)] if qte.success else "miss"
+	finale.change("bad_end");change("bad_end");line="";line_length=0
+
+func start_qte(w):
+	clear_arena(w);qte.reset();change("qte");say("Чёртов ублюдок, игры кончились",1.5)
+
 func start_fists(w):
 	clear_arena(w)
 	fighter.reset("fists");change("fists")
-	say("Без игр. Просто кулаки.", 2.0)
+	say("Отсюда выйдет только один!", 2.0)
 
 func fists(w, dt: float, movement: Vector2):
 	var events: Array = fighter.step(dt, movement)

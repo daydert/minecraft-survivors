@@ -3,7 +3,6 @@ extends "res://scripts/arsenal_world.gd"
 ## boss are the following stages of the chapter plan.
 const TERRAIN := "res://data/chapter_four_terrain.json"
 ## The evolution scene plays for this long before "Continue" (skippable).
-const EVOLUTION_REVEAL := 1.7
 const Enemies = preload("res://scripts/chapter_four_enemies.gd")
 const Equipment = preload("res://scripts/chapter_four_equipment.gd")
 var arsenal = preload("res://scripts/chapter_four_arsenal.gd").new()

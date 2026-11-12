@@ -74,8 +74,10 @@ static func draw_pause(g):
 
 static func draw_chest(g):
 	var evolution=g.world.chest_reward.get("evolution",false)
-	if evolution and g.is_four():
-		g.four_renderer.ArsenalView.evolution(g);return
+	if evolution and not g.coop.active:
+		if g.is_four():g.four_renderer.ArsenalView.evolution(g)
+		else:preload("res://scripts/ui/evolution_view.gd").draw(g)
+		return
 	g.dim(0.78)
 	g.panel(Rect2(105,47,430,266),Color("203329"),g.GOLD)
 	g.centered("ЭВОЛЮЦИЯ" if evolution else "СУНДУК ОТКРЫТ",82,21,g.GOLD,true)

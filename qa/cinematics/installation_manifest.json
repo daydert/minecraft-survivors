@@ -1,0 +1,530 @@
+{
+  "date": "2026-11-11",
+  "blender": {
+    "version": "5.3.0",
+    "executable": "/home/daydert/.local/share/Steam/steamapps/common/Blender/blender",
+    "second_install": false
+  },
+  "sources": [
+    {
+      "repository": "TheAstrayDev/rig-motion-skill",
+      "commit": "2367d01c9b5b9e67a8d6c2c856e026f0b6f43d5e",
+      "review_checkout": "/home/daydert/.cache/codex/cinematics-audit-2026-11-11/TheAstrayDev--rig-motion-skill"
+    },
+    {
+      "repository": "ahujasid/blender-mcp",
+      "commit": "2e4b0bc294694b1570d76ed01be657c22e6d02a0",
+      "review_checkout": "/home/daydert/.cache/codex/cinematics-audit-2026-11-11/ahujasid--blender-mcp"
+    },
+    {
+      "repository": "arjun988/blender-skills",
+      "commit": "904f095d8f36a6e72adaebb08d07f884a074743d",
+      "review_checkout": "/home/daydert/.cache/codex/cinematics-audit-2026-11-11/arjun988--blender-skills"
+    },
+    {
+      "repository": "jasonjgardner/blockbench-mcp-project",
+      "commit": "e9c29a93e54bdd9aaa8a308196dfd4147e47d88c",
+      "review_checkout": "/home/daydert/.cache/codex/cinematics-audit-2026-11-11/jasonjgardner--blockbench-mcp-project"
+    },
+    {
+      "repository": "kevinbadi/blender-skills",
+      "commit": "b2f0f816d320b56ae86d52597a35284e0e6cc929",
+      "review_checkout": "/home/daydert/.cache/codex/cinematics-audit-2026-11-11/kevinbadi--blender-skills"
+    },
+    {
+      "repository": "sosadly/blockbench-mcp",
+      "commit": "b024728b396691772d273b1d6b12960ce3d30c02",
+      "review_checkout": "/home/daydert/.cache/codex/cinematics-audit-2026-11-11/sosadly--blockbench-mcp"
+    }
+  ],
+  "skills": [
+    {
+      "name": "rig-motion-skill",
+      "path": "/home/daydert/.codex/skills/rig-motion-skill",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "e0d106fe08a2a0a8edd4cb89812e868cafcb5e5b7efc1bcca3896fef4650db13"
+        },
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "56d539c7852827134a700e4562dc08c2f98f3da431f5877c988eac6a45df9c0f"
+        },
+        {
+          "path": "assets/camera-shake.example.json",
+          "sha256": "4b1f91b7180d222621adac91ac5fdd5198772c91e2f7268dff52835d3d7aebdf"
+        },
+        {
+          "path": "assets/character-card.md",
+          "sha256": "22b364140ff1a7108c658f269df72c67089237df69eb04b62d68d665254ed326"
+        },
+        {
+          "path": "assets/event-sheet.md",
+          "sha256": "4d3e8ad1ef3fd0fddae2e6289b7abfcfb5ae8cc72cedebf23b720113248d7ff5"
+        },
+        {
+          "path": "assets/probe.animation.json",
+          "sha256": "feb1e5ebdc989515cf9e1a05bb1a33b3d37f9cb6f39aa7954d74dee75745b3cc"
+        },
+        {
+          "path": "assets/probe.geo.json",
+          "sha256": "85902a9f8e6808680a4dc3f7ecfc424137e30554ce3fe4c3747cadc671648acc"
+        },
+        {
+          "path": "assets/reference-stickfight.png",
+          "sha256": "cc9ed3936c8c323b5c293b1335b9b28209839024e467ceeb380355fae032713e"
+        },
+        {
+          "path": "assets/samples.example.json",
+          "sha256": "0a6e5cccc80f6fabcfd8a2638695c99e4136dd2870ed799f8eb5a4c66ac81469"
+        },
+        {
+          "path": "assets/shot-brief.md",
+          "sha256": "adf9cfe5f880cf93ec96464b16e098cfe482b1ee3434b0f5126a8d6330ff3db8"
+        },
+        {
+          "path": "references/advanced-tutorial-analysis.md",
+          "sha256": "ed3b0aa2fe62b1d69a2f99b1ddff30e2bd63c00c2739023ef5866c13d5071a7f"
+        },
+        {
+          "path": "references/animation-design.md",
+          "sha256": "eb6d818db122b603eaca6603c1d3571fa67e3a97025c0ec320e50212da4a5afa"
+        },
+        {
+          "path": "references/automation.md",
+          "sha256": "a357817d7a366c246c5f163c9f13025e915b9cf6799bd5ff204122e0e51da7e9"
+        },
+        {
+          "path": "references/blender-workflow.md",
+          "sha256": "40404c400a9b68eff35b66fba7be4bb8f8209ed36298761c7f1bd924cb6d8856"
+        },
+        {
+          "path": "references/blockbench-workflow.md",
+          "sha256": "d61f3535c4703e8fd02218dbf904d3e99d176c145747ca97d7890f783139f2af"
+        },
+        {
+          "path": "references/camera-direction.md",
+          "sha256": "71cf63a94329587c11e1ed045b972464bcf425e1862f5026ce585d3cbc8f695c"
+        },
+        {
+          "path": "references/character-direction.md",
+          "sha256": "5dea19573ffcd14ae219e0f818e63f63186f94bd7c36d47d02ebad3f9603f986"
+        },
+        {
+          "path": "references/cinematic-production.md",
+          "sha256": "5435ed1da1fe4883b8b1c2946588e843179abe45a61c0e64d2c56e165c10ba6f"
+        },
+        {
+          "path": "references/minecraft-blender.md",
+          "sha256": "a22561b60b5a90265f1ab4e771116cfb4cfeeba98f0c53c53cf05ed0f41690ef"
+        },
+        {
+          "path": "references/motion-recipes.md",
+          "sha256": "4fab8c5e3015bcc4631e11594fd479b5036761b347adec9d48757818da2b874c"
+        },
+        {
+          "path": "references/quality-review.md",
+          "sha256": "1f53315d8df0ac2c4e143753661e10a6c5aed4763c060016a4f9221d1a280916"
+        },
+        {
+          "path": "references/reference-case-stickfight.md",
+          "sha256": "ccc7e6e307323fbcc8fdd5ce4821816047da4c6f0e257366a576b56e0ef9e423"
+        },
+        {
+          "path": "references/roblox-r6.md",
+          "sha256": "7b26901b20ea3e418c8a4cf7bc157e4d98103ef8869de0f4ab881fc2d1f21394"
+        },
+        {
+          "path": "references/runtime-export.md",
+          "sha256": "b3d0ee5b5ed3a6bda775847417a2c3f26c22963e1c83e1ef2d531d95d1587f1a"
+        },
+        {
+          "path": "references/sfx-sound-design.md",
+          "sha256": "be5976bda0a01e68e56ad06cedeef4c8c41843ab03525d7559c044ad0100fc00"
+        },
+        {
+          "path": "references/sketch-to-shot.md",
+          "sha256": "94eca75286de8275fc5a6a9834354c654af18b2d3fbe0e6951667157ff7eeb8f"
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "093b8136a4d9b2d47c5cfe6bb6ba7bb247191d781b7b5b301e553f1319b983e7"
+        },
+        {
+          "path": "references/style-playbook.md",
+          "sha256": "6152b1a73545e771879e6b311c391c7d8c5755ba8d63e316c3ffb8909c0e9623"
+        },
+        {
+          "path": "references/troubleshooting.md",
+          "sha256": "b4772606a9dda37ff5e1f2205aaefccc6db0d56843831b3b3dbc92079c5d4706"
+        },
+        {
+          "path": "references/tutorial-analysis.md",
+          "sha256": "22671e36406c1f8702d85cff93f44a869fc30e3d5c2786fc93707319dce1e007"
+        },
+        {
+          "path": "references/vfx-blender.md",
+          "sha256": "568157bf56360bce7214a0436addaa9fa3615b44a5f20c1f4ffc6252011f77bf"
+        },
+        {
+          "path": "scripts/bedrock_audit.py",
+          "sha256": "22f2f8239ec68eb6e8b7a7ec6cbe9d1b7d904695b0c62b2b6314b3c8cfe4d3af"
+        },
+        {
+          "path": "scripts/camera_impulse.py",
+          "sha256": "923b45d32bb9de734b0290a104f3a99f0ed5cdb49e572422c1c0a3fcf2e1f377"
+        },
+        {
+          "path": "scripts/motion_audit.py",
+          "sha256": "a8edbd0d7cdd9d0e35103d7422bd4cccdd502908b163e128d926b541d7bab7f7"
+        },
+        {
+          "path": "scripts/tests/test_audits.py",
+          "sha256": "f3e7a0464e819e20b0bf711dc344accd05623bfa45178326fb692a35545d48a6"
+        },
+        {
+          "path": "scripts/tests/test_camera_impulse.py",
+          "sha256": "80f8a54ced99bc02dd3af83aa70bcbf8bffd0d63fc2d394be8748963ac7d57fd"
+        }
+      ]
+    },
+    {
+      "name": "turntable",
+      "path": "/home/daydert/.codex/skills/turntable",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "3396c75a61946ac3a537f0dc57a7bd2d664f1621737dbdefe6c7fd564bbb2d5d"
+        }
+      ]
+    },
+    {
+      "name": "slow-zoom",
+      "path": "/home/daydert/.codex/skills/slow-zoom",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "ee61cfed6cf0fb7c32f2863f1adedb6cf82a47300b2256feb20d03e0049c925e"
+        }
+      ]
+    },
+    {
+      "name": "dolly-rotate",
+      "path": "/home/daydert/.codex/skills/dolly-rotate",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "6d1bc79f45fd2ed3d737d9e03379f5ba32b29f3030a821b76bad1dea638d4c48"
+        }
+      ]
+    },
+    {
+      "name": "crane-shot",
+      "path": "/home/daydert/.codex/skills/crane-shot",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "ec777f9c6900e1515dd96a995248ed46b1e6ae2767a1958be7e4d4789aed7eec"
+        }
+      ]
+    },
+    {
+      "name": "dynamic-full-loop",
+      "path": "/home/daydert/.codex/skills/dynamic-full-loop",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "a3e931182e32c69e41812063c0d478138a70e8f921b13790e282ca63ebcaf725"
+        }
+      ]
+    },
+    {
+      "name": "perfect-loop",
+      "path": "/home/daydert/.codex/skills/perfect-loop",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "4140b552ba7ee7f56a65bb3e9084616c1dc064b47dcf4f79346b1c16c2c86f53"
+        }
+      ]
+    },
+    {
+      "name": "blender-animation",
+      "path": "/home/daydert/.codex/skills/blender-animation",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "eea58f6abd56d854ec10d6df13548f706fd2e56c5c90a3d57b187835fa58109b"
+        },
+        {
+          "path": "references/combat-animation.md",
+          "sha256": "9db8019516af22e7b5ec8a2cb7fcc4f4631029bcfeb01a4cb7be8dbb74b36c3f"
+        },
+        {
+          "path": "references/shared/asset-pipeline.md",
+          "sha256": "421dfcb29dba67472265fbc426e6b4b535ddc1097f21a628bbcca66693af865e"
+        },
+        {
+          "path": "references/shared/mcp-integration.md",
+          "sha256": "18468f4851d262d01420752596b35a02202dfff16bf1d770023a7d258585d770"
+        },
+        {
+          "path": "references/shared/mcp-tools.md",
+          "sha256": "3b088d8176ecf372c5f15973af5d130a2ee7450293ca55eafae19860dd000db1"
+        },
+        {
+          "path": "references/shared/naming-conventions.md",
+          "sha256": "3573b3dfecf813c18821922c62e815d9969a0c68349813769a7c3f526aafb3e5"
+        },
+        {
+          "path": "references/shared/polycount-budgets.md",
+          "sha256": "7745680c18fdc83ef06698b590c6af442a604766186a49a14861fa8d487a0a75"
+        },
+        {
+          "path": "references/shared/reference-analysis-template.md",
+          "sha256": "757ea985ff38840b2c734d44b4c6cdaed38840271a794b393c2a5e8e950f253c"
+        },
+        {
+          "path": "references/shared/reference-image-match.md",
+          "sha256": "71078b78a3469ca80725c95ecfb87294f583ebc4ac68f29cf6590fb329870b95"
+        },
+        {
+          "path": "references/shared/validation-checklist.md",
+          "sha256": "f865c62f1ac66881d67734bd72849d26f81fbeced5bc0bfd1e7b9506a8baf148"
+        },
+        {
+          "path": "references/shared/visual-match-checklist.md",
+          "sha256": "815e4d1588949c125a726ef019c1f9393580b717560b594daf40f32f78178b5f"
+        },
+        {
+          "path": "references/walk-cycle.md",
+          "sha256": "5ac01bfacc8d3daa864362a70b3751cfd32a17710708f6f2c93bd1afee77dd6a"
+        }
+      ]
+    },
+    {
+      "name": "blender-camera-cinematography",
+      "path": "/home/daydert/.codex/skills/blender-camera-cinematography",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "c8e175e8f1725684a24cbadbcf185fbb31a196dc703fb3a0d43f2821b8963f46"
+        },
+        {
+          "path": "references/camera-move-library.md",
+          "sha256": "928db1846e42139845360bc5e6c5f8ec0165445ba15c7a262b01a2e175fcaf5b"
+        },
+        {
+          "path": "references/dof-guide.md",
+          "sha256": "4824aa3465476b94ea76070e33c4c0ae7d78065f71b4da88517e6fba38995b29"
+        },
+        {
+          "path": "references/lens-and-composition.md",
+          "sha256": "5d706c214dba9fa7f630f5e0634bb9b93ea76a7c77995d2d95d8633006a78375"
+        },
+        {
+          "path": "references/shared/asset-pipeline.md",
+          "sha256": "421dfcb29dba67472265fbc426e6b4b535ddc1097f21a628bbcca66693af865e"
+        },
+        {
+          "path": "references/shared/mcp-integration.md",
+          "sha256": "18468f4851d262d01420752596b35a02202dfff16bf1d770023a7d258585d770"
+        },
+        {
+          "path": "references/shared/mcp-tools.md",
+          "sha256": "3b088d8176ecf372c5f15973af5d130a2ee7450293ca55eafae19860dd000db1"
+        },
+        {
+          "path": "references/shared/naming-conventions.md",
+          "sha256": "3573b3dfecf813c18821922c62e815d9969a0c68349813769a7c3f526aafb3e5"
+        },
+        {
+          "path": "references/shared/polycount-budgets.md",
+          "sha256": "7745680c18fdc83ef06698b590c6af442a604766186a49a14861fa8d487a0a75"
+        },
+        {
+          "path": "references/shared/reference-analysis-template.md",
+          "sha256": "757ea985ff38840b2c734d44b4c6cdaed38840271a794b393c2a5e8e950f253c"
+        },
+        {
+          "path": "references/shared/reference-image-match.md",
+          "sha256": "71078b78a3469ca80725c95ecfb87294f583ebc4ac68f29cf6590fb329870b95"
+        },
+        {
+          "path": "references/shared/validation-checklist.md",
+          "sha256": "f865c62f1ac66881d67734bd72849d26f81fbeced5bc0bfd1e7b9506a8baf148"
+        },
+        {
+          "path": "references/shared/visual-match-checklist.md",
+          "sha256": "815e4d1588949c125a726ef019c1f9393580b717560b594daf40f32f78178b5f"
+        }
+      ]
+    },
+    {
+      "name": "blender-lighting",
+      "path": "/home/daydert/.codex/skills/blender-lighting",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "8da1e931a8689bd96c66d8fe9feca882d446988c77b3cf869c33128165105e17"
+        },
+        {
+          "path": "references/cinematic-light-rigs.md",
+          "sha256": "651883fdad2ebba49f12514e01fce10d8e465c047f6e820d3f3a689c23b31e5b"
+        },
+        {
+          "path": "references/horror-lighting-setups.md",
+          "sha256": "5b1b4767983ede817e27d63b5c772bf101842618d9cb4f023a4bf73561250c90"
+        },
+        {
+          "path": "references/shared/asset-pipeline.md",
+          "sha256": "421dfcb29dba67472265fbc426e6b4b535ddc1097f21a628bbcca66693af865e"
+        },
+        {
+          "path": "references/shared/mcp-integration.md",
+          "sha256": "18468f4851d262d01420752596b35a02202dfff16bf1d770023a7d258585d770"
+        },
+        {
+          "path": "references/shared/mcp-tools.md",
+          "sha256": "3b088d8176ecf372c5f15973af5d130a2ee7450293ca55eafae19860dd000db1"
+        },
+        {
+          "path": "references/shared/naming-conventions.md",
+          "sha256": "3573b3dfecf813c18821922c62e815d9969a0c68349813769a7c3f526aafb3e5"
+        },
+        {
+          "path": "references/shared/polycount-budgets.md",
+          "sha256": "7745680c18fdc83ef06698b590c6af442a604766186a49a14861fa8d487a0a75"
+        },
+        {
+          "path": "references/shared/reference-analysis-template.md",
+          "sha256": "757ea985ff38840b2c734d44b4c6cdaed38840271a794b393c2a5e8e950f253c"
+        },
+        {
+          "path": "references/shared/reference-image-match.md",
+          "sha256": "71078b78a3469ca80725c95ecfb87294f583ebc4ac68f29cf6590fb329870b95"
+        },
+        {
+          "path": "references/shared/validation-checklist.md",
+          "sha256": "f865c62f1ac66881d67734bd72849d26f81fbeced5bc0bfd1e7b9506a8baf148"
+        },
+        {
+          "path": "references/shared/visual-match-checklist.md",
+          "sha256": "815e4d1588949c125a726ef019c1f9393580b717560b594daf40f32f78178b5f"
+        }
+      ]
+    },
+    {
+      "name": "blender-rendering",
+      "path": "/home/daydert/.codex/skills/blender-rendering",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "18ce85b379bdfa12535d95833a9f15fdb04117fbab68faac8be38aa612cfc35b"
+        },
+        {
+          "path": "references/npr-rendering.md",
+          "sha256": "9fef29b76905d04dbe5ab905b0073a14465531ef7d750491637d91563c1618ff"
+        },
+        {
+          "path": "references/render-passes.md",
+          "sha256": "3bd1590431349b76ccb82a3d3589779baa29b1426c42f900cca19c1332f1a313"
+        },
+        {
+          "path": "references/shared/asset-pipeline.md",
+          "sha256": "421dfcb29dba67472265fbc426e6b4b535ddc1097f21a628bbcca66693af865e"
+        },
+        {
+          "path": "references/shared/mcp-integration.md",
+          "sha256": "18468f4851d262d01420752596b35a02202dfff16bf1d770023a7d258585d770"
+        },
+        {
+          "path": "references/shared/mcp-tools.md",
+          "sha256": "3b088d8176ecf372c5f15973af5d130a2ee7450293ca55eafae19860dd000db1"
+        },
+        {
+          "path": "references/shared/naming-conventions.md",
+          "sha256": "3573b3dfecf813c18821922c62e815d9969a0c68349813769a7c3f526aafb3e5"
+        },
+        {
+          "path": "references/shared/polycount-budgets.md",
+          "sha256": "7745680c18fdc83ef06698b590c6af442a604766186a49a14861fa8d487a0a75"
+        },
+        {
+          "path": "references/shared/reference-analysis-template.md",
+          "sha256": "757ea985ff38840b2c734d44b4c6cdaed38840271a794b393c2a5e8e950f253c"
+        },
+        {
+          "path": "references/shared/reference-image-match.md",
+          "sha256": "71078b78a3469ca80725c95ecfb87294f583ebc4ac68f29cf6590fb329870b95"
+        },
+        {
+          "path": "references/shared/validation-checklist.md",
+          "sha256": "f865c62f1ac66881d67734bd72849d26f81fbeced5bc0bfd1e7b9506a8baf148"
+        },
+        {
+          "path": "references/shared/visual-match-checklist.md",
+          "sha256": "815e4d1588949c125a726ef019c1f9393580b717560b594daf40f32f78178b5f"
+        }
+      ]
+    },
+    {
+      "name": "blockbench-animation",
+      "path": "/home/daydert/.codex/skills/blockbench-animation",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "4bd255ad8e48ad8bd6c3e43dfdd570b41426263e21cbdeb017b9d5cb2f27e75c"
+        },
+        {
+          "path": "references/formats-and-delivery.md",
+          "sha256": "ead1d7fce4f453ad48e9f755b92f85f67ac7dbc2c3d25d6f26f7eb525213a145"
+        },
+        {
+          "path": "references/mcp-overview.md",
+          "sha256": "b878a60f017dfb19636e8f7f52fb8408aa93ab6c8d7f0e8a7e8e6a10d9fabe19"
+        },
+        {
+          "path": "references/particles.md",
+          "sha256": "7ac2ad348ab42f46b4121b26462f7ee627d486a2021e47fb03791ea13570f42d"
+        },
+        {
+          "path": "references/real-time-asset-planning.md",
+          "sha256": "9433fda4123a862a77e93d666cad025f7e8190742c63dac00971b1ec6c15c5f4"
+        }
+      ]
+    }
+  ],
+  "mcp": {
+    "name": "blender",
+    "package": "mcp-for-blender==2.2.7",
+    "config": "/home/daydert/MinecraftSurvivors2/.codex/config.toml",
+    "enabled_tools": [
+      "get_addon_status",
+      "get_scene_info",
+      "execute_blender_code",
+      "look"
+    ],
+    "addon": "/home/daydert/.config/blender/5.3/scripts/addons/blender_mcp.py",
+    "addon_upstream_copy": "/home/daydert/.config/blender/5.3/scripts/addons/blender_mcp.py.upstream",
+    "external_network": "blocked in MCP launcher, all addon integration flags off",
+    "telemetry": false
+  },
+  "skipped": [
+    "Blockbench MCP/server/plugin: desktop app not installed",
+    "Other arjun988 skills: outside requested four disciplines",
+    "Meshy/image generation and Poly Haven skill families: require keys or external asset services"
+  ],
+  "global_config_backup": "/home/daydert/.codex/config.toml.bak-cinematics-20261111-215440",
+  "verification": {
+    "mcp_scene_creation": true,
+    "actual_viewport_review": true,
+    "headless_render": true,
+    "width": 960,
+    "height": 540,
+    "frames": 48,
+    "fps": 24,
+    "duration_seconds": 2,
+    "movie": "/home/daydert/MinecraftSurvivors2/qa/cinematics/minecraft_walk.mp4"
+  }
+}

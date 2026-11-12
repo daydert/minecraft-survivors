@@ -1,0 +1,11 @@
+{
+  "status": "pass",
+  "targeted_checks": 322,
+  "video": "qa/recordings/chapter_four_combat_polish.mp4",
+  "duration": 75.03333333333333,
+  "frames": 2251,
+  "builds": "qa/ch4_combat_polish/builds.json",
+  "exports": "qa/ch4_combat_polish/exports.json",
+  "report": "docs/COMBAT_POLISH_2026-11-12.md",
+  "long_natural_boss_run": false
+}

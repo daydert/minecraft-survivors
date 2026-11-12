@@ -29,7 +29,7 @@ func run():
 	# The sword at the spawn, in every chapter.
 	game.action("chapter_1");game.world.skip_intro();game.world.begin_sword_drop()
 	check(game.world.build.get("sword",0)==1 and game.world.sword_drop.is_empty(),"In chapter I Steve walks in with his sword")
-	for chapter in [2,3,4,5]:
+	for chapter in [2,3,5]:
 		game.action("chapter_%d"%chapter);var w=game.world
 		w.begin_sword_drop()
 		var guard:=0
@@ -47,6 +47,8 @@ func run():
 		check(w.build.get("sword",0)==1,"Chapter %d: walking onto the sword picks it up"%chapter)
 		advance(.5)
 		check(w.time>t0,"Chapter %d run starts once the sword is taken"%chapter)
+	game.action("chapter_4");game.world.begin_sword_drop()
+	check(game.world.build.get("sword",0)==1 and game.world.sword_drop.is_empty(),"Chapter IV retains EnderSteve's gift without another pickup")
 	# II: the Wither's blast melts the gear.
 	game.action("chapter_2");var n=game.world
 	n.build={"sword":6,"bow":4,"trident":3};n.items={"armor":2,"sugar":1}

@@ -219,7 +219,7 @@ func step(dt: float, movement: Vector2) -> Array:
 			var nt: Dictionary = notch();nt.stun = 99.0;nt.vx = 0.0
 			resolve(steve(), nt)
 			if nt.hp < -.01 or age >= FINISH_TIME:
-				nt.ko = true;nt.stun = 0.0;state = "ko";age = 0.0;slow = .6;say("K.O.");events.append("ko")
+				nt.ko = true;nt.stun = 0.0;state = "ko";age = 0.0;slow = .6;say("K.O.");events.append("ko");settle_winner()
 		"fatality":
 			fatality_step(dt)
 		"wire":
@@ -234,10 +234,11 @@ func step(dt: float, movement: Vector2) -> Array:
 			for i in range(2):
 				var a: Dictionary = fighters[i];var b: Dictionary = fighters[1 - i]
 				if not a.ko and not b.ko and a.move.is_empty() and a.y <= 0:a.face = 1.0 if b.x > a.x else -1.0
-				resolve(a, b)
+				if state == "fight":resolve(a, b)
 			push_apart()
-			update_bolts(dt)
-			update_falls(dt)
+			if state == "fight":
+				update_bolts(dt)
+				update_falls(dt)
 			if state == "fight":check_end()
 			elif age >= 3.0:next_round()
 	for sp in sparks:sp.age += dt
@@ -262,10 +263,19 @@ func check_end():
 		winner = 0;wins[0] += 1;state = "finish";age = 0.0;slow = .5;zoom = 1.0;seq.clear()
 		say("ДОБЕЙ ЕГО!");events.append("finish_him");return
 	fighters[loser].ko = true;fighters[loser].move = "";winner = 1 - loser;wins[winner] += 1;state = "ko";age = 0.0;slow = .9;zoom = 1.0
+	settle_winner()
 	var w: Dictionary = fighters[winner]
 	say("K.O." if clock > 0 else "ВРЕМЯ!")
 	if w.hp >= w.max and winner == 0:say("БЕЗУПРЕЧНО")
 	events.append("ko")
+
+## K.O. releases the last input and action; the winner cannot keep a low
+## attack's body drop or continue resolving its hits during the victory hold.
+func settle_winner():
+	var f: Dictionary = fighters[winner]
+	f.move = "";f.t = 0.0;f.vx = 0.0;f.crouch = false;f.block = false
+	f.stun = 0.0;f.down = 0.0;input_dir = Vector2.ZERO
+	bolts.clear();falls.clear()
 
 func next_round():
 	if wins[0] >= 2 or wins[1] >= 2 or mode == "fists":
@@ -458,7 +468,7 @@ func try_fatality() -> bool:
 		if tail[i].k != FATALITY_INPUT[i]:return false
 	if age - tail[0].t > 2.5 or absf(steve().x - notch().x) > 3.2:return false
 	state = "fatality";age = 0.0;fatality = true;seq.clear()
-	var s: Dictionary = steve();s.move = "";s.vx = 0.0;s.face = 1.0 if notch().x > s.x else -1.0
+	var s: Dictionary = steve();s.move = "";s.vx = 0.0;s.crouch = false;s.block = false;s.face = 1.0 if notch().x > s.x else -1.0
 	announce = "";events.append("fatality_start");zoom = 1.0
 	return true
 

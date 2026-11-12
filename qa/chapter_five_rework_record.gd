@@ -2,10 +2,13 @@ extends SceneTree
 ## Film of the chapter V rework: fighter, battle box, lanes, arena, ending.
 var game
 var folder:="res://qa/recordings/chapter_five_frames"
-var state:={"frame":0,"cues":[],"music":[{"track":"music","time":0.0}]}
+var state:={"frame":0,"cues":[],"music":[]}
 func _initialize():run.call_deferred()
 func shoot(w):
 	for id in w.sounds:state.cues.append({"id":id,"time":state.frame/30.0})
+	var th: String=game.ch5_music() if w.get("notch")!=null and w.stage=="notch" else "silence"
+	th=th.get_slice(":",1) if th.begins_with("chapter_four_end:") else th
+	if state.music.is_empty() or state.music[-1].track!=th:state.music.append({"track":th,"time":state.frame/30.0})
 	w.sounds.clear()
 	game.ui_time+=1.0/30
 	game.queue_redraw();await process_frame;RenderingServer.force_draw(false)

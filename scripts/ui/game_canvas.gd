@@ -127,6 +127,10 @@ func ensure_four_assets():
 	four_assets_loaded = true
 
 func unload_four_assets():
+	if has_meta("ch4_combat_animations"):
+		for name in get_meta("ch4_combat_animations").sprites:textures.erase(name)
+		remove_meta("ch4_combat_animations")
+	textures.erase("ch4_spiral_spike")
 	if has_meta("ch4_finale_assets"):
 		for name in get_meta("ch4_finale_assets").sprites:textures.erase(name)
 		remove_meta("ch4_finale_assets")

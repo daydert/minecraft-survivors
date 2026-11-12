@@ -25,7 +25,10 @@
   "icon_pvz_cactus",
   "icon_pvz_piston",
   "icon_pvz_magma",
-  "icon_pvz_redstone"
+  "icon_pvz_redstone",
+  "icon_repeating_block",
+  "icon_breakpoint",
+  "icon_healing_v"
  ],
  "notch": {
   "sheet": "ch5_notch",

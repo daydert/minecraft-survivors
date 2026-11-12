@@ -1,0 +1,52 @@
+{
+  "sprites": [
+    "ch4p_cast_step",
+    "ch4p_ground_smash",
+    "ch4_spiral_spike",
+    "ch4p_spiral_raise"
+  ],
+  "poses": {
+    "cast_step": {
+      "texture": "ch4p_cast_step",
+      "frame": [
+        48,
+        56
+      ],
+      "anchor": [
+        24,
+        50
+      ],
+      "fps": 12,
+      "count": 13,
+      "length": 1.0
+    },
+    "ground_smash": {
+      "texture": "ch4p_ground_smash",
+      "frame": [
+        48,
+        56
+      ],
+      "anchor": [
+        24,
+        50
+      ],
+      "fps": 12,
+      "count": 42,
+      "length": 3.4
+    },
+    "spiral_raise": {
+      "texture": "ch4p_spiral_raise",
+      "frame": [
+        48,
+        56
+      ],
+      "anchor": [
+        24,
+        50
+      ],
+      "fps": 12,
+      "count": 32,
+      "length": 2.6
+    }
+  }
+}

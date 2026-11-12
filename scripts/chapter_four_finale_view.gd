@@ -26,6 +26,8 @@ static func h(i: int, salt: int) -> float:
 
 ## One posed frame of Herobrine or Steve from the finale atlases.
 static func figure(g, sheet: String, who: String, pose: String, t: float, p: Vector2, dir: Vector2, scale: float = 1.0, tint: Color = Color.WHITE, loop: bool = true):
+	if who=="herobrine" and pose in ["spiral_raise","ground_smash","cast_step"]:
+		combat_figure(g,pose,t,p,dir,scale,tint);return
 	var a: Dictionary = assets(g)
 	var layout: Dictionary = a[who]
 	if not layout.has(pose):pose = "idle"
@@ -1374,3 +1376,19 @@ static func door(g, e, offset: Vector2):
 			g.draw_rect(Rect2(top_left, Vector2(size.x, 3)), Color(0, 0, 0))
 	if e.door_state in ["gone", "closed"] and e.age > 11.2:
 		g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, smoothstep(11.2, 13.2, e.age)))
+
+## New whole-body poses are evaluated in Blender and baked through the same
+## native z-buffer as IV. Feet and casting arms stay in one connected rig.
+static func combat_figure(g,pose: String,t: float,p: Vector2,dir: Vector2,scale: float,tint: Color):
+	if not g.has_meta("ch4_combat_animations"):
+		g.set_meta("ch4_combat_animations",JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_four_combat_animations.json")))
+	var meta: Dictionary=g.get_meta("ch4_combat_animations").poses[pose]
+	var name: String=meta.texture
+	if not g.textures.has(name):g.load_texture(name)
+	var texture: Texture2D=g.textures.get(name)
+	if texture==null:return
+	var size:=Vector2(meta.frame[0],meta.frame[1]);var anchor:=Vector2(meta.anchor[0],meta.anchor[1])
+	var row: int=row_of(dir);var frame: int=clampi(int(t*float(meta.fps)),0,int(meta.count)-1)
+	g.draw_set_transform(p.floor(),0,Vector2(-1 if row==2 and dir.x<0 else 1,1))
+	g.draw_texture_rect_region(texture,Rect2(-anchor*scale,size*scale),Rect2(Vector2(frame*size.x,row*size.y),size),tint)
+	g.draw_set_transform(Vector2.ZERO)

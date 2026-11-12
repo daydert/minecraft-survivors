@@ -4,7 +4,7 @@
   "phases": {
     "dark_at": 240.0,
     "flicker_at": 480.0,
-    "flicker_period": 7.0
+    "flicker_period": 60.0
   },
   "mobs": {
     "token": {

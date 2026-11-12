@@ -373,13 +373,13 @@ func move_mobs(dt: float):
 		if m.kind == "skeleton":
 			if distance < 120: direction = -p.direction_to(player)
 			elif distance < 180 and line_clear(p,player): speed = 0
-			if m.timer <= 0 and visible(p, -8) and distance <= 220 and line_clear(p,player):
+			if m.timer <= 0 and distance >= 120 and visible(p, -8) and distance <= 220 and line_clear(p,player):
 				fire_projectile("enemy_arrow", p, p.direction_to(player), {"speed":110,"damage":m.damage,"range":220,"radius":3,"pierce":0}, false)
 				m.visual.shot_age = 0.0
 				sound("arrow",0.09)
 				m.timer = 3
 			elif m.timer <= 0: m.timer = 0
-			if m.timer < 0.5 and visible(p): speed = 0
+			if distance >= 120 and m.timer < 0.5 and visible(p): speed = 0
 		if m.kind == "creeper":
 			if m.fuse < 0 and distance <= 24:
 				m.fuse = 0.9
@@ -696,25 +696,32 @@ func drop_xp(p: Vector2, value: int):
 	else: orbs.append({"p":p,"value":value,"attracted":false})
 
 func pickup(dt: float):
-	var radius = 24 * (1 + 0.3 * items.get("hopper",0))
+	var radius: float = pickup_radius()
 	for i in range(orbs.size()-1,-1,-1):
 		var o = orbs[i]
 		if not can_pickup_orb(o): continue
 		var distance = o.p.distance_to(player)
 		if distance <= radius: o.attracted = true
-		if o.attracted: o.p = o.p.move_toward(player,dt * 190)
+		if o.attracted: o.p = o.p.move_toward(player,dt * orb_pull_speed())
 		if o.p.distance_to(player) < 7:
 			xp += o.value
 			orbs.remove_at(i)
 			sound("xp",0.09)
 	for i in range(loot.size()-1,-1,-1):
 		var o = loot[i]
+		pull_healing_loot(o,dt)
 		if o.p.distance_to(player) > 10: continue
 		if o.kind == "chest":
 			if not pending_chest.is_empty(): continue
 			pending_chest = o.duplicate()
 		else: apply_upgrade(o.kind)
 		loot.remove_at(i)
+
+## Virtual pickup policy: solo campaign can tune its item without changing
+## legacy coop collection. No random numbers are consumed by attraction.
+func pickup_radius() -> float:return 24.0*(1.0+.3*items.get("hopper",0))
+func orb_pull_speed() -> float:return 190.0
+func pull_healing_loot(_loot: Dictionary,_dt: float):pass
 
 func can_pickup_orb(_orb: Dictionary) -> bool:
 	return true

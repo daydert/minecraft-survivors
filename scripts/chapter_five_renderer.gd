@@ -32,6 +32,8 @@ func world(g):
 	var w = g.world
 	if w.stage == "notch":
 		var ph: String = w.notch.phase if w.notch.phase != "retry" else w.notch.retry_of
+		if ph in ["to_ut", "to_lanes", "lanes_won", "to_quake", "to_code"] and w.notch.phase != "retry":
+			NotchView.portal(g);return
 		if ph in ["ut", "to_lanes"] or (ph == "ut"):
 			NotchView.battle(g);return
 		if ph in ["lanes", "lanes_won"]:
@@ -42,6 +44,8 @@ func world(g):
 			NotchView.quake(g);return
 		if ph == "code":
 			NotchView.code(g);return
+		if ph in ["qte","bad_end"]:
+			NotchView.qte(g);return
 		if ph == "erase":
 			NotchView.erase(g);return
 		if ph == "fists":
@@ -93,7 +97,11 @@ func world(g):
 			"loot":
 				var o = actor.obj
 				g.oval(o.p + offset, Vector2(6, 2), Color(0, 0, 0, .25))
-				g.item_icon(o.kind, o.p + offset - Vector2(8, 16 + sin(w.clock * 3) * 2))
+				if o.kind=="chest":
+					var at: Vector2=o.p+offset
+					g.draw_texture_rect(g.textures.icon_structure_block,Rect2(at-Vector2(10,22),Vector2(20,20)),false)
+					g.draw_rect(Rect2(at-Vector2(11,23),Vector2(22,22)),Color(.7,.5,1,.7),false,1)
+				else:g.item_icon(o.kind, o.p + offset - Vector2(8, 16 + sin(w.clock * 3) * 2))
 			"player":
 				var p: Vector2 = w.player + offset
 				g.oval(p, Vector2(8, 3), Color(0, 0, 0, .3))
@@ -133,6 +141,7 @@ func world(g):
 			g.draw_rect(Rect2(0, 358 - i * 3, 640, 3), Color(0, 0, 0, strip * k * k))
 	if w.bosses.rewind_flash > 0:rewind(g, w.bosses.rewind_flash)
 	boss_bar(g)
+	boss_arrival(g,offset)
 	if w.stage == "notch":NotchView.overlay(g)
 	else:debug(g, offset)
 
@@ -146,6 +155,13 @@ func floor_code(g, offset: Vector2, ink: Color, tone: float):
 	for gy in range(int(floorf(-offset.y / 64.0)), int(floorf((-offset.y + 360) / 64.0)) + 1):
 		var y: float = gy * 64 + offset.y
 		g.draw_line(Vector2(0, y), Vector2(640, y), Color(ink, .05), 1)
+	for gx in range(int(floorf(-offset.x/96)),int(floorf((-offset.x+640)/96))+1):
+		for gy in range(int(floorf(-offset.y/96)),int(floorf((-offset.y+360)/96))+1):
+			var pos: Vector2=Vector2(gx,gy)*96+offset
+			var shade: Color=Color(.78,.79,.82,.12).lerp(Color(.09,.11,.16,.35),tone)
+			g.draw_rect(Rect2(pos+Vector2(4,4),Vector2(88,88)),shade)
+			g.draw_line(pos+Vector2(4,4),pos+Vector2(92,4),Color(ink,.07),1)
+			g.draw_line(pos+Vector2(92,4),pos+Vector2(92,92),Color(ink,.05),1)
 	# Rows of the game's own source, lying on the floor.
 	var first: int = int(floorf(-offset.y / 22.0))
 	for row in range(first, first + 18):
@@ -257,6 +273,8 @@ func entity(g, m: Dictionary, offset: Vector2, tone: float):
 		var owner = w.mob_by_id(m.owner)
 		if owner != null:g.draw_line(p - Vector2(0, 12), owner.p + offset - Vector2(0, 14), Color(NUM, .5), 1)
 	var card: Color = Color(1, 1, 1) if m.flash > 0 and g.settings.flashes else CARD
+	g.draw_rect(Rect2(origin+Vector2(3,4),size),Color(.01,.015,.025,alpha*.65))
+	g.draw_rect(Rect2(origin-Vector2(1,1),size+Vector2(2,2)),Color(.21,.23,.29,alpha))
 	g.draw_rect(Rect2(origin, size), Color(card, alpha * (.94 if m.kind != "null_ref" else .5)))
 	var rim: Color = Color(.45, .5, .7).lerp(Color(.6, .7, 1), tone)
 	if m.kind == "while_loop" and not m.broken:rim = NUM
@@ -449,6 +467,9 @@ func effect(g, e: Dictionary, offset: Vector2) -> bool:
 	var p: Vector2 = e.p + offset
 	var k: float = e.age / e.total
 	match e.kind:
+		"ch5_breakpoint":
+			g.draw_arc(p,18+k*35,0,TAU,24,Color(1,.3,.2,1-k),2)
+			g.text_at("break;",p-Vector2(14,25),8,Color(1,.4,.2,1-k))
 		"ch5_spawn":
 			for i in range(10):
 				var d := Vector2.from_angle(i * TAU / 10) * (4 + k * 18)
@@ -468,6 +489,17 @@ func effect(g, e: Dictionary, offset: Vector2) -> bool:
 
 func terminal(g, m: Dictionary, p: Vector2, tone: float):
 	var w = g.world
+	var boot: float=smoothstep(0,1.8,float(w.bosses.terminal.get("age",9)))
+	p.y-=32*(1-boot)
+	# A CRT housing, cooling vents and an anchored processing tower.
+	g.draw_colored_polygon(PackedVector2Array([p+Vector2(70,-70),p+Vector2(82,-80),p+Vector2(82,-19),p+Vector2(70,-7)]),Color(.19,.21,.23))
+	g.draw_colored_polygon(PackedVector2Array([p+Vector2(-70,-70),p+Vector2(-58,-80),p+Vector2(82,-80),p+Vector2(70,-70)]),Color(.66,.65,.60))
+	for y in range(5):g.draw_line(p+Vector2(73,-60+y*7),p+Vector2(79,-66+y*7),Color(.04,.05,.06),2)
+	for x in [-46,46]:
+		g.draw_rect(Rect2(p+Vector2(x,-11),Vector2(12,14)),Color(.16,.18,.21))
+	if boot<1:
+		g.draw_arc(p,38+boot*55,0,TAU,40,Color(.25,1,.65,1-boot),2)
+		for i in range(7):g.draw_line(p+Vector2(-60+i*20,-110*(1-boot)),p+Vector2(-60+i*20,0),Color(.3,1,.6,(1-boot)*.3),1)
 	var screen := Rect2((p - Vector2(66, 66)).floor(), Vector2(132, 54))
 	g.oval(p, Vector2(30, 6), Color(0, 0, 0, .3))
 	g.draw_rect(Rect2(p - Vector2(6, 12), Vector2(12, 12)), Color(.22, .22, .25))
@@ -506,6 +538,13 @@ func clone(g, m: Dictionary, p: Vector2):
 		for k in range(4):g.draw_rect(Rect2((p + Vector2(-8 + k * 5, -4 - fposmod(w.clock * 30 + k * 5, 14))).floor(), Vector2(1, 3)), Color(.5, .8, 1, .7))
 
 func loop_card(g, m: Dictionary, p: Vector2, tone: float):
+	# Concentric broken clockwork, anchored to a real slab of source code.
+	var ink: Color=Color(.65,.45,1)
+	for ring in range(3):
+		for side in range(4):
+			var angle: float=g.world.clock*(.3 if ring%2 else -.3)+side*TAU/4
+			g.draw_arc(p-Vector2(0,23),42+ring*10,angle,angle+.9,10,Color(ink,.35+ring*.12),2)
+	g.draw_rect(Rect2(p+Vector2(-61,-5),Vector2(126,8)),Color(.13,.10,.18))
 	var w = g.world
 	var lp: Dictionary = w.bosses.loop
 	var i: int = lp.get("i", 0)
@@ -560,3 +599,14 @@ func boss_bar(g):
 	g.centered(title, 41, 8, Color.WHITE, true)
 	g.draw_rect(Rect2(211, 46, 218, 5), Color(.15, .15, .2))
 	g.draw_rect(Rect2(212, 47, 216 * clampf(target.hp / target.max_hp, 0, 1), 3), Color(.35, 1, .45) if title == "Бесконечный цикл" else Color(.95, .35, .3))
+
+func boss_arrival(g, offset: Vector2):
+	var w=g.world;var b=w.bosses
+	var active: Dictionary=b.terminal if not b.terminal.is_empty() else b.loop
+	if active.is_empty():return
+	var elapsed: float=active.get("intro_age",active.get("age",9.0))
+	if elapsed>2.6:return
+	var opacity: float=smoothstep(0,.25,elapsed)*(1-smoothstep(1.8,2.6,elapsed))
+	g.draw_rect(Rect2(0,90,640,48),Color(.015,.02,.03,.84*opacity))
+	g.centered("ТЕРМИНАЛ" if not b.terminal.is_empty() else "БЕСКОНЕЧНЫЙ ЦИКЛ",112,24,Color(.65,1,.78,opacity),true)
+	g.centered("new Player(steve)" if not b.terminal.is_empty() else "while (true)",128,8,Color(.7,.72,.8,opacity))

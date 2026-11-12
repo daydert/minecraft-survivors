@@ -283,7 +283,7 @@ func move_mobs(dt: float):
 			if m.get("turret",false):speed=0
 			elif distance<95:direction=-old.direction_to(player)
 			elif distance<190:speed=0
-			if m.timer<=0 and distance<280 and visible(old) and line_clear(old,player):
+			if m.timer<=0 and (m.get("turret",false) or distance>=95) and distance<280 and visible(old) and line_clear(old,player):
 				var burning=m.kind=="blaze_nether"
 				for j in range(3 if burning else 1):
 					fire_projectile("enemy_flame" if burning else "enemy_arrow",old,old.direction_to(player).rotated((j-1)*.14 if burning else 0),{"speed":100 if burning else 145,"damage":m.damage,"range":310,"radius":4},false)

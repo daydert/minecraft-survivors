@@ -1,0 +1,12 @@
+[
+  {
+    "platform": "linux",
+    "file": "builds/linux/MinecraftSurvivors.x86_64",
+    "exit": 0
+  },
+  {
+    "platform": "windows",
+    "file": "builds/windows/MinecraftSurvivors.exe",
+    "exit": 0
+  }
+]

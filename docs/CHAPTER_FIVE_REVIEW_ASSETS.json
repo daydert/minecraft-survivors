@@ -1,0 +1,15 @@
+{
+  "icon_pvz_snow_golem": {
+    "sources": [
+      "Minecraft Java 1.21.11: textures/entity/snow_golem.png",
+      "Minecraft Java 1.21.11: block/carved_pumpkin, pumpkin_side, pumpkin_top"
+    ],
+    "geometry_reference": "https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/models/entity/snow_golem.geo.json",
+    "size": [
+      40,
+      48
+    ],
+    "sha256": "3651ef5079b88998b3cb3797812df7fd737921b08aa07655cb05504560154509",
+    "builder": "scripts/bake_chapter_five.py::snow_golem"
+  }
+}

@@ -1,0 +1,19 @@
+# Project-only Blender MCP. Existing user MCP servers are inherited unchanged.
+[mcp_servers.blender]
+command = "/home/daydert/.local/share/codex-cinematics/runtime/bin/python"
+args = ["/home/daydert/MinecraftSurvivors2/scripts/cinematics/blender_mcp_local.py"]
+cwd = "/home/daydert/MinecraftSurvivors2"
+enabled = true
+startup_timeout_sec = 30
+tool_timeout_sec = 60
+enabled_tools = ["get_addon_status", "get_scene_info", "execute_blender_code", "look"]
+
+[mcp_servers.blender.env]
+DISABLE_TELEMETRY = "true"
+BLENDERMCP_NO_UPDATE_CHECK = "1"
+BLENDER_HOST = "127.0.0.1"
+BLENDER_PORT = "9876"
+BLENDER_PATH = "/home/daydert/.local/share/Steam/steamapps/common/Blender/blender"
+BLENDER_BIN = "/home/daydert/.local/share/Steam/steamapps/common/Blender/blender"
+BLENDER_MCP_APPS = "0"
+BLENDER_MCP_OPENAI_FORMS = "0"

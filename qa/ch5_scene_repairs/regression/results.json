@@ -1,0 +1,59 @@
+[
+  {
+    "test": "test_ch5_final_act.gd",
+    "exit": 0,
+    "summary": [
+      "FINAL_ACT_RESULT 34 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_ch5_brutal.gd",
+    "exit": 0,
+    "summary": [
+      "BRUTAL_RESULT 31 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_ch5_cinema.gd",
+    "exit": 0,
+    "summary": [
+      "CH5_CINEMA_RESULT 54 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_chapter_five_3d.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FIVE_3D_RESULT 26 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_chapter_four_arsenal_visual.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FOUR_ARSENAL_VISUAL_RESULT 35 checks; 0 failures",
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "test": "test_chapter_five_finale.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FIVE_FINALE_RESULT 23 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_chapter_five_notch.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FIVE_NOTCH_RESULT 22 checks; 0 failures"
+    ]
+  },
+  {
+    "test": "test_chapter_five.gd",
+    "exit": 0,
+    "summary": [
+      "CHAPTER_FIVE_RESULT 33 checks; 0 failures"
+    ]
+  }
+]

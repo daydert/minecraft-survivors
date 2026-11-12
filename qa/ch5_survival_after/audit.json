@@ -1,0 +1,1203 @@
+{
+  "diagnostic_hp": true,
+  "max_loot": 1,
+  "samples": [
+    {
+      "build": {
+        "sword": 1
+      },
+      "items": {},
+      "loot": 0,
+      "mobs": 0,
+      "time": 1.0
+    },
+    {
+      "build": {
+        "sword": 1
+      },
+      "items": {},
+      "loot": 0,
+      "mobs": 4,
+      "time": 10.0000000000001
+    },
+    {
+      "build": {
+        "sword": 3
+      },
+      "items": {},
+      "loot": 0,
+      "mobs": 5,
+      "time": 20.0000000000001
+    },
+    {
+      "build": {
+        "sword": 3
+      },
+      "items": {
+        "armor": 1
+      },
+      "loot": 0,
+      "mobs": 5,
+      "time": 30.9999999999995
+    },
+    {
+      "build": {
+        "sword": 3
+      },
+      "items": {
+        "armor": 1
+      },
+      "loot": 0,
+      "mobs": 8,
+      "time": 40.999999999999
+    },
+    {
+      "build": {
+        "sword": 4
+      },
+      "items": {
+        "armor": 1
+      },
+      "loot": 0,
+      "mobs": 7,
+      "time": 50.9999999999984
+    },
+    {
+      "build": {
+        "sword": 6
+      },
+      "items": {
+        "armor": 1
+      },
+      "loot": 0,
+      "mobs": 6,
+      "time": 60.9999999999978
+    },
+    {
+      "build": {
+        "sword": 6
+      },
+      "items": {
+        "armor": 1
+      },
+      "loot": 0,
+      "mobs": 6,
+      "time": 70.9999999999973
+    },
+    {
+      "build": {
+        "sword": 7
+      },
+      "items": {
+        "armor": 1
+      },
+      "loot": 0,
+      "mobs": 8,
+      "time": 80.9999999999967
+    },
+    {
+      "build": {
+        "sword": 7
+      },
+      "items": {
+        "armor": 1
+      },
+      "loot": 0,
+      "mobs": 10,
+      "time": 90.9999999999961
+    },
+    {
+      "build": {
+        "sword": 7
+      },
+      "items": {
+        "armor": 2
+      },
+      "loot": 0,
+      "mobs": 7,
+      "time": 100.533333333329
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 2
+      },
+      "loot": 0,
+      "mobs": 8,
+      "time": 110.533333333328
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 3
+      },
+      "loot": 0,
+      "mobs": 13,
+      "time": 120.533333333328
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 4
+      },
+      "loot": 0,
+      "mobs": 16,
+      "time": 130.066666666662
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "light_block": 1
+      },
+      "loot": 0,
+      "mobs": 14,
+      "time": 140.06666666667
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 1,
+        "light_block": 1
+      },
+      "loot": 0,
+      "mobs": 13,
+      "time": 150.066666666678
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "light_block": 1
+      },
+      "loot": 0,
+      "mobs": 13,
+      "time": 160.066666666686
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "light_block": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 12,
+      "time": 170.600000000028
+    },
+    {
+      "build": {
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 18,
+      "time": 180.600000000036
+    },
+    {
+      "build": {
+        "bow": 1,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 18,
+      "time": 190.600000000044
+    },
+    {
+      "build": {
+        "bow": 1,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 25,
+      "time": 200.600000000052
+    },
+    {
+      "build": {
+        "bow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 24,
+      "time": 210.133333333393
+    },
+    {
+      "build": {
+        "bow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 35,
+      "time": 220.133333333401
+    },
+    {
+      "build": {
+        "bow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "redstone": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 41,
+      "time": 230.133333333409
+    },
+    {
+      "build": {
+        "bow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "redstone": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 57,
+      "time": 240.133333333417
+    },
+    {
+      "build": {
+        "bow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "redstone": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 31,
+      "time": 250.133333333425
+    },
+    {
+      "build": {
+        "bow": 3,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "redstone": 1,
+        "sugar": 1
+      },
+      "loot": 0,
+      "mobs": 16,
+      "time": 260.133333333425
+    },
+    {
+      "build": {
+        "bow": 3,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 2,
+        "hopper": 1,
+        "light_block": 1,
+        "redstone": 1,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 9,
+      "time": 270.133333333416
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 3,
+        "hopper": 1,
+        "light_block": 1,
+        "redstone": 1,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 17,
+      "time": 280.133333333407
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 1,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 26,
+      "time": 290.133333333398
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 1,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 34,
+      "time": 300.133333333389
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 2,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 26,
+      "time": 310.13333333338
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 2,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 30,
+      "time": 320.133333333371
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 2,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 16,
+      "time": 330.133333333362
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 3,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 10,
+      "time": 340.133333333353
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 12,
+      "time": 350.133333333344
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 12,
+      "time": 360.133333333334
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 1,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 17,
+      "time": 370.133333333325
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 11,
+      "time": 380.133333333316
+    },
+    {
+      "build": {
+        "bow": 4,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 8,
+      "time": 390.133333333307
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 6,
+      "time": 400.133333333298
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 8,
+      "time": 410.133333333289
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 4,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 13,
+      "time": 420.13333333328
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 13,
+      "time": 430.133333333271
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 4,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 10,
+      "time": 440.133333333262
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 7,
+      "time": 450.133333333253
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 2,
+        "light_block": 2,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 7,
+      "time": 460.133333333244
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 3,
+        "light_block": 2,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 8,
+      "time": 470.133333333234
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 3,
+        "light_block": 2,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 13,
+      "time": 480.133333333225
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 3,
+        "light_block": 2,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 22,
+      "time": 490.133333333216
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 3,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 23,
+      "time": 500.133333333207
+    },
+    {
+      "build": {
+        "bow": 5,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 4,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 15,
+      "time": 510.133333333198
+    },
+    {
+      "build": {
+        "bow": 6,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 4,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 12,
+      "time": 520.133333333189
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 4,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 8,
+      "time": 530.13333333318
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 4,
+        "knowledge_book": 1,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 9,
+      "time": 540.133333333171
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 4,
+        "knowledge_book": 2,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 16,
+      "time": 550.133333333162
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 4,
+        "knowledge_book": 2,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 2
+      },
+      "loot": 0,
+      "mobs": 29,
+      "time": 560.666666666485
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 5,
+        "knowledge_book": 2,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 3
+      },
+      "loot": 0,
+      "mobs": 23,
+      "time": 570.666666666476
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 5,
+        "knowledge_book": 3,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 3
+      },
+      "loot": 1,
+      "mobs": 25,
+      "time": 580.666666666467
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "hopper": 5,
+        "knowledge_book": 4,
+        "light_block": 3,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 23,
+      "time": 590.666666666458
+    },
+    {
+      "build": {
+        "bow": 8,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 1,
+        "hopper": 5,
+        "knowledge_book": 4,
+        "light_block": 4,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 29,
+      "time": 600.199999999783
+    },
+    {
+      "build": {
+        "bow": 8,
+        "crossbow": 1,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 1,
+        "hopper": 5,
+        "knowledge_book": 4,
+        "light_block": 4,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 38,
+      "time": 610.199999999774
+    },
+    {
+      "build": {
+        "bow": 8,
+        "crossbow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 1,
+        "hopper": 5,
+        "knowledge_book": 4,
+        "light_block": 4,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 37,
+      "time": 620.199999999765
+    },
+    {
+      "build": {
+        "axe": 1,
+        "bow": 8,
+        "crossbow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 1,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 4,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 45,
+      "time": 630.733333333088
+    },
+    {
+      "build": {
+        "axe": 1,
+        "bow": 8,
+        "crossbow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 2,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 4,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 36,
+      "time": 640.733333333079
+    },
+    {
+      "build": {
+        "axe": 1,
+        "bow": 8,
+        "command_block": 1,
+        "crossbow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 2,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 54,
+      "time": 650.73333333307
+    },
+    {
+      "build": {
+        "axe": 2,
+        "bow": 8,
+        "command_block": 1,
+        "crossbow": 2,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 2,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 40,
+      "time": 660.733333333061
+    },
+    {
+      "build": {
+        "axe": 2,
+        "bow": 8,
+        "command_block": 1,
+        "crossbow": 3,
+        "repeating_block": 1,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 3,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 34,
+      "time": 670.266666666386
+    },
+    {
+      "build": {
+        "axe": 3,
+        "bow": 8,
+        "command_block": 1,
+        "crossbow": 3,
+        "repeating_block": 1,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 3,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 40,
+      "time": 680.266666666377
+    },
+    {
+      "build": {
+        "axe": 3,
+        "bow": 8,
+        "command_block": 2,
+        "crossbow": 3,
+        "repeating_block": 1,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 3,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 40,
+      "time": 690.266666666368
+    },
+    {
+      "build": {
+        "axe": 3,
+        "bow": 8,
+        "command_block": 2,
+        "crossbow": 4,
+        "repeating_block": 1,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 3,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 49,
+      "time": 700.266666666358
+    },
+    {
+      "build": {
+        "axe": 3,
+        "bow": 8,
+        "command_block": 2,
+        "crossbow": 4,
+        "repeating_block": 3,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 3,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 45,
+      "time": 710.799999999682
+    },
+    {
+      "build": {
+        "axe": 4,
+        "bow": 8,
+        "command_block": 2,
+        "crossbow": 4,
+        "repeating_block": 3,
+        "sword": 8
+      },
+      "items": {
+        "armor": 5,
+        "blaze": 5,
+        "chain_block": 3,
+        "hopper": 5,
+        "knowledge_book": 5,
+        "light_block": 5,
+        "redstone": 5,
+        "sugar": 5
+      },
+      "loot": 0,
+      "mobs": 0,
+      "time": 720.0
+    }
+  ]
+}

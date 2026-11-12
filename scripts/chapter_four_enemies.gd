@@ -82,6 +82,8 @@ static func act(w, m: Dictionary, dt: float):
 		if m.timer<=0:windup(w,m,m.p.direction_to(destination))
 		return
 	if m.phase=="windup":
+		if m.kind in ["growth_skeleton","infected_witch"] and distance<110:
+			cancel(m,.18);return
 		if m.kind=="growth_skeleton" and m.timer>.2:m.charge=toward
 		if m.timer<=0:
 			strike(w,m)
@@ -99,7 +101,7 @@ static func act(w, m: Dictionary, dt: float):
 		"growth_skeleton":
 			if distance<110:direction=-toward
 			elif distance<180:speed=0
-			if m.timer<=0 and distance<ai.range and w.line_clear(m.p,w.player):windup(w,m,toward);return
+			if m.timer<=0 and distance>=110 and distance<ai.range and w.line_clear(m.p,w.player):windup(w,m,toward);return
 		"bloated_creeper":
 			if distance<ai.reach:windup(w,m,toward);return
 		"torn_spider","hungry_wolf":
@@ -112,7 +114,7 @@ static func act(w, m: Dictionary, dt: float):
 		"infected_witch":
 			if distance<110:direction=-toward
 			elif distance<175:speed=0
-			if m.timer<=0 and distance<ai.range:
+			if m.timer<=0 and distance>=110 and distance<ai.range:
 				m.cast="poison";m.mark=w.player+w.tracked_velocity*.2
 				for other in w.mobs:
 					if other.id!=m.id and other.hp>0 and not other.get("allied",false) and other.hp<other.max_hp*.7 and m.p.distance_to(other.p)<ai.heal_radius:
