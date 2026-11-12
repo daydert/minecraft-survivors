@@ -1320,12 +1320,14 @@ func sync_credits(f, clock: float):
 # ------------------------------------------------------------------ portals between the games
 
 ## Each passage: [colour a, colour b, floor texture, who shoves (0 Steve, 1 Notch)].
+## [rift edge, rift veins, ground, ground variant, side]. Muted, heavy blocks:
+## a chunk of a broken world hanging in the code void, not a lawn.
 const PORTALS := {
-	"to_ut": [Color(1, .15, .2), Color(1, 1, 1), "ch5q_polished_deepslate", 1],
-	"to_lanes": [Color(.25, .9, .2), Color(.9, 1, .4), "ch5p_grass", 0],
-	"lanes_won": [Color(1, .55, .1), Color(1, .9, .3), "ch5p_grass", 1],
-	"to_quake": [Color(.75, .2, .05), Color(1, .6, .2), "ch5q_polished_deepslate", 0],
-	"to_code": [Color(.1, 1, .6), Color(.2, .5, 1), "ch5q_deepslate_tiles", 1]}
+	"to_ut": [Color(.9, .08, .12), Color(1, .55, .55), "ch5q_cracked_deepslate_tiles", "ch5q_deepslate_tiles", 1],
+	"to_lanes": [Color(.35, .75, .15), Color(.8, .95, .4), "ch5p_dirt", "ch5q_cobblestone", 0],
+	"lanes_won": [Color(.95, .45, .08), Color(1, .8, .35), "ch5q_cobblestone", "ch5p_dirt", 1],
+	"to_quake": [Color(.8, .18, .04), Color(1, .5, .15), "ch5q_gilded_blackstone", "ch5q_cracked_deepslate_tiles", 0],
+	"to_code": [Color(.1, .95, .55), Color(.3, .6, 1), "ch5q_deepslate_tiles", "ch5q_crying_obsidian", 1]}
 const PORTAL_LENGTH := 4.4
 
 func portal_mesh(parent: Node3D, size: float) -> MeshInstance3D:
@@ -1334,16 +1336,36 @@ func portal_mesh(parent: Node3D, size: float) -> MeshInstance3D:
 	var sm := ShaderMaterial.new();sm.shader = load("res://shaders/ch5_portal.gdshader");m.material_override = sm
 	parent.add_child(m);return m
 
+static func hash01(a: int, b: int, salt: int) -> float:
+	var n: int = (a * 73856093) ^ (b * 19349663) ^ (salt * 83492791)
+	n = (n ^ (n >> 13)) * 1274126177
+	return float((n ^ (n >> 16)) & 0xFFFF) / 65535.0
+
 func build_portal():
-	var e := room(Color(.01, .005, .02), Color(.5, .5, .65), .55)
-	e.glow_enabled = true;e.glow_intensity = .9;e.glow_bloom = .15;e.glow_hdr_threshold = 1.0
-	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.7, .5, 0);sun.light_energy = .8;sun.shadow_enabled = true;scene.add_child(sun)
+	var e := room(Color(.004, .002, .008), Color(.5, .48, .62), .46)
+	e.glow_enabled = true;e.glow_intensity = .8;e.glow_bloom = .08;e.glow_hdr_threshold = 1.0
+	e.fog_enabled = true;e.fog_light_color = Color(.03, .02, .05);e.fog_density = .045
+	e.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-.85, .9, 0);sun.light_energy = .9;sun.light_color = Color(.8, .82, 1);sun.shadow_enabled = true;scene.add_child(sun)
 	var plat := Node3D.new();scene.add_child(plat);nodes.platform = plat
-	for x in range(-4, 5):
-		for z in range(-3, 4):
-			if absi(x) + absi(z) > 6:continue
-			var b := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(1, 1, 1);b.mesh = bm;b.position = Vector3(x, -.5 - (0.0 if absi(x) + absi(z) < 5 else .25 * (absi(x) + absi(z) - 4)), z)
+	# A torn chunk: ragged outline, uneven tops, blocks crumbling off the rim into the void.
+	for x in range(-5, 6):
+		for z in range(-4, 5):
+			var d: float = Vector2(x * .82, z).length() + hash01(x, z, 3) * 1.6
+			if d > 5.6:continue
+			var edge: float = clampf(d - 3.6, 0, 2)
+			var b := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3(1, 1 + edge * .6, 1);b.mesh = bm
+			var drop: float = edge * (.35 + hash01(x, z, 5) * .5) + (hash01(x, z, 7) - .5) * .08
+			b.position = Vector3(x, -.5 - drop - edge * .3, z)
+			b.set_meta("variant", hash01(x, z, 9) < .3)
 			plat.add_child(b)
+	# Loose debris hanging off the rim.
+	for k in range(14):
+		var ang: float = k * 2.39996;var r: float = 5.2 + hash01(k, 1, 11) * 2.4
+		var s: float = .25 + hash01(k, 2, 11) * .45
+		var b := MeshInstance3D.new();var bm := BoxMesh.new();bm.size = Vector3.ONE * s;b.mesh = bm
+		b.position = Vector3(cos(ang) * r * .9, -1.2 - hash01(k, 3, 11) * 3.0, sin(ang) * r * .7);b.rotation = Vector3(k, k * .7, k * 1.3)
+		b.set_meta("variant", true);plat.add_child(b)
 	nodes.portal = portal_mesh(scene, 4.2);nodes.portal.position = Vector3(3.6, 1.9, -.6);nodes.portal.rotation.y = -.5
 	var rim := MeshInstance3D.new();var tm := TorusMesh.new();tm.inner_radius = 1.85;tm.outer_radius = 2.05;rim.mesh = tm;rim.rotation = Vector3(PI / 2, -.5, 0);rim.position = nodes.portal.position;scene.add_child(rim);nodes.portal_rim = rim
 	nodes.portal_light = omni(nodes.portal.position + Vector3(-1, 0, 1), Color(1, 1, 1), 0.0, 9.0)
@@ -1355,9 +1377,11 @@ func sync_portal_stage(phase: String, a: float, clock: float):
 	var ca: Color = spec[0];var cb: Color = spec[1]
 	if nodes.get("portal_kind", "") != phase:
 		nodes.portal_kind = phase
-		for b in nodes.platform.get_children():(b as MeshInstance3D).material_override = material(spec[2], false)
-		var rm := StandardMaterial3D.new();rm.albedo_color = cb;rm.emission_enabled = true;rm.emission = ca.lerp(cb, .4);rm.emission_energy_multiplier = 3.0
-		(nodes.portal_rim as MeshInstance3D).material_override = rm
+		for b in nodes.platform.get_children():
+			var m: StandardMaterial3D = material(spec[3] if b.get_meta("variant", false) else spec[2], false).duplicate()
+			m.albedo_color = Color(.62, .6, .66);m.roughness = 1.0
+			(b as MeshInstance3D).material_override = m
+		(nodes.portal_rim as MeshInstance3D).visible = false
 	var mat_p: ShaderMaterial = (nodes.portal as MeshInstance3D).material_override
 	var open: float = smoothstep(0.2, 1.2, a) * (1.0 - smoothstep(3.7, 4.2, a) * .3)
 	mat_p.set_shader_parameter("color_a", ca);mat_p.set_shader_parameter("color_b", cb);mat_p.set_shader_parameter("open", open)
@@ -1375,7 +1399,8 @@ func sync_portal_stage(phase: String, a: float, clock: float):
 		var ang: float = k * 2.39996 + clock * 2.0
 		var r: float = (1.0 - t) * 3.2
 		var at: Vector3 = gate + Vector3(-cos(.5), 0, -sin(.5)) * 0.0 + Vector3(cos(ang) * r * .5, sin(ang) * r, sin(ang + 1.0) * r * .3)
-		shown.append(mcfx("magic" if k % 2 == 0 else "spark", at, t, .35 * open, ca.lerp(cb, float(k % 3) / 2.0)))
+		# Embers and ash pulled into the rift rather than fairy sparkles.
+		if k % 3 == 0:shown.append(mcfx("spark", at, t, .22 * open, ca))
 
 ## Hit-stop on each contact, then a short catch-up so the authored track still ends on time.
 static func portal_time(a: float, hits: Array, hold: float) -> float:

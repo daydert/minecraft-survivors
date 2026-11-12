@@ -26,7 +26,7 @@ func run():
 	for phase in ["to_lanes","to_ut"]:
 		n.change(phase)
 		var t:=0.0
-		for at in [.6,.89,.93,.99,1.2,1.80,1.86,2.0,2.4]:
+		for at in [.3,.7,.86,.95,1.25,1.55,1.74,1.86,2.1,2.5,3.1,3.4]:
 			advance(at-n.age);await render("%s_%03d"%[phase,int(at*100)])
 	game.audio.shutdown();game.quitting=true
 	print("CH5_PORTAL_DONE");quit()
