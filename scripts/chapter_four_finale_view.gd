@@ -1186,6 +1186,7 @@ static func prompt(g, e):
 static func words(g, e, offset: Vector2):
 	for t in e.text_events:
 		var age: float = e.age - t.at
+		if age < 0:continue
 		match t.style:
 			"calm":calm_line(g, e, t, age, offset)
 			"roar":roar(g, t, age)

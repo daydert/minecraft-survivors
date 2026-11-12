@@ -78,6 +78,67 @@ static func apply(v, track: String, age: float, camera := true):
 		var from: Vector3=vec(x).lerp(vec(y),ck);var to: Vector3=Vector3(x[3],x[4],x[5]).lerp(Vector3(y[3],y[4],y[5]),ck)
 		v.shot(v.nodes.cam,from,to,lerpf(x[6],y[6],ck))
 
+## [pulled at, file name, texture, face region, where it hangs relative to his head].
+## Timed to his lines: the creation, the iterations, "вернуть её", the brother,
+## "хватит сканировать" (the panels burn red and shatter), then exit().
+const MEMORIES := [
+	[4.2, "steve.exe  v1.0", "ch5_skin_steve", Rect2(8, 8, 8, 8), Vector3(-.5, .12, .45)],
+	[8.2, "iteration #1 048 576", "ch5p_grass", Rect2(), Vector3(.5, .18, .45)],
+	[12.8, "alex.backup — найдено", "ch5_memory_alex", Rect2(), Vector3(-.5, .15, .45)],
+	[17.0, "herobrine.dat", "achievement_herobrine", Rect2(), Vector3(.5, .12, .45)],
+	[25.8, "exit()", "ch5_skin_notch", Rect2(8, 8, 8, 8), Vector3(0, .05, .62)]]
+## When "хватит сканировать" lands, every memory read so far flares back up around him in red and shatters.
+const DENIED := 21.4
+const SHATTER := 22.3
+const HOLD := 3.4
+const RING := [Vector3(-.55, .35, .3), Vector3(.55, .4, .3), Vector3(-.45, -.15, .4), Vector3(.45, -.1, .4)]
+
+static func memories(v, f, t: float, clock: float, shown: Array):
+	var head: Vector3 = v.rigs.notch.head.global_position + Vector3(0, .25, 0)
+	var cable_end := Vector3(2.0, 1, -1)
+	var cam: Camera3D = v.nodes.cam
+	for i in range(MEMORIES.size()):
+		var m: Array = MEMORIES[i];var n: Dictionary = v.nodes.memories[i];var root: Node3D = n.root
+		var born: float = m[0];var last: bool = i == MEMORIES.size() - 1
+		var denied: bool = not last and t >= DENIED and t < SHATTER + .5
+		var read_end: float = (f.CHAIR_SCAN[1] - .4) if last else born + HOLD
+		if not denied and (t < born or t > read_end + .45):root.visible = false;continue
+		root.visible = true
+		var at: Vector3;var size := .55;var red := 0.0;var fade := 1.0
+		if denied:
+			# Flare back up around his head, red, shaking, then burst.
+			var k: float = clampf((t - DENIED) / .3, 0, 1)
+			at = head.lerp(head + RING[i], 1.0 - pow(1.0 - k, 3)) + Vector3(sin(clock * 53 + i) * .03, cos(clock * 47 + i) * .02, 0)
+			red = 1.0;size = .45 * k
+			if t > SHATTER:
+				var d: float = t - SHATTER;size *= 1.0 + d * 1.2;fade = 1.0 - clampf(d / .5, 0, 1)
+				for s in range(6):
+					var shard: Node3D = v.take("pixel", str(s % 2))
+					shard.position = at + Vector3(sin(s * 2.4 + i), cos(s * 1.9 + i) * .8, .2) * d * 1.6 + Vector3(0, -2.0 * d * d, 0)
+					shard.scale = Vector3.ONE * maxf(.05, 1.0 - d * 1.8);shown.append(shard)
+		else:
+			# Torn out of the head on an arc, held up in front of him, then sucked down the cable.
+			var out: float = 1.0 - pow(1.0 - clampf((t - born) / .5, 0, 1), 3)
+			at = head.lerp(head + m[4], out) + Vector3(0, sin(out * PI) * .18 + sin(clock * 1.7 + i) * .015, 0)
+			size = .55 * (.25 + .75 * out)
+			if t > read_end:
+				var k: float = clampf((t - read_end) / .45, 0, 1)
+				at = at.lerp(cable_end, k * k);size *= 1.0 - k
+			elif out >= 1.0:
+				for g in range(3):
+					var q: Node3D = v.take("glyph", "");var u: float = fposmod(clock * .6 + g * .33 + i * .17, 1)
+					q.position = at.lerp(cable_end, u);(q as Label3D).text = ["0", "1", "{}"][g];(q as Label3D).modulate = Color(.3, 1, .7, .7)
+					shown.append(q)
+		root.position = at;root.scale = Vector3.ONE * maxf(.01, size)
+		if cam:root.look_at(cam.global_position, Vector3.UP);root.rotate_object_local(Vector3.UP, PI)
+		var a: float = fade * (1.0 if fposmod(clock * 13.0 + i * 3.1, 1.0) > .08 * (1 + red * 3) else .35)
+		(n.rim.material_override as StandardMaterial3D).albedo_color = Color(.3, 1, .6, .9 * a).lerp(Color(1, .1, .12, .95 * a), red)
+		(n.rim.material_override as StandardMaterial3D).emission = Color(.3, 1, .6).lerp(Color(1, .1, .12), red)
+		(n.back.material_override as StandardMaterial3D).albedo_color = Color(.01, .06, .04, .82 * a).lerp(Color(.12, 0, 0, .85 * a), red)
+		n.pic.modulate = Color(1, 1, 1, a).lerp(Color(1, .45, .45, a), red)
+		n.name.modulate = Color(.55, 1, .75, a).lerp(Color(1, .3, .3, a), red)
+		n.name.text = ("ДОСТУП ЗАПРЕЩЁН" if fposmod(clock * 6.0, 1.0) < .5 else m[1]) if red > 0 else m[1]
+
 static func chair(v, f, clock: float):
 	var t: float=f.age;apply(v,"chair",t)
 	v.rigs.steve.material.set_shader_parameter("blood_amount",.18+.47*smoothstep(33,33.14,t))
@@ -108,6 +169,7 @@ static func chair(v, f, clock: float):
 			var q: Node3D=v.take("glyph","");var u: float=fposmod(clock*.45+i*.125,1)
 			q.position=(v.rigs.notch.head.global_position+Vector3(0,.4,0)).lerp(Vector3(2.3,1.3,-1),u)
 			(q as Label3D).text=["0","1","{","}"][i%4];(q as Label3D).modulate.a=.65;shown.append(q)
+	if v.nodes.has("memories"):memories(v,f,t,clock,shown)
 	if since>=0 and since<1.0:shown+=v.blood_spray(Vector3(.06,1.12,.05),since*.65,clock)
 	if since>.5 and since<9:shown+=v.blood_drips(Vector3(.06,1.05,.16),since,clock)
 	if t>38.5 and t<39.1:shown+=v.blood_spray(Vector3(.06,1.12,.20),(t-38.5)*.9,clock)

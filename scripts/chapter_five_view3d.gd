@@ -767,6 +767,21 @@ func build_chair():
 	block(Vector3(2.3, .9, -1.2), Vector3(1.4, 1.1, .3), "ch5q_polished_blackstone_bricks")
 	nodes.screen = label("scan: 0%", Vector3(1.7, 1.25, -1.03), 28, Color(.3, 1, .6))
 	rigs.notch = Cinema.rig(self,"ch5_skin_notch");rigs.steve = Cinema.rig(self,"ch5_skin_steve")
+	# Memories ripped out of his head during the scan: a frame, a picture and a file name.
+	nodes.memories = []
+	for m in Cinema.MEMORIES:
+		var root := Node3D.new();scene.add_child(root);root.visible = false
+		var back := MeshInstance3D.new();var q := QuadMesh.new();q.size = Vector2(.86, .62);back.mesh = q
+		back.material_override = flat(Color(.01, .06, .04, .82), 0.0, true);root.add_child(back)
+		var rim := MeshInstance3D.new();var rq := QuadMesh.new();rq.size = Vector2(.92, .68);rim.mesh = rq;rim.position.z = -.005
+		rim.material_override = flat(Color(.3, 1, .6, .9), 2.5, true);root.add_child(rim)
+		var pic := Sprite3D.new();pic.texture = tex(m[2]);pic.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;pic.shaded = false
+		if m[3] != Rect2():pic.region_enabled = true;pic.region_rect = m[3]
+		var px: float = .34 / maxf(pic.region_rect.size.x if m[3] != Rect2() else pic.texture.get_width(), 1)
+		pic.pixel_size = px;pic.position = Vector3(0, .07, .01);root.add_child(pic)
+		var name := Label3D.new();name.text = m[1];name.font_size = 26;name.pixel_size = .0038;name.modulate = Color(.55, 1, .75)
+		name.position = Vector3(0, -.24, .012);name.outline_size = 0;root.add_child(name)
+		nodes.memories.append({"root": root, "rim": rim, "pic": pic, "name": name, "back": back})
 	nodes.sword = voxel_sword(rigs.steve.grip, .85)
 	var pool_mesh := MeshInstance3D.new();var pm := CylinderMesh.new();pm.top_radius = 1.0;pm.bottom_radius = 1.0;pm.height = .01;pool_mesh.mesh = pm
 	pool_mesh.material_override = flat(Color(.38, .02, .03));pool_mesh.position = Vector3(0, .012, .25);scene.add_child(pool_mesh);nodes.pool = pool_mesh

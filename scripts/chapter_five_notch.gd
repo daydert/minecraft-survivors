@@ -3,11 +3,23 @@ extends RefCounted
 ## an Undertale-style battle box and a lane defence where he plays the
 ## zombies. Each phase restarts from its own checkpoint.
 const CENTER := Vector2(1024, 1024)
-const INTRO := [[0.6, "Ооо, ты всё-таки дошёл?", 2.6], [3.4, "Знаешь, я запускал тебе подобных столько раз, что уже и не знаю, какая это итерация", 3.6],
-	[7.2, "Интересно, понравилось ли оцифрованной душе моего брата впервые так жалко подохнуть?\nЭто ещё глупее, чем упасть в зерно и задохнуться", 3.2], [10.6, "ЗДЕСЬ Я ХОЗЯИН\nЯ ТЕБЯ ПОРОДИЛ, Я ТЕБЯ И УНИЧТОЖУ", 3.0],
-	[13.8, "Спросишь, зачем это всё? Ну, мне было скучно, да и личный уголок для моего брата-садиста сам себя бы не создал", 3.4], [17.4, "Не знаю, что в моём спагетти настолько мутировало, что ты появился на свет", 3.8],
-	[21.4, "Это даже мило, но, боюсь, мне ещё нужно откатить его тело после того, как ты буквально размозжил ему черепушку", 2.6], [24.2, "Покажешь, чему научился?", 2.4]]
-const INTRO_LENGTH := 26.8
+## [text, pose]; phrases of one line follow each other at reading pace (see say()).
+const INTRO_SCRIPT := [["Ооо, ты всё-таки дошёл?", "invite"], ["Знаешь, я запускал тебе подобных столько раз, что уже и не знаю, какая это итерация", "look_hand"],
+	["Интересно, понравилось ли оцифрованной душе моего брата впервые так жалко подохнуть?\nЭто ещё глупее, чем упасть в зерно и задохнуться", "point"], ["ЗДЕСЬ Я ХОЗЯИН\nЯ ТЕБЯ ПОРОДИЛ, Я ТЕБЯ И УНИЧТОЖУ", "snap"],
+	["Спросишь, зачем это всё? Ну, мне было скучно, да и личный уголок для моего брата-садиста сам себя бы не создал", "aura"], ["Не знаю, что в моём спагетти настолько мутировало, что ты появился на свет", "point"],
+	["Это даже мило, но, боюсь, мне ещё нужно откатить его тело после того, как ты буквально размозжил ему черепушку", "idle"], ["Покажешь, чему научился?", "invite"]]
+static func part_life(text: String) -> float:return clampf(.9 + text.length() / 20.0, 1.5, 7.0)
+static func line_life(text: String) -> float:
+	var total := 0.0
+	for part in text.split("\n"):total += part_life(part) + .2
+	return total
+static func intro_times() -> Array:
+	var out: Array = [];var t := .6
+	for row in INTRO_SCRIPT:out.append(t);t += line_life(row[0]) + .35
+	out.append(t + .4)
+	return out
+var INTRO_AT: Array = intro_times()
+var INTRO_LENGTH: float = INTRO_AT[INTRO_AT.size() - 1]
 const FIGHT_HP := 1500.0
 const UT_BOX := Rect2(220, 160, 200, 110)
 const UT_HP := 100.0
@@ -28,6 +40,7 @@ var age := 0.0
 var line := ""
 var line_age := 0.0
 var line_length := 0.0
+var screamed := false
 var id := -1
 var hp := FIGHT_HP
 var pose := "idle"
@@ -94,7 +107,22 @@ func reset():
 
 func active() -> bool:return not phase.is_empty()
 
-func say(text: String, length: float):line = text;line_age = 0.0;line_length = length
+## Multi-part lines are queued; each phrase gets reading time. Capitals are a scream.
+var line_queue: Array = []
+var scream := false
+var mirrored := ""
+func say(text: String, length: float):
+	var parts: PackedStringArray = text.split("\n")
+	line_queue.clear()
+	for i in range(parts.size()):
+		var life: float = maxf(length if parts.size() == 1 else 0.0, part_life(parts[i]))
+		line_queue.append([parts[i], life])
+	next_line()
+func next_line():
+	if line_queue.is_empty():line = "";line_length = 0;scream = false;return
+	var row: Array = line_queue.pop_front();line = row[0];line_age = 0.0;line_length = row[1]
+	scream = line.length() >= 4 and line == line.to_upper() and line != line.to_lower()
+	if scream:shake3d = maxf(shake3d, .8);screamed = true
 func set_pose(name: String):
 	if pose != name:pose = name;pose_age = 0.0
 func change(next: String):phase = next;age = 0.0;cues = 0
@@ -131,7 +159,8 @@ func step(w, dt: float, movement: Vector2):
 	age += dt;pose_age += dt
 	if line_length > 0:
 		line_age += dt
-		if line_age >= line_length:line = "";line_length = 0
+		if line_age >= line_length:next_line()
+	if screamed:screamed = false;w.sound("ch4_hb_glitch");w.sound("explosion", .1)
 	for list in [popups]:
 		for i in range(list.size() - 1, -1, -1):
 			list[i].age += dt
@@ -139,8 +168,8 @@ func step(w, dt: float, movement: Vector2):
 	w.shake = maxf(0, w.shake - dt);w.invulnerable = maxf(0, w.invulnerable - dt);w.message_timer = maxf(0, w.message_timer - dt)
 	match phase:
 		"intro":
-			for i in range(INTRO.size()):
-				if cue(i, INTRO[i][0]):say(INTRO[i][1], INTRO[i][2]);set_pose(["invite", "look_hand", "point", "snap", "aura", "point", "idle", "invite"][i])
+			for i in range(INTRO_SCRIPT.size()):
+				if cue(i, INTRO_AT[i]):say(INTRO_SCRIPT[i][0], 0.0);set_pose(INTRO_SCRIPT[i][1])
 			dir = p.direction_to(w.player)
 			idle_world(w, dt)
 			if age >= INTRO_LENGTH:start_fight(w)
@@ -962,13 +991,14 @@ func finale_sounds(w, _r: String):
 			"sting":w.sound("ch5_ending_sting", .1)
 			"credits":w.sound("ch5_credits", .1)
 	finale.sounds.clear()
-	if not finale.line.is_empty() and finale.line != line:say(finale.line, finale.line_length)
+	if finale.line.is_empty():mirrored = ""
+	elif finale.line != mirrored:mirrored = finale.line;say(finale.line, finale.line_length)
 
 func begin_bad_end(w):
 	bad_from_qte=phase=="qte"
 	bad_blood=minf(.65,.15+qte.beat*.055) if bad_from_qte else 0.0
 	bad_entry_track=qte.TRACKS[mini(qte.beat,7)] if qte.success else "miss"
-	finale.change("bad_end");change("bad_end");line="";line_length=0
+	finale.change("bad_end");change("bad_end");line="";line_length=0;line_queue.clear()
 
 func start_qte(w):
 	clear_arena(w);qte.reset();change("qte");say("Чёртов ублюдок, игры кончились",1.5)

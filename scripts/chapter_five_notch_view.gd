@@ -2,6 +2,7 @@ extends RefCounted
 ## Notch on screen: his figure, the fight's attacks, the battle box and the
 ## lanes. Reads the notch state only.
 const FourPrompt = preload("res://scripts/chapter_four_finale_view.gd")
+const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const ROWS := {"down": 0, "up": 1, "side": 2}
 const WHITE := Color(1, 1, 1)
 const ORANGE := Color(1, .62, .15)
@@ -88,12 +89,39 @@ static func overlay(g):
 	retry(g, n)
 	subtitles(g, n, 278.0 if n.phase == "fight" else 316.0)
 
+## Long phrases wrap to two rows; a phrase in capitals is a scream: big, red, every letter shaking.
 static func subtitles(g, n, y: float):
 	if n.line.is_empty():return
 	var a: float = minf(1, n.line_age / .15) * minf(1, (n.line_length - n.line_age) / .2)
-	var wd: float = g.font.get_string_size(n.line, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
-	g.draw_rect(Rect2((640 - wd) / 2 - 8, y, wd + 16, 16), Color(0, 0, 0, .65 * a))
-	g.centered(n.line, y + 11, 8, Color(.6, 1, .95, a))
+	var size: int = 16 if n.scream else 8
+	var rows: Array = wrap_rows(g, n.line, size, 580.0)
+	var row_h: float = 22.0 if n.scream else 12.0
+	var top: float = y - (rows.size() - 1) * row_h - (10.0 if n.scream else 0.0)
+	var widest := 0.0
+	for r in rows:widest = maxf(widest, g.font.get_string_size(r, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x)
+	if n.scream:g.draw_rect(Rect2(0, 0, 640, 360), Color(.5, 0, .03, .3 * (1 - smoothstep(0, .45, n.line_age))))
+	g.draw_rect(Rect2((640 - widest) / 2 - 8, top, widest + 16, rows.size() * row_h + (10.0 if n.scream else 4.0)), Color(0, 0, 0, .65 * a))
+	for i in range(rows.size()):
+		var row: String = rows[i]
+		if not n.scream:
+			g.centered(row, top + 11 + i * row_h, 8, Color(.6, 1, .95, a));continue
+		var rw: float = g.font.get_string_size(row, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+		var shake: float = 2.4 * (1 - smoothstep(0, 1.2, n.line_age)) + .7;var tick: int = int(g.world.clock * 30)
+		for c in range(row.length()):
+			var x: float = (640 - rw) / 2 + g.font.get_string_size(row.substr(0, c), HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+			var j := Vector2(Atmosphere.hash01(c + i * 97, tick, 61) - .5, Atmosphere.hash01(c + i * 97, tick, 62) - .5) * 2 * shake
+			g.text_at(row[c], (Vector2(x + 1.5, top + 18 + i * row_h) + j).floor(), size, Color(.2, .9, 1, .35 * a))
+			g.text_at(row[c], (Vector2(x, top + 18 + i * row_h) + j).floor(), size, Color(1, .12, .16, a))
+
+static func wrap_rows(g, text: String, size: int, limit: float) -> Array:
+	if g.font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x <= limit:return [text]
+	var rows: Array = [];var row := ""
+	for word in text.split(" "):
+		var next: String = word if row == "" else row + " " + word
+		if row != "" and g.font.get_string_size(next, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x > limit:rows.append(row);row = word
+		else:row = next
+	rows.append(row)
+	return rows
 
 static func retry(g, n):
 	if n.phase != "retry":return

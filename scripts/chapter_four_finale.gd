@@ -155,8 +155,13 @@ func set_steve(name: String):
 	if steve_pose != name:
 		steve_pose = name; steve_pose_age = 0.0
 
+## A line with "\n" is spoken phrase by phrase, each given time to be read.
 func say(text: String, style: String, duration: float, cut: float = -1.0):
-	text_events.append({"text": text, "style": style, "at": age, "life": duration, "cut": cut, "phase": phase})
+	var parts: PackedStringArray = text.split("\n");var at: float = age
+	for part in parts:
+		var life: float = duration if parts.size() == 1 else maxf(1.4, part.length() / 11.0 + 1.0)
+		text_events.append({"text": part, "style": style, "at": at, "life": life, "cut": cut, "phase": phase})
+		at += life + .15
 
 func cast_fx(w, big: bool = false):
 	w.add_effect("ch4_hb_cast", hb.p, .9 if big else .6, {"scale": scale(), "big": big})

@@ -37,7 +37,7 @@ func run():
 	var said=false
 	for i in range(ceili(9*60)):
 		w.step(1.0/60)
-		if e.text_events.any(func(t):return t.text=="Ты опять здесь."):said=true
+		if e.text_events.any(func(t):return t.text=="Ты опять здесь!"):said=true
 	check(said,"Herobrine says «Ты опять здесь.» without surprise")
 	check(e.phase=="tower","The introduction ends with him raising a tower")
 	advance(w,2.0)
@@ -76,7 +76,7 @@ func run():
 	said=false
 	for i in range(ceili(7*60)):
 		w.step(1.0/60)
-		if e.text_events.any(func(t):return t.text=="Хорошо. Давай всерьёз."):said=true
+		if e.text_events.any(func(t):return t.text=="Давай всерьёз!"):said=true
 	check(said and e.phase=="two" and e.hb.max_hp==float(e.data.two.hp),"«Хорошо. Давай всерьёз.» opens stage II at full strength")
 	for name in ["hole","blitz","rain","rift","tear"]:
 		w.hp=20;w.invulnerable=0;e.start(w,name);var ok=until(w,func():return e.move=="rest",14.0)
@@ -115,7 +115,7 @@ func run():
 	e.day_done=[];e.hb.hp=e.hb.max_hp;w.hurt(e.hb,e.hb.max_hp*2)
 	check(e.phase=="two" and e.hb.hp>e.hb.max_hp*.55,"Stage II cannot be burst past its day acceleration")
 	w.invulnerable=999;e.day_done=[0,1];var gear_before: int=w.build.size()+w.items.size();w.hurt(e.hb,e.hb.hp+10)
-	check(e.phase=="last" and e.text_events.any(func(t):return t.text=="ХВАТИТ."),"Defeat in stage II does not end him: «ХВАТИТ.» and his last attack")
+	check(e.phase=="last" and e.text_events.any(func(t):return t.text=="ХВАТИТ"),"Defeat in stage II does not end him: «ХВАТИТ.» and his last attack")
 	advance(w,float(e.data.last.duration)*0.6)
 	check(w.build.size()+w.items.size()<gear_before and e.void_r<float(e.data.last.void_from) and not e.beams.is_empty(),"The last attack tears the gear off piece by piece and erases the world from the edges")
 	advance(w,float(e.data.last.duration)*0.4+.05)
