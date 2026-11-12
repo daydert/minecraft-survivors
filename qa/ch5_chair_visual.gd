@@ -24,7 +24,7 @@ func run():
 	w.time=719.5;w.spawn("token",w.player+Vector2(50,0));advance(.6)
 	w.invulnerable=999
 	var f=n.finale;n.change("chair");f.change("chair")
-	for at in [5.0,9.5,14.0,18.5,21.7,22.6,27.0,29.6]:
+	for at in [30.2,31.5,32.8,33.1,34.5,36.5,38.6,41.5]:
 		while f.age<at:w.step(1.0/60,Vector2.ZERO)
 		await render("chair_%03d"%int(at*10))
 	game.audio.shutdown();game.quitting=true

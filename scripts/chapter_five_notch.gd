@@ -4,6 +4,10 @@ extends RefCounted
 ## zombies. Each phase restarts from its own checkpoint.
 const CENTER := Vector2(1024, 1024)
 ## [text, pose]; phrases of one line follow each other at reading pace (see say()).
+const BAD_FILM_LENGTH := 14.5
+## After the bad ending: the card, then slow grey credits.
+const BAD_CREDITS_LENGTH := 30.0
+const BAD_CREDITS := [[5.5, "Создатель", "Daydert"], [10.0, "Композитор", "Kibi"], [14.5, "Музыка · тестирование", "RodinCity"], [19.0, "Тестирование", "SET553355"], [24.0, "Тестирование завершено.", "Стив не найден"]]
 const INTRO_SCRIPT := [["Ооо, ты всё-таки дошёл?", "invite"], ["Знаешь, я запускал тебе подобных столько раз, что уже и не знаю, какая это итерация", "look_hand"],
 	["Интересно, понравилось ли оцифрованной душе моего брата впервые так жалко подохнуть?\nЭто ещё глупее, чем упасть в зерно и задохнуться", "point"], ["ЗДЕСЬ Я ХОЗЯИН\nЯ ТЕБЯ ПОРОДИЛ, Я ТЕБЯ И УНИЧТОЖУ", "snap"],
 	["Спросишь, зачем это всё? Ну, мне было скучно, да и личный уголок для моего брата-садиста сам себя бы не создал", "aura"], ["Не знаю, что в моём спагетти настолько мутировало, что ты появился на свет", "point"],
@@ -154,6 +158,7 @@ func skip():
 	elif phase in ["to_ut", "to_lanes", "lanes_won", "to_quake", "quake_won", "to_code"] and age > .8:age = 99.0
 	elif phase == "chair":finale.skip_line()
 	elif phase == "credits" and finale.age > 2.0:finale.age = finale.CREDITS_LENGTH
+	elif phase == "bad_credits" and age > 2.0:age = BAD_CREDITS_LENGTH
 
 func step(w, dt: float, movement: Vector2):
 	age += dt;pose_age += dt
@@ -219,16 +224,10 @@ func step(w, dt: float, movement: Vector2):
 			if qte.result=="lost":begin_bad_end(w)
 			elif qte.result=="won":finale.change("chair");change("chair")
 		"bad_end":
-			var ending_age: float=age-(4.2 if bad_from_qte else 0.0)
-			var shift: float=4.2 if bad_from_qte else 0.0
-			if cue(0,1.08+shift):w.sound("ch1_whoosh",.1)
-			if cue(1,1.35+shift):w.sound("ch4_hb_strip",.1)
-			if cue(2,3.15+shift):say("Пора бы завязать с тестированием",3.2)
-			if cue(3,6.8+shift):w.sound("ch4_drink",.1)
-			if cue(4,13.40+shift):w.sound("ch4_door_open",.1)
-			for step_index in range(8):
-				if cue(5+step_index,[9.80,10.55,11.45,12.30,13.10,14.45,15.20,15.95][step_index]+shift):w.sound("ch1_step",.05)
-			if ending_age>=18.2:w.state="RESULT";w.victory=false
+			# Pre-rendered film (scripts/cinematics/build_ch5_bad_end.py); its sound plays with it.
+			if age>=BAD_FILM_LENGTH:change("bad_credits");w.run_progress.award("bad_ending");w.sound("ch5_bad_credits")
+		"bad_credits":
+			if age>=BAD_CREDITS_LENGTH:w.sound("ch5_credits_stop");w.state="RESULT";w.victory=false
 		"fists":fists(w, dt, movement)
 		"chair":
 			var r: String = finale.step(dt);finale_sounds(w, r)

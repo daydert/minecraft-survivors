@@ -56,6 +56,8 @@ func world(g):
 			NotchView.flight(g);return
 		if ph in ["credits", "done"]:
 			NotchView.credits(g);return
+		if ph == "bad_credits":
+			NotchView.release(g);NotchView.bad_credits(g);return
 	NotchView.release(g)
 	var offset: Vector2 = Vector2(320, 180) - w.camera().floor()
 	if g.settings.get("camera_lead", false):offset -= g.cam_lead.round()

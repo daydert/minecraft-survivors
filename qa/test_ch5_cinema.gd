@@ -36,20 +36,13 @@ func run():
   var facing: Vector3=head.global_basis.z
   var camera_direction: Vector3=(v.nodes.cam.global_position-head.global_position).normalized()
   check(facing.dot(camera_direction)>.2,"Speaking face visible while tracking Steve: %.1f"%t)
- f.age=33;await draw()
+ f.age=29.5;await draw();v=game.get_meta("ch5_view3d")
  check(v.nodes.sword.get_parent()==v.rigs.steve.grip,"Sword remains attached to wrist control")
  check(v.rigs.steve.re.get_parent()==v.rigs.steve.ra and v.rigs.steve.rk.get_parent()==v.rigs.steve.rl,"Elbow and knee hierarchy is connected")
- var planted: Vector3=v.rigs.steve.rk.to_global(Vector3(0,-.375,0))
- check(absf(planted.y)<.08,"Leading foot supports the stab")
- f.age=32.7;await draw();var support: Vector3=v.rigs.steve.rk.to_global(Vector3(0,-.375,0))
- f.age=33.2;await draw()
- check(v.rigs.steve.rk.to_global(Vector3(0,-.375,0)).distance_to(support)<.002,"Support foot stays planted through the thrust")
- f.age=32.666666667;await draw();var cut_from: Vector3=v.nodes.cam.position
- f.age=32.68;await draw();check(v.nodes.cam.position.distance_to(cut_from)<.002,"60 Hz frame before a cut stays in the outgoing shot")
- f.age=32.7;await draw();check(v.nodes.cam.position.distance_to(cut_from)>.8,"Contact cut selects the incoming shot")
- f.age=32.55;await draw();var prepared: Transform3D=v.rigs.steve.grip.global_transform
- f.age=40;await draw();f.age=32.55;await draw()
- check(v.rigs.steve.grip.global_transform.is_equal_approx(prepared),"Seeking restores the exact preparation pose")
+ f.age=33;await draw()
+ check(v.nodes.has("film") and (v.nodes.film as VideoStreamPlayer).is_playing(),"The kill plays as the rendered film")
+ f.age=20;await draw()
+ check(v.nodes.has("memories") and not v.nodes.has("film"),"Before the kill the chair scene is live again")
  for phase in ["to_ut","to_lanes","lanes_won","to_quake","to_code"]:
   n.change(phase);n.age=2.3;await draw()
   check(v.rigs.steve.root.scale==Vector3.ONE and v.rigs.notch.root.scale==Vector3.ONE,"Full-scale portal crossing: "+phase)

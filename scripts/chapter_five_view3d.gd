@@ -53,7 +53,8 @@ func ensure(g, which: String, size: Vector2i):
 	match which:
 		"fighter", "fists":build_fighter()
 		"erase":build_erase()
-		"bad_end":build_bad_end()
+		"bad_end":build_bad_film()
+		"kill":build_film("ch5_kill")
 		"qte":build_qte()
 		"chair":build_chair()
 		"flight":build_flight()
@@ -1485,6 +1486,25 @@ func build_qte():
 func sync_qte(q):Cinema.qte(self,q)
 
 func sync_bad_end(n):Cinema.bad_end(self,n)
+
+## The bad ending is a film: picture and its own sound stem live in this scene and go with it.
+func build_bad_film():build_film("ch5_bad_end")
+
+## A pre-rendered film and its own sound stem; both are freed with the scene.
+func build_film(name: String):
+	var film := VideoStreamPlayer.new();film.stream = load("res://assets/cinematics/%s.ogv" % name);film.expand = true;film.size = Vector2(640, 360)
+	film.volume_db = -80;scene.add_child(film);film.play();nodes.film = film
+	var sfx := AudioStreamPlayer.new();sfx.stream = load("res://assets/cinematics/%s_sfx.ogg" % name);scene.add_child(sfx);sfx.play();nodes.film_sfx = sfx
+
+## Starts late if the scene was skipped into the middle of the film.
+func seek_film(at: float):
+	if at > .1 and not nodes.has("film_sought"):
+		nodes.film_sought = true;(nodes.film as VideoStreamPlayer).stream_position = at;(nodes.film_sfx as AudioStreamPlayer).seek(at)
+
+func sync_bad_film(paused: bool, volume: float):
+	(nodes.film as VideoStreamPlayer).paused = paused
+	(nodes.film_sfx as AudioStreamPlayer).stream_paused = paused
+	(nodes.film_sfx as AudioStreamPlayer).volume_db = linear_to_db(maxf(.0001, volume))
 
 func build_bad_end():
 	build_qte()

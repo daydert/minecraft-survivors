@@ -3,10 +3,10 @@ import bpy, argparse, sys, time
 from pathlib import Path
 p = argparse.ArgumentParser(); p.add_argument('--frames'); p.add_argument('--out'); p.add_argument('--scale', type=int, default=100)
 p.add_argument('--samples', type=int, default=32); p.add_argument('--start', type=int, default=1); p.add_argument('--end', type=int, default=0)
-p.add_argument('--resume', action='store_true')
+p.add_argument('--resume', action='store_true'); p.add_argument('--scene', default='CH1_Prologue_v2')
 a = p.parse_args(sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else [])
 ROOT = Path('/home/daydert/MinecraftSurvivors2')
-sc = bpy.data.scenes['CH1_Prologue_v2']; bpy.context.window.scene = sc
+sc = bpy.data.scenes[a.scene]; bpy.context.window.scene = sc
 sc.render.resolution_percentage = a.scale; sc.eevee.taa_render_samples = a.samples
 out = Path(a.out) if a.out else ROOT / 'qa/cinematics/ch1_intro_v2/frames'; out.mkdir(parents=True, exist_ok=True)
 frames = [int(x) for x in a.frames.split(',')] if a.frames else range(a.start, (a.end or sc.frame_end) + 1)

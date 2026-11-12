@@ -132,5 +132,12 @@
     "description": "Добить Нотча фаталити в файтинге главы V.",
     "tier": "hard",
     "icon": "fatality"
+  },
+  {
+    "id": "bad_ending",
+    "name": "Тестирование завершено",
+    "description": "Проиграть Нотчу в конце главы V.",
+    "tier": "secret",
+    "icon": "bad_ending"
   }
 ]

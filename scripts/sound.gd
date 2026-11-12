@@ -220,6 +220,16 @@ func play(id: String):
 	if id=="ch5_ending_fade":
 		if is_instance_valid(ending_player) and ending_player.playing:create_tween().tween_property(ending_player,"volume_db",-60.0,3.5)
 		return
+	if id=="ch5_credits_stop":
+		for c in get_children():
+			if c.has_meta("credits"):create_tween().tween_property(c,"volume_db",-60.0,1.2)
+		return
+	if id=="ch5_bad_credits":
+		# A slow, empty ambience under the grey credits of the bad ending.
+		var sad=AudioStreamPlayer.new();add_child(sad)
+		sad.stream=load("res://assets/audio/ch5_music/wastes_ambient.ogg");sad.volume_db=-40.0
+		sad.play();create_tween().tween_property(sad,"volume_db",linear_to_db(maxf(.001,music_volume*.9)),4.0)
+		sad.set_meta("credits",true);return
 	if id=="ch5_credits":
 		var credits=AudioStreamPlayer.new();add_child(credits)
 		credits.stream=load("res://assets/audio/ch5_music/flight_space.ogg");credits.volume_db=-40.0

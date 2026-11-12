@@ -782,12 +782,17 @@ static func fists(g):
 
 static func chair(g):
 	var w = g.world;var n = w.notch;var f = n.finale
-	var v = view(g);v.ensure(g, "chair", Vector2i(640, 360));v.sync_chair(f, w.clock)
+	var v = view(g)
+	if f.age >= f.KILL_FILM_AT:
+		# The kill itself is a film (scripts/cinematics/build_ch5_kill.py); the lines stay on top.
+		v.ensure(g, "kill", Vector2i(640, 360));v.seek_film(f.age - f.KILL_FILM_AT);v.sync_bad_film(w.state == "PAUSED", g.settings.effects)
+	else:
+		v.ensure(g, "chair", Vector2i(640, 360));v.sync_chair(f, w.clock)
 	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
 	g.draw_rect(Rect2(0, 0, 640, 26), Color.BLACK);g.draw_rect(Rect2(0, 334, 640, 26), Color.BLACK)
 	if f.age < 1.0:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - f.age))
 	if f.age > f.CHAIR_LENGTH - 2.0:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((f.age - (f.CHAIR_LENGTH - 2.0)) / 1.6, 0, 1)))
-	if f.age > f.CHAIR_STAB and f.age < f.CHAIR_STAB + .12 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(.6, 0, 0, .4))
+	if f.age > f.CHAIR_STAB and f.age < f.CHAIR_STAB + .08 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(.6, 0, 0, .35))
 	if f.age > 2.0:g.text_at("Пробел — дальше", Vector2(540, 350), 8, Color(1, 1, 1, .3))
 	subtitles(g, n, 306.0)
 
@@ -814,6 +819,31 @@ static func credits(g):
 		g.draw_string(g.font, Vector2(fmod(i * 97.0, 620.0) + 10, y), "01{};"[i % 5], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.3, 1, .7, .12))
 	if f.age > 3.0:g.text_at("Пробел — пропустить", Vector2(530, 348), 8, Color(1, 1, 1, .25))
 	if f.age > f.CREDITS_LENGTH - 1.5:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((f.age - (f.CREDITS_LENGTH - 1.5)) / 1.5, 0, 1)))
+
+## Bad ending: a heavy title card on black, then slow grey credits under falling ash.
+static func bad_credits(g):
+	var w = g.world;var n = w.notch;var a: float = n.age
+	g.draw_rect(Rect2(0, 0, 640, 360), Color(.015, .01, .012))
+	for i in range(40):
+		var x: float = fmod(i * 83.0 + sin(w.clock * .3 + i) * 12.0, 640.0)
+		var y: float = fmod(i * 47.0 + w.clock * (6 + i % 5 * 2), 380.0) - 10
+		g.draw_rect(Rect2(Vector2(x, y).floor(), Vector2(1 + i % 2, 1 + i % 2)), Color(.45, .42, .42, .25))
+	var title: float = clampf((a - .8) / 1.2, 0, 1) * (1 - clampf((a - 4.6) / .8, 0, 1))
+	if title > 0:
+		var tick: int = int(w.clock * 12)
+		var jitter := Vector2(Atmosphere.hash01(tick, 1, 71) - .5, 0) * (3.0 if Atmosphere.hash01(tick, 2, 71) > .85 else 0.0)
+		g.centered("ПЛОХАЯ КОНЦОВКА", 170 + jitter.y, 32, Color(.62, .06, .08, title), true)
+		g.draw_rect(Rect2(170 + jitter.x, 186, 300, 1), Color(.62, .06, .08, title * .6))
+		g.centered("глава V · Исходный код", 204, 8, Color(.55, .55, .55, title * .8))
+	for c in n.BAD_CREDITS:
+		var t: float = a - c[0]
+		if t < 0 or t > 4.4:continue
+		var k: float = clampf(t / 1.1, 0, 1) * clampf((4.4 - t) / 1.1, 0, 1)
+		g.centered(c[1], 160 + (1 - k) * 4, 8, Color(.55, .55, .58, k * .8))
+		g.centered(c[2], 184 + (1 - k) * 4, 16, Color(.82, .8, .8, k), true)
+	if a > 3.0:g.text_at("Пробел — пропустить", Vector2(530, 348), 8, Color(1, 1, 1, .2))
+	if a < .6:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - a / .6))
+	if a > n.BAD_CREDITS_LENGTH - 1.5:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((a - (n.BAD_CREDITS_LENGTH - 1.5)) / 1.5, 0, 1)))
 
 static func portal(g):
 	var w = g.world;var n = w.notch
@@ -853,16 +883,13 @@ static func flight(g):
 static func qte(g):
 	var w=g.world;var n=w.notch;var v=view(g)
 	v.ensure(g,"bad_end" if n.phase=="bad_end" else "qte",Vector2i(640,360))
-	if n.phase=="bad_end":v.sync_bad_end(n)
-	else:v.sync_qte(n.qte)
+	if n.phase=="bad_end":
+		v.sync_bad_film(w.state=="PAUSED",g.settings.effects)
+		g.draw_texture_rect(v.viewport.get_texture(),Rect2(0,0,640,360),false)
+		return
+	v.sync_qte(n.qte)
 	g.draw_texture_rect(v.viewport.get_texture(),Rect2(0,0,640,360),false)
 	g.draw_rect(Rect2(0,0,640,24),Color.BLACK);g.draw_rect(Rect2(0,330,640,30),Color.BLACK)
-	if n.phase=="bad_end":
-		var ending_age: float=n.age-(4.2 if n.bad_from_qte else 0.0)
-		if not n.bad_from_qte and n.age<.25:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,1-n.age/.25))
-		if ending_age>17.0:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(17.0,18.2,ending_age)))
-		subtitles(g,n,310.0)
-		return
 	var q=n.qte
 	if q.finishing:return
 	var feedback: float=maxf(0,q.age-q.resolved_age)

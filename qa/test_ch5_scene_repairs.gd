@@ -40,27 +40,11 @@ func run():
  n.qte.beat=2;n.qte.age=2.4;n.qte.resolved=true;n.qte.success=false;await draw()
  var v=game.get_meta("ch5_view3d");var entry: Transform3D=v.rigs.steve.root.transform;var cam: Transform3D=v.nodes.cam.transform
  n.begin_bad_end(w);await draw();v=game.get_meta("ch5_view3d")
- check(n.bad_from_qte and v.rigs.steve.root.transform.is_equal_approx(entry) and v.nodes.cam.transform.is_equal_approx(cam),"QTE failure preserves actual body and camera at its first frame")
- check(not v.nodes.bad_sword.visible,"Last sword draw starts after recovery, not inside the opponent")
- n.age=4.2;await draw();var bridge: Transform3D=v.rigs.steve.root.transform
- n.bad_from_qte=false;n.age=0;await draw()
- check(v.rigs.steve.root.transform.is_equal_approx(bridge),"Recovery joins the authored thrust without a reset pose")
- n.age=5.1;await draw();var at: Vector3=v.nodes.beer.global_position
- check(at.distance_to(Vector3(.9,1.1,-1.85))<.015,"Pickup has no snap from the table to a guessed palm")
- n.age=6.9;await draw()
- var rim: Vector3=v.nodes.beer.to_global(Vector3(0,.174,0));var mouth: Vector3=v.rigs.notch.head.to_global(Vector3(0,.18,.275))
- check(rim.distance_to(mouth)<.025,"Beer rim contacts the mouth; centre does not intersect the head")
- n.age=14.05;await draw();check(absf(v.nodes.bad_door.rotation.y)>1.6,"Door opens fully before Notch enters its opening")
- var minimum:=100.0
- for i in range(585,1000):
-  n.age=i/60.0;v.sync_bad_end(n);var p: Vector3=v.rigs.notch.root.position
-  var table_distance: float=Vector2(maxf(.2-p.x,0)+maxf(p.x-1.1,0),maxf(-2.6-p.z,0)+maxf(p.z+1.7,0)).length()
-  minimum=minf(minimum,table_distance)
- check(minimum>.30,"Full exit route clears table by the body radius")
- n.age=10.2;await draw();await draw();var pixels=v.viewport.get_texture().get_image().get_data();var clock: float=w.clock;var rng: int=w.rng.state
- w.state="PAUSED";advance(w,.5);game.ui_time+=1;await draw()
- check(pixels==v.viewport.get_texture().get_image().get_data() and w.clock==clock and w.rng.state==rng,"Pickup/camera freeze exactly on pause")
- w.state="RUNNING";n.age=18.0;advance(w,.3);check(w.state=="RESULT" and not w.victory,"Full exit still ends in genuine defeat")
+ check(v.nodes.has("film") and (v.nodes.film as VideoStreamPlayer).is_playing(),"Bad ending plays the rendered film")
+ w.state="PAUSED";await draw();check((v.nodes.film as VideoStreamPlayer).paused,"Pause also pauses the film and its sound")
+ w.state="RUNNING";n.age=n.BAD_FILM_LENGTH-.01;advance(w,.1);check(n.phase=="bad_credits","After the film: bad-ending card and credits")
+ check(w.run_progress.awarded.has("bad_ending"),"Bad ending awards its achievement")
+ await draw();n.age=n.BAD_CREDITS_LENGTH-.01;advance(w,.1);check(w.state=="RESULT" and not w.victory,"Credits end in genuine defeat")
  w.state="RUNNING";var flips:=0;var last:=1.0;var continuous:=true
  for i in range(480*60,720*60):
   w.time=i/60.0;var tone: float=w.tone()
@@ -68,7 +52,8 @@ func run():
   if absf(tone-last)>.006:continuous=false
   last=tone
  check(flips<=4 and continuous,"Late chapter changes tone at most four times, with gradual five-second fades")
- v.release();await process_frame;game.audio.shutdown();game.quitting=true
+ if is_instance_valid(v):v.release()
+ await process_frame;game.audio.shutdown();game.quitting=true
  DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://qa/ch5_scene_repairs"))
  FileAccess.open("res://qa/ch5_scene_repairs/tests.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures},"  "))
  print("SCENE_REPAIRS_RESULT ",checks," checks; ",failures.size()," failures");quit(1 if not failures.is_empty() else 0)

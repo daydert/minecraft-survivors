@@ -19,6 +19,8 @@ const CHAIR := [[0.4, "Серьёзно, верёвка?", 3.0], [4.0, "Слуш
 const CHAIR_SCAN := [3.4, 29.6]
 const CHAIR_SWORD := 30.0
 const CHAIR_STAB := 33.0
+## From here the kill plays as a film with its own sound (draw/stab cues are in it).
+const KILL_FILM_AT := 30.0
 const CHAIR_LENGTH := 44.0
 const FLIGHT_THEME := 13.0
 const FLIGHT_FADE := 23.5
@@ -208,15 +210,14 @@ func chair_step(dt: float) -> String:
 	for i in range(CHAIR.size()):
 		if cue(i, CHAIR[i][0]):say(CHAIR[i][1], CHAIR[i][2])
 	if cue(12, CHAIR_SCAN[0]):sounds.append("scan")
-	if cue(13, CHAIR_SWORD):sounds.append("draw")
-	if cue(14, CHAIR_STAB):sounds.append("stab")
+
 	if age >= CHAIR_LENGTH:return "done"
 	return ""
 
 func scan() -> float:return clampf((age - CHAIR_SCAN[0]) / (CHAIR_SCAN[1] - CHAIR_SCAN[0]), 0, 1)
 
 func skip_line():
-	if phase != "chair":return
+	if phase != "chair" or age >= KILL_FILM_AT - .4:return
 	for c in CHAIR:
 		if c[0] > age + .05:
 			age = c[0] - .02;return

@@ -37,7 +37,7 @@ func run():
  check(n.cursor==start+Vector2i.RIGHT,"Direction change still advances one cell")
  n.change("erase");f.begin_erase();advance(w,10.1)
  check(n.phase=="bad_end","Ignoring deletion enters bad ending")
- advance(w,18.3);check(w.state=="RESULT" and not w.victory,"Deletion failure is a genuine defeat")
+ advance(w,n.BAD_FILM_LENGTH+n.BAD_CREDITS_LENGTH+.3);check(w.state=="RESULT" and not w.victory,"Deletion failure is a genuine defeat")
  w.state="RUNNING";n.change("erase");f.begin_erase()
  for i in range(14):n.press(w,"accept");advance(w,.18)
  advance(w,3.8);check(n.phase=="qte","Resisting deletion starts the cinematic QTE")
