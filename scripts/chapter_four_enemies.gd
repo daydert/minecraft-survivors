@@ -41,7 +41,7 @@ static func update(w, dt: float):
 		m.moving=m.p.distance_squared_to(before)>.0001;m.visual.travel=m.p.distance_to(before)
 		if (m.phase=="attack" or was_attacking) and m.kind in ["open_cow","bone_rider","torn_spider","hungry_wolf"]:
 			if Geometry2D.get_closest_point_to_segment(w.player,before,m.p).distance_to(w.player)<m.radius+6:w.receive_hit(m.damage,m)
-		elif m.kind not in ["bloated_creeper","growth_skeleton","bellringer","infected_witch","gravedigger"] and m.phase=="walk":
+		elif m.kind not in ["bloated_creeper","growth_skeleton","bellringer","infected_witch","gravedigger","butcher","marksman"] and m.phase=="walk":
 			contact(w,m,m.radius+5)
 
 static func travel(w, m: Dictionary, direction: Vector2, speed: float, dt: float):
@@ -50,6 +50,7 @@ static func travel(w, m: Dictionary, direction: Vector2, speed: float, dt: float
 	m.p=w.move_actor(m.p,direction*speed*buff*(.65 if m.slow>0 else 1.0)*dt,m.radius)
 
 static func act(w, m: Dictionary, dt: float):
+	if m.kind in ["marksman","crucified","butcher"]:w.hunt.act(w,m,dt);return
 	m.timer-=dt
 	var ai: Dictionary=m.ai
 	var distance: float=m.p.distance_to(w.player)
@@ -163,7 +164,9 @@ static func strike(w, m: Dictionary):
 			enter(m,"smash_wait",.7);return
 		"bellringer":
 			for other in w.mobs:
-				if other.hp>0 and not other.get("allied",false) and other.p.distance_to(m.p)<ai.buff_radius:other.haste=ai.buff_life;other.haste_scale=ai.buff_speed
+				if other.hp>0 and not other.get("allied",false) and other.p.distance_to(m.p)<ai.buff_radius:
+					other.haste=ai.buff_life;other.haste_scale=ai.buff_speed
+					if other.id!=m.id and other.get("form","")!="butcher":other.hp=minf(other.max_hp,other.hp+other.max_hp*float(ai.get("heal_share",0.0)))
 			w.add_effect("ch4_bell_wave",m.p,.65);w.sound("ch4_bell")
 	enter(m,"attack",ai.get("attack",.2))
 

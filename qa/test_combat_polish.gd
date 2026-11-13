@@ -55,7 +55,7 @@ func run():
  ew=prepare(EW.new());ew.build={"sword":8,"spear":5};ew.items={"feather":3,"armor":4,"hopper":2};ew.evolved={"sword":true};ew.npc={"from":ew.player-Vector2(20,0),"p":ew.player-Vector2(20,0)};ew.stage="clash";ew.stage_age=ew.end_boss.CLASH_BREAK
  ew.end_boss.story(ew,.01)
  check(ew.build.is_empty() and ew.items.is_empty() and ew.evolved.is_empty() and ew.broken_gear.size()==5,"Final clash destroys every weapon and passive, retaining only fragment descriptors")
- ew.stage="sit";ew.stage_age=32.4;ew.end_boss.story(ew,.01)
+ ew.stage="sit";ew.stage_age=float(ew.end_boss.SIT_MARKS.gift)+2.005;ew.end_boss.story(ew,.01)
  check(ew.build=={"sword":1} and ew.items.is_empty(),"EnderSteve's later gift restores only the starter sword")
  var solo=prepare(OW.new());solo.items={"hopper":5};solo.orbs=[{"p":solo.player+Vector2(110,0),"value":2,"attracted":false}];solo.pickup(.1)
  check(solo.orbs[0].attracted and solo.orbs[0].p.x<solo.player.x+90,"Hopper V reaches and quickly pulls experience from 110 pixels away")
@@ -69,7 +69,7 @@ func run():
  var point: Vector2=e.terrain_attack.spikes[8].p;fw.player=point;fw.invulnerable=0;fw.hp=20;e.move_age=e.terrain_attack.spikes[8].born-.03;e.terrain_attack.step(e,fw,0)
  check(fw.hp==20,"Spiral warning itself does no damage")
  e.move_age=e.terrain_attack.spikes[8].born+.13;e.terrain_attack.step(e,fw,0);check(fw.hp<20,"An emerged spike damages at its visible floor position")
- fw=boss();e=fw.ending;e.phase="two";e.start(fw,"fault_smash")
+ fw=boss();e=fw.ending;e.phase="two";e.start(fw,"fault_smash");e.move_age=e.move_time;e.step_smash_dash(fw)
  check(e.terrain_attack.faults.size()==6 and e.pose=="ground_smash","Ground punch creates exactly six irregular stored fault paths")
  var fault: Dictionary=e.terrain_attack.faults[0];fw.player=fault.points[3];fw.hp=20;fw.invulnerable=0;e.move_age=2.0;e.terrain_attack.step(e,fw,0)
  check(fw.hp==20 and not e.terrain_attack.emitted,"Faults stay safe during their full one-second ignition warning")

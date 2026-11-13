@@ -391,3 +391,61 @@ def voxel_item(name, file, parent, grip, scale=.05, col='FX'):
     ob = link(bpy.data.objects.new(me.name, me), col); ob.parent = root
     return root
 
+
+class Path2:
+    """Polyline with arc-length lookup; directions are smoothed over a window so turns are gradual."""
+    def __init__(self, pts):
+        self.p = [Vector((x[0], x[1], 0)) for x in pts]; self.c = [0.0]
+        for a, b in zip(self.p, self.p[1:]): self.c.append(self.c[-1] + (b - a).length)
+        self.L = self.c[-1]
+    def at(self, s):
+        s = clamp(s, 0, self.L)
+        for i in range(len(self.p) - 1):
+            if s <= self.c[i + 1] or i == len(self.p) - 2:
+                k = (s - self.c[i]) / max(1e-6, self.c[i + 1] - self.c[i]); return self.p[i].lerp(self.p[i + 1], clamp(k))
+    def dir(self, s, win=.4):
+        d = self.at(s + win) - self.at(s - win)
+        return d.normalized() if d.length > 1e-6 else Vector((0, 1, 0))
+
+def locomote_path(n, t, t0, t1, path, stride=.55, start_yaw=None, end_yaw=None, limp=0.0):
+    """Walk a polyline with planted feet. limp>0: the right leg is hurt - the body dips and
+    leans onto the left leg whenever the right foot carries the weight, and the pace hitches."""
+    x = clamp((t - t0) / (t1 - t0)); u = x * x * (3 - 2 * x)
+    D = path.L; s = D * u; L = stride; stance = 1.25
+    base = path.at(s); dv = path.dir(s); yaw = math.atan2(dv.x, -dv.y)
+    def turn(a, b, k): d = (b - a + math.pi) % math.tau - math.pi; return a + d * k
+    if start_yaw is not None: yaw = turn(start_yaw, yaw, sm(t0, t0 + .6, t))
+    if end_yaw is not None: yaw = turn(yaw, end_yaw, sm(t1 - .5, t1 + .1, t))
+    reset(n, base, yaw, .74)
+    feet = []; planted_r = False
+    for side, sg, off in (('R', 1, 0.0), ('L', -1, L)):
+        ph = (s + L * .6 - off) / (2 * L); k = math.floor(ph)
+        P = off + 2 * L * k; st_half = stance * L / 2; land = P - st_half; lift = P + st_half
+        def plant(q):
+            q = clamp(q, 0, D); d = path.dir(q); yw = math.atan2(d.x, -d.y)
+            return path.at(q) + right(yw) * (sg * .125)
+        if land - 1e-9 <= s < lift:
+            pos = plant(P)
+            if side == 'R': planted_r = True
+        else:
+            nxt = P + 2 * L; w = clamp((s - lift) / max(1e-6, nxt - st_half - lift))
+            pos = plant(P).lerp(plant(nxt), sm(0, 1, w)); pos.z += math.sin(math.pi * w) * (.07 if (side == 'R' and limp) else .12)
+        if u >= 1:
+            settle = sm(t1, t1 + .3, t); pos = pos.lerp(base + right(yaw) * (sg * .125), settle); pos.z *= (1 - settle)
+        pos.z += .02; feet.append((side, pos))
+    rel = [(p - base).dot(dv) for _, p in feet]
+    moving = sm(t0, t0 + .3, t) * (1 - sm(t1 - .25, t1 + .1, t))
+    bob = (abs(rel[0] - rel[1]) / (2 * L)) * moving
+    hurt = limp * moving * (1.0 if planted_r else 0.0)
+    n['hips'].location.z = .735 - bob * .03 - .05 * hurt
+    rot(n['hips'], 0, -.08 * hurt, (rel[0] - rel[1]) * .3 * moving)
+    rot(n['torso'], (.07 + .12 * limp) * moving, .12 * hurt, -(rel[0] - rel[1]) * .45 * moving)
+    for side, p in feet: foot(n, side, p, yaw)
+    swing = (rel[0] - rel[1]) / L * moving
+    rot(n['Rarm'], swing * .4, 0, .05); rot(n['Larm'], -swing * .4, 0, -.05)
+    rot(n['Relbow'], -.25 * moving - .05); rot(n['Lelbow'], -.25 * moving - .05)
+    return yaw
+
+def aim_blade(n, d, wrist='Rwrist', elbow='Relbow'):
+    parent = wm(n[elbow]).to_quaternion()
+    n[wrist].rotation_quaternion = parent.inverted() @ Vector((0, -1, 0)).rotation_difference(Vector(d).normalized())

@@ -366,13 +366,14 @@ bake_end_finale.py. The title uses existing bitmap glyphs with brief sliced offs
 Axe changes apply to solo II/III only: connected grip, stronger sweep, and a damaging
 return on evolution. See docs/END_POLISH_UPDATE.md.
 
-## Achievements, 0.11.0
+## Achievements I–V, 13 November 2026
 
-Twelve solo achievements use the existing gray Minecraft controls, native bitmap
-Cyrillic and 32px badges composed from local vanilla textures. The book lives in
+Thirty-five solo achievements use the existing gray Minecraft controls, native bitmap
+Cyrillic and a shared set of 32px Minecraft-style badges. The new art uses a saved
+imagegen atlas guided by the native icons. The book lives in
 chapter selection and solo pause; the main menu retains its four buttons. It has
-difficulty filters, two pages, concealed secret details and a compact queued toast.
-The slot badge is a complete native chest model, never a raw UV sheet.
+difficulty filters, six pages, concealed story details and a compact queued toast.
+Locked story names, conditions and images all use the same anonymous presentation.
 
 Every run still starts with sword I. For the bow challenge, the untouched initial
 sword is allowed until the first bow is obtained; retire it within three active
@@ -386,5 +387,5 @@ slots. Removal cannot erase restrictions. Local unlocks persist separately from
 settings, with backup recovery; diagnostic modes and coop never grant them.
 The End teaser retains red ground, darkness and bare trunks without rubble/flesh
 props. End island top and side thickness share one pixel transform. Final
-EnderSteve defeat selects the victory stinger and song ahead of the boss theme.
-See docs/ACHIEVEMENTS_UPDATE.md for rules, sources and reproducible validation.
+EnderSteve defeat keeps the current clash and conversation sequence.
+See docs/ACHIEVEMENTS_V2_UPDATE.md for current rules, sources and validation.

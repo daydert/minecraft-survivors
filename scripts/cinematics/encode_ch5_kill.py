@@ -1,10 +1,10 @@
-"""Encode the chapter V kill film (chair 30-44 s): frames + SFX stem + subtitle -> MP4 master, Theora for Godot."""
+"""Encode the chapter V kill film (chair 30-54 s): frames + SFX stem + subtitle -> MP4 master, Theora for Godot."""
 import subprocess, json, re, shutil
 from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]; OUT = ROOT / 'qa/cinematics/ch5_kill_v2'; REC = ROOT / 'qa/recordings'
-FPS = 24; FRAMES = 336; LEN = FRAMES / FPS
+FPS = 24; FRAMES = 576; LEN = FRAMES / FPS
 AUD = ROOT / 'assets/audio'
 REC.mkdir(exist_ok=True)
 assert all((OUT / 'frames' / f'{f:04d}.png').is_file() for f in range(1, FRAMES + 1)), 'Incomplete sequence'
@@ -15,19 +15,23 @@ def snd(name):
         if p.is_file(): return p
     raise FileNotFoundError(name)
 
-# Event sheet shared with build_ch5_kill.py (shouts .65/1.7, raise 2.2, STAB 3.0, TWIST 4.2, PULL 5.45, DROP 9.6).
+# Event sheet shared with build_ch5_kill.py (v3: walk-in .3-2.6, shouts .65/3.3 in game, RAISE 5.9, STAB 7.4,
+# TWIST 8.8, PULL 10.2, DROP 15.2, walk out 16.6-23.8).
 cues = [
-    (0.05, 'entity_player_attack_sweep1', .35), (2.3, 'random_breath', .5),
-    (2.25, 'entity_player_attack_sweep3', .45), (2.95, 'entity_player_attack_sweep5', .5),
-    (3.0, 'entity_player_attack_strong2', .9), (3.0, 'mob_slime_big1', .8), (3.01, 'block_bone_block_break1', .85), (3.02, 'mob_zombie_woodbreak', .7), (3.05, 'entity_player_attack_knockback1', .7),
-    (3.4, 'mob_warden_heartbeat_1', .9), (4.2, 'mob_slime_big1', .7), (4.21, 'block_bone_block_break2', .6), (4.6, 'mob_warden_heartbeat_2', .7),
-    (5.45, 'entity_player_attack_sweep2', .6), (5.46, 'mob_slime_big1', .75), (6.3, 'random_breath', .55), (7.6, 'random_breath', .45),
-    (9.6, 'block_chain_step2', .9), (9.65, 'random_glass1', .25),
+    (0.05, 'entity_player_attack_sweep1', .25), (6.3, 'random_breath', .5),
+    (5.9, 'entity_player_attack_sweep3', .45), (7.3, 'entity_player_attack_sweep5', .55),
+    (7.4, 'entity_player_attack_strong2', .9), (7.4, 'mob_slime_big1', .8), (7.41, 'block_bone_block_break1', .85), (7.42, 'mob_zombie_woodbreak', .7), (7.45, 'entity_player_attack_knockback1', .7),
+    (7.8, 'mob_warden_heartbeat_1', .9), (8.8, 'mob_slime_big1', .7), (8.81, 'block_bone_block_break2', .6), (9.2, 'mob_warden_heartbeat_2', .7),
+    (10.2, 'entity_player_attack_sweep2', .6), (10.21, 'mob_slime_big1', .75), (10.7, 'mob_slime_big1', .45), (11.5, 'mob_warden_heartbeat_2', .4),
+    (12.2, 'random_breath', .55), (13.8, 'random_breath', .45),
+    (15.2, 'block_chain_step2', .9), (15.25, 'random_glass1', .25),
 ]
-for i, t in enumerate([.75, 1.0, 1.25, 1.75, 2.05, 2.4]):
-    cues.append((t, 'block_chain_step' + str(1 + i % 3), .45))
-for i, t in enumerate([10.5, 11.1, 11.7, 12.3, 12.9, 13.5]):
-    cues.append((t, 'block_deepslate_step' + str(1 + i % 3), .35))
+for i, t in enumerate([.75, 1.05, 1.4, 3.45, 3.8, 4.2, 4.7, 5.2]):
+    cues.append((t, 'block_chain_step' + str(1 + i % 3), .4))
+for i, t in enumerate([.6, 1.15, 1.7, 2.2, 2.55]):
+    cues.append((t, 'block_deepslate_step' + str(1 + i % 3), .3))
+for i, t in enumerate([17.0, 17.6, 18.2, 18.8, 19.4, 20.0, 20.6, 21.2, 21.8, 22.4, 23.0]):
+    cues.append((t, 'block_deepslate_step' + str(1 + i % 3), .35 * (1 - i / 14)))
 
 args = ['ffmpeg', '-y', '-v', 'error']; graph = ''; labels = []; ledger = []
 for i, (at, name, gain) in enumerate(cues):

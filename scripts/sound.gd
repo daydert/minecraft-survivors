@@ -13,7 +13,8 @@ var end_mix := 0.0
 const END_TRACKS := {"boss_one": ["chapter_four/boss_one", "chapter_four/precipice"], "boss_two": ["chapter_four/boss_two", "chapter_four/creator"], "boss_fade": ["chapter_four/boss_two", "chapter_four/creator"], "coords": ["chapter_four/coords", "chapter_four/relic"],
 	# Chapter V, Notch's dimension (CC0 tracks, see assets/audio/ch5_music/SOURCES.md).
 	"ch5_ambient": ["ch5_music/wastes_ambient"], "ch5_talk": ["ch5_music/wastes_ambient"], "ch5_notch": ["ch5_music/battle_theme"], "ch5_fighter": ["ch5_music/fight_phase2"],
-	"ch5_quake": ["ch5_music/fight_phase1"], "ch5_brawl": ["ch5_music/fight_final"], "ch5_chair": ["ch5_music/chair_tension"], "ch5_flight": ["ch5_music/flight_space"]}
+	"ch5_quake": ["ch5_music/fight_phase1"], "ch5_brawl": ["ch5_music/fight_final"], "ch5_chair": ["ch5_music/chair_tension"], "ch5_flight": ["ch5_music/flight_space"],
+	"ch5_purge": ["ch5_music/fight_phase1"], "ch4_metal": ["chapter_four/metal_fight", "chapter_four/rage_pigstep"], "ch5_surge": ["ch5_music/surge", "ch5_music/fight_final"], "ch5_timestop": ["ch5_music/time_stop"]}
 var four_mix := 0.0
 var pyramid_music: AudioStreamPlayer
 var pyramid_mix:=0.0
@@ -109,10 +110,10 @@ func set_boss_theme(next_theme: String):
 	if theme=="dragon" and not dragon_music.playing:dragon_music.play()
 	if theme=="endersteve" and not endersteve_music.playing:endersteve_music.play()
 	if theme=="chapter_four":
-		if not is_instance_valid(four_music):four_music=theme_player("chapter_four/ancestry")
+		if not is_instance_valid(four_music):four_music=theme_player("chapter_four/horror" if ResourceLoader.exists("res://assets/audio/chapter_four/horror.ogg") else "chapter_four/ancestry")
 		if not four_music.playing:four_music.play()
 	if theme=="chapter_four_pyramid":
-		if not is_instance_valid(pyramid_music):pyramid_music=theme_player("chapter_four/pyramid_5")
+		if not is_instance_valid(pyramid_music):pyramid_music=theme_player("chapter_four/metal_alert" if ResourceLoader.exists("res://assets/audio/chapter_four/metal_alert.ogg") else "chapter_four/pyramid_5")
 		if not pyramid_music.playing:pyramid_music.play()
 	if theme.begins_with("chapter_four_end:"):
 		var track: String=theme.get_slice(":",1)

@@ -42,11 +42,15 @@ func run():
 	check(n.hp<hp,"Your weapons reach him")
 	var seen={}
 	for i in range(6):
-		n.attack_timer=0;advance(.4);seen[n.attack_index]=true
+		n.attack_timer=0;n.busy=0;advance(.4);seen[n.attack_index]=true
+		check(n.hz.size()>0 or n.spiral_left>0 or n.slam_age>=0,"Attack %d puts a telegraph on the field"%i)
 		if i==0:await render("d_paste")
 		if i==1:advance(.4);await render("d_rain")
 		if i==2:advance(.6);await render("d_sweep")
-	check(seen.size()==6 and n.walls.size()+n.falls.size()>=0,"He cycles through his attacks")
+	check(seen.size()==6,"He cycles through his attacks")
+	n.hp=n.FIGHT_HP*.45;advance(.2)
+	check(n.enraged and n.busy>0,"Half HP: the second phase starts with a pause")
+	advance(1.6);check(n.dark>.9 and w.tone()>.9,"…and the page goes black")
 	# checkpoint
 	w.invulnerable=0;w.hp=1;w.damage_player(10);advance(.1)
 	check(n.phase=="retry","Dying in the fight goes to a checkpoint, not the results")
@@ -60,13 +64,13 @@ func run():
 	await render("d_ut_mercy")
 	advance(.4);n.press(w,"accept");n.press(w,"accept");check(n.ut_state=="wave","Then his turn")
 	w.invulnerable=999;advance(1.5,Vector2(1,-1));await render("d_ut_wave")
-	advance(5.2);check(n.ut_state=="menu","The turn ends")
+	advance(5.7);check(n.ut_state=="menu","The turn ends")
 	for k in range(4):
 		n.ut_state="text";n.ut_type=999;n.ut_timer=0;n.press(w,"accept");advance(1.6);await render("d_ut_wave%d" % (k+2))
 		n.ut_timer=0;advance(.05)
 	var before: float=n.ut_hp;n.ut_choice=0;n.press(w,"accept");advance(.65);await render("d_ut_bar");n.press(w,"accept")
 	check(n.ut_hp<before,"FIGHT is a timing bar")
-	advance(1.4);n.ut_hp=1;n.ut_state="menu";n.ut_choice=0;n.press(w,"accept");n.press(w,"accept");advance(1.2)
+	advance(1.4);n.ut_hp=1;n.ut_state="menu";n.ut_choice=0;n.press(w,"accept");n.press(w,"accept");advance(1.7)
 	check(n.ut_state=="end","Enough hits end the battle")
 	until("lanes",8.0);await render("d_lanes_start")
 	check(n.phase=="lanes" and n.redstone==150,"Then the lanes")

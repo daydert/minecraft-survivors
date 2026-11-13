@@ -311,6 +311,17 @@ func taunt(w, m: Dictionary):
 	m.taunt=true
 	if w.clock>=m.get("taunt_at",0.0):m.taunt_at=w.clock+11.0;w.say(TAUNTS[int(m.get("taunts",0))%TAUNTS.size()],1.6);m.taunts=int(m.get("taunts",0))+1
 
+## He never stands still: circles the hero, flips direction, blinks to the other side.
+func strafe(w, m: Dictionary, dt: float, keep: float=115.0):
+	var to: Vector2=m.p.direction_to(w.player);var dist: float=m.p.distance_to(w.player)
+	if w.clock>=float(m.get("strafe_flip",0.0)):m.strafe_flip=w.clock+w.rng.randf_range(1.4,2.4);m.strafe_dir=-float(m.get("strafe_dir",1.0))
+	var radial: float=clampf((dist-keep)/50.0,-1,1)
+	var v: Vector2=(to*radial+to.orthogonal()*float(m.get("strafe_dir",1.0))).normalized()*(150.0 if m.get("rage",false) else 120.0)
+	m.p=w.move_actor(m.p,v*dt,m.radius);m.moving=true
+	if w.clock>=float(m.get("hop_at",0.0)):
+		m.hop_at=w.clock+(1.0 if m.get("rage",false) else 1.4)
+		if dist<70 or w.rng.randf()<.45:w.teleport_mob(m,(w.player+Vector2.from_angle(w.rng.randf()*TAU)*keep).clamp(w.END_ARENA.position+Vector2(40,40),w.END_ARENA.end-Vector2(40,40)))
+
 func endersteve(w, m: Dictionary, dt: float):
 	if m.hp<m.max_hp*.5 and not m.rage:
 		m.rage=true;m.phase="rage";m.timer=1.6;m.altitude=0;w.sound("dragon_growl");w.add_effect("ender_rage",m.p,1.6,{"radius":95.0})
@@ -320,6 +331,7 @@ func endersteve(w, m: Dictionary, dt: float):
 		"walk","recover":
 			m.dir=m.p.direction_to(w.player)
 			if m.phase=="walk":m.p=w.move_actor(m.p,m.dir*m.speed*(1.25 if m.rage else .8)*dt,m.radius)
+			else:strafe(w,m,dt,130.0)
 			if m.timer<=0:
 				m.seq=int(m.get("seq",-1))+1;var order: Array=RAGE_SEQUENCE if m.rage else SEQUENCE;m.pattern=order[m.seq%order.size()];m.combo=(2 if m.rage else 1) if m.pattern==3 else 0;m.charge=m.p.direction_to(w.player);m.mark=(w.player+w.tracked_velocity*.3).clamp(w.END_ARENA.position+Vector2(50,50),w.END_ARENA.end-Vector2(50,50))
 				if m.pattern in [0,3]:
@@ -332,6 +344,7 @@ func endersteve(w, m: Dictionary, dt: float):
 		"rage":
 			if m.timer<=0:m.phase="walk";m.timer=.5
 		"windup":
+			if m.pattern not in [0,3,5]:strafe(w,m,dt*.6)
 			if m.timer<=0:
 				m.phase="rush" if m.pattern in [0,3] else "leap" if m.pattern==5 else "pursuit" if m.pattern==6 else "blink_chain" if m.pattern==9 else "echoes" if m.pattern==10 else "skyfall" if m.pattern==11 else "cast"
 				m.timer=.6 if m.phase=="rush" else 1.0 if m.phase=="leap" else 2.0 if m.phase=="pursuit" else .16*(8 if m.rage else 6) if m.phase=="blink_chain" else 2.4 if m.phase=="echoes" else 3.4 if m.phase=="skyfall" else 3.1
@@ -383,7 +396,7 @@ func endersteve(w, m: Dictionary, dt: float):
 				m.attack_serial+=1;w.fx.flash(m.p,60.0,Color(.8,.5,1),.12)
 			if m.timer<=0:m.phase="pose";m.timer=1.1;m.charge=m.p.direction_to(w.player);w.sound("ch4_hb_freeze")
 		"echoes":
-			m.dir=m.p.direction_to(w.player)
+			m.dir=m.p.direction_to(w.player);strafe(w,m,dt)
 			if m.timer<=0:recover(m,1.2)
 		"skyfall":
 			var age: float=3.4-m.timer
@@ -402,7 +415,8 @@ func endersteve(w, m: Dictionary, dt: float):
 				w.fx.quake(w,m.p,2.6,m.p+Vector2(0,60));w.fx.erupt(w,m.p,"stone",16);w.fx.stain(m.p,22.0,"scorch",w.clock);w.fx.ring(m.p,120.0,.7,"toll");w.sound("mace_smash");w.sound("explosion")
 				m.phase="pose";m.timer=1.2
 		"cast":
-			m.dir=m.p.direction_to(w.player)
+			m.dir=m.p.direction_to(w.player);strafe(w,m,dt)
+			m.charge=m.p.direction_to(w.player)
 			if m.burst_tick<=0:
 				m.burst_tick=.6 if m.rage else .8
 				match m.pattern:

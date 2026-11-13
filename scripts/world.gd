@@ -9,6 +9,13 @@ var db = GameData.new()
 var animation = preload("res://scripts/animation.gd").new()
 var finale=preload("res://scripts/chapter_finale.gd").new()
 var player_visual: Dictionary = {}
+## Chapter V core: weapons and items level past their limits, the upgrade table repeating.
+var overcap := false
+## Eye of Ender IV: two more options above and below the centre card.
+## Eye of Ender V: a small chance that an offered weapon comes already evolved.
+var side_choices: Array = []
+var evolved_offer: Dictionary = {}
+const EYE_EVOLVED_CHANCE := .04
 var attack_visuals: Dictionary = {}
 var weapon_visuals: Dictionary = {}
 var rng = RandomNumberGenerator.new()
@@ -68,6 +75,7 @@ func _init(seed_value: int = 724):
 
 func reset(seed_value: int = 0):
 	finale.reset()
+	overcap = false
 	if seed_value: rng.seed = seed_value
 	else: rng.randomize()
 	state = "RUNNING"
@@ -749,10 +757,10 @@ func emit_pixels(kind: String, at: Vector2, count: int, direction: Vector2):
 func eligible() -> Array:
 	var list: Array = []
 	for id in db.weapons:
-		if build.has(id) and build[id] < 8 and not evolved.has(id): list.append(id)
+		if build.has(id) and (build[id] < 8 or overcap) and not evolved.has(id): list.append(id)
 		elif not build.has(id) and build.size() < 6: list.append(id)
 	for id in db.passives:
-		if items.has(id) and items[id] < 5: list.append(id)
+		if items.has(id) and (items[id] < 5 or overcap): list.append(id)
 		elif not items.has(id) and items.size() < 6: list.append(id)
 	return list
 
@@ -790,12 +798,34 @@ func next_level():
 	xp -= db.required_xp(level)
 	level += 1
 	choices = make_choices()
+	eye_extras()
 	state = "LEVEL_UP"
 	sound("level")
 
+func eye_extras():
+	side_choices = [];evolved_offer = {}
+	var eye: int = int(items.get("end_eye", 0))
+	if eye >= 4:
+		var pool: Array = eligible().filter(func(id): return not choices.has(id))
+		for k in range(2):
+			if pool.is_empty():side_choices.append(["apple","emerald"][k]);continue
+			var i: int = rng.randi_range(0, pool.size() - 1);side_choices.append(pool[i]);pool.remove_at(i)
+	if eye >= 5:
+		for id in choices + side_choices:
+			if db.weapons.has(id) and db.recipes.has(id) and not evolved.has(id) and rng.randf() < EYE_EVOLVED_CHANCE:evolved_offer[id] = true
+
+## A side option takes the centre card's place, then is chosen like any card.
+func choose_side(k: int):
+	if state != "LEVEL_UP" or k < 0 or k >= side_choices.size() or choices.is_empty(): return
+	var centre: int = choices.size() / 2
+	choices[centre] = side_choices[k];side_choices = []
+	choose(centre)
+
 func choose(index: int):
 	if state != "LEVEL_UP" or index < 0 or index >= choices.size(): return
+	if evolved_offer.has(choices[index]):evolved[choices[index]] = true
 	apply_upgrade(choices[index])
+	side_choices = []
 	choices.clear()
 	if xp >= db.required_xp(level): next_level()
 	elif not pending_chest.is_empty(): open_chest(pending_chest)
@@ -803,11 +833,11 @@ func choose(index: int):
 
 func apply_upgrade(id: String):
 	if db.weapons.has(id):
-		if evolved.has(id) or build.get(id,0) >= 8 or (not build.has(id) and build.size() >= 6): return
+		if evolved.has(id) or (build.get(id,0) >= 8 and not overcap) or (not build.has(id) and build.size() >= 6): return
 		build[id] = build.get(id,0) + 1
 		cooldowns[id] = minf(cooldowns.get(id,0),0.3)
 	elif db.passives.has(id):
-		if items.get(id,0) >= 5 or (not items.has(id) and items.size() >= 6): return
+		if (items.get(id,0) >= 5 and not overcap) or (not items.has(id) and items.size() >= 6): return
 		items[id] = items.get(id,0) + 1
 	elif id == "apple":
 		hp = minf(20, hp + 4)

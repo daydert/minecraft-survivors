@@ -9,6 +9,22 @@ Minecraft, Steve и существа Minecraft относятся к Mojang/Micr
 В архивах готовых сборок манифест ресурсов также находится в licenses/MINECRAFT_ASSET_MANIFEST.json.
 
 Godot Engine: MIT, полный текст GODOT_LICENSE.txt.
+
+Предметные значки IV главы обновлены по запросу пользователя через встроенный
+image_gen.imagegen с оригинальными иконками Minecraft как референсом стиля.
+Это новые сгенерированные изображения интерфейса. Мир, модели предметов в руках
+и их ванильные текстуры сохранены. Исходники и точные запросы:
+assets/art_source/ch4_icons/. Источники и SHA-256:
+docs/CHAPTER_FOUR_ICON_MANIFEST.json. Вагонетка и порох используют оригинальные
+предметные PNG Minecraft Java 1.21.11.
+
+Значки достижений обновлены 13 ноября 2026 года по запросу пользователя через
+встроенный image_gen.imagegen, с локальными ванильными значками как референсом.
+Это сгенерированные композиции в стиле Minecraft, а не оригинальные PNG Mojang.
+Имя модели инструментом не раскрывается. Сохранённый атлас, промпт и SHA-256:
+docs/MINECRAFT_ACHIEVEMENTS_MANIFEST.json и docs/ACHIEVEMENT_ART_PROMPT.txt.
+Игровая иконка вагонетки остаётся оригинальным предметом Minecraft Java 1.21.11;
+источник и SHA-256: docs/MINECART_ICON_MANIFEST.json.
 Игровой шрифт — оригинальные bitmap-глифы Minecraft (ascii, nonlatin_european, accented), включая кириллицу. Извлечены из того же локального клиента Mojang/Microsoft; для Godot подготовлены BMFont-описания с исходными масками и метриками. Полужирное начертание повторяет однопиксельное смещение Minecraft. Происхождение: docs/MINECRAFT_PRESENTATION_MANIFEST.json.
 
 DejaVu Sans / DejaVu Sans Bold используется инструментами подготовки контактных листов и надписи на собственной UV-этикетке банки в V главе. Файлы TTF исключены из исполняемых сборок; в этикетку входят растровые глифы. Лицензия: DEJAVU_LICENSE.txt.

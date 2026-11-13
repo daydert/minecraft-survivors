@@ -24,9 +24,10 @@ func run():
 	game.action("chapters");await render("chapters")
 	check(game.buttons.any(func(b):return b.id=="achievements") and not game.buttons.any(func(b):return b.id.begins_with("starter_")),"Chapter selection exposes achievements without adding weapon selection")
 	game.action("chapter_1");check(game.world.build=={"sword":1},"Chapter I always keeps the original starting sword")
+	game.chapter_one_prologue.stop();game.world.finish_intro()
 	var clock=game.world.clock;game.action("achievements");await render("locked")
 	game.world.step(5);check(game.world.clock==clock and game.world.state=="PAUSED","Achievement book pauses the current solo attempt")
-	check(game.buttons.any(func(b):return b.id=="achievements_next"),"All twelve achievements have a reachable second page")
+	check(game.buttons.any(func(b):return b.id=="achievements_next"),"The expanded catalog has reachable additional pages")
 	key(KEY_ESCAPE);check(game.screen.is_empty() and game.world.state=="RUNNING" and game.world.clock==clock,"Esc restores the exact state that opened the book")
 	game.world.state="LEVEL_UP";game.world.choices=["bow","sugar","armor"];game.action("achievements");game.action("achievements_back")
 	check(game.world.state=="LEVEL_UP" and game.world.choices==["bow","sugar","armor"],"Returning from the book preserves a pending reward")
@@ -38,6 +39,15 @@ func run():
 	game.action("achievement_tier_medium");await render("medium")
 	game.action("achievement_tier_hard");await render("hard")
 	game.action("achievement_tier_all");game.action("achievements_next");await render("page_two")
+	# Every icon is visible in a separate, isolated preview profile. This also
+	# checks long Russian names and conditions on all six real book pages.
+	var saved: Dictionary=game.achievements.unlocked.duplicate()
+	for item in game.achievements.catalog:game.achievements.unlocked[item.id]="preview"
+	for page in range(6):
+		game.achievement_page=page
+		var shown: Image=await render()
+		shown.save_png("res://qa/achievements_v2/page_%d.png" % (page+1))
+	game.achievements.unlocked=saved
 	game.action("achievements_back");check(game.world.state=="PAUSED","Opening the book from pause returns to pause")
 	check(not game.achievements_allowed(),"Automated SceneTree runs cannot unlock the user's real profile")
 	game.achievements.pending.clear();game.achievements.pending.append("first_evolution");game.update_achievements(0);game.update_achievements(.3);await render("toast")
@@ -62,9 +72,9 @@ func run():
 	for crystal in w.crystals:crystal.alive=false
 	w.spawn("endersteve_final",w.portal_position-Vector2(0,40));w.mobs[0].hp=0;w.resolve_deaths();w.stage_age=7.61;w.end_boss.story(w,.02)
 	game.audio.update_volumes(.4,0);game._process(.01);game._process(.01)
-	check(game.audio.theme=="victory" and game.audio.celebration_state=="stinger","Final End victory starts the real stinger and is not overridden by the EnderSteve theme next frame")
+	check(game.audio.theme!="victory" and not game.audio.victory_music.playing,"The accepted final clash retains its scene soundtrack")
 	game.audio.celebration_wait=0;game.audio._process(.1)
-	check(game.audio.celebration_state=="music" and game.audio.victory_music.playing,"The victory song follows the stinger even with effects muted")
+	check(not game.audio.victory_music.playing,"Muted effects do not start an unrelated victory loop during the clash")
 	await render("end_victory")
 	w.stage="chapter_four";w.stage_age=3;w.state="RESULT";await render("overworld")
 	check(not game.end_assets.sprites.any(func(n):return n.begins_with("end_flesh_") or n.begins_with("end_rubble_")),"Chapter IV teaser keeps its red land, trees and title without rubble or flesh props")

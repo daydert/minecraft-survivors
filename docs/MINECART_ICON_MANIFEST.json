@@ -1,0 +1,19 @@
+{
+  "minecraft_version": "1.21.11",
+  "source": "assets/minecraft/textures/item/minecart.png",
+  "output": "assets/sprites/icon_minecart.png",
+  "size": [
+    16,
+    16
+  ],
+  "sha256": "3f747009754ec30eb68ebdc02386ddd5eff7ecb1b268c8dfb69a178789e175a8",
+  "byte_identical_to_vanilla": true,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "filter": "nearest",
+  "backup": "qa/minecart_icon/icon_minecart_before.png",
+  "backup_sha256": "11237f97b57051b04467419d4b105e5c2d015743bf009c9bee26dee827481c7c",
+  "preview": "qa/minecart_icon/preview.png"
+}

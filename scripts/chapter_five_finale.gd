@@ -15,20 +15,20 @@ const TESTS := [[5, 3, 9, 1, 7, 2], [1], [], [4, 4, 1, 0, 8, 2], [9, 8, 7, 6, 5,
 const CHAIR := [[0.4, "Серьёзно, верёвка?", 3.0], [4.0, "Слушай, как бы ни было странно, но ты действительно моё лучшее творение", 3.6],
 	[8.0, "Чёрт, миллионы итераций, и никто досюда не доходил. Как это вообще могло произойти?", 4.2], [12.6, "Слушай, давай просто будем жить в гармонии? Я могу заново отстроить для тебя любой мир, вернуть \"её\". Зачем нам вражда?", 3.8],
 	[16.8, "Если тебя так задел мой брат, давай оставим его в прошлом?", 4.2], [21.4, "Хватит сканировать мой грёбаный мозг! Ты мой код, каждая твоя мысль — это моя строчка, как бы они ни мутировали!", 3.8],
-	[25.6, "Ты не имеешь права здесь ничего трогать. Слышишь? Ни-че-го", 4.0], [30.65, "ЭЙ, УБЕРИ ЭТО\nМСТИТЬ — ЭТО ДЕЛО СЛАБЫХ!", 2.25]]
+	[25.6, "Ты не имеешь права здесь ничего трогать. Слышишь? Ни-че-го", 4.0], [30.65, "ЭЙ, УБЕРИ ЭТО", 2.4], [33.3, "МСТИТЬ — ЭТО ДЕЛО СЛАБЫХ!", 3.2]]
 const CHAIR_SCAN := [3.4, 29.6]
 const CHAIR_SWORD := 30.0
-const CHAIR_STAB := 33.0
+const CHAIR_STAB := 37.4
 ## From here the kill plays as a film with its own sound (draw/stab cues are in it).
 const KILL_FILM_AT := 30.0
-const CHAIR_LENGTH := 44.0
+const CHAIR_LENGTH := 54.0
 const FLIGHT_THEME := 13.0
 const FLIGHT_FADE := 23.5
 const FLIGHT_OTHER := 27.0
 const FLIGHT_STING := 30.6
 const FLIGHT_LENGTH := 32.0
 const CREDITS := [[1.0, "MINECRAFT SURVIVORS", ""], [6.0, "Создатель", "Daydert"], [11.0, "Композитор", "Kibi"], [16.0, "Музыка · тестирование", "RodinCity"],
-	[21.0, "Тестирование", "SET553355"], [26.5, "Спасибо, что дошёл до конца", ""], [31.5, "", ""]]
+	[21.0, "Тестирование", "SET553355"], [26.5, "Спасибо, что дошёл до конца", ""], [31.5, "Сторонняя музыка", "GTDStudio (Palrom) · nene · OpenGameArt"]]
 const CREDITS_LENGTH := 37.0
 
 var phase := ""
@@ -49,6 +49,7 @@ var row := 0
 var col := 0
 var result := ""
 var result_ok := false
+var submissions := 0
 var notch_progress := 0.0
 # erase
 var erase := 0.0
@@ -61,6 +62,7 @@ var line_length := 0.0
 
 func reset():
 	phase = "";age = 0.0;cues = 0;sounds.clear();built.clear();pool.clear();editor = [""];row = 0;col = 0;result = "";notch_progress = 0.0
+	submissions = 0
 	erase = 0.0;presses = 0;thrown = -1.0;line = ""
 
 func lang() -> String:return LANGS[lang_index]
@@ -80,6 +82,7 @@ func begin_pick():
 
 func start_duel():
 	change("duel");built.clear();penalty = 0.0;notch_progress = 0.0;result = "";result_ok = false
+	submissions = 0
 	var sol: Array = SOLUTIONS[lang()]
 	pool = range(sol.size())
 	# A fixed shuffle so every attempt reads the same.
@@ -172,6 +175,7 @@ func key(name: String):
 		"run":submit("\n".join(editor))
 
 func submit(source: String):
+	submissions += 1
 	for t in TESTS:
 		var r: Dictionary = Interp.new().run(source, lang(), t)
 		if not r.ok:
@@ -200,8 +204,9 @@ func erase_step(dt: float) -> String:
 		elif erase>=1.0:change("erase_failed");return "lost"
 	else:
 		thrown += dt
-		if thrown >= .6 and not (cues & 2):cues |= 2;sounds.append("console");say("Ты… что ты сделал?!", 2.2)
-		if thrown >= 3.6:return "done"
+		if thrown >= .42 and not (cues & 4):cues |= 4;sounds.append("whip")
+		if thrown >= 1.0 and not (cues & 2):cues |= 2;sounds.append("console");say("Ты… что ты сделал?!", 2.4)
+		if thrown >= 4.5:return "done"
 	return ""
 
 # ------------------------------------------------------------------ the chair

@@ -1,0 +1,10 @@
+[
+  {
+    "suite": "test_achievements",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_screen_router",
+    "exit_code": 0
+  }
+]

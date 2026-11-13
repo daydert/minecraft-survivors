@@ -25,6 +25,7 @@ func run():
 	key(KEY_ESCAPE)
 	check(game.screen=="chapters" and game.world.state=="MENU","Esc returns to chapter choice")
 	game.action("chapter_1")
+	game.chapter_one_prologue.stop();game.world.finish_intro()
 	check(game.screen.is_empty() and game.world.state=="RUNNING" and game.router.depth()==0,"Starting a chapter clears the overlay stack")
 	game.world.state="LEVEL_UP"
 	key(KEY_I)

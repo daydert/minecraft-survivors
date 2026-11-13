@@ -18,8 +18,8 @@ func run():
 	check(stopped.x<c.x and stopped.distance_to(c)>=14.99,"A high-speed dash cannot tunnel through a column")
 	check(not w.free_at(c,6) and w.blocked.has(Vector2i(c/w.CELL)),"Teleportation and pathfinding use column collision too")
 	w.items={"end_eye":5};w.build={};w.next_level();var original=w.choices.duplicate();w.tick_choices(.2)
-	check(w.choices==original,"Eye no longer changes before 0.21 seconds")
-	w.tick_choices(.02);check(w.choices!=original,"Eye cycles after the slower display interval")
+	check(w.choices==original,"Eye choices stay still")
+	w.tick_choices(.5);check(w.choices==original and w.side_choices.size()==2,"Eye shows two extra options and never cycles")
 	var selected=w.choices[4];var owned=w.build.get(selected,w.items.get(selected,0));var combat_rng=w.rng.state
 	w.choose(4);w.choose(0);w.reroll_choices();w.tick_choices(.3)
 	check(w.chosen_item==selected and w.choices[4]==selected and w.state=="LEVEL_UP","Click freezes the exact displayed reward and ignores repeat input")

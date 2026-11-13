@@ -1,0 +1,17 @@
+[
+  {
+    "archive": "MinecraftSurvivors-Windows-x64.zip",
+    "sha256_ok": true,
+    "new_icon_contents_ok": true
+  },
+  {
+    "archive": "MinecraftSurvivors-Linux-x64.zip",
+    "sha256_ok": true,
+    "new_icon_contents_ok": true
+  },
+  {
+    "archive": "MinecraftSurvivors-Source.zip",
+    "sha256_ok": true,
+    "new_icon_contents_ok": true
+  }
+]

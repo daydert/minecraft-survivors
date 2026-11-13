@@ -1,0 +1,75 @@
+{
+  "rescue": {
+    "radius": 30,
+    "time": 3.2,
+    "decay": 0.8,
+    "hit_penalty": 0.55,
+    "ambush_base": 4,
+    "ambush_per_minute": 0.5,
+    "ambush_max": 10,
+    "ambush_radius": 118,
+    "ambush_delay": 1.0,
+    "heal": 4.0,
+    "xp": 24,
+    "chest_every": 3,
+    "vengeance_time": 25.0,
+    "vengeance_damage": 1.2,
+    "stir_xp_bonus": 1.5
+  },
+  "stir": {
+    "first": 70,
+    "interval": 62,
+    "warn": 32,
+    "near": 230,
+    "far": 1000,
+    "retinue": ["crawler", "crawler", "crawler", "crawler"]
+  },
+  "affixes": {
+    "second_after": 360,
+    "names": {"vampiric": "Вампир", "volatile": "Взрывной", "shielded": "Под щитом", "frenzied": "Бешеный"},
+    "vampiric_heal": 0.08,
+    "volatile_delay": 1.1,
+    "volatile_radius": 78,
+    "volatile_damage": 5.0,
+    "volatile_shots": 12,
+    "shield_radius": 95,
+    "shield_needed": 3,
+    "shield_guard": 0.65,
+    "frenzy_hp": 0.5,
+    "frenzy_speed": 1.45,
+    "frenzy_cooldown": 0.6
+  },
+  "retinues": {
+    "gravedigger": ["flayed_zombie", "flayed_zombie", "flayed_zombie", "flayed_zombie"],
+    "bellringer": ["hungry_wolf", "hungry_wolf", "hungry_wolf"],
+    "bone_rider": ["marksman", "marksman", "marksman"]
+  },
+  "gravedigger_raise": {"interval": 8.0, "range": 320, "count": 2, "delay": 0.9},
+  "ambush": {
+    "from": 60,
+    "interval": 21,
+    "jitter": 5,
+    "min_speed": 30,
+    "distance": 175,
+    "spread": 0.8,
+    "base": 5,
+    "per_minute": 0.4,
+    "max": 9,
+    "delay": 0.95
+  },
+  "surges": {
+    "times": [95, 250, 425, 590, 680],
+    "life": 16,
+    "rate": 2.6,
+    "ring": 14,
+    "ring_radius": 240,
+    "ring_delay": 1.15
+  },
+  "butcher": {
+    "times": [140, 300, 455, 615],
+    "life": 45,
+    "retry": 5,
+    "distance": 210,
+    "sink": 1.0
+  }
+}

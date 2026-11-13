@@ -14,8 +14,9 @@ static func draw_level_up(g):
 	if (g.is_end() and g.world.choices.size()>3) or (g.is_four() and (g.world.choices.size()>3 or g.world.rerolls>0)):
 		draw_end_choices(g);return
 	g.dim(0.77)
-	g.centered("НОВЫЙ УРОВЕНЬ",67,23,g.LIME,true)
-	g.centered("Уровень %d" % g.world.level,89,8,g.MUTED)
+	var sides: bool=not g.world.side_choices.is_empty()
+	g.centered("НОВЫЙ УРОВЕНЬ",38 if sides else 67,23,g.LIME,true)
+	g.centered("Уровень %d" % g.world.level,56 if sides else 89,8,g.MUTED)
 	for i in range(g.world.choices.size()):
 		var id=g.world.choices[i]
 		var owned=g.world.build.get(id,g.world.items.get(id,0))
@@ -24,20 +25,35 @@ static func draw_level_up(g):
 		g.buttons.append({"rect":r,"id":"choice_"+str(i)})
 		g.panel(r,Color("314831") if active else Color("20362b"),g.LIME if active else Color("697655"))
 		g.draw_rect(Rect2(r.position+Vector2(12,12),Vector2(43,43)),Color("151515"))
-		g.item_icon(id,r.position+Vector2(17,17),2,false,owned+1)
+		var evo: bool=g.world.evolved_offer.has(id)
+		g.item_icon(id,r.position+Vector2(17,17),2,evo,owned+1)
 		g.text_at("%d" % (i+1),r.position+Vector2(164,24),12,g.LIME,true)
-		g.text_at("НОВОЕ" if owned==0 else "УЛУЧШЕНИЕ",r.position+Vector2(66,26),8,g.GOLD if owned==0 else g.MUTED,true)
+		g.text_at("ЭВОЛЮЦИЯ" if evo else ("НОВОЕ" if owned==0 else "УЛУЧШЕНИЕ"),r.position+Vector2(66,26),8,g.GOLD if owned==0 or evo else g.MUTED,true)
 		g.text_at("Уровень %d" % (owned+1),r.position+Vector2(66,42),9,g.INK)
 		g.wrapped(g.gear_title(id,false,owned+1),r.position+Vector2(12,77),165,11,g.INK,true)
 		g.wrapped(g.world.db.description(id,owned),r.position+Vector2(12,112),164,9,g.LIME)
 		if active:g.draw_rect(Rect2(r.position+Vector2(1,154),Vector2(186,4)),g.LIME)
+	if sides:draw_side_cards(g,Rect2(29+(g.world.choices.size()/2)*197,112,188,159))
 	g.button(Rect2(255,321,130,22),"В меню","menu")
 	if not g.coop.active and g.world is W:g.button(Rect2(24,321,150,22),"Пропустить","skip_reward")
 
+## Eye of Ender IV: one compact card above and one below the centre card.
+static func draw_side_cards(g, centre: Rect2):
+	for k in range(g.world.side_choices.size()):
+		var id: String=g.world.side_choices[k];var owned=g.world.build.get(id,g.world.items.get(id,0))
+		var r:=Rect2(centre.position.x,centre.position.y-38 if k==0 else centre.end.y+4,centre.size.x,34)
+		var active=g.selected==g.buttons.size();g.buttons.append({"rect":r,"id":"side_"+str(k)})
+		g.panel(r,Color("314831") if active else Color("20362b"),g.LIME if active else Color("697655"))
+		var evo: bool=g.world.evolved_offer.has(id)
+		g.item_icon(id,r.position+Vector2(8,9),1,evo,owned+1)
+		g.text_at(g.gear_title(id,evo,owned+1),r.position+Vector2(30,15),8,g.INK,true)
+		g.text_at(("ЭВОЛЮЦИЯ · " if evo else "")+("новое" if owned==0 else "уровень %d" % (owned+1)),r.position+Vector2(30,27),8,g.GOLD if evo else g.MUTED)
+
 static func draw_end_choices(g):
 	g.dim(.82)
-	g.centered("НОВЫЙ УРОВЕНЬ",54,24,g.INK,true)
-	g.centered("Уровень %d" % g.world.level,76,8,g.MUTED)
+	var sides: bool=not g.world.side_choices.is_empty()
+	g.centered("НОВЫЙ УРОВЕНЬ",28 if sides else 54,24,g.INK,true)
+	g.centered("Уровень %d" % g.world.level,46 if sides else 76,8,g.MUTED)
 	var count=g.world.choices.size()
 	var width=112 if count==5 else 141
 	var gap=8
@@ -46,13 +62,16 @@ static func draw_end_choices(g):
 		var id=g.world.choices[i];var owned=g.world.build.get(id,g.world.items.get(id,0))
 		var r=Rect2(start+i*(width+gap),98,width,192)
 		var active=g.selected==g.buttons.size();g.buttons.append({"rect":r,"id":"choice_"+str(i)})
-		g.panel(r);g.item_icon(id,r.position+Vector2(12,14),2,false,owned+1)
+		var evo: bool=g.world.evolved_offer.has(id)
+		g.panel(r);g.item_icon(id,r.position+Vector2(12,14),2,evo,owned+1)
+		if evo:g.text_at("ЭВОЛЮЦИЯ",r.position+Vector2(8,180),8,g.GOLD,true)
 		g.text_at(str(i+1),r.position+Vector2(width-18,25),8,g.INK,true)
 		g.text_at("I" if owned==0 else str(owned+1),r.position+Vector2(53,35),8,g.MUTED)
 		g.wrapped(g.gear_title(id,false,owned+1),r.position+Vector2(8,69),width-16,8,g.INK,true)
 		g.wrapped(g.world.db.description(id,owned),r.position+Vector2(8,107),width-16,8,g.MUTED)
 		if active:g.draw_rect(Rect2(r.position+Vector2(1,188),Vector2(width-2,3)),g.INK)
-	if g.world.rerolls>0:g.button(Rect2(207,304,226,23),"Перебросить · "+str(g.world.rerolls),"end_reroll")
+	if sides:draw_side_cards(g,Rect2(start+(count/2)*(width+gap),98,width,192))
+	if g.world.rerolls>0:g.button(Rect2(470,333,150,22) if sides else Rect2(207,304,226,23),"Перебросить · "+str(g.world.rerolls),"end_reroll")
 	g.button(Rect2(255,333,130,22),"В меню","menu")
 	g.button(Rect2(20,333,150,22),"Пропустить","skip_reward")
 

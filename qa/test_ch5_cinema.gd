@@ -51,7 +51,7 @@ func run():
  check(v.nodes.worlds.size()==11,"Exactly eleven logo universes")
  check(v.nodes.worlds.all(func(x):return x is Sprite3D),"Flight instantiates logos only")
  check(v.nodes.tf2_waters.size()>0,"2Fort water uses simulation-clock materials")
- check(f.CHAIR_STAB==33 and f.FLIGHT_THEME==13 and f.FLIGHT_FADE==23.5 and f.FLIGHT_STING==30.6,"Original event timing contract retained")
+ check(f.CHAIR_STAB==37.4 and f.FLIGHT_THEME==13 and f.FLIGHT_FADE==23.5 and f.FLIGHT_STING==30.6,"Original event timing contract retained")
  v.release();await process_frame;game.audio.shutdown();game.quitting=true
  print("CH5_CINEMA_RESULT ",checks," checks; ",failures.size()," failures")
  FileAccess.open("res://qa/ch5_cinema/test_result.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures},"  "))

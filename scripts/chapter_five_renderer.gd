@@ -1,4 +1,5 @@
 extends RefCounted
+const BossBar=preload("res://scripts/ui/boss_bar.gd")
 const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## Chapter V presentation: the white/dark code plane, code enemies drawn as
 ## editor cards, glitched vanilla mobs, deleted floor and the debug overlay.
@@ -9,6 +10,7 @@ const NUM := Color(.55, .85, .55)
 const TEXT := Color(.82, .84, .9)
 const CARD := Color(.075, .08, .11)
 const NotchView = preload("res://scripts/chapter_five_notch_view.gd")
+const PurgeView = preload("res://scripts/chapter_five_purge_view.gd")
 var code: Array = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_code.json")).lines
 var widths: Dictionary = {}
 var vignette: GradientTexture2D
@@ -77,6 +79,7 @@ func world(g):
 			g.draw_arc(p, z.r * k, 0, TAU, 28, Color(.95, .3, .25, .45), 1)
 			g.text_at("else", p - Vector2(10, -3), 8, Color(.95, .3, .25, .8))
 		else:g.draw_circle(p, z.r, Color(.95, .3, .25, .5 * (1 - (z.age - z.delay) / .3)))
+	NotchView.ground(g, offset)
 	SwordView.draw(g, offset)
 	var actors: Array = []
 	for obj in w.props:
@@ -107,6 +110,7 @@ func world(g):
 			"player":
 				var p: Vector2 = w.player + offset
 				g.oval(p, Vector2(8, 3), Color(0, 0, 0, .3))
+				if PurgeView.player(g, p):continue
 				if w.invert > 0 and int(w.clock * 20) % 2 == 0:
 					g.draw_actor("steve", p + Vector2(2, 0), w.facing, w.clock, w.player_moving, Color(.2, 1, 1, .5), "walk", 1.0, w.player_visual)
 					g.draw_actor("steve", p - Vector2(2, 0), w.facing, w.clock, w.player_moving, Color(1, .2, .3, .5), "walk", 1.0, w.player_visual)
@@ -122,12 +126,23 @@ func world(g):
 	for o in w.orbs:
 		var p: Vector2 = (o.p + offset).floor()
 		if Rect2(-8, -8, 656, 376).has_point(p):g.draw_texture_rect_region(g.textures.experience_orb, Rect2(p - Vector2(4, 5), Vector2(8, 8)), Rect2(0, 0, 16, 16), Color(.5, 1, .35))
-	for b in w.projectiles:g.draw_projectile(b, offset)
+	# Placed TNT and beds (they were never drawn in this chapter: invisible TNT).
+	for b in w.explosives:
+		var ep: Vector2=b.p+offset
+		if not Rect2(-40,-60,720,460).has_point(ep):continue
+		if b.kind=="bed":g.sprite("bed_ground",ep-Vector2(20,23))
+		else:
+			var es: float=.75 if b.get("child",false) else 1.0
+			g.oval(ep,Vector2(10,3)*es,Color(0,0,0,.4))
+			g.sprite("tnt_ground",ep-Vector2(12*es,24*es+b.get("height",0.0)),Vector2(24,28)*es,Color(1.7,1.7,1.7) if g.settings.flashes and fmod(b.age,.22)<.08 else Color.WHITE)
+	for b in w.projectiles:
+		if not g.nether_renderer.projectile(g, b, offset):g.draw_projectile(b, offset)
 	shots(g, offset, tone)
 	equipment(g, offset, tone)
 	NotchView.air(g, offset)
+	PurgeView.air(g, offset)
 	for e in w.effects:
-		if not effect(g, e, offset):g.draw_effect(e, offset)
+		if not effect(g, e, offset) and not g.nether_renderer.effect(g, e, offset):g.draw_effect(e, offset)
 	for s in w.shards:shard(g, s, offset, ink)
 	for pool in [w.particles, w.pixels]:
 		for particle in pool:
@@ -144,6 +159,10 @@ func world(g):
 	if w.bosses.rewind_flash > 0:rewind(g, w.bosses.rewind_flash)
 	boss_bar(g)
 	boss_arrival(g,offset)
+	PurgeView.screen(g)
+	if w.overflow_flash > 0:
+		g.draw_rect(Rect2(0, 0, 640, 360), Color(1, .1, .2, .25 * w.overflow_flash / .5))
+		for i in range(6):g.draw_rect(Rect2(0, h(int(w.clock * 30) + i, 90) * 360, 640, 2 + h(i, 91) * 6), Color(1, .2, .3, .3 * w.overflow_flash / .5))
 	if w.stage == "notch":NotchView.overlay(g)
 	else:debug(g, offset)
 
@@ -254,7 +273,9 @@ func entity(g, m: Dictionary, offset: Vector2, tone: float):
 	if m.kind == "hijack":
 		double(g, m, p);return
 	if m.kind == "terminal":
-		terminal(g, m, p, tone);return
+		if m.get("purge", false):PurgeView.terminal(g, m, p)
+		else:terminal(g, m, p, tone)
+		return
 	if m.kind == "clone":
 		clone(g, m, p);return
 	if m.kind == "loop_boss":
@@ -275,7 +296,6 @@ func entity(g, m: Dictionary, offset: Vector2, tone: float):
 		var owner = w.mob_by_id(m.owner)
 		if owner != null:g.draw_line(p - Vector2(0, 12), owner.p + offset - Vector2(0, 14), Color(NUM, .5), 1)
 	var card: Color = Color(1, 1, 1) if m.flash > 0 and g.settings.flashes else CARD
-	g.draw_rect(Rect2(origin+Vector2(3,4),size),Color(.01,.015,.025,alpha*.65))
 	g.draw_rect(Rect2(origin-Vector2(1,1),size+Vector2(2,2)),Color(.21,.23,.29,alpha))
 	g.draw_rect(Rect2(origin, size), Color(card, alpha * (.94 if m.kind != "null_ref" else .5)))
 	var rim: Color = Color(.45, .5, .7).lerp(Color(.6, .7, 1), tone)
@@ -598,9 +618,7 @@ func boss_bar(g):
 	elif not w.bosses.loop.is_empty():
 		target = w.mob_by_id(w.bosses.loop.id);title = "Бесконечный цикл"
 	if target == null:return
-	g.centered(title, 41, 8, Color.WHITE, true)
-	g.draw_rect(Rect2(211, 46, 218, 5), Color(.15, .15, .2))
-	g.draw_rect(Rect2(212, 47, 216 * clampf(target.hp / target.max_hp, 0, 1), 3), Color(.35, 1, .45) if title == "Бесконечный цикл" else Color(.95, .35, .3))
+	BossBar.draw(g, title, target.hp / target.max_hp, Color(.35, 1, .45) if title == "Бесконечный цикл" else Color(.95, .35, .3))
 
 func boss_arrival(g, offset: Vector2):
 	var w=g.world;var b=w.bosses

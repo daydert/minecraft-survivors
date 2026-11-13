@@ -105,6 +105,38 @@
     "textures/block/coarse_dirt.png": {
       "sha256": "6889a193decb2c38cd8559456693c15192917c7b917d6ef9c3c2e142f7819ad4",
       "bytes": 495
+    },
+    "textures/entity/villager/profession/butcher.png": {
+      "sha256": "396909284395e4e681a6edc89ba517277fd26945f85168751f35765a9c866609",
+      "bytes": 434
+    },
+    "textures/entity/villager/profession/butcher.png.mcmeta": {
+      "sha256": "57b73cee5df5b86205b0728b42adff303c3e650ba7a3555cec00d6e72808a581",
+      "bytes": 53
+    },
+    "textures/block/brown_wool.png": {
+      "sha256": "d6bfcd1e5a8ecef072201c73ba6b8e50dd4a6065cd504e8413da8413c6d0fd60",
+      "bytes": 381
+    },
+    "textures/block/white_wool.png": {
+      "sha256": "70c9c9a9901d71ef9a5a89ea2cc4bc0d99ff5e65f733d1467da8b92f746107a5",
+      "bytes": 390
+    },
+    "textures/item/iron_axe.png": {
+      "sha256": "8dea40bac06c6f14bb0ad9e8b47de63250f6d6a46ae9439b85ddd1377f1edb49",
+      "bytes": 178
+    },
+    "textures/block/stripped_dark_oak_log.png": {
+      "sha256": "23b5b04b273a99c1f645b6a043af11b4d63a07535fe66ebf7e612a623b99d330",
+      "bytes": 213
+    },
+    "textures/block/red_wool.png": {
+      "sha256": "07b48cec9b4610e908025807fb85fa686dd50f17918fa677ce655d28b3ba3464",
+      "bytes": 372
+    },
+    "textures/item/crossbow_standby.png": {
+      "sha256": "6ea28ffcdf20314406cfaddcf9c1684523ff27211a482e6a709c2bd4543bb468",
+      "bytes": 228
     }
   },
   "derived": {
@@ -287,6 +319,36 @@
         28
       ],
       "sha256": "577a396a5fc5bd4b9f36757bdf8b24d8be775ea366a9c2ff7c1fe0b06e6ee54c"
+    },
+    "ch4_butcher_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1638,
+        201
+      ],
+      "sha256": "5143e628f36111c2d911ef16abc5762c6f855c487bb378118b1b4112267c2a5c"
+    },
+    "ch4_crucified_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1352,
+        150
+      ],
+      "sha256": "82d7bf5956be71b6750c90c93e4c86239404b003fc8568a8b185fce5ef44e8a4"
+    },
+    "ch4_marksman_atlas": {
+      "sources": [
+        "vanilla entity/item/block textures; connected custom hierarchy"
+      ],
+      "size": [
+        1040,
+        135
+      ],
+      "sha256": "548499e1ecf8e56be2095530bfb92c43dd01478f917f6df68629867cfe5673c0"
     }
   }
 }

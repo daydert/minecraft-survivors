@@ -1,4 +1,6 @@
 extends RefCounted
+const BossBar=preload("res://scripts/ui/boss_bar.gd")
+const Tells=preload("res://scripts/chapter_four_tells.gd")
 const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## Chapter III draws vanilla sampled parts, paused simulation effects and restrained UI.
 const PURPLE=Color("bf82e6")
@@ -22,22 +24,17 @@ func world(g):
 		if h.wait<=0:continue
 		var p: Vector2=h.p+offset;var alpha=.4+.35*(1-h.wait/h.get("total",1))
 		if h.get("kind","")=="end_cut":
-			var end: Vector2=h.end+offset;var side=p.direction_to(end).orthogonal()*h.radius
-			g.draw_colored_polygon(PackedVector2Array([p+side,end+side,end-side,p-side]),Color(.55,.25,.7,.13))
-			g.draw_line(p+side,end+side,Color(.8,.5,.95,alpha),1);g.draw_line(p-side,end-side,Color(.8,.5,.95,alpha),1)
+			var end: Vector2=h.end+offset
+			Tells.lane(g,p.floor(),end.floor(),h.radius,1-h.wait/h.get("total",1),int(h.p.x+h.p.y),w.clock)
 			if h.get("echo",false):
 				g.draw_actor("endersteve_final",p,p.direction_to(end),0,false,Color(.7,.4,1,.4),"windup",1,{"state":"windup","time":.16*(1-h.wait/h.total)})
 			continue
 		if h.get("kind","")=="end_bolt":
 			var k: float=1-h.wait/h.total
-			for j in range(8):
-				var a0: float=j*TAU/8+k*.6
-				g.draw_line(p+Vector2.from_angle(a0)*Vector2(h.radius,h.radius*.55),p+Vector2.from_angle(a0)*Vector2(h.radius,h.radius*.55)*(1-.35*k),Color(.95,.7,1,alpha),2)
-			g.oval(p,Vector2(h.radius,h.radius*.55)*k,Color(.7,.3,1,.2))
+			Tells.ring(g,p.floor(),h.radius,k,w.clock)
 			g.draw_line(p-Vector2(0,200),p-Vector2(0,200-200*k*k),Color(.85,.6,1,.25*k),1)
 			continue
-		g.draw_arc(p,h.radius,0,TAU,32,Color(.8,.5,.95,alpha),1)
-		g.oval(p,Vector2(h.radius,h.radius*.6),Color(.6,.25,.8,.12))
+		Tells.ring(g,p.floor(),h.radius,1-h.wait/h.get("total",1),w.clock)
 	for e in w.effects:
 		if e.kind in ["friendly_breath","dragon_cloud"]:effect(g,e,offset)
 	if w.stage not in ["survival","end_arrival","departure"]:
@@ -89,9 +86,9 @@ func world(g):
 						var q=hand+Vector2.from_angle(j*PI/2+g.world.clock*2)*(9+sin(g.world.clock*5)*2)
 						g.draw_line(q-m.dir.orthogonal()*2,q+m.dir.orthogonal()*2,Color(.8,.4,1,.6),1)
 				if m.phase=="windup" and "steve" in m.kind and m.get("pattern",0) in [0,3]:
-					var v: Vector2=m.charge;g.draw_line(p,p+v*160,Color(.8,.6,.9,.4),2)
+					var v: Vector2=m.charge;Tells.lane(g,p.floor(),(p+v*160).floor(),9.0,1.0-m.timer/maxf(.01,m.get("windup_total",.85)),int(m.id),g.world.clock)
 				if m.phase=="cleave_windup":
-					g.draw_arc(p,75,m.charge.angle()-1.45,m.charge.angle()+1.45,24,Color(.8,.6,.9,.6),1)
+					Tells.claws(g,p.floor(),m.charge,70.0,1.0-m.timer/.65,int(m.id),g.world.clock)
 			"player":player(g,offset)
 			"landmark":
 				var q: Vector2=a.obj.p+offset
@@ -478,8 +475,7 @@ func hud(g):
 		# His name settles only after a moment: first he is just Steve.
 		if m.kind=="endersteve_final" and w.stage=="last_duel" and w.stage_age<3.0:
 			title="Стив" if w.stage_age<1.4 or int(w.clock*30)%5==0 else "ЭндерСтив"
-		g.centered(title,41,8,Color.WHITE,true)
-		g.draw_rect(Rect2(191,46,258,6),Color("333333"));g.draw_rect(Rect2(192,47,256*clampf(m.hp/m.max_hp,0,1),4),Color("9b739a"))
+		BossBar.draw(g,title,m.hp/m.max_hp,Color("9b739a"),m.kind)
 		if m.kind=="end_dragon":
 			var count=w.crystals.filter(func(t):return t.alive).size()
 			for i in range(6):g.sprite("icon_end_crystal",Vector2(294+i*9,58),Vector2(7,7),Color.WHITE if i<count else Color(.2,.2,.2))

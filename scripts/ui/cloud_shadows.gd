@@ -6,8 +6,9 @@ static func draw(g,offset: Vector2):
  if not g.textures.has("cloud_shadow"):g.load_texture("cloud_shadow")
  var texture: Texture2D=g.textures.get("cloud_shadow")
  if texture==null:return
- var tile: Vector2=Vector2(texture.get_size())*3.0
- var drift:=Vector2(g.world.clock*5.0,g.world.clock*1.3)
+ # One cloud texel per 12 px: the shadows read as the square vanilla cloud cells.
+ var tile: Vector2=Vector2(texture.get_size())*12.0
+ var drift:=Vector2(g.world.clock*9.0,0.0)
  var origin:=Vector2i(((-offset-drift)/tile).floor())
  for y in range(origin.y,origin.y+2):
   for x in range(origin.x,origin.x+2):

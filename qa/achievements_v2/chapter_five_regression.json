@@ -1,0 +1,14 @@
+[
+  {
+    "suite": "test_chapter_five_bosses",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_chapter_five_notch",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_chapter_five_finale",
+    "exit_code": 0
+  }
+]

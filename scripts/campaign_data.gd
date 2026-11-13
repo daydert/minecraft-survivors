@@ -1,9 +1,10 @@
 extends "res://scripts/game_data.gd"
+const EYE_TEXT := ["Ещё один предмет на выбор", "Один переброс при новом уровне", "Пятый предмет на выбор", "Ещё два варианта над и под центральной карточкой", "Шанс 4% — предмет сразу с эволюцией"]
 const FourEquipment=preload("res://scripts/chapter_four_equipment.gd")
 ## Solo equipment presentation. Network data and balance remain untouched.
 
 func configure(chapter: int):
-	data.passives.hopper.effect="Притяжение опыта +85% за уровень. Быстрее собирает опыт и подтягивает лечение."
+	data.passives.hopper.effect="Притяжение опыта +85% за уровень · подтягивает и лечение"
 	if chapter < 2:
 		var overworld: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/overworld_balance.json"))
 		data.mobs.merge(overworld.mobs,true)
@@ -96,7 +97,8 @@ func four_passive(id: String, level: int) -> String:
 		"black_candle":return "Урон стоя до +%d%% → +%d%%"%[int(100*float(r.candle_per_level)*n),int(100*float(r.candle_per_level)*m)]
 		"empty_totem":return "Здоровье после возрождения %d → %d"%[3+3*n,3+3*m]
 		"gunpowder":return "Взрывной урон +%d%% → +%d%%"%[6*n,6*m]
-		"end_eye":return ["Ещё один предмет на выбор.","Один переброс при новом уровне.","Пятый предмет на выбор.","Второй переброс.","Третий переброс."][clampi(n,0,4)]
+		"minecart":return "Поездка %s → %s с · таран %d → %d · перезарядка %d → %d с"%[number(float(r.cart_duration)+float(r.cart_duration_per_level)*(n-1)),number(float(r.cart_duration)+float(r.cart_duration_per_level)*(m-1)),int(float(r.cart_damage)+float(r.cart_damage_per_level)*(n-1)),int(float(r.cart_damage)+float(r.cart_damage_per_level)*(m-1)),int(maxf(4.0,float(r.cart_cooldown)-float(r.cart_cooldown_per_level)*(n-1))),int(maxf(4.0,float(r.cart_cooldown)-float(r.cart_cooldown_per_level)*(m-1)))]
+		"end_eye":return EYE_TEXT[clampi(n,0,4)]
 	return ""
 
 func description(id: String, level: int) -> String:
@@ -132,11 +134,11 @@ func description(id: String, level: int) -> String:
 		for k in labels:
 			if a.get(k,0)!=b.get(k,0):return "%s %s → %s%s" % [labels[k],number(a.get(k,0)),number(b.get(k,0))," с" if k in ["interval","duration"] else ""]
 	if id=="end_eye" and data.has("four_arsenal"):return four_passive(id,level)
-	if id=="end_eye":return ["Добавляет ещё один предмет на выбор.","Один переброс предметов при повышении уровня.","Ещё один предмет на выбор.","Один из пяти предметов меняется.","Три из пяти предметов меняются."][clampi(level,0,4)]
-	if id=="rabbit_foot":return "Лечение с врагов: шанс +3%." if level<4 else "Шанс +3%. Вместо яблок выпадает золотая морковь."
-	if id=="elytra":return "Пробел: полёт над пропастями." if level==0 else "Длительность полёта +0,5 с."
-	if id=="ender_pearl":return "E: бросок жемчуга и телепортация." if level==0 else "Перезарядка −1 с."
-	if id=="shulker_shell":return "Спасает от падения в пропасть." if level==0 else "Перезарядка −6 с. Урон падения −10%."
+	if id=="end_eye":return EYE_TEXT[clampi(level,0,4)]
+	if id=="rabbit_foot":return "Шанс лечения с врагов +3%" if level<4 else "Шанс +3% · вместо яблок золотая морковь"
+	if id=="elytra":return "Пробел — полёт над пропастью · в воздухе неуязвим" if level==0 else "Полёт +0,6 с · перезарядка −0,7 с · удар при посадке сильнее"
+	if id=="ender_pearl":return "E — бросок жемчуга и телепорт" if level==0 else "Перезарядка −1 с"
+	if id=="shulker_shell":return "Спасает от падения в пропасть" if level==0 else "Перезарядка −6 с · урон падения −10%"
 	var text=super.description(id,level)
 	if id=="hoe":text=text.replace("Облако","Вращение")
 	if id in ["tnt","fishing","crossbow"]:text=text.replace("Снаряды",{"tnt":"Заряды","fishing":"Крючки","crossbow":"Болты"}[id])

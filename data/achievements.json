@@ -4,7 +4,8 @@
     "name": "Из огня да в полымя",
     "description": "Пройти главу I.",
     "tier": "easy",
-    "icon": "chapter_one"
+    "icon": "chapter_one",
+    "secret": true
   },
   {
     "id": "first_evolution",
@@ -46,14 +47,16 @@
     "name": "Выход из Незера",
     "description": "Пройти главу II.",
     "tier": "medium",
-    "icon": "chapter_two"
+    "icon": "chapter_two",
+    "secret": true
   },
   {
     "id": "chapter_three",
     "name": "Край позади",
     "description": "Пройти главу III.",
     "tier": "medium",
-    "icon": "chapter_three"
+    "icon": "chapter_three",
+    "secret": true
   },
   {
     "id": "bow_only",
@@ -131,13 +134,145 @@
     "name": "FATALITY",
     "description": "Добить Нотча фаталити в файтинге главы V.",
     "tier": "hard",
-    "icon": "fatality"
+    "icon": "fatality",
+    "secret": true
   },
   {
     "id": "bad_ending",
     "name": "Тестирование завершено",
     "description": "Проиграть Нотчу в конце главы V.",
     "tier": "secret",
-    "icon": "bad_ending"
+    "icon": "bad_ending",
+    "secret": true
+  },
+  {
+    "id": "trailblazer",
+    "name": "Здесь я уже был",
+    "description": "Найти руины, колодец, шахту и пруд в главе I.",
+    "tier": "easy",
+    "icon": "trailblazer",
+    "chapter": 1
+  },
+  {
+    "id": "boss_angler",
+    "name": "Клюнуло",
+    "description": "Трижды зацепить Иссушителя удочкой за один бой.",
+    "tier": "medium",
+    "icon": "boss_angler",
+    "chapter": 2,
+    "secret": true
+  },
+  {
+    "id": "void_bouncer",
+    "name": "Вниз без очереди",
+    "description": "Сбросить пять врагов в бездну палкой отдачи за один забег.",
+    "tier": "medium",
+    "icon": "void_bouncer",
+    "chapter": 3
+  },
+  {
+    "id": "shell_rescue",
+    "name": "Зацепился",
+    "description": "Спастись от урона падения с помощью панциря шалкера.",
+    "tier": "easy",
+    "icon": "shell_rescue",
+    "chapter": 3
+  },
+  {
+    "id": "read_note",
+    "name": "Между строк",
+    "description": "Прочитать записку жителя в главе IV.",
+    "tier": "easy",
+    "icon": "read_note",
+    "chapter": 4,
+    "secret": true
+  },
+  {
+    "id": "free_golem",
+    "name": "Цепи сняты",
+    "description": "Освободить железного голема в главе IV.",
+    "tier": "medium",
+    "icon": "free_golem",
+    "chapter": 4,
+    "secret": true
+  },
+  {
+    "id": "cart_rider",
+    "name": "С дороги!",
+    "description": "Сбить насмерть 20 врагов вагонеткой за один забег.",
+    "tier": "medium",
+    "icon": "cart_rider",
+    "chapter": 4
+  },
+  {
+    "id": "healing_undead",
+    "name": "Лечению не подлежит",
+    "description": "Уничтожить 20 врагов лечебным зельем за один забег в главе IV.",
+    "tier": "medium",
+    "icon": "healing_undead",
+    "chapter": 4
+  },
+  {
+    "id": "chapter_four",
+    "name": "Дверь с той стороны",
+    "description": "Пройти главу IV.",
+    "tier": "hard",
+    "icon": "chapter_four",
+    "chapter": 4,
+    "secret": true
+  },
+  {
+    "id": "terminal_original",
+    "name": "Оригинал лучше",
+    "description": "Победить Терминал в главе V.",
+    "tier": "medium",
+    "icon": "terminal_original",
+    "chapter": 5,
+    "secret": true
+  },
+  {
+    "id": "break_loop",
+    "name": "Хватит повторяться",
+    "description": "Победить Бесконечный цикл в главе V.",
+    "tier": "medium",
+    "icon": "break_loop",
+    "chapter": 5,
+    "secret": true
+  },
+  {
+    "id": "own_controls",
+    "name": "Моё управление",
+    "description": "Уничтожить двойника до поглощения в главе V.",
+    "tier": "medium",
+    "icon": "own_controls",
+    "chapter": 5,
+    "secret": true
+  },
+  {
+    "id": "first_compile",
+    "name": "С первого запуска",
+    "description": "Выиграть битву кодом без ошибок.",
+    "tier": "hard",
+    "icon": "first_compile",
+    "chapter": 5,
+    "secret": true
+  },
+  {
+    "id": "heart_whole",
+    "name": "Сердце цело",
+    "description": "Пройти бой в рамке без единого попадания.",
+    "tier": "hard",
+    "icon": "heart_whole",
+    "chapter": 5,
+    "secret": true
+  },
+  {
+    "id": "chapter_five",
+    "name": "За пределами",
+    "description": "Пройти главу V.",
+    "tier": "hard",
+    "icon": "chapter_five",
+    "chapter": 5,
+    "secret": true
   }
 ]

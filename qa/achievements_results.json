@@ -1,6 +1,4 @@
 {
   "checks": 51,
-  "failures": [
-    "Final End victory emits the existing stinger and selects victory music once"
-  ]
+  "failures": []
 }

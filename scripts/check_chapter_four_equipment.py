@@ -1,11 +1,14 @@
-"""Only IV arsenal resources: original bytes, complete frames and bounded atlases."""
-import hashlib,json
+"""IV arsenal resources: native model sources, generated icons and bounded atlases."""
+import argparse,hashlib,json
 from pathlib import Path
 from PIL import Image,ImageFilter
 ROOT=Path(__file__).resolve().parent.parent
 m=json.loads((ROOT/'data/chapter_four_equipment.json').read_text())
 a=json.loads((ROOT/'docs/CHAPTER_FOUR_EQUIPMENT_MANIFEST.json').read_text())
 checks=0
+parser=argparse.ArgumentParser()
+parser.add_argument('--icons-only',action='store_true',help='Validate inventory sprites without repeating unchanged mesh-frame checks.')
+args=parser.parse_args()
 
 def check(ok,label):
  global checks
@@ -15,6 +18,7 @@ def check(ok,label):
 for name,spec in a['raw_files'].items():
  check(hashlib.sha256((ROOT/'assets/minecraft'/name).read_bytes()).hexdigest()==spec['sha256'],name+' native bytes')
 for name in list(m['held'])+m['sprites']:
+ if args.icons_only and name in m['held']:continue
  p=ROOT/'assets/sprites'/(name+'.png');im=Image.open(p).convert('RGBA');spec=a['derived'][name]
  check(list(im.size)==spec['size'] and hashlib.sha256(p.read_bytes()).hexdigest()==spec['sha256'],name+' manifest')
  if name not in m['held']:continue

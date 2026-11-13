@@ -299,69 +299,93 @@
     },
     "achievement_blood_moon": {
       "sources": [
-        "block/netherrack",
-        "entity/zombie/zombie"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "465d8002cfc0b0f8d07b03547608447af20b95e09e48555af8791623fdf15d9d"
+      "sha256": "4b89dc68ead3354db7101c0dcf7b6e0f89c5fc9c68eacda2fbb5277359848b3b",
+      "cell": [
+        0,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_witch_hunter": {
       "sources": [
-        "block/dark_oak_planks",
-        "entity/witch"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "03b18388ff245c50f3812b0e6d3f60e4355cd582db75b90b85018e7058103013"
+      "sha256": "87ef6f7b127c39664cc077e8882ba675b8bdaa7182653a5c127029a3b8d8a00c",
+      "cell": [
+        2,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_phantom_slayer": {
       "sources": [
-        "block/obsidian",
-        "item/phantom_membrane"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "54944df7706b13275917d9f549172eabf37b4058786db83568bad640fcbb1642"
+      "sha256": "b375ee6fa140c854d5f8db82228cb6cdf072519cec18c41bfb334f0aed2f720e",
+      "cell": [
+        3,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_bastion": {
       "sources": [
-        "block/polished_blackstone_bricks",
-        "item/gold_ingot"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "24ac72191ef0f398b0b1010907d69af02eb50d8c437fd80165f055e065e6a6a3"
+      "sha256": "5ff9eb9d095f7a04facdf21b34217f9d45810b55c23890083e3e24807daf2356",
+      "cell": [
+        4,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_end_city": {
       "sources": [
-        "block/purpur_block",
-        "item/elytra"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "6deacf26e6c8544395f200db7f5b5070b10b6ba560976f1a076df3829bec1b86"
+      "sha256": "b2f0771720ed5d4b69143ec500f5f1d7d052cf1b0394e022cb6a5a3617d2d952",
+      "cell": [
+        1,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_windswept": {
       "sources": [
-        "block/end_stone",
-        "item/wind_charge"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "ad3028aea071cd8b77e95974ca4e8767818e77586bd813468adbef163254dd4c"
+      "sha256": "6e3f7958e399d048719bea97d1ed6d229f6b90f530e642969ad3eac96a1b1e2d",
+      "cell": [
+        5,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     }
   },
   "audio": {

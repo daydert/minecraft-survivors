@@ -384,7 +384,7 @@ func move_phantom(m: Dictionary, dt: float):
 			m.dir = p.direction_to(m.mark)
 			m.altitude = move_toward(m.altitude, high + 8, dt * 20)
 			if m.timer <= 0:
-				m.phase = "dive"
+				m.phase = "dive";m.bit = false
 				m.timer = float(night.phantom_dive_time)
 				m.charge = p.direction_to(m.mark)
 				sound("phantom_swoop", 0.3)
@@ -394,8 +394,8 @@ func move_phantom(m: Dictionary, dt: float):
 			m.dir = m.charge
 			var left := maxf(0.0, m.timer / float(night.phantom_dive_time))
 			m.altitude = lerpf(3.0, high, left * left)
-			if m.altitude < 14 and m.p.distance_to(player) < m.radius + 7:
-				damage_player(m.damage)
+			if m.altitude < 18 and m.p.distance_to(player) < m.radius + 9 and not m.get("bit",false):
+				m.bit = true;damage_player(m.damage);shake = maxf(shake, .14);sound("phantom_flap", .1)
 			if m.timer <= 0:
 				m.phase = "climb"
 				m.timer = float(night.phantom_climb)
@@ -433,5 +433,8 @@ func resolve_deaths():
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if m.kind == "phantom":
-		push *= 0.4
+		# A blow knocks it out of the air for a moment: hits read, it is catchable.
+		push *= 0.8
+		m.altitude = maxf(4.0, float(m.get("altitude", 0.0)) * 0.45)
+		if m.phase == "circle":m.timer = maxf(m.timer, 0.6)
 	super.hurt(m, amount, push)

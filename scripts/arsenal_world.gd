@@ -121,6 +121,7 @@ func update_fire(dt: float):
 
 func hook_target(m: Dictionary, evolved_hook: bool):
 	if m.control_resist>0:return
+	if chapter_number()==2 and m.kind=="wither" and m.hp>0:run_progress.count("boss_angler",3)
 	var distance=maxf(0,m.p.distance_to(player)-m.radius-16)
 	m.pull_left=minf((70 if m.boss else 150)*(1+rule("feather_knock")*items.get("feather",0)),distance)
 	m.pull_dir=m.p.direction_to(player)

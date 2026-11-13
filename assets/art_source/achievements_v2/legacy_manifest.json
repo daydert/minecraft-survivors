@@ -1,0 +1,524 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/block/netherrack.png": {
+      "sha256": "3c0208b749c5393b9bad9d57ed3d830326a02b8cbd8444e96d4d0d277f85625f",
+      "bytes": 213
+    },
+    "textures/block/grass_block_side.png": {
+      "sha256": "76a677640eb91d6a9aed844bc66e329b1894f89e241a0071333b6678c0854580",
+      "bytes": 329
+    },
+    "textures/block/grass_block_top.png": {
+      "sha256": "52f44b64ce884a13dfe35e4b4da2e35898b790dd4d7a5ea536f1b0c0d56d29b4",
+      "bytes": 298
+    },
+    "textures/item/flint_and_steel.png": {
+      "sha256": "cdbc36ffa84370d0ec6cd3d09d0b2d51b4efce411537aeb1619137b3ba723c5e",
+      "bytes": 168
+    },
+    "textures/block/obsidian.png": {
+      "sha256": "d9c7dc812d8e8b995e22caff2b10c1fc663b5e127a94c20a7476cfd88af2cd82",
+      "bytes": 189
+    },
+    "textures/item/amethyst_shard.png": {
+      "sha256": "dc64feb12d553ec59b819534ae57b46e99ac95a3ab61cb71de317a5d7b857584",
+      "bytes": 183
+    },
+    "textures/item/netherite_sword.png": {
+      "sha256": "8f1584739b0c4e9aa09f901bdfc9251a0a6fa1e0172b8c2a5a869e9fbaf25906",
+      "bytes": 203
+    },
+    "textures/block/oak_planks.png": {
+      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+      "bytes": 195
+    },
+    "textures/entity/chest/normal.png": {
+      "sha256": "ab478534503430192b224ea4d5e1e87b6820198925bb7a7b4bd32f2a8a55c801",
+      "bytes": 811
+    },
+    "textures/block/stone_bricks.png": {
+      "sha256": "24415444c9e4815aad4a3a349ecbfc0e027b96be25ac5b7c273c06f16c4fdd2f",
+      "bytes": 188
+    },
+    "textures/item/iron_sword.png": {
+      "sha256": "455f2c306a9ddc1da19b04603ae0047211e2f4e4817b105573fcdc29b3c6945f",
+      "bytes": 194
+    },
+    "textures/block/polished_blackstone_bricks.png": {
+      "sha256": "91d65c74a532535cd761b4f6760467e907450c9bfa7adc6b2e11587f00942953",
+      "bytes": 190
+    },
+    "textures/item/netherite_axe.png": {
+      "sha256": "aa1c6ff73e24c7a6fd06bc3ae59b4961ffd08d22fb51b7e2b93678ce82d5a1aa",
+      "bytes": 184
+    },
+    "textures/item/book.png": {
+      "sha256": "8b851a52e2a5d81fa925774f0df30040bc86411c8c86d3d69495486adcd2a046",
+      "bytes": 198
+    },
+    "textures/item/ender_eye.png": {
+      "sha256": "95843c3a2fc9bf92359f304617cc9a3905d955796c53dd3c8f6958a04dff3c82",
+      "bytes": 213
+    },
+    "textures/block/end_stone.png": {
+      "sha256": "1fd05dbb86e8f49c518cabb82f706b71db6e94f03d9fd2b18f053f8e7a01e498",
+      "bytes": 202
+    },
+    "textures/block/dragon_egg.png": {
+      "sha256": "5ec895a4fd60650f1d08c2f66888e809f539832565c12cfc4b7d3df16d519b12",
+      "bytes": 153
+    },
+    "textures/item/arrow.png": {
+      "sha256": "fe76b2e0c79e09ddd037111cfc1d0510e1e13f2c2ff71bbf23e9c48b98d9030c",
+      "bytes": 145
+    },
+    "textures/item/bow_pulling_2.png": {
+      "sha256": "4c1c286346283a7422b9da30473da7bb71434cb190dd351daa9eb121275b3bb4",
+      "bytes": 197
+    },
+    "textures/block/diamond_block.png": {
+      "sha256": "866b9325ce953fcfdb2cfd95a4096d34b933aa90c8391332d2738bf302732699",
+      "bytes": 199
+    },
+    "textures/item/iron_chestplate.png": {
+      "sha256": "b1b467d1c98efda1c2bd31c5a32fadc884b424b3d08f3b010d9053a1e0f0609a",
+      "bytes": 161
+    },
+    "textures/item/apple.png": {
+      "sha256": "e6a57182db6029fff6d02fc774780fcec9f506b74226985445c91e5e7df5d9bb",
+      "bytes": 203
+    },
+    "textures/entity/player/wide/steve.png": {
+      "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
+      "bytes": 848
+    }
+  },
+  "derived": {
+    "achievement_chapter_one": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "38b8871b45abc7eeb8a5f1f4f53db0ff93ebe408d252e8c3373274d437db361e"
+    },
+    "achievement_first_evolution": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "2bfd779cf75d8541b21a242bddea072e7dd5734327ce0c656424ff960bda3a48"
+    },
+    "achievement_full_inventory": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "e85416f51ffb3e71895939b44162d20ea5c321171b7b2b8e0b61abd19d0f7da5"
+    },
+    "achievement_sword_only": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "030675632c7f39bb3aea7f697e28087ef57812a83779e84249b6567436bb8fbf"
+    },
+    "achievement_two_weapons": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "f52f4756b51c6f9f65280eba161acf55b05a99510b7376ec825d74e21c657463"
+    },
+    "achievement_no_evolutions": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "1b190347d1850e1b62ab03642d06d5c586a67c8ce2b8f2a7509763fc5034efe1"
+    },
+    "achievement_chapter_two": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "80e0e68af914139fcbded65825288b203423de09641f436781b60de73948668b"
+    },
+    "achievement_chapter_three": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "9f311ab617aa25e18cfb515f6aab555a9b08714573e95a223b745cbf75d53fdf"
+    },
+    "achievement_bow_only": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "6a0427a41d47aad2d23fa83dfe7f8d0a66ddf5eb6b20cae8e608d1694c38ccb5"
+    },
+    "achievement_untouched": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "9b5d829933f65dcab82ce717956420ef884ef8a11a3821ae34c4a49beaea20c7"
+    },
+    "achievement_no_healing": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "7f87a98034d80b9193c1b33c284824446bf360e9bf5877c9c105f050d58faa63"
+    },
+    "achievement_herobrine": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "a29fbe16be57a179260ff76dfd5569921de0538b7fb026564253203c6249bf16"
+    },
+    "achievement_unknown": {
+      "sources": [
+        "block/netherrack",
+        "block/grass_block_side",
+        "block/grass_block_top",
+        "item/flint_and_steel",
+        "block/obsidian",
+        "item/amethyst_shard",
+        "item/netherite_sword",
+        "block/oak_planks",
+        "entity/chest/normal",
+        "block/stone_bricks",
+        "item/iron_sword",
+        "block/polished_blackstone_bricks",
+        "item/netherite_axe",
+        "item/book",
+        "item/ender_eye",
+        "block/end_stone",
+        "block/dragon_egg",
+        "item/arrow",
+        "item/bow_pulling_2",
+        "block/diamond_block",
+        "item/iron_chestplate",
+        "item/apple",
+        "entity/player/wide/steve"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "5c0ad12cf680768bf303a5b3dba0a8d7c83383330d0f2b24f20be14660ae02d9"
+    }
+  },
+  "sound_files": {
+    "achievement_ui_toast_in.ogg": {
+      "source": "minecraft/sounds/ui/toast/in.ogg",
+      "sha256": "71fcf933a29e83940c2b896585b1c9de846d4b5fb3e934b7ef642bd11733b884"
+    }
+  },
+  "font": "Existing Minecraft bold bitmap font; same glyphs as the game interface.",
+  "notes": "Original compositions of local Minecraft resources; no imagegen or external icons."
+}

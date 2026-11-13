@@ -17,7 +17,10 @@ func fresh(chapter: int=1):
 	w.db.data.waves=[{"at":0,"rate":0,"weights":{"zombie":1}}];w.db.data.events=[]
 	return w
 func advance(w, seconds: float):
-	for i in range(ceili(seconds*60)):w.step(1.0/60)
+	var heard: Array=[]
+	for i in range(ceili(seconds*60)):
+		w.step(1.0/60);heard.append_array(w.sounds)
+	return heard
 func complete_one(w):
 	w.finale.begin(w);w.finale.phase="fall";w.finale.phase_age=3.99;w.hp=0
 	w.step(.02)
@@ -88,10 +91,10 @@ func run():
 	w=fresh(3);w.prepare_arena();w.mobs.clear();w.stage="dragon";w.spawn("end_dragon",w.player-Vector2(0,100));w.mobs[0].hp=0;w.resolve_deaths()
 	check(not w.run_progress.awarded.has("chapter_three") and not w.win_music,"Dragon alone does not finish chapter III or start final victory audio")
 	w.stage="last_duel";w.spawn("endersteve_final",w.player-Vector2(0,100));w.mobs[0].hp=0;w.resolve_deaths()
-	check(not w.win_music,"EnderSteve's death scene retains its fight soundtrack until the body dissolves")
-	advance(w,7.7)
+	check(not w.win_music,"The current EnderSteve defeat keeps its fight soundtrack for the final clash")
+	var death_sounds: Array=advance(w,7.7)
 	check(w.run_progress.awarded.has("chapter_three") and w.run_progress.awarded.has("no_evolutions") and w.run_progress.awarded.has("no_healing"),"The final defeat completes chapter III and its clean-run conditions")
-	check(w.win_music and w.boss_victory_serial==1 and w.sounds.has("boss_win"),"Final End victory emits the existing stinger and selects victory music once")
+	check(not w.win_music and w.boss_victory_serial==1 and not death_sounds.has("boss_win"),"The accepted clash ending keeps its completion record without an early victory stinger")
 	advance(w,2);check(w.boss_victory_serial==1,"Waiting for the hand never repeats the victory sound")
 	w=fresh();preload("res://scripts/boss_lab.gd").equip(w,0);w.run_progress.observe(w);complete_one(w)
 	check(w.run_progress.awarded.is_empty(),"Boss laboratory grants no achievements")
@@ -99,7 +102,7 @@ func run():
 	check(w.rng.state==rng,"Achievement tracking never consumes combat RNG")
 	w.reset(724);check(not w.run_progress.completed and not w.run_progress.healing_used and w.run_progress.damage_taken==0,"A new run clears all attempt-specific restrictions")
 	var store=Store.new();var file="user://qa_achievements_%d.json" % OS.get_process_id();store.load_profile(file)
-	check(store.catalog.size()==19 and store.catalog.filter(func(e):return e.tier=="easy").size()==5 and store.catalog.filter(func(e):return e.tier=="medium").size()==8 and store.catalog.filter(func(e):return e.tier=="hard").size()==5,"Catalog contains the twelve original and six version 2 achievements plus the chapter V fatality in their difficulty groups")
+	check(store.catalog.size()==35 and ["chapter_one","chapter_two","chapter_three","chapter_four","chapter_five","fatality","bad_ending"].all(func(id):return store.known(id)),"Catalog keeps existing achievements and covers all five chapters")
 	check(store.unlock("chapter_one") and not store.unlock("chapter_one") and not store.unlock("unknown_id"),"Profile accepts known awards exactly once")
 	store.unlock("herobrine");var loaded=Store.new();loaded.load_profile(file)
 	check(loaded.unlocked.has("chapter_one") and loaded.unlocked.has("herobrine") and loaded.pending.is_empty(),"Earned achievements survive loading without repeating old notifications")

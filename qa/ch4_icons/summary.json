@@ -1,0 +1,38 @@
+{
+  "generated_icons": 25,
+  "native_minecart": true,
+  "source_size": [
+    32,
+    32
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "asset_checks": 68,
+  "game_captures_before": 9,
+  "game_captures_after": 9,
+  "script_errors": 0,
+  "user_corrections": [
+    "Both bells yellow",
+    "No square side housings on either shotgun",
+    "Medical frame bone saw and evolution"
+  ],
+  "release": [
+    {
+      "mode": "ch4c_inventory",
+      "success": true,
+      "exit_code": 0
+    },
+    {
+      "mode": "ch4c_recipes2",
+      "success": true,
+      "exit_code": 0
+    }
+  ],
+  "windows_native_run": false,
+  "exported_resources_verified": [
+    "linux",
+    "windows"
+  ]
+}

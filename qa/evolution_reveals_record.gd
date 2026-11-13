@@ -81,7 +81,7 @@ func run():
 			check(w.evolution_candidates(600).has(id),label+": actual ingredients eligible")
 			w.open_chest({"born":600.0,"p":w.player})
 			check(w.state=="CHEST" and w.chest_reward.get("id","")==id and w.chest_reward.get("evolution",false) and w.evolved.has(id),label+": actual chest grants requested evolution")
-			check(is_equal_approx(w.chest_delay,1.7),label+": full reveal duration")
+			check(is_equal_approx(w.chest_delay,w.EVOLUTION_REVEAL),label+": full reveal duration")
 			var title: String=game.gear_title(id,true)
 			var icon: String=w.db.equipment_icon(id,8,true)
 			var key: String=title+"|"+icon+"|"+("IV-body" if chapter==4 else "standard-body")
@@ -99,10 +99,10 @@ func run():
 					await frame(w)
 					if i in [0,24,48,80]:root.get_texture().get_image().save_png(OUT+"%d_%s_%02d.png"%[chapter,id,i])
 			else:
-				for delay in [1.7,.9,.1,0.0]:
+				for delay in [2.6,1.7,1.35,1.1,.6,0.0]:
 					w.chest_delay=delay
 					await draw()
-					if distinct:root.get_texture().get_image().save_png(OUT+"%d_%s_%02d.png"%[chapter,id,roundi((1.7-delay)*30)])
+					if distinct:root.get_texture().get_image().save_png(OUT+"%d_%s_%02d.png"%[chapter,id,roundi((2.6-delay)*30)])
 			check(icon_exists(w,id,false) and icon_exists(w,id,true),label+": both item icons loaded")
 			check(not title.is_empty() and title!=id,label+": localized title")
 			check(w.rng.state==rng_before and w.clock==clock,label+": presentation preserves simulation and RNG")

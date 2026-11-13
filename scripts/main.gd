@@ -34,7 +34,7 @@ func _ready():
 		for duration in clip.durations:
 			clip.total += duration
 			if not is_equal_approx(duration,clip.durations[0]): clip.uniform = false
-	for id in world.db.weapons.keys() + world.db.passives.keys() + ["apple","emerald","chest","netherite","flamebow","channeling"]:
+	for id in world.db.weapons.keys() + world.db.passives.keys() + ["apple","emerald","chest","netherite","flamebow","channeling","minecart"]:
 		load_texture("icon_"+id)
 	for kind in ["steve","zombie","skeleton","creeper","spider","slime","ravager","elite","vindicator"]:
 		load_texture(kind+"_atlas")
@@ -200,7 +200,7 @@ func _process(delta):
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
 	var theme=ch5_music() if is_five() else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach","clash","down"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
-	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four")
+	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four_end:ch4_metal" if is_four() and world.stage=="survival" and world.rage_music>0 else "chapter_four")
 	audio.set_music_context("silence" if chapter_one_prologue.active else four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
 	update_achievements(delta)
 	update_camera_lead()
@@ -290,7 +290,9 @@ func _input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
 		if is_four() and world.state=="RUNNING" and screen.is_empty():
 			if event.physical_keycode==KEY_E:world.active_item("heart");return
-			if event.physical_keycode==KEY_SPACE:world.active_item("bat");return
+			if event.physical_keycode==KEY_SPACE:
+				if not world.active_item("bat"):world.active_item("cart")
+				return
 		if is_end() and screen.is_empty() and world.state=="RUNNING":
 			if event.physical_keycode==KEY_E or event.keycode==KEY_E:world.active_item("ender_pearl");return
 			if event.physical_keycode==KEY_SPACE or event.keycode==KEY_SPACE:world.active_item("elytra");return
@@ -363,6 +365,9 @@ func action(id: String):
 		BossLab.equip(world,id.trim_prefix("lab_build_").to_int())
 		if is_nether() or is_end():world.begin_arena()
 		else:world.finale.begin(world)
+		return
+	if id.begins_with("side_"):
+		if not coop.active:world.choose_side(id.trim_prefix("side_").to_int())
 		return
 	if id.begins_with("choice_"):
 		if coop.active: coop.command("choice",id.trim_prefix("choice_").to_int())
@@ -637,7 +642,7 @@ func draw_scene():
 		finale_renderer.ending(self)
 		return
 	WorldView.draw_world(self)
-	if (not is_four() or (world.stage != "arrival" and not world.ending.locked())) and world.state != "MENU" and world.state!="INTRO" and (not world.finale.active or world.finale.phase in ["storm","inferno","tease"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]) and (not is_five() or world.stage!="notch" or world.notch.phase=="fight"):Hud.draw_hud(self)
+	if (not is_four() or (world.stage != "arrival" and not world.ending.locked())) and world.state != "MENU" and world.state!="INTRO" and (not world.finale.active or world.finale.phase in ["storm","inferno","tease"]) and (not is_nether() or world.stage in ["survival","wither","portal"]) and (not is_end() or world.stage in ["survival","dragon","last_duel","exit_portal","hand","return_portal","portal_ready"]) and (not is_five() or world.stage!="notch" or world.notch.phase=="fight") and not (is_five() and world.purge.phase in ["snap","core","enter"]):Hud.draw_hud(self)
 	if screen=="chapters":MenuScreens.draw_chapters(self)
 	elif screen == "multiplayer": MenuScreens.draw_multiplayer(self)
 	elif not screen.is_empty(): MenuScreens.draw_settings(self)
@@ -694,7 +699,13 @@ func update_achievements(delta: float):
 
 ## Chapter V music by phase of Notch's dimension; "silence" leaves room for the ending cues.
 func ch5_music() -> String:
-	if world.stage!="notch":return "chapter_four_end:ch5_ambient"
+	if world.stage!="notch":
+		match world.purge.phase:
+			"countdown":return "chapter_four_end:ch5_purge"
+			"snap","core":return "silence"
+			"surge","ascend":return "chapter_four_end:ch5_surge"
+			"stop","enter":return "chapter_four_end:ch5_timestop"
+		return "chapter_four_end:ch5_ambient"
 	var n=world.notch
 	var f=n.finale
 	var phase: String=n.retry_of if n.phase=="retry" else n.phase

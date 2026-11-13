@@ -186,18 +186,27 @@ static func erase_throw(v, f):
 	# Release uses the very same evaluated hand as the held sword. The blade
 	# then travels point-first to the console; it cannot jump from a fake origin.
 	if not v.nodes.has("release_origin"):
-		apply(v,"erase_throw",.16,false)
+		apply(v,"erase_throw",.56,false)
 		v.nodes.release_origin=v.rigs.steve.grip.global_position
-		v.nodes.release_rotation=v.rigs.steve.grip.global_basis.get_rotation_quaternion()
-	apply(v,"erase_throw",f.thrown)
-	v.nodes.sword.visible=f.thrown<.16
-	v.nodes.flying.visible=f.thrown>=.16
+	# A hitstop on the impact: the whole scene holds for a few frames.
+	var t: float=f.thrown if f.thrown<1.0 else (1.0 if f.thrown<1.12 else f.thrown-.12)
+	apply(v,"erase_throw",t)
+	v.nodes.sword.visible=t<.56
+	v.nodes.flying.visible=t>=.56
 	var target := Vector3(.3,2.5,-2.7)
 	var from: Vector3=v.nodes.release_origin
-	var k: float=clampf((f.thrown-.16)/.44,0,1)
-	v.nodes.flying.position=from.lerp(target,k)
-	v.nodes.flying.quaternion=v.nodes.release_rotation
-	if f.thrown>=.6:
+	var k: float=clampf((t-.56)/.44,0,1)
+	var eased: float=1.0-pow(1.0-k,1.6)
+	var fl: Node3D=v.nodes.flying
+	fl.position=from.lerp(target,eased)+Vector3(0,sin(k*PI)*.12,0)
+	if k<1.0 and fl.position.distance_to(target)>.02:
+		fl.look_at(target,Vector3.UP);fl.rotate_object_local(Vector3.RIGHT,-PI/2);fl.rotate_object_local(Vector3.UP,k*22.0)
+	else:fl.position=target+from.direction_to(target)*.18
+	# camera shake on the blast
+	if f.thrown>=1.0 and f.thrown<1.7:
+		var a: float=1.0-(f.thrown-1.0)/.7
+		var cam: Camera3D=v.nodes.cam;cam.position+=Vector3(sin(f.thrown*91.0),cos(f.thrown*77.0),sin(f.thrown*63.0))*.05*a*a
+	if f.thrown>=1.0:
 		# Breaking delete() restores the body's missing pixels, before the brawl.
 		for key in ["torso","head","ra","la","rl","ll","re","le","rk","lk"]:
 			for mesh in v.rigs.steve[key].get_children():
@@ -237,6 +246,10 @@ static func impact(v, at: Vector3, age: float, teeth := true):
 			fragment.position=at+Vector3((k-1.5)*.65,.6+k*.15,.8+k*.2)*age+Vector3(0,-4.8*age*age,0)
 			fragment.rotation=Vector3(age*(12+k),k,age*8);fragment.scale=Vector3.ONE
 
+static func hitstop(t: float, at: float, hold: float) -> float:
+	if t<at:return t
+	return at if t<at+hold else t-hold
+
 static func qte(v, q):
 	for who in ["steve","notch"]:
 		v.rigs[who].root.visible=true;v.rigs[who].material.set_shader_parameter("erase_amount",0.0)
@@ -244,14 +257,16 @@ static func qte(v, q):
 	# The set includes the table legs; hide the whole table assembly together.
 	for leg in v.nodes.get("ko_legs",[]):leg.visible=q.finishing
 	if q.finishing:
-		apply(v,"finisher",q.finish_age)
-		if q.finish_age>=.65 and q.finish_age<1.25:impact(v,Vector3(.36,1.65,.25),q.finish_age-.65)
+		apply(v,"finisher",hitstop(q.finish_age,.65,.09))
+		if q.finish_age>=.65 and q.finish_age<1.25:impact(v,v.rigs.notch.head.global_position+Vector3(-.1,.1,.1),q.finish_age-.65)
 		if q.finish_age>=1.12 and q.finish_age<1.45:impact(v,Vector3(.75,.98,1.18),q.finish_age-1.12,false)
 		for who in ["steve","notch"]:v.rigs[who].material.set_shader_parameter("blood_amount",.6)
 		v.hide_rest([]);return
 	var track: String=q.TRACKS[mini(q.beat,q.TRACKS.size()-1)]
 	if q.resolved and not q.success:track="miss"
-	apply(v,"qte_"+track,q.age)
+	# Contact freezes for a few frames: the hit lands before the world moves on.
+	var contact: float=1.4 if track in ["parry","guard"] else 1.0
+	apply(v,"qte_"+track,hitstop(q.age,contact,.07) if track not in ["slip","roll"] else q.age)
 	for who in ["steve","notch"]:v.rigs[who].material.set_shader_parameter("blood_amount",minf(.65,.15+q.beat*.055))
 	if q.age>=1 and q.age<1.65 and track in ["jab","cross","hook","uppercut","miss"]:
 		var victim: String="steve" if track=="miss" else "notch"

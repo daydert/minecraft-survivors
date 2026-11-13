@@ -1,0 +1,12 @@
+[
+  {
+    "mode": "ch4c_inventory",
+    "success": true,
+    "exit_code": 0
+  },
+  {
+    "mode": "ch4c_recipes2",
+    "success": true,
+    "exit_code": 0
+  }
+]

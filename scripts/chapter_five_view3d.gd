@@ -366,7 +366,7 @@ func sync_fighter(fi):
 		var key: String = "item%d" % i
 		if not nodes.has(key):
 			var l := Label3D.new();l.text = it.text;l.font_size = 36;l.pixel_size = .008;l.modulate = Color(1, .85, .35)
-			l.outline_size = 8;l.outline_modulate = Color(.2, .05, 0);scene.add_child(l);nodes[key] = l
+			l.outline_size = 8;l.outline_modulate = Color(.2, .05, 0);l.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;scene.add_child(l);nodes[key] = l
 		var label: Label3D = nodes[key]
 		label.visible = true
 		if it.holder >= 0:
@@ -624,7 +624,7 @@ func glow_box(at: Vector3, size: Vector3, color: Color, energy: float) -> MeshIn
 
 func label(text: String, at: Vector3, size: int, color: Color, px := .006) -> Label3D:
 	var l := Label3D.new();l.text = text;l.position = at;l.font_size = size;l.pixel_size = px;l.modulate = color
-	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT;l.outline_size = 0;scene.add_child(l);return l
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT;l.outline_size = 0;l.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;scene.add_child(l);return l
 
 func omni(at: Vector3, color: Color, energy: float, reach: float) -> OmniLight3D:
 	var l := OmniLight3D.new();l.position = at;l.light_color = color;l.light_energy = energy;l.omni_range = reach;scene.add_child(l);return l
@@ -677,6 +677,16 @@ func build_erase():
 	var flying := Node3D.new();scene.add_child(flying);nodes.flying = flying
 	voxel_sword(flying,.85)
 	var cracks := label("", Vector3(0, 2.4, -2.9), 90, Color(1, 1, 1, .9), .004);cracks.text = "╳";nodes.cracks = cracks
+	# The screen bursts from where the blade went in: a spider of glowing fractures.
+	var lines: Array = []
+	for i in range(16):
+		var ang: float = i * TAU / 16 + sin(i * 7.3) * .2
+		var length: float = .5 + fposmod(i * .37, .9)
+		var bar := glow_box(Vector3(.3, 2.5, -2.94) + Vector3(cos(ang), sin(ang), 0) * length * .5, Vector3(length, .025, .02), Color(1, .9, .8), 5.0)
+		bar.rotation.z = ang;bar.visible = false;lines.append(bar)
+	nodes.crack_lines = lines
+	nodes.blast = omni(Vector3(.3, 2.4, -2.2), Color(1, .55, .3), 0.0, 9.0)
+	nodes.steve_key = omni(Vector3(-2.3, 2.6, 2.2), Color(1, .85, .7), .8, 6.0)
 	var cam := Camera3D.new();scene.add_child(cam);nodes.cam = cam
 
 const ERASE_CODE := ["delete(steve);", "for (Pixel p : steve.pixels())", "    p.remove();", "steve.memory.clear();", "// he was never here", "gc.collect(steve);", "> deleting… %d%%", "", "> _"]
@@ -684,7 +694,7 @@ const ERASE_CODE := ["delete(steve);", "for (Pixel p : steve.pixels())", "    p.
 func sync_erase(f, clock: float):
 	var a: float = f.age;var cam: Camera3D = nodes.cam
 	var n: Dictionary = rigs.notch;var s: Dictionary = rigs.steve
-	var broken: bool = f.thrown >= .6
+	var broken: bool = f.thrown >= 1.0
 	n.root.position = Vector3(1.3, 0, -1.4);n.root.rotation = Vector3(0, -.6, 0)
 	var typing: float = sin(clock * 18) * .15
 	if not broken:pose(n, {"ra":Vector3(-1.2 + typing, 0, -.2), "la":Vector3(-1.2 - typing, 0, .2), "head":Vector3(.2, .3, 0)})
@@ -695,7 +705,7 @@ func sync_erase(f, clock: float):
 	s.root.position = Vector3(-1.6, 0, 1.2);s.root.rotation = Vector3(0, PI * .75, 0)
 	var resist: float = clampf(f.presses / 14.0, 0, 1)
 	var sp := {"rl":Vector3(-.2, 0, 0), "ll":Vector3(.2, 0, 0), "torso":Vector3(.35 * (1 - resist), 0, 0), "head":Vector3(.3, 0, 0), "ra":Vector3(-.4, 0, 0), "la":Vector3(-.2, 0, 0), "drop":-.15 * (1 - resist)}
-	if f.thrown >= 0 and f.thrown < .6:sp.ra = Vector3(-3.0 + f.thrown * 5.0, 0, 0);sp.torso = Vector3(-.2, .5, 0)
+	if f.thrown >= 0 and f.thrown < 1.0:sp.ra = Vector3(-3.0, 0, 0);sp.torso = Vector3(-.2, .5, 0)
 	pose(s, sp)
 	# Keep the arm/body connected until the final failed attack. Whole-part
 	# deletion here used to force a visible restoration at the next shot.
@@ -704,7 +714,12 @@ func sync_erase(f, clock: float):
 	var fl: Node3D = nodes.flying
 	var target := Vector3(.3, 2.5, -2.7)
 	fl.visible = f.thrown >= 0
-	(nodes.cracks as Label3D).visible = f.thrown >= .6
+	(nodes.cracks as Label3D).visible = false
+	for c in nodes.get("crack_lines", []):(c as Node3D).visible = broken
+	if nodes.has("blast"):
+		var since: float = f.thrown - 1.0
+		nodes.blast.light_energy = 0.0 if since < 0 else 14.0 * exp(-since * 3.5)
+		nodes.steve_key.light_energy = (1.6 if f.thrown >= 0 else .8) + (2.5 * exp(-maxf(0, since) * 1.5) if since >= 0 else 0.0)
 	if fl.visible:
 		var t: float = clampf(f.thrown / .6, 0, 1)
 		var from := Vector3(-1.3, 1.6, 1.0)
@@ -730,8 +745,9 @@ func sync_erase(f, clock: float):
 	else:
 		scr.emission = Color(.02, .25, .1);nodes.light.light_energy = 2.2 + sin(clock * 3) * .2
 	var shown: Array = []
-	if f.erase > .02:shown += burst(s.root.position + Vector3(0, .6, 0), int(6 + f.erase * 14), clock, .8, 2.2, 1.4, false)
-	if broken and f.thrown < 2.4:shown += burst(Vector3(0, 2.3, -2.7), 24, clock * 2.0, 3.0, 1.0, .9, true)
+	if f.erase > .02 and f.thrown < 1.0:shown += burst(s.root.position + Vector3(0, .6, 0), int(6 + f.erase * 14), clock, .8, 2.2, 1.4, false)
+	if broken and f.thrown < 3.4:shown += burst(Vector3(.3, 2.4, -2.6), 48, clock * 2.0, 3.0, 1.0, .9, true)
+	if broken and f.thrown < 2.0:shown += burst(Vector3(.3, 2.4, -2.5), 30, (f.thrown - 1.0) * 1.4, 2.2, 1.0, .6, true)
 	hide_rest(shown)
 	if f.thrown < 0:
 		if a < 3.2:shot(cam, Vector3(-2.6, 1.9, 3.6), Vector3(.6, 1.6, -1.6), 46, 0.0, clock)
@@ -1227,10 +1243,13 @@ func sync_flight(f, clock: float):
 		env.background_mode = Environment.BG_COLOR;env.background_color = Color(0, 0, 0)
 		for k in range(40):
 			var g: Label3D = nodes["void%d" % k];g.position.y = fmod(k * .7 + clock * .3, 5.0)
+		# Same exposure as the kill film it follows: a dim room, the white door light does the work.
+		env.ambient_light_energy = .24;nodes.sun.light_energy = .42
 		if a < 3.0:shot(cam, Vector3(2.4, 1.1, 2.6 - a * .5), Vector3(.5, 1.2, -6.0), 42, 0.0, clock)
 		else:shot(cam, Vector3(-1.9, 1.5, -1.2), Vector3(.5, 1.1, -6.2), 44, 0.0, clock)
 	elif not other:
 		nodes.door.visible = false;nodes.frame.visible = false;nodes.opening.visible = false;nodes.door_light.light_energy = 0;nodes.door_wall.visible = false;nodes.door_hole.visible = false
+		env.ambient_light_energy = .45;nodes.sun.light_energy = .85
 		for k in range(5):nodes["beam%d" % k].visible = false
 		var t: float = a - 5.0
 		var z: float = -t * 26.0 - pow(maxf(0, t - 17.0), 2) * 6.0
@@ -1477,6 +1496,9 @@ func build_final_room():
 func build_qte():
 	build_final_room()
 	rigs.steve=Cinema.rig(self,"ch5_skin_steve");rigs.notch=Cinema.rig(self,"ch5_skin_notch")
+	# A hard key over the ring and a cold rim from the screen: faces read, the room stays dark.
+	omni(Vector3(-.3,3.0,1.9),Color(1,.86,.7),1.3,6)
+	omni(Vector3(0,2.2,-1.2),Color(.3,.75,1),1.0,4)
 	var tabletop := block(Vector3(.75,.90,1.45),Vector3(1.1,.12,1.05),"ch5q_dark_oak_planks");nodes.ko_table=tabletop
 	nodes.ko_legs=[]
 	for x in [.32,1.18]:

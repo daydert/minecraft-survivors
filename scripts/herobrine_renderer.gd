@@ -1,41 +1,87 @@
 extends RefCounted
+const BossBar=preload("res://scripts/ui/boss_bar.gd")
 var legacy=preload("res://scripts/legacy_finale_renderer.gd").new()
 const ChapterOne=preload("res://scripts/chapter_one_view.gd")
+const Tells=preload("res://scripts/chapter_four_tells.gd")
 var remains_view
+
+## Throne v2 (13.11): baked block throne and a posed, seated giant (scripts/bake_ch1_throne_v2.py).
+var throne_data: Dictionary={}
+func throne_v2() -> Dictionary:
+	if throne_data.is_empty():throne_data=JSON.parse_string(FileAccess.get_file_as_string("res://data/ch1_throne_v2.json"))
+	return throne_data
+
+func throne_pose(f) -> Array:
+	var name="sit_idle";var t: float=f.elapsed;var looping=true
+	if f.phase=="descend":name="stand";t=f.phase_age
+	elif f.phase=="rising":name="rise";t=f.phase_age/3.2;looping=false
+	elif (f.cinematic_player() and f.first_stage_won) or f.phase=="end":
+		name="stand"
+		if f.phase in ["summon","kneel","rift"]:name="sit_command" if false else "stand"
+	elif not f.villager.is_empty() and f.villager.age<3.6:name="sit_command";t=f.villager.age;looping=false
+	else:
+		for s in f.strikes:
+			if s.age<.55:name="sit_cast";t=s.age;looping=false
+		for wave in f.waves:
+			if wave.age<.7:name="sit_point";t=wave.age;looping=false
+		if f.line_length>0 and f.line_age<1.4 and name=="sit_idle":name="sit_laugh";t=f.line_age
+	return [name,t,looping]
 
 func stage(g, offset: Vector2):
 	var w=g.world;var f=w.finale;var p: Vector2=f.CENTER+offset
 	var built: float=f.throne_built()
 	if built<=0.0:return
-	var origin: Vector2=p-Vector2(96,150)
-	g.oval(p+Vector2(0,5),Vector2(86,19)*minf(1,built*1.3),Color(0,0,0,.55*minf(1,built*2)))
-	var tex: Texture2D=g.textures.get("duel_throne")
+	var d: Dictionary=throne_v2()
+	var size:=Vector2(d.frame[0],d.frame[1]);var centre:=Vector2(d.center[0],d.center[1])
+	var origin: Vector2=(p-centre+Vector2(0,6)).floor()
+	for n in ["ch1_throne_v2","ch1_throne_hb_"+f.hb_face]:
+		if not g.textures.has(n):g.load_texture(n)
+	var dark: float=1-smoothstep(.3,1.8,f.phase_age) if f.phase=="vanish" else 0.0 if f.phase in ["portal","fall","end"] else 1.0
+	# A red pool of light and dark aura around the dais while he holds court.
+	var court: bool=f.phase in ["storm","inferno"]
+	var heat: float=.5+.5*sin(w.clock*2.2)
+	g.oval(p+Vector2(0,8),Vector2(150,46)*minf(1,built*1.3),Color(0,0,0,.5*minf(1,built*2)))
+	if court:
+		g.oval(p+Vector2(0,10),Vector2(170,54),Color(.6,.04,.02,.10+.05*heat))
+		for i in range(10):
+			var seed: int=i*7+3
+			var a: float=PI*.15+i*PI*.7/9.0
+			var from: Vector2=p+Vector2(cos(a)*70,sin(a)*24+12)
+			Tells.crack(g,from.floor(),(from+Vector2(cos(a)*(40+ChapterOne.h(i,40)*60),sin(a)*(14+ChapterOne.h(i,41)*20))).floor(),.55+.45*heat,seed,3.0,1.0,w.clock)
+		for i in range(26):
+			var t: float=fposmod(w.clock*(.18+ChapterOne.h(i,42)*.2)+ChapterOne.h(i,43),1.0)
+			var q: Vector2=p+Vector2(-90+ChapterOne.h(i,44)*180,-20-t*190)
+			g.draw_rect(Rect2(q.floor(),Vector2(4,4)*(1-t)+Vector2.ONE),Color(.04,.02,.05,.55*(1-t)))
+	var tex: Texture2D=g.textures.get("ch1_throne_v2")
 	if tex!=null:
-		var size: Vector2=tex.get_size()
-		# Rebuilt from the ground up, a few rows of blocks at a time.
 		var shown: float=floorf(size.y*built/6.0)*6.0 if built<1.0 else size.y
-		g.draw_texture_rect_region(tex,Rect2(origin+Vector2(0,size.y-shown),Vector2(size.x,shown)),Rect2(0,size.y-shown,size.x,shown))
+		g.draw_texture_rect_region(tex,Rect2(origin+Vector2(0,size.y-shown),Vector2(size.x,shown)),Rect2(0,size.y-shown,size.x,shown),Color(dark,dark,dark,1) if dark<1 else Color.WHITE)
 		if built<1.0:build_blocks(g,origin,size,built,w.clock)
 	var lit: float=1.0 if f.phase!="throne" else smoothstep(f.THRONE_BUILD[1],f.THRONE_BUILD[1]+.4,f.phase_age)
-	var darkness=1-smoothstep(.3,1.8,f.phase_age) if f.phase=="vanish" else 0.0 if f.phase in ["portal","fall","end"] else 1.0
-	for socket in g.chapter_assets.throne.fire_sockets:
+	for socket in d.sockets:
 		var q: Vector2=origin+Vector2(socket[0],socket[1])
-		if lit>0:g.draw_clip("fire_animation",q-Vector2(9,25),Vector2(18,29),w.clock,Color(1,1,1,lit*(.2+.8*darkness)))
+		if lit>0:
+			g.draw_clip("soul_fire_animation" if g.textures.has("soul_fire_animation") else "fire_animation",q-Vector2(11,32),Vector2(22,36),w.clock,Color(1,1,1,lit*(.2+.8*dark)))
 	if not f.giant_visible():return
-	var name="duel_seated";var t=w.clock;var looping=true;var forward=0.0
 	var alpha: float=1.0
 	if f.phase=="throne":alpha=smoothstep(f.THRONE_SEAT,f.THRONE_SEAT+.35,f.phase_age)
 	if f.phase=="showtime":alpha=1-smoothstep(.15,.45,f.phase_age)
-	if f.phase=="descend" and f.phase_age<.4:alpha=1-smoothstep(.1,.4,f.phase_age);name="duel_stand";forward=13
-	elif f.phase=="descend":alpha=smoothstep(f.WHISPER[1]+.25,f.WHISPER[1]+.6,f.phase_age);name="duel_stand";forward=13
-	elif f.phase=="rising":name="duel_rise";t=f.phase_age/3.2*2.6;looping=false;forward=smoothstep(0,3.2,f.phase_age)*13
-	elif (f.cinematic_player() and f.first_stage_won) or f.phase=="end":
-		name="duel_stand";forward=13
-		if f.phase in ["summon","kneel","rift"]:name="duel_command";t=1.15 if f.phase!="summon" else f.phase_age;looping=false
-	elif not f.villager.is_empty() and f.villager.age<3.6:
-		name="duel_command";t=minf(f.villager.age,1.15);looping=false
-	var tint=Color(1.8,1.8,1.8,alpha*darkness) if g.settings.flashes and f.boss.get("flash",0)>.01 else Color(1,1,1,alpha*darkness)
-	g.draw_clip(name,p+Vector2(0,forward)-Vector2(40,104),Vector2(80,112),t,tint,looping)
+	if f.phase=="descend":alpha=1-smoothstep(.1,.4,f.phase_age) if f.phase_age<.4 else smoothstep(f.WHISPER[1]+.25,f.WHISPER[1]+.6,f.phase_age)
+	var pose: Array=throne_pose(f)
+	var clip: Dictionary=d.clips[pose[0]]
+	var fps: float=float(d.fps.get(pose[0],10))
+	var k: int=int(pose[1]*fps)
+	k=k%int(clip.count) if pose[2] else mini(int(clip.count)-1,k)
+	var col: int=int(clip.start)+k
+	var flash: bool=g.settings.flashes and f.boss.get("flash",0)>.01
+	var tint=Color(1.8,1.8,1.8,alpha*dark) if flash else Color(1,1,1,alpha*dark)
+	var sheet: Texture2D=g.textures.get("ch1_throne_hb_"+f.hb_face)
+	if sheet!=null:g.draw_texture_rect_region(sheet,Rect2(origin,size),Rect2(Vector2(col*size.x,0),size),tint)
+	# The white eyes burn through everything.
+	if court and alpha>.5:
+		var e: Vector2=origin+Vector2(d.eyes[0],d.eyes[1])
+		g.draw_circle(e,14+3*heat,Color(1,1,1,.06))
+		g.draw_circle(e,6+2*heat,Color(1,1,1,.12))
 
 ## Blocks fly in from the field and settle on the rising throne.
 func build_blocks(g, origin: Vector2, size: Vector2, built: float, clock: float):
@@ -54,9 +100,16 @@ func floor_effects(g, offset: Vector2):
 	for s in f.strikes:
 		var p: Vector2=s.p+offset
 		if not g.world.visible(s.p,60):continue
-		if s.age<.85:
-			g.draw_arc(p,20,0,TAU,24,Color(1,.4,.2,.65),1)
+		if s.age<.85:Tells.ring(g,p.floor(),20.0,clampf(s.age/.85,0,1),g.world.clock)
 		else:g.oval(p,Vector2(18,6),Color(.04,.025,.02,.7))
+	# His own attacks, told in the same ground language as chapter IV.
+	var a: Dictionary=f.assault
+	if not a.is_empty():
+		if a.state=="dash_wind":Tells.lane(g,Vector2(a.from)+offset,Vector2(a.to)+offset,13.0,clampf(a.age/.62,0,1),int(a.from.x),g.world.clock)
+		if a.state=="slam_wind":
+			for q in a.marks:Tells.ring(g,(q+offset).floor(),18.0,clampf(a.age/.7,0,1),g.world.clock)
+		if a.state=="slam" and a.age<.35:
+			for q in a.marks:g.draw_rect(Rect2((q+offset-Vector2(2,40)).floor(),Vector2(4,40)),Color(.85,.9,1,1-a.age/.35))
 	for wave in f.waves:
 		var count=maxi(20,int(TAU*wave.radius/12))
 		for i in range(count):
@@ -318,14 +371,15 @@ func foreground(g, offset: Vector2):
 	for s in f.sparks:
 		g.draw_rect(Rect2((s.p+offset).floor(),Vector2(2,1)),Color(1,.92,.6,1-s.age/.5))
 	if f.phase in ["storm","inferno"]:
-		g.centered("Херобрин",41,8,Color.WHITE,true)
-		g.draw_rect(Rect2(211,46,218,5),Color("33151b"))
-		g.draw_rect(Rect2(212,47,216*clampf(f.boss.hp/f.boss.max_hp,0,1),3),Color("a94550"))
+		BossBar.draw(g,"Херобрин",f.boss.hp/f.boss.max_hp,Color("b8182a"))
 	elif f.phase=="tease":
 		g.centered("Херобрин",41,8,Color.WHITE,true)
 		g.centered("не даётся",52,8,Color(1,1,1,.45))
 	if f.phase=="arrival":warp(g,offset,f.teleport_from,f.GREET_AT,(f.phase_age-1.6)/.8)
 	if f.phase=="throne":warp(g,offset,f.teleport_from,f.BOSS_AT,(f.phase_age-(f.THRONE_SEAT-.25))/.7)
+	if f.phase in ["storm","inferno"] and not f.assault.is_empty():
+		if f.assault.state=="warp":warp(g,offset,f.teleport_from,f.hb_p,f.assault.age/.35)
+		elif f.assault.state=="return":warp(g,offset,f.teleport_from,f.BOSS_AT,f.assault.age/.3)
 	if f.phase=="showtime":warp(g,offset,f.BOSS_AT,w.player+Vector2(6,-6),(f.phase_age-.25)/.6)
 	if f.phase=="descend":
 		warp(g,offset,f.BOSS_AT,w.player+Vector2(6,-6),(f.phase_age-.2)/.6)

@@ -1,4 +1,5 @@
 extends RefCounted
+const BossBar=preload("res://scripts/ui/boss_bar.gd")
 ## In-run HUD: hearts, timer, experience, equipment bars and boss bars.
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 
@@ -14,7 +15,7 @@ static func draw_hud(g):
 		var withered=g.is_nether() and g.world.player_wither>0
 		if health==2:g.sprite(("heart_wither_blink" if blink else "heart_wither") if withered else ("heart_blink" if blink else "heart"),p)
 		elif health==1:g.sprite(("heart_wither_half_blink" if blink else "heart_wither_half") if withered else ("heart_half_blink" if blink else "heart_half"),p)
-	g.centered(g.format_time(g.world.time),24,16,g.INK,true)
+	if not (g.is_five() and g.world.purge.phase in ["surge","ascend","stop","enter"]):g.centered(g.format_time(g.world.time),24,16,g.INK,true)
 	g.text_at("Убийств: %d" % g.world.kills,Vector2(12,16),8,g.INK)
 	if g.coop.active:g.text_at("Изумруды: %d" % g.world.score,Vector2(12,29),8,g.MUTED)
 	else:g.text_at("Глава V · Исходный код" if g.is_five() else "Глава IV · «Обычный мир»" if g.is_four() else "Глава III · Край" if g.is_end() else "Глава II · Незер" if g.is_nether() else "Глава I · Верхний мир",Vector2(12,29),8,g.MUTED)
@@ -63,6 +64,7 @@ static func draw_hud(g):
 						g.draw_line(p+Vector2(0,16-height),p+Vector2(16,16-height),Color(1,1,1,.8),1)
 				var level_text = str(collection[id])
 				var number_color: Color=g.INK
+				if (row==0 and collection[id]>8) or (row==1 and collection[id]>5):number_color=Color(1,.25,.22)
 				if g.is_four() and id=="heart_booster":level_text=str(int(g.world.arsenal.heart_price));number_color=Color(.95,.35,.3)
 				if g.is_four() and id=="empty_totem" and g.world.arsenal.totem_spent:
 					g.draw_line(p,p+Vector2(15,15),Color(.3,.3,.3,.9),2)
@@ -70,6 +72,7 @@ static func draw_hud(g):
 	if g.is_end():g.end_renderer.hud(g)
 	if g.is_four():g.four_renderer.ArsenalView.hud(g)
 	if g.is_four():g.four_renderer.EncounterView.hud(g)
+	if g.is_four():g.four_renderer.HuntView.hud(g)
 	if g.is_nether():g.nether_renderer.hud(g)
 	if g.world.message_timer>0 and g.world.state=="RUNNING" and (not g.is_nether() or g.world.stage!="wither"):
 		g.centered(g.world.message,68,12,g.GOLD,true)
@@ -80,6 +83,4 @@ static func draw_hud(g):
 		g.centered("Штурм бастиона",41,8,g.INK)
 	for m in g.world.mobs:
 		if m.kind!="ravager" or m.hp<=0:continue
-		g.draw_rect(Rect2(229,46,182,5),Color("333333"))
-		g.draw_rect(Rect2(229,46,182*maxf(0,m.hp)/m.max_hp,5),Color("a92c2c"))
-		g.centered("Разоритель",41,8,g.INK)
+		BossBar.draw(g,"Разоритель",maxf(0,m.hp)/m.max_hp,Color("a92c2c"))

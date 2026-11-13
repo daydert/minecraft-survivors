@@ -6,6 +6,10 @@
       "sha256": "06628f9cef88520da742ab280a01677ce17c99717f964ed89ed791673121094c",
       "bytes": 848
     },
+    "textures/entity/player/wide/alex.png": {
+      "sha256": "c8d78144f653a903d5b4118b94bd808c5522edc300bca3b674a2ffbb3a388dfd",
+      "bytes": 968
+    },
     "textures/environment/celestial/sun.png": {
       "sha256": "c7188d5685ec66b0200d716e53161803c119f609d9b2a67f6a86b30bd96043eb",
       "bytes": 458
@@ -55,6 +59,16 @@
         224
       ],
       "sha256": "012e5b4924eac98b03b39954e4e025ee8def1d6fbe30b5ea603fcb29986df2c8"
+    },
+    "ch4_alex_lure": {
+      "sources": [
+        "entity/player/wide/alex (blood and bruise texels)"
+      ],
+      "size": [
+        3840,
+        224
+      ],
+      "sha256": "da79c8e0c047aa6301f4800756b8f1d3df5ff73cbf6a6246504099e544177b76"
     },
     "ch4_fist_steve": {
       "sources": [

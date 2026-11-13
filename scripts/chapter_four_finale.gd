@@ -60,6 +60,8 @@ var steve_pose := "idle"
 var steve_pose_age := 0.0
 var steve_at := Vector2.ZERO
 var text_events: Array = []
+## Lines run on their own clock: phase changes reset `age` but never cut a sentence.
+var talk := 0.0
 var silence := false
 var music := ""
 var camera_at := Vector2.ZERO
@@ -100,7 +102,7 @@ func active() -> bool:
 
 ## Phases in which the world stands still: no spawns, weapons or free movement.
 func locked() -> bool:
-	return phase in ["intro", "vortex", "kneel", "erase", "three", "death", "coords", "road", "door", "retry"]
+	return phase in ["lure", "intro", "vortex", "kneel", "erase", "three", "death", "coords", "road", "door", "retry"]
 
 func fighting() -> bool:
 	return phase in ["one", "two"]
@@ -157,7 +159,7 @@ func set_steve(name: String):
 
 ## A line with "\n" is spoken phrase by phrase, each given time to be read.
 func say(text: String, style: String, duration: float, cut: float = -1.0):
-	var parts: PackedStringArray = text.split("\n");var at: float = age
+	var parts: PackedStringArray = text.split("\n");var at: float = talk
 	for part in parts:
 		var life: float = duration if parts.size() == 1 else maxf(1.4, part.length() / 11.0 + 1.0)
 		text_events.append({"text": part, "style": style, "at": at, "life": life, "cut": cut, "phase": phase})
@@ -213,6 +215,8 @@ func camera(w) -> Vector2:
 
 func sample_camera(w) -> Vector2:
 	match phase:
+		"lure":
+			return w.player.lerp(hb.p, .45 * smoothstep(0.0, 2.0, age)) + Vector2(0, -10)
 		"intro":
 			var focus: Vector2 = hb.p + Vector2(0, 10)
 			return w.player.lerp(focus, smoothstep(0.4, 2.2, age) * (1.0 - smoothstep(7.2, 8.2, age) * 0.6))
@@ -254,8 +258,9 @@ func step(w, dt: float, movement: Vector2):
 	elif phase == "three" and not qte.is_empty() and qte.result == "" and qte.age >= qte.windup:anim = 0.45
 	pose_age += dt * anim; steve_pose_age += dt * anim
 	flash = maxf(0.0, flash - dt); glitch = maxf(0.0, glitch - dt); impact_frame = maxf(0.0, impact_frame - dt)
+	talk += dt
 	for i in range(text_events.size() - 1, -1, -1):
-		if age - text_events[i].at > text_events[i].life:text_events.remove_at(i)
+		if talk - text_events[i].at > text_events[i].life:text_events.remove_at(i)
 	for i in range(impacts.size() - 1, -1, -1):
 		if age - impacts[i].at > 0.8:impacts.remove_at(i)
 	if not hb.is_empty():
@@ -264,7 +269,8 @@ func step(w, dt: float, movement: Vector2):
 		if hb.visual.has("hurt"):hb.visual.hurt = maxf(0, hb.visual.hurt - dt)
 	match phase:
 		"summit":
-			if w.player.distance_to(center) < float(data.summit_trigger):start_intro(w)
+			if w.player.distance_to(center) < float(data.summit_trigger):start_lure(w)
+		"lure":step_lure(w, dt)
 		"intro":step_intro(w)
 		"tower":step_tower(w, dt)
 		"vortex":step_vortex(w, dt)
@@ -286,6 +292,60 @@ func step(w, dt: float, movement: Vector2):
 		if tower_h == 0.0:tower_solid(w, false)
 	if w.hp <= 0 and phase in ["tower", "one", "two", "last", "three"]:
 		begin_retry(w)
+
+# ------------------------------------------------------------------ the lure (tester pack 13.11)
+## Before the fight he lies in the middle of the summit wearing Alex, beaten half
+## to death, and calls Steve over. Steve comes; he springs up, shoves him away,
+## laughs at him, and only then shows what he is.
+const LURE_WALK := [3.4, 6.6]
+const LURE_REVEAL := 7.0
+const LURE_LENGTH := 20.2
+
+func start_lure(w):
+	start_intro(w)
+	phase = "lure"; age = 0.0
+	hb.p = center + Vector2(0, -20); hb.scale = 1.0; hb.disguise = true; hb.aura = 0.0
+	hb.visual_dir = Vector2.RIGHT; set_pose("lying"); face = "calm"
+	w.player = center + Vector2(0, 150); w.facing = Vector2.UP
+	set_steve("idle"); camera_at = w.player
+
+func step_lure(w, dt: float):
+	hb.aura = 0.0 if hb.get("disguise", false) else move_toward(float(hb.aura), 1.0, dt * 1.5)
+	if age >= .7 and not spoken.has("lure_a"):spoken["lure_a"] = true; say("Стив?..\nЭто ты?..", "calm", 2.6); w.sound("ch4_breath", .1)
+	if age >= 3.3 and not spoken.has("lure_b"):spoken["lure_b"] = true; say("Помоги...\nпожалуйста... мне так больно", "calm", 2.8)
+	# He walks over, slowly, to kneel beside her.
+	var stop: Vector2 = hb.p + Vector2(-2, 26)
+	if age >= float(LURE_WALK[0]) and age < float(LURE_WALK[1]):
+		var k: float = (age - float(LURE_WALK[0])) / (float(LURE_WALK[1]) - float(LURE_WALK[0]))
+		var before: Vector2 = w.player
+		w.player = (center + Vector2(0, 150)).lerp(stop, smoothstep(0.0, 1.0, k))
+		w.facing = Vector2.UP; w.player_visual.travel = before.distance_to(w.player); w.player_moving = true
+	else:
+		w.player_moving = false; w.player_visual.travel = 0.0
+	if age < LURE_REVEAL - .5:
+		set_pose("lying")
+		if age >= 6.6:set_pose("rise")
+	elif hb.get("disguise", false) and age >= LURE_REVEAL:
+		# The skin tears off: a glitch, he is himself and twice the size, and the shove.
+		hb.disguise = false; glitch = .45; flash = .3; w.shake = .5; impact_frame = .08
+		set_pose("throw"); face = "smile"; hb.visual_dir = Vector2.DOWN
+		w.sound("ch4_hb_glitch"); w.sound("ch4_impact", .05); w.sound("ch4_hb_roar", .1)
+		hb.push_from = w.player
+	if not hb.get("disguise", true) and age < LURE_REVEAL + .55:
+		var k: float = clampf((age - LURE_REVEAL) / .55, 0, 1)
+		w.player = Vector2(hb.push_from).lerp(Vector2(hb.push_from) + Vector2(0, 92), 1.0 - pow(1.0 - k, 3.0))
+		w.facing = Vector2.UP
+		if k > .2:hb.scale = lerpf(1.0, float(data.giant), smoothstep(.2, 1.0, k))
+	if age >= LURE_REVEAL + .55:
+		hb.scale = float(data.giant)
+		set_pose("invite" if age < 9.2 else ("point" if age < 12.0 else "aura"))
+	if age >= LURE_REVEAL + .7 and not spoken.has("lure_c"):spoken["lure_c"] = true; say("АХАХАХАХАХ", "laugh", 1.9, 1.6); w.sound("ch4_hb_twitch", .1)
+	if age >= 9.3 and not spoken.has("lure_d"):spoken["lure_d"] = true; say("Ты реально повёлся, нищий?", "calm", 2.6)
+	if age >= 12.1 and not spoken.has("lure_e"):spoken["lure_e"] = true; say("Твоя девушка давно сдохла\nА ты до сих пор бежишь на каждый писк", "calm", 3.6)
+	if age >= LURE_LENGTH:
+		# Straight into his entrance: the rise, the roar, then the tower.
+		phase = "intro"; age = float(data.intro.rise_at) - .2
+		spoken["intro"] = true; spoken["ignite"] = true
 
 func step_intro(w):
 	var turn: Array = data.intro.turn
@@ -331,7 +391,7 @@ func tower_solid(w, on: bool):
 ## He raises a tower out of the ground and rains chapter I down from it:
 ## lightning that walks to the hero and fire waves rolling out from its foot.
 func begin_tower(w):
-	phase = "tower"; age = 0.0; face = "smile"; set_pose("cast"); music = "boss_one"; text_events.clear()
+	phase = "tower"; age = 0.0; face = "smile"; set_pose("cast"); music = "boss_one"
 	tower_queue = data.tower.queue.duplicate(); move = ""; move_age = 0.0; move_time = 0.0
 	hb.perched = false
 	w.sound("ch4_stone_rise", .1); w.sound("ch4_hb_roar", .1)
@@ -453,7 +513,7 @@ func step_vortex(w, dt: float):
 		w.add_effect("ch4_hb_blink", hb.p, .45, {"dir": hb.visual_dir, "scale": scale()})
 		w.sound("ch4_hb_teleport", .1); w.shake = .3
 	if age >= float(v.duration):
-		phase = "one"; age = 0.0; face = "smile"; set_pose("aura"); music = "boss_one"; text_events.clear()
+		phase = "one"; age = 0.0; face = "smile"; set_pose("aura"); music = "boss_one"
 		begin_move(w, "rest", 1.0); save_checkpoint(w, "one")
 
 func step_kneel(w):
@@ -466,18 +526,20 @@ func step_kneel(w):
 	if age >= float(k.line_at) and not spoken.has("kneel"):
 		spoken["kneel"] = true; say("Хорошо...\nДавай всерьёз!", "calm", 2.4)
 	if age >= float(k.duration):
-		phase = "two"; age = 0.0; silence = false; music = "boss_two"; text_events.clear()
+		phase = "two"; age = 0.0; silence = false; music = "boss_two"
 		hb.hp = float(data.two.hp); hb.max_hp = hb.hp; face = "smile"
 		begin_move(w, "invite", 1.4); save_checkpoint(w, "two")
 
 func begin_kneel(w):
-	phase = "kneel"; age = 0.0; clear_hazards(); face = "calm"; music = ""; text_events.clear()
+	drop_summons(w)
+	phase = "kneel"; age = 0.0; clear_hazards(); face = "calm"; music = ""
 	w.sound("ch4_hb_freeze")
 
 # ------------------------------------------------------------------ the last attack
 
 ## Stage II breaks him. He does not fall: he spends everything he has left.
 func begin_last(w):
+	drop_summons(w)
 	phase = "last"; age = 0.0; clear_hazards(); face = "rage"; music = "boss_two"; text_events.clear()
 	set_pose("cast"); flash = .3; w.shake = .6; glitch = .4
 	w.sound("ch4_hb_roar"); w.sound("ch4_impact", .1)
@@ -609,6 +671,9 @@ func step_fight(w, dt: float):
 			if move_age > 0.5:set_pose("aura")
 		"spiral","fault_smash":terrain_attack.step(self,w,dt)
 		"strike":step_strike(w)
+		"smash_dash":step_smash_dash(w)
+		"zombies":step_zombies(w, dt)
+		"magma":step_magma(w, dt)
 		"hole":step_hole(w, dt)
 		"blitz_mark", "blitz_dash", "landed":step_blitz(w, dt)
 		"rain":step_rain(w, dt)
@@ -619,6 +684,8 @@ func step_fight(w, dt: float):
 			set_pose("kneel" if move_age < move_time - .8 else "rise")
 			if move_age >= move_time:begin_move(w, "rest", .8)
 	if move_age > 0 and speed > 1.0 and move in ["rest"]:move_age += dt * (speed - 1.0)
+	if two:orbit_step(w, dt, angry)
+	burn_step(w, dt)
 	terrain_attack.step_motion(self,w,dt)
 	hb.p = hb.p.clamp(arena.position + Vector2(24, 34), arena.end - Vector2(24, 20))
 
@@ -627,7 +694,7 @@ func next_attack(w):
 		if phase == "one":
 			queue = ["lightning", "spiral", "ring", "strike", "lightning", "strike", "ring"]
 		else:
-			queue = ["hole", "blitz", "fault_smash", "rain", "rift", "tear", "blitz", "hole", "rain"]
+			queue = ["hole", "blitz", "fault_smash", "zombies", "rain", "magma", "blitz", "fault_smash", "hole", "zombies", "rain", "magma"]
 	if phase == "two":
 		for i in range(data.two.day.at.size()):
 			if not day_done.has(i) and hb.hp < hb.max_hp * float(data.two.day.at[i]):
@@ -639,7 +706,29 @@ func rest(w, extra: float = 0.0):
 	begin_move(w, "rest", rng.randf_range(float(r[0]), float(r[1])) + extra)
 
 func start(w, name: String):
+	if name == "fault_smash" and phase == "two":
+		# Tester pack 13.11: first a dash straight at the hero, then the slam where he lands.
+		var dir: Vector2 = hb.p.direction_to(w.player)
+		hb.dash_from = hb.p; hb.dash_to = (w.player - dir * 18.0).clamp(arena.position + Vector2(24, 34), arena.end - Vector2(24, 20))
+		begin_move(w, "smash_dash", .78); set_pose("guard"); w.sound("ch4_hb_charge", .1); return
 	if name in ["spiral","fault_smash"]:terrain_attack.start(self,w,name);return
+	if name == "zombies":
+		hb.raise = []
+		for i in range(5):
+			var at: Vector2 = (w.player + Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(55.0, 150.0)).clamp(arena.position + Vector2(30, 40), arena.end - Vector2(30, 30))
+			hb.raise.append({"p": at, "age": -i * .12, "done": false})
+		begin_move(w, "zombies", 2.2); set_pose("cast"); w.sound("ch4_hb_charge", .1); w.sound("ch4_growth_rip", .1); cast_fx(w)
+		return
+	if name == "magma":
+		hb.walls = []
+		var turn: float = rng.randf() * TAU
+		for i in range(4):
+			var a: float = turn + i * TAU / 4
+			var radial := Vector2.from_angle(a)
+			hb.walls.append({"c": w.player + Vector2(radial.x, radial.y * .7) * 66.0, "t": radial.orthogonal(), "age": 0.0, "launch": 1.2 + i * 1.5, "v": Vector2.ZERO, "gone": false, "hit": false})
+		hb.burn_left = 0.0; hb.burn_tick = 0.0
+		begin_move(w, "magma", 1.2 + 4 * 1.5 + 1.2); set_pose("snap"); w.sound("ch4_hb_fire", .1); w.sound("ch4_stone_rise", .1); cast_fx(w)
+		return
 	match name:
 		"lightning":
 			var l: Dictionary = data.one.lightning
@@ -709,6 +798,100 @@ func blink(w, to: Vector2):
 	hb.blinked = w.clock
 	w.add_effect("ch4_hb_blink", hb.p, .45, {"dir": hb.visual_dir, "scale": scale()})
 	w.sound("ch4_hb_teleport", .2)
+
+# ------------------------------------------------------------------ stage II additions (tester pack 13.11)
+func drop_summons(w):
+	for m in w.mobs:
+		if m.get("summoned", false) and m.hp > 0:m.hp = 0; m.xp = 0; w.add_effect("ch4_remains", m.p, .6, {"skin": m.get("skin", ""), "dir": m.visual_dir})
+	if not hb.is_empty():hb.walls = []; hb.raise = []; hb.burn_left = 0.0; hb.erase("orbit")
+
+const ORBIT_KINDS := ["stone", "obsidian", "magma", "netherrack", "cobble"]
+
+## Five blocks always circle him, even mid-attack; now and then one is flung at the hero.
+func orbit_step(w, dt: float, angry: bool):
+	if not hb.has("orbit"):
+		hb.orbit = []
+		for k in ORBIT_KINDS:hb.orbit.append({"kind": k, "grow": 1.0})
+		hb.orbit_a = 0.0; hb.orbit_cd = 2.5
+	hb.orbit_a = float(hb.orbit_a) + dt * (1.5 if not angry else 2.1)
+	for b in hb.orbit:b.grow = minf(1.0, float(b.grow) + dt / 1.6)
+	hb.orbit_cd = float(hb.orbit_cd) - dt
+	if hb.orbit_cd <= 0 and move not in ["day", "stunned", "invite", "look"]:
+		var ready: Array = []
+		for i in range(hb.orbit.size()):
+			if hb.orbit[i].grow >= 1.0:ready.append(i)
+		if not ready.is_empty():
+			var i: int = ready[rng.randi_range(0, ready.size() - 1)]
+			var from: Vector2 = orbit_pos(i)
+			var aim: Vector2 = w.player + w.tracked_velocity * .35
+			shots.append({"p": from, "v": from.direction_to(aim) * 230.0, "r": 5.5, "damage": 3.0, "kind": "block", "block": hb.orbit[i].kind, "life": 3.0, "spin": float(i)})
+			hb.orbit[i].grow = 0.0
+			w.sound("ch4_hb_blitz", .1)
+		hb.orbit_cd = rng.randf_range(1.6, 2.6) if angry else rng.randf_range(2.4, 3.6)
+
+func orbit_pos(i: int) -> Vector2:
+	var a: float = float(hb.get("orbit_a", 0.0)) + i * TAU / 5.0
+	return hb.p + Vector2(cos(a) * 40.0, sin(a) * 17.0) * scale() - Vector2(0, 28 * scale())
+
+func step_smash_dash(w):
+	var from: Vector2 = hb.dash_from; var to: Vector2 = hb.dash_to
+	if move_age < .45:
+		set_pose("guard"); hb.visual_dir = from.direction_to(to)
+	else:
+		set_pose("lunge")
+		var k: float = clampf((move_age - .45) / .26, 0, 1)
+		var before: Vector2 = hb.p
+		hb.p = from.lerp(to, 1.0 - pow(1.0 - k, 2.0))
+		if Geometry2D.get_closest_point_to_segment(w.player, before, hb.p).distance_to(w.player) < 15.0:w.receive_hit(4.0, hb)
+		if k > 0 and not hb.get("dash_fx", false):
+			hb.dash_fx = true; w.sound("ch4_hb_blitz", .1)
+			w.add_effect("ch4_hb_slash", from, .4, {"end": to, "width": 15.0, "dir": from.direction_to(to), "scale": scale()})
+	if move_age >= move_time:
+		hb.dash_fx = false
+		terrain_attack.start(self, w, "fault_smash")
+
+func step_zombies(w, dt: float):
+	set_pose("cast" if move_age < 1.2 else "aura")
+	for r in hb.raise:
+		r.age = float(r.age) + dt
+		if not r.done and r.age >= .9:
+			r.done = true
+			if w.spawn("flayed_zombie", r.p):
+				var m: Dictionary = w.mobs.back()
+				m.summoned = true; m.stun = 1.1; m.emerge = w.clock; m.visual_dir = r.p.direction_to(w.player); m.dir = m.visual_dir; m.xp = 0
+			w.fx.erupt(w, r.p, "dirt", 7); w.shake = maxf(w.shake, .12)
+	if move_age >= move_time:hb.raise = []; rest(w)
+
+func magma_hits(w, wall: Dictionary) -> bool:
+	var half: Vector2 = Vector2(wall.t) * 26.0
+	return Geometry2D.get_closest_point_to_segment(w.player, Vector2(wall.c) - half, Vector2(wall.c) + half).distance_to(w.player) < 9.0
+
+func step_magma(w, dt: float):
+	set_pose("snap" if move_age < .6 else "aura")
+	for wall in hb.walls:
+		if wall.gone:continue
+		wall.age = float(wall.age) + dt
+		if wall.age < .5:continue
+		if wall.v == Vector2.ZERO and wall.age >= float(wall.launch):
+			wall.v = Vector2(wall.c).direction_to(w.player) * 250.0; wall.travel = 0.0
+			w.sound("ch4_hb_fire", .05); w.sound("ch4_hb_blitz", .05)
+		if wall.v != Vector2.ZERO:
+			wall.c = Vector2(wall.c) + Vector2(wall.v) * dt; wall.travel = float(wall.travel) + 250.0 * dt
+			if not arena.grow(-10).has_point(wall.c) or wall.travel > 300.0:
+				wall.gone = true; w.fx.erupt(w, wall.c, "stone", 6); w.sound("ch4_stone_hit", .05)
+		if magma_hits(w, wall):
+			if wall.v != Vector2.ZERO and not wall.hit:wall.hit = true; w.receive_hit(4.0, hb)
+			else:w.receive_hit(1.5, hb)
+			hb.burn_left = 2.0
+	if move_age >= move_time:hb.walls = []; rest(w)
+
+## Touching magma sets him alight for a couple of seconds.
+func burn_step(w, dt: float):
+	if float(hb.get("burn_left", 0.0)) <= 0:return
+	hb.burn_left = float(hb.burn_left) - dt; hb.burn_tick = float(hb.get("burn_tick", 0.0)) - dt
+	if hb.burn_tick <= 0:
+		hb.burn_tick = .5; w.receive_hit(1.0, hb)
+		w.add_effect("ch4_hb_ignite", w.player + Vector2(0, -10), .5)
 
 func step_lightning(w):
 	var l: Dictionary = data.one.lightning
@@ -905,9 +1088,13 @@ func step_day(w):
 			var k := (t - elapsed) / c
 			sky = 0.5 - 0.5 * cos(k * TAU)
 			sun = i + k
-			# A sundial: by day the shadow sweeps the upper half, right to left. Below him is always safe.
+			# A sundial: each day the shadow sweeps 250° through where the hero stands,
+			# alternating direction; there is no permanently safe side (tester pack 13.11).
 			var day_k := clampf((k - 0.25) / 0.5, 0, 1)
-			shadow_angle = lerpf(0.0, -PI, day_k)
+			if int(hb.get("dial_day", -1)) != i:
+				var rel_p: Vector2 = w.player - hb.p
+				hb.dial_day = i; hb.dial_from = atan2(rel_p.y / 0.62, rel_p.x) - (1.0 if i % 2 == 0 else -1.0) * 2.2
+			shadow_angle = float(hb.dial_from) + (1.0 if i % 2 == 0 else -1.0) * lerpf(0.0, 4.4, day_k)
 			var sh: Dictionary = d.shadow
 			shadow_on = k > 0.27 and k < 0.73
 			if shadow_on and in_shadow(w.player):w.receive_hit(float(sh.damage), hb)

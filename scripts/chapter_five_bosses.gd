@@ -157,6 +157,7 @@ func boss_died(w, m: Dictionary):
 	match m.kind:
 		"terminal":
 			terminal_done = true
+			w.run_progress.award("terminal_original")
 			var c = mob(w, terminal.clone) if terminal.clone >= 0 else null
 			if c != null:c.hp = 0;c.xp = 0
 			terminal = {}
@@ -166,6 +167,7 @@ func boss_died(w, m: Dictionary):
 			w.sound("ch4_hb_shatter", .1)
 		"loop_boss":
 			loop_done = true;loop = {};ghosts.clear()
+			w.run_progress.award("break_loop")
 			w.loot.append({"kind":"chest","p":m.p,"born":w.time})
 			w.message = "break;";w.message_timer = 2.5
 			w.sound("ch4_hb_shatter", .1)

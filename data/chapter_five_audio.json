@@ -1,52 +1,152 @@
 {
-  "ch5_ending_theme": {
-    "gain": 1.0,
-    "variants": [
-      {
-        "path": "res://assets/audio/chapter_five/ending_theme.ogg",
-        "volume": 1,
-        "pitch": 1
-      }
-    ]
-  },
-  "ch5_ending_sting": {
-    "gain": 1.0,
-    "variants": [
-      {
-        "path": "res://assets/audio/chapter_five/ending_sting.ogg",
-        "volume": 1,
-        "pitch": 1
-      }
-    ]
-  },
-  "ch5_portal_open": {
-    "gain": 0.5,
-    "variants": [
-      {
-        "path": "res://assets/audio/ch5_sfx/portal_open.ogg",
-        "volume": 1,
-        "pitch": 1
-      }
-    ]
-  },
-  "ch5_portal_pass": {
-    "gain": 0.5,
-    "variants": [
-      {
-        "path": "res://assets/audio/ch5_sfx/portal_pass.ogg",
-        "volume": 1,
-        "pitch": 1
-      }
-    ]
-  },
-  "ch5_ut_charge": {
-    "gain": 0.4,
-    "variants": [
-      {
-        "path": "res://assets/audio/ch5_sfx/ut_charge.ogg",
-        "volume": 1,
-        "pitch": 1
-      }
-    ]
-  }
+ "ch5_ending_theme": {
+  "gain": 1.0,
+  "variants": [
+   {
+    "path": "res://assets/audio/chapter_five/ending_theme.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_ending_sting": {
+  "gain": 1.0,
+  "variants": [
+   {
+    "path": "res://assets/audio/chapter_five/ending_sting.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_portal_open": {
+  "gain": 0.5,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/portal_open.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_portal_pass": {
+  "gain": 0.5,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/portal_pass.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_ut_charge": {
+  "gain": 0.4,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/ut_charge.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_purge_alarm": {
+  "gain": 0.55,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/purge_alarm.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_snap": {
+  "gain": 0.7,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/snap.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_core_rise": {
+  "gain": 0.6,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/core_rise.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_core_absorb": {
+  "gain": 0.7,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/core_absorb.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_shockwave": {
+  "gain": 0.8,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/shockwave.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_ascend": {
+  "gain": 0.6,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/ascend.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_time_stop": {
+  "gain": 0.8,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/time_stop.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_crack": {
+  "gain": 0.6,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/crack.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_echo_step": {
+  "gain": 0.45,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/echo_step.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ },
+ "ch5_echo_step_far": {
+  "gain": 0.35,
+  "variants": [
+   {
+    "path": "res://assets/audio/ch5_sfx/echo_step_far.ogg",
+    "volume": 1,
+    "pitch": 1
+   }
+  ]
+ }
 }

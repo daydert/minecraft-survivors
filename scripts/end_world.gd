@@ -227,6 +227,7 @@ func update_gust(dt: float):
 				for m in mobs:
 					if m.hp<=0 or m.get("boss",false) or m.kind in ["shulker","arena_crystal"]:continue
 					m.knock=gust.dir*float(rules.mob_push);m.launch=.45;m.collision_hits={}
+					run_progress.mark_launch(m.id,false)
 		"blow":
 			if not flying() and dash_left<=0:player_push=player_push.lerp(gust.dir*float(rules.push),minf(1,dt*8))
 			if gust.timer<=0:
@@ -262,7 +263,13 @@ func move_actor(p: Vector2, velocity: Vector2, radius: float) -> Vector2:
 	return q
 
 func movement_speed() -> float:
-	return db.data.player_speed*(1+.08*items.get("sugar",0))*(rule("slow_arrow_factor") if slow_time>0 else 1.0)
+	return db.data.player_speed*(1+.08*items.get("sugar",0))*(rule("slow_arrow_factor") if slow_time>0 else 1.0)*(1.75 if flight>0 and not rocket else 1.0)
+
+func elytra_landing():
+	var lv: int=int(items.get("elytra",1));var r: float=46.0+6.0*lv;var dmg: float=8.0+4.0*lv
+	damage_owner="elytra"
+	for m in in_radius(player,r):hurt(m,dmg,player.direction_to(m.p)*160.0)
+	fx.quake(self,player,1.2);fx.ring(player,r,.45,"toll");fx.dust(player,10,r*.6);shake=maxf(shake,.25);sound("mace_smash",.1)
 
 func flying() -> bool:return flight>0 or rocket or jump_age>=0 or levitation>0 or levitation_height>0
 
@@ -274,7 +281,8 @@ func active_item(id: String) -> bool:
 	match id:
 		"elytra":
 			if not items.has(id) or flight_cooldown>0:return false
-			flight=1.5+.5*items[id];flight_cooldown=11-.5*items[id];sound("wind_burst")
+			# Elytra v2 (13.11): a longer, faster glide, untouchable in the air, a crash-landing shockwave.
+			flight=2.4+.6*items[id];flight_cooldown=9.5-.7*items[id];sound("wind_burst");fx.dust(player,6,14)
 		"ender_pearl":
 			if not items.has(id) or pearl_cooldown>0:return false
 			pearl_cooldown=13-items[id]
@@ -315,14 +323,19 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 	track_progress(dt)
 	clock+=dt;stage_age+=dt
 	if stage=="survival":time=minf(db.data.duration,time+dt)
+	var was_gliding: bool=flight>0
 	for key in ["invulnerable","shake","message_timer","flight","flight_cooldown","pearl_cooldown","rocket_cooldown","shell_cooldown","shield_guard","slow_time","poison_time","levitation"]:set(key,maxf(0,float(get(key))-dt))
+	if flight>0:invulnerable=maxf(invulnerable,.12)
+	if was_gliding and flight<=0 and items.has("elytra"):elytra_landing()
 	var before=player
 	var combat=stage in ["survival","dragon","last_duel"]
 	if fall_age>=0:
 		fall_age+=dt
 		if fall_age>.85:
 			fall_age=-1;player=last_safe;invulnerable=0
-			if items.has("shulker_shell") and shell_cooldown<=0:shell_cooldown=rule("fall_shell_cooldown")-rule("fall_shell_cooldown_per_level")*items.shulker_shell
+			if items.has("shulker_shell") and shell_cooldown<=0:
+				shell_cooldown=rule("fall_shell_cooldown")-rule("fall_shell_cooldown_per_level")*items.shulker_shell
+				run_progress.award("shell_rescue")
 			else:damage_player(rule("fall_damage")*(1-rule("fall_shell_reduction")*items.get("shulker_shell",0)))
 			invulnerable=1
 	elif stage in ["survival","dragon","last_duel","exit_portal","approach","portal_ready"]:
@@ -460,6 +473,13 @@ func spawn(kind: String, at=null) -> bool:
 func hurt(m: Dictionary, amount: float, push: Vector2=Vector2.ZERO):
 	if m.kind=="end_dragon" and m.get("phase","")=="slump":amount*=1.5
 	# He guards while attacking: real damage lands in the openings he leaves.
+	# The most mobile boss (tester pack 13.11): outside his openings he slips most blows with a blink.
+	if m.kind=="endersteve_final" and m.hp>0 and m.phase not in ["pose","rage","rush","leap","skyfall","blink_chain"] and clock>=float(m.get("dodge_cd",0.0)):
+		m.dodge_cd=clock+(1.15 if m.get("rage",false) else 1.7)
+		var side: Vector2=player.direction_to(m.p).orthogonal()*(1.0 if int(clock*7.0)%2==0 else -1.0)
+		teleport_mob(m,(m.p+side*72.0+m.p.direction_to(player)*-20.0).clamp(END_ARENA.position+Vector2(40,40),END_ARENA.end-Vector2(40,40)))
+		fx.flash(m.p,60.0,Color(.8,.5,1),.12)
+		return
 	if m.kind=="endersteve_final" and m.phase not in ["pose","recover","walk","rage"]:
 		amount*=.35
 		if m.hp>0 and clock>=m.get("guard_fx",0.0):m.guard_fx=clock+.15;fx.ring(m.p-Vector2(0,10),12.0,.18,"thorns");sound("shield_block",.1)
@@ -477,12 +497,15 @@ func move_mobs(dt: float):
 	damage_owner="knockback_stick"
 	var spawnlings=[]
 	for m in mobs:
-		if m.hp<=0:continue
+		if m.hp<=0:
+			run_progress.mark_launch(m.id,false)
+			continue
 		m.animation+=dt;m.flash=maxf(0,m.flash-dt);m.timer-=dt;m.teleport_cd=maxf(0,m.teleport_cd-dt);m.slow=maxf(0,m.slow-dt);m.control_resist=maxf(0,m.control_resist-dt)
 		if m.burn>0:
 			m.burn-=dt;m.burn_tick-=dt
 			if m.burn_tick<=0:m.burn_tick+=.5;damage_source="status";hurt(m,burn_damage(m));damage_source="melee"
 		var old: Vector2=m.p
+		var from_stick: bool=run_progress.stick_launches.has(m.id)
 		if m.kind=="arena_crystal":continue
 		if m.kind in ["end_dragon","endersteve_final"]:
 			if m.pull_left>0 or m.stun>0:
@@ -533,14 +556,18 @@ func move_mobs(dt: float):
 			var q=move_actor(m.p,(direction*speed+m.knock)*dt,m.radius)
 			if on_land(q):m.p=q
 			elif m.launch>0:
+				if m.hp>0:run_progress.enemy_fell(m.id)
 				m.hp=0;add_effect("end_enemy_fall",m.p,.65,{"kind_actor":m.kind});kills+=0
 			elif m.kind in ["enderman","dispenser_enderman"] and m.teleport_cd<=0:teleport_mob(m,player+direction*85)
 			m.launch=maxf(0,m.launch-dt)
+			if m.launch<=0:run_progress.mark_launch(m.id,false)
 			if m.launch>0 and m.knock.length()>60:
 				for other in in_radius(m.p,m.radius+8):
 					if other==m or m.collision_hits.has(other.id):continue
 					m.collision_hits[other.id]=true;hurt(other,18+m.knock.length()*.08,m.knock.normalized()*1.8)
-					if evolved.has("knockback_stick") and other.kind not in ["end_dragon","arena_crystal"]:other.launch=.5;other.knock=m.knock*.7
+					if evolved.has("knockback_stick") and other.kind not in ["end_dragon","arena_crystal"]:
+						other.launch=.5;other.knock=m.knock*.7
+						run_progress.mark_launch(other.id,from_stick)
 			m.knock=m.knock.move_toward(Vector2.ZERO,dt*240)
 			if m.p.distance_to(player)<m.radius+6 and jump_height+levitation_height<16 and m.phase!="windup":contact_hit(m.p,m.damage)
 		m.moving=m.p.distance_squared_to(old)>.001;m.visual.travel=m.p.distance_to(old)
@@ -622,6 +649,7 @@ func update_attacks(dt: float):
 				for m in in_radius(player,s.radius):
 					if facing.dot(player.direction_to(m.p))<-.1:continue
 					hurt(m,s.damage,player.direction_to(m.p));m.knock=player.direction_to(m.p)*s.force*(1+rule("feather_knock")*items.get("feather",0));m.launch=1.2;m.collision_hits={}
+					run_progress.mark_launch(m.id,true)
 				add_effect("stick_swing",player,.3,{"direction":facing,"radius":s.radius});sound("swing")
 			"dragon_breath":
 				for j in range(int(s.count)):add_effect("friendly_breath",target.p+Vector2(j*32,0),s.duration,{"radius":s.radius,"damage":s.damage,"tick":0.0})
@@ -860,7 +888,8 @@ func tick_choices(dt: float):
 	var tick=int(choice_age/.21)
 	if tick==choice_tick:return
 	choice_tick=tick
-	var count=3 if items.get("end_eye",0)>=5 else 1 if items.get("end_eye",0)>=4 else 0
+	# Eye IV/V no longer swap cards mid-choice: see world.eye_extras().
+	var count=0
 	for i in range(maxi(0,choices.size()-count),choices.size()):
 		if count==0:break
 		var pool=reward_pool()
@@ -875,6 +904,8 @@ func reroll_choices() -> bool:
 func choose(index: int):
 	if state!="LEVEL_UP" or index<0 or index>=choices.size() or not chosen_item.is_empty():return
 	chosen_item=choices[index];chosen_index=index;chosen_level=build.get(chosen_item,items.get(chosen_item,0))+1;choice_hold=.55
+	if evolved_offer.has(chosen_item):evolved[chosen_item]=true
+	side_choices=[]
 	sound("select")
 
 func skip_reward() -> bool:

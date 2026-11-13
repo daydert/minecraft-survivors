@@ -1257,5 +1257,280 @@
         "pitch": 1
       }
     ]
+  },
+  "ch4_butcher_roar": {
+    "minecraft_event": "entity.ravager.roar",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_roar1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_roar2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_roar3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_butcher_grunt": {
+    "minecraft_event": "entity.vindicator.ambient",
+    "gain": 0.5,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_vindication_illager_idle1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_vindication_illager_idle2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_vindication_illager_idle3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_butcher_swing": {
+    "minecraft_event": "entity.player.attack.sweep",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/entity_player_attack_sweep1.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/entity_player_attack_sweep2.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/entity_player_attack_sweep3.ogg",
+        "volume": 0.7,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_butcher_step": {
+    "minecraft_event": "entity.ravager.step",
+    "gain": 0.35,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_step1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_step2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_ravager_step3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_butcher_leave": {
+    "minecraft_event": "entity.zombie_villager.converted",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_zombie_unfect.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_rescue_cut": {
+    "minecraft_event": "entity.sheep.shear",
+    "gain": 0.7,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_sheep_shear.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_rescue_body": {
+    "minecraft_event": "entity.villager.death",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_villager_death.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_rescue_reward": {
+    "minecraft_event": "block.beacon.power_select",
+    "gain": 0.4,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_power1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_power2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_beacon_power3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_stir": {
+    "minecraft_event": "entity.zombie_villager.ambient",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_zombie_villager_say1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_zombie_villager_say2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/mob_zombie_villager_say3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_tear": {
+    "minecraft_event": "entity.zombie.break_wooden_door",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/mob_zombie_woodbreak.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_sniper_aim": {
+    "minecraft_event": "item.crossbow.loading_middle",
+    "gain": 0.45,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_loading_middle1.ogg",
+        "volume": 0.65,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_loading_middle1.ogg",
+        "volume": 0.65,
+        "pitch": 0.95
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_loading_middle1.ogg",
+        "volume": 0.65,
+        "pitch": 1.2
+      }
+    ]
+  },
+  "ch4_sniper_shot": {
+    "minecraft_event": "item.crossbow.shoot",
+    "gain": 0.6,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_shoot1.ogg",
+        "volume": 0.8,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_shoot1.ogg",
+        "volume": 0.9,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/item_crossbow_shoot1.ogg",
+        "volume": 0.9,
+        "pitch": 0.9
+      }
+    ]
+  },
+  "ch4_surge": {
+    "minecraft_event": "event.raid.horn",
+    "gain": 0.55,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/event_raid_raidhorn_01.ogg",
+        "volume": 0.01,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/event_raid_raidhorn_02.ogg",
+        "volume": 0.01,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/event_raid_raidhorn_03.ogg",
+        "volume": 0.01,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_ambush": {
+    "minecraft_event": "block.rooted_dirt.break",
+    "gain": 0.8,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_rooted_dirt_break1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_rooted_dirt_break2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_rooted_dirt_break3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
+  },
+  "ch4_affix": {
+    "minecraft_event": "block.respawn_anchor.charge",
+    "gain": 0.4,
+    "variants": [
+      {
+        "path": "res://assets/audio/chapter_four/block_respawn_anchor_charge1.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_respawn_anchor_charge2.ogg",
+        "volume": 1,
+        "pitch": 1
+      },
+      {
+        "path": "res://assets/audio/chapter_four/block_respawn_anchor_charge3.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
   }
 }

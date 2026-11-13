@@ -1,0 +1,12 @@
+[
+  {
+    "preset": "Linux",
+    "path": "builds/linux/MinecraftSurvivors.x86_64",
+    "exit_code": 0
+  },
+  {
+    "preset": "Windows Desktop",
+    "path": "builds/windows/MinecraftSurvivors.exe",
+    "exit_code": 0
+  }
+]

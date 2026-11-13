@@ -1,6 +1,5 @@
 {
   "version": "1.21.11",
-  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
   "raw_files": {
     "textures/block/netherrack.png": {
       "sha256": "3c0208b749c5393b9bad9d57ed3d830326a02b8cbd8444e96d4d0d277f85625f",
@@ -98,419 +97,543 @@
   "derived": {
     "achievement_chapter_one": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "38b8871b45abc7eeb8a5f1f4f53db0ff93ebe408d252e8c3373274d437db361e"
+      "sha256": "1ccb96f7eaeb6e23796bd833f0c38395ed0cc266573252c107436e892a41055d",
+      "cell": [
+        0,
+        0
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_first_evolution": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "2bfd779cf75d8541b21a242bddea072e7dd5734327ce0c656424ff960bda3a48"
+      "sha256": "9df89d4a433c514c0bdf607a708849e7f1dcbd1468cbe361a20ca4ebd97102cf",
+      "cell": [
+        1,
+        0
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_full_inventory": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "e85416f51ffb3e71895939b44162d20ea5c321171b7b2b8e0b61abd19d0f7da5"
+      "sha256": "fbe9bb50e691cb63c380a51c8f37349db3a1295cfb36e52d6cb34f6d7f5691e3",
+      "cell": [
+        2,
+        0
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_sword_only": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "030675632c7f39bb3aea7f697e28087ef57812a83779e84249b6567436bb8fbf"
+      "sha256": "a6b0817a1bd2774240ed8f2bbdafde9a7e1f6c742201715c63ffebb22c11f236",
+      "cell": [
+        3,
+        0
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_two_weapons": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "f52f4756b51c6f9f65280eba161acf55b05a99510b7376ec825d74e21c657463"
+      "sha256": "a54fc08f493b3bd6392654d7af3ee84c9dd08187af3f8d2da6290f7a2eb335c9",
+      "cell": [
+        4,
+        0
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_no_evolutions": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "1b190347d1850e1b62ab03642d06d5c586a67c8ce2b8f2a7509763fc5034efe1"
+      "sha256": "0c22c1967ce76f3bafbdd928891f8d363efa096e025773d0a513e4c857c93c2d",
+      "cell": [
+        5,
+        0
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_chapter_two": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "80e0e68af914139fcbded65825288b203423de09641f436781b60de73948668b"
+      "sha256": "b9f61f36596aee99b33e53e85128c72533fb3da585c0fd45416af702319cd59f",
+      "cell": [
+        0,
+        1
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_chapter_three": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/chapter_three.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "9f311ab617aa25e18cfb515f6aab555a9b08714573e95a223b745cbf75d53fdf"
+      "sha256": "151287a89cd907e74b9d37aa7767db5d03e744733a0d0c4b5440a691e162e377",
+      "cell": [
+        1,
+        1
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_bow_only": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "6a0427a41d47aad2d23fa83dfe7f8d0a66ddf5eb6b20cae8e608d1694c38ccb5"
+      "sha256": "010dbe95825985535bfd0aa3eee5ba4c1d14b3daf8709399414db5b8ecfdcdfa",
+      "cell": [
+        2,
+        1
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_untouched": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "9b5d829933f65dcab82ce717956420ef884ef8a11a3821ae34c4a49beaea20c7"
+      "sha256": "87f45f920468aedcff30ce31f53a768a1b87a11aca972218e7f38ba4a7a96a59",
+      "cell": [
+        3,
+        1
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_no_healing": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "7f87a98034d80b9193c1b33c284824446bf360e9bf5877c9c105f050d58faa63"
+      "sha256": "b370a31a5c11a83a9ca387cff76ee137dee603238a5aa6f4a4f63f820dcc679f",
+      "cell": [
+        4,
+        1
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_herobrine": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "a29fbe16be57a179260ff76dfd5569921de0538b7fb026564253203c6249bf16"
+      "sha256": "4a7f3bdb7024daa0056e329497d3720bcf182c5e28e951271fca9cfc8a5c6ae8",
+      "cell": [
+        5,
+        1
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_blood_moon": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "4b89dc68ead3354db7101c0dcf7b6e0f89c5fc9c68eacda2fbb5277359848b3b",
+      "cell": [
+        0,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_end_city": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "b2f0771720ed5d4b69143ec500f5f1d7d052cf1b0394e022cb6a5a3617d2d952",
+      "cell": [
+        1,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_witch_hunter": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "87ef6f7b127c39664cc077e8882ba675b8bdaa7182653a5c127029a3b8d8a00c",
+      "cell": [
+        2,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_phantom_slayer": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "b375ee6fa140c854d5f8db82228cb6cdf072519cec18c41bfb334f0aed2f720e",
+      "cell": [
+        3,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_bastion": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "5ff9eb9d095f7a04facdf21b34217f9d45810b55c23890083e3e24807daf2356",
+      "cell": [
+        4,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_windswept": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "6e3f7958e399d048719bea97d1ed6d229f6b90f530e642969ad3eac96a1b1e2d",
+      "cell": [
+        5,
+        2
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_fatality": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "9dcabd8e6b16f56b901fe431f711f590e3229d0da4fa0b5936807d7a35cd44de",
+      "cell": [
+        0,
+        3
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_bad_ending": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "52d24f1431e846d99c1db1a904806287e1d87c68ab28e2ba360291de275b4a2c",
+      "cell": [
+        1,
+        3
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_trailblazer": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "137ca094997975baebf34885d61c31eef1cfdf02dbf1ebc8a5ece3269b229735",
+      "cell": [
+        2,
+        3
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_boss_angler": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "2ebdbb6efe1502f31c7e6490aee4f4087accf246dc3a97b43a1002a88b5f10ce",
+      "cell": [
+        3,
+        3
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_void_bouncer": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "012bce454bb88cf3e50d0f19219e62ea0b5f7e411cc791018d1912356e685e4d",
+      "cell": [
+        4,
+        3
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_shell_rescue": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "2503cb9073086769400760af7f71e43f362a7714bf0623288814c86ced17e5f2",
+      "cell": [
+        5,
+        3
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_read_note": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "0efb0cf9c733aadd1d562de9128e29f27bfdd4fe5647adebb15db3e9ec8862de",
+      "cell": [
+        0,
+        4
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_free_golem": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "f029e1f4f56d3adcbee4c31d230b0817f83acf63c8f85aac4740a36c28892092",
+      "cell": [
+        1,
+        4
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_cart_rider": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "690addec617ad6156c896b02512cb4bc4e6996760ff794906fc5edd9c7c86e2a",
+      "cell": [
+        2,
+        4
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_healing_undead": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "d892c8808a6908a0ff65d7ceb8507e8b842ff9bb6bb56a78d401714a3bc98149",
+      "cell": [
+        3,
+        4
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_chapter_four": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "f694cd34045e501d2384ed68af58e71d30be721405d2d303a10d7807d0721606",
+      "cell": [
+        4,
+        4
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_terminal_original": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "1d1893bcdb7f2dca27782c09b199b794973093d5ece885a72aa057a35fcf50a4",
+      "cell": [
+        5,
+        4
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_break_loop": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "d7dcd1a4d1e9704027beeacb0095ced42264856a0ef61e93849b57a3375b6c2d",
+      "cell": [
+        0,
+        5
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_own_controls": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "a2127687080e1ae04a51f401a18a5ca99f55a951f706016a4e0178b3a7057ce3",
+      "cell": [
+        1,
+        5
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_first_compile": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "bc7744db986c94e7adb949504daeeb67cdad65af4ac97ab68fc67a3c17462556",
+      "cell": [
+        2,
+        5
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_heart_whole": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "6333c8837362cf5e339f3496f6475274814f892e6dbf02cf265f3e66d4f78657",
+      "cell": [
+        3,
+        5
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
+    },
+    "achievement_chapter_five": {
+      "sources": [
+        "assets/art_source/achievements_v2/atlas.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "f388c080ec12fdb9e127d14d1f7cec9a106fe39cc006edb676e2c9e05ec5bb92",
+      "cell": [
+        4,
+        5
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     },
     "achievement_unknown": {
       "sources": [
-        "block/netherrack",
-        "block/grass_block_side",
-        "block/grass_block_top",
-        "item/flint_and_steel",
-        "block/obsidian",
-        "item/amethyst_shard",
-        "item/netherite_sword",
-        "block/oak_planks",
-        "entity/chest/normal",
-        "block/stone_bricks",
-        "item/iron_sword",
-        "block/polished_blackstone_bricks",
-        "item/netherite_axe",
-        "item/book",
-        "item/ender_eye",
-        "block/end_stone",
-        "block/dragon_egg",
-        "item/arrow",
-        "item/bow_pulling_2",
-        "block/diamond_block",
-        "item/iron_chestplate",
-        "item/apple",
-        "entity/player/wide/steve"
+        "assets/art_source/achievements_v2/atlas.png"
       ],
       "size": [
         32,
         32
       ],
-      "sha256": "5c0ad12cf680768bf303a5b3dba0a8d7c83383330d0f2b24f20be14660ae02d9"
+      "sha256": "7666257f400021a2ac49371b877aae262f0ba8292cd4df6d97d50e4692f5d28c",
+      "cell": [
+        5,
+        5
+      ],
+      "origin": "Imagegen atlas, guided by local vanilla Minecraft icons; nearest 32px export and a shared gray pixel frame."
     }
   },
   "sound_files": {
@@ -520,5 +643,59 @@
     }
   },
   "font": "Existing Minecraft bold bitmap font; same glyphs as the game interface.",
-  "notes": "Original compositions of local Minecraft resources; no imagegen or external icons."
+  "art": {
+    "tool": "image_gen.imagegen",
+    "model": "Not exposed by the built-in tool",
+    "requested_model": "ChatGPT Image 2.5",
+    "source": "assets/art_source/achievements_v2/atlas.png",
+    "sha256": "ef00104f83e72d4067f7ae5820d24bf0b57b0c215596dae8723d296c7fe709ea",
+    "grid": [
+      6,
+      6
+    ],
+    "cell_order": [
+      "chapter_one",
+      "first_evolution",
+      "full_inventory",
+      "sword_only",
+      "two_weapons",
+      "no_evolutions",
+      "chapter_two",
+      "chapter_three",
+      "bow_only",
+      "untouched",
+      "no_healing",
+      "herobrine",
+      "blood_moon",
+      "end_city",
+      "witch_hunter",
+      "phantom_slayer",
+      "bastion",
+      "windswept",
+      "fatality",
+      "bad_ending",
+      "trailblazer",
+      "boss_angler",
+      "void_bouncer",
+      "shell_rescue",
+      "read_note",
+      "free_golem",
+      "cart_rider",
+      "healing_undead",
+      "chapter_four",
+      "terminal_original",
+      "break_loop",
+      "own_controls",
+      "first_compile",
+      "heart_whole",
+      "chapter_five",
+      "unknown"
+    ],
+    "prompt": "docs/ACHIEVEMENT_ART_PROMPT.txt",
+    "native_reference": "assets/art_source/achievements_v2/native_reference.png",
+    "overrides": {
+      "assets/art_source/achievements_v2/chapter_three.png": "8a3da6e0828b3233ce0154874b6d1a7543b12b364c40e4aaaa4b2dc00f443983"
+    }
+  },
+  "notes": "Achievement artwork uses imagegen at the user's request. It is not byte-identical Mojang artwork. Native audio is unchanged."
 }

@@ -65,6 +65,10 @@ var freeze=0.0
 var sparks: Array=[]
 ## Steve's gear spilling out when he dies, as on any death in the game.
 var lost: Array=[]
+## The throne fight v2 (13.11): he does not sit it out. Between storms he leaves the
+## throne, blinks to Steve, lunges, slams, laughs (the opening), and returns.
+var assault: Dictionary={}
+var next_assault=2.5
 
 func reset():
 	active=false;complete=false;elapsed=0;phase="";phase_age=0;fight_age=0;ritual_elapsed=0
@@ -105,6 +109,7 @@ func throne_built() -> float:
 	return 1.0
 func giant_visible() -> bool:
 	if phase=="throne":return phase_age>=THRONE_SEAT
+	if phase in ["storm","inferno"]:return assault.is_empty()
 	if phase=="showtime":return phase_age<.45
 	if phase=="descend":return phase_age<.4 or phase_age>=WHISPER[1]+.25
 	return phase not in ["arrival","greet","tease"]
@@ -117,7 +122,8 @@ func camera(w) -> Vector2:
 	if phase=="arrival":return start_camera.lerp(CENTER+Vector2(0,38),smoothstep(0,2.6,phase_age))
 	if phase in ["greet","throne"]:return CENTER+Vector2(0,38)
 	if phase in ["tease","storm","inferno"]:
-		var desired=(w.player.lerp(CENTER+Vector2(0,-20),.65)).clamp(w.player-Vector2(245,125),w.player+Vector2(245,125))
+		# Throne v2 is taller: frame it whole, with room above for the HUD.
+		var desired=(w.player.lerp(CENTER+Vector2(0,-62),.62)).clamp(w.player-Vector2(245,140),w.player+Vector2(245,125))
 		var settle: float=phase_age if phase=="tease" else fight_age
 		return (CENTER+Vector2(0,38)).lerp(desired,smoothstep(0,1.2,settle)) if settle<1.2 else desired
 	if phase in ["showtime","descend"]:return ritual_camera.lerp(w.player+Vector2(0,-14),smoothstep(0,1.0,ritual_elapsed))
@@ -143,7 +149,7 @@ func hit(w, amount: float):w.damage_player(amount)
 func change(next: String):phase=next;phase_age=0;cues=0
 
 func clear_combat(w):
-	strikes.clear();waves.clear();villager={};
+	strikes.clear();waves.clear();villager={};assault={};hb_visible=false;on_throne=true
 	for pool in [w.mobs,w.projectiles,w.effects,w.tasks,w.weapon_visuals,w.attack_visuals]:pool.clear()
 	w.hit_grid.clear();w.player_moving=false
 
@@ -285,8 +291,9 @@ func combat(w, dt: float, movement: Vector2):
 	w.rebuild_hit_grid();w.update_attacks(dt);w.update_projectiles(dt);w.update_effects(dt);w.pickup(dt)
 	if boss.hp<=0:begin_second(w);return
 	villager_step(w,dt);crawlers(w,dt)
-	# While he wrings a villager, his storm holds its breath.
-	var twisting: bool=not villager.is_empty() and villager.age<3.2
+	assault_step(w,dt)
+	# While he wrings a villager or fights in person, his storm holds its breath.
+	var twisting: bool=(not villager.is_empty() and villager.age<3.2) or not assault.is_empty()
 	if twisting:next_strike+=dt;next_wave+=dt
 	while fight_age>=next_strike:
 		var target=w.player if strike_index%3!=2 else CENTER+Vector2.from_angle(strike_index*2.399)*rng.randf_range(180,430)
@@ -308,6 +315,54 @@ func combat(w, dt: float, movement: Vector2):
 		if absf(w.player.distance_to(CENTER)-wave.radius)<14 and wave_active(CENTER.direction_to(w.player).angle(),wave):hit(w,2.5)
 		if wave.radius>1200:waves.remove_at(i)
 	if w.hp<=0:begin_show(w)
+
+## Off by the user's call (13.11): after the mockery he stays on the throne.
+const ASSAULTS := false
+func assault_step(w, dt: float):
+	if not ASSAULTS:boss.p=BOSS_AT;boss.radius=26.0;return
+	if assault.is_empty():
+		boss.p=BOSS_AT;boss.radius=26.0;hb_visible=false;on_throne=true
+		if fight_age<next_assault or not villager.is_empty():return
+		assault={"state":"warp","age":0.0,"round":0,"rounds":2 if boss.hp>boss.max_hp*.5 else 3}
+		teleport_from=BOSS_AT;w.sound("herobrine_warp",.1)
+		hb_p=(w.player+Vector2.from_angle(rng.randf()*TAU)*90).clamp(CENTER-Vector2(300,170),CENTER+Vector2(300,220))
+		hb_visible=true;on_throne=false;pose("aura");boss.radius=9.0
+	var a: Dictionary=assault;a.age+=dt
+	boss.p=hb_p;hb_dir=hb_p.direction_to(w.player) if a.state!="dash" else hb_dir
+	match a.state:
+		"warp":
+			if a.age>=.35:a.state="dash_wind";a.age=0.0;a.from=hb_p;a.to=(w.player+hb_p.direction_to(w.player)*40).clamp(CENTER-Vector2(300,170),CENTER+Vector2(300,220));pose("donut_wind");w.sound("ch4_hb_charge",.1)
+		"dash_wind":
+			if a.age>=.62:a.state="dash";a.age=0.0;pose("donut");w.sound("ch1_whoosh",.05);hb_dir=Vector2(a.from).direction_to(a.to)
+		"dash":
+			var before: Vector2=hb_p
+			hb_p=Vector2(a.from).lerp(a.to,smoothstep(0,.2,a.age))
+			ghosts.append({"p":before,"pose":"donut","age":0.0,"dir":hb_dir})
+			if not a.get("hit",false) and Geometry2D.get_closest_point_to_segment(w.player,before,hb_p).distance_to(w.player)<13:a.hit=true;hit(w,3.0)
+			if a.age>=.24:
+				a.state="slam_wind";a.age=0.0;pose("snap");a.hit=false
+				a.marks=[]
+				for j in range(6):a.marks.append((hb_p+Vector2.from_angle(j*TAU/6+rng.randf())*rng.randf_range(34,70)))
+		"slam_wind":
+			if a.age>=.7:
+				a.state="slam";a.age=0.0;pose("cast");w.shake=.25;w.sound("lightning",.1);w.sound("ch4_ground_slam",.1)
+				for q in a.marks:
+					if q.distance_to(w.player)<18:hit(w,2.5);break
+				if hb_p.distance_to(w.player)<32:hit(w,2.0)
+		"slam":
+			if a.age>=.35:a.state="taunt";a.age=0.0;pose("laugh");if rng.randf()<.5:say(["Медленно","Ну же","Ещё","Скучно"][rng.randi_range(0,3)],1.0)
+		"taunt":
+			# The opening: he stands and laughs; this is where Steve's blows land.
+			if a.age>=1.0:
+				a.round=int(a.round)+1
+				if a.round>=int(a.rounds):
+					a.state="return";a.age=0.0;teleport_from=hb_p;w.sound("herobrine_warp",.1)
+				else:
+					teleport_from=hb_p;w.sound("herobrine_warp",.1)
+					hb_p=(w.player+Vector2.from_angle(rng.randf()*TAU)*95).clamp(CENTER-Vector2(300,170),CENTER+Vector2(300,220))
+					a.state="warp";a.age=0.0;pose("aura")
+		"return":
+			if a.age>=.3:assault={};next_assault=fight_age+rng.randf_range(5.5,7.5);hb_visible=false;on_throne=true;hb_p=BOSS_AT;boss.p=BOSS_AT;boss.radius=26.0
 
 # ------------------------------------------------------------------ the endings
 

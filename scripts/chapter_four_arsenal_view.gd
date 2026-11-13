@@ -51,6 +51,11 @@ static func player(g,offset: Vector2):
 	if a.bat_left>0:
 		FxView.flock(g,p,a.bat_direction,w.clock,a.bat_left,float(a.rules(w).bat_duration))
 		return
+	if a.cart_left>0:
+		cart(g,p,a.cart_dir,w.clock,true)
+		body(g,p-Vector2(0,7),a.cart_dir,"idle","idle",0,g.invulnerable_tint())
+		cart(g,p,a.cart_dir,w.clock,false)
+		return
 	var recoil:=Vector2.ZERO
 	if a.heart_buff>0 and g.settings.shake:recoil=Vector2(sin(w.clock*65),cos(w.clock*41))*.7
 	if a.actions.has("shotgun"):
@@ -66,8 +71,31 @@ static func player(g,offset: Vector2):
 			var q: Vector2=p+Vector2.from_angle(w.clock*.8+j*TAU/3)*15-Vector2(0,14)
 			g.draw_colored_polygon(PackedVector2Array([q+Vector2(0,-3),q+Vector2(2,0),q+Vector2(0,3),q+Vector2(-1,0)]),Color(.7,.8,.8,.8))
 
+## The minecart: a pixel iron tub, back half behind the rider, front half over him.
+static func cart(g,p: Vector2,dir: Vector2,clock: float,back: bool):
+	var w2: float=13.0 if absf(dir.x)>absf(dir.y) else 10.0
+	var bob: float=round(sin(clock*30)*.6)
+	if back:
+		g.oval(p+Vector2(0,1),Vector2(w2+2,4),Color(0,0,0,.45))
+		g.draw_rect(Rect2(p+Vector2(-w2,-13+bob),Vector2(w2*2,5)),Color(.26,.27,.3))
+		return
+	g.draw_rect(Rect2(p+Vector2(-w2,-9+bob),Vector2(w2*2,8)),Color(.47,.48,.52))
+	g.draw_rect(Rect2(p+Vector2(-w2,-9+bob),Vector2(w2*2,1)),Color(.72,.73,.78))
+	g.draw_rect(Rect2(p+Vector2(-w2,-2+bob),Vector2(w2*2,1)),Color(.2,.2,.23))
+	for x in [-w2+3,w2-5]:g.draw_rect(Rect2(p+Vector2(x,-2),Vector2(3,3)),Color(.12,.12,.13))
+	for k in range(3):
+		var t: float=fposmod(clock*9+k*.33,1.0)
+		g.draw_rect(Rect2((p-dir*(w2+t*10)+Vector2((k-1)*3,-1-t*3)).floor(),Vector2(1,1)),Color(1,.8,.4,1-t))
+
 static func floor_layer(g,offset: Vector2):
 	var w=g.world;var a=w.arsenal
+	for rl in a.rails:
+		var al: float=1.0-smoothstep(4.5,6.0,rl.age)
+		var d: Vector2=Vector2(rl.b-rl.a);if d.length()<.1:continue
+		var side: Vector2=d.normalized().orthogonal()*4.0;var pa: Vector2=rl.a+offset;var pb: Vector2=rl.b+offset
+		g.draw_line(pa-side*1.6,pb-side*1.6,Color(.36,.24,.14,al),3)
+		g.draw_line((pa+pb)/2-side*2.2,(pa+pb)/2+side*2.2,Color(.42,.29,.17,al),3)
+		g.draw_line(pa-side,pb-side,Color(.62,.62,.66,al),1);g.draw_line(pa+side,pb+side,Color(.62,.62,.66,al),1)
 	for pool in a.pools:
 		var p: Vector2=pool.p+offset;var points:=PackedVector2Array()
 		for j in range(24):
@@ -127,6 +155,13 @@ static func air_layer(g,offset: Vector2):
 	for b in a.drops:
 		if b.wait>0:continue
 		var p: Vector2=b.p+offset
+		if b.get("big",false):
+			g.oval(p,Vector2(10+14*(1-b.height/170),4),Color(0,0,0,.5))
+			g.draw_set_transform(p-Vector2(0,b.height),0,Vector2(2.2,2.2))
+			g.sprite("ch4_sky_charge",Vector2(-16,-25))
+			g.draw_set_transform(Vector2.ZERO)
+			for j in range(6):g.draw_line(p-Vector2(-8+j*3,b.height+40+j*6),p-Vector2(-8+j*3,b.height+70+j*9),Color(1,.6,.3,.35),1)
+			continue
 		g.oval(p,Vector2(4+6*(1-b.height/105),2),Color(0,0,0,.4))
 		g.sprite("ch4_sky_charge",p-Vector2(16,25+b.height))
 		g.draw_line(p-Vector2(0,b.height+22),p-Vector2(0,b.height+34),Color(.7,.2,.1,.45),1)
@@ -160,14 +195,23 @@ static func effect(g,e: Dictionary,offset: Vector2) -> bool:
 				var d:=Vector2.from_angle(j*TAU/12);var q: Vector2=p+d*Vector2(30+k*65,12+k*28)
 				g.draw_line(q,q+d*Vector2(9,3),Color(.8,.7,.45,1-k),1)
 		"ch4_sky_blast":
-			var r: float=float(e.get("radius",26))
-			if k<.35:
-				var f: float=k/.35
-				g.oval(p-Vector2(0,6),Vector2(r*(.5+f*.7),r*(.32+f*.4)),Color(1,.55+.4*(1-f),.2,1-f))
-				g.oval(p-Vector2(0,8),Vector2(r*.45,r*.3)*(1-f),Color(1,1,.85,1-f))
-			for j in range(10):
-				var d:=Vector2.from_angle(j*2.39996);var q: Vector2=p+d*(6+k*r*1.2)+Vector2(0,-sin(k*PI)*(10+j%5*3))
-				g.draw_rect(Rect2(q.floor(),Vector2(2,2)),Color(1,.5,.2,1-k))
+			# Vanilla explosion particles, Minecraft-style: a cluster of grey-white puffs
+			# popping at staggered moments, a hot core for two frames, smoke drifting up.
+			var r: float=float(e.get("radius",26));var big: bool=e.get("big",false)
+			var n: int=18 if big else 7
+			if e.age<.07:g.draw_circle(p-Vector2(0,8),r*(.55 if big else .4),Color(1,1,.92,.85*(1-e.age/.07)))
+			for j in range(n):
+				var delay: float=hh(j,int(e.p.x)%97)*(.22 if big else .12)
+				var t: float=e.age-delay
+				if t<0 or t>=.4:continue
+				var off:=Vector2(hh(j,3+int(e.p.y)%53)-.5,(hh(j,5)-.5)*.6)*r*1.5
+				var sz: float=(30.0+hh(j,7)*22.0)*(1.5 if big else 1.0)
+				g.draw_clip("explosion_animation",(p+off-Vector2(sz/2,sz*.75)).floor(),Vector2(sz,sz),t,Color.WHITE,false)
+			for j in range(6 if big else 3):
+				var t: float=e.age-.12-j*.03
+				if t<0:continue
+				var q: Vector2=p+Vector2((hh(j,11)-.5)*r,-10-t*40)
+				g.draw_circle(q,(6+t*18)*(1.4 if big else 1.0),Color(.22,.21,.21,.35*(1-t/.6)))
 		"ch4_heal_splash","ch4_poison_splash":
 			for j in range(12):
 				var d:=Vector2.from_angle(j*2.39996);var q: Vector2=p+d*(6+k*(e.get("radius",26)))+Vector2(0,-sin(k*PI)*(8+j%5))
@@ -196,3 +240,6 @@ static func hud(g):
 ## IV uses exactly the same reveal as every solo chapter.
 static func evolution(g):
 	preload("res://scripts/ui/evolution_view.gd").draw(g,body)
+
+static func hh(i: int, salt: int) -> float:
+	return fposmod(sin(float(i) * 12.9898 + float(salt) * 78.233) * 43758.5453, 1.0)

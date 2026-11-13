@@ -1,4 +1,5 @@
 extends RefCounted
+const Tells=preload("res://scripts/chapter_four_tells.gd")
 const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## World layer of chapter I / II and coop: terrain, actors, projectiles and effects.
 const Lighting = preload("res://scripts/ui/lighting.gd")
@@ -58,14 +59,12 @@ static func draw_world(g):
 			# Dive telegraph: the shadow's landing mark, tightening as the dive nears.
 			var mark: Vector2 = m.mark+offset
 			var k: float = 1.0-m.timer/0.75 if m.phase=="windup" else 1.0
-			g.oval(mark,Vector2(14,5)*(1.6-k*0.6),Color(0.15,0.2,0.5,0.22))
-			g.draw_arc(mark,12.0*(1.6-k*0.6),0,TAU,20,Color(0.55,0.65,1.0,0.5),1)
+			# The same ground language as chapter IV: the swoop's lane cracks open ahead of it.
+			if m.phase=="windup":
+				var dir: Vector2=(m.mark-m.p).normalized()
+				Tells.lane(g,(m.p+offset).floor(),(m.mark+dir*40.0+offset).floor(),8.0,k,int(m.id),g.world.clock)
 		if m.kind == "ravager" and m.phase == "windup":
-			var dir: Vector2 = m.charge
-			var edge = dir.orthogonal()*23
-			g.draw_colored_polygon(PackedVector2Array([p-edge,p+edge,p+dir*160+edge,p+dir*160-edge]),Color(0.93,0.6,0.4,0.14))
-			g.draw_line(p-edge,p+dir*160-edge,Color("deab76"),1)
-			g.draw_line(p+edge,p+dir*160+edge,Color("deab76"),1)
+			Tells.lane(g,p.floor(),(p+m.charge*160).floor(),23.0,clampf(1.0-m.timer/maxf(.01,float(m.get("windup_total",1.0))),0,1),int(m.id),g.world.clock)
 	var actors: Array = []
 	if g.world.finale.active:actors.append({"sort":g.world.finale.CENTER.y+18,"kind":"throne"})
 	if not g.is_nether() and offset.y+ChapterOne.FENCE_S<460:actors.append({"sort":ChapterOne.FENCE_S,"kind":"south_fence"})
@@ -142,6 +141,10 @@ static func draw_world(g):
 			if g.is_nether() and m.kind=="wither":g.nether_renderer.boss(g,m,offset)
 			elif m.kind=="phantom":
 				var lift: float=m.get("altitude",0.0)
+				if m.phase=="dive":
+					for j in range(3):
+						var back: Vector2=m.p-m.charge*(10.0+j*10.0)
+						draw_actor(g,m.kind,back+offset-Vector2(0,lift+j*3),m.visual_dir,m.animation,true,Color(.4,.5,1,.32-j*.09),m.phase,1.0,m.visual)
 				g.oval(m.p+offset+Vector2(0,1),Vector2(12,3)*(1.0-lift/120.0),Color(0.02,0.04,0.12,0.45-lift/200.0))
 				draw_actor(g,m.kind,m.p+offset-Vector2(0,lift),m.visual_dir,m.animation,m.moving,tint,m.phase,1.0,m.visual)
 			else:draw_actor(g,m.kind,m.p+offset,m.visual_dir,m.animation,m.moving,tint,m.phase,1.0,m.visual)

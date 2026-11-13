@@ -21,6 +21,7 @@ python scripts/check_game_music.py
 "$engine" --headless --path . -s qa/test_end.gd
 "$engine" --headless --path . -s qa/test_end_revision.gd
 "$engine" --headless --path . -s qa/test_achievements.gd
+"$engine" --headless --path . -s qa/test_achievements_v2.gd
 "$engine" --headless --path . -s qa/test_v2_content.gd
 "$engine" --headless --path . -s qa/test_chapter_four.gd
 "$engine" --headless --path . -s qa/test_chapter_four_enemies.gd

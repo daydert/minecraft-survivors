@@ -1,0 +1,267 @@
+{
+  "version": "1.21.11",
+  "client_jar": "/home/daydert/.local/share/PrismLauncher/libraries/com/mojang/minecraft/1.21.11/minecraft-1.21.11-client.jar",
+  "raw_files": {
+    "textures/block/coarse_dirt.png": {
+      "sha256": "6889a193decb2c38cd8559456693c15192917c7b917d6ef9c3c2e142f7819ad4",
+      "bytes": 495
+    },
+    "textures/block/tuff.png": {
+      "sha256": "a9e5466e34449fb0c73de64341e38a6bef1bcb16efba2a387a5ad6700af2cd90",
+      "bytes": 185
+    },
+    "textures/block/rooted_dirt.png": {
+      "sha256": "3c59420f80c58794b49f822fb9b251779250b759f5c12111fa29f772a635f42b",
+      "bytes": 210
+    },
+    "textures/block/gravel.png": {
+      "sha256": "bc1558fa64b238fabca4cc957e61c232337d410495784b106676bf73e52e16e0",
+      "bytes": 199
+    },
+    "textures/block/dirt_path_top.png": {
+      "sha256": "653ab9be45372827da221f787435e2ad5adddc6257c29d45fe56947963784ac3",
+      "bytes": 170
+    },
+    "textures/block/crimson_nylium.png": {
+      "sha256": "3c09e4a15255d9d9e67adc946da2ad02a4b3ee983557ff4238e8ca9451d7963d",
+      "bytes": 212
+    },
+    "textures/block/red_concrete_powder.png": {
+      "sha256": "39f9bb7a9f0e11986b65cec8bb58252405f26f048ee3c62397038e3a0eff9e1d",
+      "bytes": 564
+    },
+    "textures/block/nether_wart_block.png": {
+      "sha256": "11c7567e6945e4425cb5eb22bf4b973600fc0ace33f9e556759eb949564e34b1",
+      "bytes": 178
+    },
+    "textures/block/sculk_vein.png": {
+      "sha256": "9f8619b29d925dd86b4124499e09a37b81f85bdf3409f50658c5096516db1236",
+      "bytes": 305
+    },
+    "textures/block/sculk_vein.png.mcmeta": {
+      "sha256": "b85efefc23a5531264d18bb62234a3fd36f8735a4aef0f2f3bb7cdd555cd8995",
+      "bytes": 70
+    },
+    "textures/block/cobblestone.png": {
+      "sha256": "bcda95fdf5afa91747657aa198fc0b69ebf44141de30a718075f74045e9a5def",
+      "bytes": 200
+    },
+    "textures/block/oak_planks.png": {
+      "sha256": "65665943ef9c8bcf63fc67d2083ed0c50243f724106d0e4bb1abea5d921b16d3",
+      "bytes": 195
+    },
+    "textures/block/oak_log.png": {
+      "sha256": "61735859c9c9ea82601191a77c6f256d93619cbaf7cad998a3ed5762877a34e6",
+      "bytes": 191
+    },
+    "textures/block/oak_log_top.png": {
+      "sha256": "a520800a833ea0c6214481245ab40397aa0c08b4ffc909046dac266386f9fc01",
+      "bytes": 206
+    },
+    "textures/entity/villager/villager.png": {
+      "sha256": "ac6a775858c742fecd5dd18e8f99f308701650e770d30da97773daab92b6f5bd",
+      "bytes": 700
+    },
+    "textures/entity/villager/type/plains.png": {
+      "sha256": "54ea90f039d36436afb94bdb56a4a332746d3390a483db9765e3f651c53b619d",
+      "bytes": 686
+    },
+    "textures/block/redstone_torch.png": {
+      "sha256": "160caba109123055dc002a7471439cb32502cbcb07074524be564782586872a6",
+      "bytes": 150
+    },
+    "textures/block/polished_blackstone.png": {
+      "sha256": "4a36ac06b65d5330bc83e4711b4f62c3afe788b95526f2983730461a35b401ff",
+      "bytes": 189
+    },
+    "textures/block/iron_block.png": {
+      "sha256": "dafa9944ba49fe71958553eded50e87d7bea9c7410cfe568745989bede101c49",
+      "bytes": 169
+    },
+    "textures/block/polished_blackstone_bricks.png": {
+      "sha256": "91d65c74a532535cd761b4f6760467e907450c9bfa7adc6b2e11587f00942953",
+      "bytes": 190
+    },
+    "textures/block/chiseled_polished_blackstone.png": {
+      "sha256": "fa713a4d1d0269482764471949cc9feee2c35fc13c0309a9826b3602940ce82c",
+      "bytes": 179
+    },
+    "textures/block/red_concrete.png": {
+      "sha256": "4069c61ef07e5c113c2e0850b009d8c814c21881525535a01dffea7d52fd1896",
+      "bytes": 195
+    },
+    "textures/block/shroomlight.png": {
+      "sha256": "5f20769b4ba22f548a1907e03e91ac76b702e94e0612a02ab4840ff843d49237",
+      "bytes": 217
+    },
+    "textures/block/water_still.png": {
+      "sha256": "683df6ad9c23a50b7ce9323a5fe231aa79f94a63c6d750f3cf87a1fd44422551",
+      "bytes": 1481
+    },
+    "textures/block/water_still.png.mcmeta": {
+      "sha256": "e9b8025fde1b09b0a4d2a38427b04f98f28a593045be6d177eb2b29164c872b0",
+      "bytes": 44
+    },
+    "textures/block/mushroom_stem.png": {
+      "sha256": "9633dd875492cf5240be3e2442e4729c2350912f4b0b565c9f01640195466401",
+      "bytes": 170
+    },
+    "textures/item/paper.png": {
+      "sha256": "046228bbea6334f90e915ea62c6b4050016a6b1aa575734d630a10688d9b11e7",
+      "bytes": 173
+    }
+  },
+  "derived": {
+    "ch4_ground": {
+      "sources": [
+        "block/coarse_dirt",
+        "block/tuff",
+        "block/rooted_dirt",
+        "block/coarse_dirt",
+        "block/gravel",
+        "block/dirt_path_top",
+        "block/crimson_nylium",
+        "block/red_concrete_powder",
+        "block/nether_wart_block",
+        "block/sculk_vein"
+      ],
+      "size": [
+        2048,
+        2048
+      ],
+      "sha256": "7b4247059e2c1a407421a68b1dc47e33f42a25947e6df517165bd2ffee5bd697"
+    },
+    "ch4_house_0": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        112,
+        80
+      ],
+      "sha256": "f59328bc652e0c2d13063762f8a4ba1bad3bc680aa071f1c96ab17b5e030cb81"
+    },
+    "ch4_house_1": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        112,
+        80
+      ],
+      "sha256": "fe95e407ab99718ba9f0dc4e1240619ecfab977966b64482c07cda3ca837380f"
+    },
+    "ch4_crucifix_0": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        64,
+        96
+      ],
+      "sha256": "d7257d94b759fa712ee17b0f80a79ecb928a09126e4f7f7314c9a0abffb4d676"
+    },
+    "ch4_crucifix_1": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        64,
+        96
+      ],
+      "sha256": "b3452badc0554dd4df03dbd466c3c6524aeff95445ef43539dcbcd3893126109"
+    },
+    "ch4_red_torch": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        16,
+        24
+      ],
+      "sha256": "1e3a5e4a74789d4f3621db271ac1b882f929ee8efae145d11ef1bf9ea48b26f0"
+    },
+    "ch4_cursed_torch": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        32,
+        40
+      ],
+      "sha256": "b8c8aff8f59752654c9dd135246efce7aa850e97837b4ec005338ffe28362ff6"
+    },
+    "ch4_pyramid": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        288,
+        176
+      ],
+      "sha256": "aab1985bc0cbac6b236c94d6a442232a9fe62aaadfe5c7ae66c4ccffe3724781"
+    },
+    "ch4_growth_0": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        48,
+        48
+      ],
+      "sha256": "2f45dcedddde050b14919396f727d7ebaf32c36e58880ee5237e46484f2ccc9c"
+    },
+    "ch4_growth_1": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        48,
+        48
+      ],
+      "sha256": "83337519aadb4ab1713c93567f7ecb90bd083d2e5952b8836ebc04639451ced6"
+    },
+    "ch4_growth_big": {
+      "sources": [
+        "vanilla block/entity textures"
+      ],
+      "size": [
+        128,
+        112
+      ],
+      "sha256": "edad5403a1d12ae2b965c838b3c1a1b8d5bd423f17e447b069cc9bb907a86175"
+    },
+    "ch4_blood_animation": {
+      "sources": [
+        "block/water_still"
+      ],
+      "size": [
+        512,
+        16
+      ],
+      "sha256": "e61260f95c4728b8761d2ce5ab6f17be432d9ebc27395fc772fd377eb6c1d247"
+    },
+    "ch4_hand": {
+      "sources": [
+        "block/nether_wart_block",
+        "block/mushroom_stem"
+      ],
+      "size": [
+        640,
+        72
+      ],
+      "sha256": "318cc972921a019a76e8e5f7bcdf1e3e2bfa4f9c5edc20f946000399879f1054"
+    },
+    "icon_ch4_note": {
+      "sources": [
+        "item/paper"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "046228bbea6334f90e915ea62c6b4050016a6b1aa575734d630a10688d9b11e7",
+      "byte_identical": true
+    }
+  }
+}

@@ -3,10 +3,11 @@ from pathlib import Path
 import zipfile,hashlib,json,stat,subprocess
 ROOT=Path(__file__).resolve().parent.parent
 OUT=ROOT/'builds'
-readme='''Minecraft Survivors · V2 · Главы I–III + мир IV · Кооп
+readme='''Minecraft Survivors · V2 · Главы I–V · Кооп
 
 Играть → выбор главы: Верхний мир, Незер, Край или Обычный мир. Оружие атакует автоматически.
-Достижения: кнопка в выборе главы и в одиночной паузе. Всего 18 достижений.
+Достижения: кнопка в выборе главы и в одиночной паузе. Всего 35 достижений.
+Сюжетные достижения скрыты до получения. Старый прогресс сохраняется.
 Прогресс сохраняется на этом компьютере. В коопе достижения не выдаются.
 Забег начинается с мечом. Для «Только стрелы» его нельзя улучшать;
 найдя лук, уберите меч через I за 3 секунды. Сам лук можно развивать.
@@ -78,7 +79,8 @@ for label,folder,filename in [('Windows-x64','windows','MinecraftSurvivors.exe')
   z.write(ROOT/'docs/MINECRAFT_END_MANIFEST.json','licenses/MINECRAFT_END_MANIFEST.json')
   z.write(ROOT/'docs/MUSIC_MANIFEST.json','licenses/MUSIC_MANIFEST.json')
   z.write(ROOT/'docs/MINECRAFT_ACHIEVEMENTS_MANIFEST.json','licenses/MINECRAFT_ACHIEVEMENTS_MANIFEST.json')
-  for manifest in ['V2_ASSET_MANIFEST','CHAPTER_FOUR_ASSET_MANIFEST','CHAPTER_FOUR_AUDIO_MANIFEST','CHAPTER_FOUR_MOBS_MANIFEST','CHAPTER_FOUR_EQUIPMENT_MANIFEST','CHAPTER_FOUR_ENCOUNTER_MANIFEST','CHAPTER_FOUR_FINALE_MANIFEST','CHAPTER_FOUR_EXTERNAL_AUDIO']:
+  z.write(ROOT/'docs/MINECART_ICON_MANIFEST.json','licenses/MINECART_ICON_MANIFEST.json')
+  for manifest in ['V2_ASSET_MANIFEST','CHAPTER_FOUR_ASSET_MANIFEST','CHAPTER_FOUR_AUDIO_MANIFEST','CHAPTER_FOUR_MOBS_MANIFEST','CHAPTER_FOUR_EQUIPMENT_MANIFEST','CHAPTER_FOUR_ICON_MANIFEST','CHAPTER_FOUR_ENCOUNTER_MANIFEST','CHAPTER_FOUR_FINALE_MANIFEST','CHAPTER_FOUR_EXTERNAL_AUDIO']:
    z.write(ROOT/f'docs/{manifest}.json',f'licenses/{manifest}.json')
  outputs.append(archive)
 source=OUT/'MinecraftSurvivors-Source.zip'

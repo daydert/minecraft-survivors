@@ -2,7 +2,8 @@
 
 Witch and Phantom are textured cuboids in vanilla model coordinates
 (java_part), projected with the same orthographic camera as every other actor.
-Landmarks are block cuboids. No image generation or painted pixels.
+Landmarks are block cuboids. Achievement icons are packaged from the shared
+saved imagegen atlas; rebuilding never calls an image generator.
 Writes assets/sprites/*.png, data/v2_assets.json and docs/V2_ASSET_MANIFEST.json.
 """
 from __future__ import annotations
@@ -203,27 +204,10 @@ def import_sounds(version):
 
 
 def badge(imp, name, background, icon, tint=None, scale=1.5, crop=None):
-    """Version 2 achievement badge in the existing style: frame, block field, centered icon."""
-    frame = Image.open(OUT / "achievement_chapter_one.png").convert("RGBA")
-    out = Image.new("RGBA", (32, 32))
-    field = imp.tex("block/" + background).crop((0, 0, 16, 16)).resize((32, 32), Image.Resampling.NEAREST)
-    field = Image.blend(field, Image.new("RGBA", (32, 32), (10, 10, 12, 255)), 0.45)
-    out.alpha_composite(field)
-    outer, inner = frame.getpixel((16, 0)), frame.getpixel((16, 1))
-    for x in range(32):
-        for y in range(32):
-            ring = min(x, y, 31 - x, 31 - y)
-            if ring < 2:
-                out.putpixel((x, y), outer if ring == 0 else inner)
-    art = imp.tex(icon)
-    if crop:
-        art = art.crop(crop)
-    if tint:
-        art = tinted(art, tint)
-    size = (round(art.width * scale), round(art.height * scale))
-    art = art.resize(size, Image.Resampling.NEAREST)
-    out.alpha_composite(art, ((32 - size[0]) // 2, (32 - size[1]) // 2))
-    imp.save(out, "achievement_" + name, ["block/" + background, icon])
+    """Keep version 2 rebuilds on the same reviewed achievement atlas."""
+    from bake_achievement_assets import render_badge, ORIGIN
+    imp.save(render_badge(name), "achievement_" + name, ["assets/art_source/achievements_v2/atlas.png"])
+    imp.derived["achievement_" + name]["origin"] = ORIGIN
     return "achievement_" + name
 
 

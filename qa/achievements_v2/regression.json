@@ -1,0 +1,22 @@
+[
+  {
+    "suite": "test_v2_content",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_chapter_four_arsenal",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_chapter_four_encounters",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_chapter_four_finale",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_screen_router",
+    "exit_code": 1
+  }
+]

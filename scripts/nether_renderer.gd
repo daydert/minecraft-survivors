@@ -1,4 +1,6 @@
 extends RefCounted
+const BossBar=preload("res://scripts/ui/boss_bar.gd")
+const Tells=preload("res://scripts/chapter_four_tells.gd")
 var intro=preload("res://scripts/ghast_intro_renderer.gd").new()
 ## Native Minecraft sprites, attack cues and chapter cinematics.
 
@@ -46,16 +48,11 @@ func floor_effects(g, offset: Vector2):
 		if h.wait<=0:continue
 		var p: Vector2=h.p+offset
 		var progress=1-h.wait/h.get("total",1.5)
-		g.oval(p,Vector2(h.radius,h.radius*.65),Color(.12,.35,.4,.1+progress*.12))
-		g.draw_arc(p,h.radius,0,TAU,32,Color(.42,.8,.86,.65),1)
-		for j in range(4):
-			var dir=Vector2.from_angle(j*PI/2+w.clock*.7)
-			g.draw_line(p+dir*(h.radius-3),p+dir*(h.radius+3),Color("b1d9dd"),2)
+		Tells.ring(g,p.floor(),h.radius,progress,w.clock)
 	for m in w.mobs:
 		var p: Vector2=m.p+offset
 		if m.kind=="brute" and m.phase=="windup":
-			var edge: Vector2=m.charge.orthogonal()*14
-			g.draw_colored_polygon(PackedVector2Array([p-edge,p+edge,p+m.charge*112+edge,p+m.charge*112-edge]),Color(1,.55,.3,.15))
+			Tells.lane(g,p.floor(),(p+m.charge*112).floor(),14.0,clampf(1.0-m.timer/maxf(.01,float(m.get("windup_total",.9))),0,1),int(m.id),w.clock)
 		if m.kind!="wither":continue
 		if m.phase=="volley":
 			for j in range(3):
@@ -301,9 +298,7 @@ func effect(g, e: Dictionary, offset: Vector2) -> bool:
 func hud(g):
 	for m in g.world.mobs:
 		if m.kind!="wither" or m.hp<=0:continue
-		g.centered("Иссушитель",41,8,Color.WHITE,true)
-		g.draw_rect(Rect2(191,46,258,6),Color("333333"))
-		g.draw_rect(Rect2(192,47,256*clampf(m.hp/m.max_hp,0,1),4),Color("9b739a"))
+		BossBar.draw(g,"Иссушитель",m.hp/m.max_hp,Color("9b739a"))
 
 func ending(g, controls: bool = true):
 	g.draw_rect(Rect2(0,0,640,360),Color("0c0910"))

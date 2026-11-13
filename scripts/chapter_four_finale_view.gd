@@ -1,4 +1,5 @@
 extends RefCounted
+const BossBar=preload("res://scripts/ui/boss_bar.gd")
 ## Chapter IV finale presentation: Herobrine at full size with his aura, every
 ## telegraph of his attacks, the island, the fistfight close-up, the living
 ## text, the head, the note, the road and the black door. Reads the finale
@@ -48,7 +49,7 @@ static func figure(g, sheet: String, who: String, pose: String, t: float, p: Vec
 	g.draw_set_transform(Vector2.ZERO)
 
 static func aura_color(e) -> Color:
-	return Color(0.85, 0.9, 1.0) if e.phase in ["intro", "one", "kneel", "summit"] else Color(1.0, 0.28, 0.22)
+	return Color(0.85, 0.9, 1.0) if e.phase in ["lure", "intro", "one", "kneel", "summit"] else Color(1.0, 0.28, 0.22)
 
 static func herobrine(g, offset: Vector2, scale: float = -1.0, tint_override: Color = Color(0, 0, 0, 0)):
 	var e = g.world.ending
@@ -71,13 +72,18 @@ static func herobrine(g, offset: Vector2, scale: float = -1.0, tint_override: Co
 	# While he shrinks, the larger self flickers around him for a frame or two.
 	if e.phase == "erase" and e.glitch > 0 and s < float(e.data.giant):
 		figure(g, "ch4_hb_" + e.face, "herobrine", e.pose, e.pose_age, p, hb.visual_dir, minf(float(e.data.giant), s + 0.2), Color(1, 1, 1, 0.35))
-	figure(g, "ch4_hb_" + e.face, "herobrine", e.pose, e.pose_age, p - Vector2(0, lift * s), hb.visual_dir, s, tint, loop)
+	var sheet: String = "ch4_hb_" + e.face
+	# The lure: he wears Alex; the skin flickers off him as it tears.
+	if hb.get("disguise", false) or (e.phase == "lure" and e.glitch > 0 and int(g.world.clock * 30) % 2 == 0):sheet = "ch4_alex_lure"
+	if e.phase == "lure" and e.glitch > 0:
+		for k in range(2):figure(g, sheet, "herobrine", e.pose, e.pose_age, p - Vector2(0, lift * s) + Vector2((k * 2 - 1) * 3, 0), hb.visual_dir, s, Color(1, .1, .2, .45) if k else Color(.1, 1, 1, .45), loop)
+	figure(g, sheet, "herobrine", e.pose, e.pose_age, p - Vector2(0, lift * s), hb.visual_dir, s, tint, loop)
 	if intensity > 0.01:aura_front(g, e, p - Vector2(0, lift * s * 0.5), s, intensity, clock)
 
 ## The eyes stay lit in any darkness; they gutter out with his power.
 static func eyes(g, e, p: Vector2, s: float):
 	var hb: Dictionary = e.hb
-	if e.face == "dim" or e.pose in ["lying", "lying_hit", "headless", "fall"] or row_of(hb.visual_dir) == 1:return
+	if hb.get("disguise", false) or e.face == "dim" or e.pose in ["lying", "lying_hit", "headless", "fall"] or row_of(hb.visual_dir) == 1:return
 	var eye_y: float = p.y - 26.0 * s
 	var side = row_of(hb.visual_dir) == 2
 	var x0: float = p.x + (2.0 * signf(hb.visual_dir.x) * s if side else 0.0)
@@ -175,6 +181,23 @@ static func floor_layer(g, offset: Vector2):
 		var k: float = clampf(d.age / float(e.data.two.rain.heavy_windup), 0, 1)
 		if not d.hit:Tells.ring(g, (d.p + offset).floor(), float(e.data.two.rain.heavy_radius), k, clock, Color(0.9, 0.95, 1.0))
 	if e.move == "day":day_floor(g, e, offset)
+	# tester pack 13.11: dash tell, zombie graves, magma wall footprints
+	if e.move == "smash_dash" and e.move_age < .45:
+		Tells.lane(g, Vector2(e.hb.dash_from) + offset, Vector2(e.hb.dash_to) + offset, 15.0, clampf(e.move_age / .45, 0, 1), 77, clock)
+	for r in e.hb.get("raise", []):
+		if r.age < 0:continue
+		var q: Vector2 = (Vector2(r.p) + offset).floor()
+		var k: float = clampf(r.age / .9, 0, 1)
+		if not r.done:
+			Tells.ring(g, q, 14.0, k, clock, Color(.55, 1.0, .5))
+			for i in range(5):
+				var a: float = i * 1.26 + h(int(r.p.x), i) * .8
+				g.draw_line(q, q + Vector2(cos(a), sin(a) * .55) * (6 + 10 * k), Color(.12, .08, .05), 2)
+		else:g.oval(q, Vector2(12, 5), Color(.12, .08, .05, .7 * (1 - clampf((r.age - .9) / 1.2, 0, 1))))
+	for wall in e.hb.get("walls", []):
+		if wall.gone or wall.v != Vector2.ZERO:continue
+		var c: Vector2 = Vector2(wall.c) + offset;var half: Vector2 = Vector2(wall.t) * 26.0
+		g.draw_line(c - half, c + half, Color(1, .45, .1, .35 + .2 * sin(clock * 9)), 9)
 
 static func arena_edge(g, e, offset: Vector2):
 	var r: Rect2 = e.arena
@@ -478,10 +501,63 @@ static func day_floor(g, e, offset: Vector2):
 			g.draw_line(p + side * wid * 0.5, p + dir * length + side * wid * 1.5, Color(1, 0.2, 0.15, 0.6 + 0.3 * sin(clock * 20.0)), 1)
 			g.draw_line(p - side * wid * 0.5, p + dir * length - side * wid * 1.5, Color(1, 0.2, 0.15, 0.6 + 0.3 * sin(clock * 20.0)), 1)
 
+## A small vanilla block (real block texture), drawn like the inventory icon:
+## lit top, front, darker side; it tumbles a little while it orbits or flies.
+static func block_cube(g, p: Vector2, kind: String, spin: float, k: float):
+	var name: String = "ch4_block_" + kind
+	if not g.textures.has(name):g.load_texture(name)
+	var tex: Texture2D = g.textures.get(name)
+	var s: float = 11.0 * k
+	if s < 1 or tex == null:return
+	var lean: float = sin(spin) * .25
+	var d: Vector2 = Vector2(s * .42, -s * .34).rotated(lean * .3)
+	var a: Vector2 = p + Vector2(-s / 2, -s / 2);var b: Vector2 = a + Vector2(s, 0);var c: Vector2 = b + Vector2(0, s);var e: Vector2 = a + Vector2(0, s)
+	var uv := PackedVector2Array([Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1)])
+	g.draw_primitive(PackedVector2Array([a + d, b + d, b, a]), PackedColorArray([Color(1.15, 1.15, 1.15)]), uv, tex)
+	g.draw_primitive(PackedVector2Array([b, b + d, c + d, c]), PackedColorArray([Color(.55, .55, .58)]), uv, tex)
+	g.draw_primitive(PackedVector2Array([a, b, c, e]), PackedColorArray([Color(.85, .85, .85)]), uv, tex)
+	if kind == "magma":g.draw_rect(Rect2(a, Vector2(s, s)), Color(1, .45, .1, .12 + .1 * sin(spin * 3)))
+
+## A slab of magma risen out of the ground; glows, drips, flies when thrown.
+static func magma_wall(g, c: Vector2, t: Vector2, rise: float, clock: float, flying: bool):
+	var half: Vector2 = t * 26.0
+	var hgt: float = 26.0 * rise
+	var a: Vector2 = c - half;var b: Vector2 = c + half
+	g.oval(c, Vector2(28, 6), Color(0, 0, 0, .35))
+	var quad := PackedVector2Array([a, b, b - Vector2(0, hgt), a - Vector2(0, hgt)])
+	g.draw_colored_polygon(quad, Color(.35, .1, .04))
+	var n: int = int(a.distance_to(b) / 6.0)
+	for i in range(n):
+		for j in range(int(hgt / 6.0)):
+			var q: Vector2 = a.lerp(b, (i + .5) / n) - Vector2(0, j * 6 + 3)
+			var glow: float = .5 + .5 * sin(clock * 4 + i * 1.7 + j * 2.3)
+			g.draw_rect(Rect2((q - Vector2(2, 2)).floor(), Vector2(4, 4)), Color(1, .35 + .3 * glow, .08) if (i + j) % 3 == 0 else Color(.5, .14, .05))
+	g.draw_line(a - Vector2(0, hgt), b - Vector2(0, hgt), Color(1, .7, .25, .9), 1)
+	if flying:g.draw_line(c, c - t.orthogonal() * 0, Color.WHITE, 1)
+	for i in range(3):
+		var tt: float = fposmod(clock * 1.4 + i * .33, 1.0)
+		g.draw_rect(Rect2((a.lerp(b, h(i, 60)) - Vector2(0, hgt * (1 - tt))).floor(), Vector2(2, 2)), Color(1, .6, .2, 1 - tt))
+
 static func air_layer(g, offset: Vector2):
 	var e = g.world.ending
 	if e.phase == "":return
 	var clock: float = g.world.clock
+	if e.hb.has("orbit") and e.phase == "two":
+		for i in range(e.hb.orbit.size()):
+			var o: Dictionary = e.hb.orbit[i]
+			if o.grow <= 0.02:continue
+			var q: Vector2 = (e.orbit_pos(i) + offset).floor()
+			var a: float = float(e.hb.orbit_a) + i * TAU / 5.0
+			g.oval(q + Vector2(0, 26 * e.scale() + 2), Vector2(4, 1.5), Color(0, 0, 0, .25))
+			block_cube(g, q, o.kind, a * 2.0, o.grow * (0.82 if sin(a) < 0 else 1.0))
+	for wall in e.hb.get("walls", []):
+		if wall.gone or wall.age < 0:continue
+		magma_wall(g, Vector2(wall.c) + offset, Vector2(wall.t), clampf(wall.age / .5, 0, 1), clock, wall.v != Vector2.ZERO)
+	if float(e.hb.get("burn_left", 0.0)) > 0:
+		var p: Vector2 = g.world.player + offset
+		for i in range(6):
+			var t: float = fposmod(clock * 2.2 + i * .17, 1.0)
+			g.draw_rect(Rect2((p + Vector2(-6 + h(i, 70) * 12, -4 - t * 26)).floor(), Vector2(2, 3)), Color(1, .55 - t * .4, .1, 1 - t))
 	for b in e.shots:
 		var p: Vector2 = (b.p + offset).floor()
 		match b.kind:
@@ -497,6 +573,9 @@ static func air_layer(g, offset: Vector2):
 				g.draw_colored_polygon(PackedVector2Array([p + dir * 6, p + side * 2, p - dir * 4, p - side * 2]), Color(0, 0, 0, 0.8))
 				g.draw_colored_polygon(PackedVector2Array([p + dir * 5, p + side * 1.2, p - dir * 3, p - side * 1.2]), Color(1, 1, 1, glint))
 				if not b.get("frozen", false):g.draw_line(p - dir * 14, p, Color(1, 1, 1, 0.3), 1)
+			"block":
+				block_cube(g, p, b.block, clock * 9.0 + b.spin, 1.0)
+				g.draw_line(p, p - b.v.normalized() * 12, Color(1, 1, 1, .25), 2)
 			"debris":
 				var spin: float = clock * 8.0 + b.get("spin", 0.0)
 				var size: float = 5.0
@@ -685,11 +764,7 @@ static func overlay(g, offset: Vector2):
 
 static func boss_bar(g, e):
 	var hb: Dictionary = e.hb
-	var k: float = maxf(0, hb.hp) / maxf(1, hb.max_hp)
-	g.draw_rect(Rect2(169, 46, 302, 6), Color("1a1416"))
-	g.draw_rect(Rect2(169, 46, 302 * k, 6), Color("d0d0d4") if e.phase == "one" else Color("b8182a"))
-	g.draw_rect(Rect2(169, 46, 302 * k, 1), Color(1, 1, 1, 0.5))
-	g.centered("Херобрин", 40, 8, g.INK)
+	BossBar.draw(g, "Херобрин", maxf(0, hb.hp) / maxf(1, hb.max_hp), Color("d0d0d4") if e.phase == "one" else Color("b8182a"))
 
 ## Day acceleration: sun and moon race over the sky leaving trails, the stars
 ## wheel; when time stops both hang in one sky and everything goes cold.
@@ -1185,7 +1260,7 @@ static func prompt(g, e):
 
 static func words(g, e, offset: Vector2):
 	for t in e.text_events:
-		var age: float = e.age - t.at
+		var age: float = e.talk - t.at
 		if age < 0:continue
 		match t.style:
 			"calm":calm_line(g, e, t, age, offset)

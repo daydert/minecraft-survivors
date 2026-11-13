@@ -33,6 +33,10 @@ PYRAMID = (1460, 1440)
 POOLS = [((1300, 640), 92), ((560, 1360), 78), ((1660, 1090), 64)]
 FLESH = [(VILLAGE, 250), (POOLS[0][0], 170), (PYRAMID, 300), ((860, 1520), 120)]
 ROADS = [(SPAWN, VILLAGE), (SPAWN, PYRAMID), (VILLAGE, (560, 1360))]
+# Outlying execution sites (13.11): the village is not the only place villagers hang.
+CRUCIFIX_SITES = [[(1380, 520), (1424, 536)], [(1770, 760), (1814, 744), (1858, 760)], [(1790, 1190)],
+                  [(960, 1720), (1004, 1736), (1048, 1720)], [(370, 1440), (414, 1424)],
+                  [(980, 300), (1024, 316), (1068, 300)], [(250, 960)], [(1250, 880)]]
 
 
 def field(seed, cells, scale):
@@ -356,6 +360,9 @@ def generate():
     for origin in [(PYRAMID[0], PYRAMID[1] + 100), (POOLS[0][0][0] - 110, POOLS[0][0][1] + 115)]:
         for i in range(3):
             props.append({"type": "torch", "hostile": True, "p": [origin[0] + (i - 1) * 76, origin[1] + (24 if i == 1 else 0)]})
+    for site in CRUCIFIX_SITES:
+        for i, p in enumerate(site):
+            props.append({"type": "crucifix", "variant": i % 2, "p": list(p)})
     terrain = {"size": SIZE, "tiles": TILES, "spawn": SPAWN, "village": VILLAGE, "pyramid": PYRAMID,
                "note": [VILLAGE[0] + 110, VILLAGE[1] + 24],
                "pools": [{"p": list(c), "r": r} for c, r in POOLS], "pool_cells": pool_cells,

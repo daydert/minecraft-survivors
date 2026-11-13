@@ -8,34 +8,31 @@
     {
       "chapter": 1,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "sword_netherite",
       "id": "sword",
-      "title": "Незеритовый меч",
-      "video_time": 0.0
+      "title": "Незеритовый меч"
     },
     {
       "chapter": 1,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "flamebow",
       "id": "bow",
-      "title": "Лук с горящей стрелой",
-      "video_time": 2.7
+      "title": "Лук с горящей стрелой"
     },
     {
       "chapter": 1,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "channeling",
       "id": "trident",
-      "title": "Трезубец с громовержцем",
-      "video_time": 5.4
+      "title": "Трезубец с громовержцем"
     },
     {
       "chapter": 2,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "sword_netherite",
       "id": "sword",
       "title": "Незеритовый меч"
@@ -43,7 +40,7 @@
     {
       "chapter": 2,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "flamebow",
       "id": "bow",
       "title": "Лук с горящей стрелой"
@@ -51,7 +48,7 @@
     {
       "chapter": 2,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "channeling",
       "id": "trident",
       "title": "Трезубец с громовержцем"
@@ -59,61 +56,55 @@
     {
       "chapter": 2,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "axe_netherite",
       "id": "axe",
-      "title": "Зачарованный незеритовый топор",
-      "video_time": 8.1
+      "title": "Зачарованный незеритовый топор"
     },
     {
       "chapter": 2,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "hoe_netherite",
       "id": "hoe",
-      "title": "Зачарованная незеритовая мотыга",
-      "video_time": 10.8
+      "title": "Зачарованная незеритовая мотыга"
     },
     {
       "chapter": 2,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "bed",
       "id": "bed",
-      "title": "Взрывной сон",
-      "video_time": 13.5
+      "title": "Взрывной сон"
     },
     {
       "chapter": 2,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "tnt",
       "id": "tnt",
-      "title": "Цепная реакция",
-      "video_time": 16.2
+      "title": "Цепная реакция"
     },
     {
       "chapter": 2,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "firework",
       "id": "crossbow",
-      "title": "Арбалет с фейерверками",
-      "video_time": 18.9
+      "title": "Арбалет с фейерверками"
     },
     {
       "chapter": 2,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "fishing",
       "id": "fishing",
-      "title": "Ловец душ",
-      "video_time": 21.6
+      "title": "Ловец душ"
     },
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "sword_netherite",
       "id": "sword",
       "title": "Незеритовый меч"
@@ -121,7 +112,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "flamebow",
       "id": "bow",
       "title": "Лук с горящей стрелой"
@@ -129,7 +120,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "channeling",
       "id": "trident",
       "title": "Трезубец с громовержцем"
@@ -137,7 +128,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "axe_netherite",
       "id": "axe",
       "title": "Зачарованный незеритовый топор"
@@ -145,7 +136,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "hoe_netherite",
       "id": "hoe",
       "title": "Зачарованная незеритовая мотыга"
@@ -153,7 +144,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "bed",
       "id": "bed",
       "title": "Взрывной сон"
@@ -161,7 +152,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "tnt",
       "id": "tnt",
       "title": "Цепная реакция"
@@ -169,7 +160,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "firework",
       "id": "crossbow",
       "title": "Арбалет с фейерверками"
@@ -177,7 +168,7 @@
     {
       "chapter": 3,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "fishing",
       "id": "fishing",
       "title": "Ловец душ"
@@ -185,223 +176,199 @@
     {
       "chapter": 3,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "spear_netherite",
       "id": "spear",
-      "title": "Ракетное копьё",
-      "video_time": 24.3
+      "title": "Ракетное копьё"
     },
     {
       "chapter": 3,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "mace",
       "id": "mace",
-      "title": "Булава с порывом ветра",
-      "video_time": 27.0
+      "title": "Булава с порывом ветра"
     },
     {
       "chapter": 3,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "end_crystal",
       "id": "end_crystal",
-      "title": "Резонанс Края",
-      "video_time": 29.7
+      "title": "Резонанс Края"
     },
     {
       "chapter": 3,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "knockback_stick",
       "id": "knockback_stick",
-      "title": "Палка отдачи X",
-      "video_time": 32.4
+      "title": "Палка отдачи X"
     },
     {
       "chapter": 3,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "dragon_breath",
       "id": "dragon_breath",
-      "title": "Пурпурное пламя",
-      "video_time": 35.1
+      "title": "Пурпурное пламя"
     },
     {
       "chapter": 3,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "shield",
       "id": "shield",
-      "title": "Зачарованный щит",
-      "video_time": 37.8
+      "title": "Зачарованный щит"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_bedrock_sword",
       "id": "sword",
-      "title": "Бедроковый меч",
-      "video_time": 40.5
+      "title": "Бедроковый меч"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "flamebow",
       "id": "bow",
-      "title": "Лук с горящей стрелой",
-      "video_time": 43.2
+      "title": "Лук с горящей стрелой"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "channeling",
       "id": "trident",
-      "title": "Трезубец с громовержцем",
-      "video_time": 45.9
+      "title": "Трезубец с громовержцем"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "axe_netherite",
       "id": "axe",
-      "title": "Зачарованный незеритовый топор",
-      "video_time": 48.6
+      "title": "Зачарованный незеритовый топор"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "hoe_netherite",
       "id": "hoe",
-      "title": "Зачарованная незеритовая мотыга",
-      "video_time": 51.3
+      "title": "Зачарованная незеритовая мотыга"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "bed",
       "id": "bed",
-      "title": "Взрывной сон",
-      "video_time": 54.0
+      "title": "Взрывной сон"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "tnt",
       "id": "tnt",
-      "title": "Цепная реакция",
-      "video_time": 56.7
+      "title": "Цепная реакция"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "fishing",
       "id": "fishing",
-      "title": "Ловец душ",
-      "video_time": 59.4
+      "title": "Ловец душ"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_shotgun_evo",
       "id": "shotgun",
-      "title": "Двуствольный дробовик",
-      "video_time": 62.1
+      "title": "Двуствольный дробовик"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_blood_pool_evo",
       "id": "blood_pool",
-      "title": "Кровавый источник",
-      "video_time": 64.8
+      "title": "Кровавый источник"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_embryo_evo",
       "id": "embryo",
-      "title": "Порождение",
-      "video_time": 67.5
+      "title": "Порождение"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_bell_evo",
       "id": "bell",
-      "title": "Призрачный колокол",
-      "video_time": 70.2
+      "title": "Призрачный колокол"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_bone_saw_evo",
       "id": "bone_saw",
-      "title": "Кровопийца",
-      "video_time": 72.9
+      "title": "Кровопийца"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_red_torch_evo",
       "id": "red_torch",
-      "title": "Замкнутая цепь",
-      "video_time": 75.6
+      "title": "Замкнутая цепь"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_potion_evo",
       "id": "potion",
-      "title": "Стойкие туманные зелья",
-      "video_time": 78.3
+      "title": "Стойкие туманные зелья"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_iron_maiden",
       "id": "armor",
-      "title": "Железная дева",
-      "video_time": 81.0
+      "title": "Железная дева"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_bat_swarm",
       "id": "bat_wings",
-      "title": "Кровавая стая",
-      "video_time": 83.7
+      "title": "Кровавая стая"
     },
     {
       "chapter": 4,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "ch4_sky_tnt",
       "id": "sky_tnt",
-      "title": "Небесный подрыв",
-      "video_time": 86.4
+      "title": "Небесный подрыв"
     },
     {
       "chapter": 5,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "sword_netherite",
       "id": "sword",
       "title": "Незеритовый меч"
@@ -409,7 +376,7 @@
     {
       "chapter": 5,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "flamebow",
       "id": "bow",
       "title": "Лук с горящей стрелой"
@@ -417,7 +384,7 @@
     {
       "chapter": 5,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "axe_netherite",
       "id": "axe",
       "title": "Зачарованный незеритовый топор"
@@ -425,7 +392,7 @@
     {
       "chapter": 5,
       "distinct_reveal": false,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "firework",
       "id": "crossbow",
       "title": "Арбалет с фейерверками"
@@ -433,56 +400,50 @@
     {
       "chapter": 5,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "debug_stick_evo",
       "id": "debug_stick",
-      "title": "Состояние: мёртв",
-      "video_time": 89.1
+      "title": "Состояние: мёртв"
     },
     {
       "chapter": 5,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "command_block_evo",
       "id": "command_block",
-      "title": "Цепочка команд",
-      "video_time": 91.8
+      "title": "Цепочка команд"
     },
     {
       "chapter": 5,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "barrier_evo",
       "id": "barrier",
-      "title": "Режущий свет",
-      "video_time": 94.5
+      "title": "Режущий свет"
     },
     {
       "chapter": 5,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "structure_block_evo",
       "id": "structure_block",
-      "title": "Вставка структуры",
-      "video_time": 97.2
+      "title": "Вставка структуры"
     },
     {
       "chapter": 5,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "spawn_egg_evo",
       "id": "spawn_egg",
-      "title": "Старые знакомые",
-      "video_time": 99.9
+      "title": "Старые знакомые"
     },
     {
       "chapter": 5,
       "distinct_reveal": true,
-      "duration": 1.7,
+      "duration": 2.6,
       "icon": "repeating_block",
       "id": "repeating_block",
-      "title": "Остановленный процесс",
-      "video_time": 102.6
+      "title": "Остановленный процесс"
     }
   ]
 }

@@ -32,13 +32,15 @@ func run():
 	check(w.stage=="finale" and e.phase=="summit","At 12:00 the waves stop and the pyramid calls")
 	check(w.mobs.filter(func(m):return m.has("form") and m.hp>0).is_empty(),"Remaining mobs dissolve at the summit")
 	w.player=e.center+Vector2(0,150);advance(w,.05)
-	check(e.phase=="intro" and not e.hb.is_empty() and e.scale()>=2.0,"Approaching the arena starts Herobrine's introduction at twice a man's height")
+	check(e.phase=="lure" and not e.hb.is_empty() and e.hb.get("disguise",false),"Approaching the arena: he lies there wearing Alex (tester pack lure)")
 	check(e.locked() and w.camera().distance_to(w.player)>=0,"The introduction holds the world still")
 	var said=false
-	for i in range(ceili(9*60)):
+	var big=false
+	for i in range(ceili(24*60)):
 		w.step(1.0/60)
-		if e.text_events.any(func(t):return t.text=="Ты опять здесь!"):said=true
-	check(said,"Herobrine says «Ты опять здесь.» without surprise")
+		if e.text_events.any(func(t):return t.text=="Ты реально повёлся, нищий?"):said=true
+		if e.phase=="intro" and e.scale()>=2.0:big=true
+	check(said and big,"He sheds the disguise at twice a man's height and mocks Steve")
 	check(e.phase=="tower","The introduction ends with him raising a tower")
 	advance(w,2.0)
 	check(e.tower_h>=float(e.data.tower.height) and e.hb.get("perched",false) and e.candidates().is_empty(),"He stands on the tower out of reach")
@@ -191,7 +193,7 @@ func handoff_checks():
 		w.db.data.chapter_four.exploration_only=false;advance(w,1.0)
 		check(e.candidates().is_empty() and e.current.is_empty() and not e.golem.visible,"Survival encounters cannot restart after 12:00: "+encounter)
 		w.player=w.ending.center+Vector2(0,150);w.step(.02)
-		check(w.ending.phase=="intro" and e.visual_camera(w,w.camera())==w.camera(),"The "+encounter+" cannot override the finale camera")
+		check(w.ending.phase in ["lure","intro"] and e.visual_camera(w,w.camera())==w.camera(),"The "+encounter+" cannot override the finale camera")
 	# Both active items must retain their costs and charges during locked scenes.
 	var w=fresh();w.stage="finale";w.items={"heart_booster":5,"bat_wings":5};w.evolved={"bat_wings":true}
 	w.arsenal.tick(w,.01,Vector2.ZERO)

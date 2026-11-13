@@ -1,0 +1,14 @@
+[
+  {
+    "mode": "achievements",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  },
+  {
+    "mode": "achievement_toast",
+    "exit_code": 0,
+    "success": true,
+    "errors": []
+  }
+]

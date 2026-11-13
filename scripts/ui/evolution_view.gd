@@ -23,13 +23,35 @@ static func draw(g, fourth_body: Callable = Callable()):
 		var q:=Vector2(cx+(FxView.hh(j,3)-.5)*130*(1-life*.4),floor_y-life*(150+FxView.hh(j,4)*60))
 		g.draw_rect(Rect2(q.floor(),Vector2(1,2) if j%3 else Vector2(2,2)),Color(1,.86,.5,sin(life*PI)*beam))
 	var held: String=id if w.db.weapons.has(id) else (w.build.keys()[0] if not w.build.is_empty() else "idle")
-	var state: String="idle" if k<.5 else ("attack" if fposmod(t,2.4)<.5 else "idle")
-	var progress: float=fposmod(t,.5)/.5 if state=="attack" else 0.0
+	# Choreography (13.11): he raises the item into the beam, it burns away, he brings
+	# it down into the floor with a slam that rings out, then swings the new one.
+	var state: String="windup";var progress: float=clampf(k/.44,0,1)
+	if k>=.44 and k<.62:state="attack";progress=clampf((k-.44)/.18,0,.999)
+	elif k>=.62:
+		var loop: float=fposmod(t-total*.62,1.3)
+		state="attack" if loop<.45 else "idle";progress=clampf(loop/.45,0,.999)
 	var tint: Color=Color(.05,.04,.05).lerp(Color.WHITE,turn)
 	g.draw_set_transform(Vector2(cx,floor_y),0,Vector2(3,3))
-	if fourth_body.is_valid():fourth_body.call(g,Vector2.ZERO,Vector2.DOWN,held,state,clampf(progress,0,.999),tint,false)
-	else:g.draw_actor("steve",Vector2.ZERO,Vector2.DOWN,t,false,tint,state,1.0,{"state":state,"time":progress*.5,"weapon":held,"airborne":true})
+	if fourth_body.is_valid():fourth_body.call(g,Vector2.ZERO,Vector2.DOWN,held,state,progress,tint,false)
+	else:g.draw_actor("steve",Vector2.ZERO,Vector2.DOWN,t,false,tint,state,1.0,{"state":state,"time":progress*(.16 if state=="windup" else .5),"weapon":held,"airborne":true})
 	g.draw_set_transform(Vector2.ZERO)
+	# The item itself in his hands: lifted overhead, burning, then driven down.
+	var hand:=Vector2(cx+14,floor_y-58-34*smoothstep(0,.4,k))
+	if k>=.44:hand=Vector2(cx+20,floor_y-92).lerp(Vector2(cx+26,floor_y-18),smoothstep(.44,.5,k))
+	if k>=.62:hand=Vector2(cx+20,floor_y-44+sin(t*3)*2)
+	g.item_icon(id,(hand-Vector2(16,16)).floor(),2,k>=.5)
+	if k<.44:
+		for j in range(8):
+			var q:=hand+Vector2.from_angle(j*TAU/8+t*4)*(18-10*k)
+			g.draw_rect(Rect2(q.floor(),Vector2(2,2)),Color(1,.75,.3,.4+.6*k))
+	# The slam: a ring across the floor and splinters of light.
+	if k>=.47 and k<.8:
+		var sk: float=(k-.47)/.33
+		g.draw_arc(Vector2(cx,floor_y),20+sk*170,0,TAU,64,Color(1,.9,.6,(1-sk)*.9),3)
+		g.oval(Vector2(cx,floor_y),Vector2(40+sk*150,10+sk*36),Color(1,.85,.55,.18*(1-sk)))
+		for j in range(14):
+			var d:=Vector2.from_angle(-PI*(.1+.8*FxView.hh(j,21)))
+			g.draw_line(Vector2(cx,floor_y)+d*sk*40,Vector2(cx,floor_y)+d*(sk*40+30*(1-sk)),Color(1,.95,.75,1-sk),2)
 	var lift: float=sin(t*2.0)*3
 	var icon_at:=Vector2(cx-24,64+lift)
 	if k<.5:

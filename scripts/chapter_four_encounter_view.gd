@@ -1,4 +1,5 @@
 extends RefCounted
+const BossBar=preload("res://scripts/ui/boss_bar.gd")
 ## Own native atlas cache and world-space choreography; reads the exact combat
 ## segments, tile proposal and phase clock, with no simulation writes.
 const FinaleView=preload("res://scripts/chapter_four_finale_view.gd")
@@ -137,7 +138,19 @@ static func actor(g,m: Dictionary,offset: Vector2):
 			for j in range(12):
 				var fall: float=fposmod(w.clock*40.0+j*13.0,50.0)
 				g.draw_rect(Rect2((m.p+offset+Vector2(hh(j,7)*60-30,-70+fall)).floor(),Vector2(2,2)),Color(.45,.42,.38,1-fall/50.0))
-		g.draw_actor(m.skin,m.p+offset,m.visual_dir,m.animation,m.moving,tint,m.phase,m.scale,m.visual)
+		var lift: float=float(m.get("lift",0.0)) if m.encounter_actor=="mass" else 0.0
+		if m.encounter_actor=="mass" and m.get("cast","")=="slam" and m.phase in ["windup","attack"]:
+			var k: float=clampf(m.phase_age/maxf(.01,m.phase_duration),0,1)
+			var at: Vector2=m.aim+offset
+			if m.phase=="windup" or not m.get("slam_landed",false):
+				g.oval(at,Vector2(40,14)*m.scale,Color(.35,0,.03,.25+.3*(k if m.phase=="windup" else 1.0)))
+				g.draw_arc(at,40*m.scale,0,TAU,40,Color(.9,.15,.12,.5+.4*sin(w.clock*14)),1)
+			if m.get("slam_landed",false) and float(m.get("ring_r",0))<float(w.encounters.data.mass.slam_radius):
+				var r: float=float(m.ring_r)
+				g.draw_arc(m.p+offset,r,0,TAU,64,Color(.75,.05,.08,.85),5)
+				g.draw_arc(m.p+offset,maxf(1,r-7),0,TAU,64,Color(1,.5,.4,.5),2)
+		if lift>0:g.oval(m.p+offset,Vector2(34,10)*m.scale*(1-lift/140.0),Color(0,0,0,.45))
+		g.draw_actor(m.skin,m.p+offset-Vector2(0,lift),m.visual_dir,m.animation,m.moving,tint,m.phase,m.scale,m.visual)
 		if m.encounter_actor=="mass" and m.phase not in ["death","gone"]:
 			for j in range(7):
 				var fall: float=fposmod(w.clock*(.9+hh(j,8)*.6)+hh(j,9),1.0)
@@ -248,10 +261,7 @@ static func hud(g):
 		var m: Dictionary=e.mass if e.current=="mass" else e.guardian
 		if m.phase not in ["gone","intro"]:
 			var k: float=maxf(0,m.hp)/m.max_hp
-			g.draw_rect(Rect2(169,46,302,6),Color("1a1416"))
-			g.draw_rect(Rect2(169,46,302*k,6),Color("a3121c") if e.current=="mass" else Color("b5a690"))
-			g.draw_rect(Rect2(169,46,302*k,1),Color(1,1,1,.45))
-			g.centered(title,40,8,g.INK)
+			BossBar.draw(g,title,k,Color("a3121c") if e.current=="mass" else Color("b5a690"))
 			if e.current=="mass":
 				for part in e.parts:
 					var x: float=169+302*(.2+.2*(int(part.component)-1))

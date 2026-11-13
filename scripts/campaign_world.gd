@@ -1,5 +1,5 @@
 extends "res://scripts/world.gd"
-const EVOLUTION_REVEAL := 1.7
+const EVOLUTION_REVEAL := 2.6
 ## Changes to solo campaign rules are isolated from coop_world.gd.
 
 var win_music=false
@@ -75,6 +75,8 @@ func sword_step(dt: float, movement: Vector2) -> bool:
 	if movement.length_squared() > 0:
 		facing = movement.normalized()
 		player = move_actor(player, movement.limit_length() * movement_speed() * dt, 6)
+		# The End: the island's edge holds while the sword is still on its way.
+		if has_method("on_land") and not call("on_land", player):player = before
 	player_visual.travel = before.distance_to(player)
 	player_moving = player_visual.travel > .0001
 	animation.advance(self, dt)

@@ -1,16 +1,20 @@
-"""Chapter V good ending, the kill (film v2). Covers chair age 30-44 s: the scream at the blade,
-the two-handed stab through the chest, the twist, the pull, the dripping blade, Steve walks away.
-Dialogue before 30 s stays in game (scan, memories); the flight after 44 s stays in game."""
+"""Chapter V good ending, the kill (film v3). Covers chair age 30-54 s. Opens on the game's last framing
+(KILL_FILM_AT): Steve walks in with the sword while Notch shouts his two lines, a silent beat on Steve,
+the overhead two-handed stab, the twist, the pull, Notch dies, a long look at Steve, he drops the blade and leaves.
+Lines are drawn by the game (chapter_five_finale.CHAIR at 30.65 and 33.3); the flight after 54 s stays in game."""
 import bpy, math, random
+import numpy as np
 from pathlib import Path
 from mathutils import Vector, Quaternion, Matrix
 _base = Path('/home/daydert/MinecraftSurvivors2/scripts/cinematics/_ch5bad_base.py')
-_src = _base.read_text().replace("NAME = 'CH5_BadEnd_v2'; FPS = 24; LENGTH = 14.5", "NAME = 'CH5_Kill_v2'; FPS = 24; LENGTH = 14.0")
+_src = _base.read_text().replace("NAME = 'CH5_BadEnd_v2'; FPS = 24; LENGTH = 14.5", "NAME = 'CH5_Kill_v2'; FPS = 24; LENGTH = 24.0")
 exec(compile(_src, str(_base), 'exec'))
 
 R = random.Random(9)
-SHOUT1, SHOUT2 = .65, 1.7          # ЭЙ, УБЕРИ ЭТО / МСТИТЬ — ЭТО ДЕЛО СЛАБЫХ (subtitles drawn by the game)
-RAISE, STAB, TWIST, PULL, DROP = 2.2, 3.0, 4.2, 5.45, 9.6
+SHOUT1, SHOUT2 = .65, 3.3          # ЭЙ, УБЕРИ ЭТО / МСТИТЬ — ЭТО ДЕЛО СЛАБЫХ (subtitles drawn by the game)
+WALK_IN = (.3, 2.6)
+RAISE, STAB, TWIST, PULL, DROP = 5.9, 7.4, 8.8, 10.2, 15.2
+TURN, WALK_OUT = (15.5, 16.6), (16.6, 23.8)
 
 # ---------------------------------------------------------------- set
 B = Batch()
@@ -40,39 +44,71 @@ for z in (.95, 1.2):
 screen = plain_box('Console_screen', (2.3, 1.04, .82), (1.1, .02, .5), material('scan_screen', color=(.15, 1, .45, 1), emit=4), None, 'Set')
 pool_ob = plain_box('BloodPool', (0, -.15, .004), (1.6, 1.6, .004), MAT['blood'], None, 'FX')
 
+# Blood soaks into the skins with the exact pixel pattern of the game's cinema shader (ch5_cinema_skin.gdshader),
+# so the film hands over to the in-game door scene with the same bloody Steve.
+def bloody_image(file, amount):
+    src = image(file); W, H = src.size
+    px = np.array(src.pixels[:], dtype=np.float32).reshape(H, W, 4)[::-1].copy()   # top-down like Godot UVs
+    ys, xs = np.mgrid[0:H, 0:W].astype(np.float32)
+    ux = np.floor(xs / W * 64).astype(np.float32); uy = np.floor(ys / H * 64).astype(np.float32)
+    frac = lambda v: v - np.floor(v)
+    grain = frac(np.sin(ux * np.float32(12.9898) + uy * np.float32(78.233)) * np.float32(43758.5453))
+    cluster = frac(np.sin(np.floor(ux / 3) * np.float32(31.17) + np.floor(uy / 3) * np.float32(43.71)) * np.float32(15437.71))
+    stain = (cluster * .65 + grain * .35) < amount * .62
+    lin = np.stack([.12 + grain * .07, np.full_like(grain, .012), np.full_like(grain, .018)], -1)
+    enc = np.where(lin <= .0031308, lin * 12.92, 1.055 * np.power(lin, 1 / 2.4) - .055)
+    px[..., :3] = np.where(stain[..., None], enc, px[..., :3])
+    im = bpy.data.images.new(src.name + '_blood%d' % int(amount * 100), W, H, alpha=True)
+    im.pixels = px[::-1].ravel(); im.pack(); return im
+
+MIXES = []
+def bleed(mat_key, file, before, after):
+    """Material shows the skin at `before` blood; a keyed mix switches to `after` at the stab."""
+    m = MAT[mat_key]; nt = m.node_tree; bs = nt.nodes['Principled BSDF']
+    t0 = nt.nodes.new('ShaderNodeTexImage'); t0.image = bloody_image(file, before); t0.interpolation = 'Closest'
+    t1 = nt.nodes.new('ShaderNodeTexImage'); t1.image = bloody_image(file, after); t1.interpolation = 'Closest'
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'
+    nt.links.new(t0.outputs['Color'], mx.inputs[6]); nt.links.new(t1.outputs['Color'], mx.inputs[7]); nt.links.new(mx.outputs[2], bs.inputs['Base Color'])
+    MIXES.append(mx.inputs[0])
+bleed('ch5_skin_steve', 'ch5_skin_steve.png', .18, .72)
+bleed('ch5_skin_notch', 'ch5_skin_notch.png', .30, .70)
+
 S = rig('Steve', MAT['ch5_skin_steve']); N = rig('Notch', MAT['ch5_skin_notch'])
 sword = voxel_item('Sword', 'iron_sword.png', S['Rwrist'], (3, 13), .05)
 sword.rotation_quaternion = qrot(math.pi / 2)
-s_blood = [plain_box('S_blood', (x, -.2565, z), (w, .004, h), MAT['blood'], S['head'], 'FX') for x, z, w, h in [(-.08, .22, .2, .18), (.12, .1, .14, .16)]]
-s_blood += [plain_box('S_blood_b', (0, -.1335, .45), (.42, .004, .5), MAT['blood'], S['torso'], 'FX')]
-s_blood += [plain_box('S_blood_h', (0, 0, -.33), (.27, .27, .1), MAT['blood_hand'], S[k], 'FX') for k in ('Relbow', 'Lelbow')]
 n_wound = [plain_box('N_wound', (0, -.1335, .5), (.22, .004, .22), MAT['wound'], N['torso'], 'FX'),
-           plain_box('N_stain', (0, -.135, .32), (.46, .004, .55), MAT['blood'], N['torso'], 'FX'),
            plain_box('N_mouth', (0, -.2565, .06), (.08, .004, .16), MAT['blood_solid'], N['head'], 'FX')]
 blade_blood = plain_box('BladeBlood', (0, 0, .35), (.08, .08, .45), MAT['blood_hand'], sword, 'FX')
+s_hands = [plain_box('S_blood_h', (0, 0, -.33), (.27, .27, .1), MAT['blood_hand'], S[k], 'FX') for k in ('Relbow', 'Lelbow')]
 def pool(name, count, mat, size): return [plain_box(name, (0, 0, -50), (size, size, size), MAT[mat], None, 'FX') for _ in range(count)]
-P_blood = pool('blood', 120, 'blood_solid', .04)
+P_blood = pool('blood', 230, 'blood_solid', .03)
 for ob in P_blood: ob.rotation_mode = 'XYZ'
+MAT['blood_solid'].node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value = .35
+MAT['blood'].node_tree.nodes['Principled BSDF'].inputs['Roughness'].default_value = .4
 
-# ---------------------------------------------------------------- lights
+# ---------------------------------------------------------------- lights (brighter: same exposure as the game's chair and door scenes)
 def light(name, typ, energy, color, at=(0, 0, 5), size=1.0):
     d = bpy.data.lights.new('LGT_CH5K_' + name, typ); d.energy = energy; d.color = color
     if typ == 'AREA': d.shape = 'DISK'; d.size = size
     if typ in ('POINT', 'SPOT'): d.shadow_soft_size = size
     ob = link(bpy.data.objects.new(d.name, d), 'Lights'); ob.location = at; return ob
-lamp = light('Lamp', 'SPOT', 700, (1, .9, .75), (0, -.2, 3.4), .15); lamp.data.spot_size = 1.0; lamp.data.spot_blend = .5
+def aim(ob, at): ob.rotation_euler = (Vector(at) - ob.location).to_track_quat('-Z', 'Y').to_euler()
+lamp = light('Lamp', 'SPOT', 950, (1, .92, .8), (0, -.2, 3.4), .15); lamp.data.spot_size = 1.15; lamp.data.spot_blend = .5
 bulb = plain_box('Bulb', (0, -.2, 3.45), (.16, .16, .16), material('bulb', color=(1, .9, .7, 1), emit=12), None, 'Set')
-fill = light('Fill', 'AREA', 140, (.5, .6, 1), (-3, -3.5, 2.6), 4)
-fill.rotation_euler = (Vector((0, 0, 1)) - Vector((-3, -3.5, 2.6))).to_track_quat('-Z', 'Y').to_euler()
-glow = light('Console', 'POINT', 40, (.3, 1, .6), (2.0, .7, 1.2), .3)
-rim = light('Rim', 'AREA', 120, (.6, .7, 1), (1.5, 2.8, 2.6), 3)
-rim.rotation_euler = (Vector((0, 0, 1)) - Vector((1.5, 2.8, 2.6))).to_track_quat('-Z', 'Y').to_euler()
-bg.inputs[0].default_value = (.01, .01, .015, 1); bg.inputs[1].default_value = .15
+fill = light('Fill', 'AREA', 300, (.62, .7, 1), (-2.5, -3.5, 2.6), 4); aim(fill, (0, 0, 1))
+fill2 = light('Fill2', 'AREA', 200, (.85, .9, 1), (2.4, -3.2, 2.5), 4); aim(fill2, (0, 0, 1))
+glow = light('Console', 'POINT', 60, (.3, 1, .6), (2.0, .7, 1.2), .3)
+rim = light('Rim', 'AREA', 260, (.6, .7, 1), (1.5, 2.8, 2.6), 3); aim(rim, (0, 0, 1))
+face_key = light('FaceKey', 'AREA', 0, (1, .93, .85), (0, -2, 1.8), .8)
+bg.inputs[0].default_value = (.02, .022, .03, 1); bg.inputs[1].default_value = .35
 
 # ---------------------------------------------------------------- acting
-S0 = V(-1.15, -1.25); YS = yaw_to(S0, V(0, 0)); STAB_SPOT = V(-.3, -.78)
-YF = math.degrees(yaw_to(STAB_SPOT, V(0, 0)))
+S0 = V(-1.7, -1.65); STAB_SPOT = V(-.3, -.78)     # S0 = Steve's place in the game's last chair frame
+YS = yaw_to(S0, V(0, 0)); YF = yaw_to(STAB_SPOT, V(0, 0))
 CHEST = Vector((0, -.08, 1.05))
+BACK_SPOT = STAB_SPOT + (STAB_SPOT - V(0, 0)).normalized() * .55
+EXIT = V(3.9, -2.2)
+OUT_PATH = Path2([BACK_SPOT, V(1.2, -1.75), EXIT])
 
 def aim_blade(n, d):
     parent = wm(n['Relbow']).to_quaternion()
@@ -81,76 +117,87 @@ def aim_blade(n, d):
 def pose_notch(t):
     reset(N, (0, .05, 0), 0, .63)
     rot(N['Rleg'], -1.5, 0, .05); rot(N['Lleg'], -1.5, 0, -.05); rot(N['Rknee'], 1.45); rot(N['Lknee'], 1.45)
-    struggle = (sm(.55, .7, t) * (1 - sm(1.6, 1.8, t))) + .7 * sm(1.7, 1.8, t) * (1 - sm(2.7, 2.95, t))
+    struggle = sm(.5, .65, t) * (1 - sm(2.6, 3.0, t)) + .9 * sm(3.2, 3.35, t) * (1 - sm(6.0, 6.5, t)) + .25 * sm(3.0, 3.2, t) * (1 - sm(3.2, 3.35, t))
     jerk = math.sin(t * 17) * struggle
-    alive = 1 - sm(STAB + .2, 6.5, t)
-    conv = math.sin(t * 23) * sm(STAB, STAB + .05, t) * (1 - sm(STAB + .2, 5.2, t)) * alive
-    lean = .25 * sm(1.7, 1.9, t) * (1 - sm(2.8, STAB, t))
+    alive = 1 - sm(STAB + .2, PULL + 1.3, t)
+    conv = math.sin(t * 23) * sm(STAB, STAB + .05, t) * (1 - sm(STAB + .2, PULL - .2, t)) * alive
+    lean = .25 * sm(3.2, 3.5, t) * (1 - sm(5.8, 6.6, t)) + .1 * sm(.5, .8, t) * (1 - sm(2.6, 3.0, t))
+    dread = sm(6.3, 7.0, t) * (1 - sm(STAB, STAB + .05, t))           # stares up at the raised blade
     hit = sm(STAB, STAB + .06, t) * (1 - sm(STAB + .3, STAB + 1.0, t))
-    dead = sm(5.6, 6.6, t)
-    rot(N['torso'], lean - .25 * hit + .35 * dead, .05 * jerk, .12 * jerk + .06 * conv)
-    rot(N['head'], -.3 * struggle - .5 * hit + .25 * conv + .7 * dead, .25 * jerk, .2 * dead)
+    twist = sm(TWIST, TWIST + .1, t) * (1 - sm(TWIST + .4, TWIST + 1.0, t))
+    dead = sm(PULL + .3, PULL + 1.5, t)
+    rot(N['torso'], lean - .25 * hit - .12 * twist + .35 * dead, .05 * jerk, .12 * jerk + .06 * conv)
+    rot(N['head'], -.3 * struggle - .45 * dread - .5 * hit - .3 * twist + .25 * conv + .7 * dead, .25 * jerk, .2 * dead)
     for side, sx in (('R', -1), ('L', 1)):
         p = Vector((sx * .46, -.22 + .05 * math.sin(t * 19 + sx) * struggle, .8 + .03 * abs(jerk)))
         hand(N, side, p, pole=wm(N[side + 'arm']).translation + Vector((sx * .6, .2, -.4)))
-    # The chair rattles with him.
     chair.rotation_mode = 'XYZ'; chair.rotation_euler = (.02 * jerk, 0, .015 * jerk)
 
 def pose_steve(t):
-    if t < 9.0:
-        k = sm(1.9, 2.5, t)
-        base = S0.lerp(STAB_SPOT, k)
-        back_k = sm(PULL + .2, 6.6, t)
-        base = base + (base - V(0, 0)).normalized() * .55 * back_k
-        reset(S, base, mix(YS, yaw_to(STAB_SPOT, V(0, 0)), k), .74)
-        stand(S, S['root'].rotation_quaternion.to_euler().z, .17, (.12 + .1 * k, -.18))
-        yaw = S['root'].rotation_quaternion.to_euler().z
+    if t < WALK_IN[1]:
+        # Walks in from where the game left him, sword hanging point-down in the right hand.
+        y = locomote(S, t, WALK_IN[0], WALK_IN[1], S0, STAB_SPOT, YS, stride=.55, ease_in=True, ease_out=True)
+        yaw = mix(YS, YF, sm(WALK_IN[1] - .6, WALK_IN[1], t)); S['root'].rotation_quaternion = qrot(z=yaw)
+        base = S['root'].location.copy()
+        hand(S, 'R', base + fwd(yaw) * .12 + right(yaw) * .34 + Vector((0, 0, .72)))
+        aim_blade(S, fwd(yaw) * .5 + Vector((0, 0, -1)))
+        look(S, wm(N['head']).translation, amount=1)
+        return
+    if t < DROP:
+        back_k = sm(PULL + .2, PULL + 1.4, t)
+        base = STAB_SPOT + (STAB_SPOT - V(0, 0)).normalized() * .55 * back_k
+        reset(S, base, YF, .74)
+        k = 1.0
+        stand(S, YF, .17, (.12 + .1 * k, -.18))
+        yaw = YF
         loc = lambda q: base + fwd(yaw) * q[0] + right(yaw) * q[1] + Vector((0, 0, q[2]))
         grip_low = loc((.3, .2, .78)); overhead = loc((.15, .05, 2.05)); impact = CHEST + Vector((0, -.32, .32))
-        g = grip_low.lerp(overhead, sm(RAISE, 2.6, t) if t < STAB - .08 else 1)
-        if t >= STAB - .08: g = overhead.lerp(impact, ei(STAB - .08, STAB, t))
+        g = grip_low.lerp(overhead, sm(RAISE, RAISE + .7, t)) if t < STAB - .1 else overhead.lerp(impact, ei(STAB - .1, STAB, t))
         if t >= STAB:
             g = impact + Vector((0, .04 * sm(STAB, TWIST, t), -.05 * sm(TWIST, TWIST + .3, t)))
-            if t >= PULL: g = g.lerp(loc((.35, .1, 1.05)), eo(PULL, PULL + .35, t)).lerp(loc((.3, .25, .7)), sm(6.2, 7.2, t))
-        hand(S, 'R', g); hand(S, 'L', g + right(yaw) * -.08 + Vector((0, 0, -.06)))
-        # Blade: down along the stab line, twisted, then hanging and dripping.
+            if t >= PULL: g = g.lerp(loc((.35, .1, 1.05)), eo(PULL, PULL + .35, t)).lerp(loc((.3, .25, .7)), sm(PULL + .9, PULL + 2.2, t))
+        hand(S, 'R', g)
+        two = sm(RAISE - .3, RAISE, t) * (1 - sm(PULL + .5, PULL + 1.0, t))
+        hand(S, 'L', (base + fwd(yaw) * .12 - right(yaw) * .34 + Vector((0, 0, .72))).lerp(g + right(yaw) * -.08 + Vector((0, 0, -.06)), two))
         if t < RAISE: aim_blade(S, fwd(yaw) * .6 + Vector((0, 0, -1)))
         elif t < PULL + .35: aim_blade(S, (CHEST - g) * 1.0 + Vector((0, 0, -.25)))
         else: aim_blade(S, Vector((0, 0, -1)) + fwd(yaw) * .15)
         if TWIST <= t < PULL:
             S['Rwrist'].rotation_quaternion = S['Rwrist'].rotation_quaternion @ qrot(0, 0, .9 * sm(TWIST, TWIST + .25, t))
-        lean = .25 * sm(STAB - .1, STAB, t) * (1 - sm(PULL, PULL + .6, t)) + .1 * sm(6.0, 7.0, t)
-        rot(S['torso'], lean + .08 * sm(RAISE, 2.8, t) * (1 - sm(2.85, STAB, t)), 0, 0)
-        breathe(S, t, .025 + .02 * sm(6, 7, t), 3.5)
+        lean = .25 * sm(STAB - .1, STAB, t) * (1 - sm(PULL, PULL + .6, t)) + .1 * sm(PULL + 1.0, PULL + 2.2, t)
+        rot(S['torso'], lean + .08 * sm(RAISE, RAISE + .6, t) * (1 - sm(STAB - .3, STAB, t)), 0, 0)
+        breathe(S, t, .02 + .025 * sm(PULL + 1, PULL + 2, t), 3.2)
         look(S, wm(N['head']).translation, amount=1)
-        if t > 7.2: addrot(S['head'], .12 * sm(7.2, 8.0, t), 0, 0)
+        if t > PULL + 2.5: addrot(S['head'], .12 * sm(PULL + 2.5, PULL + 3.5, t), 0, 0)
         return
-    # Drops the blade and walks out of frame toward the door (screen right).
-    door = V(3.6, -1.6)
-    back_spot = STAB_SPOT + (STAB_SPOT - V(0, 0)).normalized() * .55
-    reset(S, back_spot, yaw_to(back_spot, door), .74)
-    turn = sm(9.0, 10.2, t)
-    yaw = mix(yaw_to(back_spot, V(0, 0)), yaw_to(back_spot, door), turn)
-    if t < 10.2:
-        reset(S, back_spot, yaw, .74); stand(S, yaw, .15)
-        hand(S, 'R', back_spot + fwd(yaw) * .25 + right(yaw) * .3 + Vector((0, 0, .7)))
-        hand(S, 'L', back_spot + fwd(yaw) * .15 - right(yaw) * .3 + Vector((0, 0, .7)))
+    # Lets the blade fall, turns away and walks out of the room past the console.
+    turn = sm(*TURN, t)
+    y0 = YF; y1 = math.atan2(*(lambda d: (d.x, -d.y))(OUT_PATH.dir(0)))
+    if t < WALK_OUT[0]:
+        yaw = y0 + ((y1 - y0 + math.pi) % math.tau - math.pi) * turn
+        reset(S, BACK_SPOT, yaw, .74); stand(S, yaw, .15)
+        hand(S, 'R', BACK_SPOT + fwd(yaw) * .1 + right(yaw) * .34 + Vector((0, 0, .72)))
+        hand(S, 'L', BACK_SPOT + fwd(yaw) * .1 - right(yaw) * .34 + Vector((0, 0, .72)))
         look(S, wm(N['head']).translation, amount=1 - turn)
+        addrot(S['head'], .1 * (1 - turn), 0, 0)
     else:
-        locomote(S, t, 10.2, 14.5, back_spot, door, yaw_to(back_spot, door), stride=.6, ease_in=True, ease_out=False)
+        locomote_path(S, t, WALK_OUT[0], WALK_OUT[1], OUT_PATH, stride=.58, start_yaw=y1)
 
 # ---------------------------------------------------------------- FX
 cache = {}
+def rec_val(sock, v, frame, idx=None):
+    node = sock.node; nt = node.id_data; sidx = list(node.inputs).index(sock)
+    REC.setdefault((nt, 'nodes["%s"].inputs[%d].default_value' % (node.name, sidx), idx or 0), []).append((frame, float(v)))
+
 def apply_fx(t, frame):
     on = lambda ob, v: (setattr(ob, 'scale', (1, 1, 1) if v else (.0001,) * 3), rec(ob, 'scale', ob.scale, frame))
-    for ob in s_blood: on(ob, t >= STAB + .03)
+    for sock in MIXES: rec_val(sock, 1.0 if t >= STAB + .04 else 0.0, frame)
+    for ob in s_hands: on(ob, t >= STAB + .04)
     for ob in n_wound: on(ob, t >= STAB)
     on(blade_blood, t >= STAB)
-    # Sword falls from his hand at DROP and lies on the floor.
     if t >= DROP:
         if 'drop' not in cache: cache['drop'] = (wm(sword).translation.copy(), wm(sword).to_quaternion())
         p0, q0 = cache['drop']; k = clamp((t - DROP) / .35)
-        sword.parent = None if False else sword.parent
         loc = p0.lerp(Vector((p0.x, p0.y, .03)), k * k)
         world = Matrix.Translation(loc) @ q0.slerp(Quaternion((1, 0, 0), math.pi / 2) @ qrot(0, 0, .8), k).to_matrix().to_4x4()
         local = wm(S['Rwrist']).inverted() @ world
@@ -158,49 +205,60 @@ def apply_fx(t, frame):
     else:
         sword.location = (0, 0, 0); sword.rotation_quaternion = qrot(math.pi / 2)
     rec(sword, 'location', sword.location, frame); rec(sword, 'rotation_quaternion', sword.rotation_quaternion, frame)
-    # Blood: the stab burst, the twist spurt, the pull spray, then drips from the blade and the chair.
+    # Blood: fine droplets in streams. Stab: a burst back along the blade into Steve; twist: a spurt;
+    # pull: a pulsing jet for a second; then drips from the blade, the chest and the chair.
     rnd = random.Random(4)
+    toward_steve = (Vector((STAB_SPOT.x, STAB_SPOT.y, 1.25)) - CHEST).normalized()
     for i, ob in enumerate(P_blood):
-        if i < 90:
-            at = STAB if i < 50 else TWIST if i < 66 else PULL
+        if i < 170:
+            if i < 80: at = STAB + rnd.uniform(0, .08)
+            elif i < 105: at = TWIST + rnd.uniform(0, .1)
+            else: at = PULL + rnd.uniform(0, 1.1) * (1 if i >= 125 else .05)
             dt = t - at
-            if dt < 0 or dt > 1.5: ob.location = (0, 0, -50); ob.scale = (0, 0, 0)
+            if dt < 0 or dt > 1.6: ob.location = (0, 0, -50); ob.scale = (0, 0, 0)
             else:
                 key = 'b%d' % i
-                if key not in cache: cache[key] = CHEST + Vector((rnd.uniform(-.08, .08), -.15, rnd.uniform(-.05, .1)))
-                v = Vector((rnd.uniform(-1, 1), rnd.uniform(-2.2, -.6), rnd.uniform(.2, 1.6))) * rnd.uniform(.8, 2.4) * (1.3 if at == PULL else 1)
+                if key not in cache: cache[key] = CHEST + Vector((rnd.uniform(-.06, .06), -.15, rnd.uniform(-.04, .08)))
+                if i < 80:      # back along the blade, into Steve and the floor between them
+                    v = (toward_steve + Vector((rnd.uniform(-.45, .45), rnd.uniform(-.3, .3), rnd.uniform(-.1, .5)))) * rnd.uniform(1.2, 3.2)
+                elif i >= 125:  # pulsing jet after the pull: tight cone, speed beats with the heart
+                    pulse = .6 + .4 * abs(math.sin((at - PULL) * 7.5))
+                    v = (Vector((0, -1, .35)) + Vector((rnd.uniform(-.12, .12), 0, rnd.uniform(-.08, .1)))) * 2.2 * pulse
+                else:
+                    v = Vector((rnd.uniform(-1, 1), rnd.uniform(-2.0, -.6), rnd.uniform(.2, 1.4))) * rnd.uniform(.7, 2.0)
                 p = cache[key] + v * dt + Vector((0, 0, -4.9 * dt * dt))
-                if p.z < .01: p.z = .006; ob.scale = (1.6, 1.6, .1)
-                else: ob.scale = (1, 1, 1.7)
+                if p.z < .01: p.z = .006; ob.scale = (2.2, 2.2, .12)
+                else:
+                    sp = (v + Vector((0, 0, -9.8 * dt))).length; ob.scale = (1, 1, 1 + min(2.5, sp * .5))
+                    ob.rotation_euler = (Vector((0, 0, 1)).rotation_difference((v + Vector((0, 0, -9.8 * dt))).normalized())).to_euler()
                 ob.location = p
         else:
-            period = .45 + (i % 6) * .11; ph = ((t - STAB) % period) / period
+            period = .42 + (i % 6) * .11; ph = ((t - STAB) % period) / period
             if t < STAB + .4: ob.location = (0, 0, -50); ob.scale = (0, 0, 0)
             else:
                 src = (wm(sword) @ Vector((0, 0, .62))) if (i % 2 and t < DROP) else (CHEST + Vector((rnd.uniform(-.1, .1), -.14, -.35)))
-                ob.location = src + Vector((0, 0, -4.9 * (ph * period) ** 2)); ob.scale = (1, 1, 1.8)
-                if ob.location.z < .005: ob.location.z = .005; ob.scale = (1.4, 1.4, .1)
-        rec(ob, 'location', ob.location, frame); rec(ob, 'scale', ob.scale, frame)
-    g = sm(STAB + .5, 13.0, t); pool_ob.scale = (.15 + .85 * g, .15 + .85 * g, 1) if t > STAB + .4 else (.0001,) * 3; rec(pool_ob, 'scale', pool_ob.scale, frame)
-    # Lamp swings and flickers from the blow; the console stutters red.
+                ob.location = src + Vector((0, 0, -4.9 * (ph * period) ** 2)); ob.scale = (1, 1, 2.0)
+                if ob.location.z < .005: ob.location.z = .005; ob.scale = (1.8, 1.8, .1)
+        rec(ob, 'location', ob.location, frame); rec(ob, 'scale', ob.scale, frame); rec(ob, 'rotation_euler', ob.rotation_euler, frame)
+    g = sm(STAB + .5, 20.0, t); pool_ob.scale = (.15 + .95 * g, .15 + .9 * g, 1) if t > STAB + .4 else (.0001,) * 3; rec(pool_ob, 'scale', pool_ob.scale, frame)
     swing = .2 * math.sin((t - STAB) * 4.5) * math.exp(-max(0, t - STAB) * .5) if t > STAB else 0
     lamp.rotation_mode = 'XYZ'; lamp.rotation_euler = (swing, swing * .5, 0); rec(lamp, 'rotation_euler', lamp.rotation_euler, frame)
-    flick = .25 if (STAB < t < STAB + 1.2 and int(t * 24) % 3 == 0) else 1.0
-    lamp.data.energy = 700 * flick; rec(lamp.data, 'energy', [lamp.data.energy], frame)
+    flick = .3 if (STAB < t < STAB + 1.2 and int(t * 24) % 3 == 0) else 1.0
+    lamp.data.energy = 950 * flick; rec(lamp.data, 'energy', [lamp.data.energy], frame)
     bulb.location = lamp.location + Vector((0, 0, .05)); rec(bulb, 'location', bulb.location, frame)
     red = 1.0 if STAB < t < STAB + 2 and int(t * 10) % 2 == 0 else 0.0
     glow.data.color = (.3 + .7 * red, 1 - .9 * red, .6 - .5 * red); rec(glow.data, 'color', glow.data.color, frame)
 
 # ---------------------------------------------------------------- cameras
-SHOTS = [('Blade', 0, .6, 50), ('Scream', .6, 1.9, 40), ('Raise', 1.9, 2.92, 24), ('Stab', 2.92, 4.0, 32), ('Twist', 4.0, 5.9, 45),
-         ('Face', 5.9, 9.0, 55), ('Away', 9.0, 14.0, 30)]
+SHOTS = [('Open', 0, 2.7, 27), ('Scream', 2.7, 5.2, 40), ('SteveFace', 5.2, 6.35, 45), ('Raise', 6.35, STAB - .05, 24),
+         ('Stab', STAB - .05, 8.6, 32), ('Twist', 8.6, 10.9, 40), ('Face', 10.9, DROP - .2, 40), ('Away', DROP - .2, 30, 28)]
 CAMS = {}
 for name, a, b, lens in SHOTS:
     d = bpy.data.cameras.new('CAM_CH5K_' + name); d.lens = lens; d.sensor_width = 36; d.clip_start = .05; d.clip_end = 80
     d.dof.use_dof = True
     cam = link(bpy.data.objects.new(d.name, d), 'Cameras'); CAMS[name] = cam
     sc.timeline_markers.new(name, frame=round(a * FPS) + 1).camera = cam
-sc.camera = CAMS['Blade']
+sc.camera = CAMS['Open']
 
 def place(cam, pos, tgt, lens, focus, fstop=2.8, roll=0.0, extra=(0, 0)):
     cam.location = Vector(pos)
@@ -212,54 +270,64 @@ def orbit(c, az, el, d):
     return Vector(c) + Vector((math.sin(az) * math.cos(el), -math.cos(az) * math.cos(el), math.sin(el))) * d
 def shake(t):
     rx = ry = 0.0
-    for t0, amp, dur, fq in [(STAB, .07, .7, 11), (TWIST, .015, .3, 15), (PULL, .03, .4, 12), (DROP + .35, .012, .3, 14)]:
+    for t0, amp, dur, fq in [(STAB, .07, .7, 11), (TWIST, .02, .35, 15), (PULL, .035, .45, 12), (DROP + .35, .012, .3, 14)]:
         dt = t - t0
         if 0 <= dt <= dur: env = (1 - dt / dur) ** 2; rx += amp * env * math.sin(dt * fq * math.tau + 1.3); ry += amp * .6 * env * math.sin(dt * fq * 1.37 * math.tau)
     return rx, ry
 
-def clear_orbit(c, azs, el, dist, avoid):
-    """First azimuth whose line of sight to c keeps clear of the other bodies."""
+def clear_orbit(c, azs, el, dist, avoid, need=.42):
     best = None; best_gap = -1
     for az in azs:
         pos = orbit(c, az, el, dist); seg = Vector(c) - pos; L = seg.length; gap = 9.0
         for a in avoid:
             k = max(0.0, min(1.0, (Vector(a) - pos).dot(seg) / (L * L)))
             gap = min(gap, (pos + seg * k - Vector(a)).length)
-        if gap > .42: return pos
+        if gap > need: return pos
         if gap > best_gap: best_gap = gap; best = pos
     return best
 
 def camera(t, frame):
     for name, a, b, lens in SHOTS:
-        if a <= t < b or (name == 'Away' and t >= a): break
+        if a <= t < b: break
     cam = CAMS[name]; u = sm(a, b, t); sh = shake(t); hh = (math.sin(t * 1.1) * .003 + sh[0], math.sin(t * .8 + 1) * .002 + sh[1])
     hs = wm(S['head']) @ Vector((0, 0, .25)); hn = wm(N['head']) @ Vector((0, 0, .25))
-    if name == 'Blade':
-        c = wm(sword) @ Vector((0, 0, .3)); place(cam, orbit(c, math.degrees(YS) + 80, 10, 1.3), c, lens, c, 2.2, extra=hh)
+    face_key.data.energy = 0
+    if name == 'Open':
+        # starts exactly on the game's last chair framing (cinema track 'chair' at 29.6 s), then creeps in
+        k = sm(0, 2.7, t)
+        place(cam, Vector((3.2, -3.5, 1.65)).lerp(Vector((2.55, -2.95, 1.55)), k), Vector((-.55, -.7, 1.1)).lerp(Vector((-.45, -.5, 1.15)), k), 27.1, hn, 5.0, extra=hh)
     elif name == 'Scream':
-        av = [wm(S['head']) @ Vector((0, 0, .25)), wm(S['torso']) @ Vector((0, 0, .4))]
-        place(cam, clear_orbit(hn, [22, 40, -20, 60], -4, mix(1.7, 1.35, u), av), hn + Vector((0, 0, -.12)), lens, hn, 2.0, roll=.03, extra=hh)
+        av = [hs, wm(S['torso']) @ Vector((0, 0, .4))]
+        place(cam, clear_orbit(hn, [42, 55, 32, 68], -4, mix(1.75, 1.5, u), av), hn + Vector((0, 0, -.12)), lens, hn, 2.4, roll=.03, extra=hh)
+    elif name == 'SteveFace':
+        yawd = math.degrees(YF)
+        av = [hn, wm(N['torso']) @ Vector((0, 0, .4)), Vector((0, .42, 1.15))]
+        c = hs.lerp(hn, .3) + Vector((0, 0, -.08))
+        place(cam, orbit(c, yawd - 92, -4, mix(1.9, 1.7, u)), c, lens, hs, 2.6, extra=hh)
+        face_key.location = orbit(hs, yawd - 25, 15, 1.4); aim(face_key, hs); face_key.data.energy = 35
     elif name == 'Raise':
         c = (hs + hn) / 2 + Vector((0, 0, .2))
-        av = [Vector((0, .42, 1.15))]
-        place(cam, clear_orbit(c, [62, 75, 50, 90], 2, 3.2, av), c, lens, hs, 4.0, roll=-.04, extra=hh)
+        place(cam, clear_orbit(c, [62, 75, 50, 90], 2, 3.3, [Vector((0, .42, 1.15))]), c, lens, hs, 4.0, roll=-.04, extra=hh)
     elif name == 'Stab':
-        c = CHEST + Vector((-.15, -.3, .15)); place(cam, orbit(c, 70, 4, 2.4), c, lens, c, 3.2, extra=hh)
+        c = CHEST + Vector((-.15, -.3, .15)); place(cam, orbit(c, 70, 4, 2.5), c, lens, c, 3.5, extra=hh)
     elif name == 'Twist':
         c = (hs + hn) / 2 + Vector((0, 0, -.1))
-        av = [Vector((0, .42, 1.15))]
-        place(cam, clear_orbit(c, [70, 82, 58, 95], 2, mix(2.3, 2.0, u), av), c, lens, hs, 2.8, roll=.04, extra=hh)
+        place(cam, clear_orbit(c, [70, 82, 58, 95], 2, mix(2.6, 2.2, u), [Vector((0, .42, 1.15))]), c, lens, hs, 3.2, roll=.04, extra=hh)
     elif name == 'Face':
+        # a long look at Steve: medium close, lit from the lamp side so his face and the blood read
+        yawd = math.degrees(S['root'].rotation_quaternion.to_euler().z)
         av = [hn, wm(N['torso']) @ Vector((0, 0, .4)), Vector((0, .42, 1.15))]
-        yawf = math.degrees(S['root'].rotation_quaternion.to_euler().z)
-        place(cam, clear_orbit(hs, [yawf - 40, yawf - 60, yawf + 40, yawf - 80], 0, mix(1.25, 1.05, u), av), hs, 35, hs, 1.8, extra=hh)
+        c = hs.lerp(hn, .18) + Vector((0, 0, -.15))
+        place(cam, orbit(c, yawd - 70, -4, mix(2.1, 1.8, u)), c, lens, hs, 2.8, extra=hh)
+        face_key.location = orbit(hs, yawd - 25, 20, 1.3); aim(face_key, hs); face_key.data.energy = 40
     else:
-        c = Vector((.4, -.3, 1.0)); place(cam, orbit(c, mix(-10, -4, u), 10, mix(4.6, 4.2, u)), c, lens, hn, 4.5, extra=hh)
+        c = Vector((.8, -.6, 1.0)); place(cam, orbit(c, mix(-12, -4, u), 10, mix(5.0, 4.5, u)), c, lens, Vector((0, 0, 1.0)), 5.0, extra=hh)
+    rec(face_key, 'location', face_key.location, frame); rec(face_key, 'rotation_euler', face_key.rotation_euler, frame); rec(face_key.data, 'energy', [face_key.data.energy], frame)
     rec(cam, 'location', cam.location, frame); rec(cam, 'rotation_euler', cam.rotation_euler, frame)
     rec(cam.data, 'lens', [cam.data.lens], frame); rec(cam.data, 'dof.focus_distance', [cam.data.dof.focus_distance], frame)
 
 def hitstop(t):
-    if STAB <= t < STAB + .12: return STAB
+    if STAB <= t < STAB + .14: return STAB
     if PULL <= t < PULL + .06: return PULL
     return t
 

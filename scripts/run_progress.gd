@@ -14,15 +14,41 @@ var starter_sword=true
 var highest_weapon_slots=0
 var events: Array[String]=[]
 var awarded={}
+var counters={}
+var visited={}
+var stick_launches={}
 
 func reset(chapter_number: int):
 	enabled=true;chapter=chapter_number;completed=false;damage_taken=0;healing_used=false
 	evolved_once=false;sword_only=true;bow_allowed=true;bow_exposure.clear();bow_obtained=false;starter_sword=true
-	highest_weapon_slots=0;events.clear();awarded.clear()
+	highest_weapon_slots=0;events.clear();awarded.clear();counters.clear();visited.clear();stick_launches.clear()
 
 func award(id: String):
 	if not enabled or awarded.has(id):return
 	awarded[id]=true;events.append(id)
+
+func count(id: String, goal: int):
+	if not enabled or completed:return
+	counters[id]=int(counters.get(id,0))+1
+	if counters[id]>=goal:award(id)
+
+func mark_launch(id: int, from_stick: bool):
+	if not enabled or completed:return
+	if from_stick:stick_launches[id]=true
+	else:stick_launches.erase(id)
+
+func enemy_fell(id: int):
+	if stick_launches.has(id):count("void_bouncer",5)
+	stick_launches.erase(id)
+
+func visit_landmarks(w):
+	if chapter!=1 or not "landmarks" in w:return
+	for mark in w.landmarks:
+		var kind: String=mark.kind
+		if kind.begins_with("ruin_"):kind="ruin"
+		if kind not in ["ruin","well","mine_entrance","pond"]:continue
+		if w.player.distance_to(mark.p)<=90:visited[kind]=true
+	if visited.size()==4:award("trailblazer")
 
 func observe(w):
 	if not enabled or completed:return
@@ -38,6 +64,7 @@ func observe(w):
 func step(w, dt: float):
 	if not enabled or completed:return
 	observe(w)
+	visit_landmarks(w)
 	if chapter!=1:return
 	for id in w.build:
 		if id=="bow":continue
@@ -71,6 +98,8 @@ func finish(w):
 			award("chapter_two")
 			if highest_weapon_slots<=2:award("two_weapons")
 		3:award("chapter_three")
+		4:award("chapter_four")
+		5:award("chapter_five")
 	if chapter in [2,3]:
 		if not evolved_once:award("no_evolutions")
 		if not healing_used:award("no_healing")

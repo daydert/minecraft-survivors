@@ -24,19 +24,25 @@ var hijack: Dictionary = {}
 var double_pending := false
 var cache_ready := 0.0
 var crate_timer := 75.0
+## Overflow bursts: rings of code burst in around the hero (tester pack: a less watery start).
+var overflow_done := 0
+var overflow_flash := 0.0
 var arsenal = preload("res://scripts/chapter_five_arsenal.gd").new()
 var bosses = preload("res://scripts/chapter_five_bosses.gd").new()
 var notch = preload("res://scripts/chapter_five_notch.gd").new()
+var purge = preload("res://scripts/chapter_five_purge.gd").new()
 
 func chapter_number() -> int:
 	return 5
 
 func reset(seed_value: int = 0):
 	shots.clear();zones.clear();deleted.clear();shards.clear();pending.clear()
+	overflow_done = 0;overflow_flash = 0.0
 	void_tick = 0.0;lag = 0.0;lag_count = 0;hint = {};invert = 0.0;hijack = {};double_pending = false;crate_timer = 75.0
 	arsenal.reset()
 	bosses.reset()
 	notch.reset()
+	purge.reset()
 	cache_ready=0.0
 	super.reset(seed_value)
 	five = db.data.chapter_five
@@ -59,6 +65,8 @@ func phase_name() -> String:
 ## Presentation only: one gradual dusk, then a deliberate inversion once a
 ## minute. No strobing at phase boundaries; combat clocks/RNG are unchanged.
 func tone() -> float:
+	if stage == "notch" and notch.phase == "fight":return notch.dark
+	if purge.phase in ["stop", "enter", "core", "snap"]:return 1.0
 	var dark_at: float = five.phases.dark_at
 	var flicker_at: float = five.phases.flicker_at
 	if time < dark_at:return smoothstep(dark_at-6.0,dark_at,time)
@@ -137,6 +145,22 @@ func sound(id: String, gap: float = .04):
 	if id.begins_with("hurt_") and id.trim_prefix("hurt_") in CODE_KINDS:id = "ch4_hb_tick"
 	super.sound(id, gap)
 
+func overflow_step(dt: float):
+	overflow_flash = maxf(0, overflow_flash - dt)
+	var ov: Dictionary = five.get("overflow", {})
+	if ov.is_empty():return
+	while overflow_done < ov.at.size() and time > float(ov.at[overflow_done]) + 20.0:overflow_done += 1
+	if overflow_done >= ov.at.size() or bosses.active() or purge.active():return
+	if time < float(ov.at[overflow_done]):return
+	var n: int = int(ov.count[overflow_done]);overflow_done += 1
+	var kinds := ["token", "token", "recursion", "for_loop", "glitch_zombie", "if_else"]
+	for i in range(n):
+		var at: Vector2 = (player + Vector2.from_angle(i * TAU / n + time) * (150.0 + (i % 2) * 26.0)).clamp(Vector2(60, 60), Vector2(SIZE - 60, SIZE - 60))
+		if spawn(kinds[i % kinds.size()], at):add_effect("ch5_spawn", at, .5)
+	message = "StackOverflowError";message_timer = 2.4
+	overflow_flash = .5;shake = maxf(shake, .35)
+	sound("ch4_hb_glitch", .1);sound("ch5_purge_alarm", .1)
+
 func shoot(p: Vector2, v: Vector2, damage: float, glyph: String, delay: float = 0.0, icon: String = ""):
 	if shots.size() >= 220:return
 	shots.append({"p":p,"v":v,"life":3.2,"damage":damage,"glyph":glyph,"delay":delay,"icon":icon,"age":0.0})
@@ -161,9 +185,12 @@ func resolve_deaths():
 			"recursion":
 				if m.depth > 0:
 					for side in [-1, 1]:born.append({"p":m.p + Vector2(side * 9, 0),"depth":m.depth - 1})
-			"terminal","loop_boss":bosses.boss_died(self, m)
+			"terminal","loop_boss":
+				if m.get("purge", false):purge.terminal_died(self, m)
+				else:bosses.boss_died(self, m)
 			"hijack":
 				if not hijack.is_empty():
+					if m.id==hijack.id and hijack.left>0:run_progress.award("own_controls")
 					hijack = {};invert = 0.0
 					message = "Управление возвращено";message_timer = 2.0
 					sound("ch4_mirror", 0.1)
@@ -490,8 +517,13 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		return
 	track_progress(dt)
 	clock += dt
+	if purge.step(self, dt, movement):
+		shake = maxf(0, shake - dt);message_timer = maxf(0, message_timer - dt)
+		update_effects(dt);update_particles(dt)
+		return
 	stage_age += dt
-	time = minf(db.data.duration, time + dt)
+	if purge.phase in ["surge", "ascend"]:time += dt * purge.rate()
+	else:time = minf(db.data.duration, time + dt)
 	invulnerable = maxf(0, invulnerable - dt)
 	shake = maxf(0, shake - dt)
 	message_timer = maxf(0, message_timer - dt)
@@ -507,6 +539,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	flow_timer -= dt
 	if flow_timer <= 0 and flow_cell != Vector2i(player / CELL):update_flow();flow_timer = .25
 	spawn_wave(dt)
+	overflow_step(dt)
 	update_world(dt)
 	var before_move: Dictionary = {}
 	for m in mobs:before_move[m.id] = m.p
@@ -541,7 +574,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		state = "RESULT";victory = false
 		sound("death")
 		return
-	if time >= float(db.data.duration):
+	if time >= float(db.data.duration) and purge.phase == "":
 		notch.begin(self)
 		return
 	if xp >= db.required_xp(level):next_level()

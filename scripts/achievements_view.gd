@@ -11,21 +11,21 @@ func screen(g):
 		var rect=Rect2(24+i*120,49,112,25)
 		g.button(rect,LABELS[i],"achievement_tier_"+TIERS[i])
 		if g.achievement_tier==TIERS[i]:g.draw_line(rect.position+Vector2(3,23),rect.end-Vector2(3,2),g.INK,1)
-	var entries=g.achievements.catalog.filter(func(e):return g.achievement_tier=="all" or e.tier==g.achievement_tier)
+	var entries=g.achievements.catalog.filter(func(e):return g.achievement_tier=="all" or (g.achievements.is_secret(e) if g.achievement_tier=="secret" else e.tier==g.achievement_tier))
 	var pages=maxi(1,ceili(entries.size()/6.0))
 	g.achievement_page=clampi(g.achievement_page,0,pages-1)
 	for i in range(mini(6,entries.size()-g.achievement_page*6)):
-		var entry=entries[g.achievement_page*6+i]
+		var entry=g.achievements.display_entry(entries[g.achievement_page*6+i].id)
 		var earned=g.achievements.unlocked.has(entry.id)
-		var hidden=entry.get("secret",false) and not earned
+		var hidden=entry.hidden
 		var p=Vector2(24+(i%3)*200,87+(i/3)*119)
 		var rect=Rect2(p,Vector2(192,111))
 		g.panel(rect)
 		if earned:g.draw_rect(rect.grow(-3),Color("999999"),false,1)
-		g.sprite("achievement_"+("unknown" if hidden else entry.icon),p+Vector2(9,9),Vector2(32,32),Color.WHITE if earned or hidden else Color(.46,.46,.46))
-		g.wrapped("???" if hidden else entry.name,p+Vector2(50,22),130,8,g.INK if earned else g.MUTED,true)
-		g.text_at("Получено" if earned else "Не получено",p+Vector2(50,38),8,g.MUTED)
-		g.wrapped("Секретное достижение" if hidden else entry.description,p+Vector2(9,57),174,8,g.MUTED)
+		g.sprite("achievement_"+entry.icon,p+Vector2(9,9),Vector2(32,32),Color.WHITE if earned or hidden else Color(.46,.46,.46))
+		g.wrapped(entry.name,p+Vector2(50,22),130,8,g.INK if earned else g.MUTED,true)
+		g.text_at("Получено" if earned else "Не получено",p+Vector2(50,46),8,g.MUTED)
+		g.wrapped(entry.description,p+Vector2(9,64),174,8,g.MUTED)
 	if pages>1:
 		if g.achievement_page>0:g.button(Rect2(24,329,108,22),"Назад","achievements_prev")
 		if g.achievement_page<pages-1:g.button(Rect2(508,329,108,22),"Далее","achievements_next")

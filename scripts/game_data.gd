@@ -17,9 +17,13 @@ func stats(id: String, level: int, evolved: bool = false, items: Dictionary = {}
 	s["back"] = 0
 	s["pierce"] = 0
 	s["rows"] = 1
-	for i in range(mini(level - 1, 7)):
-		for k in data.upgrades[id][i]:
-			s[k] = s.get(k, 0) + data.upgrades[id][i][k]
+	# Past the cap (chapter V core) the upgrade table repeats from the start, stacking on top.
+	var table: Array = data.upgrades[id]
+	for i in range(level - 1):
+		var row: Dictionary = table[i] if i < table.size() else table[(i - table.size()) % table.size()]
+		for k in row:
+			s[k] = s.get(k, 0) + row[k]
+	if level > table.size() + 1 and s.has("interval"):s.interval = maxf(s.interval, .12)
 	if evolved and id == "sword":
 		s.damage += 12
 		s.radius += 12

@@ -128,31 +128,24 @@
   "waves": [
     {
       "at": 0,
-      "rate": 0.6,
+      "rate": 0.95,
       "weights": {
-        "token": 1.0
+        "token": 0.88,
+        "for_loop": 0.12
       }
     },
     {
-      "at": 40,
-      "rate": 0.75,
+      "at": 30,
+      "rate": 1.1,
       "weights": {
-        "token": 0.82,
-        "for_loop": 0.18
+        "token": 0.7,
+        "for_loop": 0.15,
+        "recursion": 0.15
       }
     },
     {
-      "at": 90,
-      "rate": 0.9,
-      "weights": {
-        "token": 0.66,
-        "for_loop": 0.16,
-        "recursion": 0.18
-      }
-    },
-    {
-      "at": 140,
-      "rate": 1.05,
+      "at": 75,
+      "rate": 1.25,
       "weights": {
         "token": 0.56,
         "for_loop": 0.14,
@@ -161,14 +154,28 @@
       }
     },
     {
-      "at": 190,
-      "rate": 1.25,
+      "at": 130,
+      "rate": 1.4,
       "weights": {
-        "token": 0.5,
-        "for_loop": 0.13,
+        "token": 0.44,
+        "for_loop": 0.12,
         "recursion": 0.12,
-        "if_else": 0.13,
-        "function": 0.12
+        "if_else": 0.12,
+        "function": 0.1,
+        "glitch_zombie": 0.1
+      }
+    },
+    {
+      "at": 190,
+      "rate": 1.55,
+      "weights": {
+        "token": 0.36,
+        "for_loop": 0.12,
+        "recursion": 0.1,
+        "if_else": 0.12,
+        "function": 0.12,
+        "glitch_zombie": 0.12,
+        "null_ref": 0.06
       }
     },
     {
@@ -245,13 +252,13 @@
   "events": [],
   "world": {
     "lag": {
-      "from": 90.0,
+      "from": 60.0,
       "every": 38.0,
       "freeze": 0.45,
       "skip": 0.9
     },
     "items": {
-      "from": 150.0,
+      "from": 100.0,
       "every": 21.0,
       "count": 5,
       "radius": 150.0,
@@ -260,7 +267,7 @@
       "damage": 3.0
     },
     "delete": {
-      "from": 240.0,
+      "from": 180.0,
       "every": 24.0,
       "size": [
         176,
@@ -303,5 +310,17 @@
       "ghost_damage": 3.0
     },
     "spawn_scale": 0.35
+  },
+  "overflow": {
+    "at": [
+      120.0,
+      360.0,
+      540.0
+    ],
+    "count": [
+      16,
+      22,
+      28
+    ]
   }
 }

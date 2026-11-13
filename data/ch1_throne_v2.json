@@ -1,0 +1,63 @@
+{
+ "frame": [
+  220,
+  198
+ ],
+ "center": [
+  110,
+  172
+ ],
+ "clips": {
+  "sit_idle": {
+   "start": 0,
+   "count": 6
+  },
+  "sit_cast": {
+   "start": 6,
+   "count": 4
+  },
+  "sit_point": {
+   "start": 10,
+   "count": 3
+  },
+  "sit_command": {
+   "start": 13,
+   "count": 4
+  },
+  "sit_laugh": {
+   "start": 17,
+   "count": 4
+  },
+  "rise": {
+   "start": 21,
+   "count": 8
+  },
+  "stand": {
+   "start": 29,
+   "count": 4
+  }
+ },
+ "sockets": [
+  [
+   24.200000000000003,
+   37.24971361445898
+  ],
+  [
+   195.8,
+   37.24971361445898
+  ]
+ ],
+ "eyes": [
+  110.0,
+  87.27190772563974
+ ],
+ "seat": [
+  110.0,
+  125.98120849650053
+ ],
+ "fps": {
+  "sit_idle": 5,
+  "sit_laugh": 9,
+  "stand": 4
+ }
+}

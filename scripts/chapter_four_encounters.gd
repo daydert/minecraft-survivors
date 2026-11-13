@@ -163,14 +163,17 @@ func update_mass(w,dt: float):
 		mass.p=w.move_actor(mass.p,mass.dir*(data.mass.small_speed if mass.small else data.mass.speed)*(.7 if mass.slow>0 else 1)*dt,mass.radius)
 		mass.moving=before.distance_to(mass.p)>.01
 		if mass.timer<=0:
-			var available: Array=["sweep"]
+			var available: Array=["sweep","slam"]
 			if mass.mask&4:available.append("haul")
-			if mass.mask&3:available.append("fan")
+			if mass.mask&3:available.append("fan");available.append("bile")
+			if mass.small:available.append("slam")
 			var cast: String=available[int(mass.pattern)%available.size()];mass.pattern+=1;mass.charge=mass.p.direction_to(w.player);mass.aim=w.player+w.tracked_velocity*.2;mass.attack_hits={}
 			enter(mass,"windup",float(data.mass.windup)*(.65 if mass.small else 1),cast);w.sound("ch4_mass_warn",.4)
 		return
 	if mass.phase=="windup" and mass.timer<=0:
-		enter(mass,"attack",data.mass.haul_time if mass.cast=="haul" else data.mass.fan_count*data.mass.fan_interval if mass.cast=="fan" else .8)
+		enter(mass,"attack",data.mass.haul_time if mass.cast=="haul" else data.mass.fan_count*data.mass.fan_interval if mass.cast=="fan" else float(data.mass.slam_air)+1.0 if mass.cast=="slam" else .9 if mass.cast=="bile" else .8)
+		if mass.cast=="slam":mass.slam_from=mass.p;mass.slam_landed=false;w.sound("ch4_mass_shed",.1)
+		if mass.cast=="bile":mass.burst=0;mass.burst_timer=0.0
 		mass.burst=0;mass.burst_timer=0
 		if mass.cast=="sweep":mass.sweep_origin=mass.p;mass.sweep_dir=mass.charge
 	if mass.phase=="attack":
@@ -189,6 +192,29 @@ func update_mass(w,dt: float):
 					for j in range(5):
 						if j!=gap:shoot(w,from,aim.rotated((j-2)*.25),data.mass.fan_speed+mass.burst%2*12,mass.damage)
 				mass.burst+=1
+		elif mass.cast=="slam":
+			# Tester pack 13.11: the whole heap jumps and lands on you; a ring of flesh rolls out.
+			var air: float=float(data.mass.slam_air);var k: float=clampf(mass.phase_age/air,0,1)
+			if k<1:
+				mass.p=Vector2(mass.slam_from).lerp(mass.aim,k*k*(3-2*k));mass.lift=sin(k*PI)*70.0
+			elif not mass.slam_landed:
+				mass.slam_landed=true;mass.lift=0.0;mass.ring_r=10.0
+				w.fx.quake(w,mass.p,2.0);w.fx.erupt(w,mass.p,"flesh",14);w.fx.pool(mass.p,26.0,w.clock);w.fx.freeze(w,.08)
+				w.shake=maxf(w.shake,.5);w.sound("ch4_ground_slam",.05);w.sound("ch4_impact",.05)
+				if w.player.distance_to(mass.p)<mass.radius+14:struck(w,mass)
+			else:
+				var before_r: float=float(mass.ring_r);mass.ring_r=before_r+float(data.mass.slam_ring_speed)*dt
+				var d: float=Vector2((w.player-mass.p).x,(w.player-mass.p).y*1.6).length()
+				if d>=before_r-6 and d<mass.ring_r+6 and mass.ring_r<float(data.mass.slam_radius) and not mass.attack_hits.has("ring"):mass.attack_hits.ring=true;w.receive_hit(float(data.mass.slam_damage),mass)
+		elif mass.cast=="bile":
+			mass.burst_timer-=dt
+			if mass.burst_timer<=0 and mass.burst<int(data.mass.bile_count):
+				mass.burst_timer+=.11
+				var spread: float=(float(mass.burst)/maxf(1,int(data.mass.bile_count)-1)-.5)*1.3
+				var to: Vector2=mass.p+mass.charge.rotated(spread)*(70.0+40.0*(mass.burst%3))
+				w.enemy_bottles.append({"p":mass.p-Vector2(0,30),"end":to,"age":0.0,"total":.45,"radius":float(data.mass.bile_radius),"life":float(data.mass.bile_life),"damage":2.0})
+				mass.burst+=1
+				if mass.burst==1:w.sound("ch4_poison",.1)
 		elif mass.cast=="sweep":
 			var segment: Array=sweep_segment()
 			if Geometry2D.get_closest_point_to_segment(w.player,segment[0],segment[1]).distance_to(w.player)<data.mass.sweep_width and not mass.attack_hits.has("player"):
@@ -253,6 +279,7 @@ func update_golem(w,dt: float):
 		if golem.timer<=0:golem.skin="ch4d_golem_saved";golem.allied=true;golem.undead=false;golem.help_until=w.clock+data.golem.help_duration;enter(golem,"walk",.8);w.loot.append({"kind":"chest","p":golem.p+Vector2(0,20),"born":w.time})
 		return
 	if not rescued and nodes.filter(func(n):return n.encounter_actor=="golem_node" and n.hp>0).is_empty():
+		w.run_progress.award("free_golem")
 		rescued=true;golem.allied=true;golem.undead=false;enter(golem,"release",data.golem.release);w.drop_xp(golem.p,data.golem.reward_xp);w.sound("ch4_golem_free");w.add_effect("ch4d_release",golem.p,1.4);w.fx.quake(w,golem.p,1.2);w.fx.ring(golem.p,170.0,1.0,"evolve");w.fx.flash(golem.p-Vector2(0,24),220.0,Color(1,.9,.6),.7);w.fx.freeze(w,.14);return
 	# The director keeps only one hostile encounter preparing attacks at a time.
 	if busy() and not rescued:return

@@ -15,6 +15,17 @@ func entry(id: String) -> Dictionary:
 		if item.id==id:return item
 	return {}
 
+func is_secret(item: Dictionary) -> bool:
+	return item.get("secret",false) or item.get("tier","")=="secret"
+
+func display_entry(id: String) -> Dictionary:
+	var item=entry(id).duplicate()
+	if item.is_empty():return item
+	item["hidden"]=is_secret(item) and not unlocked.has(id)
+	if item.hidden:
+		item.name="???";item.description="Секретное достижение";item.icon="unknown"
+	return item
+
 func load_profile(save_path: String="user://achievements.json"):
 	path=save_path;unlocked.clear();pending.clear();recovered=false
 	for candidate in [path,path+".bak"]:

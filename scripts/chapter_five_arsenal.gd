@@ -113,7 +113,7 @@ func stick(w, first: Dictionary, s: Dictionary, evo: bool):
 		if stick_flip or evo:m.slow = maxf(m.get("slow", 0.0), s.duration)
 		if not stick_flip or evo:
 			if m.kind not in ["condition","hijack","array","while_loop"]:m.knock = w.player.direction_to(m.p) * float(rules(w).stick_shove)
-	w.sound("ch4_hb_twitch", .08)
+	w.sound("ch4_hb_tick", .14)
 
 func step(w, dt: float):
 	breakpoint_ready=maxf(0,breakpoint_ready-dt)

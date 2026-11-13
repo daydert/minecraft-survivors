@@ -1,0 +1,399 @@
+{
+  "tool": "image_gen.imagegen",
+  "model": "Not exposed by the built-in tool",
+  "prompt_set": "assets/art_source/ch4_icons/prompts.json",
+  "style_reference": "assets/art_source/ch4_icons/vanilla_reference.png",
+  "edits": "assets/art_source/ch4_icons/edits.json",
+  "sources": {
+    "shotgun": {
+      "path": "assets/art_source/ch4_icons/shotgun.png",
+      "sha256": "e8383c3cec0c0d673d5a961af9dd1741358d5f37678ee1ed5f7268cc9da093af"
+    },
+    "heart_booster": {
+      "path": "assets/art_source/ch4_icons/heart_booster.png",
+      "sha256": "eef341c5af606f15f04acd76005fd1585c898968a3e7b4deb9e14d54e059224f"
+    },
+    "bedrock_sword": {
+      "path": "assets/art_source/ch4_icons/bedrock_sword.png",
+      "sha256": "65c6b11f6ade18b367cfe87f9a39f9ccaacbed523736c2487571e6c52518a9ac"
+    },
+    "blood_pool": {
+      "path": "assets/art_source/ch4_icons/blood_pool.png",
+      "sha256": "e835ce925d534881e96468602f0ef396ed0a991fcfc0232426ae59a4f0ea37c8"
+    },
+    "blood_pool_evo": {
+      "path": "assets/art_source/ch4_icons/blood_pool_evo.png",
+      "sha256": "f6c27b82219a5bfc93ce4efeb2d9595fa1dafb30d3ad7445a9a67cd550dfe30c"
+    },
+    "embryo": {
+      "path": "assets/art_source/ch4_icons/embryo.png",
+      "sha256": "839e4ca79474676e566e4424fbe6178d2fa2ca85a57f3fdce2d81febd1f0767f"
+    },
+    "embryo_evo": {
+      "path": "assets/art_source/ch4_icons/embryo_evo.png",
+      "sha256": "4a140567de02ca37ef6633c3dca3a4dfdbfb4ca0e25c3404ba860a5d367da901"
+    },
+    "bell": {
+      "path": "assets/art_source/ch4_icons/bell.png",
+      "sha256": "f2030dadc331a5bca81866ca1d4779a779e70ca960b09314ac54fd19e76b3104"
+    },
+    "bell_evo": {
+      "path": "assets/art_source/ch4_icons/bell_evo.png",
+      "sha256": "17afc76984895bfe8c7eb3e7f22cb0b686ee9bf607865b0116e006b855b5afd3"
+    },
+    "bone_saw": {
+      "path": "assets/art_source/ch4_icons/bone_saw.png",
+      "sha256": "d41dc708cf9eff7c3897416dae191f98ad8061a74b1989adebe8a210010ceb15"
+    },
+    "bone_saw_evo": {
+      "path": "assets/art_source/ch4_icons/bone_saw_evo.png",
+      "sha256": "6784522ccdc6d7ed83a5b998650b01019986c36e209058367ae6afb556a09ce9"
+    },
+    "red_torch": {
+      "path": "assets/art_source/ch4_icons/red_torch.png",
+      "sha256": "4f7f18ee470be6d9caa4199ee456b9064c2e10ca96360e679a6f1eca93bc9dec"
+    },
+    "red_torch_evo": {
+      "path": "assets/art_source/ch4_icons/red_torch_evo.png",
+      "sha256": "39ff242c29568a19900209d5ef96e03947ebdba70f682ce0193e494c466a9b22"
+    },
+    "sky_tnt": {
+      "path": "assets/art_source/ch4_icons/sky_tnt.png",
+      "sha256": "6d66d1ec6f78bc34191dd1609d4e0e3ca261d14a79d63ef0ef37a3bf422569d3"
+    },
+    "potion": {
+      "path": "assets/art_source/ch4_icons/potion.png",
+      "sha256": "a94376c7ddd2cf6bbad9c0eb6e33b15f7e6fb6fd7474d87047d6c8ed710d7850"
+    },
+    "potion_evo": {
+      "path": "assets/art_source/ch4_icons/potion_evo.png",
+      "sha256": "b208d66982bf931ab4e583523d80770a544211ec1ec95bc3c103c557ceed761a"
+    },
+    "bedrock": {
+      "path": "assets/art_source/ch4_icons/bedrock.png",
+      "sha256": "4697d2cebf5b6ec6f9448df428b5f098bf32d159fa8fa847089f3219e05751bc"
+    },
+    "thorns": {
+      "path": "assets/art_source/ch4_icons/thorns.png",
+      "sha256": "a3bd2ac1d56f62f9c1d603983ea8ed2a6405d88d6d9e978e3069026be9c95f2f"
+    },
+    "bat_wings": {
+      "path": "assets/art_source/ch4_icons/bat_wings.png",
+      "sha256": "849310f676d32ce1d02e69f3fc1ba4598ad9f8d1b3a6d99fb16c666f9fe727d3"
+    },
+    "mirror_shard": {
+      "path": "assets/art_source/ch4_icons/mirror_shard.png",
+      "sha256": "8f690756ab148bde65becfbb31fa416dda72f57a9b5eeda606811f6afa4551d0"
+    },
+    "black_candle": {
+      "path": "assets/art_source/ch4_icons/black_candle.png",
+      "sha256": "dd5d45daf24f58383076b0647fc11ee8d07d380b4e05e2a567b4795a2c1eee29"
+    },
+    "empty_totem": {
+      "path": "assets/art_source/ch4_icons/empty_totem.png",
+      "sha256": "db7594392236de1830109c86b09286b890c8133c676e4836211301113034f321"
+    },
+    "iron_maiden": {
+      "path": "assets/art_source/ch4_icons/iron_maiden.png",
+      "sha256": "63396f69ed878340ea46b799528ff18793704ddaa60565656ad8aac6bad3d2ef"
+    },
+    "bat_swarm": {
+      "path": "assets/art_source/ch4_icons/bat_swarm.png",
+      "sha256": "9ed62f74814bd6e049dad106b9c3590f0027ae9748919815bc92698ba7a92b31"
+    },
+    "shotgun_evo": {
+      "path": "assets/art_source/ch4_icons/shotgun_evo.png",
+      "sha256": "a605ee8d433dac8e519f7da321c2e81315377ed2ab7dcf4bc9b8566785c05c90"
+    }
+  },
+  "derived": {
+    "icon_ch4_shotgun": {
+      "sources": [
+        "assets/art_source/ch4_icons/shotgun.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "ead3117bf664ed157686326b7607bcdf4f5b65c97e8e91c4378966079e87a76a",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_heart_booster": {
+      "sources": [
+        "assets/art_source/ch4_icons/heart_booster.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "a6e7463cbb0bc75b125535bad5a88ed64be77f13d86e0981d0dd5fe799a684d6",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bedrock_sword": {
+      "sources": [
+        "assets/art_source/ch4_icons/bedrock_sword.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "df2a07d9eabac8083966456104ee0d2711d62e34b097dc34cfef2418a81a4b5c",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_blood_pool": {
+      "sources": [
+        "assets/art_source/ch4_icons/blood_pool.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "49307bfead529b8e02e38014205aa192257f1aa90591cca8508cbef58f6d8ecf",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_blood_pool_evo": {
+      "sources": [
+        "assets/art_source/ch4_icons/blood_pool_evo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "4ecc14de22588dfdb937d0d40e69eebca20e4a6e41ede5e89f3963f6b93bb83d",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_embryo": {
+      "sources": [
+        "assets/art_source/ch4_icons/embryo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "7211448426cbde62a85b20cffb7dba9cc86a909a51021a2159d5ca60eb4d0c64",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_embryo_evo": {
+      "sources": [
+        "assets/art_source/ch4_icons/embryo_evo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "defefae9ada991ebf4b3f1ed9fb92ca87bd4b76d6a4d5b8e45826cc493c7059a",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bell": {
+      "sources": [
+        "assets/art_source/ch4_icons/bell.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "97a479ee93e25e0153a9fac26258b97646366f6c6cd77d62ad58cc9678b720d8",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bell_evo": {
+      "sources": [
+        "assets/art_source/ch4_icons/bell_evo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "0276ac434169981ae80cb69115182834ce9994a634e2fef866e693b2f644f119",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bone_saw": {
+      "sources": [
+        "assets/art_source/ch4_icons/bone_saw.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "f13c1cd399c252d9eb926207f661193a5e21f6735b36e21eb3964c02e8cee5fd",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bone_saw_evo": {
+      "sources": [
+        "assets/art_source/ch4_icons/bone_saw_evo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "6046d1b2300382e40253d5b0d29e445b49bc3c1ae24abcb27b37d1746d121566",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_red_torch": {
+      "sources": [
+        "assets/art_source/ch4_icons/red_torch.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "2129371ce322070f16e277631d45f860740137b540095de484e3442dd45f9a07",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_red_torch_evo": {
+      "sources": [
+        "assets/art_source/ch4_icons/red_torch_evo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "288946af2db6e377a6834b2b70b1d005f87da092966d66d56b5fc4d239008c9f",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_sky_tnt": {
+      "sources": [
+        "assets/art_source/ch4_icons/sky_tnt.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "d91ade2453e1d505b45ac2cf17e56a0d3dfefbff201db203d65bbe2e2dea4aee",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_potion": {
+      "sources": [
+        "assets/art_source/ch4_icons/potion.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "5c56672b008e5cd01b2351c0099774f19b041f98cd01b46531a4e8ffa1410b46",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_potion_evo": {
+      "sources": [
+        "assets/art_source/ch4_icons/potion_evo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "32a83a2eaf2c59b4678d97934394661de6cacce342b9d1b8f45de1510f456238",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bedrock": {
+      "sources": [
+        "assets/art_source/ch4_icons/bedrock.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "e2f51e2539d20f158b47cebfc97678d12dae772f86f9842a74c2770c97fc1222",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_thorns": {
+      "sources": [
+        "assets/art_source/ch4_icons/thorns.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "d33c8cfe7d890db342fb5106f20a7c0a3b58ea878cd8cadc6b38b61609c3c2f2",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bat_wings": {
+      "sources": [
+        "assets/art_source/ch4_icons/bat_wings.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "c832d28ba5f22ebacf442fac9fbc3d928fefcc091d65e34a2792662e9ebe1ccf",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_mirror_shard": {
+      "sources": [
+        "assets/art_source/ch4_icons/mirror_shard.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "7779928c619c1752c903c5a75da20f56e849b53b033329ebe874205a10cf053b",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_black_candle": {
+      "sources": [
+        "assets/art_source/ch4_icons/black_candle.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "939e38335c5ce434240ab7f912973af88d8d040238ea733e3c0b8cd73a725585",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_empty_totem": {
+      "sources": [
+        "assets/art_source/ch4_icons/empty_totem.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "5eaa91658a634b0ba56790a0c9d0307dba6ab57a41f7c749a78cbd7fd8153f58",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_iron_maiden": {
+      "sources": [
+        "assets/art_source/ch4_icons/iron_maiden.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "580a626062a3051a3c4d3beb1b1a6a6de77b82231ede31530e22ca02448f4d68",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_bat_swarm": {
+      "sources": [
+        "assets/art_source/ch4_icons/bat_swarm.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "0f6002cbabbd72890847f394a0335b70c47ef3b1eb0151b9fe0ea3e4ae200565",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_shotgun_evo": {
+      "sources": [
+        "assets/art_source/ch4_icons/shotgun_evo.png"
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "sha256": "79e1fdc4a47b55b38e965e15bd2ed09a6df115df9de187d748adce381c880599",
+      "origin": "Built-in image_gen.imagegen; vanilla Minecraft inventory reference; nearest pixels, 24-color palette, transparent alpha."
+    },
+    "icon_ch4_minecart": {
+      "sources": [
+        "assets/sprites/icon_minecart.png"
+      ],
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3f747009754ec30eb68ebdc02386ddd5eff7ecb1b268c8dfb69a178789e175a8",
+      "origin": "Unmodified vanilla Minecraft Java minecart item; MINECART_ICON_MANIFEST.json."
+    }
+  },
+  "generated_count": 25,
+  "notes": "Generated inventory art requested by the user. Native world models and their textures are unchanged. Minecart remains vanilla."
+}

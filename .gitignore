@@ -19,3 +19,4 @@ qa/chapter_four_e/
 *.blend1
 qa/cinematics/**/*.wav
 qa/cinematics/**/*.avi
+qa/cinematics/reels/

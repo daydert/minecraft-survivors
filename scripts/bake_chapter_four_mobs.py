@@ -357,6 +357,80 @@ def chicken(imp,state,i,n):
     return mesh
 
 
+def butcher(imp,state,i,n):
+    """The village butcher: whole, upright, apron soaked, a sack over the head
+    and a cleaver as long as his arm. Unkillable stalker of chapter IV."""
+    gait,lift,action,hurt,breath=action_pose(state,i,n)
+    tex=imp.tex('entity/villager/villager');prof=imp.tex('entity/villager/profession/butcher')
+    mesh=[]
+    head=part(tex,(-4,24,-4),(8,10,8),(0,0))+part(prof,(-4,24,-4),(8,10,8),(0,0),inflate=.15)
+    head+=part(tex,(-1,25,-6),(2,4,2),(24,0))
+    head+=block(imp,'brown_wool',(-4.6,26,-4.6),(9.2,9,9.2),tint=(196,170,140))
+    head+=block(imp,'coal_block',(-3,30,-4.8),(2,1.6,.6));head+=block(imp,'coal_block',(1,30,-4.8),(2,1.6,.6))
+    head+=flesh(imp,(-4.7,26,-4.8),(5,3,.6))
+    for x in [-3,0,3]:head+=beam(imp,(x,26,-4.6),(x+.6,23.5,-4.4),.7)
+    mesh+=transform(head,(-action*.15+hurt,0,0),pivot=(0,24,0))
+    for layer in [tex,prof]:
+        mesh+=part(layer,(-4,12,-3),(8,12,6),(16,20),inflate=.05 if layer is prof else 0)
+        mesh+=part(layer,(-4,4,-3),(8,20,6),(0,38),inflate=.1 if layer is prof else 0)
+    mesh+=block(imp,'white_wool',(-4.4,5,-3.7),(8.8,16,.7),tint=(230,205,195))
+    mesh+=flesh(imp,(-4.4,6,-3.9),(5,9,.6));mesh+=flesh(imp,(.5,12,-3.9),(3.6,6,.6))
+    for sign in [-1,1]:
+        mesh+=part(tex,(sign*2-2,0,-2),(4,12,4),(0,22),pivot=(sign*2,12,0),angles=(gait*.42*sign,0,0))
+    # Left arm reaches, right arm carries the cleaver overhead on windup.
+    left=part(tex,(-2,10,-2),(4,12,4),(44,22))
+    mesh+=transform(left,(.35+gait*.2+action*.5,0,-.15),pivot=(0,22,0),offset=(-6,0,0))
+    right=part(tex,(-2,10,-2),(4,12,4),(44,22))
+    right+=item(imp,'iron_axe',(0,10,-3),-.4,1.7)
+    right+=flesh(imp,(-1.4,9,-4.2),(2.8,3,1))
+    swing=(-1.9*min(1,action)) if state=='windup' else (1.6-action*.6) if state=='attack' else .2-gait*.2
+    mesh+=transform(right,(swing,0,.12),pivot=(0,22,0),offset=(6,0,0))
+    return transform(mesh,offset=(0,lift+breath,0))
+
+
+def crucified(imp,state,i,n):
+    """A villager left too long on the pillar: torn down with the crossbeam
+    still nailed through both palms, it drags the beam like a ram."""
+    gait,lift,action,hurt,breath=action_pose(state,i,n)
+    tex=imp.tex('entity/villager/villager')
+    mesh=transform(split_head(imp,tex,24,10),(.35-action*.3,0,.18),pivot=(0,24,0))
+    mesh+=part(tex,(-1,25,-6),(2,4,2),(24,0),pivot=(0,24,0),angles=(.35-action*.3,0,.18))
+    mesh+=part(tex,(-4,12,-3),(8,12,6),(16,20))[1:]
+    mesh+=part(tex,(-4,4,-3),(8,20,6),(0,38))[1:]
+    mesh+=open_ribs(imp,12,-3.2,7,10)
+    for sign in [-1,1]:
+        mesh+=part(tex,(sign*2-2,0,-2),(4,12,4),(0,22),pivot=(sign*2,12,0),angles=(gait*.6*sign,0,0))
+    beam_mesh=block(imp,'stripped_dark_oak_log',(-17,20,1),(34,4,4),'stripped_dark_oak_log',tint=(150,120,110))
+    for sign in [-1,1]:
+        arm=part(tex,(-2,-2,-2),(4,12,4),(44,22),pivot=(0,0,0),angles=(0,0,-sign*1.5))
+        beam_mesh+=transform(arm,offset=(sign*6,22,0))
+        beam_mesh+=block(imp,'iron_block',(sign*13-1,21,-1.5),(2,2,6),tint=(120,110,110))
+        beam_mesh+=flesh(imp,(sign*13-2,18,-.8),(4,3,1.4))
+    beam_mesh+=block(imp,'stripped_dark_oak_log',(-2,24,1),(4,7,4),'stripped_dark_oak_log',tint=(150,120,110))
+    mesh+=transform(beam_mesh,(-action*.9,0,gait*.08),pivot=(0,22,0))
+    mesh+=flesh(imp,(-4.2,14,-3.2),(3,6,1))
+    return transform(mesh,offset=(0,lift+breath,0))
+
+
+def marksman(imp,state,i,n):
+    """Skeleton with a crossbow braced to the shoulder; reads as a sniper."""
+    gait,lift,action,hurt,breath=action_pose(state,i,n)
+    tex=imp.tex('entity/skeleton/skeleton')
+    mesh=transform(split_head(imp,tex),(-.1,0,.08),pivot=(0,24,0))
+    mesh+=part(tex,(-4,12,-2),(8,12,4),(16,16))[1:]
+    mesh+=open_ribs(imp,14,-2,7,8)
+    mesh+=block(imp,'red_wool',(-4.6,20,-2.6),(9.2,4,5.2),tint=(150,70,70))
+    for sign in [-1,1]:
+        mesh+=part(tex,(sign*2-1,0,-1),(2,12,2),(0,16),pivot=(sign*2,12,0),angles=(gait*.4*sign,0,0))
+    aim=1.45 if state in ['windup','attack'] else .5+gait*.15
+    kick=-.35 if state=='attack' else 0
+    for sign in [-1,1]:
+        arm=part(tex,(-1,10,-1),(2,12,2),(40,16))
+        if sign>0:arm+=transform(item(imp,'crossbow_standby',(0,9,-2),.9,1.15),(0,math.pi/4,0),pivot=(0,9,-2))
+        mesh+=transform(arm,(aim+kick,0,-sign*.25 if state in ['windup','attack'] else sign*.1),pivot=(0,22,0),offset=(sign*4.5,0,0))
+    return transform(mesh,offset=(0,lift+breath,0))
+
+
 def generate(only=None):
     version,client,_=find_client(Path.home()/'.local/share/PrismLauncher');imp=Importer(client)
     base=json.loads((ROOT/'data/animations.json').read_text())['actors']['zombie']
@@ -378,6 +452,9 @@ def generate(only=None):
       'bone_rider':(horse,(80,72),1.0,(40,62)),
       'parasite':(parasite,(24,20),1.0,(12,14)),
       'chicken':(chicken,(24,24),.85,(12,20)),
+      'butcher':(butcher,(64,72),1.3,(32,62)),
+      'crucified':(crucified,(72,60),1.0,(36,52)),
+      'marksman':(marksman,(48,44),.9,(24,39)),
     }
     previous=json.loads((ROOT/'data/chapter_four_mobs.json').read_text()) if only else {}
     previous_manifest=json.loads((ROOT/'docs/CHAPTER_FOUR_MOBS_MANIFEST.json').read_text()) if only else {}
@@ -385,7 +462,7 @@ def generate(only=None):
     for name,(builder,frame,scale,anchor) in definitions.items():
         if only and name not in only:continue
         spec=json.loads(json.dumps(base));spec['states']['death']={'start':22,'durations':[.1,.12,.14,.2],'loop':False};spec['columns']=26;spec['frame_size']=list(frame);spec['anchor']=list(anchor);spec['pivot']=list(anchor)
-        spec['shadow_size']=[15,4] if name in ['gravedigger','bone_rider'] else [12,3] if name in ['open_cow','torn_spider'] else [7,2]
+        spec['shadow_size']=[15,4] if name in ['gravedigger','bone_rider','butcher','crucified'] else [12,3] if name in ['open_cow','torn_spider'] else [7,2]
         # Action clips use normalized encounter progress; arbitrary attack lengths
         # remain synchronized with the same warning/effect/collision clock.
         def animated(imp,state,i,n,builder=builder):
@@ -420,4 +497,6 @@ def generate(only=None):
     previous_manifest.update(version=version,client_jar=str(client))
     (ROOT/'docs/CHAPTER_FOUR_MOBS_MANIFEST.json').write_text(json.dumps(previous_manifest,indent=2)+'\n')
 
-if __name__=='__main__':generate()
+if __name__=='__main__':
+    import sys
+    generate(sys.argv[1:] or None)

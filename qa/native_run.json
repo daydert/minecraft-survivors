@@ -1,0 +1,19 @@
+{
+  "build": {},
+  "chapter_complete": false,
+  "ending": "",
+  "evolved": {},
+  "executable": "/home/daydert/MinecraftSurvivors2/.tools/Godot_v4.7.2-stable_linux.x86_64",
+  "hp": 20.0,
+  "items": {},
+  "kills": 0,
+  "level": 1,
+  "simulation": {
+    "max_ms": 0.379,
+    "mean_ms": 0.0273230978260869,
+    "p95_ms": 0.062
+  },
+  "style": "",
+  "time": 0.0,
+  "victory": false
+}

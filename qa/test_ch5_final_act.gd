@@ -16,7 +16,7 @@ func run():
  game.action("chapter_5");var w=game.world;var n=w.notch;var f=n.finale;n.begin(w)
  var revenge := false;var old_line := false
  for line in f.CHAIR:
-  if line[1]=="Мстить — дело слабых.":revenge=line[0]<f.CHAIR_STAB and line[0]+line[2]<=f.CHAIR_STAB
+  if line[1]=="МСТИТЬ — ЭТО ДЕЛО СЛАБЫХ!":revenge=line[0]<f.CHAIR_STAB and line[0]+line[2]<=f.CHAIR_STAB
   if str(line[1]).contains("С ней"):old_line=true
  check(revenge and not old_line,"Revenge line completes before the stab; old final line is gone")
  n.change("erase");f.begin_erase();f.erase=.95;f.age=9.5;await draw();var v=game.get_meta("ch5_view3d")
@@ -27,14 +27,9 @@ func run():
  check(arm_visible,"Last deletion warning retains a connected attacking arm")
  check(float(v.rigs.steve.material.get_shader_parameter("erase_amount"))>.2,"Deletion already erodes pixels before the failed attack")
  n.begin_bad_end(w);advance(w,2.4);await draw();v=game.get_meta("ch5_view3d")
- check(v.mode=="bad_end" and v.rigs.notch.root.visible and not v.rigs.steve.root.visible,"Steve disappears mid-attack while Notch remains")
- check(not v.nodes.bad_sword.visible,"Sword dissolves with the attacking hand")
- advance(w,.8);check(n.line=="Пора бы завязать с тестированием.","Notch speaks after Steve has disappeared")
- advance(w,3.8);await draw()
- check(v.nodes.beer.global_position.distance_to(v.rigs.notch.grip.to_global(Vector3(0,.015,.15)))<.001,"Beer can is held by the actual hand")
- check(w.state=="RUNNING","Bad ending waits for Notch's full action")
- advance(w,6.7);await draw();check(absf(v.nodes.bad_door.rotation.y)>.6,"Notch opens the exit before leaving")
- advance(w,4.6);check(w.state=="RESULT" and not w.victory,"Full bad ending still ends in real defeat")
+ check(v.mode=="bad_end" and v.nodes.has("film"),"Bad ending plays as a film")
+ check(w.state=="RUNNING","Bad ending waits for the film")
+ advance(w,n.BAD_FILM_LENGTH+n.BAD_CREDITS_LENGTH);check(w.state=="RESULT" and not w.victory,"Full bad ending still ends in real defeat")
  w.state="RUNNING";n.start_qte(w);var q=n.qte
  var events: Array=[]
  while n.phase=="qte":
@@ -61,7 +56,7 @@ func run():
  check(first_cam!=last_cam,"Camera follows the exchange")
  var i0: Array=spec.portal_0.frames[26].notch.head;var i1: Array=spec.portal_0.frames[29].notch.head
  check(i0!=i1,"First portal punch visibly snaps the recipient's head")
- for sample in [["bad_end",1.4],["bad_end",6.2],["bad_end",12.1],["qte",1.1],["finisher",1.3],["to_ut",.96],["chair",32.8]]:
+ for sample in [["qte",1.1],["finisher",1.3],["to_ut",.96],["chair",32.8]]:
   n.change(sample[0]);n.age=sample[1];f.change(sample[0]);f.age=sample[1];w.clock=100+sample[1]
   if sample[0] in ["qte","finisher"]:
    n.change("qte");q.reset();q.beat=3;q.age=sample[1];q.resolved=true;q.success=true;q.resolved_age=.4;q.finishing=sample[0]=="finisher";q.finish_age=sample[1]

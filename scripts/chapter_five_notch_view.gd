@@ -42,47 +42,215 @@ static func actor(g, offset: Vector2):
 	var w = g.world;var n = w.notch
 	if not (n.phase in ["intro", "fight", "to_ut", "retry"] and (n.phase != "retry" or n.retry_of == "fight")):return
 	var p: Vector2 = n.p + offset
-	g.oval(p, Vector2(10, 3), Color(0, 0, 0, .35))
+	var height: float = 0.0
+	if n.phase == "fight" and n.slam_age >= 0:height = (n.slam_at - n.p).y
+	g.oval(n.p + Vector2(0, height) + offset, Vector2(10, 3) * (1.0 - clampf(height / 300.0, 0, .7)), Color(0, 0, 0, .35))
 	glow(g, p, 1.0, w.clock)
 	var m = n.notch_mob(w) if n.id >= 0 else null
 	var tint := Color(1.8, 1.8, 1.8) if m != null and m.flash > 0 and g.settings.flashes else Color.WHITE
+	if n.phase == "fight" and n.enraged:
+		# Red static around him once he is angry.
+		for i in range(10):
+			var a: float = i * .628 + w.clock * 3.0
+			var q: Vector2 = p + Vector2(cos(a) * 16, sin(a) * 8 - 18 - fposmod(w.clock * 40 + i * 9, 30))
+			g.draw_rect(Rect2(q.floor(), Vector2(2, 2)), Color(1, .1, .15, .7))
+		if int(w.clock * 9) % 7 == 0:figure(g, n.pose, n.pose_age, p + Vector2(4, -3), n.dir, 1.5, Color(1, .1, .3, .5))
 	var lift: float = round(sin(w.clock * 2.0) * 1.5) + 3
 	figure(g, n.pose, n.pose_age, p - Vector2(0, lift), n.dir, 1.5, tint)
 
+const RED := Color(.93, .16, .14)
+const SELECT := Color(.25, .5, 1)
+
+## Under the actors: selections, shadows of falling blocks, craters, dash lines.
+static func ground(g, offset: Vector2):
+	var w = g.world;var n = w.notch
+	if n.phase != "fight":return
+	var v = view(g)
+	var ink: Color = Color(.08, .08, .1).lerp(Color(.9, .92, 1), n.dark)
+	for h in n.hz:
+		if h.age < 0:continue
+		match h.kind:
+			"select":
+				var r := Rect2(h.rect.position + offset, h.rect.size)
+				var del: float = h.drag + h.hold
+				if h.age < del:
+					var k: float = 1.0 - pow(1.0 - clampf(h.age / h.drag, 0, 1), 3)
+					var anchors := [r.position, Vector2(r.end.x, r.position.y), r.end, Vector2(r.position.x, r.end.y)]
+					var from: Vector2 = anchors[h.corner];var to: Vector2 = anchors[(h.corner + 2) % 4]
+					var cur: Vector2 = from.lerp(to, k)
+					var shown := Rect2(from, cur - from).abs()
+					var hold: float = clampf((h.age - h.drag) / h.hold, 0, 1)
+					g.draw_rect(shown, Color(SELECT, .18 + .1 * hold))
+					if h.age > h.drag:
+						g.draw_rect(shown, Color(RED, hold * .3 * (.6 + .4 * sin(h.age * 40))))
+						g.text_at("Del", shown.get_center() - Vector2(8, -3), 8, Color(RED, .5 + hold * .5))
+					dashed_rect(g, shown, SELECT.lerp(RED, hold), h.age * 30.0)
+					cursor_arrow(g, cur)
+				else:
+					# Deleted: a hole of nothing with dead pixels, closing again.
+					var t: float = h.age - del
+					var close: float = 1.0 - smoothstep(.6, .9, t)
+					var hole: Rect2 = r.grow_individual(-r.size.x * (1 - close) / 2, -r.size.y * (1 - close) / 2, -r.size.x * (1 - close) / 2, -r.size.y * (1 - close) / 2)
+					if t < .08:g.draw_rect(r, Color.WHITE)
+					else:
+						g.draw_rect(hole, Color(0, 0, 0, .95) if n.dark < .5 else Color(.95, .95, 1, .9))
+						for i in range(26):
+							var q: Vector2 = hole.position + hole.size * Vector2(Atmosphere.hash01(i, int(t * 20), 71), Atmosphere.hash01(i, int(t * 20), 72))
+							g.draw_rect(Rect2(q.floor(), Vector2(2, 2)), [Color(.97, 0, .86), Color(.3, 1, .9), RED][i % 3])
+						g.draw_rect(hole, RED, false, 1)
+			"block":
+				var k: float = clampf(h.age / h.fall, 0, 1)
+				var q: Vector2 = h.p + offset
+				if h.age < h.fall:
+					g.oval(q, Vector2(4 + 9 * k, 2 + 4 * k), Color(0, 0, 0, .15 + .35 * k))
+					g.draw_arc(q, 17, 0, TAU, 20, Color(RED, .25 + .35 * k), 1)
+				else:
+					var t: float = h.age - h.fall
+					crack(g, q, 12.0, Color(ink, .5 * (1.0 - t)), int(h.p.x))
+					if h.block == "ch5q_tnt" and t < .7:
+						g.draw_arc(q, 52, 0, TAU, 32, Color(RED, .4 + .4 * float(int(t * 14) % 2)), 2)
+						g.draw_circle(q, 52, Color(RED, .08))
+			"crater":
+				var t: float = h.age / 2.0
+				crack(g, h.p + offset, 40.0, Color(ink, .7 * (1 - t)), int(h.p.x))
+			"clone":
+				if h.age < h.warn + .1:
+					var d: Vector2 = h.from.direction_to(h.target)
+					var a: Vector2 = h.from + offset;var b: Vector2 = a + d * 420.0
+					var k: float = clampf(h.age / h.warn, 0, 1)
+					g.draw_line(a, b, Color(RED, .15 + .25 * k), 9.0 * k + 1)
+					for s in range(0, 420, 14):
+						var q: Vector2 = a + d * (s + fposmod(h.age * 120.0, 14.0))
+						g.draw_line(q, q + d * 6, Color(RED, .8), 2)
+	if n.slam_age >= 0:
+		var hunt: float = 1.05;var lock: float = .35
+		var q: Vector2 = n.slam_at + offset
+		var locked: bool = n.slam_age >= hunt
+		var spin: float = w.clock * (2.0 if not locked else 0.0)
+		var c: Color = RED if locked and int(n.slam_age * 20) % 2 == 0 else Color(RED, .7)
+		g.draw_arc(q, 46, 0, TAU, 36, Color(c, .8), 2)
+		g.draw_circle(q, 46, Color(RED, .1 + (.15 if locked else 0.0)))
+		for k in range(4):
+			var a: float = spin + k * PI / 2
+			g.draw_line(q + Vector2.from_angle(a) * 30, q + Vector2.from_angle(a) * 54, c, 2)
+
+static func crack(g, at: Vector2, size: float, c: Color, seed: int):
+	if c.a <= 0:return
+	for i in range(7):
+		var a: float = i * .9 + Atmosphere.hash01(seed, i, 80) * .6
+		var q: Vector2 = at
+		for s in range(3):
+			var nq: Vector2 = q + Vector2.from_angle(a + (Atmosphere.hash01(seed, i * 3 + s, 81) - .5) * .9) * size / 3.0
+			g.draw_line(q.floor(), nq.floor(), c, 1)
+			q = nq
+
+## Over the actors: falling blocks, beams, the clones, bolts, the shockwave, popups.
 static func air(g, offset: Vector2):
 	var w = g.world;var n = w.notch
 	if n.phase != "fight":return
-	for wl in n.walls:
-		var x: float = wl.x + offset.x
-		for y in range(0, 360, 8):
-			var wy: float = y - offset.y
-			if absf(wy - wl.gap) < 26:continue
-			var q := Vector2(x - 4, y)
-			for k in range(2):g.draw_rect(Rect2(q + Vector2(0, k * 4), Vector2(4, 4)), Color(.97, 0, .86) if (k + y / 8) % 2 == 0 else Color(0, 0, 0))
-			g.draw_rect(Rect2(q + Vector2(4, 0), Vector2(4, 4)), Color(0, 0, 0) if (y / 8) % 2 == 0 else Color(.97, 0, .86))
-	for f in n.falls:
-		var k: float = clampf(f.age / f.delay, 0, 1)
-		var q: Vector2 = f.p + offset
-		if f.age < f.delay:
-			var height: float = (1 - k) * 160
-			var icon: String = "icon_pvz_obsidian" if f.block == "obsidian" else ""
-			if not icon.is_empty() and g.textures.has(icon):g.draw_texture_rect(g.textures[icon], Rect2(q - Vector2(8, 16 + height), Vector2(16, 16)), false)
-			else:g.draw_rect(Rect2(q - Vector2(7, 14 + height), Vector2(14, 14)), Color(.5, .5, .52) if f.block == "stone" else Color(.48, .33, .2))
+	var v = view(g)
+	var mouth: Vector2 = n.p + offset + Vector2(0, -14)
+	for h in n.hz:
+		if h.age < 0:continue
+		match h.kind:
+			"block":
+				var k: float = clampf(h.age / h.fall, 0, 1)
+				var q: Vector2 = h.p + offset
+				if h.age < h.fall:
+					cube(g, v, h.block, q - Vector2(0, (1 - k * k) * 260.0), 22.0, 1.0)
+				else:
+					var t: float = h.age - h.fall
+					if h.block == "ch5q_tnt":
+						if t < .7:cube(g, v, h.block, q, 22.0, 1.0, Color(2.4, 2.4, 2.4) if int(t * (8 + t * 20)) % 2 == 0 else Color.WHITE)
+						else:mc_boom(g, v, q, t - .7, 1.3)
+						continue
+					if t < .12:cube(g, v, h.block, q + Vector2(0, -2), 22.0, 1.0)
+					# It breaks into its own pixels.
+					for i in range(12):
+						var a: float = i * 2.39996
+						var fp: Vector2 = q + Vector2(cos(a) * (8 + t * 70), -10 - t * 50 * (1 + sin(a)) + t * t * 160)
+						if t < .6:g.draw_texture_rect_region(v.tex(h.block), Rect2(fp.floor(), Vector2(4, 4)), Rect2((i % 4) * 4, (i / 4) * 4, 4, 4), Color(1, 1, 1, 1 - t / .6))
+					if t < .25:g.draw_arc(q, 10 + t * 120, 0, TAU, 24, Color(1, 1, 1, .8 * (1 - t / .25)), 2)
+			"beam":
+				var d: Vector2 = Vector2.from_angle(h.angle)
+				if h.age < h.warn:
+					var k: float = h.age / h.warn
+					g.draw_line(mouth, mouth + d * 700, Color(RED, .3 + .5 * k * float(int(h.age * 18) % 2)), 1 + int(k * 2))
+					# An arrow shows which way it will turn.
+					var tip: Vector2 = mouth + d * 70
+					var side: Vector2 = d.orthogonal() * signf(h.spin)
+					g.draw_line(tip, tip + side * 16, Color(RED, .8), 2);g.draw_line(tip + side * 16, tip + side * 10 + d * 5, Color(RED, .8), 2)
+				elif h.age < h.warn + h.life + .25:
+					var t: float = h.age - h.warn
+					var fade: float = 1.0 - smoothstep(h.life, h.life + .25, t)
+					var wd: float = (9.0 + 2.0 * sin(t * 50)) * minf(1, t / .08) * fade
+					var o: Vector2 = d.orthogonal()
+					g.draw_colored_polygon(PackedVector2Array([mouth + o * wd * 1.8, mouth + o * wd * 1.8 + d * 700, mouth - o * wd * 1.8 + d * 700, mouth - o * wd * 1.8]), Color(.3, 1, .9, .25 * fade))
+					g.draw_colored_polygon(PackedVector2Array([mouth + o * wd, mouth + o * wd + d * 700, mouth - o * wd + d * 700, mouth - o * wd]), Color(1, 1, 1, .95 * fade))
+					g.draw_colored_polygon(PackedVector2Array([mouth + o * wd * .35, mouth + o * wd * .35 + d * 700, mouth - o * wd * .35 + d * 700, mouth - o * wd * .35]), Color(.6, 1, .95, fade))
+					for i in range(10):
+						var s: float = fposmod(t * 300 + i * 70, 700)
+						g.draw_string(g.font, (mouth + d * s + o * (wd + 4) * (1 if i % 2 else -1)).floor(), "01{}"[i % 4], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.3, 1, .9, .8 * fade))
+					g.draw_circle(mouth, wd * 1.6, Color(1, 1, 1, fade))
+			"clone":
+				var d: Vector2 = h.from.direction_to(h.target)
+				var q: Vector2 = h.p + offset
+				if h.age >= h.warn:
+					for i in range(5):
+						var back: Vector2 = q - d * (i + 1) * 16 * clampf((h.age - h.warn) / .1, 0, 1)
+						figure(g, "lunge", 0.0, back, d, 1.5, Color(1, .2, .4, .35 - i * .06))
+				var glitch: Vector2 = Vector2(round(sin(w.clock * 47 + h.from.x) * 2), 0)
+				var alpha: float = clampf(h.age / .15, 0, 1) * (1.0 - clampf((h.age - h.warn - h.dash) / .35, 0, 1))
+				figure(g, "lunge" if h.age >= h.warn else "snap", h.age, q + glitch + Vector2(2, 0), d, 1.5, Color(.2, 1, 1, .45 * alpha))
+				figure(g, "lunge" if h.age >= h.warn else "snap", h.age, q + glitch, d, 1.5, Color(1, .35, .5, alpha))
+			"bolt":
+				var q: Vector2 = h.p + offset
+				g.draw_circle(q, 6, Color(RED, .25))
+				g.draw_rect(Rect2((q - Vector2(4, 4)).floor(), Vector2(8, 8)), Color(.05, .05, .07))
+				g.draw_rect(Rect2((q - Vector2(4, 4)).floor(), Vector2(8, 8)), RED, false, 1)
+				g.draw_string(g.font, (q + Vector2(-2, 3)).floor(), h.glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, .85, .8))
+			"wave":
+				var r: float = h.age * 290.0
+				var fade: float = 1.0 - clampf(r / 420.0, 0, 1)
+				var c: Vector2 = h.p + offset
+				for gi in range(24):
+					var a0: float = gi * TAU / 24.0;var a1: float = a0 + TAU / 24.0
+					var mid: float = (a0 + a1) / 2
+					var safe := false
+					for gp in h.gaps:safe = safe or absf(angle_difference(mid, gp)) < .3
+					if safe:continue
+					g.draw_arc(c, r, a0, a1, 4, Color(1, 1, 1, fade), 10)
+					g.draw_arc(c, r, a0, a1, 4, Color(RED, fade), 5)
+				if r < 60:g.draw_circle(c, 46 - r * .5, Color(1, 1, 1, .7 * (1 - r / 60)))
 	for pu in n.popups:
 		if pu.get("screen", false):continue
 		var k: float = pu.age / 1.8
 		var q: Vector2 = pu.p + offset - Vector2(0, 48 + k * 14)
 		var wd: float = g.font.get_string_size(pu.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
-		g.draw_rect(Rect2((q - Vector2(wd / 2 + 4, 9)).floor(), Vector2(wd + 8, 12)), Color(0, 0, 0, .7 * (1 - k)))
+		g.draw_rect(Rect2((q - Vector2(wd / 2 + 4, 9)).floor(), Vector2(wd + 8, 12)), Color(0, 0, 0, .75 * (1 - k)))
 		g.draw_string(g.font, (q - Vector2(wd / 2, 0)).floor(), pu.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.4, 1, .9, 1 - k))
-	if n.slow_left > 0:g.draw_arc(w.player + offset - Vector2(0, 10), 14, 0, TAU, 16, Color(.4, 1, .9, .5), 1)
+
+## A block seen from above-front: the texture as the face, a darker top strip.
+static func cube(g, v, block: String, at: Vector2, size: float, alpha: float, tint := Color.WHITE):
+	var r := Rect2((at - Vector2(size / 2, size)).floor(), Vector2(size, size))
+	g.draw_texture_rect(v.tex(block), Rect2(r.position + Vector2(0, -6), Vector2(size, 6)), false, Color(tint.r * 1.15, tint.g * 1.15, tint.b * 1.15, alpha))
+	g.draw_texture_rect(v.tex(block), r, false, Color(tint.r * .8, tint.g * .8, tint.b * .8, alpha))
+	g.draw_rect(Rect2(r.position + Vector2(0, -6), Vector2(size, size + 6)), Color(0, 0, 0, .6 * alpha), false, 1)
 
 static func overlay(g):
 	var w = g.world;var n = w.notch
+	if n.phase == "fight":
+		if n.flash > 0 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, .1, .1, n.flash * .35))
+		if n.enraged:
+			var pulse: float = .18 + .08 * sin(w.clock * 4.0)
+			for i in range(8):g.draw_rect(Rect2(i * 4, i * 4, 640 - i * 8, 360 - i * 8), Color(.8, 0, .05, pulse * (1.0 - i / 8.0)), false, 4)
 	if n.phase == "fight" and n.id >= 0:
-		g.centered("Нотч", 41, 8, Color.WHITE, true)
-		g.draw_rect(Rect2(191, 46, 258, 6), Color(.15, .15, .2))
-		g.draw_rect(Rect2(192, 47, 256 * clampf(n.hp / n.FIGHT_HP, 0, 1), 4), Color(.3, 1, .9))
+		g.centered("Нотч" if not n.enraged else "Нотч · HARDCORE", 41, 8, Color.WHITE if not n.enraged else Color(1, .35, .35), true)
+		g.draw_rect(Rect2(159, 46, 322, 9), Color(0, 0, 0, .8))
+		var k: float = clampf(n.hp / n.FIGHT_HP, 0, 1)
+		g.draw_rect(Rect2(160, 47, 320 * k, 7), Color(.3, 1, .9) if not n.enraged else Color(.95, .15, .2))
+		g.draw_rect(Rect2(160, 47, 320 * k, 2), Color(1, 1, 1, .45))
+		g.draw_rect(Rect2(319, 45, 2, 11), Color(1, 1, 1, .8))
 	if n.phase == "intro":
 		g.draw_rect(Rect2(0, 0, 640, 24), Color.BLACK);g.draw_rect(Rect2(0, 336, 640, 24), Color.BLACK)
 		if n.age > 1.5:g.text_at("Пробел — пропустить", Vector2(522, 351), 8, Color(1, 1, 1, .35))
@@ -141,7 +309,7 @@ static func bw(g) -> Texture2D:
 			var c: Color = im.get_pixel(x, y)
 			if c.a < .1:continue
 			var l: float = c.get_luminance()
-			im.set_pixel(x, y, Color(1, 1, 1, 1) if l > .42 else (Color(.55, .55, .55, 1) if l > .2 else Color(0, 0, 0, 1)))
+			im.set_pixel(x, y, Color(1, 1, 1, 1) if l > .58 else (Color(.6, .6, .6, 1) if l > .3 else (Color(.25, .25, .25, 1) if l > .16 else Color(0, 0, 0, 1))))
 	var t := ImageTexture.create_from_image(im)
 	g.set_meta("ch5_notch_bw", t)
 	return t
@@ -173,116 +341,102 @@ static func ut_icon(g, kind: String, at: Vector2, c: Color):
 static func battle(g):
 	var w = g.world;var n = w.notch
 	var v = view(g)
-	g.draw_rect(Rect2(0, 0, 640, 360), Color(.01, .02, .03))
-	# His dimension behind the box: falling columns of code and a slow grid.
+	var quake: Vector2 = Vector2(round(sin(w.clock * 83) * 4), round(cos(w.clock * 71) * 3)) * minf(1.0, n.ut_quake / .2) if g.settings.shake else Vector2.ZERO
+	g.set_meta("ut_quake", quake);g.draw_set_transform(quake)
+	g.draw_rect(Rect2(-8, -8, 656, 376), Color(0, 0, 0))
+	# His dimension behind the box: slow columns of code, dim and far away.
 	for c in range(32):
 		var x: float = 10 + c * 20
-		var speed: float = 18.0 + fmod(c * 7.3, 22.0)
+		var speed: float = 14.0 + fmod(c * 7.3, 18.0)
 		for r in range(7):
 			var y: float = fposmod(w.clock * speed + r * 54 + c * 31, 380.0) - 10
-			var a: float = (.05 + .07 * float(r == 6)) * (1.0 - absf(x - 320) / 400.0)
+			var a: float = (.035 + .05 * float(r == 6)) * (1.0 - absf(x - 320) / 400.0)
 			g.draw_string(g.font, Vector2(x, y), ["0", "1", "{", "}", ";", "=", "<", ">"][(c * 3 + r + int(w.clock * 2)) % 8], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.3, 1, .6, a))
-	for k in range(9):
-		var gy: float = 300 - pow(k / 8.0, 1.6) * 140
-		g.draw_line(Vector2(0, gy), Vector2(640, gy), Color(.2, .9, .8, .05), 1)
-	var shake: Vector2 = Vector2(round(sin(w.clock * 60) * 3), 0) if n.ut_flash > 0 else Vector2.ZERO
-	var np := Vector2(320, 150 + sin(w.clock * 1.6) * 3) + shake
-	glow(g, np, 3.6, w.clock)
-	var pose: String = "exhausted" if n.ut_state == "end" else ("stagger" if n.ut_flash > 0 else ("cast" if n.ut_state == "wave" else "idle"))
-	if int(w.clock * 7) % 23 == 0:figure(g, pose, n.age, np + Vector2(5, 0), Vector2.DOWN, 3.8, Color(.97, 0, .86, .5))
-	figure(g, pose, n.age, np, Vector2.DOWN, 3.8, Color(1.6, 1.6, 1.6) if n.ut_flash > 0 and int(w.clock * 30) % 2 == 0 else Color.WHITE)
-	if n.ut_slash >= 0 and n.ut_slash < .45:
-		var k: float = n.ut_slash / .45
-		for i in range(3):g.draw_line(np + Vector2(-34 + i * 10, -130), (np + Vector2(-34 + i * 10, -130)).lerp(np + Vector2(40 + i * 10, -40), k), Color(1, .1, .1), 3)
-	if n.ut_number_age < 1.2:
-		var bounce: float = -absf(sin(n.ut_number_age * 9.0)) * 10.0 * (1 - n.ut_number_age)
+	# Notch, Undertale-style: white, grey and black, breathing in slices.
+	var hit_shake: float = 0.0
+	if n.ut_state == "slash" and n.ut_number_age >= 0 and n.ut_number_age < .5:hit_shake = sin(n.ut_number_age * 70) * 9 * (1 - n.ut_number_age / .5)
+	var np := Vector2(320 + hit_shake, 142 + sin(w.clock * 1.6) * 2)
+	var pose: String = "exhausted" if n.ut_state == "end" else ("stagger" if n.ut_flash > 0 and n.ut_number_age >= 0 else ("cast" if n.ut_state == "wave" else "idle"))
+	if n.ut_state == "wave" and n.ut_pattern == 5 and n.pose == "throw" and n.pose_age < .4:pose = "throw"
+	if int(w.clock * 7) % 23 == 0:bw_figure_tint(g, pose, n.age, np + Vector2(5, 0), 3.6, w.clock, Color(.97, 0, .86, .45))
+	bw_figure(g, pose, n.age, np, 3.6, w.clock)
+	if n.ut_flash > 0 and n.ut_number_age >= 0 and int(w.clock * 30) % 2 == 0:bw_figure_tint(g, pose, n.age, np, 3.6, w.clock, Color(1, .2, .2, .55))
+	# FIGHT: a red slash across him, then the number, then his HP drains.
+	if n.ut_slash >= 0 and n.ut_slash < .4:
+		var k: float = n.ut_slash / .4
+		var a0: Vector2 = np + Vector2(-46, -128);var a1: Vector2 = np + Vector2(46, -24)
+		var tip: Vector2 = a0.lerp(a1, minf(1, k * 1.6))
+		var tail: Vector2 = a0.lerp(a1, maxf(0, k * 1.6 - .6))
+		for i in range(3):
+			var o := Vector2(-5 + i * 5, 0)
+			g.draw_line(tail + o, tip + o, Color(1, .15, .15) if i != 1 else Color(1, .9, .9), 5 - absi(i - 1) * 2)
+	if n.ut_number_age >= 0 and n.ut_number_age < 1.3:
+		var bounce: float = -absf(sin(n.ut_number_age * 9.0)) * 14.0 * maxf(0, 1 - n.ut_number_age * 1.5)
 		var txt: String = "ПРОМАХ" if n.ut_number < 0 else str(n.ut_number)
-		g.draw_string(g.bold, Vector2(320 - g.bold.get_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 32).x / 2, 64 + bounce), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, 32, Color(1, .15, .15) if n.ut_number >= 0 else Color(.7, .7, .7))
+		var size: int = 40 if n.ut_crit and n.ut_number >= 0 else 32
+		var tw: float = g.bold.get_string_size(txt, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+		g.draw_string(g.bold, Vector2(320 - tw / 2 + 2, 54 + bounce + 2), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, size, Color(0, 0, 0))
+		g.draw_string(g.bold, Vector2(320 - tw / 2, 54 + bounce), txt, HORIZONTAL_ALIGNMENT_LEFT, -1, size, Color(1, .15, .15) if n.ut_number >= 0 else Color(.75, .75, .75))
+		if n.ut_crit and n.ut_number >= 0:g.centered("КРИТ", 72 + bounce, 8, Color(1, .9, .3), true)
 		if n.ut_number >= 0:
-			g.draw_rect(Rect2(260, 74, 120, 8), Color(.3, .3, .3));g.draw_rect(Rect2(260, 74, 120 * clampf(n.ut_hp / n.UT_HP, 0, 1), 8), Color(.1, .9, .2))
-	var box: Rect2 = n.UT_BOX if n.ut_state == "wave" else Rect2(40, 168, 560, 104)
-	g.draw_rect(box, Color(0, 0, 0, .92))
-	g.draw_rect(box.grow(4), Color(.3, 1, .85, .12 + .06 * sin(w.clock * 3)), false, 3)
-	g.draw_rect(box.grow(1), Color(.92, 1, .97), false, 3)
-	for cpt in [box.position, Vector2(box.end.x, box.position.y), box.end, Vector2(box.position.x, box.end.y)]:
-		g.draw_rect(Rect2(cpt - Vector2(4, 4), Vector2(8, 8)), Color(.3, 1, .85))
+			g.draw_rect(Rect2(250, 80, 140, 9), Color(.25, .25, .25));g.draw_rect(Rect2(250, 80, 140 * clampf(n.ut_hp_shown / n.UT_HP, 0, 1), 9), Color(.1, .95, .2))
+	var box: Rect2 = n.ut_box
+	g.draw_rect(box, Color(0, 0, 0))
+	if n.ut_mode == "blue" and n.ut_state == "wave":
+		# The wall that pulls: a faint blue edge on the side gravity points to.
+		var gr: Vector2 = n.ut_grav
+		var edge := Rect2(box.position, Vector2(box.size.x, 3)) if gr.y < 0 else (Rect2(Vector2(box.position.x, box.end.y - 3), Vector2(box.size.x, 3)) if gr.y > 0 else (Rect2(box.position, Vector2(3, box.size.y)) if gr.x < 0 else Rect2(Vector2(box.end.x - 3, box.position.y), Vector2(3, box.size.y))))
+		g.draw_rect(edge, Color(.25, .45, 1, .5))
 	match n.ut_state:
-		"wave":
-			for bl in n.ut_blasters:
-				var dir := Vector2.from_angle(bl.angle)
-				if bl.age < .75:
-					g.draw_line(bl.p, bl.p + dir * 400, Color(1, 1, 1, .25 + .2 * sin(bl.age * 40)), 1)
-				elif bl.age < 1.15:
-					var o: Vector2 = dir.orthogonal() * 9
-					g.draw_colored_polygon(PackedVector2Array([bl.p + o, bl.p + o + dir * 420, bl.p - o + dir * 420, bl.p - o]), Color(1, 1, 1, 1.0 - (bl.age - .75) * 1.5))
-				g.draw_set_transform(bl.p, bl.angle + PI / 2, Vector2.ONE)
-				g.draw_texture_rect(view(g).tex("icon_command_block") if g.textures.has("icon_command_block") == false else g.textures.icon_command_block, Rect2(-11, -11 - (4 if bl.age > .75 else 0), 22, 22), false)
-				g.draw_set_transform(Vector2.ZERO)
-			for b in n.ut_bullets:
-				if not box.grow(-2).has_point(b.p) and not b.get("ring", false) and not b.has("delay"):continue
-				match b.get("shape", "dot"):
-					"block":
-						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color.WHITE);g.draw_rect(Rect2(b.p - b.size / 2 + Vector2(2, 2), b.size - Vector2(4, 4)), Color.BLACK)
-					"line":g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color(.3, .7, 1) if n.ut_mode == "blue" else Color.WHITE)
-					"cursor":
-						var d: Vector2 = b.v.normalized() if b.v.length() > .1 else Vector2.RIGHT
-						var o2: Vector2 = d.orthogonal()
-						g.draw_colored_polygon(PackedVector2Array([b.p + d * 6, b.p - d * 5 + o2 * 4, b.p - d * 2, b.p - d * 5 - o2 * 4]), Color.WHITE)
-					"ring":g.draw_arc(b.p, b.r, 0, TAU, 24, Color(1, 1, 1, clampf(1 - b.r / 60.0, 0, 1)), 2)
-					"key":
-						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color.WHITE)
-						g.draw_string(g.bold, b.p + Vector2(-3, 4), b.glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color.BLACK)
-					"anvil":
-						if b.has("delay"):
-							var warn: float = .25 + .25 * sin(b.age * 40)
-							g.draw_rect(Rect2(b.p.x - 8, box.position.y, 16, box.size.y), Color(1, .2, .1, warn * .5))
-							continue
-						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color(.3, .3, .33))
-						g.draw_rect(Rect2(b.p + Vector2(-8, -7), Vector2(16, 4)), Color(.45, .45, .5))
-						g.draw_rect(Rect2(b.p + Vector2(-4, -3), Vector2(8, 6)), Color(.25, .25, .28))
-					"tnt":
-						var blink: bool = int(b.age * (6 + b.age * 14)) % 2 == 0
-						g.draw_texture_rect(v.tex("ch5q_tnt"), Rect2(b.p - b.size / 2, b.size), false, Color(2, 2, 2) if blink else Color.WHITE)
-						g.draw_line(Vector2(box.position.x, b.p.y), Vector2(box.end.x, b.p.y), Color(1, .4, .1, .12 + .1 * float(blink)), 1)
-						g.draw_line(Vector2(b.p.x, box.position.y), Vector2(b.p.x, box.end.y), Color(1, .4, .1, .12 + .1 * float(blink)), 1)
-					"fire":
-						var k2: float = 1.0 - float(b.get("age", 0.0)) / b.life
-						g.draw_rect(Rect2(b.p - b.size / 2, b.size), Color(1, .55, .1, k2))
-						g.draw_rect(Rect2(b.p - b.size / 2 + Vector2(0, b.size.y * .3) * float(b.size.x > b.size.y) + Vector2(b.size.x * .3, 0) * float(b.size.x <= b.size.y), b.size * Vector2(1, .4) if b.size.x > b.size.y else b.size * Vector2(.4, 1)), Color(1, .95, .6, k2))
-					_:g.draw_circle(b.p, 3.5, Color(1, .6, .2) if b.get("reversed", false) else Color.WHITE)
-			var ht: Color = (Color(.5, .7, 1.6) if n.ut_mode == "blue" else Color.WHITE) if w.invulnerable <= 0 or int(w.clock * 20) % 2 == 0 else Color(1, 1, 1, .25)
-			g.draw_texture_rect(g.textures.heart if g.textures.has("heart") else v.tex("heart"), Rect2(n.soul - Vector2(6, 6), Vector2(12, 12)), false, ht)
-			if 6.5 - n.ut_timer < 2.8 and not n.ut_bubble.is_empty():
-				var bt: String = n.ut_bubble
-				var bwid: float = minf(220.0, g.font.get_string_size(bt, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x + 16)
-				var r := Rect2(392, 40, bwid, 34)
-				g.draw_rect(r, Color.WHITE);g.draw_colored_polygon(PackedVector2Array([r.position + Vector2(0, 12), r.position + Vector2(-10, 18), r.position + Vector2(0, 22)]), Color.WHITE)
-				g.draw_string(g.font, r.position + Vector2(8, 14), bt, HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 12, 8, Color.BLACK)
+		"wave":wave(g, n, v, box, w)
 		"bar", "slash", "miss":
-			var r := Rect2(box.position + Vector2(18, 14), Vector2(box.size.x - 36, box.size.y - 28))
-			g.draw_rect(r, Color(.05, .05, .05))
+			var r := Rect2(box.position + Vector2(14, 10), Vector2(box.size.x - 28, box.size.y - 20))
 			var c: Vector2 = r.get_center()
-			for i in range(1, 6):
-				var wd: float = r.size.x * i / 6.0
-				g.draw_rect(Rect2(c - Vector2(wd / 2, r.size.y / 2 - i * 3), Vector2(wd, r.size.y - i * 6)), Color(.2 + i * .1, .7, .3 + i * .05) if i % 2 else Color(.05, .05, .05), false, 2)
-			g.draw_rect(Rect2(c - Vector2(2, r.size.y / 2), Vector2(4, r.size.y)), Color(1, 1, 1, .5))
+			# The target: concentric bands, a bright stripe in the middle.
+			for i in range(14):
+				var wd: float = r.size.x * (1.0 - i / 14.0)
+				g.draw_rect(Rect2(c.x - wd / 2, r.position.y + i * 1.5, wd, r.size.y - i * 3), Color(.05, .05, .05) if i % 2 else Color(.12 + i * .05, .55 + i * .03, .25), false, 1)
+			g.draw_rect(Rect2(c.x - 3, r.position.y, 6, r.size.y), Color(.95, .95, .9))
 			var cx: float = r.position.x + r.size.x * clampf(n.bar, 0, 1)
-			var bar_col: Color = Color.WHITE if n.ut_state == "bar" or int(w.clock * 16) % 2 == 0 else Color.BLACK
-			g.draw_rect(Rect2(cx - 3, r.position.y - 4, 6, r.size.y + 8), bar_col);g.draw_rect(Rect2(cx - 3, r.position.y - 4, 6, r.size.y + 8), Color.BLACK, false, 1)
+			var lit: bool = n.ut_state == "bar" or int(w.clock * 16) % 2 == 0
+			g.draw_rect(Rect2(cx - 4, r.position.y - 6, 8, r.size.y + 12), Color.WHITE if lit else Color.BLACK)
+			g.draw_rect(Rect2(cx - 4, r.position.y - 6, 8, r.size.y + 12), Color.BLACK, false, 2)
+			g.draw_rect(Rect2(cx - 2, r.position.y - 4, 4, r.size.y + 8), Color.WHITE if lit else Color(.3, .3, .3), false, 1)
 		_:
 			var shown: String = n.ut_text.substr(0, int(n.ut_type))
 			var lines: PackedStringArray = shown.split("\n")
-			for i in range(lines.size()):g.draw_string(g.bold, box.position + Vector2(20, 34 + i * 26), lines[i], HORIZONTAL_ALIGNMENT_LEFT, box.size.x - 30, 16, Color.WHITE)
-	var hp: float = maxf(0, w.hp)
-	for k in range(10):
-		var hx := Vector2(232 + k * 18, 280)
-		g.draw_texture_rect(v.tex("heart_empty") if g.textures.has("heart_empty") == false else g.textures.heart_empty, Rect2(hx, Vector2(16, 16)), false)
-		var fill: float = hp - k * 2
-		if fill >= 2:g.draw_texture_rect(g.textures.heart, Rect2(hx, Vector2(16, 16)), false)
-		elif fill >= 1:g.draw_texture_rect(g.textures.heart_half, Rect2(hx, Vector2(16, 16)), false)
-	g.draw_string(g.bold, Vector2(40, 294), "STEVE", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
-	g.draw_rect(Rect2(110, 288, 100, 4), Color(0, 0, 0));g.draw_rect(Rect2(110, 288, 64, 4), Color(.5, 1, .2))
-	g.draw_string(g.bold, Vector2(150, 286), "19", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.5, 1, .2))
+			for i in range(lines.size()):g.draw_string(g.bold, box.position + Vector2(22, 34 + i * 26), lines[i], HORIZONTAL_ALIGNMENT_LEFT, box.size.x - 30, 16, Color.WHITE)
+	g.draw_rect(box.grow(2), Color.WHITE, false, 4)
+	for s in n.ut_sparks:
+		var k: float = 1.0 - s.age / s.life
+		g.draw_rect(Rect2(s.p.floor() - Vector2(1, 1), Vector2(3, 3) * (0.5 + k)), Color(s.col, k))
+	# A hit tints the screen edge red.
+	if n.ut_hurt > 0:
+		for i in range(6):g.draw_rect(Rect2(i * 3, i * 3, 640 - i * 6, 360 - i * 6), Color(1, 0, 0, n.ut_hurt * (.5 - i * .07)), false, 3)
+	stats(g, w, n, v)
+	g.draw_set_transform(Vector2.ZERO)
+	retry(g, n)
+
+static func bw_figure_tint(g, pose: String, t: float, p: Vector2, scale: float, clock: float, tint: Color):
+	var d: Dictionary = data(g)
+	var clip: Dictionary = d.layout.get(pose, d.layout.idle)
+	var index: int = int(t * 6.0) % int(clip.count)
+	var size := Vector2(d.frame[0], d.frame[1]);var anchor := Vector2(d.anchor[0], d.anchor[1])
+	var col: int = int(clip.start) + index
+	for y in range(0, int(size.y), 4):
+		var sway: float = round(sin(clock * 2.2 + y * .09) * (1.5 if y < 30 else .5))
+		g.draw_texture_rect_region(bw(g), Rect2((p - anchor * scale + Vector2(sway, y * scale)).floor(), Vector2(size.x, 4) * scale), Rect2(Vector2(col * size.x, y), Vector2(size.x, 4)), tint)
+
+## Undertale's bottom line: name, LV, HP bar and the four orange buttons.
+static func stats(g, w, n, v):
+	var hp: float = clampf(w.hp, 0, 20)
+	var y: float = 294
+	g.draw_string(g.bold, Vector2(40, y), "STEVE", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+	g.draw_string(g.bold, Vector2(122, y), "LV 19", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
+	g.draw_string(g.bold, Vector2(222, y - 2), "HP", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color.WHITE)
+	g.draw_rect(Rect2(244, y - 13, 60, 14), Color(.8, 0, 0))
+	g.draw_rect(Rect2(244, y - 13, 60 * hp / 20.0, 14), Color(1, 1, 0) if n.ut_hurt <= 0 or int(w.clock * 20) % 2 else Color(1, 1, 1))
+	g.draw_string(g.bold, Vector2(316, y), "%d / 20" % int(ceil(hp)), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color.WHITE)
 	var labels := {"fight":"БИТЬ", "act":"ДЕЙСТВ", "item":"ВЕЩИ", "mercy":"ПОЩАДА"}
 	var options: Array = n.menu_options()
 	for i in range(4):
@@ -291,14 +445,166 @@ static func battle(g):
 			if n.mercy_gone and int(w.clock * 3) % 4 == 0:g.draw_string(g.font, r.position + Vector2(16, 17), "null", HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.97, 0, .86, .6))
 			continue
 		var on: bool = n.ut_state == "menu" and n.ut_choice == i
-		# Hotbar slots with the item that does the job.
-		g.draw_rect(r, Color(.18, .18, .2, .95));g.draw_rect(r, Color(.05, .05, .06), false, 2)
-		g.draw_line(r.position + Vector2(2, 2), Vector2(r.end.x - 2, r.position.y + 2), Color(.45, .45, .5), 1)
-		if on:g.draw_rect(r.grow(2), Color(1, 1, 1), false, 2)
-		var icon: String = {"fight":"ch5q_item_iron_sword", "act":"ch5q_item_book", "item":"ch5q_item_golden_apple", "mercy":"ch5q_item_paper"}[options[i]]
-		g.draw_texture_rect(v.tex(icon), Rect2(r.position + Vector2(4, 2 - (2 if on else 0)), Vector2(20, 20)), false)
-		g.draw_string(g.bold, r.position + Vector2(30, 16), labels[options[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(1, 1, .6) if on else Color(.85, .85, .85))
-	retry(g, n)
+		var c: Color = Color(1, 1, .25) if on else Color(1, .5, .12)
+		g.draw_rect(r, Color.BLACK);g.draw_rect(r, c, false, 2)
+		if on:
+			g.draw_texture_rect(g.textures.heart, Rect2(r.position + Vector2(5, 4), Vector2(16, 16)), false)
+		else:
+			var icon: String = {"fight":"ch5q_item_iron_sword", "act":"ch5q_item_book", "item":"ch5q_item_golden_apple", "mercy":"ch5q_item_paper"}[options[i]]
+			g.draw_texture_rect(v.tex(icon), Rect2(r.position + Vector2(4, 2), Vector2(20, 20)), false, Color(1, .75, .5))
+		g.draw_string(g.bold, r.position + Vector2(28, 17), labels[options[i]], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, c)
+
+static func wave(g, n, v, box: Rect2, w):
+	var inner: Rect2 = box.grow(-1)
+	# Selections first: they lie under everything.
+	for s in n.ut_selects:
+		if s.age < 0:continue
+		var r: Rect2 = s.rect
+		var k: float = clampf(s.age / s.drag, 0, 1);k = 1.0 - pow(1.0 - k, 3)
+		var anchors := [r.position, Vector2(r.end.x, r.position.y), r.end, Vector2(r.position.x, r.end.y)]
+		var from: Vector2 = anchors[s.corner];var to: Vector2 = anchors[(s.corner + 2) % 4]
+		var cur: Vector2 = from.lerp(to, k)
+		var shown := Rect2(from, cur - from).abs().intersection(inner)
+		var deleted: bool = s.age >= s.drag + s.hold
+		if not deleted:
+			var blink: bool = s.age > s.drag and int(s.age * 14) % 2 == 0
+			g.draw_rect(shown, Color(.2, .45, 1, .22 if not blink else .38))
+			dashed_rect(g, shown, Color(.55, .75, 1), s.age * 30.0)
+			if s.age > s.drag:
+				var warn: float = (s.age - s.drag) / s.hold
+				g.draw_rect(shown, Color(1, .15, .1, warn * .35))
+				g.text_at("DEL", shown.get_center() - Vector2(9, -4), 8, Color(1, 1, 1, .5 + .5 * warn))
+			cursor_arrow(g, cur)
+		else:
+			var t: float = s.age - s.drag - s.hold
+			if t < .12:g.draw_rect(shown, Color(1, 1, 1, .95))
+			elif t < .22:g.draw_rect(shown, Color(1, .15, .1, .8))
+			# The selection breaks into its pixels.
+			for i in range(24):
+				var fx: float = fposmod(i * .618, 1.0);var fy: float = fposmod(i * .377 + .2, 1.0)
+				var p0: Vector2 = shown.position + shown.size * Vector2(fx, fy)
+				var p1: Vector2 = p0 + Vector2(fx - .5, fy - .9) * 120.0 * t + Vector2(0, 160 * t * t)
+				if inner.has_point(p1):g.draw_rect(Rect2(p1.floor(), Vector2(3, 3)), Color(.55, .75, 1, 1.0 - t / .5))
+	for b in n.ut_bullets:
+		var shape: String = b.get("shape", "dot")
+		if shape == "spike":spike(g, n, b, box);continue
+		if shape == "anvil" and b.has("delay"):
+			var warn: float = .3 + .3 * sin(b.age * 40)
+			g.draw_rect(Rect2(b.p.x - 9, box.position.y, 18, box.size.y), Color(1, .2, .1, warn * .45))
+			g.draw_rect(Rect2(b.p.x - 9, box.position.y, 18, box.size.y), Color(1, .3, .2, warn), false, 1)
+			continue
+		if not inner.grow(14).has_point(b.p) or b.p.y < -100:continue
+		var r := Rect2(b.p - b.get("size", Vector2(8, 8)) / 2, b.get("size", Vector2(8, 8)))
+		match shape:
+			"block":
+				g.draw_texture_rect(v.tex("ch5q_cobblestone"), clip(r, inner), false, Color(1.25, 1.25, 1.25))
+			"fence":
+				var cr: Rect2 = clip(r, inner)
+				g.draw_rect(cr, Color(.95, .95, .95));g.draw_rect(Rect2(cr.position + Vector2(2, 0), Vector2(2, cr.size.y)), Color(.7, .7, .7))
+				for yy in range(int(cr.position.y) + 4, int(cr.end.y), 9):g.draw_rect(Rect2(cr.position.x - 2, yy, cr.size.x + 4, 2), Color(.85, .85, .85))
+			"key":
+				var cr: Rect2 = clip(r, inner)
+				g.draw_rect(cr, Color.WHITE);g.draw_rect(Rect2(cr.position + Vector2(0, cr.size.y - 3), Vector2(cr.size.x, 3)), Color(.6, .6, .6))
+				g.draw_string(g.bold, b.p + Vector2(-3, 3), b.glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color.BLACK)
+			"anvil":
+				g.draw_texture_rect(v.tex("ch5q_anvil"), clip(r, inner), false, Color(1.3, 1.3, 1.35))
+			"tnt":
+				var blink: bool = int(b.age * (6 + b.age * 16)) % 2 == 0
+				g.draw_texture_rect(v.tex("ch5q_tnt"), r, false, Color(2.2, 2.2, 2.2) if blink else Color.WHITE)
+				var warn: float = clampf(b.age / b.fuse, 0, 1)
+				g.draw_rect(Rect2(box.position.x, b.p.y - 6, box.size.x, 12), Color(1, .4, .1, .1 * warn + .08 * float(blink)))
+				g.draw_rect(Rect2(b.p.x - 6, box.position.y, 12, box.size.y), Color(1, .4, .1, .1 * warn + .08 * float(blink)))
+			"fire":
+				var k2: float = 1.0 - float(b.get("age", 0.0)) / b.life
+				var cr: Rect2 = clip(r.grow(2.0 * k2), inner)
+				g.draw_rect(cr, Color(1, .45, .08, k2))
+				g.draw_rect(cr.grow_individual(-cr.size.x * .2 * float(cr.size.y > cr.size.x), -cr.size.y * .3 * float(cr.size.x >= cr.size.y), -cr.size.x * .2 * float(cr.size.y > cr.size.x), -cr.size.y * .3 * float(cr.size.x >= cr.size.y)), Color(1, .95, .7, k2))
+			_:g.draw_circle(b.p, 3.5, Color.WHITE)
+	for bl in n.ut_blasters:ghast(g, bl)
+	var blink_off: bool = w.invulnerable > 0 and int(w.clock * 20) % 2 == 1
+	if not blink_off:g.draw_texture_rect(g.textures.heart, Rect2(n.soul - Vector2(7, 7), Vector2(14, 14)), false, Color(.5, .7, 1.8) if n.ut_mode == "blue" else Color.WHITE)
+	if n.WAVE_LENGTH - n.ut_timer < 2.8 and not n.ut_bubble.is_empty():
+		var bt: String = n.ut_bubble
+		var rows: Array = []
+		for part in bt.split("\n"):rows.append_array(wrap_rows(g, part, 8, 200.0))
+		var bwid := 0.0
+		for row in rows:bwid = maxf(bwid, g.font.get_string_size(row, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x)
+		var r := Rect2(384, 36, minf(220.0, bwid + 16), 10 + rows.size() * 11)
+		g.draw_rect(r, Color.WHITE);g.draw_colored_polygon(PackedVector2Array([r.position + Vector2(0, 10), r.position + Vector2(-10, 16), r.position + Vector2(0, 20)]), Color.WHITE)
+		var shown: int = int((n.WAVE_LENGTH - n.ut_timer) * 34.0)
+		for i in range(rows.size()):
+			g.draw_string(g.font, r.position + Vector2(8, 14 + i * 11), rows[i].substr(0, maxi(0, shown)), HORIZONTAL_ALIGNMENT_LEFT, r.size.x - 12, 8, Color.BLACK)
+			shown -= rows[i].length()
+
+static func clip(r: Rect2, inner: Rect2) -> Rect2:
+	var c: Rect2 = r.intersection(inner)
+	return c if c.has_area() else Rect2(r.position, Vector2.ZERO)
+
+static func dashed_rect(g, r: Rect2, c: Color, phase: float):
+	var corners := [r.position, Vector2(r.end.x, r.position.y), r.end, Vector2(r.position.x, r.end.y)]
+	for e in range(4):
+		var a: Vector2 = corners[e];var b: Vector2 = corners[(e + 1) % 4]
+		var length: float = a.distance_to(b)
+		if length < 1:continue
+		var d: Vector2 = (b - a) / length
+		var s: float = -fposmod(phase, 8.0)
+		while s < length:
+			var s0: float = maxf(0, s);var s1: float = minf(length, s + 4)
+			if s1 > s0:g.draw_line(a + d * s0, a + d * s1, c, 1)
+			s += 8
+
+static func cursor_arrow(g, at: Vector2):
+	var pts := PackedVector2Array([Vector2(0, 0), Vector2(0, 13), Vector2(3, 10), Vector2(6, 16), Vector2(8, 15), Vector2(5, 9), Vector2(9, 9)])
+	var outline := PackedVector2Array()
+	for p in pts:outline.append(at + p)
+	g.draw_colored_polygon(outline, Color.WHITE)
+	outline.append(at)
+	g.draw_polyline(outline, Color.BLACK, 1)
+
+## Fence posts rising out of the wall the soul was slammed into; a red strip warns first.
+static func spike(g, n, b: Dictionary, box: Rect2):
+	if b.age < b.warn:
+		var full: Rect2 = n.spike_rect({"p":b.p, "wall":b.wall, "size":b.size, "rise":1.0})
+		g.draw_rect(full, Color(1, .15, .1, .25 + .25 * sin(b.age * 50)))
+		return
+	var r: Rect2 = n.spike_rect(b)
+	if not r.has_area():return
+	g.draw_rect(r.grow_individual(-1, 0, -1, 0) if b.wall in ["down", "up"] else r.grow_individual(0, -1, 0, -1), Color.WHITE)
+	var tip: Vector2
+	match b.wall:
+		"down":tip = Vector2(r.get_center().x, r.position.y - 3)
+		"up":tip = Vector2(r.get_center().x, r.end.y + 3)
+		"left":tip = Vector2(r.end.x + 3, r.get_center().y)
+		_:tip = Vector2(r.position.x - 3, r.get_center().y)
+	g.draw_circle(tip, 2.5, Color.WHITE)
+
+## A ghast head: white, eyes shut while it slides in, mouth open when it fires.
+static func ghast(g, bl: Dictionary):
+	var fire: float = bl.get("charge", .75)
+	var d := Vector2.from_angle(bl.angle)
+	var width: float = bl.get("width", 11.0)
+	if bl.age < fire:
+		var k: float = bl.age / fire
+		g.draw_line(bl.p, bl.p + d * 520, Color(1, 1, 1, .12 + .25 * k * (.5 + .5 * sin(bl.age * 50))), 1 + int(k * 2))
+	else:
+		var t: float = (bl.age - fire) / .55
+		var wd: float = width * (1.0 + .25 * sin(bl.age * 60)) * (1.0 - t * t)
+		var o: Vector2 = d.orthogonal() * wd
+		var base: Vector2 = bl.p + d * 10
+		g.draw_colored_polygon(PackedVector2Array([base + o * 1.5, base + o * 1.5 + d * 560, base - o * 1.5 + d * 560, base - o * 1.5]), Color(.6, .85, 1, .35 * (1 - t)))
+		g.draw_colored_polygon(PackedVector2Array([base + o, base + o + d * 560, base - o + d * 560, base - o]), Color(1, 1, 1, 1 - t * .6))
+	var recoil: float = 6.0 * sin(clampf((bl.age - fire) / .2, 0, 1) * PI) if bl.age > fire else 0.0
+	var quake: Vector2 = g.get_meta("ut_quake", Vector2.ZERO)
+	g.draw_set_transform(bl.p - d * recoil + quake, bl.angle - PI / 2, Vector2(2, 2))
+	var open: float = clampf((bl.age - fire * .6) / (fire * .4), 0, 1)
+	g.draw_rect(Rect2(-8, -8, 16, 16), Color(.96, .96, .96))
+	g.draw_rect(Rect2(-8, -8, 16, 2), Color(.82, .82, .82))
+	for x in [-5, 2]:
+		if open < .5:g.draw_rect(Rect2(x, -2, 3, 1), Color(.3, .3, .3))
+		else:g.draw_rect(Rect2(x, -4, 3, 4), Color(0, 0, 0))
+	var mouth: float = 1.0 + open * 4.0
+	g.draw_rect(Rect2(-3, 8 - mouth - 1, 6, mouth), Color(0, 0, 0) if open < .9 else Color(1, .9, .8))
+	g.draw_set_transform(quake)
 
 static func heart(g, c: Vector2, col: Color):
 	var pts := PackedVector2Array([c + Vector2(0, 4), c + Vector2(-4, 0), c + Vector2(-4, -2), c + Vector2(-2, -4), c + Vector2(0, -2), c + Vector2(2, -4), c + Vector2(4, -2), c + Vector2(4, 0)])
@@ -756,7 +1062,20 @@ static func erase(g):
 	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
 	g.draw_rect(Rect2(0, 0, 640, 24), Color.BLACK);g.draw_rect(Rect2(0, 336, 640, 24), Color.BLACK)
 	if f.age < .8:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - f.age / .8))
-	if f.thrown >= .6 and f.thrown < .78 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, (.78 - f.thrown) * 5.0))
+	if f.thrown >= 0:
+		# letterbox closes in for the throw; speed lines while the blade flies; impact frame on the hit
+		var bars: float = 24 + 18 * smoothstep(0, .4, f.thrown) * (1 - smoothstep(3.6, 4.4, f.thrown))
+		g.draw_rect(Rect2(0, 0, 640, bars), Color.BLACK);g.draw_rect(Rect2(0, 360 - bars, 640, bars), Color.BLACK)
+		if f.thrown >= .56 and f.thrown < 1.0:
+			var k: float = (f.thrown - .56) / .44
+			for i in range(22):
+				var a: float = i * 2.39996;var d := Vector2(cos(a), sin(a) * .6)
+				var r0: float = 120 + fmod(i * 37.0 + f.thrown * 900.0, 200.0)
+				g.draw_line(Vector2(320, 170) + d * r0, Vector2(320, 170) + d * (r0 + 40 + 60 * k), Color(1, 1, 1, .35 * k), 1)
+		if f.thrown >= 1.0 and f.thrown < 1.12 and g.settings.flashes:
+			g.draw_rect(Rect2(0, 0, 640, 360), Color(1, 1, 1, .9))
+			g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, .55 if int(f.thrown * 60) % 2 == 0 else 0.0))
+		elif f.thrown >= 1.12 and f.thrown < 1.5 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(1, .5, .3, (1.5 - f.thrown) * .9))
 	if f.erase > .05 and f.thrown < 0:
 		for i in range(int(f.erase * 10)):
 			var y: float = fmod(i * 47.0 + w.clock * 300.0, 312.0) + 24
@@ -791,6 +1110,9 @@ static func chair(g):
 	g.draw_texture_rect(v.viewport.get_texture(), Rect2(0, 0, 640, 360), false)
 	g.draw_rect(Rect2(0, 0, 640, 26), Color.BLACK);g.draw_rect(Rect2(0, 334, 640, 26), Color.BLACK)
 	if f.age < 1.0:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - f.age))
+	# The film's first decoded frame lands a moment late: a short dip hides it and softens the cut.
+	var into: float = f.age - f.KILL_FILM_AT
+	if into >= 0 and into < .4:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf(1.0 - (into - .1) / .3, 0, 1)))
 	if f.age > f.CHAIR_LENGTH - 2.0:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((f.age - (f.CHAIR_LENGTH - 2.0)) / 1.6, 0, 1)))
 	if f.age > f.CHAIR_STAB and f.age < f.CHAIR_STAB + .08 and g.settings.flashes:g.draw_rect(Rect2(0, 0, 640, 360), Color(.6, 0, 0, .35))
 	if f.age > 2.0:g.text_at("Пробел — дальше", Vector2(540, 350), 8, Color(1, 1, 1, .3))
@@ -817,7 +1139,6 @@ static func credits(g):
 	for i in range(18):
 		var y: float = fmod(i * 61.0 + w.clock * (8 + i % 4 * 3), 300.0) + 30
 		g.draw_string(g.font, Vector2(fmod(i * 97.0, 620.0) + 10, y), "01{};"[i % 5], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(.3, 1, .7, .12))
-	if f.age > 3.0:g.text_at("Пробел — пропустить", Vector2(530, 348), 8, Color(1, 1, 1, .25))
 	if f.age > f.CREDITS_LENGTH - 1.5:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((f.age - (f.CREDITS_LENGTH - 1.5)) / 1.5, 0, 1)))
 
 ## Bad ending: a heavy title card on black, then slow grey credits under falling ash.
@@ -841,7 +1162,6 @@ static func bad_credits(g):
 		var k: float = clampf(t / 1.1, 0, 1) * clampf((4.4 - t) / 1.1, 0, 1)
 		g.centered(c[1], 160 + (1 - k) * 4, 8, Color(.55, .55, .58, k * .8))
 		g.centered(c[2], 184 + (1 - k) * 4, 16, Color(.82, .8, .8, k), true)
-	if a > 3.0:g.text_at("Пробел — пропустить", Vector2(530, 348), 8, Color(1, 1, 1, .2))
 	if a < .6:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, 1 - a / .6))
 	if a > n.BAD_CREDITS_LENGTH - 1.5:g.draw_rect(Rect2(0, 0, 640, 360), Color(0, 0, 0, clampf((a - (n.BAD_CREDITS_LENGTH - 1.5)) / 1.5, 0, 1)))
 
@@ -880,18 +1200,43 @@ static func flight(g):
 	if a >= f.FLIGHT_STING:g.draw_rect(Rect2(0, 0, 640, 360), Color.BLACK)
 	if a >= f.FLIGHT_STING + 1.0:g.centered("…", 176, 16, Color(1, 1, 1, clampf(a - f.FLIGHT_STING - 1.0, 0, 1)), true)
 
+## Contact: a one-frame flash, then speed lines pulling to the blow.
+static func impact_frames(g,q):
+	var at: float=-1.0;var good := true
+	if q.finishing:at=q.finish_age-.65
+	else:
+		var track: String=q.TRACKS[mini(q.beat,q.TRACKS.size()-1)]
+		if not q.resolved:return
+		good=q.success
+		at=q.age-(1.4 if good and track in ["parry","guard"] else 1.0)
+		if good and track in ["slip","roll"]:at=-1.0
+	if at<0 or at>.3:return
+	if at<.05 and g.settings.flashes:g.draw_rect(Rect2(0,0,640,360),Color(1,1,1,.85) if good else Color(.8,0,0,.6))
+	var k: float=1.0-at/.3
+	for i in range(28):
+		var a: float=i*2.39996
+		var r0: float=90.0+Atmosphere.hash01(i,7,90)*80.0+at*200.0
+		var d := Vector2(cos(a),sin(a)*.62)
+		g.draw_line(Vector2(320,180)+d*r0,Vector2(320,180)+d*(r0+60+k*90),Color(1,1,1,.55*k) if good else Color(1,.2,.2,.5*k),2)
+
 static func qte(g):
 	var w=g.world;var n=w.notch;var v=view(g)
 	v.ensure(g,"bad_end" if n.phase=="bad_end" else "qte",Vector2i(640,360))
 	if n.phase=="bad_end":
 		v.sync_bad_film(w.state=="PAUSED",g.settings.effects)
 		g.draw_texture_rect(v.viewport.get_texture(),Rect2(0,0,640,360),false)
+		if n.age<.15:g.draw_rect(Rect2(0,0,640,360),Color.BLACK)
 		return
 	v.sync_qte(n.qte)
 	g.draw_texture_rect(v.viewport.get_texture(),Rect2(0,0,640,360),false)
 	g.draw_rect(Rect2(0,0,640,24),Color.BLACK);g.draw_rect(Rect2(0,330,640,30),Color.BLACK)
 	var q=n.qte
+	impact_frames(g,q)
 	if q.finishing:return
+	# The prompt window: the edges close in while the decision is yours.
+	if q.age>.2 and (not q.resolved or q.age<q.resolved_age+.2):
+		var k: float=smoothstep(.2,.4,q.age)*(1.0-smoothstep(0,.2,q.age-q.resolved_age) if q.resolved else 1.0)
+		for i in range(10):g.draw_rect(Rect2(i*6,24+i*4,640-i*12,306-i*8),Color(0,0,0,.09*k),false,6)
 	var feedback: float=maxf(0,q.age-q.resolved_age)
 	if not q.resolved or feedback<.28:
 		var at := Vector2(320,74)

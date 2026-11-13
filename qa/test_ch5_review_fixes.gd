@@ -61,15 +61,21 @@ func run():
 	var r: Dictionary=v.rigs.steve
 	check(r.hips.position.y>.65 and absf(r.rl.rotation.x)<.4 and absf(r.ll.rotation.x)<.4,"Winner stands on two legs")
 	# Density and warning checks for the already strengthened battle-box rules.
-	n.start_ut(w);n.ut_wave=2;n.begin_wave(w);w.invulnerable=0
+	n.start_ut(w);n.ut_wave=3;n.begin_wave(w);w.invulnerable=0
 	n.ut_timer=2.0;n.wave_bullets(w,1.0/60)
-	check(n.serial>=8 and n.ut_serial2>0,"Third wave combines both attack patterns")
-	n.ut_bullets.clear();n.ut_blasters.clear();n.spawn_pattern(w,2,2)
-	var ring: Dictionary=n.ut_bullets.back()
-	check(ring.get("arm_at",0.0)>=.4,"Expanding ring gives an escape warning before damage")
+	check(n.serial>=5 and n.ut_serial2>0,"Fourth wave combines both attack patterns")
+	check(n.ut_box_to.size!=n.MENU_BOX.size,"The box takes the shape of the attack")
+	n.ut_selects.clear();n.spawn_pattern(w,2,2)
+	var sel: Dictionary=n.ut_selects.back()
+	check(sel.drag+sel.hold>=.9,"Drag-selection holds before Delete")
 	n.ut_bullets.clear();n.spawn_pattern(w,6,1)
 	var warning: Dictionary=n.ut_bullets.back()
 	check(warning.delay>=.45 and warning.drop>=400,"Anvil keeps a warning before the faster drop")
+	n.ut_wave=5;n.begin_wave(w);n.ut_box=n.ut_box_to;n.ut_bullets.clear();n.spawn_pattern(w,5,1);n.ut_bullets.clear();n.spawn_pattern(w,5,2)
+	check(n.ut_mode=="blue" and n.ut_grav==Vector2.LEFT,"Blue soul is thrown against a wall")
+	for k in range(40):n.soul_move(w,Vector2.ZERO,1.0/60)
+	check(n.soul.x<=n.ut_box.position.x+7,"The throw pins the soul to that wall")
+	check(n.ut_bullets.all(func(b):return b.shape=="spike" and b.warn>=.45),"Spikes warn before rising")
 	await render("anvil_warning")
 	n.start_ut(w);n.ut_wave=3;n.begin_wave(w)
 	for k in range(150):n.step(w,1.0/60,Vector2.RIGHT if k%80<40 else Vector2.LEFT)

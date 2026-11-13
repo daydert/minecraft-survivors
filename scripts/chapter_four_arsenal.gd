@@ -25,6 +25,13 @@ var heart_pulse:=0.0
 var heal_lock:=0.0
 var totem_spent:=false
 var bat_left:=0.0
+## Minecart (tester pack 13.11): ride, ram, lay rails behind.
+var cart_left:=0.0
+var cart_recharge:=0.0
+var cart_dir:=Vector2.RIGHT
+var cart_hits: Dictionary={}
+var rails: Array=[]
+var rail_from:=Vector2.ZERO
 var bat_recharge:=0.0
 var bat_direction:=Vector2.RIGHT
 var bat_hits: Dictionary={}
@@ -49,7 +56,7 @@ func reset(w):
 	for a in [shots,events,pools,clouds,torches,links,drops,echoes]:a.clear()
 	actions.clear();pet={"p":w.player,"stage":1,"age":0.0,"attack":0.0,"dir":Vector2.DOWN}
 	candle=0;still=0;kills=0;heart_initialized=false;heart_charges=0;heart_left=0;heart_price=2;heart_quiet=0;heart_buff=0;heal_lock=0;totem_spent=false
-	bat_left=0;bat_recharge=0;bat_hits.clear();vamp_left=0;vamp_budget=0;retaliation=0;mirror_count=0;mirror_ready=false;mirror_key="";ghost_ready=0;secondary=false;piercing=false;incoming={};potion_poison=2.5;pet_guard=0;pet_bite=0
+	bat_left=0;bat_recharge=0;bat_hits.clear();cart_left=0;cart_recharge=0;cart_hits.clear();rails.clear();vamp_left=0;vamp_budget=0;retaliation=0;mirror_count=0;mirror_ready=false;mirror_key="";ghost_ready=0;secondary=false;piercing=false;incoming={};potion_poison=2.5;pet_guard=0;pet_bite=0
 	potion_heal_left=0
 	heart_pulse=0
 
@@ -91,6 +98,11 @@ func activate(w,id: String) -> bool:
 			w.message="Недостаточно здоровья";w.message_timer=1.2;return false
 		w.run_progress.damage(heart_price);w.hp-=heart_price;heart_charges-=1;heart_quiet=0;heart_price=minf(float(r.heart_price_max),heart_price+float(r.heart_price_step));heart_buff=float(r.heart_duration);heal_lock=float(r.heart_heal_lock)
 		heart_pulse=.7;w.sound("ch4_heartbeat");w.add_effect("ch4_overload",w.player,.55);w.fx.pulse(w,"heart");return true
+	if id=="cart" and w.items.has("minecart") and cart_left<=0 and cart_recharge<=0 and bat_left<=0:
+		var lv: int=int(w.items.minecart)
+		cart_left=float(r.cart_duration)+float(r.cart_duration_per_level)*(lv-1);cart_recharge=maxf(4.0,float(r.cart_cooldown)-float(r.cart_cooldown_per_level)*(lv-1))
+		cart_dir=w.facing if w.facing.length_squared()>0 else Vector2.RIGHT;cart_hits.clear();rail_from=w.player
+		w.sound("ch4_door_close",.1);w.fx.dust(w.player,4,10);return true
 	if id=="bat" and w.items.has("bat_wings") and w.evolved.has("bat_wings") and bat_recharge<=0:
 		bat_left=float(r.bat_duration);bat_recharge=float(r.bat_cooldown);bat_direction=w.facing;bat_hits.clear();w.sound("ch4_bat");return true
 	return false
@@ -140,7 +152,9 @@ func update_attacks(w,dt: float):
 
 func hit(w,m: Dictionary,amount: float,owner: String,push:=Vector2.ZERO,extra:=false,ignore_guard:=false):
 	var previous: String=w.damage_owner;var prior:=secondary;var old_pierce:=piercing
+	var alive: bool=m.hp>0
 	w.damage_owner=owner;secondary=extra;piercing=ignore_guard;w.hurt(m,amount,push)
+	if alive and m.hp<=0 and owner=="minecart" and not m.get("allied",false):w.run_progress.count("cart_rider",20)
 	w.damage_owner=previous;secondary=prior;piercing=old_pierce
 
 func sweep(w,p: Vector2,dir: Vector2,radius: float,damage: float,owner: String,extra:=false,shape: String=""):
@@ -187,7 +201,11 @@ func release(w,id: String,a: Dictionary):
 				for j in range(count):
 					if drops.size()>=int(r.sky_limit):break
 					var p: Vector2=w.player+Vector2.from_angle(j*TAU/count+ring*.17)*(25+ring*29)
-					drops.append({"p":p,"wait":.35+ring*float(r.sky_step),"height":105.0,"speed":0.0,"damage":s.damage,"radius":s.radius,"ring":ring})
+					drops.append({"p":p,"wait":.35+ring*float(r.sky_step),"height":105.0,"speed":0.0,"damage":s.damage,"radius":s.radius,"ring":ring,"total":.35+ring*float(r.sky_step)})
+			# The finale of the volley: one huge charge onto the thickest crowd.
+			var c=cluster_point(w,180.0)
+			var wait: float=.55+int(r.sky_rings)*float(r.sky_step)
+			drops.append({"p":c,"wait":wait,"height":170.0,"speed":0.0,"damage":s.damage*2.5,"radius":s.radius*2.4,"ring":99,"big":true,"total":wait})
 			w.sound("ch4_sky_hook")
 
 func pellets(w,a: Dictionary):
@@ -293,12 +311,34 @@ func step(w,dt: float):
 		if b.wait>0:continue
 		b.speed+=290*dt;b.height-=b.speed*dt
 		if b.height<=0:
-			for m in w.in_radius(b.p,b.radius):hit(w,m,b.damage,"sky_tnt",b.p.direction_to(m.p))
-			w.break_props(b.p,b.radius,b.damage);w.add_effect("ch4_sky_blast",b.p,.35,{"radius":b.radius});w.sound("explosion",.12);w.fx.blast(w,b.p,b.radius);drops.remove_at(i)
+			for m in w.in_radius(b.p,b.radius):
+				hit(w,m,b.damage,"sky_tnt",b.p.direction_to(m.p))
+				if m.hp>0:m.burn=maxf(float(m.get("burn",0)),2.0)
+			var big: bool=b.get("big",false)
+			w.break_props(b.p,b.radius,b.damage);w.add_effect("ch4_sky_blast",b.p,.85 if big else .55,{"radius":b.radius,"big":big});w.sound("explosion",.05 if big else .12);w.fx.blast(w,b.p,b.radius)
+			w.shake=maxf(w.shake,.45 if big else .14)
+			if big:w.fx.quake(w,b.p,1.6);w.hitstop=maxf(w.hitstop,.06);w.sound("ch4_impact",.05)
+			drops.remove_at(i)
 	for i in range(echoes.size()-1,-1,-1):
 		var e=echoes[i];e.wait-=dt;e.age+=dt
 		if e.wait<=0 and not e.hit:e.hit=true;sweep(w,e.p,e.dir,e.radius,e.damage,"mirror_shard",true,e.owner)
 		if e.age>.6:echoes.remove_at(i)
+	cart_recharge=maxf(0,cart_recharge-dt)
+	for rl in rails:rl.age+=dt
+	rails=rails.filter(func(rl):return rl.age<6.0)
+	if cart_left>0:
+		cart_left-=dt
+		if w.player.distance_to(rail_from)>=9.0:
+			rails.append({"a":rail_from,"b":w.player,"age":0.0});rail_from=w.player
+		var lv: int=int(w.items.get("minecart",1))
+		var dmg: float=float(rules(w).cart_damage)+float(rules(w).cart_damage_per_level)*(lv-1)
+		for m in w.in_radius(w.player+cart_dir*6,17):
+			if m.get("allied",false):continue
+			if float(cart_hits.get(m.id,-9.0))>w.clock-.45:continue
+			cart_hits[m.id]=w.clock;hit(w,m,dmg,"minecart",cart_dir*2.2,true)
+			if not m.get("boss",false) and m.has("pull_left"):m.pull_dir=(cart_dir+w.player.direction_to(m.p)*.6).normalized();m.pull_left=46.0;m.pull_stun=.35
+			w.fx.burst(m.p-Vector2(0,10),true,false);w.sound("ch4_punch_heavy",.06);w.shake=maxf(w.shake,.1)
+		if cart_left<=0:w.sound("ch4_door_close",.1);w.fx.dust(w.player,3,8)
 	if bat_left>0:
 		w.invulnerable=maxf(w.invulnerable,.08)
 		for m in w.in_radius(w.player,22):
@@ -363,3 +403,12 @@ func clear(id: String):
 	if id=="bat_wings":bat_left=0
 	if id=="heart_booster":heart_buff=0
 	if id=="mirror_shard" or id in MELEE:echoes.clear();mirror_ready=false;mirror_count=0
+
+## Where a volley hurts most: the nearest crowd within reach, else ahead of the hero.
+func cluster_point(w,reach: float) -> Vector2:
+	var best: Vector2=w.player+w.facing*60.0;var count:=-1
+	for m in w.in_radius(w.player,reach):
+		if m.get("allied",false):continue
+		var n: int=w.in_radius(m.p,60.0).size()
+		if n>count:count=n;best=m.p
+	return best

@@ -60,7 +60,7 @@ func run():
 	for i in range(140):w.arsenal.step(w,.005)
 	check(close_damage>10000-m.hp and m.hp<10000,"Pellet collision has real close-range damage falloff")
 	w=fresh();w.build={"sky_tnt":8};release(w,"sky_tnt")
-	check(w.arsenal.drops.size()==50 and w.arsenal.drops.map(func(b):return b.ring).max()==4,"Sky cast schedules five bounded rings rather than a single blast")
+	check(w.arsenal.drops.size()==67 and w.arsenal.drops.filter(func(b):return not b.get("big",false)).map(func(b):return b.ring).max()==5 and w.arsenal.drops.filter(func(b):return b.get("big",false)).size()==1,"Sky cast: six bounded rings, then one huge charge on the crowd")
 	var waits: Array=w.arsenal.drops.map(func(b):return b.wait)
 	check(waits.min()<waits.max(),"Outer TNT rings start sequentially")
 	w.state="PAUSED";var snap=JSON.stringify(w.arsenal.drops);advance(w,1)

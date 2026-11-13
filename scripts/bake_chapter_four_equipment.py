@@ -2,6 +2,7 @@
 
 Lazy runtime cache loads only the current gear/wing/armour combination. Source
 textures remain local vanilla bytes; no old chapter atlas is ever written.
+Inventory icons are restored from the reviewed generated set after baking.
 """
 from pathlib import Path
 import json,math,argparse
@@ -192,5 +193,7 @@ def generate(only=None,wings_only=False,small_only=False,jobs=1,reuse_plain=Fals
  ghost=bake(tool(imp,'bell','idle',0),(96,96),5,(48,68),yaw=-15,elevation=20);imp.save(ghost,'ch4_ghost_bell',['entity/bell/bell_body']);data['sprites'].append('ch4_ghost_bell')
  tnt=bake(cube(imp,'tnt_side',(-7,0,-7),(14,14,14)),(32,32),1,(16,25),yaw=20,elevation=20);imp.save(tnt,'ch4_sky_charge',['block/tnt_side']);data['sprites'].append('ch4_sky_charge')
  data['sprites']=list(dict.fromkeys(data['sprites']));old_path.write_text(json.dumps(data,indent=2)+'\n');manifest['raw_files'].update(imp.files);manifest['derived'].update(imp.derived);manifest.update(version=version,client_jar=str(jar));manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
+ from import_chapter_four_icons import generate_icons
+ generate_icons()
 if __name__=='__main__':
  parser=argparse.ArgumentParser();parser.add_argument('--only',nargs='+',choices=GEARS);parser.add_argument('--wings-only',action='store_true');parser.add_argument('--small-only',action='store_true');parser.add_argument('--jobs',type=int,default=1);parser.add_argument('--reuse-plain',action='store_true');args=parser.parse_args();generate(args.only,args.wings_only,args.small_only,args.jobs,args.reuse_plain)

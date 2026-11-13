@@ -13,7 +13,11 @@
     "ch4_growth_big",
     "ch4_blood_animation",
     "ch4_hand",
-    "icon_ch4_note"
+    "icon_ch4_note",
+    "ch4_crucifix_empty_0",
+    "ch4_crucifix_empty_1",
+    "ch4_crucifix_torn",
+    "ch4_laid_villager"
   ],
   "clips": {
     "ch4_blood_animation": {

@@ -560,6 +560,110 @@
     "relic.ogg": {
       "source": "minecraft/sounds/records/relic.ogg",
       "sha256": "06b4194f4b05ef31196d9e37d8d1f90347040983fcc32a896977ffc5272ffc55"
+    },
+    "rage_pigstep.ogg": {
+      "source": "minecraft/sounds/records/pigstep.ogg",
+      "sha256": "dcb9467b78c3d635f849306e2068ae7d1b3e22c057baa683b86373da3ffc56a3"
+    },
+    "mob_ravager_roar1.ogg": {
+      "source": "minecraft/sounds/mob/ravager/roar1.ogg",
+      "sha256": "8de6cd2abc28bc9d489f5dc57a09b4ff1174afbd1cb63f90fa5ee343d665c936"
+    },
+    "mob_ravager_roar2.ogg": {
+      "source": "minecraft/sounds/mob/ravager/roar2.ogg",
+      "sha256": "7300450d2dd265710ca178ae4248783a07aa3b17071bc437a98fd9cd1b55a321"
+    },
+    "mob_ravager_roar3.ogg": {
+      "source": "minecraft/sounds/mob/ravager/roar3.ogg",
+      "sha256": "fcc36df2b23500fa1fb60a7bbe4a9e1f69f8dcc493101c690a5454b488c78fe8"
+    },
+    "mob_vindication_illager_idle1.ogg": {
+      "source": "minecraft/sounds/mob/vindication_illager/idle1.ogg",
+      "sha256": "e98f09a0c813444157dd4ae5bbba27a2fb44d6af3283b191a0de93da91a31198"
+    },
+    "mob_vindication_illager_idle2.ogg": {
+      "source": "minecraft/sounds/mob/vindication_illager/idle2.ogg",
+      "sha256": "0d74e412dc4adee4bbc0b8fb9050ed5bcc556fa048bec271e9a96f748721e8d5"
+    },
+    "mob_vindication_illager_idle3.ogg": {
+      "source": "minecraft/sounds/mob/vindication_illager/idle3.ogg",
+      "sha256": "b1a09fdfe1ffdf7b66723e733ac6aaeea8a22fef20d71d4ffa2e4b47da628c5e"
+    },
+    "entity_player_attack_sweep1.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep1.ogg",
+      "sha256": "37cfe39d4d85697e1431af93f045e94ccb78578bacb6e9ce52f6fbc91d7a417f"
+    },
+    "entity_player_attack_sweep2.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep2.ogg",
+      "sha256": "fa6ef1546275d20167e2e11591e93df5b8bfe8b87fe92b41609ce689350c4650"
+    },
+    "entity_player_attack_sweep3.ogg": {
+      "source": "minecraft/sounds/entity/player/attack/sweep3.ogg",
+      "sha256": "270a0f370684ed5435bc8984cf50985a8c10acd32c5a6d244ab6ed9161300485"
+    },
+    "mob_ravager_step1.ogg": {
+      "source": "minecraft/sounds/mob/ravager/step1.ogg",
+      "sha256": "88a9a5484cc345efcf94f2f38c0b458e22920568fb94791a5a126c84c0786452"
+    },
+    "mob_ravager_step2.ogg": {
+      "source": "minecraft/sounds/mob/ravager/step2.ogg",
+      "sha256": "0a9e7d8afb4167ff182c7e767c1dfd1dba6e286a57d8b4a1d80b3de40ba66063"
+    },
+    "mob_ravager_step3.ogg": {
+      "source": "minecraft/sounds/mob/ravager/step3.ogg",
+      "sha256": "3bddba3b638aa6482131f3fc04bb2b65fd7a17d6236eec849882b22904c424b5"
+    },
+    "mob_zombie_unfect.ogg": {
+      "source": "minecraft/sounds/mob/zombie/unfect.ogg",
+      "sha256": "c2674a7715f8418213a857377945cfd7edf67e4c5d55e5dd3fe2a76d06ead494"
+    },
+    "mob_sheep_shear.ogg": {
+      "source": "minecraft/sounds/mob/sheep/shear.ogg",
+      "sha256": "7c920a2a8adb5b4b7f5438ba67d628e855bfdefaa12efc665155d175ca69c4d3"
+    },
+    "mob_villager_death.ogg": {
+      "source": "minecraft/sounds/mob/villager/death.ogg",
+      "sha256": "bdfb3fc58e89da8c2341a4b7c4ffbb95df21b24ffa707eed1d07c98c7f474149"
+    },
+    "mob_zombie_villager_say1.ogg": {
+      "source": "minecraft/sounds/mob/zombie_villager/say1.ogg",
+      "sha256": "dfea33b2d6d10866d207f0ad02345311076771d9352d4064411849bbfe98e141"
+    },
+    "mob_zombie_villager_say2.ogg": {
+      "source": "minecraft/sounds/mob/zombie_villager/say2.ogg",
+      "sha256": "981d65b30161f6957776627bef60fba9a89643778cd95bf1103d6ad24cd4dcd8"
+    },
+    "mob_zombie_villager_say3.ogg": {
+      "source": "minecraft/sounds/mob/zombie_villager/say3.ogg",
+      "sha256": "c4a42c1764dd90dc977e359d33cb989194815f3318c6783971665511a5f7268b"
+    },
+    "item_crossbow_loading_middle1.ogg": {
+      "source": "minecraft/sounds/item/crossbow/loading_middle1.ogg",
+      "sha256": "864e5d745dd9103152edf81a50ac61e893a96c315ea0b44b116a0ebf848574dc"
+    },
+    "event_raid_raidhorn_01.ogg": {
+      "source": "minecraft/sounds/event/raid/raidhorn_01.ogg",
+      "sha256": "a74507b69596c480d690e7c7e30429932895b7978162d0c1a240fcb6a6052eac"
+    },
+    "event_raid_raidhorn_02.ogg": {
+      "source": "minecraft/sounds/event/raid/raidhorn_02.ogg",
+      "sha256": "5a11bd03923cd41e6c19acd8d2d818d4cffd5be6a25e127ee2a7e079ffd994b6"
+    },
+    "event_raid_raidhorn_03.ogg": {
+      "source": "minecraft/sounds/event/raid/raidhorn_03.ogg",
+      "sha256": "09495654664ebee19b3a084ed88a2be4ce85855f7d581a8ab19a369d6f1b1e04"
+    },
+    "block_rooted_dirt_break1.ogg": {
+      "source": "minecraft/sounds/block/rooted_dirt/break1.ogg",
+      "sha256": "c343285670bdb81412fae6d690d09a16b1c643ac7ce8014df81c8b7b291ab22c"
+    },
+    "block_rooted_dirt_break2.ogg": {
+      "source": "minecraft/sounds/block/rooted_dirt/break2.ogg",
+      "sha256": "879ee31a4e73d840a0949d4e635b1b37d681f0811b870bdf3fdca3e92c597d82"
+    },
+    "block_rooted_dirt_break3.ogg": {
+      "source": "minecraft/sounds/block/rooted_dirt/break3.ogg",
+      "sha256": "73a81f14b29aea08d10c29dff039bdd76b2bb7a2bd3622ecf2ea1ae8fed61c37"
     }
   }
 }

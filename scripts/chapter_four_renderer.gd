@@ -10,6 +10,7 @@ const FinaleView=preload("res://scripts/chapter_four_finale_view.gd")
 const ArsenalView=preload("res://scripts/chapter_four_arsenal_view.gd")
 const EncounterView=preload("res://scripts/chapter_four_encounter_view.gd")
 const FxView=preload("res://scripts/chapter_four_fx_view.gd")
+const HuntView=preload("res://scripts/chapter_four_hunt_view.gd")
 const Lighting = preload("res://scripts/ui/lighting.gd")
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 const ANCHORS = {"house": Vector2(56,66), "crucifix": Vector2(32,88), "growth": Vector2(24,40), "growth_big": Vector2(64,96), "torch": Vector2(8,21), "pyramid": Vector2(144,150)}
@@ -32,8 +33,9 @@ func world(g):
 	EncounterView.floor_layer(g,offset)
 	FinaleView.floor_layer(g,offset)
 	TerrainAttacks.floor_layer(g,offset)
+	HuntView.floor_layer(g,offset)
 	for mark in w.landmarks:
-		if mark.kind == "crucifix":pillar_floor(g, mark, offset)
+		if mark.kind == "crucifix" and w.hunt.hanging(mark):pillar_floor(g, mark, offset)
 		if mark.get("attack", "") == "windup" and mark.kind == "torch":
 			var other = w.linked_torch(mark)
 			if other != null:
@@ -80,7 +82,7 @@ func world(g):
 			"pet":ArsenalView.pet(g,offset)
 			"mob":
 				var m = actor.obj
-				var depth: float = FxView.emerging(g,m,offset)
+				var depth: float = maxf(FxView.emerging(g,m,offset),HuntView.sink_depth(g,m))
 				if depth > 0:
 					EnemyView.actor(g,m,offset+Vector2(0,depth))
 					FxView.soil_cover(g,m,offset,depth)
@@ -95,10 +97,21 @@ func world(g):
 	for o in w.orbs:
 		var p: Vector2 = (o.p+offset).floor()
 		g.draw_texture_rect_region(g.textures.experience_orb,Rect2(p-Vector2(4,5),Vector2(8,8)),Rect2(0,0,16,16),Color(.6,1,.4))
-	for b in w.projectiles:g.draw_projectile(b,offset)
+	# Placed TNT and beds (they were never drawn in this chapter: invisible TNT).
+	for b in w.explosives:
+		var ep: Vector2=b.p+offset
+		if not Rect2(-40,-60,720,460).has_point(ep):continue
+		if b.kind=="bed":g.sprite("bed_ground",ep-Vector2(20,23))
+		else:
+			var es: float=.75 if b.get("child",false) else 1.0
+			g.oval(ep,Vector2(10,3)*es,Color(0,0,0,.4))
+			g.sprite("tnt_ground",ep-Vector2(12*es,24*es+b.get("height",0.0)),Vector2(24,28)*es,Color(1.7,1.7,1.7) if g.settings.flashes and fmod(b.age,.22)<.08 else Color.WHITE)
+	for b in w.projectiles:
+		if not g.nether_renderer.projectile(g,b,offset):g.draw_projectile(b,offset)
 	EnemyView.projectiles(g,offset)
 	if not gearless:ArsenalView.air_layer(g,offset)
 	EncounterView.air_layer(g,offset)
+	HuntView.air_layer(g,offset)
 	FxView.air_layer(g,offset)
 	FinaleView.air_layer(g,offset)
 	TerrainAttacks.air_layer(g,offset)
@@ -107,8 +120,10 @@ func world(g):
 		elif EncounterView.effect(g,e,offset):pass
 		elif gearless and e.kind.begins_with("ch4c"):pass
 		elif ArsenalView.effect(g,e,offset):pass
+		elif HuntView.effect(g,e,offset):pass
 		elif EnemyView.effect(g,e,offset):pass
 		elif e.kind == "ch4_arc":arc(g,e,offset)
+		elif g.nether_renderer.effect(g,e,offset):pass
 		else:g.draw_effect(e,offset)
 	for b in w.blood_shots:
 		var p: Vector2 = (b.p+offset).floor()
@@ -121,7 +136,8 @@ func world(g):
 	Atmosphere.collect(g,offset)
 	EncounterView.lights(g)
 	FxView.lights(g)
-	if not w.ending.hb.is_empty() and w.ending.phase in ["intro","tower","vortex","one","two","kneel","last","erase"]:
+	HuntView.lights(g)
+	if not w.ending.hb.is_empty() and w.ending.phase in ["lure","intro","tower","vortex","one","two","kneel","last","erase"]:
 		var e = w.ending
 		if not e.hole.is_empty():g.ambient_lights.append({"p":e.hole.p,"r":120.0,"c":Color(.8,.6,1.0),"power":.8,"glow":.25})
 		if e.phase == "last":g.ambient_lights.append({"p":e.hb.p,"r":260.0,"c":Color(1,1,1),"power":.9,"glow":.2})
@@ -224,6 +240,9 @@ func landmark(g, mark: Dictionary, offset: Vector2):
 		return
 	var name: String = "ch4_"+mark.kind
 	if mark.kind in ["house","crucifix","growth"]:name += "_"+str(mark.variant)
+	var state: String = mark.get("state","hung") if mark.kind == "crucifix" else ""
+	if state == "freed":name = "ch4_crucifix_empty_"+str(mark.variant)
+	elif state == "torn":name = "ch4_crucifix_torn"
 	if mark.kind == "torch":name = "ch4_cursed_torch" if mark.hostile else "ch4_red_torch"
 	var anchor: Vector2 = Vector2(16,34) if name == "ch4_cursed_torch" else ANCHORS[mark.kind]
 	if mark.get("dead",false):
@@ -236,9 +255,19 @@ func landmark(g, mark: Dictionary, offset: Vector2):
 	var color := Color(1.4,1.1,1.1) if mark.get("flash",0)>0 and g.settings.flashes else Color.WHITE
 	# Fade an occluding ruin rather than hiding the hero behind the wall.
 	if mark.kind in ["house","pyramid"] and absf(w.player.x-mark.p.x)<(105 if mark.kind=="pyramid" else 40) and w.player.y<mark.p.y and w.player.y>mark.p.y-80:color.a=.42
+	if state == "stirring":
+		var left: float = clampf((mark.stir_until-w.clock)/float(w.hunt.data.stir.warn),0,1)
+		var rate: float = lerpf(30.0,9.0,left)
+		p.x += roundf(sin(w.clock*rate)*(1.0+1.5*(1-left)))
+		color = color*Color(1,.75+.25*sin(w.clock*rate*.4),.75+.25*sin(w.clock*rate*.4))
+	elif state == "hung" and mark.get("progress",0.0) > 0:
+		p.x += roundf(sin(w.clock*22)*.6)
 	g.draw_set_transform(p,0,Vector2.ONE*pulse)
 	g.sprite(name,-anchor,Vector2.ZERO,color)
 	g.draw_set_transform(Vector2.ZERO)
+	if state == "freed":
+		g.oval(p+Vector2(14,12),Vector2(16,5),Color(0,0,0,.35))
+		g.sprite("ch4_laid_villager",p+Vector2(14,12)-Vector2(28,26))
 	if mark.kind == "torch":
 		var charged: bool = mark.get("attack","") == "windup"
 		g.draw_rect(Rect2(p-Vector2(1,25 if mark.hostile else 13),Vector2(2,2)),Color(1,.8,.55) if charged else Color(.9,.18,.09,.8))
@@ -292,6 +321,17 @@ func note(g):
 	g.panel(Rect2(123,63,394,228))
 	g.sprite("icon_ch4_note",Vector2(151,84),Vector2(24,24))
 	g.text_at(g.world.db.data.chapter_four.note.title,Vector2(189,102),16,g.INK,true)
-	var lines: Array = g.world.db.data.chapter_four.note.lines
-	for i in range(lines.size()):g.text_at(lines[i],Vector2(150,132+i*15),8,Color("dddddd"))
+	var rows: Array = []
+	for line in g.world.db.data.chapter_four.note.lines:rows.append_array(wrap_rows(g,line,8,338))
+	var step: float = minf(15,112.0/maxf(1,rows.size()-1))
+	for i in range(rows.size()):g.text_at(rows[i],Vector2(150,130+i*step),8,Color("dddddd"))
 	g.button(Rect2(226,251,188,25),"Прочитано","ch4_note_close")
+
+static func wrap_rows(g, text: String, size: int, limit: float) -> Array:
+	var rows: Array = [];var row := ""
+	for word in text.split(" "):
+		var next: String = word if row == "" else row + " " + word
+		if row != "" and g.font.get_string_size(next, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x > limit:rows.append(row);row = word
+		else:row = next
+	rows.append(row)
+	return rows

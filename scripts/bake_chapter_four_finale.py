@@ -48,6 +48,18 @@ def herobrine_skin(imp, face):
     return tex
 
 
+def lure_skin(imp):
+    """Alex as Herobrine wears her: bruised, bloodied, eyes half shut."""
+    tex = imp.tex("entity/player/wide/alex").copy()
+    d = ImageDraw.Draw(tex)
+    blood, dark = (120, 12, 14, 255), (70, 6, 8, 255)
+    for x, y in [(9, 11), (10, 11), (13, 11), (14, 11)]:d.point((x, y), fill=(150, 104, 80, 255))
+    for x, y in [(11, 14), (12, 15), (12, 14), (10, 9), (9, 10)]:d.point((x, y), fill=blood)
+    for x, y in [(21, 22), (22, 23), (23, 22), (22, 25), (24, 26), (25, 25), (26, 28), (20, 27), (23, 29), (27, 23)]:d.point((x, y), fill=blood if (x + y) % 2 else dark)
+    for x, y in [(45, 24), (46, 26), (44, 28), (37, 54), (38, 56), (21, 54), (6, 24), (5, 27)]:d.point((x, y), fill=dark)
+    return tex
+
+
 # ------------------------------------------------------------------ posed player model
 
 def jbox(tex, origin, size, uv, pivot, angles=(0, 0, 0), inflate=0.0):
@@ -275,6 +287,10 @@ def generate():
         image, layout = atlas(herobrine_skin(imp, face), HEROBRINE)
         imp.save(image, "ch4_hb_" + face, ["entity/player/wide/steve (white eyes, " + face + " mouth texels)"])
         sprites.append("ch4_hb_" + face)
+    # Herobrine's lure (tester pack 13.11): Alex, beaten half to death, in his poses.
+    lure, _ = atlas(lure_skin(imp), HEROBRINE)
+    imp.save(lure, "ch4_alex_lure", ["entity/player/wide/alex (blood and bruise texels)"])
+    sprites.append("ch4_alex_lure")
     fist, fist_layout = atlas(imp.tex("entity/player/wide/steve"), STEVE)
     imp.save(fist, "ch4_fist_steve", ["entity/player/wide/steve"])
     sprites.append("ch4_fist_steve")

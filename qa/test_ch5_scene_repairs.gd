@@ -25,7 +25,7 @@ func run():
   var ready: bool=id in w.evolution_candidates(600)
   check(ready,"Chapter %d: real recipe eligible"%ch)
   w.open_chest({"born":600.0,"p":w.player})
-  check(w.state=="CHEST" and w.chest_reward.evolution and is_equal_approx(w.chest_delay,1.7),"Chapter %d: IV reveal duration through real chest flow"%ch)
+  check(w.state=="CHEST" and w.chest_reward.evolution and is_equal_approx(w.chest_delay,w.EVOLUTION_REVEAL),"Chapter %d: IV reveal duration through real chest flow"%ch)
   w.chest_delay=.2;await draw()
   var im: Image=root.get_texture().get_image();var cyan:=0
   for x in range(286,354):

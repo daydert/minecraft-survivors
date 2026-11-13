@@ -60,7 +60,7 @@ func run():
 	w=fresh();w.build={};w.items={"end_eye":1};w.next_level();check(w.choices.size()==4,"Eye I gives four choices")
 	w.items.end_eye=2;w.state="RUNNING";w.next_level();check(w.rerolls==1 and w.reroll_choices() and w.rerolls==0 and not w.reroll_choices(),"Eye II gives exactly one reroll per reward")
 	w.items.end_eye=5;w.state="RUNNING";w.next_level();var choices=w.choices.duplicate();w.tick_choices(.22)
-	check(w.choices.size()==5 and w.choices.slice(0,2)==choices.slice(0,2) and w.choices!=choices,"Eye V cycles three out of five choices, leaving two stable")
+	check(w.choices==choices and w.side_choices.size()==2,"Eye V keeps choices stable and adds options above and below")
 	var rng_state=w.rng.state;w.tick_choices(.22);check(w.rng.state==rng_state,"Cycling presentation does not consume combat RNG")
 	w.state="PAUSED";var age=w.choice_age;w.tick_choices(5);check(w.choice_age==age,"Inventory/pause freezes reward cycling")
 	w=fresh();w.build={};w.prepare_arena();check(w.crystals.size()==6 and w.mobs.size()==7,"Dragon arena creates six real crystals and one boss")

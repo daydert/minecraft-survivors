@@ -105,9 +105,10 @@ MAT['brow'] = material('brow', color=(.17, .09, .05, 1))
 BLOOD_PAL = {'a': (.33, .0, .01, 1), 'b': (.20, .0, .005, 1), 'c': (.48, .02, .02, 1), 'd': (.09, .0, .0, 1)}
 blood_im = pixel_texture('blood', ['..a..b....', '.aabbba..c', 'abbcbbbaa.', '.abbdbbcba', 'aabddbbba.', '.cabbdbba.', '..abbbbaa.', '.aa.bab.a.', '..a..a....', '....a.....'], BLOOD_PAL)
 wound_im = pixel_texture('wound', ['..aab.a.', '.abbbba.', 'abbddbba', 'abdddbb.', 'abddddba', '.bbddbba', 'aabbbba.', '.a.ab.a.'], BLOOD_PAL)
-MAT['blood'] = image_material('blood_splat', blood_im, rough=.18)
+MAT['blood'] = image_material('blood_splat', blood_im, rough=.45)
+MAT['blood'].node_tree.nodes['Principled BSDF'].inputs['Specular IOR Level'].default_value = .25
 MAT['wound'] = image_material('wound', wound_im, rough=.2)
-MAT['blood_solid'] = material('blood_drop', color=(.30, .0, .01, 1), rough=.15, spec=.6)
+MAT['blood_solid'] = material('blood_drop', color=(.30, .0, .01, 1), rough=.38, spec=.3)
 MAT['blood_hand'] = material('blood_hand', color=(.09, .0, .003, 1), rough=.25, spec=.4)
 MAT['smoke'] = material('aura_smoke', color=(.015, .01, .02, 1), rough=1)
 MAT['smoke'].node_tree.nodes['Principled BSDF'].inputs['Alpha'].default_value = .85
@@ -340,7 +341,18 @@ s_hands_blood = [plain_box('S_handblood', (0, 0, -.33), (.27, .27, .1), MAT['blo
 
 # Props: chest with hinged lid, iron sword (voxel extrusion), wheat bundle item.
 chest = empty('Chest', (-2.6, 1.15, 0), col='Set')
-skin_box('chest_body', (0, 0, .3), (.875, .875, .625), MAT['normal'], chest, (0, 19, 14, 10, 14))
+chest_body = skin_box('chest_body', (0, 0, .3), (.875, .875, .625), MAT['normal'], chest, (0, 19, 14, 10, 14))
+# hollow: drop the top face, add inner walls and a dark floor so the hand really goes inside
+import bmesh
+_bm = bmesh.new(); _bm.from_mesh(chest_body.data); _bm.faces.ensure_lookup_table()
+bmesh.ops.delete(_bm, geom=[f for f in _bm.faces if f.normal.z > .9], context='FACES'); _bm.to_mesh(chest_body.data); _bm.free()
+_inner = material('chest_inner', color=(.10, .06, .035, 1))
+_rim = material('chest_rim', color=(.36, .22, .1, 1))
+for _at, _sz in [((0, -.40, .3), (.8, .06, .6)), ((0, .40, .3), (.8, .06, .6)), ((-.40, 0, .3), (.06, .8, .6)), ((.40, 0, .3), (.06, .8, .6))]:
+    plain_box('chest_wall', _at, _sz, _inner, chest, 'Set')
+plain_box('chest_floor', (0, 0, .1), (.8, .8, .04), _inner, chest, 'Set')
+for _at, _sz in [((0, -.405, .6), (.875, .065, .05)), ((0, .405, .6), (.875, .065, .05)), ((-.405, 0, .6), (.065, .875, .05)), ((.405, 0, .6), (.065, .875, .05))]:
+    plain_box('chest_rim', _at, _sz, _rim, chest, 'Set')
 lid = empty('Chest_lid', (0, .4375, .625), chest, 'Set')
 skin_box('chest_lid', (0, -.4375, .1), (.875, .875, .3125), MAT['normal'], lid, (0, 0, 14, 5, 14))
 plain_box('chest_latch', (0, -.89, .02), (.125, .06, .25), material('latch', color=(.55, .55, .58, 1), rough=.3, spec=.6), lid, 'Set')
@@ -384,14 +396,14 @@ wheat_item = voxel_item('WheatBundle', 'wheat.png', None, (8, 8), .024)
 # ---------------------------------------------------------------- particles (pooled cubes)
 def pool(name, count, mat, size):
     return [plain_box(name, (0, 0, -50), (size, size, size), MAT[mat], None, 'FX') for _ in range(count)]
-P_blood = pool('blood_drop', 110, 'blood_solid', .045)
-P_drip = pool('blood_drip', 26, 'blood_solid', .035)
+P_blood = pool('blood_drop', 260, 'blood_solid', .05)
+P_drip = pool('blood_drip', 44, 'blood_solid', .035)
 P_smoke = pool('aura', 70, 'smoke', .12)
 P_ember = pool('ember', 36, 'ember', .03)
 P_dust = pool('vanish', 90, 'smoke', .09)
 P_ash = pool('ash', 60, 'smoke', .025)
 blood_pool = plain_box('blood_pool', (0, 0, -50), (1.4, 1.4, .004), MAT['blood'], None, 'FX')
-splats = [plain_box('blood_splat', (0, 0, -50), (.32, .32, .004), MAT['blood'], None, 'FX') for _ in range(9)]
+splats = [plain_box('blood_splat', (0, 0, -50), (.38, .38, .004), MAT['blood'], None, 'FX') for _ in range(20)]
 for ob in P_smoke + P_dust + P_ash + P_ember + P_blood + P_drip + splats + [blood_pool]: ob.rotation_mode = 'XYZ'
 for ob in P_ember: ob.visible_shadow = False
 # Mob eyes in the forest for the final shot.
@@ -560,6 +572,56 @@ def locomote(n, t, t0, t1, p0, p1, yaw, stride=.62, run=False, ease_in=True, eas
     rot(n['Relbow'], -(1.2 if run else .25) * moving - .05); rot(n['Lelbow'], -(1.2 if run else .25) * moving - .05)
     return u
 
+class Path2:
+    """Polyline with arc-length lookup; directions are smoothed over a window so turns are gradual."""
+    def __init__(self, pts):
+        self.p = [Vector(x) for x in pts]; self.c = [0.0]
+        for a, b in zip(self.p, self.p[1:]): self.c.append(self.c[-1] + (b - a).length)
+        self.L = self.c[-1]
+    def at(self, s):
+        s = clamp(s, 0, self.L)
+        for i in range(len(self.p) - 1):
+            if s <= self.c[i + 1] or i == len(self.p) - 2:
+                k = (s - self.c[i]) / max(1e-6, self.c[i + 1] - self.c[i]); return self.p[i].lerp(self.p[i + 1], clamp(k))
+    def dir(self, s, win=.45):
+        d = self.at(s + win) - self.at(s - win)
+        return d.normalized() if d.length > 1e-6 else Vector((0, 1, 0))
+
+def locomote_path(n, t, t0, t1, path, stride=.62, start_yaw=None):
+    """Walk along a polyline with planted feet; body yaw follows the smoothed path direction."""
+    x = clamp((t - t0) / (t1 - t0)); u = x * x * (2 - x) if x < 1 else 1
+    D = path.L; s = D * u; L = stride; stance = 1.25
+    base = path.at(s); dv = path.dir(s); yaw = math.atan2(dv.x, -dv.y)
+    if start_yaw is not None:
+        d = (yaw - start_yaw + math.pi) % math.tau - math.pi; yaw = start_yaw + d * sm(t0, t0 + .7, t)
+    reset(n, base, yaw, .74)
+    feet = []
+    for side, sg, off in (('R', 1, 0.0), ('L', -1, L)):
+        ph = (s + L * .6 - off) / (2 * L); k = math.floor(ph)
+        P = off + 2 * L * k; st_half = stance * L / 2; land = P - st_half; lift = P + st_half
+        def plant(q):
+            q = clamp(q, 0, D); d = path.dir(q); yw = math.atan2(d.x, -d.y)
+            return path.at(q) + right(yw) * (sg * .125)
+        if land - 1e-9 <= s < lift:
+            pos = plant(P)
+        else:
+            nxt = P + 2 * L; w = clamp((s - lift) / max(1e-6, nxt - st_half - lift))
+            pos = plant(P).lerp(plant(nxt), sm(0, 1, w)); pos.z += math.sin(math.pi * w) * .12
+        if u >= 1:
+            settle = sm(t1, t1 + .3, t); pos = pos.lerp(base + right(yaw) * (sg * .125), settle); pos.z *= (1 - settle)
+        pos.z += .02; feet.append((side, pos))
+    rel = [(p - base).dot(dv) for _, p in feet]
+    moving = sm(t0, t0 + .3, t) * (1 - sm(t1 - .2, t1 + .1, t))
+    bob = (abs(rel[0] - rel[1]) / (2 * L)) * moving
+    n['hips'].location.z = .735 - bob * .03
+    rot(n['hips'], 0, 0, (rel[0] - rel[1]) * .35 * moving)
+    rot(n['torso'], .07 * moving, 0, -(rel[0] - rel[1]) * .5 * moving)
+    for side, p in feet: foot(n, side, p, yaw)
+    swing = (rel[0] - rel[1]) / L * moving
+    rot(n['Rarm'], swing * .45, 0, .05); rot(n['Larm'], -swing * .45, 0, -.05)
+    rot(n['Relbow'], -.25 * moving - .05); rot(n['Lelbow'], -.25 * moving - .05)
+    return yaw
+
 def breathe(n, t, amp=.012, rate=1.6, phase=0.0):
     addrot(n['torso'], amp * math.sin(t * rate + phase), 0, 0)
 
@@ -569,17 +631,20 @@ YA = yaw_to(A0, S0)  # Alex faces Steve
 YS = yaw_to(S0, A0)
 YH = YA
 CHEST = Vector((-2.6, 1.15, 0))
+RS = 1.0  # sign of right(yaw) that points to the character's right hand
 SWORD_STAND = CHEST + Vector((0, -.86, 0))
+WALK_PATH = Path2([SWORD_STAND, V(-1.75, .3), V(-1.4, 2.4), V(-.45, 4.6), V(-.4, 6.2), V(-.2, 10.0)])
 
 SHOTS = [  # name, start, end, lens
     ('Garden', 0.0, 4.5, 28), ('Together', 4.5, 9.6, 40), ('Shudder', 9.6, 12.0, 24), ('Dark', 12.0, 14.0, 45),
     ('Reveal', 14.0, 16.4, 32), ('Pierce', 16.4, 18.4, 30), ('SteveFace', 18.4, 19.8, 70), ('Charge', 19.8, 21.2, 26),
-    ('Invitation', 21.2, 25.4, 55), ('Vanish', 25.4, 27.0, 30), ('Catch', 27.0, 32.0, 35), ('Loss', 32.0, 37.5, 50),
+    ('Invitation', 21.2, 25.4, 55), ('Vanish', 25.4, 32.0, 30), ('Loss', 32.0, 37.5, 50),
     ('Rage', 37.5, 42.0, 22), ('Sword', 42.0, 46.5, 35), ('IntoDark', 46.5, 53.0, 30)]
 HIT = 16.92        # hand exits Alex's chest
 FREEZE = (16.92, 17.10)  # hit-stop
 STOP0, STOP1 = 21.2, 25.35  # time stop during the invitation
 VANISH = 25.45
+CATCH0, CATCH1 = 26.6, 29.0  # both sink to the ground in one continuous move
 
 def shot_at(t):
     for s in SHOTS:
@@ -650,17 +715,35 @@ def pose_alex(t):
         if t > STOP0 and t < STOP1:  # frozen moment: imperceptible drift
             pass
         return
-    # collapse forward into Steve's arms
-    c = sm(VANISH, VANISH + .8, t)
-    if t < 27.0:
-        A['root'].location = A0.lerp(A0 + fwd(YA) * .28, c)
-        A['hips'].location.z = mix(.75, .5, c)
-        rot(A['hips'], .55 * c, 0, 0)
-        rot(A['torso'], .45 * c, 0, 0)
-        rot(A['head'], .9, .2, .1)
-        rot(A['Rleg'], -.15 * c); rot(A['Rknee'], .9 * c); rot(A['Lleg'], .15 * c); rot(A['Lknee'], .7 * c)
-        rot(A['Rarm'], -.2 * c, 0, -.1); rot(A['Larm'], -.3 * c, 0, .15); rot(A['Relbow'], -.2); rot(A['Lelbow'], -.15)
+    # collapse forward into Steve's arms, then one continuous sink to the ground across his lap
+    if t < CATCH1:
+        alex_collapse(min(t, CATCH0))
+        if t <= CATCH0: return
+        s0 = snap(A); reset(A, A0, YA, .75); alex_lap(CATCH1); s1 = snap(A)
+        blend(A, s0, s1, catch_k(t))
         return
+    alex_lap(t)
+
+def alex_collapse(t):
+    reset(A, A0, YA, .75)
+    c = sm(VANISH, VANISH + 1.0, t)
+    A['root'].location = A0.lerp(A0 + fwd(YA) * .3, c)
+    A['hips'].location.z = mix(.75, .56, c)
+    rot(A['hips'], .4 * c, 0, 0)
+    rot(A['torso'], .4 * c, 0, -.1 * c)
+    rot(A['head'], mix(1.0, .7, c), .2, .1)
+    rot(A['Rleg'], -.15 * c); rot(A['Rknee'], .6 * c); rot(A['Lleg'], .1 * c); rot(A['Lknee'], .5 * c)
+    rot(A['Rarm'], -.15 * c, 0, -.1); rot(A['Larm'], -.2 * c, 0, .15); rot(A['Relbow'], -.2); rot(A['Lelbow'], -.15)
+
+def snap(n): return {k: (ob.location.copy(), ob.rotation_quaternion.copy()) for k, ob in n.items()}
+def blend(n, s0, s1, k):
+    for key, ob in n.items():
+        (l0, q0), (l1, q1) = s0[key], s1[key]
+        ob.location = l0.lerp(l1, k); ob.rotation_quaternion = q0.slerp(q1, k)
+def catch_k(t):
+    x = clamp((t - CATCH0) / (CATCH1 - CATCH0)); return x * x * x * (x * (6 * x - 15) + 10)
+
+def alex_lap(t):
     # cradled across Steve's lap: reclined, head toward his left arm; lowered to the grass at 37.4-38.8
     sp = steve_kneel_spot()
     lay = sm(37.4, 38.8, t)
@@ -720,7 +803,24 @@ def pose_steve(t):
         locomote(S, t, 19.85, STOP0, S0, pre, yaw, stride=.85, run=True, ease_in=True, ease_out=False)
         return
     loc = lambda q, base: base + fwd(yaw) * q[0] + right(yaw) * q[1] + Vector((0, 0, q[2]))
-    if t < 27.0:
+    if CATCH0 < t < CATCH1:
+        steve_catch(CATCH0); s0 = snap(S); steve_lap(CATCH1); s1 = snap(S)
+        k = catch_k(t); blend(S, s0, s1, k)
+        # hands stay on her back and under her knees all the way down
+        hand(S, 'R', wm(A['torso']) @ Vector((-.2, .05, .55)).lerp(Vector((0, .16, .55)), k))
+        hand(S, 'L', wm(A['torso']) @ Vector((.2, .05, .55)).lerp(Vector((0, .16, .1)), k))
+        look(S, wm(A['head']).translation, amount=.9)
+        return
+    if t <= CATCH0:
+        steve_catch(t); return
+    steve_lap(t)
+
+def steve_catch(t):
+    yaw = YS
+    end = A0 + fwd(YA) * .8
+    pre = end - fwd(YS) * .28
+    loc = lambda q, base: base + fwd(yaw) * q[0] + right(yaw) * q[1] + Vector((0, 0, q[2]))
+    if True:
         k = sm(STOP1, STOP1 + .12, t)
         base = pre.lerp(end, k)
         reset(S, base, yaw, .70)
@@ -739,6 +839,10 @@ def pose_steve(t):
             hand(S, 'R', (wm(A['torso']) @ Vector((-.2, .05, .55))).lerp(loc((.8, .05, 1.62), end), 1 - catch))
             hand(S, 'L', wm(A['torso']) @ Vector((.2, .05, .55)))
         return
+
+def steve_lap(t):
+    yaw = YS
+    loc = lambda q, base: base + fwd(yaw) * q[0] + right(yaw) * q[1] + Vector((0, 0, q[2]))
     sp = steve_kneel_spot()
     if t < 41.6:
         # kneeling with her across his lap -> lays her down -> rises on one knee -> stands
@@ -756,9 +860,8 @@ def pose_steve(t):
         hold_hip = wm(A['torso']) @ Vector((0, .16, .1))
         cheek = wm(A['head']) @ Vector((.27, 0, .2))
         rel = sm(38.8, 39.4, t)
-        side_l = loc((.12, -.3, hh - .1), sp); side_r = loc((.12, .3, hh - .1), sp)
-        if 39.4 < t: side_l = loc((.1, -.32, hh - .12), sp); side_r = loc((.1, .32, hh - .12), sp)
-        if t > 39.5: side_l = loc((.45, -.12, .62), sp) if t < 40.6 else side_l  # pushes off his knee
+        # released hands hang as clenched fists well out at his sides (never in front of the hips)
+        side_l = loc((.06, -.44, hh + .05), sp); side_r = loc((.06, .44, hh + .05), sp)
         rp = hold_hip if t < 33.6 else hold_hip.lerp(cheek, sm(33.6, 34.3, t))
         hand(S, 'R', hold_back.lerp(side_r, rel))
         hand(S, 'L', rp.lerp(side_l, rel))
@@ -769,14 +872,15 @@ def pose_steve(t):
             anger = sm(37.6, 39.0, t)
             look(S, head_t, amount=1 - anger)
             addrot(S['head'], mix(.2, -.12, anger), 0, 0)
-            if t > 39.0:
-                for side in ('Rarm', 'Larm'): addrot(S[side], .025 * math.sin(t * 31 + len(side)) * anger, 0, 0)
+            # heavy angry breathing in the chest, arms stay still
+            addrot(S['torso'], .03 * math.sin(t * 7.5) * anger, 0, 0)
         return
-    # turn and walk to the chest
+    # stands still, staring ahead; the shot ends on his face and cuts to the chest
     if t < 42.0:
-        yaw2 = K(t, [(41.0, yaw), (41.6, yaw), (42.0, yaw_to(sp, SWORD_STAND))])
-        reset(S, sp, yaw2, .74); stand(S, yaw2, .14)
-        look(S, CHEST + Vector((0, 0, .5)), amount=.8)
+        reset(S, sp, yaw, .75); stand(S, yaw, .15)
+        rot(S['torso'], .06, 0, 0); addrot(S['torso'], .03 * math.sin(t * 7.5), 0, 0)
+        hand(S, 'L', loc((.06, -.44, .8), sp)); hand(S, 'R', loc((.06, .44, .8), sp))
+        rot(S['head'], -.12 + .02 * math.sin(t * 7.5), 0, 0)
         return
     if t < 46.5:
         # Sword shot starts with Steve at the chest
@@ -789,16 +893,16 @@ def pose_steve(t):
         look(S, CHEST + Vector((0, 0, .6)), amount=1 - sm(44.4, 45.0, t))
         loc = lambda q: SWORD_STAND + fwd(yaw3) * q[0] + right(yaw3) * q[1] + Vector((0, 0, q[2]))
         # left hand lifts the lid, right reaches in, then raises the sword
-        lp = K(t, [(42.0, (.25, .3, .85)), (42.5, (.62, .2, .8)), (42.8, (.62, .25, .82)), (43.2, (.7, .3, 1.25)), (44.0, (.6, .3, 1.1)), (44.6, (.25, .3, .85))])
-        rp = K(t, [(42.0, (.2, -.3, .85)), (43.1, (.25, -.3, .85)), (43.5, (.82, -.05, .55)), (43.9, (.75, -.08, .6)), (44.4, (.45, -.15, 1.4)), (44.75, (.3, -.18, 1.97)), (45.6, (.28, -.2, 1.95)), (46.2, (.15, -.32, .75))])
-        hand(S, 'L', loc(lp)); hand(S, 'R', loc(rp))
-        rot(S['Rwrist'], K(t, [(43.5, .6), (44.4, 1.2), (44.75, 1.55), (45.6, 1.55), (46.2, 1.3)]), 0, 0)
+        lp = K(t, [(42.0, (.25, -RS * .3, .85)), (42.5, (.62, -RS * .2, .8)), (42.8, (.62, -RS * .25, .82)), (43.2, (.7, -RS * .3, 1.25)), (44.0, (.6, -RS * .3, 1.1)), (44.6, (.25, -RS * .3, .85))])
+        # right hand dips below the rim (wall top .625), grips, then lifts in an arc out to his right side
+        rp = K(t, [(42.0, (.2, RS * .3, .85)), (43.1, (.25, RS * .3, .85)), (43.5, (.8, RS * .05, .42)), (43.95, (.78, RS * .06, .44)),
+                   (44.3, (.62, RS * .28, 1.0)), (44.55, (.42, RS * .5, 1.55)), (44.8, (.22, RS * .52, 1.98)), (45.6, (.2, RS * .52, 1.96)), (46.2, (.12, RS * .4, .8))])
+        hand(S, 'L', loc(lp)); hand(S, 'R', loc(rp), pole=wm(S['Rarm']).translation + right(yaw3) * RS * .9 + Vector((0, 0, -.3)))
+        rot(S['Rwrist'], K(t, [(43.5, .3), (43.95, .3), (44.4, 1.0), (44.8, 1.55), (45.6, 1.55), (46.2, 1.3)]), 0, 0)
         if t > 45.0: rot(S['head'], -.08, 0, 0)
         return
-    # walk into the dark forest, sword low
-    p0 = SWORD_STAND; p1 = V(-.6, 9.5)
-    yaw4 = yaw_to(p0, p1)
-    locomote(S, t, 46.7, 53.5, p0, p1, yaw4, stride=.62, ease_in=True, ease_out=False)
+    # walk into the dark forest, sword low: around the chest, through the fence gap
+    locomote_path(S, t, 46.6, 53.5, WALK_PATH, stride=.6, start_yaw=math.pi)
     rot(S['Rarm'], -.15, 0, -.12); rot(S['Relbow'], -.25); rot(S['Rwrist'], 1.3, 0, 0)
     rot(S['head'], .05, 0, 0)
 
@@ -892,7 +996,7 @@ def apply_fx(t, frame):
     for ob in hb_blood: show(ob, t >= HIT)
     for ob in s_splat: show(ob, t >= HIT + .12)
     for ob in s_hands_blood: show(ob, t >= 28.5)
-    show(sword, 43.6 <= t)
+    show(sword, 44.0 <= t)
     for ob in s_brows:
         on = t >= 38.0
         ob.scale = (1, 1, 1) if on else (.0001,) * 3; rec(ob, 'scale', ob.scale, frame)
@@ -935,9 +1039,12 @@ def apply_fx(t, frame):
     ts = story_time(t)
     origin = wm_cache.get('exit') or (A0 + fwd(YA) * .3 + Vector((0, 0, 1.18)))
     for i, ob in enumerate(P_blood):
-        d0 = HIT + rnd.uniform(0, .25) * (1 if i > 40 else 0)
-        sp = rnd.uniform(1.6, 4.2); dirv = (fwd(YA) * rnd.uniform(.6, 1.1) + right(YA) * rnd.uniform(-.55, .55) + Vector((0, 0, rnd.uniform(-.15, .6)))).normalized()
-        if i % 4 == 0: dirv = (-fwd(YA) * .8 + Vector((0, 0, rnd.uniform(-.1, .4))) + right(YA) * rnd.uniform(-.4, .4)).normalized(); sp *= .6
+        # first wave: violent burst; later waves: pulsing gush that keeps pouring from the exit wound
+        wave = 0 if i < 120 else (1 if i < 190 else 2)
+        d0 = HIT + (rnd.uniform(0, .12) if wave == 0 else rnd.uniform(.15, .55) if wave == 1 else rnd.uniform(.55, 1.4))
+        sp = rnd.uniform(1.8, 5.0) if wave == 0 else rnd.uniform(1.0, 2.6) if wave == 1 else rnd.uniform(.5, 1.5)
+        dirv = (fwd(YA) * rnd.uniform(.6, 1.1) + right(YA) * rnd.uniform(-.6, .6) + Vector((0, 0, rnd.uniform(-.2, .7)))).normalized()
+        if i % 4 == 0: dirv = (-fwd(YA) * .8 + Vector((0, 0, rnd.uniform(-.1, .5))) + right(YA) * rnd.uniform(-.5, .5)).normalized(); sp *= .7
         dt = ts - story_time(d0)
         if dt < 0 or t < HIT: ob.scale = (0, 0, 0); ob.location = (0, 0, -50)
         else:
@@ -959,7 +1066,7 @@ def apply_fx(t, frame):
     for i, ob in enumerate(P_drip):
         period = .55 + rnd.uniform(0, .5); off = rnd.uniform(0, period)
         src = (wm(A['torso']) @ Vector((rnd.uniform(-.06, .06), -.14, .45))) if i % 3 else (wm(H['Rwrist']).translation if t < VANISH else wm(A['torso']) @ Vector((0, .14, .45)))
-        active = (HIT + .3 < t < 33.0)
+        active = (HIT + .3 < t < 36.0)
         tt = story_time(t)
         ph = ((tt - off) % period) / period if active else 0
         if not active: ob.location = (0, 0, -50); ob.scale = (0, 0, 0)
@@ -970,11 +1077,12 @@ def apply_fx(t, frame):
         rec(ob, 'location', ob.location, frame); rec(ob, 'scale', ob.scale, frame)
     # splats on the grass in front of Alex
     for i, ob in enumerate(splats):
-        appear = HIT + .25 + i * .07
+        appear = HIT + .2 + i * .045
         if t < appear: ob.location = (0, 0, -50); ob.scale = (0, 0, 0)
         else:
-            ob.location = A0 + fwd(YA) * (.5 + i * .17 + (i % 3) * .1) + right(YA) * ((i % 4) * .18 - .27) + Vector((0, 0, .003 + i * .0004))
-            g = sm(appear, appear + .15, t); ob.scale = (g * (.8 + (i % 3) * .3), g * (.8 + (i % 2) * .4), 1); ob.rotation_euler = (0, 0, i * 1.3)
+            back_side = i % 5 == 4
+            ob.location = A0 + fwd(YA) * ((-.45 - (i % 3) * .2) if back_side else (.35 + (i % 10) * .16 + (i % 3) * .08)) + right(YA) * (((i * 7) % 6) * .14 - .35) + Vector((0, 0, .003 + i * .0004))
+            g = sm(appear, appear + .2, t); ob.scale = (g * (.8 + (i % 3) * .35), g * (.8 + (i % 2) * .5), 1); ob.rotation_euler = (0, 0, i * 1.3)
         rec(ob, 'location', ob.location, frame); rec(ob, 'scale', ob.scale, frame); rec(ob, 'rotation_euler', ob.rotation_euler, frame)
     # growing pool under Alex once she lies in Steve's lap
     if t >= 28.0:
@@ -1122,7 +1230,11 @@ def camera(t, frame):
         c = H_head * .6 + A_head * .4
         shoot(c, mix(-66, -60, u), -2, mix(1.55, 1.35, u), 36, focus=H_head, fstop=2.2, roll=.04)
     elif name == 'Vanish':
-        shoot(Vector((.0, .25, 1.15)), -25, 6, 3.1, 32, focus=(.0, .25, 1.2), fstop=3.5, extra=sh)
+        # one continuous shot: the vanish, the collapse and the slow sink to the ground together
+        # orbit from behind Alex round to the side so both faces read while they sink; settles into the old Catch framing
+        g = sm(26.0, 29.6, t); late = sm(29.6, 32.0, t)
+        c = Vector((.0, .25, 1.15)).lerp(wm(S['torso']).translation + Vector((.3, 0, .05)), g)
+        shoot(c, mix(-25, 104, g) - 8 * late, mix(6, 22, g), mix(3.1, 2.9, g) - .3 * late, mix(32, 35, g), focus=c, fstop=mix(3.5, 2.5, g), extra=(sh[0] + hand_held[0] * g, sh[1] + hand_held[1] * g, sh[2]))
     elif name == 'Catch':
         c = wm(S['torso']).translation + Vector((.3, 0, .05))
         shoot(c, mix(104, 96, u), 22, mix(3.0, 2.6, u), 35, focus=c, fstop=2.5, extra=hand_held)
@@ -1152,6 +1264,9 @@ def camera(t, frame):
     key.rotation_euler = (tgt_key - key.location).to_track_quat('-Z', 'Y').to_euler()
     key.data.energy = mix(0, 35, dk) * (1 if name not in ('Shudder',) else .3)
     key.data.color = (.55, .65, 1.0)
+    if name == 'IntoDark':  # Steve must not read as a pure silhouette walking away
+        key.location = cam.location + Vector((.6, -.3, 1.2)); key.rotation_euler = (wm(S['torso']).translation - key.location).to_track_quat('-Z', 'Y').to_euler()
+        key.data.energy = 70
     rim.location = Vector((1.0, 3.5, 2.6)); rim.rotation_euler = (Vector((0, .3, 1.1)) - rim.location).to_track_quat('-Z', 'Y').to_euler()
     rim.data.energy = 220 * dk
     if name == 'Rage': rim.data.color = (1, .15, .05); rim.data.energy = 320; rim.location = wm(S['root']).translation + Vector((-.5, 2.0, 1.8))

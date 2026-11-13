@@ -10,12 +10,17 @@ var encounters = preload("res://scripts/chapter_four_encounters.gd").new()
 var ending = preload("res://scripts/chapter_four_finale.gd").new()
 ## Presentation-only impact state (gore, stains, smoke); see chapter_four_fx.gd.
 var fx = preload("res://scripts/chapter_four_fx.gd").new()
+## Pillar rescues, retinues, affixes, ambushes, surges and the butcher.
+var hunt = preload("res://scripts/chapter_four_hunt.gd").new()
 var enemy_shots: Array = []
 var enemy_fields: Array = []
 var enemy_bottles: Array = []
 var mob_walls: Array = []
 var chickens: Array = []
 var mob_slow := 1.0
+## Music arc (13.11): horror ambient and wind first, then heavy metal for good once
+## the village's story is read or three minutes have passed.
+var rage_music := 0.0
 var terrain: Dictionary = {}
 var pools: Dictionary = {}
 var landmarks: Array = []
@@ -44,7 +49,7 @@ func reset(seed_value: int = 0):
 	terrain = JSON.parse_string(FileAccess.get_file_as_string(TERRAIN))
 	pools.clear();landmarks.clear();threats.clear();blood_shots.clear()
 	blood_hand.clear();hand_cooldown = 2.0;held = 0.0
-	enemy_shots.clear();enemy_fields.clear();enemy_bottles.clear();mob_walls.clear();chickens.clear();mob_slow=1.0
+	enemy_shots.clear();enemy_fields.clear();enemy_bottles.clear();mob_walls.clear();chickens.clear();mob_slow=1.0;rage_music=0.0
 	note_read = false;note_pending = false;note_presented = false
 	aura_state = "none";aura_changed_at = -10.0;victory_stage = ""
 	damage_popups.clear();hitstop = 0.0;rerolls = 0
@@ -62,6 +67,7 @@ func reset(seed_value: int = 0):
 	encounters.reset(self)
 	ending.reset(self)
 	fx.reset(self)
+	hunt.reset(self)
 	stage = "arrival"
 	facing = Vector2.UP
 
@@ -126,12 +132,13 @@ func remove_mob_solid(p: Vector2):
 func spawn(kind: String, at = null) -> bool:
 	if not db.data.forms.has(kind):return super.spawn(kind,at)
 	var def: Dictionary=db.data.forms[kind]
-	if encounters.busy() and def.elite:return false
+	if encounters.busy() and def.elite and not hunt.forcing:return false
 	var limits: Dictionary=db.data.chapter_four.enemy_limits
+	if kind=="marksman" and not hunt.forcing and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.marksmen):return false
 	if kind=="parasite" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.parasites):return false
 	if kind=="infected_witch" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.witches):return false
 	if kind=="growth_skeleton" and mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=int(limits.skeletons):return false
-	if def.elite and mobs.filter(func(m):return m.get("boss",false) and m.hp>0).size()>=int(limits.elites):return false
+	if def.elite and not hunt.forcing and mobs.filter(func(m):return m.get("boss",false) and m.hp>0).size()>=int(limits.elites):return false
 	var entrance: bool=def.elite and at==null and stage=="survival"
 	if entrance:
 		# Elites rise out of the ground in view instead of walking in off-screen.
@@ -147,6 +154,9 @@ func spawn(kind: String, at = null) -> bool:
 		m.emerge=clock;m.stun=maxf(m.stun,1.1);m.visual_dir=m.p.direction_to(player)
 		fx.quake(self,m.p,1.4);fx.erupt(self,m.p,"dirt",9)
 		message=ELITE_NAMES.get(kind,"");message_timer=2.5;sound("ch4_growth_rip")
+	if def.elite and kind!="crucified":
+		hunt.on_elite(self,m)
+		if entrance:message+=hunt.affix_suffix(m)
 	return true
 
 func move_mobs(dt: float):
@@ -160,7 +170,9 @@ func move_mobs(dt: float):
 func heal_undead(at: Vector2, radius: float, damage: float):
 	# Shared hook for the Chapter IV healing potion (arsenal stage C).
 	for m in in_radius(at,radius):
-		if m.get("undead",false) and not m.get("allied",false):hurt(m,damage)
+		if m.hp>0 and m.get("undead",false) and not m.get("allied",false):
+			hurt(m,damage)
+			if m.hp<=0:run_progress.count("healing_undead",20)
 
 func add_effect(kind: String,p: Vector2,life: float,extra: Dictionary={}):
 	# Fast pellets/saw ticks share one nearby number for 120 ms. Damage and hit
@@ -189,6 +201,7 @@ func resolve_deaths():
 			arsenal.after_kill(self,m)
 			kills+=1;drop_xp(m.p,m.xp)
 			if m.boss:loot.append({"kind":"chest","p":m.p,"born":time})
+			if m.has("affixes"):hunt.on_elite_death(self,m)
 			add_effect("ch4_remains",m.p,.6,{"skin":m.skin,"dir":m.visual_dir})
 			fx.death(self,m)
 		if m.exploded and threats.filter(func(t):return t.hp>0 and t.has("parasite_at")).size()<int(db.data.chapter_four.enemy_limits.cysts):
@@ -234,7 +247,8 @@ func rebuild_hit_grid():
 
 func hurt(m: Dictionary, amount: float, push: Vector2 = Vector2.ZERO):
 	if m.get("allied",false) or m.hp<=0:return
-	if not arsenal.piercing:amount*=1-clampf(float(m.get("guard",0)),0,.8)
+	if m.get("immortal",false):hunt.butcher_hurt(self,m,amount,push);return
+	if not arsenal.piercing:amount*=1-clampf(float(m.get("guard",0))+hunt.shield_guard(m),0,.8)
 	amount*=1+minf(4,m.get("ch4_cracks",0))*.025
 	if m.has("finale_actor"):ending.hurt(self,m,amount,push);return
 	if m.has("encounter_actor"):encounters.hurt(self,m,amount,push);return
@@ -287,7 +301,7 @@ func hook_target(m: Dictionary, evolved_hook: bool):
 
 func aura_near() -> bool:
 	for mark in landmarks:
-		if mark.kind == "crucifix" and player.distance_to(mark.p) < float(db.data.aura.radius):return true
+		if mark.kind == "crucifix" and hunt.hanging(mark) and player.distance_to(mark.p) < float(db.data.aura.radius):return true
 	return false
 
 func update_aura():
@@ -295,12 +309,13 @@ func update_aura():
 	if next != aura_state:
 		aura_state = next;aura_changed_at = clock
 		if next != "none":sound("ch4_rage" if next == "rage" else "ch4_despair", 1.0)
-	db.data.aura_damage = 1.0 if next == "none" else float(db.data.aura[next + "_damage"])
+	db.data.aura_damage = (1.0 if next == "none" else float(db.data.aura[next + "_damage"])) * hunt.damage_scale(self)
 	db.data.aura_interval = 1.0 if next == "none" else float(db.data.aura[next + "_interval"])
 
 func read_note():
 	if note_read:return
 	note_read = true;note_pending = false
+	run_progress.award("read_note")
 	update_aura()
 	aura_changed_at = clock
 	sound("ch4_note")
@@ -401,6 +416,12 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	if stage == "survival" and fx.opening == 0 and stage_age >= .45:first_contact()
 	arsenal.tick(self,dt,movement)
 	var before: Vector2 = player
+	if arsenal.cart_left>0:
+		# The cart rolls on its own; the stick only steers it.
+		if movement.length_squared()>.01:
+			var want: float=movement.angle();var have: float=arsenal.cart_dir.angle()
+			arsenal.cart_dir=Vector2.from_angle(have+clampf(angle_difference(have,want),-1,1)*float(arsenal.rules(self).cart_turn)*dt)
+		movement=arsenal.cart_dir
 	if arsenal.bat_left>0:
 		movement=arsenal.bat_direction
 		invulnerable=maxf(invulnerable,.08)
@@ -413,9 +434,11 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	flow_timer -= dt
 	if flow_timer <= 0 and flow_cell != Vector2i(player / CELL):update_flow();flow_timer = .25
 	update_aura()
+	if rage_music <= 0 and (note_read or time >= 180.0 or encounters.current == "mass"):rage_music = 1.0;sound("ch4_rage", 1.0)
 	if not db.data.chapter_four.exploration_only and time<float(db.data.duration) and stage == "survival":spawn_wave(dt)
 	move_mobs(dt)
 	encounters.tick(self,dt)
+	hunt.tick(self,dt)
 	rebuild_hit_grid()
 	update_attacks(dt);update_projectiles(dt);update_explosives(dt)
 	arsenal.step(self,dt)
@@ -465,7 +488,7 @@ func drop_xp(p: Vector2, value: int):
 
 func next_level():
 	super.next_level()
-	rerolls = [0, 0, 1, 1, 2, 3][clampi(int(items.get("end_eye", 0)), 0, 5)]
+	rerolls = [0, 0, 1, 1, 1, 1][clampi(int(items.get("end_eye", 0)), 0, 5)]
 
 func make_choices() -> Array:
 	var result: Array = super.make_choices()
@@ -482,7 +505,8 @@ func reroll_choices() -> bool:
 
 func movement_speed() -> float:
 	if arsenal.bat_left>0:return float(arsenal.rules(self).bat_speed)
-	return float(db.data.player_speed) * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow)
+	if arsenal.cart_left>0:return float(arsenal.rules(self).cart_speed)
+	return float(db.data.player_speed) * 1.12 * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow)
 
 func active_item(id: String) -> bool:
 	if stage=="arrival" or (stage=="finale" and ending.locked()):return false
@@ -527,14 +551,19 @@ func update_attacks(dt: float):
 	arsenal.update_attacks(self,dt)
 
 func receive_hit(amount: float,attacker: Dictionary):
+	var before: float=hp
 	arsenal.incoming=attacker;damage_player(amount);arsenal.incoming={}
+	hunt.on_hit_player(self,attacker,before-hp)
 
 func damage_player(amount: float):
 	if invulnerable>0 or hp<=0:return
+	# In the minecart bodies bounce off; shots and clouds still hurt.
+	if arsenal.cart_left>0 and not arsenal.incoming.is_empty():return
 	var armor: float=.2*items.get("armor",0)
 	var protection: float=float(arsenal.rules(self).bedrock_defense)*items.get("bedrock",0) if arsenal.still>=.7 else 0.0
 	var taken: float=maxf(1,amount-armor)*(1-protection)
 	hp-=taken;run_progress.damage(taken)
+	hunt.on_player_hit(self)
 	invulnerable=.95 if evolved.has("armor") and items.has("armor") else .65
 	player_visual.hurt=.12;shake=.12;sound("hurt",.15);add_effect("player_hit",player,.22)
 	fx.spray(player,Vector2.ZERO if arsenal.incoming.is_empty() else arsenal.incoming.p.direction_to(player),5,80.0,1.4)
@@ -563,7 +592,7 @@ func neutral(m: Dictionary) -> bool:
 	return m.get("allied",false)
 
 func spawn_wave(dt: float):
-	super.spawn_wave(dt*float(encounters.data.rules.wave_scale) if encounters.busy() else dt)
+	super.spawn_wave((dt*float(encounters.data.rules.wave_scale) if encounters.busy() else dt)*hunt.wave_scale(self))
 
 func replace_special_solids(owner: String,positions: Array,radius: float):
 	# Batch replacement updates navigation once, rather than once per stone.

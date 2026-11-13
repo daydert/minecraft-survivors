@@ -1,0 +1,33 @@
+{
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "user_correction": "Колокол жёлтый; у дробовика убрать квадраты сбоку; костяная пила как медицинская.",
+  "items": [
+    {
+      "id": "bell_evo",
+      "prompt": "Edit the supplied SINGLE transparent Minecraft inventory sprite. Keep the strict chunky Minecraft item pixel style, palette-sized flat color clusters, diagonal or upright placement, dark pixel contour, crisp stepped edges and real transparent background. It must read at 16x16 and 32x32. No background, no frame, no text, no watermark, no smooth painting, no gradients, no glow. User correction: The bell must be YELLOW GOLD. Replace ALL cyan and blue-green bell metal with warm vanilla Minecraft gold: bright yellow top-left pixels, ochre main body, deep brown-gold shadow at the lower lip. Preserve the wooden handle, original bell silhouette and dark clapper. No cyan body and no silver body. Change the color of the bell, keep it a readable yellow Minecraft bell.",
+      "reference": "assets/art_source/ch4_icons/drafts/bell_evo.png"
+    },
+    {
+      "id": "shotgun",
+      "prompt": "Edit the supplied SINGLE transparent Minecraft inventory sprite. Keep the strict chunky Minecraft item pixel style, palette-sized flat color clusters, diagonal or upright placement, dark pixel contour, crisp stepped edges and real transparent background. It must read at 16x16 and 32x32. No background, no frame, no text, no watermark, no smooth painting, no gradients, no glow. User correction: REMOVE the two bulky gray square housings with large square black openings that protrude on the upper-right side of this crossbow shotgun. They are the unwanted side squares. Replace them with a clean narrow aligned pair of simple iron barrels that directly continue the central receiver, without box attachments and without oversized square muzzle holes. Keep the brown wooden stock, bow limbs and white crossbow string, and keep the diagonal item pose. Simplify the silhouette; do not add side plates, cubes, square attachments or ammunition. Keep square PIXELS; remove the large square COMPONENTS.",
+      "reference": "assets/art_source/ch4_icons/drafts/shotgun.png"
+    },
+    {
+      "id": "shotgun_evo",
+      "prompt": "Edit the supplied SINGLE transparent Minecraft inventory sprite. Keep the strict chunky Minecraft item pixel style, palette-sized flat color clusters, diagonal or upright placement, dark pixel contour, crisp stepped edges and real transparent background. It must read at 16x16 and 32x32. No background, no frame, no text, no watermark, no smooth painting, no gradients, no glow. User correction: REMOVE the bulky gray rectangular/square side housings and their large black square openings along the upper-right side of this double-barrel crossbow shotgun. Replace them with TWO narrow parallel simple iron barrels, joined tightly into one clean central receiver, no box attachments or oversize black cutouts. Preserve the brown wooden stock, crossbow bow limbs, white bowstring and small dark-red grip. Same diagonal pose. The evolved gun is slightly heavier but has no protruding cubes or square side plates. Keep square PIXELS; remove the large square COMPONENTS.",
+      "reference": "assets/art_source/ch4_icons/drafts/shotgun_evo.png"
+    },
+    {
+      "id": "bone_saw",
+      "prompt": "Edit the supplied SINGLE transparent Minecraft inventory sprite. Keep the strict chunky Minecraft item pixel style, palette-sized flat color clusters, diagonal or upright placement, dark pixel contour, crisp stepped edges and real transparent background. It must read at 16x16 and 32x32. No background, no frame, no text, no watermark, no smooth painting, no gradients, no glow. User correction: Redesign the item as a MEDICAL SURGICAL BONE SAW, the recognizable hand-operated amputation FRAME SAW: a squared stainless-steel U-shaped arch, a thin straight finely toothed steel blade spanning the open bottom of the arch, and a short black/dark handle at one end. The open rectangular center of the frame must be clearly transparent. Cold silver-gray steel with white top-left highlight, dark charcoal handle and shadow. A real surgical instrument rendered as a simple Minecraft pixel item. Diagonal inventory pose, single isolated item, compact silhouette. Remove the fantasy ivory bone blade, the giant bone teeth and the wooden sword-like design. It is NOT a sword, a carpenter's broad triangular saw, a chainsaw or a bone-shaped club. Small regular 1-pixel teeth on a thin straight metal blade.",
+      "reference": "assets/art_source/ch4_icons/drafts/bone_saw.png"
+    },
+    {
+      "id": "bone_saw_evo",
+      "prompt": "Edit the supplied SINGLE transparent Minecraft inventory sprite. Keep the strict chunky Minecraft item pixel style, palette-sized flat color clusters, diagonal or upright placement, dark pixel contour, crisp stepped edges and real transparent background. It must read at 16x16 and 32x32. No background, no frame, no text, no watermark, no smooth painting, no gradients, no glow. User correction: Redesign the evolved item as the SAME MEDICAL SURGICAL FRAME BONE SAW family: silver-gray squared U-shaped stainless-steel arch around a clearly transparent open rectangular center; a thin straight fine-toothed steel blade spans its bottom; a short dark-red wrapped handle at one end. Small crimson stain only on one section of the metal blade indicates the evolution, while most of the saw remains cold silver surgical steel. Diagonal item pose, isolated and compact. Remove the long ivory fantasy bone blade, the oversized hooked bone teeth and the sword-like shape. No bone material, no chainsaw, no carpenter saw. The silhouette must unmistakably be a surgical amputation hand frame saw, with small regular teeth.",
+      "reference": "assets/art_source/ch4_icons/drafts/bone_saw_evo.png"
+    }
+  ]
+}
+

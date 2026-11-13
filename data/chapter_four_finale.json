@@ -1,431 +1,431 @@
 {
- "arena": {
-  "offset": [
-   0,
-   200
-  ],
-  "size": [
-   560,
-   360
-  ],
-  "island": 90
- },
- "summit_trigger": 230,
- "giant": 2.0,
- "intro": {
-  "duration": 8.2,
-  "turn": [
-   2.6,
-   4.2
-  ],
-  "line_at": 4.6,
-  "rise_at": 6.2
- },
- "tower": {
-  "at": [
-   0,
-   -140
-  ],
-  "height": 64,
-  "reach": 36,
-  "rise": 1.6,
-  "rest": 0.9,
-  "queue": [
-   "storm",
-   "spiral",
-   "waves",
-   "storm",
-   "waves",
-   "inferno"
-  ],
-  "storm": {
-   "chain": 8,
-   "every": 0.14,
-   "windup": 0.8,
-   "radius": 22,
-   "big": 3,
-   "big_radius": 34,
-   "big_delay": 1.25,
-   "damage": 4
-  },
-  "waves": {
-   "count": 3,
-   "every": 1.5,
-   "speed": 110,
-   "band": 10,
-   "gap": 0.95,
-   "damage": 3,
-   "time": 5.4,
-   "shift": 0.35
-  },
-  "inferno_marks": 5
- },
- "vortex": {
-  "warp": 0.45,
-  "grow": [
-   0.5,
-   1.6
-  ],
-  "squeeze": [
-   0.9,
-   3.4
-  ],
-  "cut": 3.7,
-  "split": 3.95,
-  "react": 4.9,
-  "down": 5.8,
-  "duration": 6.8,
-  "at": [
-   0,
-   30
-  ]
- },
- "one": {
-  "hp": 6000,
-  "radius": 15,
-  "rest": [
-   0.85,
-   1.4
-  ],
-  "walk": 22,
-  "keep": 80,
-  "blink_range": 56,
-  "blink_distance": 130,
-  "blink_cooldown": 2.2,
-  "lightning": {
-   "windup": 0.85,
-   "radius": 26,
-   "damage": 4,
-   "spread": 46,
-   "count": 4
-  },
-  "ring": {
-   "windup": 0.85,
-   "start": 120,
-   "end": 14,
-   "time": 1.9,
-   "gap": 1.0,
-   "band": 10,
-   "damage": 4,
-   "gap_near": 1.2
-  },
-  "strike": {
-   "windup": 0.7,
-   "length": 140,
-   "width": 16,
-   "damage": 5
-  },
-  "look_threshold": 0.6,
-  "look_time": 1.6
- },
- "kneel": {
-  "duration": 6.8,
-  "rise_at": 3.0,
-  "line_at": 4.4
- },
- "two": {
-  "hp": 10500,
-  "rest": 1.05,
-  "walk": 30,
-  "angry_below": 0.34,
-  "angry_speed": 1.2,
-  "hole": {
-   "grow": 3.4,
-   "pull": 55,
-   "radius": 30,
-   "reach": 170,
-   "damage": 6,
-   "debris": 40,
-   "gaps": 5,
-   "speed": 140
-  },
-  "blitz": {
-   "points": 5,
-   "mark": 0.34,
-   "delay": 0.7,
-   "speed": 560,
-   "width": 14,
-   "damage": 5,
-   "stagger": 2.0
-  },
-  "rain": {
-   "wave": 2.3,
-   "waves": 3,
-   "lanes": 21,
-   "every": 0.15,
-   "speed": 255,
-   "damage": 3,
-   "safe": 2,
-   "slant": 80,
-   "heavy_every": 0.5,
-   "heavy_windup": 0.75,
-   "heavy_radius": 18,
-   "heavy_damage": 4,
-   "drift": 1.5
-  },
-  "rift": {
-   "windup": 1.1,
-   "hold": 5.5,
-   "strips": 2,
-   "height": 30,
-   "gap": 56
-  },
-  "tear": {
-   "windup": 0.9,
-   "time": 4.4,
-   "pulse_speed": 200,
-   "pulses": 3,
-   "width": 12,
-   "damage": 4,
-   "bridges": 2
-  },
-  "day": {
-   "at": [
-    0.67,
-    0.34
-   ],
-   "cycles": [
-    3.0,
-    2.4,
-    1.8,
-    1.3
-   ],
-   "ring": 20,
-   "speed": 125,
-   "damage": 3,
-   "shadow": {
-    "length": 250,
-    "width": 20,
-    "damage": 4,
-    "from_sky": 0.35,
-    "sweep": "upper"
-   },
-   "freeze": 3.2,
-   "knives": {
-    "rings": 3,
-    "count": 30,
-    "radius": [
-     64,
-     96,
-     128
+  "arena": {
+    "offset": [
+      0,
+      200
     ],
-    "gap": 0.62,
-    "speed": 230,
-    "every": 0.55
-   },
-   "release": 1.4,
-   "finale_rings": 3,
-   "stun": 4.0,
-   "float_guard": 0.3,
-   "stun_bonus": 2.0
+    "size": [
+      560,
+      360
+    ],
+    "island": 90
+  },
+  "summit_trigger": 230,
+  "giant": 2.0,
+  "intro": {
+    "duration": 8.2,
+    "turn": [
+      2.6,
+      4.2
+    ],
+    "line_at": 4.6,
+    "rise_at": 6.2
+  },
+  "tower": {
+    "at": [
+      0,
+      -140
+    ],
+    "height": 64,
+    "reach": 36,
+    "rise": 1.6,
+    "rest": 0.9,
+    "queue": [
+      "storm",
+      "spiral",
+      "waves",
+      "storm",
+      "waves",
+      "inferno"
+    ],
+    "storm": {
+      "chain": 8,
+      "every": 0.14,
+      "windup": 0.8,
+      "radius": 22,
+      "big": 3,
+      "big_radius": 34,
+      "big_delay": 1.25,
+      "damage": 4
+    },
+    "waves": {
+      "count": 3,
+      "every": 1.5,
+      "speed": 110,
+      "band": 10,
+      "gap": 0.95,
+      "damage": 3,
+      "time": 5.4,
+      "shift": 0.35
+    },
+    "inferno_marks": 5
+  },
+  "vortex": {
+    "warp": 0.45,
+    "grow": [
+      0.5,
+      1.6
+    ],
+    "squeeze": [
+      0.9,
+      3.4
+    ],
+    "cut": 3.7,
+    "split": 3.95,
+    "react": 4.9,
+    "down": 5.8,
+    "duration": 6.8,
+    "at": [
+      0,
+      30
+    ]
+  },
+  "one": {
+    "hp": 6000,
+    "radius": 15,
+    "rest": [
+      0.85,
+      1.4
+    ],
+    "walk": 22,
+    "keep": 80,
+    "blink_range": 56,
+    "blink_distance": 130,
+    "blink_cooldown": 2.2,
+    "lightning": {
+      "windup": 0.85,
+      "radius": 26,
+      "damage": 4,
+      "spread": 46,
+      "count": 4
+    },
+    "ring": {
+      "windup": 0.85,
+      "start": 120,
+      "end": 14,
+      "time": 1.9,
+      "gap": 1.0,
+      "band": 10,
+      "damage": 4,
+      "gap_near": 1.2
+    },
+    "strike": {
+      "windup": 0.7,
+      "length": 140,
+      "width": 16,
+      "damage": 5
+    },
+    "look_threshold": 0.6,
+    "look_time": 1.6
+  },
+  "kneel": {
+    "duration": 6.8,
+    "rise_at": 3.0,
+    "line_at": 4.4
+  },
+  "two": {
+    "hp": 10500,
+    "rest": 1.05,
+    "walk": 30,
+    "angry_below": 0.34,
+    "angry_speed": 1.2,
+    "hole": {
+      "grow": 3.4,
+      "pull": 55,
+      "radius": 30,
+      "reach": 170,
+      "damage": 6,
+      "debris": 40,
+      "gaps": 5,
+      "speed": 140
+    },
+    "blitz": {
+      "points": 5,
+      "mark": 0.34,
+      "delay": 0.7,
+      "speed": 560,
+      "width": 14,
+      "damage": 5,
+      "stagger": 2.0
+    },
+    "rain": {
+      "wave": 2.3,
+      "waves": 3,
+      "lanes": 21,
+      "every": 0.15,
+      "speed": 255,
+      "damage": 3,
+      "safe": 2,
+      "slant": 80,
+      "heavy_every": 0.5,
+      "heavy_windup": 0.75,
+      "heavy_radius": 18,
+      "heavy_damage": 4,
+      "drift": 1.5
+    },
+    "rift": {
+      "windup": 1.1,
+      "hold": 5.5,
+      "strips": 2,
+      "height": 30,
+      "gap": 56
+    },
+    "tear": {
+      "windup": 0.9,
+      "time": 4.4,
+      "pulse_speed": 200,
+      "pulses": 3,
+      "width": 12,
+      "damage": 4,
+      "bridges": 2
+    },
+    "day": {
+      "at": [
+        0.67,
+        0.34
+      ],
+      "cycles": [
+        3.0,
+        2.4,
+        1.8,
+        1.3
+      ],
+      "ring": 20,
+      "speed": 125,
+      "damage": 3,
+      "shadow": {
+        "length": 250,
+        "width": 30,
+        "damage": 4,
+        "from_sky": 0.35,
+        "sweep": "upper"
+      },
+      "freeze": 3.2,
+      "knives": {
+        "rings": 3,
+        "count": 30,
+        "radius": [
+          64,
+          96,
+          128
+        ],
+        "gap": 0.62,
+        "speed": 230,
+        "every": 0.55
+      },
+      "release": 1.4,
+      "finale_rings": 3,
+      "stun": 4.0,
+      "float_guard": 0.3,
+      "stun_bonus": 2.0
+    }
+  },
+  "last": {
+    "duration": 10.5,
+    "rise": 2.0,
+    "beams": 3,
+    "beam_speed": [
+      0.3,
+      0.6
+    ],
+    "beam_warn": 0.9,
+    "beam_width": 12,
+    "pulse_every": 1.35,
+    "pulse_count": 26,
+    "pulse_speed": 150,
+    "damage": 3,
+    "void_from": 330,
+    "void_to": 104,
+    "strip_from": 2.6,
+    "strip_every": 0.55,
+    "beam_on": 1.1,
+    "beam_off": 0.75
+  },
+  "erase": {
+    "duration": 6.0,
+    "shrink": [
+      1.0,
+      3.4
+    ]
+  },
+  "three": {
+    "steve_hp": 12,
+    "hit": 3,
+    "events": [
+      {
+        "kind": "dodge",
+        "dir": "left",
+        "hb": "lunge",
+        "window": 0.9
+      },
+      {
+        "kind": "attack",
+        "hb": "knocked",
+        "window": 0.85
+      },
+      {
+        "kind": "dodge",
+        "dir": "right",
+        "hb": "hook",
+        "window": 0.85
+      },
+      {
+        "kind": "attack",
+        "hb": "knocked",
+        "window": 0.8
+      },
+      {
+        "kind": "hold",
+        "hb": "grab",
+        "window": 1.3
+      },
+      {
+        "kind": "seq",
+        "dirs": [
+          "up",
+          "down"
+        ],
+        "hb": "jab",
+        "window": 1.4
+      },
+      {
+        "kind": "dodge",
+        "dir": "up",
+        "hb": "slam",
+        "window": 0.9
+      },
+      {
+        "kind": "attack",
+        "hb": "knocked",
+        "window": 0.8
+      },
+      {
+        "kind": "dodge",
+        "dir": "left",
+        "hb": "lunge",
+        "window": 0.75
+      },
+      {
+        "kind": "hold",
+        "hb": "grab",
+        "window": 1.4
+      },
+      {
+        "kind": "seq",
+        "dirs": [
+          "left",
+          "up",
+          "right",
+          "down"
+        ],
+        "hb": "jab",
+        "window": 2.2
+      },
+      {
+        "kind": "mash",
+        "hb": "knocked",
+        "count": 7,
+        "window": 2.6
+      },
+      {
+        "kind": "attack",
+        "hb": "fall",
+        "window": 1.1
+      }
+    ]
+  },
+  "death": {
+    "duration": 21.0,
+    "lines": [
+      {
+        "text": "АХАХАХАХАХХАХА",
+        "at": 1.6,
+        "style": "laugh",
+        "cut": 3.6
+      },
+      {
+        "text": "ТЫ НИЧЕРТА НЕ ПОНЯЛ",
+        "at": 4.4,
+        "style": "crawl",
+        "cut": 7.4
+      },
+      {
+        "text": "Я ВСЕГО ЛИШЬ СОГЛАСИЛСЯ ВЫПОЛНИТЬ ГРЯЗНУЮ РАБОТУ ЗА НЕГО",
+        "at": 8.2,
+        "style": "plead",
+        "cut": 12.6
+      }
+    ],
+    "punches": [
+      3.55,
+      4.0,
+      7.35,
+      7.8,
+      8.05,
+      9.5,
+      10.6,
+      11.6
+    ],
+    "final": 12.55,
+    "stand": 16.0,
+    "drag": 2.3
+  },
+  "coords": {
+    "duration": 9.0,
+    "text": "X 1337   Y 64   Z -4096",
+    "glitch": [
+      3.4,
+      3.7
+    ]
+  },
+  "road": {
+    "scenes": [
+      [
+        600,
+        760
+      ],
+      [
+        1300,
+        640
+      ],
+      [
+        860,
+        1520
+      ]
+    ],
+    "each": 3.6
+  },
+  "door": {
+    "duration": 14.0,
+    "p": [
+      1024,
+      1180
+    ]
+  },
+  "terrain_attacks": {
+    "spiral": {
+      "count": 48,
+      "inner": 30,
+      "outer": 245,
+      "turns": 1.65,
+      "windup": 1.05,
+      "step": 0.038,
+      "rise": 0.12,
+      "hold": 0.6,
+      "sink": 0.3,
+      "radius": 15,
+      "damage": 4
+    },
+    "smash": {
+      "windup": 1.1,
+      "delay": 1.0,
+      "beam": 0.55,
+      "recover": 0.65,
+      "min_length": 112,
+      "max_length": 195,
+      "width": 7,
+      "damage": 5,
+      "height": 95
+    }
   }
- },
- "last": {
-  "duration": 10.5,
-  "rise": 2.0,
-  "beams": 3,
-  "beam_speed": [
-   0.3,
-   0.6
-  ],
-  "beam_warn": 0.9,
-  "beam_width": 12,
-  "pulse_every": 1.35,
-  "pulse_count": 26,
-  "pulse_speed": 150,
-  "damage": 3,
-  "void_from": 330,
-  "void_to": 104,
-  "strip_from": 2.6,
-  "strip_every": 0.55,
-  "beam_on": 1.1,
-  "beam_off": 0.75
- },
- "erase": {
-  "duration": 6.0,
-  "shrink": [
-   1.0,
-   3.4
-  ]
- },
- "three": {
-  "steve_hp": 12,
-  "hit": 3,
-  "events": [
-   {
-    "kind": "dodge",
-    "dir": "left",
-    "hb": "lunge",
-    "window": 0.9
-   },
-   {
-    "kind": "attack",
-    "hb": "knocked",
-    "window": 0.85
-   },
-   {
-    "kind": "dodge",
-    "dir": "right",
-    "hb": "hook",
-    "window": 0.85
-   },
-   {
-    "kind": "attack",
-    "hb": "knocked",
-    "window": 0.8
-   },
-   {
-    "kind": "hold",
-    "hb": "grab",
-    "window": 1.3
-   },
-   {
-    "kind": "seq",
-    "dirs": [
-     "up",
-     "down"
-    ],
-    "hb": "jab",
-    "window": 1.4
-   },
-   {
-    "kind": "dodge",
-    "dir": "up",
-    "hb": "slam",
-    "window": 0.9
-   },
-   {
-    "kind": "attack",
-    "hb": "knocked",
-    "window": 0.8
-   },
-   {
-    "kind": "dodge",
-    "dir": "left",
-    "hb": "lunge",
-    "window": 0.75
-   },
-   {
-    "kind": "hold",
-    "hb": "grab",
-    "window": 1.4
-   },
-   {
-    "kind": "seq",
-    "dirs": [
-     "left",
-     "up",
-     "right",
-     "down"
-    ],
-    "hb": "jab",
-    "window": 2.2
-   },
-   {
-    "kind": "mash",
-    "hb": "knocked",
-    "count": 7,
-    "window": 2.6
-   },
-   {
-    "kind": "attack",
-    "hb": "fall",
-    "window": 1.1
-   }
-  ]
- },
- "death": {
-  "duration": 21.0,
-  "lines": [
-   {
-    "text": "АХАХАХАХАХХАХА",
-    "at": 1.6,
-    "style": "laugh",
-    "cut": 3.6
-   },
-   {
-    "text": "ТЫ НИЧЕРТА НЕ ПОНЯЛ",
-    "at": 4.4,
-    "style": "crawl",
-    "cut": 7.4
-   },
-   {
-    "text": "Я ВСЕГО ЛИШЬ СОГЛАСИЛСЯ ВЫПОЛНИТЬ ГРЯЗНУЮ РАБОТУ ЗА НЕГО",
-    "at": 8.2,
-    "style": "plead",
-    "cut": 12.6
-   }
-  ],
-  "punches": [
-   3.55,
-   4.0,
-   7.35,
-   7.8,
-   8.05,
-   9.5,
-   10.6,
-   11.6
-  ],
-  "final": 12.55,
-  "stand": 16.0,
-  "drag": 2.3
- },
- "coords": {
-  "duration": 9.0,
-  "text": "X 1337   Y 64   Z -4096",
-  "glitch": [
-   3.4,
-   3.7
-  ]
- },
- "road": {
-  "scenes": [
-   [
-    600,
-    760
-   ],
-   [
-    1300,
-    640
-   ],
-   [
-    860,
-    1520
-   ]
-  ],
-  "each": 3.6
- },
- "door": {
-  "duration": 14.0,
-  "p": [
-   1024,
-   1180
-  ]
- },
- "terrain_attacks": {
-  "spiral": {
-   "count": 48,
-   "inner": 30,
-   "outer": 245,
-   "turns": 1.65,
-   "windup": 1.05,
-   "step": 0.038,
-   "rise": 0.12,
-   "hold": 0.45,
-   "sink": 0.3,
-   "radius": 10,
-   "damage": 4
-  },
-  "smash": {
-   "windup": 1.1,
-   "delay": 1.0,
-   "beam": 0.55,
-   "recover": 0.65,
-   "min_length": 112,
-   "max_length": 195,
-   "width": 7,
-   "damage": 5,
-   "height": 95
-  }
- }
 }
