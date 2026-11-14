@@ -268,7 +268,7 @@ func move_actor(p: Vector2, velocity: Vector2, radius: float) -> Vector2:
 	return q
 
 func movement_speed() -> float:
-	return db.data.player_speed*(1+.08*items.get("sugar",0))*(rule("slow_arrow_factor") if slow_time>0 else 1.0)*(1.75 if flight>0 and not rocket else 1.0)
+	return db.data.player_speed*(1+.08*items.get("sugar",0))*(rule("slow_arrow_factor") if slow_time>0 else 1.0)*(1.75 if flight>0 and not rocket else 1.0)*cheat_speed
 
 func elytra_landing():
 	var lv: int=int(items.get("elytra",1));var r: float=46.0+6.0*lv;var dmg: float=8.0+4.0*lv

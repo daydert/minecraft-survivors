@@ -211,7 +211,7 @@ func assign_healing():
 	for i in range(vessels.size()/2):vessels[i].has_heal=true
 
 func movement_speed() -> float:
-	return db.data.player_speed*(1+.08*items.get("sugar",0))
+	return db.data.player_speed*(1+.08*items.get("sugar",0))*cheat_speed
 
 func boss_defeated(kind: String):
 	if not ((kind=="wither" and chapter_number()==2) or (kind=="endersteve_final" and chapter_number()==3)):return
@@ -230,7 +230,7 @@ func sound(id: String, gap: float=.04):
 
 ## The hopper now reaches beyond a single melee sweep. Chests stay manual;
 ## chorus fruit stays manual too, so attraction never teleports the player.
-func pickup_radius() -> float:return 24.0*(1.0+.85*items.get("hopper",0))
+func pickup_radius() -> float:return 24.0*(1.0+.85*items.get("hopper",0))*cheat_magnet
 func orb_pull_speed() -> float:return 190.0*(1.0+.15*items.get("hopper",0))
 func pull_healing_loot(o: Dictionary,dt: float):
 	if items.get("hopper",0)<=0 or o.kind not in ["apple","golden_carrot"]:return

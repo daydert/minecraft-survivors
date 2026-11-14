@@ -146,16 +146,4 @@ static func draw_result(g):
 	g.button(Rect2(330,239,178,33),"В меню","menu")
 
 static func draw_boss_lab(g):
-	g.draw_rect(Rect2(0,0,640,360),Color.BLACK)
-	g.text_at("Испытание босса",Vector2(22,29),16,g.INK,true)
-	g.button(Rect2(510,13,108,22),"Назад","lab_back")
-	g.button(Rect2(24,53,192,26),"I · Херобрин","lab_chapter_1")
-	g.button(Rect2(224,53,192,26),"II · Иссушитель","lab_chapter_2")
-	g.button(Rect2(424,53,192,26),"III · Край","lab_chapter_3")
-	g.draw_line(Vector2(24+(g.lab_chapter-1)*200,82),Vector2(216+(g.lab_chapter-1)*200,82),g.INK,2)
-	var presets=BossLab.presets(g.lab_chapter)
-	for i in range(presets.size()):
-		var p=Vector2(24+i%2*304,105+i/2*110)
-		g.panel(Rect2(p,Vector2(288,96)))
-		for j in range(presets[i].weapons.size()):g.item_icon(presets[i].weapons[j],p+Vector2(12+j*28,12),1,false,8)
-		g.button(Rect2(p+Vector2(8,56),Vector2(272,30)),presets[i].name,"lab_build_"+str(i))
+	g.DavisLabView.draw(g)

@@ -32,6 +32,8 @@ func stats(id: String, level: int, evolved: bool = false, items: Dictionary = {}
 		s[k] *= 1.0 + 0.1 * items.get("blaze", 0)
 	s.interval *= 1.0 - 0.06 * items.get("redstone", 0)
 	s.radius *= 1.0 + 0.1 * items.get("amethyst", 0)
+	s.damage *= float(data.get("cheat_damage", 1.0))
+	s.interval *= float(data.get("cheat_interval", 1.0))
 	return s
 
 func required_xp(level: int) -> int:

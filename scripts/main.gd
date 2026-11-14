@@ -187,7 +187,9 @@ func _physics_process(delta):
 			sim_samples.append((Time.get_ticks_usec()-start)/1000.0)
 		else:
 			if is_end() and world.state=="LEVEL_UP":world.tick_choices(delta)
-			world.step(delta,movement)
+			var time_scale: float=davis.before(self)
+			world.step(delta*time_scale,movement)
+			davis.after(self)
 			if is_four() and world.note_pending:
 				world.note_pending = false
 				router.open("ch4_note",world)
@@ -343,6 +345,11 @@ func _input(event):
 			input_lock = 0.14
 		elif event.keycode in [KEY_ENTER,KEY_SPACE] and input_lock <= 0 and not buttons.is_empty():
 			action(buttons[mini(selected,buttons.size()-1)].id)
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed and screen=="boss_lab":
+		mouse = get_global_mouse_position()
+		for b in buttons:
+			if b.rect.has_point(mouse) and b.id.begins_with("lab_item_"):
+				audio.play("select");lab_action("lab_unpick_"+b.id.trim_prefix("lab_item_"));break
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and input_lock <= 0:
 		mouse = get_global_mouse_position()
 		for b in buttons:
@@ -355,17 +362,8 @@ func action(id: String):
 	input_lock = 0.1
 	if id.begins_with("achievement_tier_"):
 		achievement_tier=id.trim_prefix("achievement_tier_");achievement_page=0;selected=0;return
-	if id.begins_with("lab_chapter_"):
-		lab_chapter=id.trim_prefix("lab_chapter_").to_int()
-		if lab_chapter==3:ensure_end_assets(true)
-		return
-	if id.begins_with("lab_build_"):
-		if coop.active:return
-		start_chapter(lab_chapter)
-		BossLab.equip(world,id.trim_prefix("lab_build_").to_int())
-		if is_nether() or is_end():world.begin_arena()
-		else:world.finale.begin(world)
-		return
+	if id.begins_with("lab_"):
+		lab_action(id);return
 	if id.begins_with("side_"):
 		if not coop.active:world.choose_side(id.trim_prefix("side_").to_int())
 		return
@@ -381,7 +379,6 @@ func action(id: String):
 		adjust_volume(parts[1],-.1 if parts[2]=="down" else .1)
 		return
 	match id:
-		"lab_back":close_boss_lab()
 		"chapters":screen="chapters"
 		"achievements":open_achievements()
 		"achievements_back":close_achievements()
@@ -487,7 +484,7 @@ func secret_input(event: InputEventKey) -> bool:
 	if code in [KEY_ENTER,KEY_KP_ENTER] and secret_keys=="davis":
 		secret_keys=""
 		if screen!="boss_lab":
-			lab_chapter=mini(solo_chapter,3)
+			lab_chapter=clampi(solo_chapter,1,5)
 			router.open("boss_lab",world);selected=3
 		return true
 	var words: Array=["davis","tester"] if tester_menu else ["davis"]
@@ -501,6 +498,54 @@ func secret_input(event: InputEventKey) -> bool:
 
 func close_boss_lab():
 	router.close(world);selected=0;input_lock=.12
+
+## The chapter of the solo run the DAVIS lab was opened over; 0 from menus.
+func lab_run_chapter() -> int:
+	if coop.active or not (world is W) or router.depth()==0:return 0
+	if router.stack.back().state in ["MENU","RESULT"]:return 0
+	return world.chapter_number()
+
+func lab_action(id: String):
+	var chapter: int=lab_chapter
+	if id=="lab_back":close_boss_lab();return
+	if id.begins_with("lab_chapter_"):
+		lab_chapter=id.trim_prefix("lab_chapter_").to_int();lab.focus=""
+		if lab_chapter==3:ensure_end_assets(true)
+		return
+	if id.begins_with("lab_tab_"):lab.tab=id.trim_prefix("lab_tab_");selected=0;return
+	if id.begins_with("lab_target_"):lab.target[chapter]=id.trim_prefix("lab_target_").to_int();lab.save_state();return
+	if id.begins_with("lab_item_"):lab.pick(chapter,id.trim_prefix("lab_item_"));return
+	if id.begins_with("lab_unpick_"):lab.set_level(chapter,id.trim_prefix("lab_unpick_"),0);return
+	if id.begins_with("lab_cheat_"):lab.toggle_cheat(id.trim_prefix("lab_cheat_"));return
+	if id.begins_with("lab_preset_edit_"):lab.use_preset(chapter,id.trim_prefix("lab_preset_edit_").to_int());lab.tab="custom";selected=0;return
+	if id.begins_with("lab_build_"):lab_launch(lab.preset_loadout(lab.pool_world(chapter),id.trim_prefix("lab_build_").to_int()));return
+	if id.begins_with("lab_now_"):
+		if lab_run_chapter()!=chapter:return
+		close_boss_lab()
+		DavisCheats.now(self,id.trim_prefix("lab_now_"))
+		return
+	var focus: String=lab.focus
+	match id:
+		"lab_start":lab_launch(lab.loadout(chapter))
+		"lab_level_up":if not focus.is_empty():lab.set_level(chapter,focus,lab.level_of(chapter,focus)+1)
+		"lab_level_down":if not focus.is_empty():lab.set_level(chapter,focus,lab.level_of(chapter,focus)-1)
+		"lab_evo":if not focus.is_empty():lab.toggle_evolution(chapter,focus)
+		"lab_remove":if not focus.is_empty():lab.set_level(chapter,focus,0)
+		"lab_add":if not focus.is_empty():lab.pick(chapter,focus)
+		"lab_hero_up","lab_hero_down","lab_hero_up10","lab_hero_down10":
+			lab.hero_level=clampi(lab.hero_level+{"lab_hero_up":1,"lab_hero_down":-1,"lab_hero_up10":10,"lab_hero_down10":-10}[id],1,99);lab.save_state()
+		"lab_all_max":lab.all_max(chapter)
+		"lab_clear":lab.clear(chapter)
+		"lab_random":lab.roll_random(chapter)
+		"lab_cheats_reset":lab.reset_cheats()
+
+## A new run of the lab chapter with `loadout`, straight to the chosen target.
+func lab_launch(loadout: Dictionary):
+	if coop.active:return
+	var target: String=lab.selected_target(lab_chapter)
+	start_chapter(lab_chapter,false)
+	lab.apply_loadout(world,loadout,lab.hero_level)
+	if target!="chapter":lab.begin_target(world,target)
 
 func update_camera_lead():
 	if not settings.get("camera_lead",false) or coop.active or world.state=="MENU":
@@ -601,6 +646,7 @@ func close_stats():
 func _draw():
 	var began = Time.get_ticks_usec()
 	draw_scene()
+	DavisCheats.draw(self)
 	achievements_view.toast(self)
 	var end_power=0.0
 	if is_end():

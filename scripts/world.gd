@@ -11,6 +11,10 @@ var finale=preload("res://scripts/chapter_finale.gd").new()
 var player_visual: Dictionary = {}
 ## Chapter V core: weapons and items level past their limits, the upgrade table repeating.
 var overcap := false
+## DAVIS lab cheats (solo only; neutral by default).
+var cheat_speed := 1.0
+var cheat_magnet := 1.0
+var cheat_peace := false
 ## Eye of Ender IV: two more options above and below the centre card.
 ## Eye of Ender V: a small chance that an offered weapon comes already evolved.
 var side_choices: Array = []
@@ -341,6 +345,7 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	elif not pending_chest.is_empty(): open_chest(pending_chest)
 
 func spawn_wave(dt: float):
+	if cheat_peace:return
 	for i in range(db.data.events.size()):
 		var e = db.data.events[i]
 		if time >= e.at and not events_done.has(i):

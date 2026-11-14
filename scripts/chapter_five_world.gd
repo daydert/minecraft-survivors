@@ -501,7 +501,7 @@ func camera() -> Vector2:
 	return super.camera()
 
 func movement_speed() -> float:
-	return float(db.data.player_speed) * (1 + 0.08 * items.get("sugar", 0))
+	return float(db.data.player_speed) * (1 + 0.08 * items.get("sugar", 0)) * cheat_speed
 
 func step(dt: float, movement: Vector2 = Vector2.ZERO):
 	if sword_step(dt, movement):return

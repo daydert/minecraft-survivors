@@ -209,7 +209,7 @@ func count_kind(kind: String) -> int:
 
 func spawn_wave(dt: float):
 	super.spawn_wave(dt)
-	if state != "RUNNING":
+	if state != "RUNNING" or cheat_peace:
 		return
 	if time >= float(night.blood_moon_at) + float(night.blood_moon_duration) and hp > 0:
 		run_progress.award("blood_moon")

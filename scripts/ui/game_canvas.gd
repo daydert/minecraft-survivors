@@ -91,6 +91,10 @@ var lab_chapter=1
 const BossLab=preload("res://scripts/boss_lab.gd")
 var coop = preload("res://scripts/coop_session.gd").new()
 var nickname_field: LineEdit
+const DavisCheats=preload("res://scripts/davis_cheats.gd")
+const DavisLabView=preload("res://scripts/ui/davis_lab_view.gd")
+var lab=BossLab.new()
+var davis=DavisCheats.new()
 var address_field: LineEdit
 var network_nick = "Стив"
 var network_address = ""

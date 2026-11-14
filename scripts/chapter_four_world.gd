@@ -506,7 +506,7 @@ func reroll_choices() -> bool:
 func movement_speed() -> float:
 	if arsenal.bat_left>0:return float(arsenal.rules(self).bat_speed)
 	if arsenal.cart_left>0:return float(arsenal.rules(self).cart_speed)
-	return float(db.data.player_speed) * 1.12 * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow)
+	return float(db.data.player_speed) * 1.12 * (1 + .08 * items.get("sugar", 0)) * (.15 if held > 0 else mob_slow) * cheat_speed
 
 func active_item(id: String) -> bool:
 	if stage=="arrival" or (stage=="finale" and ending.locked()):return false
