@@ -387,11 +387,11 @@ func action(id: String):
 		"achievements_back":close_achievements()
 		"achievements_next":achievement_page+=1
 		"achievements_prev":achievement_page=maxi(0,achievement_page-1)
-		"chapter_1":start_chapter(1)
-		"chapter_2":start_chapter(2)
-		"chapter_3":start_chapter(3)
-		"chapter_4":start_chapter(4)
-		"chapter_5":start_chapter(5)
+		"chapter_1":select_chapter(1)
+		"chapter_2":select_chapter(2)
+		"chapter_3":select_chapter(3)
+		"chapter_4":select_chapter(4)
+		"chapter_5":select_chapter(5)
 		"ch4_note_close":close_four_note()
 		"end_reroll":
 			if is_end() or is_four():world.reroll_choices()
@@ -478,18 +478,25 @@ func secret_input(event: InputEventKey) -> bool:
 	var code=event.physical_keycode if event.physical_keycode!=0 else event.keycode
 	if Time.get_ticks_msec()-secret_key_time>3000:secret_keys=""
 	secret_key_time=Time.get_ticks_msec()
+	var tester_menu: bool=screen=="chapters" or (screen.is_empty() and world.state=="MENU")
+	if code in [KEY_ENTER,KEY_KP_ENTER] and secret_keys=="tester" and tester_menu:
+		secret_keys="";achievements.enable_tester_access()
+		screen="chapters";selected=0;input_lock=.15
+		audio.play("select");queue_redraw()
+		return true
 	if code in [KEY_ENTER,KEY_KP_ENTER] and secret_keys=="davis":
 		secret_keys=""
 		if screen!="boss_lab":
 			lab_chapter=mini(solo_chapter,3)
 			router.open("boss_lab",world);selected=3
 		return true
-	var letter: String={KEY_D:"d",KEY_A:"a",KEY_V:"v",KEY_I:"i",KEY_S:"s"}.get(code,"")
+	var words: Array=["davis","tester"] if tester_menu else ["davis"]
+	var letter: String={KEY_D:"d",KEY_A:"a",KEY_V:"v",KEY_I:"i",KEY_S:"s",KEY_T:"t",KEY_E:"e",KEY_R:"r"}.get(code,"")
 	var candidate=secret_keys+letter
-	if not letter.is_empty() and "davis".begins_with(candidate):
+	if not letter.is_empty() and words.any(func(word):return word.begins_with(candidate)):
 		secret_keys=candidate
 		return true
-	secret_keys="d" if letter=="d" else ""
+	secret_keys=letter if not letter.is_empty() and words.any(func(word):return word.begins_with(letter)) else ""
 	return false
 
 func close_boss_lab():
@@ -510,6 +517,13 @@ func update_camera_lead():
 
 func close_recipes():
 	router.close(world,"inventory")
+
+func select_chapter(chapter: int):
+	collect_achievements()
+	# Automation disables input and still needs to stage arbitrary chapters.
+	# Normal buttons and story continuations use the saved campaign access.
+	if is_processing_input() and not achievements.chapter_available(chapter):return
+	start_chapter(chapter)
 
 func start_chapter(chapter: int, intro: bool=true):
 	if coop.active:return

@@ -74,7 +74,7 @@ static func draw_hud(g):
 	if g.is_four():g.four_renderer.EncounterView.hud(g)
 	if g.is_four():g.four_renderer.HuntView.hud(g)
 	if g.is_nether():g.nether_renderer.hud(g)
-	if g.world.message_timer>0 and g.world.state=="RUNNING" and (not g.is_nether() or g.world.stage!="wither"):
+	if g.world.message_timer>0 and g.world.state=="RUNNING" and not g.is_four() and (not g.is_nether() or g.world.stage!="wither"):
 		g.centered(g.world.message,68,12,g.GOLD,true)
 	if g.is_nether() and g.world.bastion.get("state","")=="assault" and g.world.stage=="survival":
 		var left: float=g.world.bastion.timer/float(g.world.db.data.bastion.duration)

@@ -97,7 +97,7 @@ func run():
 	var n=NW.new();n.reset(724)
 	check(not n.db.data.has("chapter_four") and n.chapter_number()==2,"New chapter data does not leak into the Nether")
 	var game=load("res://scenes/main.tscn").instantiate();root.add_child(game);await process_frame
-	game.qa_mode="test_four";game.set_physics_process(false)
+	game.qa_mode="test_four";game.set_physics_process(false);game.set_process_input(false)
 	check(not game.four_assets_loaded and not game.textures.has("ch4_ground"),"Menu does not load chapter IV textures")
 	game.action("chapter_4");game.world.stage="survival"
 	check(game.is_four() and game.four_assets_loaded and not game.end_assets_loaded,"Chapter selection loads only IV's large resources")

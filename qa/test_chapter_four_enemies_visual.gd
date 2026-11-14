@@ -20,7 +20,7 @@ func run():
 	game.set_process(false);game.set_physics_process(false);game.set_process_input(false)
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360)
 	prepare("gallery");var gallery=await render("gallery")
-	check(game.world.mobs.size()==14 and game.world.mobs.all(func(m):return game.textures.has(m.skin+"_atlas")),"Every enemy uses its own loaded atlas in the actual renderer")
+	check(game.world.mobs.size()==game.world.db.data.forms.size() and game.world.mobs.all(func(m):return game.textures.has(m.skin+"_atlas")),"Every enemy uses its own loaded atlas in the actual renderer")
 	var rng=game.world.rng.state
 	await render();await render()
 	check(rng==game.world.rng.state,"Rendering enemies never consumes combat randomness")

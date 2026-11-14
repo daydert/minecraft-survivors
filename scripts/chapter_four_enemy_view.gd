@@ -78,7 +78,7 @@ static func actor(g,m: Dictionary,offset: Vector2):
 		g.draw_line(q+Vector2(3,1),q+Vector2(7,-1),Color(.85,.6,.25,.5),1)
 	if m.burn>0:g.draw_clip("fire_animation",m.p+offset-Vector2(9,20),Vector2(18,21),g.world.clock)
 	if m.boss:
-		var q: Vector2=m.p+offset-Vector2(15,48 if m.kind in ["gravedigger","bone_rider"] else 40)
+		var q: Vector2=m.p+offset-Vector2(15,48 if m.kind in ["gravedigger","bone_rider","crucified"] else 40)
 		g.draw_rect(Rect2(q,Vector2(30,3)),Color(.15,.1,.1))
 		g.draw_rect(Rect2(q,Vector2(30*maxf(0,m.hp)/m.max_hp,2)),Color(.72,.22,.18))
 

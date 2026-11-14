@@ -293,11 +293,11 @@ static func cinematic(g):
 	if e.busy():
 		m=e.mass if e.current=="mass" else e.guardian
 		name="СРОСШИЕСЯ" if e.current=="mass" else "ХРАНИТЕЛЬ ПИРАМИДЫ"
-		sub="те, кого никто не похоронил" if e.current=="mass" else "камень помнит, кого впускать"
+		sub=""
 	elif e.golem.started and e.golem.phase=="intro":
-		m=e.golem;name="ЖЕЛЕЗНЫЙ ГОЛЕМ";sub="его держат живые нити"
+		m=e.golem;name="ЖЕЛЕЗНЫЙ ГОЛЕМ";sub="разбей наросты, чтобы освободить"
 	elif e.golem.started and e.golem.phase=="release":
-		m=e.golem;name="СВОБОДЕН";sub="он помнит, кто его освободил"
+		m=e.golem;name="ГОЛЕМ СВОБОДЕН";sub="теперь он дерётся за тебя"
 	if m.is_empty() or m.phase not in ["intro","release"]:
 		if not e.mass.is_empty() and e.mass.phase=="death":
 			Atmosphere.draw_edges(g,Color(.5,0,.03,.5*maxf(0,1-e.mass.phase_age)))

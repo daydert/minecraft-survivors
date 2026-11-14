@@ -21,10 +21,13 @@ func mob(w,kind: String,offset:=Vector2(70,0)):
 	assert(w.spawn(kind,w.player+offset));w.rebuild_hit_grid();return w.mobs.back()
 func run():
 	var w=fresh()
+	# Scripted IV arrivals (Crucified, butcher) exceed the elite limit on purpose.
+	w.hunt.forcing=true
 	for kind in w.db.data.forms:
 		var m=mob(w,kind,Vector2(160,0))
 		check(m.kind==kind and m.form==kind and m.undead and m.skin=="ch4_"+kind,"Dedicated undead form: "+kind)
 		check(w.animation.data.actors.has(m.skin),"Own animation metadata: "+kind)
+	w.hunt.forcing=false
 	w=fresh();var m=mob(w,"growth_skeleton",Vector2(160,0));m.timer=0
 	advance(w,.5)
 	check(m.phase=="windup" and w.enemy_shots.is_empty(),"Skeleton draws a bone arrow before firing")

@@ -452,7 +452,7 @@ def generate(only=None):
       'bone_rider':(horse,(80,72),1.0,(40,62)),
       'parasite':(parasite,(24,20),1.0,(12,14)),
       'chicken':(chicken,(24,24),.85,(12,20)),
-      'butcher':(butcher,(64,72),1.3,(32,62)),
+      'butcher':(butcher,(80,88),1.62,(40,76)),
       'crucified':(crucified,(72,60),1.0,(36,52)),
       'marksman':(marksman,(48,44),.9,(24,39)),
     }

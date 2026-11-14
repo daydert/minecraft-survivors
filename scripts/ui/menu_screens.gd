@@ -13,11 +13,14 @@ static func draw_chapters(g):
 	g.dim(.9)
 	g.centered("Выбор главы",64,24,g.INK,true)
 	g.button(Rect2(478,12,140,22),"Достижения","achievements")
-	g.button(Rect2(164,84,312,33),"Глава I · Верхний мир","chapter_1")
-	g.button(Rect2(164,124,312,33),"Глава II · Незер","chapter_2")
-	g.button(Rect2(164,164,312,33),"Глава III · Край","chapter_3")
-	g.button(Rect2(164,204,312,33),"Глава IV · «Обычный мир»","chapter_4")
-	g.button(Rect2(164,244,312,33),"Глава V · Исходный код","chapter_5")
+	var titles=["Глава I · Верхний мир","Глава II · Незер","Глава III · Край","Глава IV · «Обычный мир»","Глава V · Исходный код"]
+	for i in range(titles.size()):
+		var rect=Rect2(164,84+i*40,312,33)
+		if g.achievements.chapter_available(i+1):
+			g.button(rect,titles[i],"chapter_"+str(i+1))
+		else:
+			g.panel(rect)
+			g.text_at("?",rect.position+Vector2(153,21),8,g.MUTED,true)
 	g.button(Rect2(219,299,202,27),"Назад","back")
 
 static func draw_settings(g):

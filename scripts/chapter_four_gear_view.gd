@@ -4,7 +4,7 @@ const Equipment=preload("res://scripts/chapter_four_equipment.gd")
 static func recipes(g):
 	g.draw_rect(Rect2(0,0,640,360),Color.BLACK)
 	g.text_at("Эволюции",Vector2(22,29),16,g.INK,true)
-	g.text_at("Цифра — нужный уровень · золотая рамка — сначала эволюция · сундук после 6:00",Vector2(22,47),8,g.MUTED)
+	g.text_at("Цифра: нужный уровень. Золотая рамка: сначала эволюция. Сундуки с 6:00",Vector2(22,47),8,g.MUTED)
 	g.button(Rect2(510,13,108,22),"Назад","recipes_back")
 	var ids: Array=g.world.db.recipes.keys()
 	g.recipe_page=clampi(g.recipe_page,0,maxi(0,(ids.size()-1)/9))

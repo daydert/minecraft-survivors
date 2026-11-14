@@ -2,10 +2,26 @@
 .tools/
 builds/
 __pycache__/
+*.py[cod]
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
 *.tmp
 qa/*.log
 qa/**/*.log
 qa/recordings/
+# Diagnostic videos; runtime cutscenes in assets/cinematics/*.ogv are required.
+*.mp4
+*.mkv
+*.mov
+*.avi
+*.webm
 qa/network_logs/
 qa/*.png
 qa/*.png.import

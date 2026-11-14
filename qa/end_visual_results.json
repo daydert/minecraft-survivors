@@ -1,4 +1,7 @@
 {
   "checks": 14,
-  "failures": []
+  "failures": [
+    "Chapter selection exposes III with the same gray controls",
+    "Eye cycles the drawn item descriptions and icons"
+  ]
 }

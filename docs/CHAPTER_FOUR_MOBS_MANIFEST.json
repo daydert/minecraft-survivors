@@ -325,10 +325,10 @@
         "vanilla entity/item/block textures; connected custom hierarchy"
       ],
       "size": [
-        1638,
-        201
+        2002,
+        246
       ],
-      "sha256": "5143e628f36111c2d911ef16abc5762c6f855c487bb378118b1b4112267c2a5c"
+      "sha256": "2a0db4665a28897695a627d2be817742ce22a2d87e5a8eee4c2857a84fe706d6"
     },
     "ch4_crucified_atlas": {
       "sources": [

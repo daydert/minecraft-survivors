@@ -85,7 +85,7 @@ func world(g):
 					for j in range(4):
 						var q=hand+Vector2.from_angle(j*PI/2+g.world.clock*2)*(9+sin(g.world.clock*5)*2)
 						g.draw_line(q-m.dir.orthogonal()*2,q+m.dir.orthogonal()*2,Color(.8,.4,1,.6),1)
-				if m.phase=="windup" and "steve" in m.kind and m.get("pattern",0) in [0,3]:
+				if m.phase=="windup" and m.kind=="endersteve_final" and m.get("pattern",0) in [0,3]:
 					var v: Vector2=m.charge;Tells.lane(g,p.floor(),(p+v*160).floor(),9.0,1.0-m.timer/maxf(.01,m.get("windup_total",.85)),int(m.id),g.world.clock)
 				if m.phase=="cleave_windup":
 					Tells.claws(g,p.floor(),m.charge,70.0,1.0-m.timer/.65,int(m.id),g.world.clock)
@@ -1075,3 +1075,4 @@ func chains(g, at: Vector2, t: float, S: float):
 		g.draw_rect(Rect2(-4,-2,8,4),Color(.06,0,.1,fade))
 		g.draw_set_transform(Vector2.ZERO)
 	if t>=0 and t<.25:g.draw_rect(Rect2(0,0,640,360),Color(.8,.6,1,.3*(1-t/.25)))
+

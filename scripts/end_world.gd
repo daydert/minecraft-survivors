@@ -3,6 +3,11 @@ extends "res://scripts/arsenal_world.gd"
 ## not chapter II itself. No network classes or data are used.
 const END_WEAPONS=["spear","mace","end_crystal","knockback_stick","dragon_breath","shield"]
 const END_ARENA=Rect2(656,704,736,640)
+## The echo's slash: a short dash that hits anything within REACH of him.
+const ECHO_SLASH_SPEED:=200.0
+const ECHO_SLASH_TIME:=.28
+const ECHO_SLASH_REACH:=44.0
+const ECHO_WINDUP:=.65
 var land=PackedByteArray()
 var flight=0.0
 var flight_cooldown=0.0
@@ -536,17 +541,17 @@ func move_mobs(dt: float):
 						fire_projectile(["enemy_arrow","slow_arrow","poison_arrow"][m.id%3],m.p,m.p.direction_to(player),{"speed":142,"damage":m.damage,"range":350,"radius":3},false);m.timer=2.5;m.visual.shot_age=0;sound("arrow")
 				"endermite_brood":
 					if m.timer<=0:
-						for j in range(3):spawnlings.append(m.p+Vector2.from_angle(j*TAU/3+clock)*24)
+						for j in range(3):spawnlings.append(m.p+Vector2.from_angle(j*TAU/3+float(m.id))*24)
 						m.timer=6;add_effect("brood_spawn",m.p,.65)
 				"endersteve":
 					if m.phase=="walk" and m.timer<=0:
-						teleport_mob(m,player-facing*60);m.phase="windup";m.timer=.65;m.charge=m.p.direction_to(player)
+						teleport_mob(m,player-facing*60);m.phase="windup";m.timer=ECHO_WINDUP;m.charge=m.p.direction_to(player)
 					elif m.phase=="windup":
 						speed=0
-						if m.timer<=0:m.phase="slash";m.timer=.28;add_effect("ender_slash",m.p,.38,{"direction":m.charge,"radius":65.0})
+						if m.timer<=0:m.phase="slash";m.timer=ECHO_SLASH_TIME;add_effect("ender_slash",m.p,.38,{"direction":m.charge,"radius":ECHO_SLASH_REACH})
 					elif m.phase=="slash":
-						direction=m.charge;speed=200
-						if distance<44:contact_hit(m.p,m.damage)
+						direction=m.charge;speed=ECHO_SLASH_SPEED
+						if distance<ECHO_SLASH_REACH:contact_hit(m.p,m.damage)
 						if m.timer<=0:m.phase="recover";m.timer=.8
 					elif m.phase=="recover":
 						speed=0

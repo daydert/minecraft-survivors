@@ -1,0 +1,57 @@
+{
+  "checks": 252,
+  "failures": 0,
+  "suites": [
+    {
+      "suite": "tests",
+      "checks": 28,
+      "failures": 0
+    },
+    {
+      "suite": "test_achievements",
+      "checks": 51,
+      "failures": 0
+    },
+    {
+      "suite": "test_achievements_v2",
+      "checks": 52,
+      "failures": 0
+    },
+    {
+      "suite": "test_screen_router",
+      "checks": 17,
+      "failures": 0
+    },
+    {
+      "suite": "test_chapter_four_enemies",
+      "checks": 75,
+      "failures": 0
+    },
+    {
+      "suite": "ch4_hunt",
+      "checks": 29,
+      "failures": 0
+    }
+  ],
+  "tester_persistent": true,
+  "progress_source": "Existing chapter completion achievements",
+  "windows_native_run": false,
+  "exports": {
+    "linux": {
+      "binary": "/home/daydert/MinecraftSurvivors2/builds/linux/MinecraftSurvivors.x86_64",
+      "chapter_access": true,
+      "stale_chapter_four": [],
+      "sha256": "c54a40626ab21f8bc56e44e4190053e8c3042bd01e85306b01d9cf102447354c",
+      "bytes": 334894960
+    },
+    "windows": {
+      "binary": "/home/daydert/MinecraftSurvivors2/builds/windows/MinecraftSurvivors.exe",
+      "chapter_access": true,
+      "stale_chapter_four": [],
+      "sha256": "300772e7d20535767c30f5dcbbb66c8fd6a24b19ad4bcc8196110ade41dbc279",
+      "bytes": 370504256
+    }
+  },
+  "packed_menu_verified": true,
+  "native_linux_started": true
+}

@@ -8,7 +8,6 @@ extends RefCounted
 const CORE := Color(0.05, 0.0, 0.01)
 const HOT := Color(1.0, 0.36, 0.2)
 const EMBER := Color(1.0, 0.75, 0.5)
-
 static func h01(i: int, salt: int) -> float:
 	var h := (i * 374761393 + salt * 668265263) & 0x7fffffff
 	h = ((h ^ (h >> 13)) * 1274126177) & 0x7fffffff
@@ -45,7 +44,7 @@ static func crack(g, a: Vector2, b: Vector2, k: float, seed: int, jag: float, wi
 		var branch := side * (1 if h01(i, seed + 7) > 0.5 else -1) * (3.0 + h01(i, seed + 9) * 5.0)
 		g.draw_line(points[i], (points[i] + branch + dir * 2).floor(), Color(CORE, 0.8), 1)
 
-## A lane that the attack will sweep: two edge cracks and a dark seam.
+## A lane that the attack will sweep: two edge cracks and a dark CORE.
 static func lane(g, a: Vector2, b: Vector2, half_width: float, k: float, seed: int, clock: float):
 	var side := (b - a).normalized().orthogonal() * half_width
 	crack(g, a + side, b + side, k, seed, 2.5, 1.0, clock)
@@ -95,15 +94,24 @@ static func bulge(g, p: Vector2, k: float, seed: int, clock: float):
 		var q := (p + Vector2((h01(j, seed + 3) - 0.5) * 16, -phase * 10 * k)).floor()
 		g.draw_rect(Rect2(q, Vector2.ONE), Color(0.45, 0.36, 0.32, (1.0 - phase) * k))
 
-## Aim of a ranged shot: a short line of bone dust that locks before firing.
+## Aim of a ranged shot: a CORE of bone dust that grows and locks before firing.
 static func aim(g, p: Vector2, dir: Vector2, length: float, k: float, clock: float):
-	var steps := 9
-	for i in range(1, steps):
-		var t := float(i) / steps
-		if t > 0.25 + 0.75 * k:
+	var reach := 0.25 + 0.75 * clampf(k, 0, 1)
+	var a := p.floor()
+	var b := (p + dir * length * reach).floor()
+	var c := hot(k, clock)
+	g.draw_line(a, b, Color(CORE, 0.55 + 0.3 * k), 3)
+	g.draw_line(a, b, c, 1)
+	var side := dir.orthogonal()
+	for i in range(1, 7):
+		var t := float(i) / 7.0
+		if t > reach:
 			break
-		var q := (p + dir * length * t).floor()
-		g.draw_rect(Rect2(q, Vector2.ONE * (2 if i % 3 == 0 else 1)), Color(hot(k, clock), (1.0 - t * 0.6) * (0.5 + 0.5 * k)))
+		var q := (p + dir * length * t + side * (2.0 if i % 2 == 0 else -2.0)).floor()
+		g.draw_rect(Rect2(q, Vector2.ONE), Color(c, c.a * 0.7))
+	if k > 0.85:
+		g.draw_line(b, (b - dir * 4 + side * 3).floor(), c, 1)
+		g.draw_line(b, (b - dir * 4 - side * 3).floor(), c, 1)
 
 ## A thread of current between two cursed torches: flickering, sparking, thin.
 static func thread(g, a: Vector2, b: Vector2, k: float, seed: int, clock: float):
@@ -119,3 +127,122 @@ static func thread(g, a: Vector2, b: Vector2, k: float, seed: int, clock: float)
 		last = q
 	var spark := a.lerp(b, fposmod(clock * 1.7 + seed * 0.1, 1.0)).floor()
 	g.draw_rect(Rect2(spark - Vector2.ONE, Vector2(3, 3)), Color(EMBER, 0.9))
+
+## A creeper's fuse: a burning line runs around the blast radius, ember at its head.
+static func fuse(g, p: Vector2, radius: float, k: float, seed: int, clock: float):
+	var count := int(clampf(radius * 0.9, 16.0, 44.0))
+	var lit := int(ceil(count * clampf(k, 0, 1)))
+	var last := Vector2.ZERO
+	for j in range(count):
+		var a := -PI / 2 + j * TAU / count
+		var q := (p + Vector2(cos(a), sin(a) * 0.5) * radius).floor()
+		if j < lit:
+			if j > 0:
+				g.draw_line(last, q, CORE, 2)
+				g.draw_line(last, q, hot(k, clock), 1)
+		elif j % 2 == 0:
+			g.draw_rect(Rect2(q, Vector2.ONE), Color(CORE, 0.7))
+		last = q
+	if lit > 0 and lit < count:
+		var a := -PI / 2 + lit * TAU / count
+		var head := (p + Vector2(cos(a), sin(a) * 0.5) * radius).floor()
+		g.draw_rect(Rect2(head - Vector2.ONE, Vector2(3, 3)), EMBER)
+		for s in range(2):
+			var t := fposmod(clock * 3.0 + s * 0.5 + seed * 0.13, 1.0)
+			var d := Vector2(h01(int(clock * 3.0) + s, seed) - 0.5, -1.0) * (2 + t * 6)
+			g.draw_rect(Rect2((head + d).floor(), Vector2.ONE), Color(EMBER, 1.0 - t))
+	if k > 0.85:
+		ring(g, p, radius * 0.6, k, clock)
+
+## An axe biting the ground: an arc of cracks at reach, split by radial cuts.
+static func chop(g, p: Vector2, dir: Vector2, reach: float, spread: float, k: float, seed: int, clock: float):
+	var base := dir.angle()
+	var steps := maxi(5, int(reach * spread / 6.0))
+	var half := int(ceil(steps * 0.5 * clampf(k * 1.3, 0, 1)))
+	var centre := steps / 2
+	var points := PackedVector2Array()
+	for i in range(centre - half, centre + half + 1):
+		var t := float(i) / steps - 0.5
+		var r := reach + (h01(i, seed) - 0.5) * 3.0
+		points.append((p + Vector2.from_angle(base + t * spread) * Vector2(1, 0.6) * r).floor())
+	if points.size() >= 2:
+		g.draw_polyline(points, CORE, 2)
+		g.draw_polyline(points, hot(k, clock), 1)
+	for j in range(3):
+		var a := base + (j - 1) * spread * 0.35
+		var from := p + Vector2.from_angle(a) * Vector2(1, 0.6) * 6.0
+		crack(g, from, p + Vector2.from_angle(a) * Vector2(1, 0.6) * reach, k, seed + j * 11, 1.5, 1.0, clock)
+
+## Hoofprints stamped along a charge, the herd's path before it runs.
+static func hooves(g, a: Vector2, b: Vector2, k: float, seed: int, clock: float):
+	var length := a.distance_to(b)
+	if length < 1:
+		return
+	var dir := (b - a) / length
+	var side := dir.orthogonal()
+	var count := int(length / 14.0)
+	for i in range(1, count + 1):
+		var t := float(i) / count
+		if t > k:
+			break
+		var q := a + dir * length * t + side * (4.0 if i % 2 == 0 else -4.0) + side * (h01(i, seed) - 0.5) * 3.0
+		for d in [Vector2.ZERO, dir * 3.0]:
+			var r: Vector2 = (q + d).floor()
+			g.draw_rect(Rect2(r - Vector2.ONE, Vector2(3, 2)), CORE)
+			g.draw_rect(Rect2(r - Vector2(1, 2), Vector2(3, 1)), hot(k, clock))
+
+## Wind chevrons racing ahead of a swoop from the sky.
+static func chevrons(g, a: Vector2, b: Vector2, k: float, clock: float):
+	var length := a.distance_to(b)
+	if length < 1:
+		return
+	var dir := (b - a) / length
+	var side := dir.orthogonal()
+	var count := maxi(3, int(length / 18.0))
+	for i in range(count):
+		var t := fposmod(float(i) / count + clock * 0.9, 1.0)
+		if t > 0.2 + 0.8 * k:
+			continue
+		var q := a + dir * length * t
+		var c := hot(k, clock)
+		c.a *= 1.0 - t * 0.5
+		g.draw_line((q - dir * 4 + side * 4).floor(), q.floor(), c, 1)
+		g.draw_line((q - dir * 4 - side * 4).floor(), q.floor(), c, 1)
+
+## Two tusk furrows ploughed ahead of a goring charge, dust kicked at the start.
+static func tusks(g, p: Vector2, dir: Vector2, length: float, k: float, seed: int, clock: float):
+	var side := dir.orthogonal()
+	for j in [-1, 1]:
+		var start: Vector2 = p + dir * 6 + side * j * 4
+		crack(g, start, start + dir * length + side * j * 2, k, seed + j * 17, 1.2, 2.0, clock)
+	for s in range(4):
+		var t := fposmod(clock * 2.2 + s * 0.25, 1.0)
+		var q := p - dir * (2 + t * 8) + side * (h01(s, seed) - 0.5) * 12 - Vector2(0, t * 5)
+		g.draw_rect(Rect2(q.floor(), Vector2.ONE), Color(0.45, 0.36, 0.32, (1.0 - t) * k))
+	if k > 0.85:
+		var end := (p + dir * (length + 6)).floor()
+		g.draw_line(end - side * 4, end + side * 4, hot(k, clock), 1)
+
+## A potion's landing: the ring closes while shards of glass fall into it.
+static func splash(g, p: Vector2, radius: float, k: float, seed: int, clock: float):
+	ring(g, p, radius, k, clock)
+	for j in range(6):
+		var a := j * TAU / 6 + h01(j, seed) * 0.8
+		var q := p + Vector2(cos(a), sin(a) * 0.5) * radius * 0.55 - Vector2(0, (1.0 - k) * 26.0 + h01(j, seed + 4) * 6.0)
+		g.draw_rect(Rect2(q.floor(), Vector2(1, 2)), Color(hot(k, clock), 0.4 + 0.6 * k))
+
+## A crossbow lock on the target: four ticks close in, then hold.
+static func lock(g, p: Vector2, k: float, clock: float):
+	var r := lerpf(12.0, 5.0, smoothstep(0.0, 1.0, k))
+	var c := hot(k, clock)
+	for j in range(4):
+		var d := Vector2.from_angle(j * PI / 2)
+		g.draw_line((p + d * r).floor(), (p + d * (r + 3)).floor(), c, 1)
+
+## Embers drifting up from a body that is about to fire.
+static func embers(g, p: Vector2, k: float, seed: int, clock: float):
+	for s in range(6):
+		var t := fposmod(clock * 1.4 + s / 6.0, 1.0)
+		var q := p + Vector2((h01(s, seed) - 0.5) * 14, -t * 18 * (0.5 + k))
+		g.draw_rect(Rect2(q.floor(), Vector2.ONE * (2 if s % 3 == 0 else 1)), Color(EMBER if s % 2 else HOT, (1.0 - t) * (0.4 + 0.6 * k)))
+

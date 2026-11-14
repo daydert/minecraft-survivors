@@ -1776,13 +1776,13 @@
     },
     "ch4_butcher": {
       "frame_size": [
-        63,
-        67
+        77,
+        82
       ],
       "columns": 26,
       "pivot": [
-        20,
-        49
+        24,
+        61
       ],
       "directions": [
         "down",
@@ -1869,8 +1869,8 @@
         "side": -55
       },
       "anchor": [
-        20,
-        49
+        24,
+        61
       ],
       "shadow_size": [
         15,

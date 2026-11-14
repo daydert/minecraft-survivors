@@ -129,12 +129,12 @@ func free_villager(w, mark: Dictionary):
 	var xp: float = float(rules.xp) * (float(rules.stir_xp_bonus) if was_stirring else 1.0)
 	for j in range(5):w.drop_xp(mark.p + Vector2.from_angle(j * TAU / 5) * 14, int(ceil(xp / 5.0)))
 	vengeance_until = w.clock + float(rules.vengeance_time)
-	last_reward = "Возмездие: +20% урона"
+	last_reward = "+20%% урона на %d с" % int(rules.vengeance_time)
 	if rescued % int(rules.chest_every) == 0:
 		w.loot.append({"kind": "chest", "p": mark.p + Vector2(0, 16), "born": w.time})
-		last_reward = "Житель оставил сундук"
+		last_reward = "Сундук у столба"
 	reward_at = w.clock
-	w.message = "Житель снят со столба (%d/%d)" % [rescued, pillars(w).size()];w.message_timer = 2.4
+	w.message = "Житель снят (%d/%d)" % [rescued, pillars(w).size()];w.message_timer = 2.4
 	w.sound("ch4_rescue_body");w.sound("ch4_rescue_reward")
 	w.add_effect("ch4h_freed", mark.p, 1.2)
 	w.fx.pulse(w, "heart")
@@ -158,7 +158,7 @@ func update_stir(w):
 	if best == null:stir_at = w.clock + 8.0;return
 	best.state = "stirring";best.stir_from = w.clock;best.stir_until = w.clock + float(data.stir.warn)
 	stirring = best
-	w.message = "Житель на столбе шевелится — сними его, пока он не сорвался";w.message_timer = 3.2
+	w.message = "Житель на столбе зашевелился";w.message_timer = 3.2
 	w.sound("ch4_stir")
 
 func tear(w, mark: Dictionary):
@@ -171,7 +171,7 @@ func tear(w, mark: Dictionary):
 	w.sound("ch4_tear");w.sound("ch4_butcher_roar", .3)
 	w.add_effect("ch4h_tear", mark.p, .8)
 	on_elite(w, m, data.stir.retinue)
-	w.message = "Распятый сорвался со столба" + affix_suffix(m);w.message_timer = 2.8
+	w.message = "Распятый сорвался" + affix_suffix(m);w.message_timer = 2.8
 	w.update_aura()
 
 # ------------------------------------------------------------------ elites
@@ -192,7 +192,7 @@ func on_elite(w, m: Dictionary, retinue = null):
 func affix_suffix(m: Dictionary) -> String:
 	var names: Array = []
 	for id in m.get("affixes", []):names.append(data.affixes.names[id])
-	return "" if names.is_empty() else " · " + " · ".join(names)
+	return "" if names.is_empty() else ": " + ", ".join(names)
 
 func has_affix(m: Dictionary, id: String) -> bool:
 	return id in m.get("affixes", [])
@@ -273,7 +273,7 @@ func update_surges(w, dt: float):
 		if surges_done.has(i) or w.time < float(rules.times[i]):continue
 		surges_done[i] = true
 		surge_left = float(rules.life)
-		w.message = "Набат: они идут со всех сторон";w.message_timer = 2.6
+		w.message = "Набат";w.message_timer = 2.6
 		w.sound("ch4_surge");w.sound("ch4_bell", .2)
 		w.shake = maxf(w.shake, .3)
 		if not w.encounters.busy():
@@ -284,14 +284,17 @@ func update_butcher(w):
 	var rules: Dictionary = data.butcher
 	var b = butcher(w)
 	if b != null:
+		if not b.has("leave_at"):
+			b.immortal = true;b.leave_at = w.clock + float(rules.life);b.stagger_acc = 0.0;b.stagger_lock = 0.0;b.lunge_ready = w.clock + 3.0
 		b.control_resist = 99.0
+		if b.get("expired", false):return
 		b.hp = b.max_hp
 		if b.has("sinking"):
 			if w.clock - b.sinking >= float(rules.sink):b.immortal = false;b.expired = true;b.hp = 0
 		elif w.clock >= b.leave_at and b.phase in ["walk", "recover"] or w.time >= float(w.db.data.duration) - 2:
-			b.sinking = w.clock;b.phase = "smash_wait";b.timer = 99.0
+			b.sinking = w.clock;b.phase = "sink";b.timer = 99.0;b.cast = ""
 			w.fx.erupt(w, b.p, "dirt", 8);w.sound("ch4_butcher_leave")
-			w.message = "Мясник ушёл под землю. Пока что";w.message_timer = 2.2
+			w.message = "Мясник ушёл";w.message_timer = 2.2
 		elif b.p.distance_to(w.player) < 300:
 			w.sound("ch4_butcher_step", .62)
 		return
@@ -309,7 +312,6 @@ func update_butcher(w):
 			m.emerge = w.clock;m.stun = 1.6;m.visual_dir = p.direction_to(w.player);m.dir = m.visual_dir;m.control_resist = 99.0
 			w.fx.erupt(w, p, "dirt", 12);w.fx.quake(w, p, 1.6)
 			w.sound("ch4_butcher_roar");w.sound("ch4_heavy", .2)
-			w.message = "МЯСНИК. Его не убить — переживи";w.message_timer = 3.0
 			break
 		return
 
@@ -330,7 +332,7 @@ func act(w, m: Dictionary, dt: float):
 	var ai: Dictionary = m.ai
 	var distance: float = m.p.distance_to(w.player)
 	var toward: Vector2 = m.p.direction_to(w.player)
-	if m.phase == "smash_wait":return
+	if m.phase in ["smash_wait", "sink"]:return
 	if m.phase == "recover":
 		if m.timer <= 0:Enemies.enter(m, "walk", ai.get("cooldown", 1.5))
 		return

@@ -1,6 +1,4 @@
 {
   "checks": 26,
-  "failures": [
-    "2x capture contains the actual 1280x720 framebuffer"
-  ]
+  "failures": []
 }

@@ -1,4 +1,8 @@
 {
   "checks": 15,
-  "failures": []
+  "failures": [
+    "Unlit ground is the original opaque baked surface",
+    "Camera lead moves terrain by the same integer offset as the objects",
+    "Chapter IV uses the imported local Ancestry OGG"
+  ]
 }

@@ -51,8 +51,6 @@ func floor_effects(g, offset: Vector2):
 		Tells.ring(g,p.floor(),h.radius,progress,w.clock)
 	for m in w.mobs:
 		var p: Vector2=m.p+offset
-		if m.kind=="brute" and m.phase=="windup":
-			Tells.lane(g,p.floor(),(p+m.charge*112).floor(),14.0,clampf(1.0-m.timer/maxf(.01,float(m.get("windup_total",.9))),0,1),int(m.id),w.clock)
 		if m.kind!="wither":continue
 		if m.phase=="volley":
 			for j in range(3):

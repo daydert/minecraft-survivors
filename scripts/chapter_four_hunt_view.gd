@@ -40,22 +40,12 @@ static func floor_layer(g, offset: Vector2):
 			var beat: float = .5 + .5 * sin(w.clock * lerpf(14.0, 4.0, left))
 			g.oval(p + Vector2(0, 2), Vector2(26, 9), Color(.55, .02, .03, .25 + .25 * beat))
 		if d < radius * 4 or mark.get("progress", 0.0) > 0:
-			var k: float = clampf(mark.get("progress", 0.0) / float(h.data.rescue.time), 0, 1)
-			var near: bool = d < radius
-			var rr := Vector2(radius, radius * .45)
-			ellipse(g, p + Vector2(0, 2), rr, 0, TAU, Color(.9, .8, .6, .35 if near else .18), 1)
-			if k > 0:
-				ellipse(g, p + Vector2(0, 2), rr, -PI / 2, -PI / 2 + TAU * k, Color(1, .86, .45, .95), 2)
-			if not near and k <= 0 and d < radius * 3:
-				var hint := "Встань рядом, чтобы снять"
-				var width: float = g.font.get_string_size(hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 8).x
-				g.text_at(hint, (p + Vector2(-width / 2, 20)).floor(), 8, Color(.9, .85, .75, .7))
+			rescue_ring(g, p + Vector2(0, 2), radius, clampf(mark.get("progress", 0.0) / float(h.data.rescue.time), 0, 1), d < radius, clampf(1.0 - (d - radius) / (radius * 3), 0, 1), w.clock)
 	for r in h.rises:
 		var p: Vector2 = r.p + offset
 		if not view.has_point(p):continue
 		var k: float = clampf((w.clock - r.born) / maxf(.01, r.at - r.born), 0, 1)
-		Tells.bulge(g, p, k, int(r.seed), w.clock)
-		g.oval(p, Vector2(7, 3) * (.5 + .5 * k), Color(.05, .02, .02, .35 * k))
+		grave(g, p, k, int(r.seed), w.clock)
 	for b in h.blasts:
 		var k: float = clampf((w.clock - b.born) / maxf(.01, b.at - b.born), 0, 1)
 		Tells.ring(g, b.p + offset, b.radius, k, w.clock)
@@ -78,6 +68,45 @@ static func floor_layer(g, offset: Vector2):
 					if m.cast == "lunge":Tells.lane(g, p, p + m.charge * float(m.ai.dash_speed) * float(m.ai.lunge_attack), m.radius + 7, k, int(m.id) * 5, w.clock)
 					else:wedge(g, p, m.charge, float(m.ai.reach) + 14, float(m.ai.arc), k, w.clock)
 				g.oval(p + Vector2(0, 1), Vector2(20, 6), Color(.25, 0, 0, .25 + .1 * sin(w.clock * 3)))
+
+## Pixel ring of rope fibres around a pillar: dotted while idle, filling in
+## gold clockwise while the hero cuts the villager down.
+static func rescue_ring(g, p: Vector2, radius: float, k: float, inside: bool, near: float, clock: float):
+	var count := 28
+	var filled: int = int(round(k * count))
+	var base := Color(.85, .74, .55, (.6 if inside else .45) * maxf(near, .35 if k > 0 else 0.0))
+	for j in range(count):
+		var a: float = -PI / 2 + j * TAU / count
+		var q: Vector2 = (p + Vector2(cos(a) * radius, sin(a) * radius * .45)).floor()
+		if j < filled:
+			g.draw_rect(Rect2(q - Vector2(1, 0), Vector2(3 if j % 2 == 0 else 2, 2)), Color(1, .84, .42, .95))
+			g.draw_rect(Rect2(q - Vector2(0, 1), Vector2(1, 1)), Color(1, .97, .8, .9))
+		elif (j + int(clock * 4)) % 2 == 0 or inside:
+			g.draw_rect(Rect2(q, Vector2(2 if j % 3 == 0 else 1, 1)), base)
+	if k > 0 and k < 1:
+		var a: float = -PI / 2 + TAU * k
+		var tip: Vector2 = (p + Vector2(cos(a) * radius, sin(a) * radius * .45)).floor()
+		var flick: float = .6 + .4 * sin(clock * 40)
+		g.draw_rect(Rect2(tip - Vector2(1, 1), Vector2(3, 3)), Color(1, .95, .7, flick))
+		for j in range(3):
+			var phase: float = fposmod(clock * 2.5 + j * .33, 1)
+			g.draw_rect(Rect2((tip + Vector2((j - 1) * 2, -phase * 8)).floor(), Vector2.ONE), Color(1, .8, .45, 1 - phase))
+
+## Soil splitting where the dead will climb out: a widening black pit, cracks
+## running from it and grit jumping on the surface, in the bulge-tell style.
+static func grave(g, p: Vector2, k: float, seed: int, clock: float):
+	var shown: float = .35 + .65 * k
+	g.oval(p, Vector2(12, 5) * shown, Color(.03, 0, 0, .45 + .45 * k))
+	g.oval(p - Vector2(0, 1), Vector2(7, 2.5) * shown, Color(.25, .03, .03, .35 * k))
+	for j in range(5):
+		var a: float = j * TAU / 5 + Tells.h01(j, seed) * .8
+		var q: Vector2 = p + Vector2(cos(a) * 7, sin(a) * 3) * shown
+		Tells.crack(g, q, q + Vector2(cos(a) * 10, sin(a) * 4.5) * shown, shown, seed + j, 1.5, 1.0, clock)
+	Tells.bulge(g, p, shown, seed, clock)
+	if k > .8:
+		for j in range(4):
+			var d: Vector2 = Vector2.from_angle(j * PI / 2 + PI / 4) * (5 + 2 * sin(clock * 30))
+			g.draw_rect(Rect2((p + d * Vector2(1, .5)).floor(), Vector2.ONE), Tells.hot(k, clock))
 
 static func laser(g, m: Dictionary, p: Vector2, k: float, w):
 	var locked: bool = m.timer <= float(m.ai.lock)
@@ -181,6 +210,14 @@ static func lights(g):
 	for mark in h.pillars(w):
 		if mark.get("state", "") == "freed" and w.clock - mark.get("freed_at", -9.0) < 1.5:
 			g.ambient_lights.append({"p": mark.p - Vector2(0, 20), "r": 90.0, "c": Color(1, .85, .5), "power": .8 * (1 - (w.clock - mark.freed_at) / 1.5), "glow": .2})
+	var view := Rect2(w.camera() - Vector2(360, 220), Vector2(720, 440))
+	for r in h.rises:
+		if view.has_point(r.p):
+			var k: float = clampf((w.clock - r.born) / maxf(.01, r.at - r.born), 0, 1)
+			g.ambient_lights.append({"p": r.p, "r": 28.0 + 10.0 * k, "c": Color(1, .22, .1), "power": .4 + .4 * k, "glow": .05})
+	for mark in h.pillars(w):
+		if h.hanging(mark) and view.has_point(mark.p):
+			g.ambient_lights.append({"p": mark.p - Vector2(0, 34), "r": 44.0, "c": Color(.9, .35, .25), "power": .3, "glow": .03})
 	var b = h.butcher(w)
 	if b != null:g.ambient_lights.append({"p": b.p - Vector2(0, 20), "r": 46.0, "c": Color(.9, .1, .08), "power": .35, "glow": .05})
 
@@ -191,26 +228,54 @@ static func sink_depth(g, m: Dictionary) -> float:
 static func hud(g):
 	var w = g.world
 	var h = w.hunt
-	if w.stage != "survival" or h.data.is_empty():return
+	var lines: Array = []
+	if w.message_timer > 0 and w.state == "RUNNING":lines.append({"text": w.message, "size": 12, "color": g.GOLD})
+	if w.stage != "survival" or h.data.is_empty():
+		stack(g, lines, 56 if not w.encounters.title().is_empty() else 44);return
+	var e = w.encounters
+	var bar: bool = not e.title().is_empty() or (e.golem.started and not e.rescued and w.player.distance_to(e.golem.p) < 200 and e.golem.phase != "intro")
 	var b = h.butcher(w)
-	if b != null and w.encounters.title().is_empty():
-		BossBar.draw(g, "Мясник — его не убить, только пережить", clampf((b.leave_at - w.clock) / float(h.data.butcher.life), 0, 1), Color("6b0f0f"), "ch4_butcher")
+	if b != null and not b.has("sinking") and not bar:
+		BossBar.draw(g, "Мясник", clampf((b.get("leave_at", w.clock) - w.clock) / float(h.data.butcher.life), 0, 1), Color("6b0f0f"), "ch4_butcher")
+		bar = true
+	if w.clock - h.reward_at < 2.6 and not h.last_reward.is_empty():
+		lines.append({"text": h.last_reward, "size": 8, "color": Color(1, .85, .55, 1 - maxf(0, w.clock - h.reward_at - 1.8) / .8)})
 	if not h.stirring.is_empty():
 		var left: float = maxf(0, h.stirring.stir_until - w.clock)
-		var y := 84 if b != null or not w.encounters.title().is_empty() else 46
-		g.centered("Житель сорвётся со столба через %d с" % ceili(left), y, 8, Color(1, .45, .4) if left < 10 else Color(.95, .8, .7), true)
+		lines.append({"text": "Сорвётся через %d с" % ceili(left), "size": 8, "color": Color(1, .45, .4) if left < 10 else Color(.95, .8, .7)})
 		marker(g, h.stirring.p, Color(1, .2, .15, .6 + .4 * sin(w.clock * 8)))
+	stack(g, lines, 56 if bar else 44)
 	if w.clock < h.vengeance_until:
-		var t := "Возмездие %d с" % ceili(h.vengeance_until - w.clock)
-		g.text_at(t, Vector2(8, 352), 8, Color(1, .55, .45))
-	if w.clock - h.reward_at < 2.6 and not h.last_reward.is_empty():
-		g.centered(h.last_reward, 84, 8, Color(1, .85, .55, 1 - maxf(0, w.clock - h.reward_at - 1.8) / .8), true)
+		g.text_at("Возмездие %d с" % ceili(h.vengeance_until - w.clock), Vector2(8, 352), 8, Color(1, .55, .45))
 	if h.surge_left > 0:
 		var a: float = minf(1, h.surge_left / 2.0) * (.16 + .08 * sin(w.clock * 6))
 		for j in range(6):
 			var c := Color(.5, 0, 0, a * (1 - j / 6.0))
 			g.draw_rect(Rect2(0, j * 3, 640, 3), c);g.draw_rect(Rect2(0, 357 - j * 3, 640, 3), c)
 			g.draw_rect(Rect2(j * 3, 0, 3, 360), c);g.draw_rect(Rect2(637 - j * 3, 0, 3, 360), c)
+
+## Top-centre text column for IV: every line fits the screen (shrinks, then
+## wraps) and lines stack under the boss bar instead of drawing over each other.
+static func stack(g, lines: Array, top: float):
+	var y: float = top + 12
+	for line in lines:
+		var size: int = line.size
+		var heavy: bool = size >= 12
+		var f = g.bold if heavy else g.font
+		if f.get_string_size(line.text, HORIZONTAL_ALIGNMENT_LEFT, -1, g.pixel_font_size(size)).x > 600:size = 8;heavy = false;f = g.font
+		for row in wrap_text(g, f, line.text, g.pixel_font_size(size), 600):
+			g.centered(row, y, size, line.color, heavy)
+			y += 16 if size >= 12 else 11
+		y += 2
+
+static func wrap_text(g, f, text: String, size: int, limit: float) -> Array:
+	var rows: Array = [];var row := ""
+	for word in text.split(" "):
+		var next: String = word if row == "" else row + " " + word
+		if row != "" and f.get_string_size(next, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x > limit:rows.append(row);row = word
+		else:row = next
+	rows.append(row)
+	return rows
 
 static func marker(g, p: Vector2, color: Color):
 	var delta: Vector2 = p - g.world.player

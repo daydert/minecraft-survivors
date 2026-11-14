@@ -302,7 +302,7 @@
       "speed": 72.0,
       "damage": 6.0,
       "xp": 0,
-      "radius": 11,
+      "radius": 13,
       "elite": false,
       "ai": {
         "windup": 0.7,

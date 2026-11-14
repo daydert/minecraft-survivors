@@ -1,4 +1,5 @@
 extends RefCounted
+const Tells=preload("res://scripts/chapter_four_tells.gd")
 const BossBar=preload("res://scripts/ui/boss_bar.gd")
 const SwordView = preload("res://scripts/spawn_sword_view.gd")
 ## Chapter V presentation: the white/dark code plane, code enemies drawn as
@@ -75,10 +76,12 @@ func world(g):
 		var p: Vector2 = z.p + offset
 		var k: float = clampf(z.age / z.delay, 0, 1)
 		if z.age < z.delay:
-			g.draw_arc(p, z.r, 0, TAU, 28, Color(.95, .3, .25, .8), 1)
-			g.draw_arc(p, z.r * k, 0, TAU, 28, Color(.95, .3, .25, .45), 1)
-			g.text_at("else", p - Vector2(10, -3), 8, Color(.95, .3, .25, .8))
+			Tells.ring(g, p.floor(), z.r, k, w.clock)
+			Tells.crack(g, p + Vector2(-z.r * .6, 0), p + Vector2(z.r * .6, 0), k, int(z.p.y), 2.0, 1.0, w.clock)
+			g.text_at("else", p - Vector2(10, 9), 8, Tells.hot(k, w.clock))
 		else:g.draw_circle(p, z.r, Color(.95, .3, .25, .5 * (1 - (z.age - z.delay) / .3)))
+	for m in w.mobs:
+		if Rect2(-80, -80, 800, 520).has_point(m.p + offset):code_tells(g, m, offset)
 	NotchView.ground(g, offset)
 	SwordView.draw(g, offset)
 	var actors: Array = []
@@ -630,3 +633,9 @@ func boss_arrival(g, offset: Vector2):
 	g.draw_rect(Rect2(0,90,640,48),Color(.015,.02,.03,.84*opacity))
 	g.centered("ТЕРМИНАЛ" if not b.terminal.is_empty() else "БЕСКОНЕЧНЫЙ ЦИКЛ",112,24,Color(.65,1,.78,opacity),true)
 	g.centered("new Player(steve)" if not b.terminal.is_empty() else "while (true)",128,8,Color(.7,.72,.8,opacity))
+
+## Ordinary chapter V enemies show no charge tells (14.11); only the "else"
+## zones warn where the floor is about to strike.
+func code_tells(g, m: Dictionary, offset: Vector2):
+	pass
+

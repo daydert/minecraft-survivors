@@ -1,0 +1,18 @@
+[
+  {
+    "suite": "test_achievements",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_achievements_v2",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_screen_router",
+    "exit_code": 0
+  },
+  {
+    "suite": "test_chapter_four_enemies",
+    "exit_code": 0
+  }
+]

@@ -56,6 +56,7 @@ if [ "${1:-}" = "--network-four" ]; then
     python qa/test_network.py --players 4 --scenario host_leave --label four
 fi
 if [ "${1:-}" = "--visual" ]; then
+    "$engine" --path . --display-driver wayland -s qa/test_chapter_access.gd
     "$engine" --path . --display-driver wayland -s qa/test_camera_visual.gd
     "$engine" --path . --display-driver wayland -s qa/test_chapter_four_finale_visual.gd
     "$engine" --path . --display-driver wayland -s qa/test_chapter_four_arsenal_visual.gd

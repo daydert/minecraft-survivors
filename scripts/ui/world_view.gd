@@ -51,20 +51,8 @@ static func draw_world(g):
 		if e.kind in ["cloud","fangs","player_hit","potion_splash"]: draw_effect(g,e,offset)
 		if e.kind=="witch_potion":
 			var k: float=clampf(e.age/e.total,0,1)
-			preload("res://scripts/ui/witch_puddle_view.gd").draw(g,e.end+offset,e.radius,.12+k*.22)
+			Tells.splash(g,(e.end+offset).floor(),e.radius,k,int(e.get("owner",0))*5,g.world.clock)
 	if g.world.finale.active:g.finale_renderer.floor_effects(g,offset)
-	for m in g.world.mobs:
-		var p: Vector2 = m.p+offset
-		if m.kind == "phantom" and m.phase in ["windup","dive"]:
-			# Dive telegraph: the shadow's landing mark, tightening as the dive nears.
-			var mark: Vector2 = m.mark+offset
-			var k: float = 1.0-m.timer/0.75 if m.phase=="windup" else 1.0
-			# The same ground language as chapter IV: the swoop's lane cracks open ahead of it.
-			if m.phase=="windup":
-				var dir: Vector2=(m.mark-m.p).normalized()
-				Tells.lane(g,(m.p+offset).floor(),(m.mark+dir*40.0+offset).floor(),8.0,k,int(m.id),g.world.clock)
-		if m.kind == "ravager" and m.phase == "windup":
-			Tells.lane(g,p.floor(),(p+m.charge*160).floor(),23.0,clampf(1.0-m.timer/maxf(.01,float(m.get("windup_total",1.0))),0,1),int(m.id),g.world.clock)
 	var actors: Array = []
 	if g.world.finale.active:actors.append({"sort":g.world.finale.CENTER.y+18,"kind":"throne"})
 	if not g.is_nether() and offset.y+ChapterOne.FENCE_S<460:actors.append({"sort":ChapterOne.FENCE_S,"kind":"south_fence"})

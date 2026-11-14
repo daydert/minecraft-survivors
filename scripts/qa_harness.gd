@@ -354,8 +354,10 @@ static func prepare_four_enemies_capture(g):
 	var mode: String=g.qa_mode.trim_prefix("ch4b_")
 	if mode in ["gallery","unlit"]:
 		var i:=0
+		if "hunt" in w:w.hunt.forcing=true
 		for kind in w.db.data.forms:
-			w.spawn(kind,w.player+Vector2(-205+(i%5)*103,-90+(i/5)*78));i+=1
+			w.spawn(kind,w.player+Vector2(-250+(i%6)*100,-110+(i/6)*82));i+=1
+		if "hunt" in w:w.hunt.forcing=false
 		for m in w.mobs:m.timer=10;m.dir=Vector2.DOWN
 		if mode=="unlit":g.settings.lighting=false
 	elif mode=="crowd":

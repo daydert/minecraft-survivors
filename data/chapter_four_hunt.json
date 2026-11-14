@@ -22,11 +22,21 @@
     "warn": 32,
     "near": 230,
     "far": 1000,
-    "retinue": ["crawler", "crawler", "crawler", "crawler"]
+    "retinue": [
+      "crawler",
+      "crawler",
+      "crawler",
+      "crawler"
+    ]
   },
   "affixes": {
     "second_after": 360,
-    "names": {"vampiric": "Вампир", "volatile": "Взрывной", "shielded": "Под щитом", "frenzied": "Бешеный"},
+    "names": {
+      "vampiric": "вампир",
+      "volatile": "взрывной",
+      "shielded": "под щитом",
+      "frenzied": "бешеный"
+    },
     "vampiric_heal": 0.08,
     "volatile_delay": 1.1,
     "volatile_radius": 78,
@@ -40,11 +50,29 @@
     "frenzy_cooldown": 0.6
   },
   "retinues": {
-    "gravedigger": ["flayed_zombie", "flayed_zombie", "flayed_zombie", "flayed_zombie"],
-    "bellringer": ["hungry_wolf", "hungry_wolf", "hungry_wolf"],
-    "bone_rider": ["marksman", "marksman", "marksman"]
+    "gravedigger": [
+      "flayed_zombie",
+      "flayed_zombie",
+      "flayed_zombie",
+      "flayed_zombie"
+    ],
+    "bellringer": [
+      "hungry_wolf",
+      "hungry_wolf",
+      "hungry_wolf"
+    ],
+    "bone_rider": [
+      "marksman",
+      "marksman",
+      "marksman"
+    ]
   },
-  "gravedigger_raise": {"interval": 8.0, "range": 320, "count": 2, "delay": 0.9},
+  "gravedigger_raise": {
+    "interval": 8.0,
+    "range": 320,
+    "count": 2,
+    "delay": 0.9
+  },
   "ambush": {
     "from": 60,
     "interval": 21,
@@ -58,7 +86,13 @@
     "delay": 0.95
   },
   "surges": {
-    "times": [95, 250, 425, 590, 680],
+    "times": [
+      95,
+      250,
+      425,
+      590,
+      680
+    ],
     "life": 16,
     "rate": 2.6,
     "ring": 14,
@@ -66,7 +100,12 @@
     "ring_delay": 1.15
   },
   "butcher": {
-    "times": [140, 300, 455, 615],
+    "times": [
+      140,
+      300,
+      455,
+      615
+    ],
     "life": 45,
     "retry": 5,
     "distance": 210,
