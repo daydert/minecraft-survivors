@@ -1,0 +1,58 @@
+[
+  {
+    "build": "Рывок",
+    "clock_breaks": 2,
+    "deaths": 0,
+    "framed": 0,
+    "learned": "mace",
+    "min_hp": 13.0,
+    "naive": false,
+    "reached_fight": 2,
+    "rewinds": 1,
+    "seconds": 166.4,
+    "sugar": false,
+    "won": true
+  },
+  {
+    "build": "Дыхание",
+    "clock_breaks": 2,
+    "deaths": 0,
+    "framed": 0,
+    "learned": "dragon_breath",
+    "min_hp": 17.0,
+    "naive": false,
+    "reached_fight": 2,
+    "rewinds": 1,
+    "seconds": 146.0,
+    "sugar": false,
+    "won": true
+  },
+  {
+    "build": "Край",
+    "clock_breaks": 2,
+    "deaths": 1,
+    "framed": 1,
+    "learned": "end_crystal",
+    "min_hp": 0.0,
+    "naive": false,
+    "reached_fight": 2,
+    "rewinds": 1,
+    "seconds": 227.3,
+    "sugar": false,
+    "won": true
+  },
+  {
+    "build": "Смешанная",
+    "clock_breaks": 0,
+    "deaths": 0,
+    "framed": 0,
+    "learned": "end_crystal",
+    "min_hp": 13.5,
+    "naive": false,
+    "reached_fight": 2,
+    "rewinds": 3,
+    "seconds": 112.9,
+    "sugar": false,
+    "won": true
+  }
+]

@@ -1,8 +1,30 @@
 {
   "sprites": [
     "ch3_brawl_steve",
-    "ch3_brawl_ender"
+    "ch3_brawl_ender",
+    "ch3_brawl_steve_sword",
+    "ch3_brawl_steve_axe",
+    "ch3_brawl_steve_hoe",
+    "ch3_brawl_steve_spear",
+    "ch3_brawl_steve_mace",
+    "ch3_brawl_steve_knockback_stick",
+    "ch3_brawl_steve_bow",
+    "ch3_brawl_steve_crossbow",
+    "ch3_brawl_steve_fishing",
+    "ch3_brawl_steve_shield"
   ],
+  "weapons": {
+    "sword": "ch3_brawl_steve_sword",
+    "axe": "ch3_brawl_steve_axe",
+    "hoe": "ch3_brawl_steve_hoe",
+    "spear": "ch3_brawl_steve_spear",
+    "mace": "ch3_brawl_steve_mace",
+    "knockback_stick": "ch3_brawl_steve_knockback_stick",
+    "bow": "ch3_brawl_steve_bow",
+    "crossbow": "ch3_brawl_steve_crossbow",
+    "fishing": "ch3_brawl_steve_fishing",
+    "shield": "ch3_brawl_steve_shield"
+  },
   "frame": [
     56,
     56
@@ -50,6 +72,54 @@
     },
     "spent": {
       "start": 39,
+      "count": 2
+    },
+    "stance": {
+      "start": 41,
+      "count": 2
+    },
+    "run": {
+      "start": 43,
+      "count": 8
+    },
+    "grab": {
+      "start": 51,
+      "count": 4
+    },
+    "hold": {
+      "start": 55,
+      "count": 2
+    },
+    "kneel": {
+      "start": 57,
+      "count": 2
+    },
+    "lie_wait": {
+      "start": 59,
+      "count": 2
+    },
+    "raise_over": {
+      "start": 61,
+      "count": 2
+    },
+    "lower": {
+      "start": 63,
+      "count": 6
+    },
+    "bad_strike": {
+      "start": 69,
+      "count": 4
+    },
+    "idle": {
+      "start": 73,
+      "count": 2
+    },
+    "gesture": {
+      "start": 75,
+      "count": 2
+    },
+    "clutch": {
+      "start": 77,
       "count": 2
     }
   }

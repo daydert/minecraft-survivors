@@ -523,7 +523,8 @@ func step(dt: float, movement: Vector2 = Vector2.ZERO):
 		return
 	stage_age += dt
 	if purge.phase in ["surge", "ascend"]:time += dt * purge.rate()
-	else:time = minf(db.data.duration, time + dt)
+	elif time < purge.AT:time = minf(purge.AT, time + dt)
+	elif not purge.clock_frozen():time = minf(db.data.duration, time + dt)
 	invulnerable = maxf(0, invulnerable - dt)
 	shake = maxf(0, shake - dt)
 	message_timer = maxf(0, message_timer - dt)

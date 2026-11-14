@@ -5,6 +5,7 @@ const WorldView = preload("res://scripts/ui/world_view.gd")
 const Hud = preload("res://scripts/ui/hud.gd")
 const MenuScreens = preload("res://scripts/ui/menu_screens.gd")
 const RunScreens = preload("res://scripts/ui/run_screens.gd")
+const FiveTeaser = preload("res://scripts/chapter_five_teaser_view.gd")
 const GearScreens = preload("res://scripts/ui/gear_screens.gd")
 const QAHarness = preload("res://scripts/qa_harness.gd")
 
@@ -70,6 +71,7 @@ var screen: String:
 var record = {"time":0.0,"kills":0,"score":0}
 var pause_from = "RUNNING"
 var solo_chapter = 1
+var five_teaser_age := 0.0
 var nether_renderer = preload("res://scripts/nether_renderer.gd").new()
 var last_state = "MENU"
 var input_lock = 0.0
@@ -89,12 +91,12 @@ var secret_keys=""
 var secret_key_time=0
 var lab_chapter=1
 const BossLab=preload("res://scripts/boss_lab.gd")
-var coop = preload("res://scripts/coop_session.gd").new()
-var nickname_field: LineEdit
 const DavisCheats=preload("res://scripts/davis_cheats.gd")
 const DavisLabView=preload("res://scripts/ui/davis_lab_view.gd")
 var lab=BossLab.new()
 var davis=DavisCheats.new()
+var coop = preload("res://scripts/coop_session.gd").new()
+var nickname_field: LineEdit
 var address_field: LineEdit
 var network_nick = "Стив"
 var network_address = ""

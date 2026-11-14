@@ -24,7 +24,7 @@ func fresh():
 	game.action("chapter_5");var w=game.world
 	w.db.data.waves=[{"at":0,"rate":0,"weights":{"token":1}}]
 	for id in w.next_event:w.next_event[id]=99999.0
-	w.build={};w.invulnerable=0
+	w.build={};w.invulnerable=0;w.bosses.loop_done=true;w.bosses.terminal_done=true
 	return w
 func last(w):return w.mobs.back()
 func run():

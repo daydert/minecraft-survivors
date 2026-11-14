@@ -201,9 +201,10 @@ func _process(delta):
 	sync_network_fields()
 	var hero_theme=world.finale.active and (not world.finale.has_method("duel_phase") or not world.finale.complete)
 	if is_end() and world.stage=="chapter_four":world.stage_age+=delta
-	var theme=ch5_music() if is_five() else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach","clash","down"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
-	var four_theme: String=("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four_end:ch4_metal" if is_four() and world.stage=="survival" and world.rage_music>0 else "chapter_four")
-	audio.set_music_context("silence" if chapter_one_prologue.active else four_theme if is_four() else theme,world.state not in ["MENU","RESULT"])
+	five_teaser_age=five_teaser_age+delta if FiveTeaser.shown(self) else 0.0
+	var theme=ch5_music() if is_five() else "victory" if world.get("win_music")==true else "silence" if is_end() and world.stage in ["betrayal","yield","approach","clash","down","rebirth","fallen","standoff","sword_race","mercy","bad_end","bad_card"] else "chapter_four_end:coords" if is_end() and world.stage in ["to_edge","sit","talk","restore","portal_ready","exit_jump","chapter_four"] else "endersteve" if is_end() and world.stage in ["last_arrival","last_duel"] else "dragon" if is_end() and world.stage in ["departure","dragon_arrival","dragon","dragon_death"] else "herobrine" if hero_theme else "wither" if is_nether() and world.stage in ["departure","arrival","wither","defeat"] else ""
+	var four_theme: String="chapter_four_end:ch5_ambient" if FiveTeaser.shown(self) else ("chapter_four_end:"+world.ending.music) if is_four() and world.stage=="finale" and world.ending.phase not in ["","summit"] else ("chapter_four_pyramid" if is_four() and world.encounters.current=="guardian" else "chapter_four_end:ch4_metal" if is_four() and world.stage=="survival" and world.rage_music>0 else "chapter_four")
+	audio.set_music_context("silence" if chapter_one_prologue.active else four_theme if is_four() else theme,world.state not in ["MENU","RESULT"] or FiveTeaser.shown(self))
 	update_achievements(delta)
 	update_camera_lead()
 	ui_time += delta
@@ -246,6 +247,15 @@ func _input(event):
 		elif event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:qte_action="attack"
 		if not qte_action.is_empty():
 			world.ending.press(qte_action);return
+	# Chapter III: the race for the last iron sword.
+	if is_end() and world.stage=="sword_race" and world.state=="RUNNING" and screen.is_empty():
+		var race_action := ""
+		if event is InputEventKey and event.pressed and not event.echo:
+			var code: int=event.physical_keycode if event.physical_keycode!=0 else event.keycode
+			race_action={KEY_A:"left",KEY_LEFT:"left",KEY_D:"right",KEY_RIGHT:"right",KEY_SPACE:"attack",KEY_J:"attack",KEY_ENTER:"attack"}.get(code,"")
+		elif event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT:race_action="attack"
+		if not race_action.is_empty():
+			world.sword_race.press(race_action);return
 	if screen == "multiplayer" and event is InputEventKey and (nickname_field.has_focus() or address_field.has_focus()) and event.keycode not in [KEY_ESCAPE,KEY_F11,KEY_F8]: return
 	if event is InputEventMouseMotion:
 		mouse = get_global_mouse_position()
@@ -295,7 +305,7 @@ func _input(event):
 			if event.physical_keycode==KEY_SPACE:
 				if not world.active_item("bat"):world.active_item("cart")
 				return
-		if is_end() and screen.is_empty() and world.state=="RUNNING":
+		if is_end() and screen.is_empty() and world.state=="RUNNING" and world.stage not in ["fallen","bad_card"]:
 			if event.physical_keycode==KEY_E or event.keycode==KEY_E:world.active_item("ender_pearl");return
 			if event.physical_keycode==KEY_SPACE or event.keycode==KEY_SPACE:world.active_item("elytra");return
 			if event.keycode==KEY_SHIFT:world.active_item("rocket");return
@@ -420,6 +430,8 @@ func action(id: String):
 			sync_network_fields()
 		"stats": toggle_stats()
 		"close_stats": close_stats()
+		"end_retry":
+			if is_end() and world.stage in ["fallen","bad_card"]:world.retry_duel()
 		"start","retry":
 			if coop.active:
 				if coop.hosting: coop.start_run()
@@ -650,7 +662,7 @@ func _draw():
 	achievements_view.toast(self)
 	var end_power=0.0
 	if is_end():
-		if world.stage=="betrayal":end_power=.95*smoothstep(1.4,3.4,world.stage_age)*(1-smoothstep(5.0,10.0,world.stage_age))
+		if world.stage=="betrayal":end_power=.95*smoothstep(1.4,world.end_boss.BETRAYAL_IMPACT,world.stage_age)*(1-smoothstep(world.end_boss.BETRAYAL_IMPACT+1.6,world.end_boss.BETRAYAL_IMPACT+6.6,world.stage_age))
 		elif world.stage=="last_arrival":end_power=.55*(1-smoothstep(2,3.2,world.stage_age))
 		elif world.stage=="last_duel":
 			for boss in world.mobs:
@@ -698,6 +710,10 @@ func draw_scene():
 	if screen=="stats":
 		GearScreens.draw_stats(self)
 		return
+	if FiveTeaser.shown(self):
+		FiveTeaser.draw(self,five_teaser_age)
+		return
+	FiveTeaser.idle(self)
 	if world.state=="RESULT" and world.finale.complete:
 		finale_renderer.ending(self)
 		return

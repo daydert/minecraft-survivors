@@ -3,6 +3,18 @@ const BossBar=preload("res://scripts/ui/boss_bar.gd")
 ## In-run HUD: hearts, timer, experience, equipment bars and boss bars.
 const Atmosphere = preload("res://scripts/ui/atmosphere.gd")
 
+## Slots past the bar (chapter V overcap): extra rows stack upward over it.
+static func overflow_slots(g,collection: Dictionary,ids: Array,origin: Vector2,row: int):
+	var per=8 if row==1 else 6
+	for i in range(ids.size()):
+		var p=origin+Vector2(3+(i%per)*20,-24-int(i/per)*20)
+		var cell=Rect2(p-Vector2(2,2),Vector2(20,20))
+		g.draw_rect(cell,Color(0,0,0,.55))
+		g.draw_rect(cell,Color(1,.25,.22,.55+.25*sin(g.world.clock*4+i)),false,1)
+		g.item_icon(ids[i],p,1,g.world.evolved.has(ids[i]))
+		var t=str(collection[ids[i]])
+		g.text_at(t,p+Vector2(17-g.font.get_string_size(t,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x,17),8,Color(1,.25,.22))
+
 static func draw_hud(g):
 	Atmosphere.health_edges(g)
 	# Vanilla-sized health and experience sit above the two equipment bars.
@@ -15,7 +27,11 @@ static func draw_hud(g):
 		var withered=g.is_nether() and g.world.player_wither>0
 		if health==2:g.sprite(("heart_wither_blink" if blink else "heart_wither") if withered else ("heart_blink" if blink else "heart"),p)
 		elif health==1:g.sprite(("heart_wither_half_blink" if blink else "heart_wither_half") if withered else ("heart_half_blink" if blink else "heart_half"),p)
-	if not (g.is_five() and g.world.purge.phase in ["surge","ascend","stop","enter"]):g.centered(g.format_time(g.world.time),24,16,g.INK,true)
+	if g.is_five() and g.world.stage!="notch" and g.world.purge.clock_frozen():
+		# the run clock is held at 10:00 while the terminal counts its own time
+		var held=Color(.62,.86,1) if int(g.world.clock*2)%2==0 else Color(.9,.97,1)
+		g.centered(g.format_time(g.world.time),24,16,held,true)
+	elif not (g.is_five() and g.world.purge.phase in ["surge","ascend","stop","enter"]):g.centered(g.format_time(g.world.time),24,16,g.INK,true)
 	g.text_at("Убийств: %d" % g.world.kills,Vector2(12,16),8,g.INK)
 	if g.coop.active:g.text_at("Изумруды: %d" % g.world.score,Vector2(12,29),8,g.MUTED)
 	else:g.text_at("Глава V · Исходный код" if g.is_five() else "Глава IV · «Обычный мир»" if g.is_four() else "Глава III · Край" if g.is_end() else "Глава II · Незер" if g.is_nether() else "Глава I · Верхний мир",Vector2(12,29),8,g.MUTED)
@@ -69,6 +85,8 @@ static func draw_hud(g):
 				if g.is_four() and id=="empty_totem" and g.world.arsenal.totem_spent:
 					g.draw_line(p,p+Vector2(15,15),Color(.3,.3,.3,.9),2)
 				g.text_at(level_text,p+Vector2(17-g.font.get_string_size(level_text,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x,17),8,number_color)
+		var base=8 if row==1 and not g.coop.active else 6
+		if ids.size()>base:overflow_slots(g,collection,ids.slice(base),Vector2(x0,312),row)
 	if g.is_end():g.end_renderer.hud(g)
 	if g.is_four():g.four_renderer.ArsenalView.hud(g)
 	if g.is_four():g.four_renderer.EncounterView.hud(g)

@@ -7,6 +7,8 @@ static func draw_inventory(g):
 	g.text_at("Инвентарь",Vector2(22,29),16,g.INK,true)
 	g.button(Rect2(510,13,108,22),"Готово","close_inventory")
 	g.draw_line(Vector2(22,59),Vector2(618,59),Color("555555"))
+	if g.world.build.size()>6 or g.world.items.size()>8:
+		draw_overcap_inventory(g);return
 	for row in range(2):
 		var collection=g.world.build if row==0 else g.world.items
 		var slots=6 if row==0 else 8
@@ -25,6 +27,26 @@ static func draw_inventory(g):
 			g.text_at(str(collection[id])+" / "+("8" if row==0 else "5"),Vector2(x+29,y+19),8,g.MUTED)
 			g.wrapped(g.gear_title(id,g.world.evolved.has(id)),Vector2(x+6,y+38),step_x-14,8,g.INK)
 			g.button(Rect2(x+5,y+77,step_x-15,20),"Удалить","discard_"+id)
+	g.button(Rect2(24,330,100,22),"Рецепты","recipes")
+
+## Chapter V core: no slot limit, so the bars become a compact grid.
+static func draw_overcap_inventory(g):
+	var y=74
+	for row in range(2):
+		var collection=g.world.build if row==0 else g.world.items
+		var ids=collection.keys()
+		g.text_at(("Оружие · %d · без лимита" if row==0 else "Усиления · %d · без лимита") % ids.size(),Vector2(24,y),8,Color(1,.45,.4),true)
+		y+=8
+		for i in range(ids.size()):
+			var cell=Rect2(24+(i%8)*74,y+int(i/8)*42,70,38)
+			g.panel(cell)
+			var id=ids[i]
+			g.item_icon(id,cell.position+Vector2(5,5),1,g.world.evolved.has(id))
+			var cap=8 if row==0 else 5
+			g.text_at(str(collection[id]),cell.position+Vector2(26,17),8,Color(1,.3,.25) if collection[id]>cap else g.INK)
+			g.button(Rect2(cell.position+Vector2(50,3),Vector2(17,14)),"x","discard_"+id)
+			g.text_at(g.gear_title(id,g.world.evolved.has(id)).left(11),cell.position+Vector2(5,33),8,g.MUTED)
+		y+=int(ceil(ids.size()/8.0))*42+14
 	g.button(Rect2(24,330,100,22),"Рецепты","recipes")
 
 static func draw_recipe_book(g):

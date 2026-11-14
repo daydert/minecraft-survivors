@@ -42,6 +42,22 @@ var chosen_level=0
 var chosen_index=-1
 var choice_hold=0.0
 var end_boss=preload("res://scripts/end_encounter.gd").new()
+var steve_boss=preload("res://scripts/end_steve_boss.gd").new()
+## The duel with EnderSteve across his deaths: which fight, what he learned, checkpoints.
+var duel: Dictionary={}
+## His blows ignore the leap/glide shelter; only these honest windows stop them.
+var hit_grace:=0.0
+var blink_grace:=0.0
+## Caught by his Projection: the hero is frozen in a frame until the crushing blow.
+var framed:=0.0
+var frame_pos:=Vector2.ZERO
+## Counts mace leaps and glides so he answers each one once.
+var air_serial:=0
+var pearl_serial:=0
+var dash_serial:=0
+## The race for the last iron sword (end_sword_race.gd) once both blades are gone.
+var race: Dictionary={}
+var sword_race=preload("res://scripts/end_sword_race.gd").new()
 var crystals: Array=[]
 var dragon_history: Array=[]
 var scene_camera=Vector2(1024,1024)
@@ -65,7 +81,7 @@ var npc: Dictionary={}
 var hitstop:=0.0
 var echo_count:=0
 var broken_gear: Array=[]
-const ECHO_LINES=["Даже не думай туда возвращаться","ТЫ ОПЯТЬ МЕНЯ НЕ СЛУШАЕШЬ","Я уже это проходил, ещё не поздно остановиться","Снова и снова, эта грёбаная петля меня никогда не отпустит","Ладно...\nУ меня нет другого выбора...\nТы ничем не отличаешься от остальных...\nНАЧНЁМ!"]
+const ECHO_LINES=["Даже не думай туда возвращаться","ТЫ ОПЯТЬ МЕНЯ НЕ СЛУШАЕШЬ","Я уже это проходил, ещё не поздно остановиться","Снова и снова, эта грёбаная петля меня никогда не отпустит","Стой\nТуда нельзя\nНе заставляй меня"]
 var hand_taken=false
 var heal_rng=RandomNumberGenerator.new()
 var reward_rng=RandomNumberGenerator.new()
@@ -115,6 +131,7 @@ func reset(seed_value: int=0):
 	chosen_item="";chosen_index=-1;choice_hold=0
 	endsteve_corpse={};hand_taken=false;end_complete=false;damage_source="melee"
 	lines.clear();npc={};hitstop=0.0;echo_count=0
+	duel={"fight":1,"adapt":{},"style":{},"checkpoint":{},"phase_start":{}};hit_grace=0.0;blink_grace=0.0;framed=0.0;air_serial=0;pearl_serial=0;dash_serial=0;race={}
 	landmarks.clear();city={};gust={};falls=0
 	super.reset(seed_value)
 	var extra: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_animations.json"))
@@ -282,15 +299,17 @@ func elevation() -> float:
 	return jump_height+(12+sin(clock*5)*2 if flight>0 or rocket else 0)+levitation_height
 
 func active_item(id: String) -> bool:
-	if state!="RUNNING" or stage not in ["survival","dragon","last_duel"] or fall_age>=0:return false
+	if state!="RUNNING" or stage not in ["survival","dragon","last_duel"] or fall_age>=0 or framed>0:return false
 	match id:
 		"elytra":
 			if not items.has(id) or flight_cooldown>0:return false
 			# Elytra v2 (13.11): a longer, faster glide, untouchable in the air, a crash-landing shockwave.
-			flight=2.4+.6*items[id];flight_cooldown=9.5-.7*items[id];sound("wind_burst");fx.dust(player,6,14)
+			flight=2.4+.6*items[id];flight_cooldown=9.5-.7*items[id];air_serial+=1;sound("wind_burst");fx.dust(player,6,14)
+			if stage=="last_duel":duel.style.glides=int(duel.style.get("glides",0))+1
 		"ender_pearl":
 			if not items.has(id) or pearl_cooldown>0:return false
-			pearl_cooldown=13-items[id]
+			pearl_cooldown=13-items[id];pearl_serial+=1
+			if stage=="last_duel":duel.style.pearls=int(duel.style.get("pearls",0))+1
 			add_effect("end_pearl",player,.65,{"end":player+facing*(125+items[id]*15),"start":player})
 			sound("pearl_throw")
 		"rocket":
@@ -319,17 +338,21 @@ func safe_destination(center: Vector2, radius: float, randomize: bool=false):
 func teleport_to(p: Vector2):
 	add_effect("end_teleport",player,.55)
 	player=p;last_safe=p;player_push=Vector2.ZERO
-	add_effect("end_teleport",player,.55);invulnerable=maxf(invulnerable,.3);sound("end_teleport")
+	add_effect("end_teleport",player,.55);invulnerable=maxf(invulnerable,.3);blink_grace=.3;sound("end_teleport")
 
 func step(dt: float, movement: Vector2=Vector2.ZERO):
 	if sword_step(dt, movement):return
 	if state!="RUNNING":return
 	if hitstop>0:hitstop=maxf(0,hitstop-dt);return
+	if framed>0:
+		movement=Vector2.ZERO
+		# The frame lasts only while he is there to strike.
+		if not mobs.any(func(v):return v.kind=="endersteve_final" and v.hp>0 and v.phase=="framed_strike"):framed=0.0
 	track_progress(dt)
 	clock+=dt;stage_age+=dt
 	if stage=="survival":time=minf(db.data.duration,time+dt)
 	var was_gliding: bool=flight>0
-	for key in ["invulnerable","shake","message_timer","flight","flight_cooldown","pearl_cooldown","rocket_cooldown","shell_cooldown","shield_guard","slow_time","poison_time","levitation"]:set(key,maxf(0,float(get(key))-dt))
+	for key in ["invulnerable","shake","message_timer","flight","flight_cooldown","pearl_cooldown","rocket_cooldown","shell_cooldown","shield_guard","slow_time","poison_time","levitation","hit_grace","blink_grace"]:set(key,maxf(0,float(get(key))-dt))
 	if flight>0:invulnerable=maxf(invulnerable,.12)
 	if was_gliding and flight<=0 and items.has("elytra"):elytra_landing()
 	var before=player
@@ -337,7 +360,7 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 	if fall_age>=0:
 		fall_age+=dt
 		if fall_age>.85:
-			fall_age=-1;player=last_safe;invulnerable=0
+			fall_age=-1;player=last_safe;invulnerable=0;hit_grace=1.0
 			if items.has("shulker_shell") and shell_cooldown<=0:
 				shell_cooldown=rule("fall_shell_cooldown")-rule("fall_shell_cooldown_per_level")*items.shulker_shell
 				run_progress.award("shell_rescue")
@@ -370,7 +393,9 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 		flow_timer-=dt
 		if flow_timer<=0 and flow_cell!=Vector2i(player/CELL):update_flow();flow_timer=.3
 		if stage=="survival":spawn_wave(dt);update_city();update_gust(dt)
-		move_mobs(dt);rebuild_hit_grid();update_attacks(dt);update_projectiles(dt);update_explosives(dt);update_hazards(dt);resolve_deaths()
+		move_mobs(dt);rebuild_hit_grid()
+		if framed<=0:update_attacks(dt)
+		update_projectiles(dt);update_explosives(dt);update_hazards(dt);resolve_deaths()
 	update_effects(dt);fx.update(self,dt);update_loop_world(dt);heal_drop_cd=maxf(0,heal_drop_cd-dt)
 	if fall_age<0:pickup(dt)
 	update_particles(dt);animation.advance(self,dt)
@@ -381,7 +406,12 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 	if status_tick<=0:
 		status_tick+=1
 		if poison_time>0 and hp>1:damage_player(minf(1,hp-1))
-	if hp<=0:state="RESULT";victory=false;sound("death");return
+	if hp<=0:
+		if stage=="fallen":return
+		# In the duel with him a death returns to the last checkpoint, not the menu.
+		if stage in ["last_arrival","last_duel","rebirth"] and not duel.get("checkpoint",{}).is_empty():fall_in_duel();return
+		state="RESULT";victory=false;sound("death");return
+	track_duel(dt)
 	end_boss.story(self,dt)
 	if stage in ["survival","dragon","last_duel"]:
 		if xp>=db.required_xp(level):next_level()
@@ -392,10 +422,17 @@ func step(dt: float, movement: Vector2=Vector2.ZERO):
 			for boss in mobs:
 				if boss.kind in ["end_dragon","endersteve_final"]:
 					var focus: Vector2=boss.p-Vector2(0,boss.get("altitude",0)+30)
+					# Projection: pull back to the middle of the path so every frame of it is on screen.
+					if boss.get("phase","") in ["projection_preview","projection"] and not boss.get("path",[]).is_empty():
+						var sum:=Vector2.ZERO
+						for q in boss.path:sum+=q
+						focus=sum/boss.path.size()-Vector2(0,20)
+					if framed>0:focus=player-Vector2(0,10)
 					target=player.lerp(focus,.46)+Vector2(0,-8);break
 			target=target.clamp(player-Vector2(260,120),player+Vector2(260,100))
 		if stage in ["dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump"]:target=player.lerp(portal_position,.5)+Vector2(0,-25)
 		if stage=="endsteve_death":target=player.lerp(endsteve_corpse.p,.6)-Vector2(0,30)
+		if stage=="rebirth":target=player.lerp(betrayer_position() if endsteve_corpse.is_empty() or stage_age>end_boss.REBIRTH_GONE else endsteve_corpse.p,.55)-Vector2(0,24)
 		if stage in ["yield","approach","clash","down"] and not npc.is_empty():target=player.lerp(npc.p,.5)-Vector2(0,24)
 		if stage in ["to_edge","sit"]:target=(seats()[0]+seats()[1])/2-Vector2(0,34)
 		if stage=="restore":target=player.lerp(portal_position,.6)-Vector2(0,24)
@@ -426,7 +463,7 @@ func update_elevation(dt: float):
 			sound("mace_smash");shake=.2
 
 func start_dash(seconds: float, boosted: bool=false):
-	dash_left=seconds;dash_direction=facing;dash_hits.clear();rocket=boosted
+	dash_left=seconds;dash_direction=facing;dash_hits.clear();rocket=boosted;dash_serial+=1
 	invulnerable=maxf(invulnerable,seconds)
 	animation.strike(self,"spear",facing)
 
@@ -451,7 +488,30 @@ func block_hit(source: Vector2, projectile: Dictionary={}) -> bool:
 	if shield_charges<=0:shield_timer=db.stats("shield",build.shield,evolved.has("shield"),items).interval;sound("shield_break")
 	return true
 
+## Lasting speed of the hero against the base (sugar); slows and the glide do not count.
+func speed_scale() -> float:
+	return clampf(1.0+.08*items.get("sugar",0),1.0,1.6)
+
+func damage_player(amount: float):
+	var old: float=hp
+	super.damage_player(amount)
+	if hp<old:hit_grace=.65
+
+## A blow of EnderSteve. Leaping with the mace or gliding is no shelter; only the
+## grace after a hit, a pearl blink, a spear dash or falling off the island are.
+func boss_strike(source: Vector2, damage: float, unblockable: bool=false, projectile: Dictionary={}) -> bool:
+	if fall_age>=0 or dash_left>0 or hit_grace>0 or blink_grace>0 or hp<=0 or framed>0:return false
+	if int(duel.get("fight",1))==2 and duel.get("learned","")=="shield" and not unblockable:
+		unblockable=true
+		# Through the guard: a red flash where the shield would have held.
+		if build.has("shield") and shield_charges>0 and facing.dot(player.direction_to(source))>=.35:fx.flash(player,70.0,Color(1,.2,.2),.15);sound("shield_break",.1)
+	if not unblockable and block_hit(source,projectile):return false
+	var old: float=hp;invulnerable=0.0;damage_player(damage)
+	if hp<old:fx.burst(player-Vector2(0,12),false,false);fx.shove(self,source.direction_to(player),4.0,.15)
+	return hp<old
+
 func contact_hit(source: Vector2, damage: float, projectile: Dictionary={}) -> bool:
+	if framed>0:return false
 	if fall_age>=0 or dash_left>0 or invulnerable>0:return false
 	if block_hit(source,projectile):return false
 	var old=hp;damage_player(damage)
@@ -459,9 +519,10 @@ func contact_hit(source: Vector2, damage: float, projectile: Dictionary={}) -> b
 	return hp<old
 
 func spawn(kind: String, at=null) -> bool:
-	if kind=="endersteve":
+	# One body, many loops: never two of him at once, echo or final.
+	if kind in ["endersteve","endersteve_final"]:
 		for m in mobs:
-			if m.kind==kind and m.hp>0:return false
+			if m.kind in ["endersteve","endersteve_final"] and m.hp>0:return false
 	if kind in ["shulker","dispenser_enderman","endermite_brood"]:
 		var cap={"shulker":9,"dispenser_enderman":12,"endermite_brood":5}[kind]
 		if mobs.filter(func(m):return m.kind==kind and m.hp>0).size()>=cap:return false
@@ -471,23 +532,19 @@ func spawn(kind: String, at=null) -> bool:
 		m.boss=true;m.hp=db.data.mobs[kind].hp;m.max_hp=m.hp;m.timer=2.0
 	if kind=="arena_crystal":m.hp=180;m.max_hp=180;m.boss=false
 	if kind=="end_dragon":m.altitude=45.0;m.phase="circle";m.orbit=0.0;m.fire_tick=2.2;m.rush_tick=8.0;m.phase_two=false;m.burst_tick=0.0;m.dir=Vector2.RIGHT;m.pattern=0;m.volley=0
-	if kind=="endersteve_final":m.phase="walk";m.pattern=-1;m.burst_tick=0.0;m.rage=false
+	if kind=="endersteve_final":m.phase="walk";m.pattern=-1;m.burst_tick=0.0;m.rage=int(duel.get("fight",1))==2;m.charge=Vector2.DOWN;m.mark=m.p;m.altitude=0.0
 	if kind=="endersteve":say(ECHO_LINES[echo_count%ECHO_LINES.size()],3.0);echo_count+=1;sound("warning")
 	return true
 
 func hurt(m: Dictionary, amount: float, push: Vector2=Vector2.ZERO):
 	if m.kind=="end_dragon" and m.get("phase","")=="slump":amount*=1.5
-	# He guards while attacking: real damage lands in the openings he leaves.
-	# The most mobile boss (tester pack 13.11): outside his openings he slips most blows with a blink.
-	if m.kind=="endersteve_final" and m.hp>0 and m.phase not in ["pose","rage","rush","leap","skyfall","blink_chain"] and clock>=float(m.get("dodge_cd",0.0)):
-		m.dodge_cd=clock+(1.15 if m.get("rage",false) else 1.7)
-		var side: Vector2=player.direction_to(m.p).orthogonal()*(1.0 if int(clock*7.0)%2==0 else -1.0)
-		teleport_mob(m,(m.p+side*72.0+m.p.direction_to(player)*-20.0).clamp(END_ARENA.position+Vector2(40,40),END_ARENA.end-Vector2(40,40)))
-		fx.flash(m.p,60.0,Color(.8,.5,1),.12)
-		return
-	if m.kind=="endersteve_final" and m.phase not in ["pose","recover","walk","rage"]:
-		amount*=.35
-		if m.hp>0 and clock>=m.get("guard_fx",0.0):m.guard_fx=clock+.15;fx.ring(m.p-Vector2(0,10),12.0,.18,"thorns");sound("shield_block",.1)
+	# His guard, his blink and what he has learned decide what reaches him.
+	if m.kind=="endersteve_final":
+		amount=steve_boss.on_hurt(self,m,amount)
+		if amount<=0:return
+		if int(duel.get("fight",1))==1 and m.hp>0:
+			if not duel.has("dealt"):duel.dealt={}
+			duel.dealt[damage_owner]=float(duel.dealt.get(damage_owner,0.0))+minf(amount,m.hp)
 	if m.hp>0 and (m.kind!="end_dragon" or stage=="dragon"):fx.hit(self,m,amount,push,damage_owner)
 	if m.kind=="end_dragon":
 		if stage!="dragon":return
@@ -589,7 +646,7 @@ func hook_target(m: Dictionary, evolved_hook: bool):
 	var allowed=m.control_resist<=0
 	super.hook_target(m,evolved_hook)
 	if not allowed:return
-	if m.kind=="endersteve_final" and m.phase in ["windup","rush","cast","pursuit","cleave_windup"]:m.phase="recover";m.timer=.7;m.combo=0
+	if m.kind=="endersteve_final" and m.phase in ["windup","rush","cast","pursuit","cleave_windup","intercept","projection_stance","projection_preview","counter"]:m.phase="recover";m.timer=.7;m.combo=0
 	elif m.kind=="end_dragon" and m.phase in ["windup","rush"]:m.phase="circle";m.timer=3
 
 func update_end_poses(dt: float=0):
@@ -604,7 +661,12 @@ func update_end_poses(dt: float=0):
 			if m.pose_phase!=m.phase:m.pose_phase=m.phase;m.pose_age=0.0
 			else:m.pose_age+=dt
 			if m.teleport_cd>.48:animation.set_pose(m.visual,"teleport",maxf(0,.6*(m.teleport_cd-.48)/.22))
-			elif m.phase in ["windup","cleave_windup"]:animation.set_pose(m.visual,"windup",m.pose_age/m.get("windup_total",.8)*.16)
+			elif m.phase in ["windup","cleave_windup","counter","framed_strike","projection_stance"]:animation.set_pose(m.visual,"windup",minf(1,m.pose_age/maxf(.01,m.get("windup_total",.8)))*.16)
+			elif m.phase=="projection_preview":animation.set_pose(m.visual,"windup",.16)
+			elif m.phase in ["clock_wind","rewind"]:animation.set_pose(m.visual,"cast",fposmod(m.pose_age,1.0))
+			elif m.phase=="intercept":animation.set_pose(m.visual,"windup",minf(1,m.pose_age/maxf(.01,m.get("windup_total",.5)))*.16)
+			elif m.phase=="projection":animation.set_pose(m.visual,"slash",.3)
+			elif m.phase in ["winded","clock_broken"]:animation.set_pose(m.visual,"recover",.24)
 			elif m.phase=="cast":
 				if m.get("pattern",0)==1:animation.set_pose(m.visual,"slash",fposmod(m.pose_age,.6 if m.get("rage",false) else .8)/(.6 if m.get("rage",false) else .8)*.52)
 				elif m.get("pattern",0)==2:animation.set_pose(m.visual,"roar",m.pose_age)
@@ -619,7 +681,7 @@ func update_end_poses(dt: float=0):
 			elif m.phase=="pose":animation.set_pose(m.visual,"idle",0.0)
 			elif m.phase in ["blink_chain","echoes"]:animation.set_pose(m.visual,"cast",fposmod(m.pose_age,1.0))
 			elif m.phase=="skyfall":animation.set_pose(m.visual,"slash",.2)
-			m.visual_dir=m.charge if m.phase in ["windup","slash","rush","cleave_windup","cleave","leap"] else m.dir
+			m.visual_dir=m.charge if m.phase in ["windup","slash","rush","cleave_windup","cleave","leap","counter","framed_strike","projection","projection_preview"] else m.dir
 
 func update_attacks(dt: float):
 	var all=build;build={}
@@ -646,7 +708,7 @@ func update_attacks(dt: float):
 						if Geometry2D.get_closest_point_to_segment(m.p,player,player+aim*s.range).distance_to(m.p)<m.radius+10:hurt(m,s.damage*.8,aim*2)
 					add_effect("spear_thrust",player,.25,{"direction":aim,"range":s.range});sound("swing")
 			"mace":
-				if jump_age<0 and not rocket:jump_age=0;jump_stats=s;jump_height=0;sound("wind_burst")
+				if jump_age<0 and not rocket:jump_age=0;jump_stats=s;jump_height=0;air_serial+=1;sound("wind_burst")
 			"end_crystal":
 				var p=player+facing*34
 				if on_land(p):add_effect("placed_end_crystal",p,.85,{"stats":s,"triggered":false})
@@ -727,7 +789,7 @@ func update_projectiles(dt: float):
 		b.distance+=old.distance_to(b.p)
 		var dead=b.life<=0 or b.distance>b.range
 		if Geometry2D.get_closest_point_to_segment(player,old,b.p).distance_to(player)<9 and fall_age<0:
-			var landed=contact_hit(old,b.damage,b)
+			var landed=boss_strike(old,b.damage,false,b) if b.get("steve",false) else contact_hit(old,b.damage,b)
 			if landed:
 				if b.kind=="shulker_bullet":levitation=6
 				if b.kind=="slow_arrow":slow_time=3.5
@@ -750,7 +812,10 @@ func update_hazards(dt: float):
 			h.remaining-=dt;h.tick-=dt
 			if h.tick<=0:
 				h.tick=.45
-				if Geometry2D.get_closest_point_to_segment(player,h.p,h.end).distance_to(player)<h.radius+6 and jump_height+levitation_height<20:contact_hit(h.p,h.damage)
+				var near: bool=Geometry2D.get_closest_point_to_segment(player,h.p,h.end).distance_to(player)<h.radius+6
+				if h.get("steve",false):
+					if near:boss_strike(h.p,h.damage)
+				elif near and jump_height+levitation_height<20:contact_hit(h.p,h.damage)
 			if h.remaining<=0:hazards.remove_at(i)
 			continue
 		if not h.get("triggered",false):
@@ -760,7 +825,9 @@ func update_hazards(dt: float):
 		h.remaining-=dt;h.tick-=dt
 		if h.tick<=0:
 			h.tick+=.45
-			if player.distance_to(h.p)<h.radius and jump_height+levitation_height<20:contact_hit(h.p,h.damage)
+			if h.get("steve",false):
+				if player.distance_to(h.p)<h.radius:boss_strike(h.p,h.damage)
+			elif player.distance_to(h.p)<h.radius and jump_height+levitation_height<20:contact_hit(h.p,h.damage)
 		if h.remaining<=0:hazards.remove_at(i)
 
 func update_effects(dt: float):
@@ -770,6 +837,8 @@ func update_effects(dt: float):
 			if destination!=null:teleport_to(destination)
 		elif e.kind=="placed_end_crystal" and e.age+dt>.65 and not e.triggered:
 			e.triggered=true;damage_owner="end_crystal";end_blast(e.p,e.stats.radius,e.stats.damage,"crystal_blast")
+			# Kicked back by EnderSteve: the blast is his now.
+			if e.get("kicked",false) and player.distance_to(e.p)<float(e.stats.radius):boss_strike(e.p,steve_boss.HIT,true)
 			if evolved.has("end_crystal"):
 				for j in range(4):add_effect("end_aftershock",e.p+Vector2.from_angle(j*PI/2)*e.stats.radius*.7,.85+j*.1,{"radius":e.stats.radius*.6,"damage":e.stats.damage*.4,"triggered":false})
 		elif e.kind=="end_aftershock" and not e.triggered and e.age+dt>=e.total-.15:e.triggered=true;damage_owner="end_crystal";end_blast(e.p,e.radius,e.damage,"crystal_blast")
@@ -826,7 +895,9 @@ func resolve_deaths():
 				if t.id==m.id:t.alive=false
 			add_effect("crystal_blast",m.p,.8,{"radius":55.0});sound("explosion");fx.blast(self,m.p,40.0);fx.erupt(self,m.p,"stone",10)
 		elif m.kind=="end_dragon":dragon_dead=true;defeated_boss=m.duplicate(true)
-		elif m.kind=="endersteve_final":steve_dead=true;endsteve_corpse=m.duplicate(true)
+		elif m.kind=="endersteve_final":
+			# A death of the hero in the same frame wins: the duel restarts from its checkpoint.
+			if hp>0:steve_dead=true;endsteve_corpse=m.duplicate(true)
 		elif m.kind=="endersteve":loot.append({"kind":"chest","p":m.p,"born":time});add_effect("end_teleport",m.p,.7,{"radius":30.0});sound("end_teleport")
 		if m.kind not in ["arena_crystal","end_dragon","endersteve_final"]:fx.death(self,m)
 		# The foot was a free full heal every few kills; now rarer, with a pause between drops.
@@ -837,15 +908,72 @@ func resolve_deaths():
 		for pool in [mobs,projectiles,hazards,explosives,tnt_groups,effects,tasks,orbs,loot]:pool.clear()
 		rebuild_hit_grid();invulnerable=2;player_push=Vector2.ZERO;dash_left=0;rocket=false;jump_age=-1;jump_height=0
 		slow_time=0;poison_time=0;player_burn=0;player_wither=0;flight=0;levitation=0;levitation_height=0;levitation_velocity=0
-		stage="dragon_death" if dragon_dead else "clash";stage_age=0
+		stage="dragon_death" if dragon_dead else "clash";stage_age=0;framed=0.0
+		if steve_dead and int(duel.get("fight",1))==1:
+			# His first death is not the end: the loop takes him back.
+			stage="rebirth";duel.learned=learned_weapon();duel.style.top=duel.learned;invulnerable=end_boss.REBIRTH_END+1.0;hit_grace=invulnerable
+			sound("ch4_body_fall");fx.flash(endsteve_corpse.p,180.0,Color(.75,.4,1),.4);return
 		if dragon_dead:
 			sound("dragon_death");fx.quake(self,defeated_boss.p,3.0);fx.flash(defeated_boss.p,320.0,Color(.9,.6,1),.9);fx.ring(defeated_boss.p,200.0,1.2,"evolve")
 		else:
-			# Defeat is not death: he goes down on his knees and stays.
+			# Defeat is not death: one last exchange, his blade against the hero's own weapon.
 			npc={"p":endsteve_corpse.p,"dir":endsteve_corpse.visual_dir,"from":endsteve_corpse.p}
-			boss_victory_serial+=1
-			if hp>0:run_progress.finish(self)
+			boss_victory_serial+=1;duel.clash_weapon=top_held_weapon();stage="standoff"
 			sound("ch4_body_fall");sound("end_teleport")
+
+## Steve's weapon in the last exchange: what dealt the most in this chapter, held in the hand.
+const HELD:=["sword","axe","hoe","spear","mace","knockback_stick","shield","bow","crossbow","fishing"]
+func top_held_weapon() -> String:
+	var top:="sword";var best:=0.0
+	for id in damage_by:
+		if id in HELD and float(damage_by[id])>best:best=float(damage_by[id]);top=id
+	return top
+
+## What he learned from his first death: the weapon that hurt him most in fight one.
+const LEARNABLE:=["mace","spear","knockback_stick","end_crystal","dragon_breath","shield"]
+func learned_weapon() -> String:
+	var dealt: Dictionary=duel.get("dealt",{});var top:="";var best:=0.0
+	for id in dealt:
+		if float(dealt[id])>best:best=float(dealt[id]);top=id
+	if top in LEARNABLE:return top
+	var style: Dictionary=duel.style
+	if float(style.get("time",0.0))>0 and float(style.get("dist_sum",0.0))/float(style.time)>110.0:return "distance"
+	if int(style.get("glides",0))>=4:return "distance"
+	return "other"
+
+## The duel restarts here after a death or the bad ending.
+func save_duel_checkpoint(kind: String):
+	duel.checkpoint[kind]={"build":build.duplicate(true),"items":items.duplicate(true),"evolved":evolved.duplicate(true),"hp":maxf(hp,12.0),"cooldowns":cooldowns.duplicate(true),"damage_by":damage_by.duplicate(true),"adapt":duel.adapt.duplicate(true),"style":duel.style.duplicate(true),"learned":duel.get("learned",""),"dealt":duel.get("dealt",{}).duplicate(true),"framed":int(duel.get("framed",0))}
+
+func restore_duel_checkpoint(kind: String):
+	var c: Dictionary=duel.checkpoint.get(kind,duel.checkpoint.get("fight1",{}))
+	if c.is_empty():return
+	for pool in [mobs,projectiles,hazards,explosives,tnt_groups,effects,tasks,orbs,loot,particles,pixels]:pool.clear()
+	build=c.build.duplicate(true);items=c.items.duplicate(true);evolved=c.evolved.duplicate(true);cooldowns=c.cooldowns.duplicate(true);damage_by=c.damage_by.duplicate(true)
+	weapon_visuals.clear();attack_visuals.clear();broken_gear.clear();npc={};lines.clear();endsteve_corpse={};race={}
+	duel.adapt=c.adapt.duplicate(true);duel.style=c.style.duplicate(true);duel.learned=c.learned;duel.dealt=c.dealt.duplicate(true);duel.framed=c.framed
+	duel.fight=2 if kind=="fight2" else 1
+	hp=c.hp;framed=0.0;hitstop=0.0;shake=0.0;blink_grace=0.0;tracked_velocity=Vector2.ZERO;flight_cooldown=0;pearl_cooldown=0;rocket_cooldown=0;shell_cooldown=0;shield_guard=0;player_burn=0;player_wither=0;flight=0;rocket=false;dash_left=0;jump_age=-1;jump_height=0;fall_age=-1;levitation=0;levitation_height=0;levitation_velocity=0
+	slow_time=0;poison_time=0;player_push=Vector2.ZERO;shield_timer=0;shield_charges=int(db.stats("shield",build.shield,evolved.has("shield"),items).count) if build.has("shield") else 0
+	player=portal_position+Vector2(0,110);last_safe=player;facing=Vector2.UP;portal_lit=false;victory=false;state="RUNNING"
+	keepsake=false;hand_taken=false;end_complete=false;win_music=false
+	spawn("endersteve_final",betrayer_position());invulnerable=3.5;hit_grace=3.5
+	stage="last_arrival";stage_age=0;rebuild_hit_grid()
+
+func retry_duel():
+	restore_duel_checkpoint("fight2" if int(duel.get("fight",1))==2 and duel.checkpoint.has("fight2") and stage!="bad_card" else "fight1")
+
+func fall_in_duel():
+	for pool in [mobs,projectiles,hazards,explosives,tnt_groups,tasks]:pool.clear()
+	framed=0.0;hp=0;stage="fallen";stage_age=0;sound("death");shake=.4
+
+## Fight one is watched: how far the hero keeps, how often he glides or blinks.
+func track_duel(dt: float):
+	if stage!="last_duel" or int(duel.get("fight",1))!=1:return
+	for m in mobs:
+		if m.kind=="endersteve_final" and m.hp>0:
+			duel.style.dist_sum=float(duel.style.get("dist_sum",0.0))+player.distance_to(m.p)*dt
+			duel.style.time=float(duel.style.get("time",0.0))+dt
 
 func begin_arena():
 	time=db.data.duration;stage="departure";stage_age=0;invulnerable=3;message_timer=0

@@ -7,6 +7,7 @@ const PURPLE=Color("bf82e6")
 const Lighting=preload("res://scripts/ui/lighting.gd")
 const Atmosphere=preload("res://scripts/ui/atmosphere.gd")
 const FxView=preload("res://scripts/chapter_four_fx_view.gd")
+const SteveView=preload("res://scripts/end_steve_view.gd")
 var dragon_meta: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/end_dragon.json"))
 
 func world(g):
@@ -25,7 +26,7 @@ func world(g):
 		var p: Vector2=h.p+offset;var alpha=.4+.35*(1-h.wait/h.get("total",1))
 		if h.get("kind","")=="end_cut":
 			var end: Vector2=h.end+offset
-			Tells.lane(g,p.floor(),end.floor(),h.radius,1-h.wait/h.get("total",1),int(h.p.x+h.p.y),w.clock)
+			SteveView.dots_line(g,p,end,1-h.wait/h.get("total",1),w.clock,h.radius)
 			if h.get("echo",false):
 				g.draw_actor("endersteve_final",p,p.direction_to(end),0,false,Color(.7,.4,1,.4),"windup",1,{"state":"windup","time":.16*(1-h.wait/h.total)})
 			continue
@@ -86,9 +87,11 @@ func world(g):
 						var q=hand+Vector2.from_angle(j*PI/2+g.world.clock*2)*(9+sin(g.world.clock*5)*2)
 						g.draw_line(q-m.dir.orthogonal()*2,q+m.dir.orthogonal()*2,Color(.8,.4,1,.6),1)
 				if m.phase=="windup" and m.kind=="endersteve_final" and m.get("pattern",0) in [0,3]:
-					var v: Vector2=m.charge;Tells.lane(g,p.floor(),(p+v*160).floor(),9.0,1.0-m.timer/maxf(.01,m.get("windup_total",.85)),int(m.id),g.world.clock)
+					var v: Vector2=m.charge;SteveView.dots_line(g,p,p+v*160,1.0-m.timer/maxf(.01,m.get("windup_total",.85)),g.world.clock,9.0)
 				if m.phase=="cleave_windup":
-					Tells.claws(g,p.floor(),m.charge,70.0,1.0-m.timer/.65,int(m.id),g.world.clock)
+					SteveView.dots_arc(g,p,m.charge,70.0,1.0-m.timer/maxf(.01,m.get("windup_total",.65)),g.world.clock)
+				if m.phase=="counter":
+					SteveView.dots_arc(g,p,m.charge,46.0,1.0-m.timer/maxf(.01,m.get("windup_total",.35)),g.world.clock)
 			"player":player(g,offset)
 			"landmark":
 				var q: Vector2=a.obj.p+offset
@@ -105,9 +108,10 @@ func world(g):
 	for b in w.projectiles:
 		if not projectile(g,b,offset):g.draw_projectile(b,offset)
 	if not w.echo.is_empty():echo_scene(g,offset)
+	if w.stage=="last_duel":SteveView.fight_world(g,self,offset)
 	FxView.air_layer(g,offset)
 	for e in w.effects:
-		if e.kind in ["friendly_breath","dragon_cloud"]:continue
+		if e.kind in ["friendly_breath","dragon_cloud","steve_loop_ghost","frame_shatter"]:continue
 		if not effect(g,e,offset) and not g.nether_renderer.effect(g,e,offset):g.draw_effect(e,offset)
 	for pool in [w.particles,w.pixels]:
 		for p in pool:g.draw_rect(Rect2((p.p+offset).floor(),Vector2.ONE*p.get("size",2)),Color(p.color,clampf(p.life/.2,0,1)))
@@ -247,8 +251,9 @@ func player(g, offset: Vector2):
 	var w=g.world;var p: Vector2=w.player+offset
 	if w.stage=="hand_pickup":
 		pose(g,"end_player_pickup",p,w.facing,clampf(w.stage_age/.6,0,1));return
-	if w.stage=="sit" or (w.stage=="to_edge" and w.player==w.seats()[1]) or (w.stage=="restore" and w.stage_age<1.0):
+	if w.stage=="sit" or (w.stage=="to_edge" and w.player==w.seats()[1]):
 		seated(g,"steve",p,w.clock);return
+	if w.stage in ["sword_race","bad_card"]:return
 	if w.stage in ["clash","down"] and not w.npc.is_empty():
 		brawler(g,"steve",p,w.facing,w.npc.get("side",Vector2.RIGHT).x,0.0);return
 	if w.stage=="exit_jump":
@@ -311,7 +316,7 @@ func portal(g, offset: Vector2):
 	var w=g.world
 	if w.stage in ["dragon_arrival","dragon","departure"]:return
 	var p: Vector2=w.portal_position+offset
-	var broken=w.stage in ["last_arrival","last_duel","endsteve_death","yield","approach","clash","down","to_edge","sit"] or (w.stage=="betrayal" and w.stage_age>=w.end_boss.BETRAYAL_IMPACT) or (w.stage=="restore" and w.stage_age<3.6)
+	var broken=w.stage in ["last_arrival","last_duel","endsteve_death","yield","approach","clash","down","to_edge","sit","rebirth","fallen","standoff","sword_race","mercy","bad_end","bad_card","talk"] or (w.stage=="betrayal" and w.stage_age>=w.end_boss.BETRAYAL_IMPACT) or (w.stage=="restore" and w.stage_age<3.6)
 	for y in range(-2,3):
 		for x in range(-2,3):
 			if x*x+y*y>6:continue
@@ -438,7 +443,7 @@ func effect(g, e: Dictionary, offset: Vector2) -> bool:
 
 func cinematic(g, offset: Vector2):
 	var w=g.world;var a: float=w.stage_age
-	if w.stage=="betrayal":g.draw_rect(Rect2(0,0,640,360),Color(.04,0,.06,.18+sin(clampf(a/6.4,0,1)*PI)*.3))
+	if w.stage=="betrayal":g.draw_rect(Rect2(0,0,640,360),Color(.04,0,.06,.18+sin(clampf(a/(w.end_boss.BETRAYAL_IMPACT+3.0),0,1)*PI)*.3))
 	elif w.stage=="endsteve_death":g.draw_rect(Rect2(0,0,640,360),Color(.03,0,.05,sin(clampf(a/7.6,0,1)*PI)*.42))
 	if w.stage=="dragon_death" and not w.defeated_boss.is_empty():
 		var m=w.defeated_boss.duplicate(true);m.altitude=32+a*10
@@ -448,12 +453,14 @@ func cinematic(g, offset: Vector2):
 			var angle=j*2.39996+a*.13;var r=(35+j%5*13)*smoothstep(0,2.5,a);var dir=Vector2.from_angle(angle)
 			g.draw_colored_polygon(PackedVector2Array([p,p+dir*r+dir.orthogonal()*5,p+dir*r-dir.orthogonal()*5]),Color(.8,.45,1,sin(clampf(a/4.5,0,1)*PI)*.35))
 	if w.stage=="betrayal":betrayal(g,offset,a)
+	if w.stage=="rebirth":SteveView.rebirth(g,self,offset)
+	if w.stage=="last_duel":SteveView.fight_screen(g)
 	if w.stage=="sit":closeup(g,a)
-	if w.stage in ["clash","down"] and not w.npc.is_empty():brawl_close(g,a)
+	if w.stage in CLOSE_STAGES and not w.npc.is_empty():brawl_close(g,a)
 	if w.stage=="dragon_arrival":title_card(g,a,"ЭНДЕР-ДРАКОН","хозяин этого острова")
-	var close_shot: bool=(w.stage=="sit" and a>=.6 and a<=w.end_boss.SIT_LENGTH-.6) or w.stage in ["clash","down"]
+	var close_shot: bool=(w.stage=="sit" and a>=.6 and a<=w.end_boss.SIT_LENGTH-.6) or w.stage in CLOSE_STAGES or w.stage in ["sword_race","bad_card"]
 	if not w.npc.is_empty() and not close_shot:ender_npc(g,offset)
-	if w.stage in ["end_arrival","departure","dragon_arrival","dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump","yield","clash","down","to_edge","sit","restore"]:
+	if w.stage in ["end_arrival","departure","dragon_arrival","dragon_death","betrayal","last_arrival","endsteve_death","rekindle","exit_jump","yield","clash","down","to_edge","sit","restore","rebirth","sword_race"]:
 		var bars=18.0
 		if w.stage in ["dragon_arrival","last_arrival","end_arrival"]:bars*=1-smoothstep(1,3.9 if w.stage=="dragon_arrival" else 2.2,a)
 		if w.stage=="endsteve_death":bars*=1-smoothstep(6.6,7.6,a)
@@ -466,6 +473,9 @@ func cinematic(g, offset: Vector2):
 		if w.stage=="end_arrival" and a>.6:g.centered("Глава III · Край",95,16,Color(1,1,1,1-smoothstep(1.7,2.5,a)),true)
 	elif w.stage=="exit_jump":g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,smoothstep(2.2,3.4,a)))
 	subtitles(g)
+	if w.stage=="fallen":SteveView.fallen(g)
+	if w.stage=="sword_race":SteveView.race_close(g,self);SteveView.race_ui(g)
+	if w.stage=="bad_card":SteveView.bad_card(g)
 
 func hud(g):
 	var w=g.world
@@ -475,7 +485,8 @@ func hud(g):
 		# His name settles only after a moment: first he is just Steve.
 		if m.kind=="endersteve_final" and w.stage=="last_duel" and w.stage_age<3.0:
 			title="Стив" if w.stage_age<1.4 or int(w.clock*30)%5==0 else "ЭндерСтив"
-		BossBar.draw(g,title,m.hp/m.max_hp,Color("9b739a"),m.kind)
+		BossBar.draw(g,title,m.hp/m.max_hp,Color("9b739a"),m.kind+str(w.duel.get("fight",1)))
+		if m.kind=="endersteve_final":SteveView.hud(g,m)
 		if m.kind=="end_dragon":
 			var count=w.crystals.filter(func(t):return t.alive).size()
 			for i in range(6):g.sprite("icon_end_crystal",Vector2(294+i*9,58),Vector2(7,7),Color.WHITE if i<count else Color(.2,.2,.2))
@@ -579,9 +590,42 @@ func brawl_assets(g) -> Dictionary:
 		if not g.textures.has(name):g.load_texture(name)
 	return brawl_data
 
-## Which baked pose each of them is in at this moment of the scene.
+## Close-up scenes drawn on the brawl atlases (2026-11-14 finale).
+const CLOSE_STAGES:=["standoff","clash","down","mercy","bad_end","talk"]
+
+## Which baked pose each of them is in at this moment of the scene: [name, time, loop].
 func brawl_pose(w, ender: bool) -> Array:
 	var e=w.end_boss;var a: float=w.stage_age
+	match w.stage:
+		"standoff":return ["stance",a+(.3 if ender else 0.0),true]
+		"mercy":
+			var why: float=e.MERCY_MARKS.why;var raise: float=why-e.RAISE_BEFORE
+			if ender:
+				var rise: float=e.MERCY_MARKS.rise
+				if a<1.2:return ["kneel",a,true]
+				if a<rise:
+					for l in e.MERCY_LINES:
+						if l[3]=="ender" and a>=l[0] and a<l[0]+l[2]:return ["lying_talk",a,true]
+					return ["lie_wait",a,true]
+				if a<rise+1.9:return ["getup",(a-rise)*.85,false]
+				return ["spent",a,true]
+			if a<raise:return ["hold",a,true]
+			if a<raise+e.RAISE_HOLD:return ["raise_over",a,true]
+			if a<raise+e.RAISE_HOLD+e.LOWER_TIME:return ["lower",(a-raise-e.RAISE_HOLD)/e.LOWER_TIME*.6,false]
+			# He turns his back on the blow he did not strike; the chains breaking turn him round.
+			if a<e.MERCY_MARKS.free:return ["idle",a*.5,true,true]
+			return ["idle",a*.5,true]
+		"bad_end":
+			if not ender:return ["kneel",a,true]
+			if a<.6:return ["grab",a*5,false]
+			if a<e.BAD_RAISE:return ["hold",a,true]
+			if a<e.BAD_STRIKE:return ["bad_strike",(a-e.BAD_RAISE)/(e.BAD_STRIKE-e.BAD_RAISE)*.2,false]
+			return ["bad_strike",.2+(a-e.BAD_STRIKE)*3,false]
+		"talk":
+			if ender and a>=e.SIT_MARKS.delete and a<e.SIT_MARKS.delete+2.4:return ["clutch",a,true]
+			for l in e.SIT_LINES:
+				if (l[3]=="ender")==ender and a>=l[0] and a<l[0]+l[2]:return ["gesture",a*.7,true]
+			return ["idle",a*.5+(.4 if ender else 0.0),true]
 	if w.stage=="clash":
 		var hits: Array=e.CLASH_HITS+[e.CLASH_BREAK]
 		if a<hits[0]-.25:return ["guard",a,true]
@@ -606,7 +650,8 @@ func brawl_pose(w, ender: bool) -> Array:
 func brawl_fig(g, sheet: String, pose: Array, p: Vector2, flip: bool, S: float):
 	var d: Dictionary=brawl_assets(g)
 	var clip: Dictionary=d.poses[pose[0]]
-	var fps: float=4.0 if pose[0] in ["lying","lying_talk","spent","guard","clang"] else 10.0
+	# Calm poses breathe slowly; a two-frame loop at speed reads as twitching.
+	var fps: float=1.3 if pose[0] in ["spent","stance","hold","kneel","lie_wait","raise_over","idle","gesture","lying"] else 4.0 if pose[0] in ["lying_talk","guard","clang","clutch"] else 14.0 if pose[0]=="run" else 10.0
 	var index: int=int(pose[1]*fps)
 	index=index%int(clip.count) if pose[2] else clampi(index,0,int(clip.count)-1)
 	var size:=Vector2(d.frame[0],d.frame[1]);var anchor:=Vector2(d.anchor[0],d.anchor[1])
@@ -615,10 +660,8 @@ func brawl_fig(g, sheet: String, pose: Array, p: Vector2, flip: bool, S: float):
 	g.draw_texture_rect_region(g.textures[sheet],Rect2(-anchor,size),Rect2((int(clip.start)+index)*size.x,0,size.x,size.y))
 	g.draw_set_transform(Vector2.ZERO)
 
-func brawl_close(g, a: float):
-	var w=g.world;var e=w.end_boss;var S:=BRAWL_CLOSE
-	var mid: Vector2=(w.player+w.npc.p)/2
-	var c:=Vector2(320,250)
+## End stone under a close shot centred on `mid`, at scale S.
+func close_floor(g, mid: Vector2, S: float, c: Vector2=Vector2(320,250)):
 	var tile: Texture2D=g.textures.get("end_stone_tile")
 	var origin: Vector2=c-mid*S
 	if tile:
@@ -632,14 +675,60 @@ func brawl_close(g, a: float):
 			y+=step
 	else:g.draw_rect(Rect2(0,0,640,360),Color(.86,.85,.62))
 	g.draw_rect(Rect2(0,0,640,360),Color(.05,0,.08,.25))
+
+## The camera of the close-up scenes: [centre in world space, scale, shot id].
+## Pushes in on tension, cuts to the speaker in the talk, holds wide on the exchange.
+func close_shot(w, a: float) -> Array:
+	var e=w.end_boss;var both: Vector2=(w.player+w.npc.p)/2
+	match w.stage:
+		"standoff":return [both,lerpf(2.6,3.4,smoothstep(0,e.STANDOFF_LENGTH,a)),"standoff"]
+		"mercy":
+			var raise: float=e.MERCY_MARKS.why-e.RAISE_BEFORE
+			if a<raise-.8:return [both,3.0+a*.03,"mercy_wide"]
+			if a<raise+e.RAISE_HOLD:return [both-Vector2(0,10),3.9,"mercy_raise"]
+			if a<e.MERCY_MARKS.free:return [both.lerp(w.player,.3)-Vector2(0,6),3.3,"mercy_turn"]
+			if a<e.MERCY_MARKS.rise:return [both.lerp(w.npc.p,.35),3.6,"mercy_free"]
+			return [both,3.0,"mercy_rise"]
+		"talk":
+			var gone: float=e.SIT_MARKS.delete;var gift: float=e.SIT_MARKS.gift
+			if a>=gone and a<gone+2.4:return [w.npc.p-Vector2(0,10),4.6,"delete"]
+			if a>=gift-.3 and a<gift+1.6:return [both,3.0,"gift"]
+			for l in e.SIT_LINES:
+				if a>=l[0] and a<l[0]+l[2] and float(l[2])>=2.6:
+					var who: Vector2=w.npc.p if l[3]=="ender" else w.player
+					return [who.lerp(both,.3)-Vector2(0,8),3.9+(a-l[0])*.04,"talk_%d"%int(l[0]*10)]
+			return [both,3.0,"talk_wide"]
+		"bad_end":
+			if a<e.BAD_STRIKE:return [both,lerpf(3.0,3.6,smoothstep(e.BAD_LINE_AT,e.BAD_STRIKE,a)),"bad"]
+			return [w.player.lerp(both,.4),3.8,"bad_strike"]
+	return [both,BRAWL_CLOSE,w.stage]
+
+var cam_state: Dictionary={}
+
+func brawl_close(g, a: float):
+	var w=g.world;var e=w.end_boss
+	var shot: Array=close_shot(w,a)
+	var dt: float=clampf(w.clock-float(cam_state.get("clock",w.clock)),0,.1)
+	# A new stage or a new speaker is a cut; inside a shot the camera glides.
+	if cam_state.get("shot","")!=shot[2] and (w.stage=="talk" or cam_state.get("stage","")!=w.stage) or cam_state.is_empty():
+		cam_state={"mid":shot[0],"S":shot[1]}
+	else:
+		var k: float=1.0-exp(-dt*2.4)
+		cam_state.mid=Vector2(cam_state.mid).lerp(shot[0],k);cam_state.S=lerpf(float(cam_state.S),float(shot[1]),k)
+	cam_state.shot=shot[2];cam_state.stage=w.stage;cam_state.clock=w.clock
+	var S: float=cam_state.S
+	var mid: Vector2=cam_state.mid
+	if w.stage=="talk" and a>=e.SIT_MARKS.delete and a<e.SIT_MARKS.delete+.6 and g.settings.shake:mid+=Vector2(sin(w.clock*80),cos(w.clock*67))*1.5
+	var c:=Vector2(320,250)
+	close_floor(g,mid,S,c)
 	var side: float=w.npc.get("side",Vector2.RIGHT).x
 	var steve: Vector2=c+(w.player-mid)*S;var ender: Vector2=c+(w.npc.p-mid)*S
 	var sp: Array=brawl_pose(w,false);var ep: Array=brawl_pose(w,true)
-	for who in [[steve,sp,side,"ch3_brawl_steve"],[ender,ep,-side,"ch3_brawl_ender"]]:
-		var lying: bool=who[1][0] in ["lying","lying_talk","fall","getup"]
+	for who in [[steve,sp,side],[ender,ep,-side]]:
+		var lying: bool=who[1][0] in ["lying","lying_talk","fall","getup","lie_wait"]
 		g.oval(who[0]+Vector2(-who[2]*(14 if lying else 0),2)*S/3,Vector2(26 if lying else 16,5)*S/3,Color(0,0,0,.3))
 	# The broken blades, where they landed.
-	if w.stage=="down" or a>e.CLASH_BREAK+.6:
+	if w.stage=="down" or (w.stage=="clash" and a>e.CLASH_BREAK+.6):
 		if not g.textures.has("icon_sword_iron"):g.load_texture("icon_sword_iron")
 		var tex=g.textures.get("icon_sword_iron")
 		if tex:
@@ -647,18 +736,53 @@ func brawl_close(g, a: float):
 				g.draw_set_transform((c+Vector2(k*20,10)*S/3*2.2).floor(),k*.7+.3,Vector2.ONE*S*.8)
 				g.draw_texture_rect_region(tex,Rect2(-5,-5,9,9),Rect2(0,7,9,9),Color(.85,.85,.85))
 				g.draw_set_transform(Vector2.ZERO)
-	brawl_fig(g,"ch3_brawl_ender",ep,ender,side<0,S)
-	brawl_fig(g,"ch3_brawl_steve",sp,steve,side>0,S)
-	var gear_age: float=a-e.CLASH_BREAK if w.stage=="clash" else a+(e.CLASH_LENGTH-e.CLASH_BREAK)
-	if gear_age>=0:gear_debris(g,steve,gear_age,S)
-
-	if not ep[0] in ["clang","guard","windup","strike"]:end_particles(g,ender-Vector2(0,30),w.clock,4,10,30)
+	# Before he picks it up, the last sword still lies at his feet.
+	if w.stage=="bad_end" and a<.35:
+		if not g.textures.has("icon_sword_iron"):g.load_texture("icon_sword_iron")
+		var tex=g.textures.get("icon_sword_iron")
+		if tex:
+			g.draw_set_transform((ender+Vector2(side*10,2)*S).floor(),.6,Vector2.ONE*S*.7);g.draw_texture_rect(tex,Rect2(-8,-8,16,16),false);g.draw_set_transform(Vector2.ZERO)
+	# Steve holds the weapon he used most; after the clash only the iron sword.
+	var steve_sheet:="ch3_brawl_steve"
+	if w.stage in ["standoff","clash"]:steve_sheet=String(brawl_assets(g).get("weapons",{}).get(w.duel.get("clash_weapon","sword"),"ch3_brawl_steve"))
+	if not g.textures.has(steve_sheet):g.load_texture(steve_sheet)
+	if w.stage=="mercy":mercy_light(g,steve,ender,a,S)
+	brawl_fig(g,"ch3_brawl_ender",ep,ender,(side<0)!=(ep.size()>3 and ep[3]),S)
+	brawl_fig(g,steve_sheet,sp,steve,(side>0)!=(sp.size()>3 and sp[3]),S)
+	if w.stage=="clash":
+		var gear_age: float=a-e.CLASH_BREAK
+		if gear_age>=0:gear_debris(g,steve,gear_age,S)
+	if not ep[0] in ["clang","guard","windup","strike","stance"]:end_particles(g,ender-Vector2(0,30),w.clock,4,10,30)
 	if w.stage=="down":chains(g,ender,a-e.DOWN_MARKS.free,S)
+	if w.stage=="mercy":chains(g,ender,a-e.MERCY_MARKS.free,S)
+	if w.stage=="talk":
+		var gone: float=e.SIT_MARKS.delete
+		if a>gone:glitch_over(g,ender-Vector2(0,40),Vector2(22,40),clampf((a-gone)/(e.SIT_LENGTH-gone),.25,1.0),73)
+		var gift: float=e.SIT_MARKS.gift
+		if a>gift and a<gift+1.4:
+			var k: float=smoothstep(gift,gift+1.0,a)
+			g.item_icon("ender_eye",ender.lerp(steve,k)-Vector2(8,60+sin(k*PI)*20),2,false)
 	if w.stage=="clash":clash_sparks(g,(steve+ender)/2-Vector2(0,30*S/3*1.6),S/1.5)
+	if w.stage=="bad_end" and a>=e.BAD_STRIKE and a<e.BAD_STRIKE+.1 and g.settings.flashes:g.draw_rect(Rect2(0,0,640,360),Color(1,.15,.15,.6))
 	var black: float=0.0
-	if w.stage=="clash":black=1-smoothstep(0,.3,a)
-	else:black=smoothstep(e.DOWN_LENGTH-.5,e.DOWN_LENGTH-.05,a)
+	match w.stage:
+		"clash":black=1-smoothstep(0,.3,a)
+		"standoff":black=1-smoothstep(0,.5,a)
+		"down":black=smoothstep(e.DOWN_LENGTH-.5,e.DOWN_LENGTH-.05,a)
+		"mercy":black=maxf(1-smoothstep(0,.4,a),smoothstep(e.MERCY_LENGTH-.6,e.MERCY_LENGTH-.05,a))
+		"bad_end":black=smoothstep(e.BAD_STRIKE+.1,e.BAD_STRIKE+.6,a)
+		"talk":black=maxf(1-smoothstep(0,.6,a),smoothstep(e.SIT_LENGTH-.6,e.SIT_LENGTH-.05,a))
 	if black>0:g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,black))
+
+## Steve's sword over him: the light narrows to the two of them, the heart is heard.
+func mercy_light(g, steve: Vector2, ender: Vector2, a: float, S: float):
+	var e=g.world.end_boss;var raise: float=e.MERCY_MARKS.why-e.RAISE_BEFORE
+	var k: float=smoothstep(raise-.4,raise+.3,a)*(1-smoothstep(raise+e.RAISE_HOLD,raise+e.RAISE_HOLD+1.2,a))
+	if k<=0:return
+	var pulse: float=.5+.5*sin((a-raise)*TAU/.62)
+	g.draw_rect(Rect2(0,0,640,360),Color(0,0,0,.35*k))
+	var mid: Vector2=(steve+ender)/2-Vector2(0,20)
+	for j in range(24):g.draw_arc(mid,84+j*9+pulse*4,0,TAU,64,Color(0,0,0,.035*k*(1+j*.08)),9)
 
 ## Sparks where the blades meet, then the iron flying apart.
 func clash_sparks(g, mid: Vector2, S: float=1.0):
@@ -699,7 +823,7 @@ func ender_npc(g, offset: Vector2):
 			seated(g,"endersteve_final",p,w.clock+1.3)
 			end_particles(g,p-Vector2(0,4),w.clock,6,5,10)
 		"restore":
-			if a<.5:seated(g,"endersteve_final",p,w.clock);glitch_over(g,p-Vector2(0,14),Vector2(9,14),.8,73);return
+			if a<.5:g.draw_actor("endersteve_final",p,Vector2.DOWN,w.clock,false,Color.WHITE,"idle",1,{"state":"idle","time":0.0});glitch_over(g,p-Vector2(0,14),Vector2(9,14),.8,73);return
 			if a<2.0:
 				g.draw_actor("endersteve_final",p,n.dir,w.clock*1.6,true,Color.WHITE,"walk",1,{"state":"walk","time":w.clock*1.6})
 				glitch_over(g,p-Vector2(0,14),Vector2(9,14),.8,73);return
@@ -736,7 +860,7 @@ func ender_npc(g, offset: Vector2):
 
 ## The chapter looks finished; he breaks the way out and the end card with it.
 func betrayal(g, offset: Vector2, a: float):
-	var w=g.world;var impact: float=w.end_boss.BETRAYAL_IMPACT
+	var w=g.world;var impact: float=w.end_boss.BETRAYAL_IMPACT;var raise: float=impact-1.6
 	var p: Vector2=w.betrayer_position()+offset
 	var card: float=smoothstep(.2,1.2,a)*(1-smoothstep(impact,impact+.02,a))
 	if card>0:
@@ -744,20 +868,20 @@ func betrayal(g, offset: Vector2, a: float):
 		g.centered("ГЛАВА III ПРОЙДЕНА",112,16,Color(1,.92,.7,card),true)
 		var rect:=Rect2(234,246,172,26)
 		var shake:=Vector2.ZERO
-		if a>2.6:shake=Vector2(sin(w.clock*70),cos(w.clock*53))*smoothstep(2.6,impact,a)*2
+		if a>raise:shake=Vector2(sin(w.clock*70),cos(w.clock*53))*smoothstep(raise,impact,a)*2
 		g.draw_style_box(g.button_styles[1 if int(w.clock*2)%2==0 else 0],Rect2(rect.position+shake,rect.size))
 		var label:="Продолжить"
 		var width: float=g.bold.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,8).x
 		g.text_at(label,rect.position+shake+Vector2((rect.size.x-width)/2,17),8,Color(1,1,1,card),true)
 	if a>=1.6:
 		var arrival: float=smoothstep(1.6,2.1,a)
-		var pose_name: String="teleport" if a<2.1 else "idle" if a<2.6 else "windup" if a<impact else "slash" if a<impact+.5 else "recover" if a<5.0 else "idle"
-		var pose_time: float=(1-arrival)*.6 if a<2.1 else 0.0 if a<2.6 else clampf((a-2.6)/(impact-2.6),0,1)*.16 if a<impact else clampf((a-impact)/.5,0,1)*.52 if a<impact+.5 else .24
-		var facing: Vector2=Vector2.DOWN if a<2.6 or a>5.0 else Vector2.UP
-		end_particles(g,p,w.clock,6,30,26+smoothstep(2.6,impact,a)*30)
+		var pose_name: String="teleport" if a<2.1 else "idle" if a<raise else "windup" if a<impact else "slash" if a<impact+.5 else "recover" if a<impact+1.6 else "idle"
+		var pose_time: float=(1-arrival)*.6 if a<2.1 else 0.0 if a<raise else clampf((a-raise)/(impact-raise),0,1)*.16 if a<impact else clampf((a-impact)/.5,0,1)*.52 if a<impact+.5 else .24
+		var facing: Vector2=Vector2.DOWN if a<raise or a>impact+1.6 else Vector2.UP
+		end_particles(g,p,w.clock,6,30,26+smoothstep(raise,impact,a)*30)
 		g.draw_actor("endersteve_final",p-Vector2(0,(1-arrival)*30),facing,a,false,Color(1,1,1,arrival),pose_name,1,{"state":pose_name,"time":pose_time})
-		if a>2.6 and a<impact:
-			var strength: float=smoothstep(2.6,impact,a)
+		if a>raise and a<impact:
+			var strength: float=smoothstep(raise,impact,a)
 			for j in range(12):
 				var q: Vector2=p-Vector2(0,20)+Vector2.from_angle(j*2.39996+w.clock*.3)*(70*(1-strength)+10)
 				g.draw_line(q,q.move_toward(p-Vector2(0,22),8),Color(.85,.5,1,strength*.7),1)

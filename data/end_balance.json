@@ -309,9 +309,9 @@
       "radius": 28
     },
     "endersteve_final": {
-      "hp": 6500,
+      "hp": 9000,
       "speed": 56,
-      "damage": 7,
+      "damage": 5,
       "xp": 0,
       "radius": 6
     },

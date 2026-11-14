@@ -73,6 +73,8 @@
     "end_duel_leap",
     "end_finale_death",
     "end_teaser_ground",
-    "end_chapter_title"
+    "end_chapter_title",
+    "ch3_clock_face",
+    "ch3_clock_gear"
   ]
 }

@@ -59,6 +59,7 @@ func ensure(g, which: String, size: Vector2i):
 		"chair":build_chair()
 		"flight":build_flight()
 		"portal":build_portal()
+		"teaser":build_teaser()
 		_:build_quake()
 
 func release():
@@ -1547,3 +1548,191 @@ func beer_can() -> Node3D:
 	var prop: Node3D=load("res://assets/models/ch5_beer_can.glb").instantiate()
 	scene.add_child(prop)
 	return prop
+
+# ------------------------------------------------------------------ IV -> V: arrival in the source code
+
+## A material from a vanilla block texture (not baked into assets/sprites).
+func block_mat(name: String, emission := 0.0) -> StandardMaterial3D:
+	var key: String = "block|%s|%s" % [name, emission]
+	if cache.has(key):return cache[key]
+	var m := StandardMaterial3D.new()
+	var t: Texture2D = load("res://assets/minecraft/textures/block/%s.png" % name)
+	m.albedo_texture = t;m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	m.uv1_scale = Vector3(1, 1, 1)
+	if t != null and t.get_height() > t.get_width():m.uv1_scale = Vector3(1, float(t.get_width()) / t.get_height(), 1)
+	if emission > 0:m.emission_enabled = true;m.emission_texture = t;m.emission_energy_multiplier = emission
+	cache[key] = m
+	return m
+
+func paper_grid() -> ImageTexture:
+	var img := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	img.fill(Color(.95, .955, .97))
+	for i in range(32):
+		img.set_pixel(i, 0, Color(.84, .86, .9));img.set_pixel(0, i, Color(.84, .86, .9))
+		if i % 8 == 0:
+			for j in range(1, 32, 4):img.set_pixel(i, j, Color(.9, .91, .94))
+	return ImageTexture.create_from_image(img)
+
+## Steve falls out of a white sky into an endless page of code.
+func build_teaser():
+	var e := room(Color(.975, .98, .99), Color(.9, .93, 1), .62)
+	e.fog_enabled = true;e.fog_light_color = Color(.975, .98, .99);e.fog_density = .034;e.fog_sky_affect = 0.0
+	e.glow_enabled = true;e.glow_intensity = .55;e.glow_bloom = .05;e.glow_hdr_threshold = 1.1
+	var sun := DirectionalLight3D.new();sun.rotation = Vector3(-1.05, .55, 0);sun.light_energy = 1.15;sun.shadow_enabled = true;sun.shadow_opacity = .55
+	sun.directional_shadow_max_distance = 30.0;scene.add_child(sun)
+	omni(Vector3(0, 2.5, 2.5), Color(.7, 1, .95), .9, 7)
+	var floor := MeshInstance3D.new();var pm := PlaneMesh.new();pm.size = Vector2(240, 240);floor.mesh = pm
+	var fm := StandardMaterial3D.new();fm.albedo_texture = paper_grid();fm.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+	fm.uv1_scale = Vector3(240, 240, 1);fm.roughness = .9;floor.material_override = fm;scene.add_child(floor)
+	var code: Array = JSON.parse_string(FileAccess.get_file_as_string("res://data/chapter_five_code.json")).lines
+	nodes.code = code
+	# code printed on the floor, a page that goes on forever
+	var flats: Array = []
+	for i in range(56):
+		var l := label(code[(i * 7) % code.size()], Vector3.ZERO, 32, Color(.34, .38, .48, .75), .0105)
+		l.rotation = Vector3(-PI / 2, 0, 0);l.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		var col: int = i % 4;var row: int = i / 4
+		l.position = Vector3(-14 + col * 7.4 + (row % 2) * 1.6, .012, -22 + row * 2.2)
+		if absf(l.position.x + 1) < 2.6 and absf(l.position.z) < 2.2:l.position.x -= 6.0
+		flats.append(l)
+	nodes.flats = flats
+	# pages of code standing in the air all around, fading into the white
+	var pages: Array = []
+	for i in range(26):
+		var ang: float = i * 2.39996
+		var r: float = 11.0 + fmod(i * 3.7, 24.0)
+		var text := ""
+		for k in range(7 + i % 5):text += str(code[(i * 11 + k) % code.size()]) + "\n"
+		var l := label(text, Vector3(sin(ang) * r, 2.2 + fmod(i * 1.3, 5.5), -absf(cos(ang)) * r - 4.0), 40, Color(.12, .14, .2, .85) if i % 4 else Color(.05, .55, .45, .9), .0085)
+		l.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;l.double_sided = true
+		l.look_at_from_position(l.position, Vector3(0, l.position.y, 0) * 1.0 + Vector3(0, 0, 4), Vector3.UP)
+		l.rotate_object_local(Vector3.UP, PI)
+		pages.append({"n":l, "y":l.position.y, "seed":i})
+	nodes.pages = pages
+	# white monoliths and towers on the horizon, some carrying code
+	var white := gloss(Color(.97, .975, .985), .6)
+	for i in range(30):
+		var ang: float = i * 2.39996 + .7
+		var r: float = 14.0 + fmod(i * 5.3, 34.0)
+		var hgt: float = 2.0 + fmod(i * 4.1, 14.0)
+		var wd: float = 1.0 + fmod(i * 1.7, 3.0)
+		var at := Vector3(sin(ang) * r, hgt / 2, -absf(cos(ang)) * r - 3.0)
+		wbox(scene, at, Vector3(wd, hgt, wd), white)
+		if i % 3 == 0:
+			var l := label("{\n  " + str(code[i % code.size()]).left(18) + "\n}", at + Vector3(0, hgt * .2, wd / 2 + .02), 32, Color(.2, .24, .32, .9), .009)
+			l.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		if i % 5 == 1:wbox(scene, at + Vector3(0, hgt / 2 + .06, 0), Vector3(wd + .04, .1, wd + .04), flat(Color(.35, 1, .85), 2.5))
+	# giant glyphs hanging in the sky
+	for i in range(5):
+		var g := label(["{", "}", ";", "</>", "0x5"][i], Vector3(-22 + i * 11, 9 + (i % 2) * 4, -38 - (i % 3) * 6), 256, Color(.78, .82, .88, .9), .05)
+		g.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# floating blocks of the world, white and a few command blocks
+	var cubes: Array = []
+	for i in range(46):
+		var ang: float = i * 2.39996 + .3
+		var r: float = 4.5 + fmod(i * 2.9, 18.0)
+		var size: float = .25 + fmod(i * .37, .8)
+		var mat: Material = white
+		if i % 7 == 0:mat = block_mat("repeating_command_block_side", .4)
+		elif i % 7 == 3:mat = block_mat("command_block_side", .4)
+		elif i % 9 == 5:mat = block_mat("quartz_block_side")
+		var c := wbox(scene, Vector3(sin(ang) * r, 0, -absf(cos(ang)) * r * .9 - 1.5), Vector3.ONE * size, mat)
+		cubes.append({"n":c, "y":.8 + fmod(i * 1.9, 5.5), "seed":i})
+	nodes.cubes = cubes
+	# rising glyphs
+	var motes: Array = []
+	for i in range(30):
+		var l := label(["0","1","{","}",";","=","+","<",">","/"][i % 10], Vector3.ZERO, 48, Color(.1, .12, .18, .8) if i % 3 else Color(.1, .7, .55, .9), .012)
+		l.billboard = BaseMaterial3D.BILLBOARD_ENABLED;l.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+		motes.append(l)
+	nodes.motes = motes
+	# landing ripple: a ring of glyphs and a cyan ring on the floor
+	var ring: Array = []
+	for i in range(40):
+		var l := label(["0","1",";","{","}"][i % 5], Vector3.ZERO, 40, Color(.05, .6, .5, 1), .012)
+		l.rotation = Vector3(-PI / 2, 0, 0);l.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;ring.append(l)
+	nodes.ring = ring
+	var torus := MeshInstance3D.new();var tm := TorusMesh.new();tm.inner_radius = .96;tm.outer_radius = 1.0;tm.rings = 48;torus.mesh = tm
+	torus.material_override = flat(Color(.35, 1, .85, .8), 2.0, true);torus.position = Vector3(0, .02, 0);scene.add_child(torus);nodes.torus = torus
+	# a pixel trail while he falls
+	var trail: Array = []
+	for i in range(18):trail.append(wbox(scene, Vector3.ZERO, Vector3.ONE * .09, flat(Color(.2, .9, .75), 2.2) if i % 2 else gloss(Color(.15, .17, .22), .5)))
+	nodes.trail = trail
+	rigs.steve = make_rig("ch5_skin_steve")
+	var cam := Camera3D.new();cam.fov = 42;cam.far = 140;scene.add_child(cam);nodes.cam = cam
+
+const TEASE_FALL := 1.0
+const TEASE_LAND := 2.15
+
+func sync_teaser(t: float):
+	var r: Dictionary = rigs.steve
+	# fall, land, recover, look around
+	var y := 0.0;var p := {}
+	if t < TEASE_LAND:
+		var k: float = clampf((t - TEASE_FALL) / (TEASE_LAND - TEASE_FALL), 0, 1)
+		y = 12.0 * (1 - k * k) if t >= TEASE_FALL else 40.0
+		var flail: float = sin(t * 18)
+		p = {"ra":Vector3(-2.6 + flail * .3, 0, -.4), "la":Vector3(-2.6 - flail * .3, 0, .4), "rl":Vector3(.5 + flail * .4, 0, 0), "ll":Vector3(-.4 - flail * .4, 0, 0), "head":Vector3(-.3, 0, 0)}
+	elif t < TEASE_LAND + 1.1:
+		var k: float = clampf((t - TEASE_LAND) / 1.1, 0, 1)
+		var crouch: float = (1 - smoothstep(.25, 1.0, k)) * (smoothstep(0, .08, k))
+		p = {"drop":-.32 * crouch, "torso":Vector3(.45 * crouch, 0, 0), "rl":Vector3(-1.0 * crouch, 0, 0), "ll":Vector3(-1.0 * crouch, 0, 0),
+			"ra":Vector3(-.6 * crouch, 0, -.5 * crouch), "la":Vector3(-.6 * crouch, 0, .5 * crouch), "head":Vector3(-.2 * crouch, 0, 0)}
+	else:
+		var a: float = t - TEASE_LAND - 1.1
+		var look: float = sin(a * .9) * .75 * smoothstep(0, 1.2, a)
+		var breath: float = sin(t * 1.7) * .03
+		p = {"head":Vector3(-.1 + sin(a * .6) * .12, look, 0), "torso":Vector3(0, look * .25, 0), "ra":Vector3(breath, 0, -.06), "la":Vector3(-breath, 0, .06)}
+	pose(r, p)
+	r.root.position = Vector3(0, y, 0)
+	r.root.rotation.y = .35
+	# trail of pixels behind him while he falls
+	for i in range(nodes.trail.size()):
+		var c: MeshInstance3D = nodes.trail[i]
+		var show: bool = t > TEASE_FALL and t < TEASE_LAND + .5
+		c.visible = show
+		if show:
+			var lag: float = i * .035
+			var tk: float = clampf((t - lag - TEASE_FALL) / (TEASE_LAND - TEASE_FALL), 0, 1)
+			c.position = Vector3(sin(i * 2.1) * .35, 1.0 + 12.0 * (1 - tk * tk) + i * .05, cos(i * 1.7) * .3)
+			c.scale = Vector3.ONE * (1.0 - clampf((t - TEASE_LAND) / .5, 0, 1))
+	# ripple on landing
+	var rk: float = t - TEASE_LAND
+	var torus: MeshInstance3D = nodes.torus
+	torus.visible = rk > 0 and rk < 2.2
+	if torus.visible:
+		var rr: float = .3 + rk * 5.5;torus.scale = Vector3(rr, 1, rr)
+		torus.material_override.albedo_color = Color(.35, 1, .85, .9 * (1 - rk / 2.2))
+	for i in range(nodes.ring.size()):
+		var l: Label3D = nodes.ring[i]
+		l.visible = rk > 0 and rk < 2.6
+		if l.visible:
+			var ang: float = i * TAU / nodes.ring.size()
+			var rr: float = .5 + rk * 4.2
+			l.position = Vector3(cos(ang) * rr, .03, sin(ang) * rr);l.rotation.y = -ang
+			l.modulate.a = 1 - rk / 2.6
+	# the world breathes: pages drift, blocks float and turn, glyphs rise
+	for pg in nodes.pages:pg.n.position.y = pg.y + sin(t * .5 + pg.seed) * .25
+	for c in nodes.cubes:
+		var n: MeshInstance3D = c.n
+		n.position.y = c.y + sin(t * .7 + c.seed) * .35
+		n.rotation = Vector3(t * .2 + c.seed, t * .3 + c.seed * .5, 0)
+	for i in range(nodes.motes.size()):
+		var l: Label3D = nodes.motes[i]
+		var k: float = fmod(t * (.09 + .04 * hash01(i, 1, 9)) + hash01(i, 2, 9), 1.0)
+		var ang: float = i * 2.39996
+		var rr: float = 3.0 + hash01(i, 3, 9) * 10.0
+		l.position = Vector3(sin(ang) * rr, k * 6.0, -absf(cos(ang)) * rr - 1.5)
+		l.modulate.a = sin(k * PI) * .85
+	# camera: tracks the fall, a small kick on landing, then a slow orbit
+	var cam: Camera3D = nodes.cam
+	var kick: float = maxf(0, 1 - absf(rk) / .35) * .08 if rk > 0 else 0.0
+	if t < TEASE_LAND:
+		var look_y: float = 1.2 + y * .7
+		shot(cam, Vector3(2.6, 2.0 + y * .25, 9.0), Vector3(0, look_y, 0), 42)
+	else:
+		var a: float = rk
+		var ang: float = .28 - a * .04
+		var rad: float = 9.0 + minf(a, 10.0) * .3
+		var hgt: float = 1.9 + minf(a, 8.0) * .06
+		shot(cam, Vector3(sin(ang) * rad, hgt, cos(ang) * rad), Vector3(0, 1.25 - smoothstep(0, 3, a) * .3, 0), 42 - minf(a, 6.0) * .4, kick, t)

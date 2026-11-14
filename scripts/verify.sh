@@ -20,6 +20,7 @@ python scripts/check_game_music.py
 "$engine" --headless --path . -s qa/test_ghast_update.gd
 "$engine" --headless --path . -s qa/test_end.gd
 "$engine" --headless --path . -s qa/test_end_revision.gd
+"$engine" --headless --path . -s qa/test_ch3_finale.gd
 "$engine" --headless --path . -s qa/test_achievements.gd
 "$engine" --headless --path . -s qa/test_achievements_v2.gd
 "$engine" --headless --path . -s qa/test_v2_content.gd

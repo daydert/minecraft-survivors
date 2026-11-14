@@ -264,7 +264,7 @@ static func prepare_end_capture(g):
 		elif g.qa_mode in ["end_betrayal","end_last_duel","end_rekindle","end_jump","end_steve_death"]:
 			g.world.mobs.clear();
 			for crystal in g.world.crystals:crystal.alive=false
-			g.world.stage="betrayal";g.world.stage_age=3.35;g.world.portal_lit=false;g.world.player=Vector2(1024,1140)
+			g.world.stage="betrayal";g.world.stage_age=g.world.end_boss.BETRAYAL_IMPACT-.05;g.world.portal_lit=false;g.world.player=Vector2(1024,1140)
 			g.world.add_effect("portal_shatter",g.world.portal_position,3.8,{"radius":100.0});g.world.effects.back().age=.3
 			if g.qa_mode=="end_last_duel":
 				g.world.stage="last_duel";g.world.effects.clear();g.world.spawn("endersteve_final",Vector2(1024,1020));g.world.mobs.back().phase="cast";g.world.mobs.back().pattern=1;g.world.mobs.back().timer=3

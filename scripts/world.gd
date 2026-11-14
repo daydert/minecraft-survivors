@@ -763,10 +763,10 @@ func eligible() -> Array:
 	var list: Array = []
 	for id in db.weapons:
 		if build.has(id) and (build[id] < 8 or overcap) and not evolved.has(id): list.append(id)
-		elif not build.has(id) and build.size() < 6: list.append(id)
+		elif not build.has(id) and (build.size() < 6 or overcap): list.append(id)
 	for id in db.passives:
 		if items.has(id) and (items[id] < 5 or overcap): list.append(id)
-		elif not items.has(id) and items.size() < 6: list.append(id)
+		elif not items.has(id) and (items.size() < 6 or overcap): list.append(id)
 	return list
 
 func make_choices() -> Array:
@@ -838,11 +838,11 @@ func choose(index: int):
 
 func apply_upgrade(id: String):
 	if db.weapons.has(id):
-		if evolved.has(id) or (build.get(id,0) >= 8 and not overcap) or (not build.has(id) and build.size() >= 6): return
+		if evolved.has(id) or (build.get(id,0) >= 8 and not overcap) or (not build.has(id) and build.size() >= 6 and not overcap): return
 		build[id] = build.get(id,0) + 1
 		cooldowns[id] = minf(cooldowns.get(id,0),0.3)
 	elif db.passives.has(id):
-		if (items.get(id,0) >= 5 and not overcap) or (not items.has(id) and items.size() >= 6): return
+		if (items.get(id,0) >= 5 and not overcap) or (not items.has(id) and items.size() >= 6 and not overcap): return
 		items[id] = items.get(id,0) + 1
 	elif id == "apple":
 		hp = minf(20, hp + 4)

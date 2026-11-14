@@ -1,7 +1,8 @@
 extends RefCounted
-## Chapter V mini-bosses. The Terminal copies Steve with his build and runs
-## him against you; the Infinite Loop rolls the arena back every iteration
-## while your past selves walk the path you took.
+## Chapter V mini-bosses. Since 15.11 the run has a single mid boss: the
+## Infinite Loop at 6:00 rolls the arena back every iteration while your past
+## selves walk the path you took. The 10:00 purge terminal lives in
+## chapter_five_purge.gd. The clone Terminal stays for the boss lab and tests.
 var terminal_done := false
 var loop_done := false
 var terminal: Dictionary = {}
@@ -21,10 +22,20 @@ func type_line(text: String):
 	screen.append({"text":text,"age":0.0})
 	while screen.size() > 5:screen.pop_front()
 
+## Bosses always arrive: at the mob cap the farthest ordinary mob makes room
+## (before 15.11 a full map turned the last token into the "boss" and the
+## chapter's bosses never came again).
 func place(w, kind: String, at: Vector2):
 	var p: Vector2 = at.clamp(Vector2(90, 90), Vector2(w.SIZE - 90, w.SIZE - 90))
 	if not w.free_at(p, 10):p = w.player + Vector2(0, -60)
-	w.super_spawn(kind, p)
+	var count: int = w.mobs.size()
+	while not w.super_spawn(kind, p):
+		var far = null
+		for o in w.mobs:
+			if o.hp > 0 and not o.get("boss", false) and o.kind not in w.BOSS_KINDS and (far == null or o.p.distance_squared_to(p) > far.p.distance_squared_to(p)):far = o
+		if far == null:return null
+		far.hp = 0;far.xp = 0
+	if w.mobs.size() == count:return null
 	var m: Dictionary = w.mobs.back()
 	m.code = true;m.glitch = false;m.owner = 0;m.depth = 0;m.shield = false;m.reveal = 0.0;m.broken = false;m.boss = true
 	return m
@@ -33,8 +44,7 @@ func step(w, dt: float):
 	rewind_flash = maxf(0, rewind_flash - dt)
 	for l in screen:l.age += dt
 	var d: Dictionary = data(w)
-	if not terminal_done and terminal.is_empty() and w.time >= float(d.terminal.at):begin_terminal(w)
-	if not loop_done and loop.is_empty() and terminal.is_empty() and w.time >= float(d.loop.at):begin_loop(w)
+	if not loop_done and loop.is_empty() and terminal.is_empty() and w.time >= float(d.loop.at) and w.time < w.purge.AT - 20.0 and not w.purge.active():begin_loop(w)
 	if not terminal.is_empty():terminal_step(w, dt)
 	if not loop.is_empty():loop_step(w, dt)
 
@@ -47,6 +57,7 @@ func mob(w, id: int):
 
 func begin_terminal(w):
 	var m = place(w, "terminal", w.player + Vector2(110, -20))
+	if m == null:return
 	m.locked = true
 	terminal = {"id":m.id,"age":0.0,"clone":-1,"respawn":-1.0,"command":float(data(w).terminal.command_every),"built":false}
 	screen.clear()
@@ -59,6 +70,7 @@ func spawn_clone(w, hp_share: float):
 	if t == null:return
 	var d: Dictionary = data(w).terminal
 	var m = place(w, "clone", t.p + Vector2(34, 26))
+	if m == null:return
 	m.hp = (float(w.db.data.mobs.clone.hp) + float(d.clone_hp_per_level) * w.level) * hp_share;m.max_hp = m.hp
 	m.build = w.build.duplicate();m.cool = {};m.side = 1.0;m.learn = 0.0;m.lean = 0.0;m.learned = false;m.haste = 0.0;m.orbit = 0.0
 	for id in m.build:m.cool[id] = 1.0 + 0.4 * m.cool.size()
@@ -71,7 +83,8 @@ func terminal_step(w, dt: float):
 	var d: Dictionary = data(w).terminal
 	terminal.age += dt
 	var t = mob(w, terminal.id)
-	if t == null:return
+	if t == null:
+		terminal = {};return
 	if not terminal.built and terminal.age >= float(d.boot):
 		terminal.built = true;spawn_clone(w, 1.0)
 	var c = mob(w, terminal.clone) if terminal.clone >= 0 else null
@@ -176,6 +189,7 @@ func boss_died(w, m: Dictionary):
 
 func begin_loop(w):
 	var m = place(w, "loop_boss", w.player + Vector2(0, -50))
+	if m == null:return
 	loop = {"id":m.id,"age":0.0,"intro_age":0.0,"i":0,"start_hp":m.hp,"dealt":0.0,"snap":{},"path":[],"tick":0.0,"ring":float(data(w).loop.ring_every)}
 	snapshot(w)
 	w.message = "while (true)";w.message_timer = 3.0
@@ -192,7 +206,9 @@ func snapshot(w):
 func loop_step(w, dt: float):
 	var d: Dictionary = data(w).loop
 	var b = mob(w, loop.id)
-	if b == null:return
+	if b == null:
+		# lost without a death report (deleted floor, purge): never block the run
+		loop = {};ghosts.clear();return
 	loop.age += dt;loop.intro_age=float(loop.get("intro_age",0))+dt;loop.tick -= dt
 	if loop.tick <= 0:
 		loop.tick = .1;loop.path.append(w.player)
@@ -230,3 +246,12 @@ func iterate(w, b: Dictionary):
 	rewind_flash = .5
 	w.sound("ch4_hb_teleport", .1)
 	snapshot(w)
+
+## The purge terminal erases whatever mini-boss is still running at 10:00.
+func abort(w):
+	for id in [terminal.get("id", -1), terminal.get("clone", -1), loop.get("id", -1)]:
+		var m = mob(w, id)
+		if m != null:w.add_effect("ch5_spawn", m.p, .5);w.mobs.erase(m)
+	if not terminal.is_empty():terminal_done = true
+	if not loop.is_empty():loop_done = true
+	terminal = {};loop = {};ghosts.clear()

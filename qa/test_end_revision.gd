@@ -31,7 +31,7 @@ func run():
 	w=fresh();w.prepare_arena();w.stage="last_duel";w.mobs.clear();w.crystals.clear();w.build={};w.spawn("endersteve_final",Vector2(1024,1020));var m=w.mobs[0]
 	var signatures=[];var saw_leap=false;var saw_echo=false;var saw_cleave=false
 	for pattern in [0,1,2,3,4,5,6,9,10,11]:
-		w.projectiles.clear();w.hazards.clear();w.effects.clear();m.p=Vector2(1024,1020);w.player=Vector2(1024,1120);m.phase="walk";m.timer=0;m.seq=w.end_boss.SEQUENCE.find(pattern)-1;m.rage=false;m.hp=m.max_hp;m.combo=0
+		w.projectiles.clear();w.hazards.clear();w.effects.clear();m.p=Vector2(1024,1020);w.player=Vector2(1024,1120);m.hp=m.max_hp;w.steve_boss.begin(w,m,pattern)
 		var phases={};var kinds={};var hazards={};w.invulnerable=100
 		for i in range(300):
 			w.clock+=1.0/60;w.move_mobs(1.0/60);w.update_hazards(1.0/60);w.update_effects(1.0/60);w.update_end_poses(1.0/60)
@@ -62,8 +62,8 @@ func run():
 	check(m.hp<hp-50,"Enchanted axe makes a second damaging return sweep")
 	hp=m.hp;w.state="PAUSED";w.discard("axe");w.update_effects(.4)
 	check(m.hp==hp and not w.effects.any(func(e):return e.kind=="axe_spin"),"Removing the axe cancels its delayed return hit")
-	w=fresh();w.prepare_arena();w.mobs.clear();w.build={};w.stage="last_duel";w.spawn("endersteve_final",w.END_ARENA.end-Vector2(6,26));w.mobs[0].hp=0;w.resolve_deaths()
-	for i in range(int((w.end_boss.CLASH_LENGTH+w.end_boss.DOWN_LENGTH+.6)*60)):w.step(1.0/60)
-	check(w.stage=="to_edge","A boss beaten against the arena wall still leads to the walk to the rim")
+	w=fresh();w.prepare_arena();w.mobs.clear();w.build={};w.stage="last_duel";w.duel.fight=2;w.spawn("endersteve_final",w.END_ARENA.end-Vector2(6,26));w.mobs[0].hp=0;w.resolve_deaths()
+	for i in range(int((w.end_boss.STANDOFF_LENGTH+w.end_boss.CLASH_LENGTH+.8)*60)):w.step(1.0/60)
+	check(w.stage=="sword_race" and w.END_ARENA.grow(-30).has_point(w.race.sword),"A boss beaten against the arena wall still leaves the last sword inside the arena")
 	FileAccess.open("res://qa/end_revision_results.json",FileAccess.WRITE).store_string(JSON.stringify({"checks":checks,"failures":failures},"  "))
 	print("END_REVISION_RESULT ",checks," checks; ",failures.size()," failures");quit(0 if failures.is_empty() else 1)

@@ -28,5 +28,15 @@
         "pitch": 1
       }
     ]
+  },
+  "return_by_death": {
+    "gain": 0.95,
+    "variants": [
+      {
+        "path": "res://assets/audio/end_ext/ext_return_by_death.ogg",
+        "volume": 1,
+        "pitch": 1
+      }
+    ]
   }
 }

@@ -316,7 +316,7 @@
     },
     {
       "core": "0cb229a744c8e6ed927454174c9b5b32",
-      "effects": "b65b0dea7d7e8b580c07bcf1bce6ef9b",
+      "effects": "c112fa6d99e6ce8c30c5a4bd683b5f95",
       "extra": "a2f6e398cc50dd10252b178851954994",
       "mobs": "13da052ab3e4d3a1b9ca0e92557bc3b9",
       "pickups": "75b3d258b9235f2b457dbeeb0cc73101",
@@ -383,14 +383,14 @@
   ],
   "end_boss": [
     {
-      "core": "38468b87a9fd57b62eaa3ecdea6fe38d",
+      "core": "887ad64b0585ad87aa8b1976a63d232b",
       "effects": "d751713988987e9331980363e24189ce",
-      "extra": "ea769558c9e5b6cb5522145ad00f36e2",
+      "extra": "beda7cfe6b03731835fb54d540a2443c",
       "mobs": "d751713988987e9331980363e24189ce",
       "pickups": "12c938e66de7972718bad1927d597103",
       "projectiles": "d751713988987e9331980363e24189ce",
       "sounds": "d751713988987e9331980363e24189ce",
-      "summary": "hp=12.0 lvl=30 kills=35 mobs=0 state=RUNNING stage=down",
+      "summary": "hp=20.0 lvl=30 kills=34 mobs=0 state=RUNNING stage=fallen",
       "t": 720.0
     }
   ],

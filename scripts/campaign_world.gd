@@ -129,12 +129,13 @@ func damage_player(amount: float):
 
 func eligible() -> Array:
 	var result: Array=[]
+	# Overcap (chapter V core): no level limits and no slot limits.
 	for id in db.weapons:
-		if build.has(id) and build[id]<8 and not evolved.has(id):result.append(id)
-		elif not build.has(id) and build.size()<6:result.append(id)
+		if build.has(id) and (build[id]<8 or overcap) and not evolved.has(id):result.append(id)
+		elif not build.has(id) and (build.size()<6 or overcap):result.append(id)
 	for id in db.passives:
-		if items.has(id) and items[id]<5:result.append(id)
-		elif not items.has(id) and items.size()<8:result.append(id)
+		if items.has(id) and (items[id]<5 or overcap):result.append(id)
+		elif not items.has(id) and (items.size()<8 or overcap):result.append(id)
 	return result
 
 func make_choices() -> Array:
@@ -154,7 +155,7 @@ func skip_reward() -> bool:
 func apply_upgrade(id: String):
 	run_progress.observe(self)
 	if db.passives.has(id):
-		if items.get(id,0)<5 and (items.has(id) or items.size()<8):items[id]=items.get(id,0)+1
+		if (items.get(id,0)<5 or overcap) and (items.has(id) or items.size()<8 or overcap):items[id]=items.get(id,0)+1
 	elif id in ["emerald","experience"]:
 		xp+=8
 		sound("pickup")

@@ -44,5 +44,17 @@
     ],
     "converted": "ffmpeg first 34 s, fades, mono, loudnorm",
     "converted_sha256": "0cde4e1894b006ca7fcaf9bb118d38d44f172b2b1c064e4b200dd33db8619ff9"
+  },
+  "ext_return_by_death.ogg": {
+    "sources": [
+      {
+        "file": "return-by-death.mp3",
+        "author": "файл пользователя",
+        "license": "предоставлен пользователем проекта",
+        "sha256": "9abb7f800a452593ec2121047d63c2bf3d70a2ca023bf69f0f4a7c301e022ef7"
+      }
+    ],
+    "converted": "ffmpeg loudnorm I=-16, Ogg Vorbis",
+    "converted_sha256": "4d11c143d97bb6a1f942c0d2f2a8547221d21b0c4894c059106564dba4c07dec"
   }
 }

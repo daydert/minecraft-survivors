@@ -28,7 +28,7 @@ func run():
 	check(w.chosen_item==item and game.buttons.all(func(b):return not b.id.begins_with("choice_")),"Receipt draws the chosen icon and name without live card buttons")
 	w.tick_choices(.3);var same=await render();check(receipt.get_data()==same.get_data(),"Receipt remains visually fixed while its short display timer elapses")
 	w.tick_choices(.3);w.state="RUNNING";w.build={};w.items={};w.prepare_arena();w.stage="exit_portal";w.portal_lit=true;w.mobs.clear();w.crystals.clear();w.player=w.portal_position+Vector2(0,80);w.scene_camera=w.portal_position+Vector2(0,10)
-	advance(.02);await render("betrayal_arrive");advance(1.2);await render("betrayal_card");advance(1.6);var windup=await render("betrayal_windup");advance(.7);var impact=await render("betrayal_impact");advance(1.5);await render("betrayal_after")
+	advance(.02);await render("betrayal_arrive");advance(1.2);await render("betrayal_card");advance(w.end_boss.BETRAYAL_IMPACT-1.62);var windup=await render("betrayal_windup");advance(.7);var impact=await render("betrayal_impact");advance(1.5);await render("betrayal_after")
 	check(not w.portal_lit and windup.get_data()!=impact.get_data(),"End card, charge and the broken portal use distinct rendered stages")
 	advance(7.0);w.stage="last_duel";var m=w.mobs[0];w.player=w.portal_position+Vector2(110,80);w.scene_camera=w.portal_position+Vector2(30,20);m.p=w.portal_position+Vector2(-45,-45)
 	for pattern in [4,5,6]:

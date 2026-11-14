@@ -36,8 +36,10 @@ func run():
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED);root.size=Vector2i(640,360)
 	# Terminal
 	var w=fresh(239.5);w.build={"sword":4,"bow":3,"command_block":2};w.cooldowns={"sword":0.3,"bow":0.3,"command_block":0.3}
-	advance(.6);var t=kind(w,"terminal")
-	check(t!=null and w.bosses.active(),"At 4:00 the Terminal boots")
+	advance(.6)
+	check(kind(w,"terminal")==null and not w.bosses.active(),"15.11: no Terminal at 4:00 any more")
+	w.bosses.begin_terminal(w);var t=kind(w,"terminal")
+	check(t!=null and w.bosses.active(),"The lab Terminal still boots")
 	advance(1.0);await render("c_terminal_boot")
 	advance(2.0);var c=kind(w,"clone")
 	check(c!=null and c.build.has("bow") and c.build.has("command_block"),"It runs a copy of Steve with his own build")
@@ -64,8 +66,8 @@ func run():
 	t.hp=0;w.resolve_deaths()
 	check(not w.bosses.active() and w.bosses.terminal_done and kind(w,"clone")==null and w.loot.any(func(o):return o.kind=="chest"),"Closing the Terminal ends the fight with a chest")
 	# Infinite loop
-	w=fresh(479.5);w.build={};w.bosses.terminal_done=true;advance(.6);var b=kind(w,"loop_boss")
-	check(b!=null,"At 8:00 the Infinite Loop starts")
+	w=fresh(359.5);w.build={};w.bosses.terminal_done=true;advance(.6);var b=kind(w,"loop_boss")
+	check(b!=null,"At 6:00 the Infinite Loop starts")
 	w.spawn("token",w.player+Vector2(150,0));var tok=w.mobs.back();tok.speed=40.0
 	w.bosses.snapshot(w)
 	var at: Vector2=tok.p
